@@ -19,7 +19,7 @@ describe("commonProps", () => {
   });
   afterEach(() => vi.restoreAllMocks());
 
-  it("keeps the same anonymous id across calls and marks a returning visit", () => {
+  it("keeps the same anonymous id within a page load", () => {
     const first = commonProps();
     expect(first.anon_id).toMatch(/^[0-9a-f-]{36}$/);
     expect(first.returning).toBe(false);
@@ -125,7 +125,9 @@ describe("commonProps", () => {
     }
   });
 
-  it("generates valid uuid without crypto.randomUUID", () => {
+  it("generates valid uuid fallback when crypto.randomUUID unavailable", async () => {
+    localStorage.clear();
+    sessionStorage.clear();
     const originalRandomUUID = Object.getOwnPropertyDescriptor(crypto, "randomUUID");
 
     try {
@@ -134,8 +136,17 @@ describe("commonProps", () => {
         configurable: true,
       });
 
-      const p = commonProps();
-      expect(p.anon_id).toMatch(/^[0-9a-f-]{36}$/);
+      vi.resetModules();
+      const { commonProps: freshCommonProps } = await import("./common");
+
+      const spy = vi.spyOn(Math, "random");
+      const p = freshCommonProps();
+
+      // RFC4122-v4 pattern: xxxxxxxx-xxxx-4xxx-[89ab]xxx-xxxxxxxxxxxx
+      expect(p.anon_id).toMatch(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+      );
+      expect(spy).toHaveBeenCalled();
     } finally {
       if (originalRandomUUID) {
         Object.defineProperty(crypto, "randomUUID", originalRandomUUID);
@@ -143,5 +154,25 @@ describe("commonProps", () => {
         Reflect.deleteProperty(crypto, "randomUUID");
       }
     }
+  });
+
+  it("marks a returning visit with returning=true on fresh page load", async () => {
+    // First page load: create anon_id and store in localStorage
+    const firstPageLoad = commonProps();
+    const storedAnonId = firstPageLoad.anon_id;
+    expect(firstPageLoad.returning).toBe(false);
+
+    // New page load: localStorage persists, sessionStorage cleared, memory empty
+    vi.resetModules();
+    localStorage.clear();
+    sessionStorage.clear();
+    localStorage.setItem("galpi.anon", storedAnonId);
+    localStorage.setItem("galpi.seen", "1");
+
+    const { commonProps: freshCommonProps } = await import("./common");
+    const secondPageLoad = freshCommonProps();
+
+    expect(secondPageLoad.anon_id).toBe(storedAnonId);
+    expect(secondPageLoad.returning).toBe(true);
   });
 });
