@@ -2,7 +2,14 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { track } from "./client";
 
 describe("track", () => {
-  afterEach(() => vi.restoreAllMocks());
+  const originalBeacon = Object.getOwnPropertyDescriptor(navigator, "sendBeacon");
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    if (originalBeacon) Object.defineProperty(navigator, "sendBeacon", originalBeacon);
+    else Reflect.deleteProperty(navigator, "sendBeacon");
+  });
 
   it("posts the event with common props to /api/track", async () => {
     const send = vi.fn().mockReturnValue(true);
