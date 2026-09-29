@@ -1,0 +1,21 @@
+# secrets
+.env
+.env.*
+!.env.example
+web/.env.local
+# third-party text we may not redistribute (YES24 terms)
+data/raw/yes24/
+data/processed/check/
+data/processed/d1_candidates.json
+data/raw/crema_probe/
+data/raw/api_compare/
+**/yes24_*.json
+# python
+__pycache__/
+.ipynb_checkpoints/
+# node / next
+node_modules/
+web/.next/
+web/coverage/
+web/playwright-report/
+web/test-results/

@@ -1,0 +1,217 @@
+{
+ "n_target": 10,
+ "n_leaf": 10,
+ "keywords": {
+  "decisions": 38,
+  "agree_ai": 76.3,
+  "kappa_ai": 0.54,
+  "agree_rule": 89.5,
+  "kappa_rule": 0.79,
+  "disagreements": [
+   {
+    "title": "생성형 AI 활용과 실습",
+    "keyword": "프롬프트 엔지니어링",
+    "human": false,
+    "ai": true,
+    "rule": false
+   },
+   {
+    "title": "바로바로 제미나이 X 구글 AI",
+    "keyword": "프롬프트 엔지니어링",
+    "human": false,
+    "ai": true,
+    "rule": false
+   },
+   {
+    "title": "바로바로 제미나이 X 구글 AI",
+    "keyword": "AI 에이전트",
+    "human": false,
+    "ai": true,
+    "rule": true
+   },
+   {
+    "title": "바로바로 제미나이 X 구글 AI",
+    "keyword": "이미지·영상 생성",
+    "human": false,
+    "ai": true,
+    "rule": false
+   },
+   {
+    "title": "1만 시간의 재발견",
+    "keyword": "일하는 법",
+    "human": false,
+    "ai": true,
+    "rule": false
+   },
+   {
+    "title": "통계학, 빅데이터를 잡다",
+    "keyword": "기초 통계",
+    "human": false,
+    "ai": true,
+    "rule": false
+   },
+   {
+    "title": "통계학, 빅데이터를 잡다",
+    "keyword": "확률",
+    "human": false,
+    "ai": true,
+    "rule": true
+   },
+   {
+    "title": "50부터 뇌가 젊어지는 습관",
+    "keyword": "마음·회복",
+    "human": false,
+    "ai": true,
+    "rule": false
+   },
+   {
+    "title": "50개의 프로젝트로 완성하는 파이썬 업무 자동화",
+    "keyword": "AI 업무 활용",
+    "human": true,
+    "ai": false,
+    "rule": true
+   }
+  ]
+ },
+ "level": {
+  "agree": 70.0,
+  "kappa": 0.44,
+  "human_counts": {
+   "실무에 써요": 4,
+   "처음이에요": 6
+  },
+  "ai_counts": {
+   "처음이에요": 7,
+   "조금 알아요": 2,
+   "실무에 써요": 1
+  },
+  "disagreements": [
+   {
+    "title": "생성형 AI 활용과 실습",
+    "human": "실무에 써요",
+    "ai": "처음이에요",
+    "ai_note": "프롬프트 가이드가 부록뿐이라 프롬프트 엔지니어링 포함 여부가 애매했다."
+   },
+   {
+    "title": "59가지 통계학 궁금증 완전 정복",
+    "human": "실무에 써요",
+    "ai": "조금 알아요",
+    "ai_note": "실무자 대상이라 했지만 개념 혼동 정리 위주라 '조금 알아요'와 '실무에 써요' 사이에서 고민했다."
+   },
+   {
+    "title": "50개의 프로젝트로 완성하는 파이썬 업무 자동화",
+    "human": "실무에 써요",
+    "ai": "조금 알아요",
+    "ai_note": "부록의 ChatGPT·Copilot·Gemini를 키워드로 넣을지, 문법 워밍업이 있어 레벨을 '처음이에요'로 볼지 애매했다."
+   }
+  ]
+ },
+ "way": {
+  "agree": 90.0,
+  "kappa": 0.85,
+  "human_counts": {
+   "따라 하며 실습": 5,
+   "사례로 술술": 3,
+   "개념부터 쉽게": 2
+  },
+  "ai_counts": {
+   "따라 하며 실습": 4,
+   "사례로 술술": 3,
+   "개념부터 쉽게": 3
+  },
+  "disagreements": [
+   {
+    "title": "실무에서 바로 통하는 데이터 시각화 노하우",
+    "human": "따라 하며 실습",
+    "ai": "개념부터 쉽게",
+    "ai_note": "슬롯 키워드가 SQL뿐이라 해당 없음이고, 방식은 원칙 설명과 사례 사이에서 고민했다."
+   }
+  ]
+ },
+ "axes": {
+  "temp": {
+   "label": "따뜻함↔여운",
+   "agree": 80.0,
+   "kappa": 0.71,
+   "opposite": 0,
+   "disagreements": [
+    {
+     "title": "이기적 유전자 The Selfish Gene : 50주년 기념판",
+     "human": "여운",
+     "ai": "중간",
+     "ai_note": "사고실험이 많지만 이야기로 끌고 가는 책은 아니라 pull을 0으로 봤다."
+    },
+    {
+     "title": "내가 죽였다",
+     "human": "여운",
+     "ai": "중간",
+     "ai_note": "살인 사건이지만 유쾌한 톤이라 temp를 서늘함이 아닌 0으로 했다."
+    }
+   ]
+  },
+  "pull": {
+   "label": "문장↔몰입",
+   "agree": 90.0,
+   "kappa": 0.85,
+   "opposite": 0,
+   "disagreements": [
+    {
+     "title": "이기적 유전자 The Selfish Gene : 50주년 기념판",
+     "human": "문장",
+     "ai": "중간",
+     "ai_note": "사고실험이 많지만 이야기로 끌고 가는 책은 아니라 pull을 0으로 봤다."
+    }
+   ]
+  },
+  "gain": {
+   "label": "알게 됨↔마음",
+   "agree": 70.0,
+   "kappa": 0.46,
+   "opposite": 0,
+   "disagreements": [
+    {
+     "title": "선 끝에",
+     "human": "중간",
+     "ai": "마음",
+     "ai_note": "소설 한 편과 시 일곱 편이 섞여 pull을 한쪽으로 정하기 어려웠다."
+    },
+    {
+     "title": "내가 죽였다",
+     "human": "마음",
+     "ai": "중간",
+     "ai_note": "살인 사건이지만 유쾌한 톤이라 temp를 서늘함이 아닌 0으로 했다."
+    },
+    {
+     "title": "[예스리커버] 미술관에 간 할미",
+     "human": "중간",
+     "ai": "알게 됨",
+     "ai_note": "미술사 지식과 따뜻한 위로가 함께 있어 gain을 알게 됨과 마음 중 고르기 어려웠다."
+    }
+   ]
+  },
+  "world": {
+   "label": "현실↔딴 세상",
+   "agree": 80.0,
+   "kappa": 0.51,
+   "opposite": 1,
+   "disagreements": [
+    {
+     "title": "토마토 컵라면",
+     "human": "딴 세상",
+     "ai": "현실",
+     "ai_note": "식어버린 여름 추억의 쌉쌀함이 있어 따뜻함과 여운 사이에서 고민했다."
+    },
+    {
+     "title": "선 끝에",
+     "human": "중간",
+     "ai": "딴 세상",
+     "ai_note": "소설 한 편과 시 일곱 편이 섞여 pull을 한쪽으로 정하기 어려웠다."
+    }
+   ]
+  }
+ },
+ "axes_pooled": {
+  "agree": 80.0,
+  "kappa": 0.69
+ }
+}

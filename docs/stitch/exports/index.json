@@ -1,0 +1,107 @@
+[
+ {
+  "title": "P-07 · 로그인 시트 (S-07)",
+  "file": "P-07",
+  "screen": "projects/8108840855580886710/screens/5cbc92b74e3c47aca63ca2a3d9e83e4f",
+  "width": "780",
+  "height": "1768",
+  "screenshot": "ok",
+  "code": "ok"
+ },
+ {
+  "title": "P-02 · 밸런스 게임 (S-02)",
+  "file": "P-02",
+  "screen": "projects/8108840855580886710/screens/d63ff6cce66b419585d55e1a39d7ad20",
+  "width": "780",
+  "height": "1768",
+  "screenshot": "ok (.jpg)",
+  "code": "ok"
+ },
+ {
+  "title": "P-04 · 책 펼치기 + 첫 장 (S-03, S-04)",
+  "file": "P-04",
+  "screen": "projects/8108840855580886710/screens/49040a4d4caa4f85938a2064d971fea3",
+  "width": "780",
+  "height": "1884",
+  "screenshot": "ok",
+  "code": "ok"
+ },
+ {
+  "title": "STITCH-PROMPTS.md",
+  "file": "STITCH_PROMPTS_md_661818",
+  "screen": "projects/8108840855580886710/screens/6238057976248661818",
+  "width": "780",
+  "height": "1768",
+  "code": "ok"
+ },
+ {
+  "title": "P-06 · 궁금해요 책 보기 (S-06)",
+  "file": "P-06",
+  "screen": "projects/8108840855580886710/screens/6e88b6c208e2486fb1ff9ebe26326b08",
+  "width": "780",
+  "height": "1778",
+  "screenshot": "ok",
+  "code": "ok"
+ },
+ {
+  "title": "P-00 · 책갈피 시트",
+  "file": "P-00",
+  "screen": "projects/8108840855580886710/screens/cfb8aecbc44c4bb0ad6e237faa7b660d",
+  "width": "780",
+  "height": "3502",
+  "screenshot": "ok",
+  "code": "ok"
+ },
+ {
+  "title": "P-08 · 내 서재 (S-09)",
+  "file": "P-08",
+  "screen": "projects/8108840855580886710/screens/d2d951e5a750499f8c53ae5ae0eb66a0",
+  "width": "780",
+  "height": "1834",
+  "screenshot": "ok",
+  "code": "ok"
+ },
+ {
+  "title": "P-03 · 조건 입력 (S-02)",
+  "file": "P-03",
+  "screen": "projects/8108840855580886710/screens/53611bc7e07f4bebb0bed0713f135795",
+  "width": "780",
+  "height": "2138",
+  "screenshot": "ok",
+  "code": "ok"
+ },
+ {
+  "title": "갈피 로고",
+  "file": "갈피_로고_d6d51e",
+  "screen": "projects/8108840855580886710/screens/f33f951d84264e34b699a2969bd6d51e",
+  "width": "1024",
+  "height": "1024",
+  "screenshot": "ok (.jpg)"
+ },
+ {
+  "title": "P-05 · 책갈피 장 (S-05)",
+  "file": "P-05",
+  "screen": "projects/8108840855580886710/screens/0950dd218bb0400e80620dae39fe5d80",
+  "width": "780",
+  "height": "1768",
+  "screenshot": "ok",
+  "code": "ok"
+ },
+ {
+  "title": "DESIGN.md",
+  "file": "DESIGN_md_661592",
+  "screen": "projects/8108840855580886710/screens/6238057976248661592",
+  "width": "780",
+  "height": "1768",
+  "code": "ok"
+ },
+ {
+  "title": "P-01 · 처음 화면 (S-01)",
+  "file": "P-01",
+  "screen": "projects/8108840855580886710/screens/9ca97b97db754bd6acdc8357422ab8f6",
+  "width": "780",
+  "height": "1768",
+  "screenshot": "ok",
+  "code": "ok"
+ }
+]
