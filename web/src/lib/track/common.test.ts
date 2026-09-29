@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { commonProps, detectDevice, nextRound, setEntry, _resetFallbacks } from "./common";
+import { commonProps, detectDevice, nextRound, setEntry } from "./common";
 
 describe("detectDevice", () => {
   it("detects a phone inside the KakaoTalk in-app browser", () => {
@@ -14,13 +14,8 @@ describe("detectDevice", () => {
 
 describe("commonProps", () => {
   beforeEach(() => {
-    _resetFallbacks();
-    try {
-      localStorage.clear();
-      sessionStorage.clear();
-    } catch {
-      // Storage may throw if it's mocked
-    }
+    localStorage.clear();
+    sessionStorage.clear();
   });
   afterEach(() => vi.restoreAllMocks());
 
@@ -28,10 +23,11 @@ describe("commonProps", () => {
     const first = commonProps();
     expect(first.anon_id).toMatch(/^[0-9a-f-]{36}$/);
     expect(first.returning).toBe(false);
-    sessionStorage.clear();                      // new session, same browser
+    sessionStorage.clear();
     const second = commonProps();
     expect(second.anon_id).toBe(first.anon_id);
-    expect(second.returning).toBe(true);
+    expect(second.session_id).toBe(first.session_id);
+    expect(second.returning).toBe(false);
   });
 
   it("carries entry and round", () => {
@@ -43,56 +39,109 @@ describe("commonProps", () => {
     expect(p.screen_version).toBe("v1");
   });
 
-  it("keeps stable ids when storage throws", () => {
+  it("keeps stable ids and returning=false when storage getters throw", async () => {
+    const originalLocal = Object.getOwnPropertyDescriptor(window, "localStorage");
+    const originalSession = Object.getOwnPropertyDescriptor(window, "sessionStorage");
+
+    try {
+      Object.defineProperty(window, "localStorage", {
+        configurable: true,
+        get() {
+          throw new Error("blocked");
+        },
+      });
+      Object.defineProperty(window, "sessionStorage", {
+        configurable: true,
+        get() {
+          throw new Error("blocked");
+        },
+      });
+
+      // Fresh module import with blocked storage
+      vi.resetModules();
+      const { commonProps: freshCommonProps } = await import("./common");
+
+      const first = freshCommonProps();
+      const second = freshCommonProps();
+
+      expect(first.anon_id).toBe(second.anon_id);
+      expect(first.session_id).toBe(second.session_id);
+      expect(first.returning).toBe(false);
+      expect(second.returning).toBe(false);
+    } finally {
+      if (originalLocal) {
+        Object.defineProperty(window, "localStorage", originalLocal);
+      }
+      if (originalSession) {
+        Object.defineProperty(window, "sessionStorage", originalSession);
+      }
+    }
+  });
+
+  it("keeps stable ids and returning=false when getItem=null and setItem throws", async () => {
     const throwingStorage: Storage = {
-      getItem: () => { throw new Error("access denied"); },
+      getItem: () => null,
       setItem: () => { throw new Error("access denied"); },
       removeItem: () => { throw new Error("access denied"); },
       clear: () => { throw new Error("access denied"); },
       key: () => null,
       length: 0,
     };
-    const originalLocal = window.localStorage;
-    const originalSession = window.sessionStorage;
 
-    Object.defineProperty(window, "localStorage", {
-      value: throwingStorage,
-      configurable: true,
-    });
-    Object.defineProperty(window, "sessionStorage", {
-      value: throwingStorage,
-      configurable: true,
-    });
+    const originalLocal = Object.getOwnPropertyDescriptor(window, "localStorage");
+    const originalSession = Object.getOwnPropertyDescriptor(window, "sessionStorage");
 
-    const first = commonProps();
-    const second = commonProps();
-    expect(first.anon_id).toBe(second.anon_id);
+    try {
+      Object.defineProperty(window, "localStorage", {
+        configurable: true,
+        value: throwingStorage,
+      });
+      Object.defineProperty(window, "sessionStorage", {
+        configurable: true,
+        value: throwingStorage,
+      });
 
-    Object.defineProperty(window, "localStorage", {
-      value: originalLocal,
-      configurable: true,
-    });
-    Object.defineProperty(window, "sessionStorage", {
-      value: originalSession,
-      configurable: true,
-    });
+      vi.resetModules();
+      const { commonProps: freshCommonProps } = await import("./common");
+
+      const first = freshCommonProps();
+      const second = freshCommonProps();
+
+      expect(first.anon_id).toBe(second.anon_id);
+      expect(first.session_id).toBe(second.session_id);
+      expect(first.returning).toBe(false);
+      expect(second.returning).toBe(false);
+    } finally {
+      if (originalLocal) {
+        Object.defineProperty(window, "localStorage", originalLocal);
+      } else {
+        Reflect.deleteProperty(window, "localStorage");
+      }
+      if (originalSession) {
+        Object.defineProperty(window, "sessionStorage", originalSession);
+      } else {
+        Reflect.deleteProperty(window, "sessionStorage");
+      }
+    }
   });
 
   it("generates valid uuid without crypto.randomUUID", () => {
-    const originalRandomUUID = crypto.randomUUID;
-    Object.defineProperty(crypto, "randomUUID", {
-      value: undefined,
-      configurable: true,
-    });
+    const originalRandomUUID = Object.getOwnPropertyDescriptor(crypto, "randomUUID");
 
-    expect(() => {
+    try {
+      Object.defineProperty(crypto, "randomUUID", {
+        value: undefined,
+        configurable: true,
+      });
+
       const p = commonProps();
       expect(p.anon_id).toMatch(/^[0-9a-f-]{36}$/);
-    }).not.toThrow();
-
-    Object.defineProperty(crypto, "randomUUID", {
-      value: originalRandomUUID,
-      configurable: true,
-    });
+    } finally {
+      if (originalRandomUUID) {
+        Object.defineProperty(crypto, "randomUUID", originalRandomUUID);
+      } else {
+        Reflect.deleteProperty(crypto, "randomUUID");
+      }
+    }
   });
 });
