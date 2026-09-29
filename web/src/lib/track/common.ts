@@ -3,6 +3,7 @@ import { SCREEN_VERSION, type CommonProps } from "./schema";
 const ANON = "galpi.anon";
 const SEEN = "galpi.seen";
 const SESSION = "galpi.session";
+const RETURNING = "galpi.returning";
 
 let entry: CommonProps["entry"] = null;
 let round = 1;
@@ -75,8 +76,14 @@ export function commonProps(): CommonProps {
   const anon = getOrCreate(local, ANON);
   const sessionId = getOrCreate(session, SESSION);
 
-  const seenBefore = (read(local, SEEN) ?? memory[SEEN]) === "1";
-  const returning = seenBefore && sessionId.created;
+  // Decided once when the session is created, then reused for every event of that session.
+  if (sessionId.created) {
+    const seenBefore = (read(local, SEEN) ?? memory[SEEN]) === "1";
+    const flag = seenBefore ? "1" : "0";
+    memory[RETURNING] = flag;
+    write(session, RETURNING, flag);
+  }
+  const returning = (read(session, RETURNING) ?? memory[RETURNING]) === "1";
 
   memory[SEEN] = "1";
   write(local, SEEN, "1");

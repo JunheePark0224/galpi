@@ -176,3 +176,38 @@ describe("commonProps", () => {
     expect(secondPageLoad.returning).toBe(true);
   });
 });
+
+describe("commonProps returning is fixed per session", () => {
+  beforeEach(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+    vi.resetModules();
+  });
+
+  it("is true on every call of a returning session", async () => {
+    localStorage.setItem("galpi.anon", "11111111-1111-4111-8111-111111111111");
+    localStorage.setItem("galpi.seen", "1");
+    const { commonProps: fresh } = await import("./common");
+    const first = fresh();
+    const second = fresh();
+    expect(first.returning).toBe(true);
+    expect(second.returning).toBe(true);
+    expect(second.session_id).toBe(first.session_id);
+  });
+
+  it("stays true after a module reload within the same session", async () => {
+    localStorage.setItem("galpi.anon", "11111111-1111-4111-8111-111111111111");
+    localStorage.setItem("galpi.seen", "1");
+    const a = await import("./common");
+    expect(a.commonProps().returning).toBe(true);
+    vi.resetModules();
+    const b = await import("./common");
+    expect(b.commonProps().returning).toBe(true);
+  });
+
+  it("stays false on every call of a first-ever visit", async () => {
+    const { commonProps: fresh } = await import("./common");
+    expect(fresh().returning).toBe(false);
+    expect(fresh().returning).toBe(false);
+  });
+});
