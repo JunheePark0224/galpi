@@ -6,7 +6,7 @@ export function track(name: EventName, props: Record<string, unknown> = {}): voi
     const body = JSON.stringify({ name, props, common: commonProps() });
     const blob = new Blob([body], { type: "application/json" });
     if (!navigator.sendBeacon?.("/api/track", blob)) {
-      void fetch("/api/track", { method: "POST", body, headers: { "Content-Type": "application/json" }, keepalive: true });
+      void fetch("/api/track", { method: "POST", body, headers: { "Content-Type": "application/json" }, keepalive: true }).catch(() => {});
     }
   } catch {
     // tracking must never break the page
