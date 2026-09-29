@@ -7,10 +7,20 @@ test("design page shows tokens and buttons", async ({ page }) => {
   expect(ink.toUpperCase()).toBe("#2B2724");
 });
 
-test("content column is at most 430px wide", async ({ page }) => {
+test("content column is 430px and centered on laptop, full width on phone", async ({ page }, testInfo) => {
   await page.goto("/");
-  const width = await page.locator(".column").evaluate((el) => el.getBoundingClientRect().width);
-  expect(width).toBeLessThanOrEqual(430);
+  const viewport = page.viewportSize();
+  if (!viewport) throw new Error("viewport is not set");
+  const rect = await page.locator(".column").evaluate((el) => {
+    const r = el.getBoundingClientRect();
+    return { left: r.left, width: r.width };
+  });
+  if (testInfo.project.name === "laptop") {
+    expect(rect.width).toBe(430);
+    expect(Math.round(rect.left)).toBe(Math.round((viewport.width - 430) / 2));
+  } else {
+    expect(rect.width).toBe(viewport.width);
+  }
 });
 
 test("footer credits YES24", async ({ page }) => {
