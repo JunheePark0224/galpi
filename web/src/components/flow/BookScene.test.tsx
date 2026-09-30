@@ -53,12 +53,18 @@ describe("BookScene", () => {
     expect(screen.getByText("아직 이 주제 책이 없어요. 가장 가까운 '데이터 분석' 책을 펼칠게요")).toBeInTheDocument();
   });
 
-  it("S-04: offers a retry when the draw failed", () => {
+  it("S-04: a failed draw offers a primary retry and a way home, and no dead 다음 장", () => {
     const h = handlers();
     render(<BookScene state={{ ...first, status: "error", draw: null }} {...h} />);
     expect(screen.getByRole("alert")).toHaveTextContent(DRAW_FAILED);
+    expect(screen.getByRole("button", { name: "다시 시도" })).toHaveAttribute("data-variant", "primary");
+    expect(screen.getByRole("button", { name: "처음으로" })).toHaveAttribute("data-variant", "secondary");
+    expect(screen.queryByRole("button", { name: "다음 장" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "한 번 고치기" })).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "다시 시도" }));
+    fireEvent.click(screen.getByRole("button", { name: "처음으로" }));
     expect(h.onRetry).toHaveBeenCalledTimes(1);
+    expect(h.onHome).toHaveBeenCalledTimes(1);
   });
 
   it("S-04: sends the person home when the draw is empty", () => {

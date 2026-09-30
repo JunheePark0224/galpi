@@ -1,4 +1,4 @@
-import { TOPIC_CHIPS, TOPICS, type Topic } from "@/lib/books/taxonomy";
+import { MAX_KEYWORDS, TOPIC_CHIPS, TOPICS, type Topic } from "@/lib/books/taxonomy";
 import type { Vocab } from "@/lib/books/types";
 
 /** target-chips.md 1절: 직접 쓰기 is 30 characters. */
@@ -49,7 +49,8 @@ export function matchGoal(input: string, vocab: Vocab): GoalMatch {
       .map(([name]) => name);
     if (hits.length > (top?.keywords.length ?? 0)) top = { topic, keywords: hits };
   }
-  if (top) return { ...base, ...top, matched: true };
+  // The server takes at most MAX_KEYWORDS: keep the first ones in vocab order.
+  if (top) return { ...base, topic: top.topic, keywords: top.keywords.slice(0, MAX_KEYWORDS), matched: true };
 
   const byWords = rank((topic) => topicWords(topic, vocab).filter((w) => flat.includes(w)).length);
   if (byWords.score > 0) return { ...base, topic: byWords.topic, matched: true };

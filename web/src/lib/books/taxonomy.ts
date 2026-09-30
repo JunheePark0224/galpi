@@ -27,6 +27,9 @@ export const TOPICS: readonly Topic[] = TOPIC_CHIPS.map((c) => c.topic);
 export const LEAF_GENRES = ["한국 소설", "외국 소설", "SF·판타지", "추리·스릴러", "에세이", "시", "인문", "과학 교양", "예술·여행"] as const;
 export type LeafGenre = (typeof LEAF_GENRES)[number];
 
+/** Most keywords one 🎯 draw carries — the server rejects more, so the matcher must never produce more. */
+export const MAX_KEYWORDS = 5;
+
 export const WAYS: readonly Way[] = ["개념", "실습", "사례"];
 
 const GENRE_TONE: Record<LeafGenre, string> = {

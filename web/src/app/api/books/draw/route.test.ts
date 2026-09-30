@@ -45,7 +45,7 @@ describe("POST /api/books/draw", () => {
     ["an unknown way", { entry: "target", answers: { topic: "통계", way: "독학", len: 0, keywords: [] } }],
     ["a length outside -1..1", { entry: "target", answers: { topic: "통계", way: null, len: 2, keywords: [] } }],
     ["a keyword of another topic", { entry: "target", answers: { topic: "통계", way: null, len: 0, keywords: ["SQL"] } }],
-    ["too many keywords", { entry: "target", answers: { topic: "통계", way: null, len: 0, keywords: ["확률", "확률", "확률", "확률", "확률", "확률"] } }],
+    ["too many keywords", { entry: "target", answers: { topic: "AI 활용", way: null, len: 0, keywords: ["챗GPT", "클로드", "제미나이", "프롬프트 엔지니어링", "바이브 코딩", "AI 에이전트"] } }],
     ["seen that is not a list of ids", { entry: "leaf", choices: NINE, seen: "9790000000001" }],
     ["a seen id that is not a string", { entry: "leaf", choices: NINE, seen: [9790000000001] }],
     ["a negative seed", { entry: "leaf", choices: NINE, seed: -1 }],

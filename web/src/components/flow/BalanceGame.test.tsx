@@ -1,11 +1,15 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { track } from "@/lib/track/client";
-import { BalanceGame } from "./BalanceGame";
+import { BalanceGame, TAP_GUARD_MS } from "./BalanceGame";
 
 vi.mock("@/lib/track/client", () => ({ track: vi.fn() }));
 
+/** Time passes only when told: the guard reads performance.now(), which the fake clock controls. */
+const settle = () => act(() => { vi.advanceTimersByTime(TAP_GUARD_MS); });
+
 describe("BalanceGame", () => {
+  beforeEach(() => vi.useFakeTimers());
   afterEach(() => {
     vi.clearAllMocks();
     vi.useRealTimers();
@@ -14,6 +18,7 @@ describe("BalanceGame", () => {
   it("asks question 1 with A on the left and logs the answer", () => {
     const onAnswer = vi.fn();
     render(<BalanceGame choices={[]} edit={false} onAnswer={onAnswer} />);
+    settle();
     expect(screen.getByRole("heading", { name: "책을 덮은 뒤, 남았으면 하는 건?" })).toBeInTheDocument();
     expect(screen.getByText("1 / 9")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "몽글몽글 따뜻함" }));
@@ -24,6 +29,7 @@ describe("BalanceGame", () => {
   it("puts A on the right from question 5", () => {
     const onAnswer = vi.fn();
     const { container } = render(<BalanceGame choices={["A", "A", "A", "A"]} edit onAnswer={onAnswer} />);
+    settle();
     expect(container.querySelector('[data-side="left"]')).toHaveTextContent("빗소리처럼 쓸쓸한 책");
     fireEvent.click(screen.getByRole("button", { name: "빗소리처럼 쓸쓸한 책" }));
     expect(onAnswer).toHaveBeenCalledWith("B");
@@ -31,7 +37,6 @@ describe("BalanceGame", () => {
   });
 
   it("answers 못 잡겠어요 after the hold and logs a cancelled hold before it", () => {
-    vi.useFakeTimers();
     const onAnswer = vi.fn();
     render(<BalanceGame choices={["A"]} edit={false} onAnswer={onAnswer} />);
     const hold = screen.getByRole("button", { name: "갈피를 못 잡겠어요" });
@@ -50,5 +55,27 @@ describe("BalanceGame", () => {
     expect(container.querySelectorAll('[data-state="done"]')).toHaveLength(2);
     expect(container.querySelectorAll('[data-state="unsure"]')).toHaveLength(1);
     expect(container.querySelectorAll('[data-state="now"]')).toHaveLength(1);
+  });
+
+  it("records one answer for two taps 100 ms apart, then takes a tap once the guard has passed", () => {
+    const onAnswer = vi.fn();
+    const { rerender } = render(<BalanceGame choices={[]} edit={false} onAnswer={onAnswer} />);
+    settle();
+    fireEvent.click(screen.getByRole("button", { name: "몽글몽글 따뜻함" }));         // tap 1 answers question 1
+    rerender(<BalanceGame choices={["A"]} edit={false} onAnswer={onAnswer} />);      // question 2 appears
+    const card = () => screen.getByRole("button", { name: "밑줄 긋고 싶은 문장" });
+    act(() => { vi.advanceTimersByTime(100); });
+    fireEvent.click(card());                                                        // tap 2, 100 ms later: still the double tap
+    expect(onAnswer).toHaveBeenCalledTimes(1);
+    expect(track).toHaveBeenCalledTimes(1);
+
+    act(() => { vi.advanceTimersByTime(TAP_GUARD_MS - 100 - 1); });
+    fireEvent.click(card());
+    expect(onAnswer).toHaveBeenCalledTimes(1);                                      // 1 ms short of the guard
+    act(() => { vi.advanceTimersByTime(1); });
+    fireEvent.click(card());
+    expect(onAnswer).toHaveBeenCalledTimes(2);
+    expect(onAnswer).toHaveBeenLastCalledWith("A");
+    expect(track).toHaveBeenLastCalledWith("balance_answered", expect.objectContaining({ question: 2, choice: "A" }));
   });
 });

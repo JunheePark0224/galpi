@@ -51,4 +51,22 @@ describe("HoldButton", () => {
     fireEvent.pointerUp(button);
     expect(button).not.toHaveAttribute("data-holding");
   });
+
+  it("does not start a hold from a right or middle click", () => {
+    const { onHold, onCancel, button } = setup();
+    fireEvent.pointerDown(button, { button: 2 });
+    fireEvent.pointerDown(button, { button: 1 });
+    expect(button).not.toHaveAttribute("data-holding");
+    act(() => { vi.advanceTimersByTime(HOLD_MS * 2); });
+    fireEvent.pointerUp(button, { button: 2 });
+    expect(onHold).not.toHaveBeenCalled();
+    expect(onCancel).not.toHaveBeenCalled();
+  });
+
+  it("still holds from the primary button (touch and left click are button 0)", () => {
+    const { onHold, button } = setup();
+    fireEvent.pointerDown(button, { button: 0 });
+    act(() => { vi.advanceTimersByTime(HOLD_MS); });
+    expect(onHold).toHaveBeenCalledTimes(1);
+  });
 });

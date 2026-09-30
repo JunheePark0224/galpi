@@ -1,18 +1,32 @@
 import { describe, expect, it } from "vitest";
 import type { Vocab } from "@/lib/books/types";
+import { MAX_KEYWORDS } from "@/lib/books/taxonomy";
 import { GOAL_MAX, matchGoal } from "./match";
 
 // A slice of keyword_vocab.json v1.1 so this test does not move when the real list grows.
 const VOCAB: Vocab = {
   "데이터 분석": { keywords: { SQL: "SQL|쿼리|데이터베이스" }, terms: ["파이썬", "엑셀", "시각화"] },
   통계: { keywords: { 회귀분석: "회귀", 확률: "확률" }, terms: ["베이즈"] },
-  "AI 활용": { keywords: { 챗GPT: "챗GPT|ChatGPT" }, terms: [] },
+  "AI 활용": {
+    keywords: {
+      챗GPT: "챗GPT|ChatGPT", 클로드: "클로드|Claude", 제미나이: "제미나이|Gemini", "바이브 코딩": "코덱스|Codex",
+      "AI 에이전트": "MCP|에이전트", "이미지·영상 생성": "캔바|미드저니",
+    },
+    terms: [],
+  },
   "업무 자동화": { keywords: { "파이썬 자동화": "파이썬|Python", "AI 업무 활용": "챗GPT|ChatGPT|생성형 ?AI" }, terms: ["노션"] },
   "습관·집중": { keywords: { "마음·회복": "회복 ?탄력성|스트레스|번아웃|불안" }, terms: ["도파민"] },
   "시간·생산성": { keywords: { "일하는 법": "일 ?잘하는|업무 ?효율|생산성" }, terms: ["시간 관리"] },
 };
 
 describe("matchGoal", () => {
+  it("never returns more keywords than the server accepts", () => {
+    const m = matchGoal("챗GPT 클로드 제미나이 코덱스 MCP 캔바", VOCAB);
+    expect(m.keywords).toEqual(["챗GPT", "클로드", "제미나이", "바이브 코딩", "AI 에이전트"]);
+    expect(m.keywords).toHaveLength(MAX_KEYWORDS);
+    expect(m.topic).toBe("AI 활용");
+  });
+
   it("finds a keyword from our closed list", () => {
     expect(matchGoal("SQL 공부", VOCAB)).toEqual({ text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], matched: true, method: "word" });
   });

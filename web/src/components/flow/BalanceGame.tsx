@@ -12,6 +12,9 @@ interface Props {
   onAnswer: (choice: BalanceChoice) => void;
 }
 
+/** A card tap this soon after a question appears is the tail of a double tap on the previous one, not an answer. */
+export const TAP_GUARD_MS = 250;
+
 type Side = { side: "left" | "right"; choice: "A" | "B"; text: string };
 
 /** S-02 🍃 (C-07): nine two-way questions, tap to go on; the second question of each axis swaps sides. */
@@ -26,6 +29,7 @@ export function BalanceGame({ choices, edit, onAnswer }: Props) {
   const right: Side = q.aOnLeft ? { side: "right", choice: "B", text: q.b } : { side: "right", choice: "A", text: q.a };
 
   const choose = (s: Side) => {
+    if (elapsed() < TAP_GUARD_MS) return;
     track("balance_answered", { question: q.n, choice: s.choice, side: s.side, ms: elapsed(), edit });
     onAnswer(s.choice);
   };

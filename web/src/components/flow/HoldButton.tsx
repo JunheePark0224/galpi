@@ -42,6 +42,7 @@ export function HoldButton({ label, onHold, onCancel }: Props) {
   };
 
   const onPointerDown = (e: PointerEvent<HTMLButtonElement>) => {
+    if (e.button !== 0) return;       // right / middle click is not a hold (touch and left click are button 0)
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
     } catch {

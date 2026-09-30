@@ -89,12 +89,19 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
       {step === "first" && (
         <div className={styles.actions}>
           {status === "error" && <p className={styles.error} role="alert">{DRAW_FAILED}</p>}
-          {status === "error"
-            ? <Button variant="secondary" onClick={onRetry}>다시 시도</Button>
-            : !state.edited && <Button variant="secondary" onClick={onEdit}>{editLabel}</Button>}
-          {noBooks
-            ? <Button onClick={onHome}>처음으로</Button>
-            : <Button onClick={onNext} disabled={status !== "ready"}>다음 장</Button>}
+          {status === "error" ? (
+            <>
+              <Button variant="secondary" onClick={onHome}>처음으로</Button>
+              <Button onClick={onRetry}>다시 시도</Button>
+            </>
+          ) : (
+            <>
+              {!state.edited && <Button variant="secondary" onClick={onEdit}>{editLabel}</Button>}
+              {noBooks
+                ? <Button onClick={onHome}>처음으로</Button>
+                : <Button onClick={onNext} disabled={status !== "ready"}>다음 장</Button>}
+            </>
+          )}
         </div>
       )}
 

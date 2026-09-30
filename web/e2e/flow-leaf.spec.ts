@@ -11,10 +11,14 @@ async function holdUnsure(page: Page, ms: number) {
   await page.keyboard.up("Enter");
 }
 
-/** Taps the left card from question `from` to 9, waiting for each question to appear. */
+// BalanceGame ignores card taps in the first 250 ms of a question (a double tap must not answer the next one).
+const TAP_GUARD_MS = 250;
+
+/** Taps the left card from question `from` to 9, waiting for each question to appear and to become tappable. */
 async function answerLeft(page: Page, from: number) {
   for (let q = from; q <= 9; q++) {
     await expect(page.getByText(`${q} / 9`)).toBeVisible();
+    await page.waitForTimeout(TAP_GUARD_MS + 50);
     await page.locator('[data-side="left"]').click();
   }
 }
@@ -73,4 +77,47 @@ test("🍃 a reload keeps the page and the entry/round of later events", async (
   await expect.poll(() => named(events, "visit").length).toBe(2);
   expect(named(events, "visit")[1].common).toMatchObject({ entry: "leaf", round: 1 });
   expect(named(events, "bookmark_shown")).toHaveLength(2);              // a reload is not a new showing
+});
+
+test("🍃 a draw that keeps failing still lets the person go back to the start", async ({ page }) => {
+  const { events } = await recordEvents(page);
+  let draws = 0;
+  await page.route("**/api/books/draw", async (route) => {
+    draws++;
+    await route.fulfill({ status: 500, contentType: "application/json", body: JSON.stringify({ error: "boom" }) });
+  });
+  await page.goto("/");
+  await page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ }).click();
+  await answerLeft(page, 1);
+  await page.getByRole("button", { name: "책 펼치기" }).click();
+  await expect(page.getByText("책을 불러오지 못했어요")).toBeVisible();
+  await expect(page.getByRole("button", { name: "다음 장" })).toHaveCount(0);
+
+  await page.getByRole("button", { name: "다시 시도" }).click();          // still failing: the same screen, not a trap
+  await expect.poll(() => draws).toBe(2);
+  await expect(page.getByText("책을 불러오지 못했어요")).toBeVisible();
+
+  await page.getByRole("button", { name: "처음으로" }).click();
+  await expect(page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ })).toBeVisible();
+  await expect.poll(() => named(events, "home_clicked").length).toBe(1);
+  expect(named(events, "home_clicked")[0].props).toEqual({ curious: 0 });
+});
+
+test("🍃 one failed draw, then 다시 시도 brings the book", async ({ page }) => {
+  let draws = 0;
+  await page.route("**/api/books/draw", async (route) => {
+    if (++draws === 1) {
+      await route.fulfill({ status: 500, contentType: "application/json", body: JSON.stringify({ error: "boom" }) });
+      return;
+    }
+    await route.continue();
+  });
+  await page.goto("/");
+  await page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ }).click();
+  await answerLeft(page, 1);
+  await page.getByRole("button", { name: "책 펼치기" }).click();
+  await expect(page.getByText("책을 불러오지 못했어요")).toBeVisible();
+  await page.getByRole("button", { name: "다시 시도" }).click();
+  await expect(page.getByRole("button", { name: "다음 장" })).toBeEnabled();
+  await expect(page.getByText("책을 불러오지 못했어요")).toHaveCount(0);
 });

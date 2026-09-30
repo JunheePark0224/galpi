@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
 
 test("design page shows tokens and buttons", async ({ page }) => {
@@ -43,4 +44,33 @@ test("frost and book tokens exist for bookmarks", async ({ page }) => {
 test("design page shows a bookmark with its reading label", async ({ page }) => {
   await page.goto("/design");
   await expect(page.getByRole("article", { name: /천천히 걷는 아침/ })).toBeVisible();
+});
+
+// C-02 text room: the longest real title and one-liner must fit the 160 x 320 frame (title may clamp at 2 lines, the one-liner may not).
+test("every real book's title and one-liner fit the bookmark frame", async ({ page }) => {
+  const books = JSON.parse(readFileSync("src/data/books.json", "utf8")) as { isbn: string; title: string; one_liner: string }[];
+  expect(books).toHaveLength(200);
+  await page.goto("/design");
+  await page.evaluate(() => document.fonts.ready);
+
+  const problems = await page.evaluate((all) => {
+    const card = document.querySelector("article")?.children[1] as HTMLElement;
+    const [, win, , title, line, stitch, mark] = Array.from(card.children) as HTMLElement[];
+    const room = card.getBoundingClientRect().bottom - parseFloat(getComputedStyle(card).paddingBottom) - 1;
+    const naturalWindow = win.getBoundingClientRect().width * 0.76;     // art viewBox is 100 x 76
+    const found: string[] = [];
+    for (const b of all) {
+      title.textContent = b.title;
+      line.textContent = b.one_liner;
+      const why: string[] = [];
+      if (line.scrollHeight > line.clientHeight + 1) why.push("one-liner is cut");
+      if (title.getBoundingClientRect().height > 2 * parseFloat(getComputedStyle(title).lineHeight) + 1) why.push("title over 2 lines");
+      if (line.getBoundingClientRect().bottom > stitch.getBoundingClientRect().top) why.push("text runs into the stitch line");
+      if (mark.getBoundingClientRect().bottom > room + 0.5) why.push("갈피 mark leaves the card");
+      if (Math.abs(win.getBoundingClientRect().height - naturalWindow) > 1) why.push("window is squeezed");
+      if (why.length) found.push(`${b.isbn}: ${why.join(", ")}`);
+    }
+    return found;
+  }, books.map(({ isbn, title, one_liner }) => ({ isbn, title, one_liner })));
+  expect(problems).toEqual([]);
 });

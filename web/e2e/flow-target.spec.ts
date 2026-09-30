@@ -88,3 +88,24 @@ test("🎯 written goal → honest count → one edit → five bookmarks", async
   expect(named(events, "first_page_edited").map((e) => e.props)).toEqual([{ entry: "target", items: ["len"] }]);
   expect(named(events, "chip_selected").map((e) => [e.props.value, e.props.edit])).toEqual([["direct", false], ["thin", true]]);
 });
+
+test("🎯 a 30-character goal with no spaces wraps inside the first page", async ({ page }) => {
+  const long = "가나다라마바사아자차".repeat(3);
+  await page.goto("/");
+  await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
+  await page.getByRole("button", { name: "직접 쓰기" }).click();
+  await page.getByRole("textbox", { name: "직접 쓰기" }).fill(long);
+  await page.getByRole("button", { name: "책 펼치기" }).click();
+  await page.getByRole("button", { name: "책 펼치기" }).click();
+  await expect(page.getByRole("heading", { name: "당신이 찾는 책" })).toBeVisible();
+  const goal = page.locator("dd", { hasText: long });
+  await expect(goal).toBeVisible();
+
+  const overflow = await goal.evaluate((dd) => {
+    let el: HTMLElement | null = dd.parentElement;
+    while (el && getComputedStyle(el).overflowY !== "auto") el = el.parentElement;
+    return el ? { scroll: el.scrollWidth, client: el.clientWidth } : null;
+  });
+  expect(overflow).not.toBeNull();
+  expect(overflow?.scroll).toBeLessThanOrEqual(overflow?.client ?? 0);
+});

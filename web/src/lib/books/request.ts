@@ -1,5 +1,5 @@
 import { QUESTION_AXIS, type BalanceChoice, type Tag, type TargetAnswers, type Way } from "@/lib/recommend";
-import { TOPICS, WAYS } from "./taxonomy";
+import { MAX_KEYWORDS, TOPICS, WAYS } from "./taxonomy";
 import type { Vocab } from "./types";
 
 export type DrawQuery = { entry: "leaf"; choices: BalanceChoice[] } | { entry: "target"; answers: TargetAnswers };
@@ -7,7 +7,6 @@ export interface DrawRequest { query: DrawQuery; seen: string[]; seed: number | 
 
 export const MAX_SEEN = 1000;
 const MAX_ID = 32;
-const MAX_KEYWORDS = 5;
 const CHOICES: ReadonlySet<unknown> = new Set(["A", "B", "unsure"]);
 
 const isObject = (x: unknown): x is Record<string, unknown> => typeof x === "object" && x !== null && !Array.isArray(x);
@@ -30,10 +29,12 @@ function parseTarget(x: unknown, vocab: Vocab): TargetAnswers | null {
   if (typeof topic !== "string" || !(TOPICS as readonly string[]).includes(topic)) return null;
   if (way !== null && !WAYS.includes(way as Way)) return null;
   if (len !== -1 && len !== 0 && len !== 1) return null;
-  if (!Array.isArray(keywords) || keywords.length > MAX_KEYWORDS) return null;
+  if (!Array.isArray(keywords)) return null;
   const known = vocab[topic]?.keywords ?? {};
   if (!keywords.every((k) => typeof k === "string" && Object.hasOwn(known, k))) return null;
-  return { topic, way: way as Way | null, len: len as Tag, keywords: keywords as string[] };
+  const unique = [...new Set(keywords as string[])];          // a repeat is counted once
+  if (unique.length > MAX_KEYWORDS) return null;
+  return { topic, way: way as Way | null, len: len as Tag, keywords: unique };
 }
 
 /** Strict check of the draw body: anything unexpected is a 400, never a silent default. */
