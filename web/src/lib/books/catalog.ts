@@ -14,5 +14,5 @@ export function toBook(b: CatalogBook): Book {
 }
 
 export function toCard(b: CatalogBook): BookCard {
-  return { id: b.isbn, entry: b.entry, title: b.title, genre: b.genre, field: b.field, oneLiner: b.one_liner, oneLinerStyle: b.one_liner_style };
+  return { id: b.isbn, entry: b.entry, title: b.title, author: b.author, genre: b.genre, field: b.field, oneLiner: b.one_liner, oneLinerStyle: b.one_liner_style };
 }

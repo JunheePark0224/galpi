@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { normalizeBook, normalizeCatalog, normalizeVocab, parseCsv, titlesFromCsv } from "./normalize";
+import { bibFromCsv, cleanAuthor, normalizeBook, normalizeCatalog, normalizeVocab, parseCsv } from "./normalize";
 
-const TITLES = new Map([["9791111111111", "모순"], ["9792222222222", "처음 만나는 SQL"]]);
+const BIB = new Map([
+  ["9791111111111", { title: "모순", author: "양귀자" }],
+  ["9792222222222", { title: "처음 만나는 SQL", author: "김하늘, 이바다" }],
+]);
 const leafRow = {
   isbn: "9791111111111", entry: "leaf", slot: "한국 소설", field: null, topic: null, genre: "한국 소설", pages: 308, way: null,
   axes: { temp: 1, pull: -1, gain: 0, world: 1 }, keywords: [], one_liner: "사랑과 현실 사이에서 무엇을 고를까요?", one_liner_style: "question",
@@ -13,22 +16,22 @@ const targetRow = {
 
 describe("normalizeBook", () => {
   it("keeps a 🍃 row with its title and axes", () => {
-    expect(normalizeBook(leafRow, TITLES)).toEqual({
-      isbn: "9791111111111", entry: "leaf", title: "모순", genre: "한국 소설", field: null, topic: null, pages: 308, way: null,
+    expect(normalizeBook(leafRow, BIB)).toEqual({
+      isbn: "9791111111111", entry: "leaf", title: "모순", author: "양귀자", genre: "한국 소설", field: null, topic: null, pages: 308, way: null,
       axes: { temp: 1, pull: -1, gain: 0, world: 1 }, keywords: [], one_liner: "사랑과 현실 사이에서 무엇을 고를까요?", one_liner_style: "question",
     });
   });
 
   it("derives field and genre of a 🎯 row from its topic", () => {
-    const b = normalizeBook({ ...targetRow, field: undefined, genre: undefined }, TITLES);
+    const b = normalizeBook({ ...targetRow, field: undefined, genre: undefined }, BIB);
     expect(b).toMatchObject({
-      entry: "target", title: "처음 만나는 SQL", topic: "데이터 분석", genre: "데이터 분석", field: "데이터·통계",
+      entry: "target", title: "처음 만나는 SQL", author: "김하늘, 이바다", topic: "데이터 분석", genre: "데이터 분석", field: "데이터·통계",
       way: "실습", axes: null, keywords: ["SQL", "시각화"],
     });
   });
 
   it("accepts Korean one-liner style names", () => {
-    expect(normalizeBook({ ...targetRow, one_liner_style: "요약형" }, TITLES).one_liner_style).toBe("summary");
+    expect(normalizeBook({ ...targetRow, one_liner_style: "요약형" }, BIB).one_liner_style).toBe("summary");
   });
 
   it.each([
@@ -41,32 +44,60 @@ describe("normalizeBook", () => {
     ["an unknown entry", { ...targetRow, entry: "shelf" }, /unknown entry/],
     ["zero pages", { ...targetRow, pages: 0 }, /pages/],
   ])("rejects %s", (_, row, message) => {
-    expect(() => normalizeBook(row, TITLES)).toThrow(message);
+    expect(() => normalizeBook(row, BIB)).toThrow(message);
+  });
+
+  it("rejects a book whose author is empty after cleaning", () => {
+    const bib = new Map([["9791111111111", { title: "모순", author: "" }]]);
+    expect(() => normalizeBook(leafRow, bib)).toThrow(/no author/);
   });
 });
 
 describe("normalizeCatalog", () => {
   it("accepts a list or an isbn-keyed object", () => {
-    expect(normalizeCatalog([leafRow, targetRow], TITLES)).toHaveLength(2);
+    expect(normalizeCatalog([leafRow, targetRow], BIB)).toHaveLength(2);
     const { isbn, ...rest } = leafRow;
-    expect(normalizeCatalog({ [isbn]: rest }, TITLES)[0].isbn).toBe(isbn);
+    expect(normalizeCatalog({ [isbn]: rest }, BIB)[0].isbn).toBe(isbn);
   });
 
   it("rejects duplicates and empty sources", () => {
-    expect(() => normalizeCatalog([leafRow, leafRow], TITLES)).toThrow(/duplicate isbn/);
-    expect(() => normalizeCatalog([], TITLES)).toThrow(/no books/);
+    expect(() => normalizeCatalog([leafRow, leafRow], BIB)).toThrow(/duplicate isbn/);
+    expect(() => normalizeCatalog([], BIB)).toThrow(/no books/);
   });
 });
 
-describe("CSV titles", () => {
+describe("CSV titles and authors", () => {
   it("reads quoted titles with commas and a BOM", () => {
-    const csv = "﻿entry,slot,title,isbn\r\nleaf,시,\"꽃, 그리고 \"\"나\"\"\",9791111111111\nleaf,시,모순,9792222222222\n";
-    expect(parseCsv(csv)[1]).toEqual(["leaf", "시", "꽃, 그리고 \"나\"", "9791111111111"]);
-    expect(titlesFromCsv(csv).get("9792222222222")).toBe("모순");
+    const csv = "﻿entry,slot,title,author,isbn\r\nleaf,시,\"꽃, 그리고 \"\"나\"\"\",\"천선란,임솔아 저\",9791111111111\nleaf,시,모순,양귀자 저,9792222222222\n";
+    expect(parseCsv(csv)[1]).toEqual(["leaf", "시", "꽃, 그리고 \"나\"", "천선란,임솔아 저", "9791111111111"]);
+    expect(bibFromCsv(csv).get("9791111111111")).toEqual({ title: "꽃, 그리고 \"나\"", author: "천선란, 임솔아" });
+    expect(bibFromCsv(csv).get("9792222222222")).toEqual({ title: "모순", author: "양귀자" });
   });
 
-  it("needs isbn and title columns", () => {
-    expect(() => titlesFromCsv("a,b\n1,2\n")).toThrow(/isbn and title/);
+  it("needs isbn, title and author columns", () => {
+    expect(() => bibFromCsv("isbn,title\n1,2\n")).toThrow(/isbn, title and author/);
+  });
+});
+
+describe("cleanAuthor", () => {
+  it.each([
+    ["양귀자 저", "양귀자"],
+    ["김수현 저 ", "김수현"],
+    ["조지 오웰 저/정회성 역", "조지 오웰"],
+    ["라이먼 프랭크 바움 저/윌리엄 월리스 덴슬로우 그림/손인혜 역", "라이먼 프랭크 바움"],
+    ["권정민 글/주형 만화", "권정민"],
+    ["지현이(디지털거북이) 저", "지현이"],
+    ["아디티 네루카(Aditi Nerurkar, MD) 저/박미경 역", "아디티 네루카"],
+    ["천선란,임솔아 저", "천선란, 임솔아"],
+    ["마경근,서주란 공저", "마경근, 서주란"],
+    ["기시미 이치로,고가 후미타케 저/전경아 역/김정운 감수", "기시미 이치로 외"],
+    ["피터 브루스, 앤드루 브루스, 피터 게데크 저/이준용 역", "피터 브루스 외"],
+    ["배명은 등저", "배명은 외"],
+    ["Dave Lee 저", "Dave Lee"],
+    ["루키우스 안나이우스 세네카 저/하와이 대저택 편역", "루키우스 안나이우스 세네카"],
+    ["", ""],
+  ])("%s → %s", (raw, clean) => {
+    expect(cleanAuthor(raw)).toBe(clean);
   });
 });
 

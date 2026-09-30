@@ -4,7 +4,7 @@ import type { DrawResponse } from "@/lib/books/types";
 import { drawBody, requestDraw, toDrawView } from "./api";
 import { INITIAL } from "./state";
 
-const card = (id: string) => ({ id, entry: "leaf" as const, title: id, genre: "시", field: null, oneLiner: "?", oneLinerStyle: "question" as const });
+const card = (id: string) => ({ id, entry: "leaf" as const, title: id, author: "시인", genre: "시", field: null, oneLiner: "?", oneLinerStyle: "question" as const });
 const RES: DrawResponse = {
   picks: ["a", "b", "c", "d", "e"].map((id, i) => ({ card: card(id), kind: i === 0 ? "random" : "recommended" })),
   exhausted: false, widened: false, found: null, keywords: [],

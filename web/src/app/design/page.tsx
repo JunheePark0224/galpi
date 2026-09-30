@@ -5,8 +5,8 @@ import { artFromSeed } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
 
 const DEMO: BookCard[] = [
-  { id: "demo-leaf", entry: "leaf", title: "천천히 걷는 아침", genre: "에세이", field: null, oneLiner: "오늘 아침은 몇 걸음이었을까요?", oneLinerStyle: "question" },
-  { id: "demo-target", entry: "target", title: "처음 만나는 쿼리", genre: "데이터 분석", field: "데이터·통계", oneLiner: "표에서 원하는 줄만 꺼내는 쿼리를 익혀요", oneLinerStyle: "summary" },
+  { id: "demo-leaf", entry: "leaf", title: "천천히 걷는 아침", author: "천아침", genre: "에세이", field: null, oneLiner: "오늘 아침은 몇 걸음이었을까요?", oneLinerStyle: "question" },
+  { id: "demo-target", entry: "target", title: "처음 만나는 쿼리", author: "김쿼리", genre: "데이터 분석", field: "데이터·통계", oneLiner: "표에서 원하는 줄만 꺼내는 쿼리를 익혀요", oneLinerStyle: "summary" },
 ];
 
 const COLORS = ["paper", "paper-deep", "paper-line", "cloth", "ink", "ink-soft", "ink-muted"];

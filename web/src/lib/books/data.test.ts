@@ -11,8 +11,8 @@ const asRows = (books: CatalogBook[]) => books.map((b) => ({ ...b, slot: b.entry
 describe("app book data", () => {
   it.each([["books.sample.json", sample], ["books.json", real]])("%s passes the import checks unchanged", (_, data) => {
     const books = data as unknown as CatalogBook[];
-    const titles = new Map(books.map((b) => [b.isbn, b.title]));
-    expect(normalizeCatalog(asRows(books), titles)).toEqual(books);
+    const bib = new Map(books.map((b) => [b.isbn, { title: b.title, author: b.author }]));
+    expect(normalizeCatalog(asRows(books), bib)).toEqual(books);
   });
 
   it("sample has 12 🍃 and 18 🎯 books, enough for one full 🎯 draw in 데이터 분석", () => {

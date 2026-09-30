@@ -5,11 +5,11 @@ import type { BookCard } from "@/lib/books/types";
 import { Bookmark } from "./Bookmark";
 
 const leaf: BookCard = {
-  id: "9790000000008", entry: "leaf", title: "천천히 걷는 아침", genre: "에세이", field: null,
+  id: "9790000000008", entry: "leaf", title: "천천히 걷는 아침", author: "천아침", genre: "에세이", field: null,
   oneLiner: "오늘 아침은 몇 걸음이었을까요?", oneLinerStyle: "question",
 };
 const target: BookCard = {
-  id: "9790000000101", entry: "target", title: "처음 만나는 쿼리", genre: "데이터 분석", field: "데이터·통계",
+  id: "9790000000101", entry: "target", title: "처음 만나는 쿼리", author: "김쿼리", genre: "데이터 분석", field: "데이터·통계",
   oneLiner: "표에서 원하는 줄만 꺼내는 쿼리를 익혀요", oneLinerStyle: "summary",
 };
 const art: ArtCombo = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false };

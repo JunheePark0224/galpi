@@ -5,7 +5,7 @@ import { INITIAL, flowReducer, type DrawView, type FlowAction, type FlowState } 
 const art = { animal: "cat", bg: "peach", sky: "moon", ground: "none", rare: false } as const;
 const view = (n: number): DrawView => ({
   picks: Array.from({ length: n }, (_, i) => ({
-    card: { id: `b${i}`, entry: "leaf" as const, title: `책 ${i}`, genre: "에세이", field: null, oneLiner: "한 줄일까요?", oneLinerStyle: "question" as const },
+    card: { id: `b${i}`, entry: "leaf" as const, title: `책 ${i}`, author: `저자 ${i}`, genre: "에세이", field: null, oneLiner: "한 줄일까요?", oneLinerStyle: "question" as const },
     kind: i === 0 ? ("random" as const) : ("recommended" as const),
     art,
   })),

@@ -13,7 +13,7 @@ const goal = (over: Partial<GoalMatch> = {}): GoalMatch =>
 const draw = (over: Partial<DrawView> = {}): DrawView =>
   ({ picks: [], exhausted: false, found: null, keywords: [], ...over });
 const onePick: DrawView["picks"] = [{
-  card: { id: "1", entry: "target", title: "t", genre: "데이터 분석", field: "데이터·통계", oneLiner: "o", oneLinerStyle: "summary" },
+  card: { id: "1", entry: "target", title: "t", author: "a", genre: "데이터 분석", field: "데이터·통계", oneLiner: "o", oneLinerStyle: "summary" },
   kind: "recommended", art: { animal: "cat", bg: "peach", sky: "moon", ground: "none", rare: false },
 }];
 

@@ -63,7 +63,7 @@ describe("drawTarget", () => {
 
   it("does not call a draw exhausted because of an impossible keyword", () => {
     const habit = (i: number): CatalogBook => ({
-      isbn: `97911111111${String(i).padStart(2, "0")}`, entry: "target", title: `습관 ${i}`, genre: "습관·집중",
+      isbn: `97911111111${String(i).padStart(2, "0")}`, entry: "target", title: `습관 ${i}`, author: "저자", genre: "습관·집중",
       field: "습관·자기계발", topic: "습관·집중", pages: 300, way: "사례", axes: null, keywords: ["습관"],
       one_liner: "습관을 만드는 법을 알려줘요", one_liner_style: "summary",
     });

@@ -2,6 +2,7 @@
  {
   "isbn": "9788998441012",
   "title": "모순",
+  "author": "양귀자",
   "pages": 308,
   "one_liner": "쌍둥이로 태어나 갈라진 인생을 보며 내 삶을 돌아보게 될까요?",
   "one_liner_style": "question",
@@ -21,6 +22,7 @@
  {
   "isbn": "9791194891178",
   "title": "빵충 사육 준수 사항",
+  "author": "김혜영",
   "pages": 388,
   "one_liner": "빵과 똑같은 애벌레로 인생 역전을 꿈꾸면 어떻게 될까요?",
   "one_liner_style": "question",
@@ -40,6 +42,7 @@
  {
   "isbn": "9791141602376",
   "title": "안녕이라 그랬어",
+  "author": "김애란",
   "pages": 320,
   "one_liner": "이웃과 홈 파티가 오가는 공간에는 어떤 서늘한 감정이 떠다닐까요?",
   "one_liner_style": "question",
@@ -59,6 +62,7 @@
  {
   "isbn": "9791198547514",
   "title": "수족관",
+  "author": "유래혁",
   "pages": 376,
   "one_liner": "보육 시설을 떠난 두 사람은 오키나와의 바다에 닿을 수 있을까요?",
   "one_liner_style": "question",
@@ -78,6 +82,7 @@
  {
   "isbn": "9791141602451",
   "title": "절창 切創 (화이트 에디션)",
+  "author": "구병모",
   "pages": 352,
   "one_liner": "상처를 보고 타인을 읽어 내는 사람은 무엇을 알게 될까요?",
   "one_liner_style": "question",
@@ -97,6 +102,7 @@
  {
   "isbn": "9788936439996",
   "title": "찌니주의보",
+  "author": "정지아",
   "pages": 232,
   "one_liner": "산골 마을에서 낯선 이웃과 밥상을 나누면 사람이 달리 보일까요?",
   "one_liner_style": "question",
@@ -116,6 +122,7 @@
  {
   "isbn": "9788936439743",
   "title": "혼모노",
+  "author": "성해나",
   "pages": 368,
   "one_liner": "길티 클럽에서 갈월동 집까지, 이 시대 사람들은 어떤 얼굴일까요?",
   "one_liner_style": "question",
@@ -135,6 +142,7 @@
  {
   "isbn": "9791169087520",
   "title": "녹색 절벽의 신자들",
+  "author": "조예은",
   "pages": 388,
   "one_liner": "사이비 종교의 집단 자살 뒤에 감춰진 진실을 따라가 볼까요?",
   "one_liner_style": "question",
@@ -154,6 +162,7 @@
  {
   "isbn": "9791199305304",
   "title": "자몽살구클럽",
+  "author": "한로로",
   "pages": 199,
   "one_liner": "벼랑 끝에 선 아이들은 서로에게 어떤 이유가 되어 줄 수 있을까요?",
   "one_liner_style": "question",
@@ -173,6 +182,7 @@
  {
   "isbn": "9791124575178",
   "title": "달러구트 꿈 백화점 0",
+  "author": "이미예",
   "pages": 300,
   "one_liner": "잠 못 드는 청년이 꿈 가게에서 찾는 건 무엇일까요?",
   "one_liner_style": "question",
@@ -192,6 +202,7 @@
  {
   "isbn": "9788936434120",
   "title": "소년이 온다",
+  "author": "한강",
   "pages": 216,
   "one_liner": "광주의 상처를 여러 목소리로 듣고 나면 마음에 무엇이 남을까요?",
   "one_liner_style": "question",
@@ -211,6 +222,7 @@
  {
   "isbn": "9788937461491",
   "title": "무진기행",
+  "author": "김승옥",
   "pages": 405,
   "one_liner": "서울과 무진 사이에서 흔들리는 마음은 어디로 향할까요?",
   "one_liner_style": "question",
@@ -230,6 +242,7 @@
  {
   "isbn": "9788937460777",
   "title": "1984",
+  "author": "조지 오웰",
   "pages": 444,
   "one_liner": "감시하는 체제 앞에서 한 개인은 어디까지 저항할 수 있을까요?",
   "one_liner_style": "question",
@@ -249,6 +262,7 @@
  {
   "isbn": "9791175772892",
   "title": "테오",
+  "author": "앨런 레비",
   "pages": 556,
   "one_liner": "낯선 노신사의 조용한 선행이 작은 도시를 어떻게 바꿔 놓을까요?",
   "one_liner_style": "question",
@@ -268,6 +282,7 @@
  {
   "isbn": "9788937461033",
   "title": "인간 실격",
+  "author": "다자이 오사무",
   "pages": 191,
   "one_liner": "어느 세계에도 속하지 못한 사람의 내면을 끝까지 따라가 볼까요?",
   "one_liner_style": "question",
@@ -287,6 +302,7 @@
  {
   "isbn": "9788937443848",
   "title": "이방인",
+  "author": "알베르 카뮈",
   "pages": 270,
   "one_liner": "죽음 앞에 서서야 마주하는 나는 어떤 사람일까요?",
   "one_liner_style": "question",
@@ -306,6 +322,7 @@
  {
   "isbn": "9788937461798",
   "title": "브람스를 좋아하세요...",
+  "author": "프랑수아즈 사강",
   "pages": 160,
   "one_liner": "서로 다른 두 사랑 앞에서 폴의 마음은 어디로 향할까요?",
   "one_liner_style": "question",
@@ -325,6 +342,7 @@
  {
   "isbn": "9791199757684",
   "title": "우리는 가장 밝은 밤에 헤어졌다",
+  "author": "표도르 도스토옙스키",
   "pages": 268,
   "one_liner": "해가 지지 않는 밤, 몽상가가 나흘 동안 만난 사랑은 어땠을까요?",
   "one_liner_style": "question",
@@ -344,6 +362,7 @@
  {
   "isbn": "9788937460708",
   "title": "체호프 단편선",
+  "author": "안톤 체호프",
   "pages": 205,
   "one_liner": "사소한 일상 속 아이러니가 삶의 진짜 얼굴이라면요?",
   "one_liner_style": "question",
@@ -363,6 +382,7 @@
  {
   "isbn": "9788932909349",
   "title": "그리스인 조르바",
+  "author": "니코스 카잔차키스",
   "pages": 483,
   "one_liner": "호쾌하게 살아가는 자유인 곁에 서면 내 삶은 어떻게 보일까요?",
   "one_liner_style": "question",
@@ -382,6 +402,7 @@
  {
   "isbn": "9788954657129",
   "title": "아침 그리고 저녁",
+  "author": "욘 포세",
   "pages": 152,
   "one_liner": "짧고 고요한 문장 속에서 삶과 죽음은 어떤 리듬으로 이어질까요?",
   "one_liner_style": "question",
@@ -401,6 +422,7 @@
  {
   "isbn": "9788937461088",
   "title": "달콤 쌉싸름한 초콜릿",
+  "author": "라우라 에스키벨",
   "pages": 272,
   "one_liner": "요리 한 접시에 담긴 사랑과 욕망은 어떤 맛일까요?",
   "one_liner_style": "question",
@@ -420,6 +442,7 @@
  {
   "isbn": "9791159921445",
   "title": "사탄탱고 (블랙 에디션)",
+  "author": "크러스너호르커이 라슬로",
   "pages": 412,
   "one_liner": "부활의 소식과 파멸의 공포 속에서 사람들은 무엇에 매달릴까요?",
   "one_liner_style": "question",
@@ -439,6 +462,7 @@
  {
   "isbn": "9788972917793",
   "title": "존재의 세 가지 거짓말",
+  "author": "아고타 크리스토프",
   "pages": 672,
   "one_liner": "전쟁과 혼란 속에서 인간성은 어떻게 무너지고 변할까요?",
   "one_liner_style": "question",
@@ -458,6 +482,7 @@
  {
   "isbn": "9788925588735",
   "title": "프로젝트 헤일메리",
+  "author": "앤디 위어",
   "pages": 692,
   "one_liner": "과학과 우주 이야기 속으로, 짜릿한 모험을 떠나볼까요?",
   "one_liner_style": "question",
@@ -477,6 +502,7 @@
  {
   "isbn": "9791190090193",
   "title": "깃털",
+  "author": "김혜진",
   "pages": 140,
   "one_liner": "답답한 여름을 SF 단편 몇 편으로 건너 볼까요?",
   "one_liner_style": "question",
@@ -496,6 +522,7 @@
  {
   "isbn": "9791191824582",
   "title": "태양 아래 올리브",
+  "author": "김초엽",
   "pages": 396,
   "one_liner": "믿음의 수녀와 의심하는 과학 유튜버가 국경을 넘으면 무엇을 마주할까요?",
   "one_liner_style": "question",
@@ -515,6 +542,7 @@
  {
   "isbn": "9791190090261",
   "title": "천 개의 파랑",
+  "author": "천선란",
   "pages": 376,
   "one_liner": "따듯한 SF 속에서 우리는 어떤 온기를 만나게 될까요?",
   "one_liner_style": "question",
@@ -534,6 +562,7 @@
  {
   "isbn": "9788937417566",
   "title": "클라라와 태양",
+  "author": "가즈오 이시구로",
   "pages": 448,
   "one_liner": "인공지능 친구의 눈에 비친 사람들은 어떤 모습일까요?",
   "one_liner_style": "question",
@@ -553,6 +582,7 @@
  {
   "isbn": "9791190090018",
   "title": "우리가 빛의 속도로 갈 수 없다면",
+  "author": "김초엽",
   "pages": 344,
   "one_liner": "과학도가 쓴 일곱 편의 SF에서 아름다운 존재들은 어디에 있을까요?",
   "one_liner_style": "question",
@@ -572,6 +602,7 @@
  {
   "isbn": "9791163501190",
   "title": "찢어진 종잇조각의 신",
+  "author": "듀나",
   "pages": 304,
   "one_liner": "죽음을 코앞에 두고도 글을 쓰는 주인공, 열두 편에서 만나 볼까요?",
   "one_liner_style": "question",
@@ -591,6 +622,7 @@
  {
   "isbn": "9791189836504",
   "title": "잼 한 병을 받았습니다",
+  "author": "홍락훈",
   "pages": 421,
   "one_liner": "드래곤도 세금을 내야 한다면, 판타지 세계는 얼마나 웃겨질까요?",
   "one_liner_style": "question",
@@ -610,6 +642,7 @@
  {
   "isbn": "9791168344198",
   "title": "트와이스",
+  "author": "미치 앨봄",
   "pages": 376,
   "one_liner": "시간을 되돌릴 수 있어도 되돌리지 못하는 건 무엇일까요?",
   "one_liner_style": "question",
@@ -629,6 +662,7 @@
  {
   "isbn": "9791189836542",
   "title": "러브 앤 티스",
+  "author": "홍락훈",
   "pages": 408,
   "one_liner": "메이드 카페의 마녀와 드래곤이 만나면 어떤 웃픈 일이 벌어질까요?",
   "one_liner_style": "question",
@@ -648,6 +682,7 @@
  {
   "isbn": "9788963716664",
   "title": "낙원의 이론 1",
+  "author": "정선우",
   "pages": 464,
   "one_liner": "용의 사체로 지은 도시에서 선택받지 못한 이들은 어떻게 될까요?",
   "one_liner_style": "question",
@@ -667,6 +702,7 @@
  {
   "isbn": "9791194413394",
   "title": "궤도",
+  "author": "서맨사 하비",
   "pages": 240,
   "one_liner": "하루에 열여섯 번 해가 뜨고 지는 곳에서 지구는 어떻게 보일까요?",
   "one_liner_style": "question",
@@ -686,6 +722,7 @@
  {
   "isbn": "9791175240421",
   "title": "초판본 오즈의 마법사",
+  "author": "라이먼 프랭크 바움",
   "pages": 244,
   "one_liner": "회오리바람에 날려간 도로시는 어떤 친구들과 에메랄드 시티로 향할까요?",
   "one_liner_style": "question",
@@ -705,6 +742,7 @@
  {
   "isbn": "9791124668016",
   "title": "선 끝에",
+  "author": "천선란, 임솔아",
   "pages": 124,
   "one_liner": "소설 한 편과 시 일곱 편이 SF라는 질문 앞에서 만나면 어떤 풍경이 될까요?",
   "one_liner_style": "question",
@@ -724,6 +762,7 @@
  {
   "isbn": "9788932925851",
   "title": "에드거 앨런 포 단편선",
+  "author": "에드거 앨런 포",
   "pages": 384,
   "one_liner": "죽음에 사로잡힌 이야기꾼은 공포를 어떻게 아름답게 바꿨을까요?",
   "one_liner_style": "question",
@@ -743,6 +782,7 @@
  {
   "isbn": "9791138483995",
   "title": "추리소설가의 살인사건",
+  "author": "히가시노게이고",
   "pages": 296,
   "one_liner": "추리소설가와 편집자, 독자가 얽힌 사건은 얼마나 웃길까요?",
   "one_liner_style": "question",
@@ -762,6 +802,7 @@
  {
   "isbn": "9788972750031",
   "title": "악의",
+  "author": "히가시노 게이고",
   "pages": 356,
   "one_liner": "범인이 먼저 드러난 사건에서, 진짜 동기는 어디에 숨어 있을까요?",
   "one_liner_style": "question",
@@ -781,6 +822,7 @@
  {
   "isbn": "9791194930136",
   "title": "장미와 나이프",
+  "author": "히가시노 게이고",
   "pages": 348,
   "one_liner": "다섯 편의 탐정 이야기 속 덫과 위장을 눈치챌 수 있을까요?",
   "one_liner_style": "question",
@@ -800,6 +842,7 @@
  {
   "isbn": "9791175774162",
   "title": "1차원의 삽목",
+  "author": "마쓰시타 류노스케",
   "pages": 420,
   "one_liner": "오래된 백골의 DNA가 가까운 사람과 맞아떨어진다면 무슨 일일까요?",
   "one_liner_style": "question",
@@ -819,6 +862,7 @@
  {
   "isbn": "9791197708572",
   "title": "이상한 집",
+  "author": "우케쓰",
   "pages": 248,
   "one_liner": "평범한 주택 평면도 속에 숨은 위화감을 알아챌 수 있을까요?",
   "one_liner_style": "question",
@@ -838,6 +882,7 @@
  {
   "isbn": "9791190174756",
   "title": "칵테일, 러브, 좀비",
+  "author": "조예은",
   "pages": 165,
   "one_liner": "사랑과 좀비와 귀신이 뒤섞인 이야기가 궁금하지 않나요?",
   "one_liner_style": "question",
@@ -857,6 +902,7 @@
  {
   "isbn": "9791163165736",
   "title": "마피아 찾기",
+  "author": "김하림",
   "pages": 384,
   "one_liner": "가면 뒤에 숨은 연쇄살인마를 아무도 믿지 않고 가려낼 수 있을까요?",
   "one_liner_style": "question",
@@ -876,6 +922,7 @@
  {
   "isbn": "9791191043419",
   "title": "소문",
+  "author": "오기와라 히로시",
   "pages": 528,
   "one_liner": "향수 홍보용 도시전설이 현실이 되면 소녀들은 어떻게 될까요?",
   "one_liner_style": "question",
@@ -895,6 +942,7 @@
  {
   "isbn": "9791175773424",
   "title": "내가 죽였다",
+  "author": "정해연",
   "pages": 392,
   "one_liner": "자백을 마친 노인이 그날 밤 숨졌다면, 누가 진실을 숨겼을까요?",
   "one_liner_style": "question",
@@ -914,6 +962,7 @@
  {
   "isbn": "9791168343764",
   "title": "흉담",
+  "author": "전건우",
   "pages": 304,
   "one_liner": "자정까지 두 사람에게 들려줘야 하는 저주의 이야기, 버틸 수 있을까요?",
   "one_liner_style": "question",
@@ -933,6 +982,7 @@
  {
   "isbn": "9791167375803",
   "title": "숲의 신",
+  "author": "리즈 무어",
   "pages": 696,
   "one_liner": "한 소녀가 사라진 뒤, 사회의 민낯은 어떻게 드러날까요?",
   "one_liner_style": "question",
@@ -952,6 +1002,7 @@
  {
   "isbn": "9791127562632",
   "title": "귀신나방",
+  "author": "장용민",
   "pages": 412,
   "one_liner": "역사 속 희대의 악인이 다른 몸으로 살아 있다면 어떨까요?",
   "one_liner_style": "question",
@@ -971,6 +1022,7 @@
  {
   "isbn": "9791170522454",
   "title": "데들리 러블리",
+  "author": "배명은 외",
   "pages": 344,
   "one_liner": "호랑이와 인어가 얽힌 사랑은 어떻게 아찔해질까요?",
   "one_liner_style": "question",
@@ -990,6 +1042,7 @@
  {
   "isbn": "9791193153710",
   "title": "[예스리커버] 너를 아끼며 살아라 (10만 부 특별 한정판)",
+  "author": "나태주",
   "pages": 272,
   "one_liner": "가슴속에 간직한 별을 놓치지 않으려면 나를 어떻게 아껴야 할까요?",
   "one_liner_style": "question",
@@ -1009,6 +1062,7 @@
  {
   "isbn": "9791169852180",
   "title": "마음의 어휘력",
+  "author": "조아란 외",
   "pages": 240,
   "one_liner": "짜증 나 한마디에 눌러 담은 마음에 알맞은 이름을 붙여 볼까요?",
   "one_liner_style": "question",
@@ -1028,6 +1082,7 @@
  {
   "isbn": "9791169851053",
   "title": "어른의 행복은 조용하다",
+  "author": "태수",
   "pages": 288,
   "one_liner": "요란하지 않은 하루가 사실은 가장 큰 행복이라면 어떨까요?",
   "one_liner_style": "question",
@@ -1047,6 +1102,7 @@
  {
   "isbn": "9791141618575",
   "title": "그랬다고 적었다",
+  "author": "김애란",
   "pages": 220,
   "one_liner": "소설가가 소설 밖에서 나직하게 건네는 말은 어떤 얼굴일까요?",
   "one_liner_style": "question",
@@ -1066,6 +1122,7 @@
  {
   "isbn": "9791162145043",
   "title": "행복할 거야 이래도 되나 싶을 정도로",
+  "author": "일홍",
   "pages": 304,
   "one_liner": "지친 하루 끝에 다정한 문장 몇 줄이면 조금 나아질까요?",
   "one_liner_style": "question",
@@ -1085,6 +1142,7 @@
  {
   "isbn": "9788901299730",
   "title": "신경 끄기의 기술 (한교동 에디션)",
+  "author": "마크맨슨",
   "pages": 268,
   "one_liner": "부족하다는 말에 지친 날, 나는 무엇에만 마음을 쓸까요?",
   "one_liner_style": "question",
@@ -1104,6 +1162,7 @@
  {
   "isbn": "9788970128337",
   "title": "달리기를 말할 때 내가 하고 싶은 이야기",
+  "author": "무라카미 하루키",
   "pages": 280,
   "one_liner": "매일 길 위를 달리는 소설가는 무엇을 배울까요?",
   "one_liner_style": "question",
@@ -1123,6 +1182,7 @@
  {
   "isbn": "9791197647666",
   "title": "기분이 태도가 되지 말자 (30만 부 기념 최신 개정판)",
+  "author": "김수현",
   "pages": 216,
   "one_liner": "순간의 기분에 휘둘린 말과 행동을 어떻게 다독일 수 있을까요?",
   "one_liner_style": "question",
@@ -1142,6 +1202,7 @@
  {
   "isbn": "9791173323027",
   "title": "호의에 대하여",
+  "author": "문형배",
   "pages": 408,
   "one_liner": "받은 마음을 되돌려주는 일상은 우리를 어떻게 지켜 줄까요?",
   "one_liner_style": "question",
@@ -1161,6 +1222,7 @@
  {
   "isbn": "9788901300702",
   "title": "박완서의 낱말들",
+  "author": "박완서",
   "pages": 264,
   "one_liner": "잊혀 가는 고운 우리말 하나가 하루를 선명하게 바꿀까요?",
   "one_liner_style": "question",
@@ -1180,6 +1242,7 @@
  {
   "isbn": "9791168341890",
   "title": "제철 행복",
+  "author": "김신지",
   "pages": 336,
   "one_liner": "지금 계절에만 만날 수 있는 작은 기쁨을 놓치고 있진 않나요?",
   "one_liner_style": "question",
@@ -1199,6 +1262,7 @@
  {
   "isbn": "9791193300800",
   "title": "유선과 랄프",
+  "author": "찰리 스미스",
   "pages": 224,
   "one_liner": "환하게 웃던 사진 속 두 사람에게는 어떤 이야기가 숨어 있을까요?",
   "one_liner_style": "question",
@@ -1218,6 +1282,7 @@
  {
   "isbn": "9788997381678",
   "title": "소년과 두더지와 여우와 말",
+  "author": "찰리 매커시",
   "pages": 128,
   "one_liner": "가장 용감한 일이 도움을 청하는 것이라면 어떨까요?",
   "one_liner_style": "question",
@@ -1237,6 +1302,7 @@
  {
   "isbn": "9791162145418",
   "title": "구원에게",
+  "author": "정영욱",
   "pages": 304,
   "one_liner": "놓아야 할 사랑을 붙잡을 때, 마음은 어디까지 가라앉을까요?",
   "one_liner_style": "question",
@@ -1256,6 +1322,7 @@
  {
   "isbn": "9788956605593",
   "title": "불안",
+  "author": "알랭 드 보통",
   "pages": 372,
   "one_liner": "돈과 지위에 따라 흔들리는 마음의 뿌리는 어디에 있을까요?",
   "one_liner_style": "question",
@@ -1275,6 +1342,7 @@
  {
   "isbn": "9791194184645",
   "title": "안녕, 피터팬",
+  "author": "전경철",
   "pages": 456,
   "one_liner": "말 못 하는 아들을 두고 떠나야 하는 아버지는 무엇을 남길까요?",
   "one_liner_style": "question",
@@ -1294,6 +1362,7 @@
  {
   "isbn": "9791192372754",
   "title": "각성",
+  "author": "김요한",
   "pages": 224,
   "one_liner": "달콤한 위로 대신 냉정한 한 줄이 나를 일으켜 세울까요?",
   "one_liner_style": "question",
@@ -1313,6 +1382,7 @@
  {
   "isbn": "9788931027068",
   "title": "사랑의 기술",
+  "author": "에리히 프롬",
   "pages": 240,
   "one_liner": "사랑이 감정이 아니라 배우고 익히는 기술이라면 무엇부터 해야 할까요?",
   "one_liner_style": "question",
@@ -1332,6 +1402,7 @@
  {
   "isbn": "9788932024639",
   "title": "서랍에 저녁을 넣어 두었다",
+  "author": "한강",
   "pages": 165,
   "one_liner": "침묵에서 건져 올린 언어를 한 편씩 밑줄 그으며 읽어 볼까요?",
   "one_liner_style": "question",
@@ -1351,6 +1422,7 @@
  {
   "isbn": "9791194280958",
   "title": "초판본 하늘과 바람과 별과 시",
+  "author": "윤동주",
   "pages": 184,
   "one_liner": "서시와 별 헤는 밤에 담긴 자기 성찰을 오늘 밤 읽어 볼까요?",
   "one_liner_style": "question",
@@ -1370,6 +1442,7 @@
  {
   "isbn": "9791157280292",
   "title": "꽃을 보듯 너를 본다",
+  "author": "나태주",
   "pages": 184,
   "one_liner": "독자들이 고른 시 속에서 나는 어떤 사랑을 만날까요?",
   "one_liner_style": "question",
@@ -1389,6 +1462,7 @@
  {
   "isbn": "9788954619578",
   "title": "당신의 이름을 지어다가 며칠은 먹었다",
+  "author": "박준",
   "pages": 144,
   "one_liner": "슬픔과 죽음을 곁에 두고도 다정해질 수 있을까요?",
   "one_liner_style": "question",
@@ -1408,6 +1482,7 @@
  {
   "isbn": "9791141077761",
   "title": "토마토 컵라면",
+  "author": "차정은",
   "pages": 80,
   "one_liner": "한여름 사랑이 식은 뒤에도 토마토 향은 왜 남을까요?",
   "one_liner_style": "question",
@@ -1427,6 +1502,7 @@
  {
   "isbn": "9791192372730",
   "title": "위버멘쉬",
+  "author": "프리드리히 니체",
   "pages": 292,
   "one_liner": "타인의 시선에 흔들릴 때 나를 지켜 줄 단단한 태도는 무엇일까요?",
   "one_liner_style": "question",
@@ -1446,6 +1522,7 @@
  {
   "isbn": "9791199489561",
   "title": "세네카, 오늘을 빼앗기고 있는 당신에게",
+  "author": "루키우스 안나이우스 세네카",
   "pages": 236,
   "one_liner": "하루가 늘 바쁜데 공허하다면 내 시간은 누가 가져갔을까요?",
   "one_liner_style": "question",
@@ -1465,6 +1542,7 @@
  {
   "isbn": "9791193282045",
   "title": "쇼펜하우어 인생수업 (30만 부 기념 개정증보판)",
+  "author": "쇼펜하우어",
   "pages": 224,
   "one_liner": "자아부터 관계까지, 실망할 준비가 오히려 마음을 편하게 할까요?",
   "one_liner_style": "question",
@@ -1484,6 +1562,7 @@
  {
   "isbn": "9791199889378",
   "title": "내 인생이 왜 당신 마음에 들어야 합니까",
+  "author": "김경일",
   "pages": 256,
   "one_liner": "비교에 지친 마음이 행복을 찾아가는 길은 어디에 있을까요?",
   "one_liner_style": "question",
@@ -1503,6 +1582,7 @@
  {
   "isbn": "9791168340770",
   "title": "미움받을 용기 (200만 부 기념 스페셜 에디션)",
+  "author": "기시미 이치로 외",
   "pages": 340,
   "one_liner": "과거 탓을 멈추고 지금 여기에서 변할 수 있다면 무엇부터 할까요?",
   "one_liner_style": "question",
@@ -1522,6 +1602,7 @@
  {
   "isbn": "9791124248171",
   "title": "인생을 위한 최소한의 생각",
+  "author": "신영준, 고영성",
   "pages": 320,
   "one_liner": "짧은 영상에 밀려난 깊은 사유를 어떻게 되찾을 수 있을까요?",
   "one_liner_style": "question",
@@ -1541,6 +1622,7 @@
  {
   "isbn": "9788972917038",
   "title": "소유냐 존재냐",
+  "author": "에리히 프롬",
   "pages": 311,
   "one_liner": "무엇을 가졌는가보다 어떻게 존재하는가를 물으면 삶은 어떻게 달라질까요?",
   "one_liner_style": "question",
@@ -1560,6 +1642,7 @@
  {
   "isbn": "9788936812621",
   "title": "빅터 프랭클의 죽음의 수용소에서",
+  "author": "빅터 프랭클",
   "pages": 264,
   "one_liner": "극한의 시련 속에서도 삶의 이유를 붙드는 힘은 어디서 올까요?",
   "one_liner_style": "question",
@@ -1579,6 +1662,7 @@
  {
   "isbn": "9791193506516",
   "title": "초역 부처의 말",
+  "author": "코이케 류노스케",
   "pages": 256,
   "one_liner": "2500년을 건너온 짧은 말은 약해진 마음에 어떤 힘을 줄까요?",
   "one_liner_style": "question",
@@ -1598,6 +1682,7 @@
  {
   "isbn": "9791124248515",
   "title": "문해내공",
+  "author": "신종호, 김윤정",
   "pages": 528,
   "one_liner": "읽고 쓰는 힘이 멈춰 있다면, 어떻게 다시 키울 수 있을까요?",
   "one_liner_style": "question",
@@ -1617,6 +1702,7 @@
  {
   "isbn": "9788925574394",
   "title": "무의식은 어떻게 나를 설계하는가",
+  "author": "데이비드 이글먼",
   "pages": 344,
   "one_liner": "내 머릿속의 누군가가 내 행동을 대신 정하고 있다면요?",
   "one_liner_style": "question",
@@ -1636,6 +1722,7 @@
  {
   "isbn": "9788932476506",
   "title": "이기적 유전자 The Selfish Gene : 50주년 기념판",
+  "author": "리처드 도킨스",
   "pages": 632,
   "one_liner": "유전자의 시선으로 보면 생명의 다양성은 어떻게 설명될까요?",
   "one_liner_style": "question",
@@ -1655,6 +1742,7 @@
  {
   "isbn": "9788983711892",
   "title": "코스모스",
+  "author": "칼 세이건",
   "pages": 719,
   "one_liner": "밤하늘의 별들이 살고 죽는 이야기를 함께 따라가 볼까요?",
   "one_liner_style": "question",
@@ -1674,6 +1762,7 @@
  {
   "isbn": "9791176611466",
   "title": "이토록 인간적인 물리학",
+  "author": "팀 폴러트",
   "pages": 340,
   "one_liner": "빅뱅에서 나까지 이어진 138억 년 우주 이야기가 궁금하지 않나요?",
   "one_liner_style": "question",
@@ -1693,6 +1782,7 @@
  {
   "isbn": "9791193937990",
   "title": "처음 만나는 양자의 세계",
+  "author": "채은미",
   "pages": 272,
   "one_liner": "파동이면서 입자인 세계는 어떻게 스마트폰과 GPS가 됐을까요?",
   "one_liner_style": "question",
@@ -1712,6 +1802,7 @@
  {
   "isbn": "9791193941577",
   "title": "[예스리커버] 뇌는 어떻게 나를 조종하는가",
+  "author": "크리스 나이바우어",
   "pages": 272,
   "one_liner": "끊임없이 떠오르는 생각이 사실은 좌뇌가 지어낸 이야기라면 어떨까요?",
   "one_liner_style": "question",
@@ -1731,6 +1822,7 @@
  {
   "isbn": "9791189327156",
   "title": "물고기는 존재하지 않는다",
+  "author": "룰루 밀러",
   "pages": 300,
   "one_liner": "오래된 도감 속 물고기가 사라지면 삶의 의미는 어디에 남을까요?",
   "one_liner_style": "question",
@@ -1750,6 +1842,7 @@
  {
   "isbn": "9788962627145",
   "title": "세상이 그대를 속일지라도",
+  "author": "김상욱",
   "pages": 320,
   "one_liner": "물리학자의 눈으로 보면 인간의 변치 않는 본성은 무엇일까요?",
   "one_liner_style": "question",
@@ -1769,6 +1862,7 @@
  {
   "isbn": "9788962622508",
   "title": "떨림과 울림",
+  "author": "김상욱",
   "pages": 272,
   "one_liner": "원자까지 내려가 바라보면 나와 세계는 어떻게 달라 보일까요?",
   "one_liner_style": "question",
@@ -1788,6 +1882,7 @@
  {
   "isbn": "9791130682952",
   "title": "극한 진화의 세계",
+  "author": "이정모",
   "pages": 396,
   "one_liner": "가장 혹독한 곳에서 살아남은 생명들은 어떤 비밀을 품고 있을까요?",
   "one_liner_style": "question",
@@ -1807,6 +1902,7 @@
  {
   "isbn": "9791197831744",
   "title": "창조적 행위",
+  "author": "릭 루빈",
   "pages": 352,
   "one_liner": "안테나처럼 귀 기울이면 내 안의 창의성이 눈을 뜰까요?",
   "one_liner_style": "question",
@@ -1826,6 +1922,7 @@
  {
   "isbn": "9791176881456",
   "title": "아름다운 것들은 비밀을 품고 있다",
+  "author": "파묘",
   "pages": 236,
   "one_liner": "익숙한 명화 속 숨은 디테일을 찾으면 어떤 사건이 보일까요?",
   "one_liner_style": "question",
@@ -1845,6 +1942,7 @@
  {
   "isbn": "9791140714575",
   "title": "[예스리커버] 미술관에 간 할미",
+  "author": "할미",
   "pages": 280,
   "one_liner": "그림 뒤에 숨은 화가들의 반전 인생을 들으면 미술이 쉬워질까요?",
   "one_liner_style": "question",
@@ -1864,6 +1962,7 @@
  {
   "isbn": "9791191975376",
   "title": "휴대폰과 독화살",
+  "author": "장준호",
   "pages": 336,
   "one_liner": "사라져 가는 삶을 지키는 사람들은 무엇을 잃고 있을까요?",
   "one_liner_style": "question",
@@ -1883,6 +1982,7 @@
  {
   "isbn": "9791191114591",
   "title": "여행의 이유",
+  "author": "김영하",
   "pages": 260,
   "one_liner": "여행이 끝난 뒤 돌아온 일상은 어떻게 다르게 보일까요?",
   "one_liner_style": "question",
@@ -1902,6 +2002,7 @@
  {
   "isbn": "9791156646532",
   "title": "모두를 위한 R 데이터 분석 입문",
+  "author": "오세종",
   "pages": 584,
   "one_liner": "R 문법과 데이터프레임을 예제로 익히며 데이터 분석을 시작해요",
   "one_liner_style": "summary",
@@ -1919,6 +2020,7 @@
  {
   "isbn": "9788931480634",
   "title": "데이터 시각화와 탐색 with POWER BI 3rd",
+  "author": "마경근, 서주란",
   "pages": 628,
   "one_liner": "흩어진 데이터를 모아 정제하고 파워BI로 시각화해 공유하는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -1936,6 +2038,7 @@
  {
   "isbn": "9791173400780",
   "title": "AI로 완성하는 데이터 리터러시",
+  "author": "김규석",
   "pages": 292,
   "one_liner": "문제 정의부터 보고서까지 AI와 함께 데이터를 분석하는 4단계를 알려줘요",
   "one_liner_style": "summary",
@@ -1953,6 +2056,7 @@
  {
   "isbn": "9791158395483",
   "title": "데이터 분석가가 반드시 알아야 할 모든 것",
+  "author": "황세웅",
   "pages": 640,
   "one_liner": "통계 기초부터 머신러닝까지 분석 업무 단계를 쉬운 개념으로 이해해요",
   "one_liner_style": "summary",
@@ -1969,6 +2073,7 @@
  {
   "isbn": "9791192469317",
   "title": "실무에 바로 쓰는 일잘러의 엑셀 데이터 분석",
+  "author": "에이블런",
   "pages": 268,
   "one_liner": "엑셀로 공공데이터를 불러와 통계 분석까지 해 보는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -1987,6 +2092,7 @@
  {
   "isbn": "9791192932170",
   "title": "DB 입문자를 위한 데이터베이스 기초와 SQL",
+  "author": "오세종",
   "pages": 556,
   "one_liner": "관계형 모델과 SQL로 데이터베이스를 설계하고 다루는 기초를 알려줘요",
   "one_liner_style": "summary",
@@ -2003,6 +2109,7 @@
  {
   "isbn": "9791140708277",
   "title": "최소한의 데이터 리터러시",
+  "author": "송석리 외",
   "pages": 228,
   "one_liner": "생활 속 데이터를 읽고 질문하며 데이터 리터러시를 키우는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -2020,6 +2127,7 @@
  {
   "isbn": "9791163033493",
   "title": "Do it! 쉽게 배우는 파이썬 데이터 분석",
+  "author": "김영우",
   "pages": 472,
   "one_liner": "통계나 코딩을 몰라도 파이썬으로 데이터 정제부터 그래프까지 따라 해요",
   "one_liner_style": "summary",
@@ -2036,6 +2144,7 @@
  {
   "isbn": "9791163035725",
   "title": "Do it! MySQL로 배우는 SQL 입문",
+  "author": "강성욱",
   "pages": 408,
   "one_liner": "실습 예제 300개로 MySQL 설치부터 조인과 뷰까지 SQL을 익혀요",
   "one_liner_style": "summary",
@@ -2053,6 +2162,7 @@
  {
   "isbn": "9791196203757",
   "title": "대시보드 설계와 데이터 시각화",
+  "author": "스티브 웩슬러 외",
   "pages": 436,
   "one_liner": "강의와 매출, 서버 같은 시나리오별 대시보드를 하나씩 설계해 봐요",
   "one_liner_style": "summary",
@@ -2069,6 +2179,7 @@
  {
   "isbn": "9791193083185",
   "title": "이토록 쉬운 엑셀 데이터 분석 with 챗GPT",
+  "author": "임선집 외",
   "pages": 348,
   "one_liner": "엑셀과 챗GPT를 함께 써서 전처리부터 시각화까지 분석 과정을 밟아요",
   "one_liner_style": "summary",
@@ -2086,6 +2197,7 @@
  {
   "isbn": "9791140712823",
   "title": "코딩 자율학습 잔재미코딩의 파이썬 데이터 분석 입문",
+  "author": "Dave Lee",
   "pages": 432,
   "one_liner": "파이썬과 Pandas로 데이터를 불러와 전처리하고 시각화하는 흐름을 익혀요",
   "one_liner_style": "summary",
@@ -2103,6 +2215,7 @@
  {
   "isbn": "9791162244258",
   "title": "엑셀 데이터 분석 바이블",
+  "author": "최준선",
   "pages": 712,
   "one_liner": "피벗 테이블과 파워 쿼리로 엑셀 데이터를 정리하고 분석하는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -2121,6 +2234,7 @@
  {
   "isbn": "9791197149887",
   "title": "데이터 분석가의 숫자유감",
+  "author": "권정민",
   "pages": 344,
   "one_liner": "직장 만화 속 에피소드로 상관관계와 실험 같은 데이터 상식을 익혀요",
   "one_liner_style": "summary",
@@ -2135,6 +2249,7 @@
  {
   "isbn": "9791189909109",
   "title": "데이터 시각화 교과서",
+  "author": "클라우스 윌케",
   "pages": 376,
   "one_liner": "그래프와 차트를 왜곡 없이 그리는 원리와 색 쓰는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -2151,6 +2266,7 @@
  {
   "isbn": "9791169210287",
   "title": "혼자 공부하는 데이터 분석 with 파이썬",
+  "author": "박해선",
   "pages": 496,
   "one_liner": "코랩과 파이썬으로 데이터 분석을 처음부터 혼자 익히도록 도와줘요",
   "one_liner_style": "summary",
@@ -2168,6 +2284,7 @@
  {
   "isbn": "9791188829439",
   "title": "실무에서 바로 통하는 데이터 시각화 노하우",
+  "author": "전익진",
   "pages": 240,
   "one_liner": "보고서와 발표에서 설득력 있는 표와 차트를 만드는 요령을 알려줘요",
   "one_liner_style": "summary",
@@ -2184,6 +2301,7 @@
  {
   "isbn": "9788990994004",
   "title": "세상에서 가장 쉬운 통계학 입문",
+  "author": "고지마 히로유키",
   "pages": 238,
   "one_liner": "중학교 수학만으로 표준편차부터 검정과 구간추정까지 통계 기초를 짚어줘요",
   "one_liner_style": "summary",
@@ -2201,6 +2319,7 @@
  {
   "isbn": "9791197889141",
   "title": "숫자 감각의 힘",
+  "author": "사이토 고타츠",
   "pages": 240,
   "one_liner": "성공 확률을 높이는 25가지 숫자 분석 사례로 숫자 감각을 길러 봐요",
   "one_liner_style": "summary",
@@ -2219,6 +2338,7 @@
  {
   "isbn": "9788956749075",
   "title": "파이썬 데이터 과학 통계 학습",
+  "author": "황보현우, 정지현",
   "pages": 476,
   "one_liner": "파이썬 코드로 회귀와 분류, 그룹화, 차원 축소까지 차근차근 익혀요",
   "one_liner_style": "summary",
@@ -2236,6 +2356,7 @@
  {
   "isbn": "9788965403388",
   "title": "빅데이터 시대, 올바른 인사이트를 위한 통계 101×데이터 분석",
+  "author": "아베 마사토",
   "pages": 400,
   "one_liner": "확률과 가설검정, 베이즈까지 통계의 사고방식을 쉬운 개념으로 익혀요",
   "one_liner_style": "summary",
@@ -2256,6 +2377,7 @@
  {
   "isbn": "9791162244180",
   "title": "데이터 과학을 위한 통계",
+  "author": "피터 브루스 외",
   "pages": 380,
   "one_liner": "데이터 과학에 필요한 통계 개념을 R과 파이썬 코드와 함께 정리해줘요",
   "one_liner_style": "summary",
@@ -2274,6 +2396,7 @@
  {
   "isbn": "9788901244488",
   "title": "숫자에 약한 사람들을 위한 통계학 수업",
+  "author": "데이비드 스피겔할터",
   "pages": 460,
   "one_liner": "비율과 회귀, 확률과 불확실성 같은 통계의 핵심 개념을 실제 질문으로 풀어줘요",
   "one_liner_style": "summary",
@@ -2290,6 +2413,7 @@
  {
   "isbn": "9788962605952",
   "title": "벌거벗은 통계학 (리커버 에디션)",
+  "author": "찰스 윌런",
   "pages": 448,
   "one_liner": "야구·영화 추천·여론조사 사례로 숫자 뒤의 진실을 읽는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -2306,6 +2430,7 @@
  {
   "isbn": "9791163033073",
   "title": "Do it! 첫 통계 with 베이즈",
+  "author": "사사키 준",
   "pages": 216,
   "one_liner": "17가지 통계 기초와 생활 속 문제로 베이즈 통계를 쉽게 익혀요",
   "one_liner_style": "summary",
@@ -2324,6 +2449,7 @@
  {
   "isbn": "9791161758343",
   "title": "통계의 함정",
+  "author": "앨런 B. 다우니",
   "pages": 328,
   "one_liner": "평균과 편향 같은 통계의 오해를 사례로 짚어 바르게 읽게 해줘요",
   "one_liner_style": "summary",
@@ -2340,6 +2466,7 @@
  {
   "isbn": "9788965022893",
   "title": "통계학 超초 입문",
+  "author": "다카하시 요이치",
   "pages": 184,
   "one_liner": "히스토그램과 평균, 분산, 표준편차의 뜻을 쉽게 짚어 줘요",
   "one_liner_style": "summary",
@@ -2357,6 +2484,7 @@
  {
   "isbn": "9788947526562",
   "title": "괴짜 통계학",
+  "author": "김진호",
   "pages": 280,
   "one_liner": "도박과 여론조사 같은 일상 사례로 숫자에 속지 않는 눈을 길러 줘요",
   "one_liner_style": "summary",
@@ -2373,6 +2501,7 @@
  {
   "isbn": "9791161754727",
   "title": "통계학으로 배우는 머신러닝 2/e",
+  "author": "트레버 헤이스트 외",
   "pages": 844,
   "one_liner": "회귀에서 신경망까지 머신러닝 알고리즘의 통계 이론을 깊이 이해해요",
   "one_liner_style": "summary",
@@ -2391,6 +2520,7 @@
  {
   "isbn": "9791169213196",
   "title": "파이썬으로 배우는 통계학 교과서",
+  "author": "바바 신야",
   "pages": 528,
   "one_liner": "파이썬 코드를 돌려 보며 기술통계와 가설검정을 직관적으로 이해해요",
   "one_liner_style": "summary",
@@ -2411,6 +2541,7 @@
  {
   "isbn": "9788987527598",
   "title": "통계학, 빅데이터를 잡다",
+  "author": "조재근",
   "pages": 412,
   "one_liner": "빅데이터와 머신러닝을 떠받치는 통계학 개념을 쉽게 풀어 줘요",
   "one_liner_style": "summary",
@@ -2428,6 +2559,7 @@
  {
   "isbn": "9788965022817",
   "title": "만화로 아주 쉽게 배우는 통계학",
+  "author": "고지마 히로유키",
   "pages": 251,
   "one_liner": "평균과 표준편차부터 비즈니스에 쓰는 통계의 기초를 그림으로 알려줘요",
   "one_liner_style": "summary",
@@ -2446,6 +2578,7 @@
  {
   "isbn": "9791140714568",
   "title": "59가지 통계학 궁금증 완전 정복",
+  "author": "황성원",
   "pages": 264,
   "one_liner": "상관과 인과, 정규화처럼 실무에서 헷갈리는 통계 개념을 풀어 줘요",
   "one_liner_style": "summary",
@@ -2465,6 +2598,7 @@
  {
   "isbn": "9791192229508",
   "title": "개념 있는 수학자 : 대수·미적분·확률과 통계 편",
+  "author": "이광연",
   "pages": 288,
   "one_liner": "지수·로그·삼각함수 등 수학 개념을 정확히 이해하도록 도와줘요",
   "one_liner_style": "summary",
@@ -2481,6 +2615,7 @@
  {
   "isbn": "9791189028589",
   "title": "뚝딱 바로 써먹는 AI 3대장 챗GPT · 제미나이 · 클로드",
+  "author": "코리아교육그룹",
   "pages": 312,
   "one_liner": "세 가지 AI의 강점을 내 업무 상황에 맞게 골라 쓰는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -2500,6 +2635,7 @@
  {
   "isbn": "9791124373071",
   "title": "챗GPT · 제미나이 · 클로드까지 모두를 위한 AI",
+  "author": "지현이",
   "pages": 252,
   "one_liner": "글과 이미지, 음악, 영상을 AI로 만드는 기초 요령을 따라 익혀요",
   "one_liner_style": "summary",
@@ -2519,6 +2655,7 @@
  {
   "isbn": "9791194383796",
   "title": "이게 되네? 제미나이 완전 미친 활용법 81제",
+  "author": "오힘찬",
   "pages": 340,
   "one_liner": "제미나이로 영상 제작과 보고서 작성 같은 업무를 빠르게 줄여요",
   "one_liner_style": "summary",
@@ -2536,6 +2673,7 @@
  {
   "isbn": "9791190488617",
   "title": "AI 시대의 질문력, 프롬프트 엔지니어링",
+  "author": "류한석",
   "pages": 528,
   "one_liner": "질문 방식을 바꿔 AI에게서 더 나은 답을 끌어내는 프롬프트 작성법을 알려줘요",
   "one_liner_style": "summary",
@@ -2552,6 +2690,7 @@
  {
   "isbn": "9791140719914",
   "title": "클로드 코드 제대로 시작하기",
+  "author": "주홍철, 황진성",
   "pages": 460,
   "one_liner": "클로드 코드로 바이브 코딩을 시작해 스킬과 서브에이전트까지 익혀요",
   "one_liner_style": "summary",
@@ -2571,6 +2710,7 @@
  {
   "isbn": "9791189028596",
   "title": "뚝딱 바로 써먹는 첫 클로드 : 프롬프트 엔지니어링 실전 가이드",
+  "author": "심재빈",
   "pages": 248,
   "one_liner": "역할·맥락·요청·형식·조건으로 프롬프트를 짜고 업무를 자동화하게 도와줘요",
   "one_liner_style": "summary",
@@ -2589,6 +2729,7 @@
  {
   "isbn": "9791199529847",
   "title": "혼자 공부하는 바이브 코딩 with 클로드 코드",
+  "author": "조태호",
   "pages": 384,
   "one_liner": "15가지 실습 프로젝트로 설치부터 배포까지 나만의 웹 앱을 만들어요",
   "one_liner_style": "summary",
@@ -2607,6 +2748,7 @@
  {
   "isbn": "9791124516133",
   "title": "바로바로 클로드 with 코워크, 스킬, 클로드 코드, 디자인",
+  "author": "차진우",
   "pages": 372,
   "one_liner": "클로드로 문서 작업부터 코딩·디자인까지 업무를 맡기는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -2628,6 +2770,7 @@
  {
   "isbn": "9791194383772",
   "title": "요즘 바이브 코딩 코덱스 완벽 가이드",
+  "author": "윤재원",
   "pages": 344,
   "one_liner": "코덱스로 프롬프트 기초부터 MCP와 스킬 활용까지 실전 개발을 익혀요",
   "one_liner_style": "summary",
@@ -2646,6 +2789,7 @@
  {
   "isbn": "9788960309258",
   "title": "5분 컷, 미친 효율 AI 프롬프트",
+  "author": "송진주",
   "pages": 264,
   "one_liner": "AI에게 메일·회의·문서 업무를 직접 시켜 바로 쓸 결과물을 만들어요",
   "one_liner_style": "summary",
@@ -2662,6 +2806,7 @@
  {
   "isbn": "9791194587804",
   "title": "LLM을 위한 프롬프트 엔지니어링",
+  "author": "존 베리먼 외",
   "pages": 300,
   "one_liner": "LLM이 토큰 단위로 작동하는 원리부터 프롬프트를 설계하는 이유를 알려줘요",
   "one_liner_style": "summary",
@@ -2680,6 +2825,7 @@
  {
   "isbn": "9791175790896",
   "title": "누구나 아는 나만 모르는 클로드",
+  "author": "이성원",
   "pages": 252,
   "one_liner": "코딩을 몰라도 클로드로 글쓰기부터 웹사이트 만들기까지 따라 해요",
   "one_liner_style": "summary",
@@ -2699,6 +2845,7 @@
  {
   "isbn": "9791124516157",
   "title": "바로바로 제미나이 X 구글 AI",
+  "author": "공냥이",
   "pages": 376,
   "one_liner": "구글의 다양한 AI 도구를 업무에 활용하는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -2717,6 +2864,7 @@
  {
   "isbn": "9791163037057",
   "title": "Do it! LLM을 활용한 AI 에이전트 개발 입문",
+  "author": "이성용",
   "pages": 504,
   "one_liner": "GPT API로 업무 자동화 프로그램과 협업하는 에이전트를 직접 만들어요",
   "one_liner_style": "summary",
@@ -2734,6 +2882,7 @@
  {
   "isbn": "9791169213998",
   "title": "생성형 AI를 위한 프롬프트 엔지니어링",
+  "author": "제임스 피닉스 외",
   "pages": 492,
   "one_liner": "좋은 프롬프트를 만드는 다섯 가지 원칙과 모델별 활용법을 알려줘요",
   "one_liner_style": "summary",
@@ -2755,6 +2904,7 @@
  {
   "isbn": "9791173400292",
   "title": "생성형 AI 활용과 실습",
+  "author": "서지영",
   "pages": 376,
   "one_liner": "챗GPT 같은 도구로 글과 이미지, 영상을 직접 만들며 AI 원리를 익혀요",
   "one_liner_style": "summary",
@@ -2772,6 +2922,7 @@
  {
   "isbn": "9791198240828",
   "title": "프롬프트 엔지니어링 교과서",
+  "author": "서승완",
   "pages": 196,
   "one_liner": "역할 지정 같은 12가지 기법으로 챗GPT 답변의 품질을 높이는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -2790,6 +2941,7 @@
  {
   "isbn": "9791194383130",
   "title": "파이썬 업무 자동화 일잘러 되기 + 챗GPT",
+  "author": "메이허",
   "pages": 608,
   "one_liner": "파일과 엑셀, 워드, PDF 처리를 파이썬 코드로 자동화하는 프로그램을 만들어요",
   "one_liner_style": "summary",
@@ -2808,6 +2960,7 @@
  {
   "isbn": "9791189028619",
   "title": "뚝딱 바로 써먹는 AI 실무 엑셀 : 챗GPT · 제미나이 · 코파일럿",
+  "author": "주보연",
   "pages": 372,
   "one_liner": "엑셀 함수를 외우지 않고 원리로 이해해 AI와 함께 업무에 써요",
   "one_liner_style": "summary",
@@ -2826,6 +2979,7 @@
  {
   "isbn": "9791191600704",
   "title": "진짜 쓰는 실무 엑셀",
+  "author": "오빠두",
   "pages": 508,
   "one_liner": "엑셀 함수와 동적 배열로 자료 취합·분석·시각화를 빠르게 하는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -2843,6 +2997,7 @@
  {
   "isbn": "9788965404446",
   "title": "AI 대세전환 노션xAI 압도적 업무 생산성",
+  "author": "지니언트",
   "pages": 416,
   "one_liner": "노션 페이지와 데이터베이스부터 AI 업무 자동화까지 차근차근 따라 해요",
   "one_liner_style": "summary",
@@ -2860,6 +3015,7 @@
  {
   "isbn": "9791198685353",
   "title": "50개의 프로젝트로 완성하는 파이썬 업무 자동화",
+  "author": "오토코더",
   "pages": 320,
   "one_liner": "50개 프로젝트를 만들며 파이썬으로 업무와 데이터 수집을 자동화해요",
   "one_liner_style": "summary",
@@ -2879,6 +3035,7 @@
  {
   "isbn": "9791194084242",
   "title": "챗GPT·퍼플렉시티·클로드·코파일럿·제미나이 다 잘함",
+  "author": "이호정",
   "pages": 488,
   "one_liner": "다섯 가지 생성형 AI의 특징을 알고 내 업무에 맞게 골라 쓰는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -2897,6 +3054,7 @@
  {
   "isbn": "9791191407310",
   "title": "구글 워크스페이스로 완성하는 AI 업무 자동화 시스템",
+  "author": "차지영",
   "pages": 280,
   "one_liner": "메모와 일정, 문서, 메일을 AI와 연동해 나만의 업무 시스템을 만들어요",
   "one_liner_style": "summary",
@@ -2914,6 +3072,7 @@
  {
   "isbn": "9788960884250",
   "title": "IT 비전공자를 위한 파이썬 업무 자동화 (RPA)",
+  "author": "비현코",
   "pages": 384,
   "one_liner": "반복 업무를 파이썬으로 줄이는 방법을 비전공자 눈높이로 알려줘요",
   "one_liner_style": "summary",
@@ -2930,6 +3089,7 @@
  {
   "isbn": "9791158392260",
   "title": "일 잘하는 직장인을 위한 엑셀 자동화 with 파이썬",
+  "author": "최은석",
   "pages": 632,
   "one_liner": "파이썬 문법부터 익혀 지루한 엑셀 업무를 자동으로 처리해요",
   "one_liner_style": "summary",
@@ -2947,6 +3107,7 @@
  {
   "isbn": "9791140713127",
   "title": "M365 코파일럿 무작정 따라하기",
+  "author": "김시연, 서지영",
   "pages": 252,
   "one_liner": "엑셀과 워드 같은 M365 앱에서 코파일럿과 프롬프트로 일하는 법을 따라 해요",
   "one_liner_style": "summary",
@@ -2964,6 +3125,7 @@
  {
   "isbn": "9791163034858",
   "title": "된다! 업무 자동화를 위한 구글 앱스 스크립트",
+  "author": "사카이노 타카요시",
   "pages": 352,
   "one_liner": "코딩 경험 없이 스크립트를 짜서 일일 보고서 발송 같은 반복 업무를 없애요",
   "one_liner_style": "summary",
@@ -2980,6 +3142,7 @@
  {
   "isbn": "9791140713899",
   "title": "커리어 스킬업 파이썬 업무 자동화",
+  "author": "손원준",
   "pages": 492,
   "one_liner": "파이썬 기초부터 웹 크롤링까지 단계별로 익히며 업무를 자동화해요",
   "one_liner_style": "summary",
@@ -2997,6 +3160,7 @@
  {
   "isbn": "9791194587330",
   "title": "업무와 일상을 정리하는 새로운 방법 노션",
+  "author": "전시진",
   "pages": 448,
   "one_liner": "분산된 도구를 한곳에 모아 정리하는 사용법을 따라 익혀요",
   "one_liner_style": "summary",
@@ -3013,6 +3177,7 @@
  {
   "isbn": "9788960885110",
   "title": "퇴근이 빨라지는 제미나이 & 노트북LM 업무 자동화 정석 엑셀 X AI",
+  "author": "권현욱",
   "pages": 288,
   "one_liner": "제미나이 답변을 엑셀 데이터로 옮겨 업무에 바로 쓰는 방법을 알려줘요",
   "one_liner_style": "summary",
@@ -3030,6 +3195,7 @@
  {
   "isbn": "9791165922597",
   "title": "사장님 몰래하는 파이썬 업무 자동화",
+  "author": "정용범, 손상우",
   "pages": 472,
   "one_liner": "엑셀·워드·PDF·이메일 작업을 파이썬 코드로 자동 처리하는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -3047,6 +3213,7 @@
  {
   "isbn": "9791169212304",
   "title": "일잘러의 비밀, 구글 스프레드시트 제대로 파헤치기",
+  "author": "강남석",
   "pages": 512,
   "one_liner": "구글 스프레드시트의 배열 수식과 앱스 스크립트로 반복 업무를 줄여요",
   "one_liner_style": "summary",
@@ -3065,6 +3232,7 @@
  {
   "isbn": "9791140717057",
   "title": "직장인을 위한 AI 실무 엑셀",
+  "author": "선양미",
   "pages": 452,
   "one_liner": "파워 쿼리와 AI로 엑셀 작업 시간을 줄이는 실무 요령을 알려줘요",
   "one_liner_style": "summary",
@@ -3083,6 +3251,7 @@
  {
   "isbn": "9791139723281",
   "title": "회복탄력성의 뇌과학",
+  "author": "아디티 네루카",
   "pages": 376,
   "one_liner": "스트레스와 번아웃을 다스리는 다섯 가지 리셋 방법을 뇌과학으로 알려줘요",
   "one_liner_style": "summary",
@@ -3100,6 +3269,7 @@
  {
   "isbn": "9791188102259",
   "title": "더 시스템 THE SYSTEM",
+  "author": "스콧 애덤스",
   "pages": 384,
   "one_liner": "실패를 겪은 저자가 목표 대신 시스템으로 성공한 경험을 들려줘요",
   "one_liner_style": "summary",
@@ -3114,6 +3284,7 @@
  {
   "isbn": "9791162540640",
   "title": "아주 작은 습관의 힘 (50만 부 기념 스페셜 에디션)",
+  "author": "제임스 클리어",
   "pages": 360,
   "one_liner": "매일 1퍼센트씩 쌓는 작은 행동으로 습관을 바꾸는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -3130,6 +3301,7 @@
  {
   "isbn": "9791162543184",
   "title": "당신의 뇌는 변화가 필요합니다",
+  "author": "가비아 톨리키타",
   "pages": 336,
   "one_liner": "사소한 행동 설계로 작심삼일을 넘기는 습관 만드는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -3146,6 +3318,7 @@
  {
   "isbn": "9788925568379",
   "title": "모든 하루는 뇌에서 시작된다",
+  "author": "벤트 프라이발트",
   "pages": 416,
   "one_liner": "아침부터 밤까지 하루 속 습관과 집중을 뇌과학으로 풀어 줘요",
   "one_liner_style": "summary",
@@ -3164,6 +3337,7 @@
  {
   "isbn": "9788927881612",
   "title": "김민식의 내 몸을 바꾸는 평생 루틴",
+  "author": "김민식",
   "pages": 288,
   "one_liner": "식생활, 운동, 수면을 바꾼 저자의 경험으로 무리 없는 건강 루틴을 만들어 봐요",
   "one_liner_style": "summary",
@@ -3180,6 +3354,7 @@
  {
   "isbn": "9791193865156",
   "title": "내 마음을 위한 뇌과학",
+  "author": "쿼카쌤",
   "pages": 236,
   "one_liner": "불안과 무기력이 뇌의 자연스러운 반응임을 알고 마음을 다스려요",
   "one_liner_style": "summary",
@@ -3197,6 +3372,7 @@
  {
   "isbn": "9791173579974",
   "title": "뇌는 왜 나를 딴짓하게 만드는가",
+  "author": "젤레나 몬미니",
   "pages": 428,
   "one_liner": "집중이 흐트러지는 이유를 뇌와 환경 원리로 풀고 주의력을 되찾는 길을 보여줘요",
   "one_liner_style": "summary",
@@ -3213,6 +3389,7 @@
  {
   "isbn": "9791167740984",
   "title": "도둑맞은 집중력",
+  "author": "요한 하리",
   "pages": 464,
   "one_liner": "산만해지는 이유를 개인 의지가 아닌 사회 구조에서 찾아 줘요",
   "one_liner_style": "summary",
@@ -3229,6 +3406,7 @@
  {
   "isbn": "9791139718805",
   "title": "집중의 뇌과학",
+  "author": "가바사와 시온",
   "pages": 216,
   "one_liner": "스마트폰에 뺏긴 집중력을 뇌의 생체 리듬과 호르몬으로 풀어 줘요",
   "one_liner_style": "summary",
@@ -3248,6 +3426,7 @@
  {
   "isbn": "9788965294931",
   "title": "독서 습관 만드는 법",
+  "author": "정석헌",
   "pages": 220,
   "one_liner": "부담 없이 하루 두 쪽부터 읽기 루틴을 붙이는 방법을 알려줘요",
   "one_liner_style": "summary",
@@ -3264,6 +3443,7 @@
  {
   "isbn": "9791169851442",
   "title": "바쁜 뇌를 회복하라",
+  "author": "로미 무슈타크 박사",
   "pages": 424,
   "one_liner": "불면증과 불안, 집중력 저하를 8주 동안 다스리는 뇌 회복법을 알려줘요",
   "one_liner_style": "summary",
@@ -3281,6 +3461,7 @@
  {
   "isbn": "9788965706342",
   "title": "당신의 뇌는 최적화를 원한다",
+  "author": "가바사와 시온",
   "pages": 276,
   "one_liner": "도파민 같은 뇌 속 물질을 생활습관으로 다루는 방법을 알려줘요",
   "one_liner_style": "summary",
@@ -3300,6 +3481,7 @@
  {
   "isbn": "9791166572012",
   "title": "50부터 뇌가 젊어지는 습관",
+  "author": "와다 히데키",
   "pages": 226,
   "one_liner": "전두엽을 젊게 지키는 63가지 생활습관을 하나씩 알려줘요",
   "one_liner_style": "summary",
@@ -3316,6 +3498,7 @@
  {
   "isbn": "9788947549394",
   "title": "직장으로 간 뇌과학자",
+  "author": "존 메디나",
   "pages": 376,
   "one_liner": "팀과 재택근무, 사무실 환경에서 뇌가 일하는 원리를 쉽게 짚어 줘요",
   "one_liner_style": "summary",
@@ -3332,6 +3515,7 @@
  {
   "isbn": "9788965965046",
   "title": "도파민네이션",
+  "author": "애나 렘키",
   "pages": 316,
   "one_liner": "임상 사례로 도파민과 중독의 원리를 살펴보고 탐닉 속에서 균형 찾는 법을 배워요",
   "one_liner_style": "summary",
@@ -3349,6 +3533,7 @@
  {
   "isbn": "9791185584454",
   "title": "나는 4시간만 일한다",
+  "author": "팀 페리스",
   "pages": 368,
   "one_liner": "일주일에 몇 시간만 일하고 원하는 삶을 누리는 방식을 알려줘요",
   "one_liner_style": "summary",
@@ -3363,6 +3548,7 @@
  {
   "isbn": "9791171830909",
   "title": "시간 지도",
+  "author": "모치즈키 도시타카",
   "pages": 244,
   "one_liner": "긴급한 일에 속지 않고 목표와 계획으로 시간을 설계하는 원리를 알려줘요",
   "one_liner_style": "summary",
@@ -3380,6 +3566,7 @@
  {
   "isbn": "9791165347048",
   "title": "세컨드 브레인",
+  "author": "티아고 포르테",
   "pages": 352,
   "one_liner": "수집·정리·표현 단계로 지식을 관리해 결과물로 잇는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -3397,6 +3584,7 @@
  {
   "isbn": "9791171714308",
   "title": "혼자 있는 시간의 힘",
+  "author": "사이토 다카시",
   "pages": 232,
   "one_liner": "혼자 보낸 10년의 경험으로 고독이 지적 성장이 되는 이유를 들려줘요",
   "one_liner_style": "summary",
@@ -3411,6 +3599,7 @@
  {
   "isbn": "9791130650678",
   "title": "거인의 시간",
+  "author": "어맨사 임버",
   "pages": 464,
   "one_liner": "세계적 리더들의 인터뷰로 우선순위와 하루 구조를 짜는 습관을 알려줘요",
   "one_liner_style": "summary",
@@ -3428,6 +3617,7 @@
  {
   "isbn": "9788994938011",
   "title": "365 매일쓰는 메모 습관",
+  "author": "조병천",
   "pages": 179,
   "one_liner": "성공한 사람들의 사례와 함께 메모 도구와 기술, 활용법을 익혀요",
   "one_liner_style": "summary",
@@ -3444,6 +3634,7 @@
  {
   "isbn": "9788965966500",
   "title": "시간 해방",
+  "author": "댄 마텔",
   "pages": 376,
   "one_liner": "내 시간을 팔지 않고 사는 사고방식, 바이백 원칙을 알려줘요",
   "one_liner_style": "summary",
@@ -3460,6 +3651,7 @@
  {
   "isbn": "9791162998328",
   "title": "새벽 4시, 꿈이 현실이 되는 시간",
+  "author": "박춘성",
   "pages": 386,
   "one_liner": "새벽 4시에 일어나 자격증과 박사학위까지 이룬 경험을 들려줘요",
   "one_liner_style": "summary",
@@ -3476,6 +3668,7 @@
  {
   "isbn": "9791164139934",
   "title": "기획자가 일 잘하는 법",
+  "author": "Peter",
   "pages": 296,
   "one_liner": "전략기획의 프레임으로 회사와 고객을 설득하는 기획 실무를 익혀요",
   "one_liner_style": "summary",
@@ -3492,6 +3685,7 @@
  {
   "isbn": "9791194777441",
   "title": "계획이 문제였습니다",
+  "author": "정지하",
   "pages": 300,
   "one_liner": "실천하기 쉬운 계획 공식으로 한정된 시간을 내 뜻대로 쓰는 법을 알려줘요",
   "one_liner_style": "summary",
@@ -3509,6 +3703,7 @@
  {
   "isbn": "9791186805848",
   "title": "메모의 재발견",
+  "author": "사이토 다카시",
   "pages": 248,
   "one_liner": "노트와 펜으로 메모하며 정보를 내 지식으로 만드는 습관을 알려줘요",
   "one_liner_style": "summary",
@@ -3525,6 +3720,7 @@
  {
   "isbn": "9791140711970",
   "title": "기록이라는 세계",
+  "author": "리니",
   "pages": 240,
   "one_liner": "짧은 메모부터 일기, 포토로그까지 25가지 기록법을 골라 시작하게 도와줘요",
   "one_liner_style": "summary",
@@ -3541,6 +3737,7 @@
  {
   "isbn": "9791193000717",
   "title": "업무시간을 반으로 줄이는 챗GPT 글쓰기",
+  "author": "정태일",
   "pages": 268,
   "one_liner": "메일과 보고서, 회의록을 챗GPT 프롬프트로 빠르게 쓰는 법을 보여줘요",
   "one_liner_style": "summary",
@@ -3555,6 +3752,7 @@
  {
   "isbn": "9788960543324",
   "title": "성공하는 사람들의 시간관리 습관",
+  "author": "유성은, 유미현",
   "pages": 292,
   "one_liner": "시간의 의미부터 목표 설정까지, 시간관리의 원리를 차근차근 짚어 줘요",
   "one_liner_style": "summary",
@@ -3572,6 +3770,7 @@
  {
   "isbn": "9791186805282",
   "title": "1만 시간의 재발견",
+  "author": "안데르스 에릭슨 외",
   "pages": 416,
   "one_liner": "타고난 재능보다 방법이 중요한 이유를 연구 사례로 보여줘요",
   "one_liner_style": "summary",
@@ -3586,6 +3785,7 @@
  {
   "isbn": "9788934903611",
   "title": "성공하는 시간관리와 인생관리를 위한 10가지 자연법칙",
+  "author": "하이럼 W. 스미스",
   "pages": 325,
   "one_liner": "지배가치를 기준으로 일일 계획을 세우고 집중력을 높이는 법을 알려줘요",
   "one_liner_style": "summary",

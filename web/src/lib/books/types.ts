@@ -5,6 +5,7 @@ export type OneLinerStyle = "summary" | "question";
 interface CatalogBase {
   isbn: string;
   title: string;
+  author: string;
   genre: string;
   pages: number;
   keywords: string[];
@@ -12,7 +13,7 @@ interface CatalogBase {
   one_liner_style: OneLinerStyle;
 }
 
-/** Roadmap 3-3 books columns (minus slot) + title. Our own tags only — no YES24 text. */
+/** Roadmap 3-3 books columns (minus slot) + title and author. Our own tags only — no YES24 text. */
 export type CatalogBook =
   | (CatalogBase & { entry: "leaf"; field: null; topic: null; way: null; axes: Record<AxisKey, Tag> })
   | (CatalogBase & { entry: "target"; field: string; topic: string; way: Way; axes: null });
@@ -22,6 +23,7 @@ export interface BookCard {
   id: string;
   entry: Entry;
   title: string;
+  author: string;
   genre: string;
   field: string | null;
   oneLiner: string;

@@ -7,23 +7,28 @@ type Row = Record<string, unknown>;
 const STYLE: Record<string, OneLinerStyle> = { summary: "summary", question: "question", 요약형: "summary", 질문형: "question" };
 const bad = (isbn: string, why: string) => new Error(`${isbn || "(no isbn)"}: ${why}`);
 
-function base(raw: Row, titles: ReadonlyMap<string, string>) {
+/** Title and author of one book, from d1_selected.csv (bibliographic data already in git — not YES24 text). */
+export interface Bib { title: string; author: string }
+
+function base(raw: Row, bib: ReadonlyMap<string, Bib>) {
   const isbn = typeof raw.isbn === "string" ? raw.isbn : String(raw.isbn ?? "");
   if (!/^\d{13}$/.test(isbn)) throw bad(isbn, "isbn must be 13 digits");
-  const title = titles.get(isbn);
+  const title = bib.get(isbn)?.title;
   if (!title) throw bad(isbn, "no title in d1_selected.csv");
+  const author = bib.get(isbn)?.author;
+  if (!author) throw bad(isbn, "no author in d1_selected.csv");
   const pages = Number(raw.pages);
   if (!Number.isInteger(pages) || pages <= 0) throw bad(isbn, "pages must be a positive integer");
   const oneLiner = typeof raw.one_liner === "string" ? raw.one_liner.trim() : "";
   if (!oneLiner) throw bad(isbn, "one_liner is empty");
   const style = STYLE[String(raw.one_liner_style)];
   if (!style) throw bad(isbn, `unknown one_liner_style ${String(raw.one_liner_style)}`);
-  return { isbn, title, pages, one_liner: oneLiner, one_liner_style: style };
+  return { isbn, title, author, pages, one_liner: oneLiner, one_liner_style: style };
 }
 
 /** One row of books_v1(_draft).json → CatalogBook. Genre / field / topic are derived from entry + slot. */
-export function normalizeBook(raw: Row, titles: ReadonlyMap<string, string>): CatalogBook {
-  const b = base(raw, titles);
+export function normalizeBook(raw: Row, bib: ReadonlyMap<string, Bib>): CatalogBook {
+  const b = base(raw, bib);
   const slot = String(raw.slot ?? "");
   if (raw.entry === "leaf") {
     if (!(LEAF_GENRES as readonly string[]).includes(slot)) throw bad(b.isbn, `unknown leaf genre ${slot}`);
@@ -47,14 +52,14 @@ export function normalizeBook(raw: Row, titles: ReadonlyMap<string, string>): Ca
   throw bad(b.isbn, `unknown entry ${String(raw.entry)}`);
 }
 
-export function normalizeCatalog(rows: unknown, titles: ReadonlyMap<string, string>): CatalogBook[] {
+export function normalizeCatalog(rows: unknown, bib: ReadonlyMap<string, Bib>): CatalogBook[] {
   const list: Row[] = Array.isArray(rows)
     ? (rows as Row[])
     : typeof rows === "object" && rows !== null
       ? Object.entries(rows as Record<string, Row>).map(([isbn, r]) => ({ isbn, ...r }))
       : [];
   if (!list.length) throw new Error("no books in source");
-  const books = list.map((r) => normalizeBook(r, titles));
+  const books = list.map((r) => normalizeBook(r, bib));
   const seen = new Set<string>();
   for (const book of books) {
     if (seen.has(book.isbn)) throw bad(book.isbn, "duplicate isbn");
@@ -87,12 +92,29 @@ export function parseCsv(text: string): string[][] {
   return rows.filter((r) => r.some((c) => c !== ""));
 }
 
-export function titlesFromCsv(text: string): Map<string, string> {
+// Role words after the names: 저 · 공저 · 등저("and others") · 글 · 지음 · 편 · 편저 · 엮음.
+const ROLE = /\s+(공저|등저|저|글|지음|편저|편|엮음)$/;
+// Two names longer than this (with ", ") do not fit the bookmark's one author line at 12px — they become "첫 이름 외".
+const TWO_NAMES_MAX = 10;
+
+/**
+ * "양귀자 저" → "양귀자", "조지 오웰 저/정회성 역" → "조지 오웰" (translators, illustrators, editors after "/" are dropped),
+ * "지현이(디지털거북이) 저" → "지현이", two short names → "천선란, 임솔아", two long names, three or more (or 등저) → "피터 브루스 외".
+ */
+export function cleanAuthor(raw: string): string {
+  const main = raw.split("/")[0].replace(/\([^)]*\)/g, "").trim();
+  const names = main.replace(ROLE, "").split(",").map((n) => n.trim()).filter(Boolean);
+  if (!names.length) return "";
+  const both = names.join(", ");
+  if (names.length > 2 || /\s등저$/.test(main) || (names.length === 2 && both.length > TWO_NAMES_MAX)) return `${names[0]} 외`;
+  return both;
+}
+
+export function bibFromCsv(text: string): Map<string, Bib> {
   const [head = [], ...rows] = parseCsv(text);
-  const iIsbn = head.indexOf("isbn");
-  const iTitle = head.indexOf("title");
-  if (iIsbn < 0 || iTitle < 0) throw new Error("d1_selected.csv needs isbn and title columns");
-  return new Map(rows.map((r) => [r[iIsbn], r[iTitle]]));
+  const [iIsbn, iTitle, iAuthor] = ["isbn", "title", "author"].map((c) => head.indexOf(c));
+  if (iIsbn < 0 || iTitle < 0 || iAuthor < 0) throw new Error("d1_selected.csv needs isbn, title and author columns");
+  return new Map(rows.map((r) => [r[iIsbn], { title: r[iTitle], author: cleanAuthor(r[iAuthor] ?? "") }]));
 }
 
 type RawTopic = { kept?: Record<string, { pattern?: unknown }>; folded?: Record<string, unknown>; too_common?: Record<string, unknown> };
