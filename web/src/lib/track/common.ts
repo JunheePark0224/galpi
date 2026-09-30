@@ -1,5 +1,6 @@
 import { SCREEN_VERSION, type CommonProps } from "./schema";
 
+const MAX_REFERRER = 500;   // the server cuts at the same length
 const ANON = "galpi.anon";
 const SEEN = "galpi.seen";
 const SESSION = "galpi.session";
@@ -120,7 +121,7 @@ export function commonProps(): CommonProps {
     round: currentRound(),
     entry: currentEntry(),
     screen_version: SCREEN_VERSION,
-    referrer: typeof document === "undefined" ? "" : document.referrer,
+    referrer: typeof document === "undefined" ? "" : document.referrer.slice(0, MAX_REFERRER),
     returning,
     ...detectDevice(typeof navigator === "undefined" ? "" : navigator.userAgent),
   };

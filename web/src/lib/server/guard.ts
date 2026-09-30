@@ -46,6 +46,9 @@ const windows = new Map<string, { count: number; resetAt: number }>();
 
 export type RateResult = { ok: true } | { ok: false; retryAfter: number };
 
+/** For tests: how many keys the limiter currently holds. */
+export const rateLimitKeyCount = (): number => windows.size;
+
 export function rateLimit(key: string, limit: number, windowMs: number): RateResult {
   const now = Date.now();
   const current = windows.get(key);
@@ -76,15 +79,20 @@ export async function readJsonCapped(req: Request, maxBytes: number): Promise<Ca
   let total = 0;
   const reader = req.body?.getReader();
   if (reader) {
-    for (;;) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      total += value.byteLength;
-      if (total > maxBytes) {
-        await reader.cancel();
-        return { ok: false, response: reject(413, "too large") };
+    try {
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        total += value.byteLength;
+        if (total > maxBytes) {
+          await reader.cancel();
+          return { ok: false, response: reject(413, "too large") };
+        }
+        chunks.push(value);
       }
-      chunks.push(value);
+    } catch {
+      // the client went away in the middle of the body
+      return { ok: false, response: reject(400, "unreadable body") };
     }
   }
   const bytes = new Uint8Array(total);

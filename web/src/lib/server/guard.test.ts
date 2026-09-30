@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { clientKey, rateLimit, readJsonCapped, sameOrigin } from "./guard";
+import { clientKey, rateLimit, rateLimitKeyCount, readJsonCapped, sameOrigin } from "./guard";
 
 const post = (headers: Record<string, string> = {}, body = "{}", url = "https://galpi.example/api/track") =>
   new Request(url, { method: "POST", body, headers });
@@ -73,9 +73,13 @@ describe("rateLimit", () => {
     expect(rateLimit("2.2.2.2:b", 3, 60_000).ok).toBe(true);
   });
 
-  it("stays bounded: 10,000+ distinct keys never break it", () => {
-    for (let i = 0; i < 10_500; i++) expect(rateLimit(`flood-${i}`, 1, 60_000).ok).toBe(true);
+  it("stays bounded: the map never grows past 10,000 keys, however many distinct callers arrive", () => {
+    for (let i = 0; i < 10_500; i++) {
+      expect(rateLimit(`flood-${i}`, 1, 60_000).ok).toBe(true);
+      expect(rateLimitKeyCount()).toBeLessThanOrEqual(10_000);
+    }
     expect(rateLimit("after-flood", 1, 60_000).ok).toBe(true);
+    expect(rateLimitKeyCount()).toBeLessThanOrEqual(10_000);
   });
 });
 
@@ -100,6 +104,21 @@ describe("readJsonCapped", () => {
     const r = await readJsonCapped(post({}, JSON.stringify({ big: "가".repeat(50) })), 100);
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.response.status).toBe(413);
+  });
+
+  it("answers 400 when the client aborts in the middle of the body", async () => {
+    const stream = new ReadableStream<Uint8Array>({
+      start(c) {
+        c.enqueue(new TextEncoder().encode('{"a":'));
+      },
+      pull() {
+        throw new Error("aborted");
+      },
+    });
+    const req = new Request("https://galpi.example/api/track", { method: "POST", body: stream, duplex: "half" } as RequestInit);
+    const r = await readJsonCapped(req, 100);
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.response.status).toBe(400);
   });
 
   it("answers 400 for invalid JSON", async () => {

@@ -71,6 +71,15 @@ describe("POST /api/books/draw", () => {
     expect((await POST(req(body))).status).toBe(400);
   });
 
+  it("answers 400, not 500, when the client aborts mid-body", async () => {
+    const stream = new ReadableStream<Uint8Array>({
+      start(c) { c.enqueue(new TextEncoder().encode('{"entry":')); },
+      pull() { throw new Error("aborted"); },
+    });
+    const res = await POST(new Request("http://x/api/books/draw", { method: "POST", headers: from("9.9.9.9"), body: stream, duplex: "half" } as RequestInit));
+    expect(res.status).toBe(400);
+  });
+
   it("rejects a body over the size cap with 413", async () => {
     const seen = Array.from({ length: 2500 }, (_, i) => `id-${i}-padding`);
     expect((await POST(req({ entry: "leaf", choices: NINE, seen }))).status).toBe(413);

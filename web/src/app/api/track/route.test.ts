@@ -79,10 +79,46 @@ describe("POST /api/track", () => {
   it("rejects a common block with a missing key, a wrong type or a too-long string", async () => {
     const missing: Record<string, unknown> = { ...common };
     delete missing.anon_id;
-    for (const bad of [missing, { ...common, round: "1" }, { ...common, device: "tablet" }, { ...common, referrer: "x".repeat(501) }, { ...common, anon_id: "x".repeat(201) }]) {
+    for (const bad of [missing, { ...common, round: "1" }, { ...common, device: "tablet" }, { ...common, anon_id: "x".repeat(201) }]) {
       expect((await POST(req({ name: "visit", props: {}, common: bad }))).status).toBe(400);
     }
     expect(saveEvent).not.toHaveBeenCalled();
+  });
+
+  it("keeps the event when the referrer is longer than 500 characters, storing it cut", async () => {
+    const res = await POST(req({ name: "visit", props: {}, common: { ...common, referrer: "https://s.example/?q=" + "x".repeat(900) } }));
+    expect(res.status).toBe(202);
+    const stored = vi.mocked(saveEvent).mock.calls[0][0];
+    expect(stored.common.referrer).toHaveLength(500);
+  });
+
+  it("keeps the event and strips NUL and lone surrogates that Postgres jsonb would refuse", async () => {
+    const dirty = { ...common, referrer: "a\u0000b\ud800c" };
+    const res = await POST(req({ name: "visit", props: { goal: "책\u0000 \udc00읽기", "\u0000k": 1, nested: [{ t: "x\ud83d" }], ok: "😀" }, common: dirty }));
+    expect(res.status).toBe(202);
+    expect(saveEvent).toHaveBeenCalledWith({
+      name: "visit",
+      props: { goal: "책 \ufffd읽기", k: 1, nested: [{ t: "x\ufffd" }], ok: "😀" },
+      common: { ...common, referrer: "ab\ufffdc" },
+    });
+  });
+
+  it("does not let a __proto__ key in props change the stored object's prototype", async () => {
+    const res = await POST(new Request("http://x/api/track", { method: "POST", headers: from("9.9.9.9"),
+      body: '{"name":"visit","props":{"__proto__":{"polluted":true}},"common":' + JSON.stringify(common) + "}" }));
+    expect(res.status).toBe(202);
+    const props = vi.mocked(saveEvent).mock.calls[0][0].props;
+    expect(Object.getPrototypeOf(props)).toBe(Object.prototype);
+    expect(Object.keys(props)).toEqual(["__proto__"]);
+  });
+
+  it("answers 400, not 500, when the client aborts mid-body", async () => {
+    const stream = new ReadableStream<Uint8Array>({
+      start(c) { c.enqueue(new TextEncoder().encode('{"name":')); },
+      pull() { throw new Error("aborted"); },
+    });
+    const res = await POST(new Request("http://x/api/track", { method: "POST", headers: from("9.9.9.9"), body: stream, duplex: "half" } as RequestInit));
+    expect(res.status).toBe(400);
   });
 
   it("drops keys that are not in the common schema", async () => {

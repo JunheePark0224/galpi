@@ -43,7 +43,6 @@ describe("parseCommon", () => {
     ["screen_version over 200", { screen_version: "x".repeat(201) }],
     ["user_id over 200", { user_id: "x".repeat(201) }],
     ["user_id undefined", { user_id: undefined }],
-    ["referrer over 500", { referrer: "x".repeat(501) }],
     ["referrer number", { referrer: 1 }],
     ["round 0.5", { round: 0.5 }],
     ["round -1", { round: -1 }],
@@ -55,6 +54,10 @@ describe("parseCommon", () => {
     ["returning string", { returning: "false" }],
     ["in_app_browser 0", { in_app_browser: 0 }],
   ])("rejects %s", (_, patch) => expect(parseCommon({ ...good, ...patch })).toBeNull());
+
+  it("cuts a referrer over 500 characters instead of rejecting it (ids stay strict)", () => {
+    expect(parseCommon({ ...good, referrer: "x".repeat(900) })?.referrer).toBe("x".repeat(500));
+  });
 
   it("accepts the limits themselves", () => {
     expect(parseCommon({ ...good, anon_id: "x".repeat(200), referrer: "y".repeat(500), round: 0 })).not.toBeNull();

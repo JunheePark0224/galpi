@@ -41,10 +41,11 @@ export function parseCommon(x: unknown): CommonProps | null {
   const { anon_id, user_id, session_id, round, entry, screen_version, referrer, returning, device, in_app_browser } = c;
   if (!text(anon_id, MAX_ID, 1) || !text(session_id, MAX_ID, 1) || !text(screen_version, MAX_ID, 1)) return null;
   if (user_id !== null && !text(user_id, MAX_ID)) return null;
-  if (!text(referrer, MAX_REFERRER)) return null;
+  if (typeof referrer !== "string") return null;
   if (typeof round !== "number" || !Number.isInteger(round) || round < 0 || round > MAX_ROUND) return null;
   if (entry !== null && entry !== "leaf" && entry !== "target") return null;
   if (device !== "phone" && device !== "desktop") return null;
   if (typeof returning !== "boolean" || typeof in_app_browser !== "boolean") return null;
-  return { anon_id, user_id, session_id, round, entry, screen_version, referrer, returning, device, in_app_browser };
+  // referrer comes from the visitor's browser and may be a long URL: keep the event, cut the value.
+  return { anon_id, user_id, session_id, round, entry, screen_version, referrer: referrer.slice(0, MAX_REFERRER), returning, device, in_app_browser };
 }

@@ -30,6 +30,13 @@ describe("commonProps", () => {
     expect(second.returning).toBe(false);
   });
 
+  it("cuts a very long document.referrer to 500 characters", () => {
+    vi.spyOn(document, "referrer", "get").mockReturnValue("https://search.example/?q=" + "가".repeat(900));
+    const p = commonProps();
+    expect(p.referrer).toHaveLength(500);
+    expect(p.referrer.startsWith("https://search.example/?q=")).toBe(true);
+  });
+
   it("carries entry and round", () => {
     setEntry("leaf");
     nextRound();
