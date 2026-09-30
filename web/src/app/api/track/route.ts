@@ -1,5 +1,5 @@
 import { guardJson } from "@/lib/server/guard";
-import { cleanJson } from "@/lib/server/sanitize";
+import { cleanJson, TooDeepError } from "@/lib/server/sanitize";
 import { isEventName, parseCommon } from "@/lib/track/schema";
 import { saveEvent } from "@/lib/track/store";
 
@@ -9,7 +9,13 @@ const PER_MINUTE = 120;
 export async function POST(request: Request): Promise<Response> {
   const guarded = await guardJson(request, { route: "track", limit: PER_MINUTE, maxBytes: MAX_BYTES });
   if (!guarded.ok) return guarded.response;
-  const body = cleanJson(guarded.body);
+  let body: unknown;
+  try {
+    body = cleanJson(guarded.body);
+  } catch (err) {
+    if (err instanceof TooDeepError) return Response.json({ error: "invalid event" }, { status: 400 });
+    throw err;
+  }
   if (typeof body !== "object" || body === null || Array.isArray(body)) {
     return Response.json({ error: "invalid event" }, { status: 400 });
   }

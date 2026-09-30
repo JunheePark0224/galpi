@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { EVENT_NAMES, isEventName, parseCommon } from "./schema";
+import { cutText, EVENT_NAMES, isEventName, parseCommon } from "./schema";
 
 describe("event schema", () => {
   it("lists the 24 PRD events in order (E-04 removed)", () => {
@@ -57,6 +57,16 @@ describe("parseCommon", () => {
 
   it("cuts a referrer over 500 characters instead of rejecting it (ids stay strict)", () => {
     expect(parseCommon({ ...good, referrer: "x".repeat(900) })?.referrer).toBe("x".repeat(500));
+  });
+
+  it.each([
+    ["499 + emoji (cut lands inside the pair)", "x".repeat(499) + "😀", "x".repeat(499)],
+    ["498 + emoji (pair ends exactly at 500)", "x".repeat(498) + "😀", "x".repeat(498) + "😀"],
+    ["500 + emoji", "x".repeat(500) + "😀", "x".repeat(500)],
+    ["501 plain", "x".repeat(501), "x".repeat(500)],
+  ])("never leaves half an emoji when cutting: %s", (_, input, expected) => {
+    expect(cutText(input, 500)).toBe(expected);
+    expect(parseCommon({ ...good, referrer: input })?.referrer).toBe(expected);
   });
 
   it("accepts the limits themselves", () => {

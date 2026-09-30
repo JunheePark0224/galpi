@@ -32,6 +32,12 @@ const MAX_ID = 200;
 const MAX_REFERRER = 500;
 const MAX_ROUND = 1000;
 
+/** Cuts to at most `max` UTF-16 units without leaving half of an emoji (a trailing high surrogate is dropped). */
+export function cutText(s: string, max: number): string {
+  const cut = s.slice(0, max);
+  return /[\uD800-\uDBFF]$/.test(cut) ? cut.slice(0, -1) : cut;
+}
+
 const text = (x: unknown, max: number, min = 0): x is string => typeof x === "string" && x.length >= min && x.length <= max;
 
 /** Strict check of the common block sent with every event. Returns a fresh object with the known keys only. */
@@ -47,5 +53,5 @@ export function parseCommon(x: unknown): CommonProps | null {
   if (device !== "phone" && device !== "desktop") return null;
   if (typeof returning !== "boolean" || typeof in_app_browser !== "boolean") return null;
   // referrer comes from the visitor's browser and may be a long URL: keep the event, cut the value.
-  return { anon_id, user_id, session_id, round, entry, screen_version, referrer: referrer.slice(0, MAX_REFERRER), returning, device, in_app_browser };
+  return { anon_id, user_id, session_id, round, entry, screen_version, referrer: cutText(referrer, MAX_REFERRER), returning, device, in_app_browser };
 }

@@ -37,6 +37,13 @@ describe("commonProps", () => {
     expect(p.referrer.startsWith("https://search.example/?q=")).toBe(true);
   });
 
+  it("does not cut an emoji in half at the 500 boundary", () => {
+    vi.spyOn(document, "referrer", "get").mockReturnValue("x".repeat(499) + "😀");
+    expect(commonProps().referrer).toBe("x".repeat(499));
+    vi.spyOn(document, "referrer", "get").mockReturnValue("x".repeat(498) + "😀");
+    expect(commonProps().referrer).toBe("x".repeat(498) + "😀");
+  });
+
   it("carries entry and round", () => {
     setEntry("leaf");
     nextRound();

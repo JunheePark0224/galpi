@@ -92,6 +92,24 @@ describe("POST /api/track", () => {
     expect(stored.common.referrer).toHaveLength(500);
   });
 
+  it("keeps the event when the referrer cut falls inside an emoji, and stores no lone surrogate", async () => {
+    const res = await POST(req({ name: "visit", props: {}, common: { ...common, referrer: "x".repeat(499) + "😀" } }));
+    expect(res.status).toBe(202);
+    const referrer = vi.mocked(saveEvent).mock.calls[0][0].common.referrer as string;
+    expect(referrer).toBe("x".repeat(499));
+    expect(referrer.isWellFormed()).toBe(true);
+  });
+
+  it("answers 400, not 500, for absurdly deep nesting that fits in the size cap", async () => {
+    const deep = (n: number) => "[".repeat(n) + "]".repeat(n);
+    const withProps = (n: number) => new Request("http://x/api/track", { method: "POST", headers: from("9.9.9.9"),
+      body: `{"name":"visit","props":{"a":${deep(n)}},"common":${JSON.stringify(common)}}` });
+    expect((await POST(withProps(3300))).status).toBe(400);
+    expect((await POST(new Request("http://x/api/track", { method: "POST", headers: from("9.9.9.9"), body: deep(3300) }))).status).toBe(400);
+    expect((await POST(withProps(10))).status).toBe(202);      // ordinary nesting is fine
+    expect(saveEvent).toHaveBeenCalledTimes(1);
+  });
+
   it("keeps the event and strips NUL and lone surrogates that Postgres jsonb would refuse", async () => {
     const dirty = { ...common, referrer: "a\u0000b\ud800c" };
     const res = await POST(req({ name: "visit", props: { goal: "책\u0000 \udc00읽기", "\u0000k": 1, nested: [{ t: "x\ud83d" }], ok: "😀" }, common: dirty }));

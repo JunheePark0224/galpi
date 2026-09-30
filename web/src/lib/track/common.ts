@@ -1,4 +1,4 @@
-import { SCREEN_VERSION, type CommonProps } from "./schema";
+import { cutText, SCREEN_VERSION, type CommonProps } from "./schema";
 
 const MAX_REFERRER = 500;   // the server cuts at the same length
 const ANON = "galpi.anon";
@@ -121,7 +121,7 @@ export function commonProps(): CommonProps {
     round: currentRound(),
     entry: currentEntry(),
     screen_version: SCREEN_VERSION,
-    referrer: typeof document === "undefined" ? "" : document.referrer.slice(0, MAX_REFERRER),
+    referrer: typeof document === "undefined" ? "" : cutText(document.referrer, MAX_REFERRER),
     returning,
     ...detectDevice(typeof navigator === "undefined" ? "" : navigator.userAgent),
   };
