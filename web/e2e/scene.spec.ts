@@ -12,6 +12,7 @@ const noPageScroll = (page: Page) => {
     return window.innerWidth === w && doc.scrollWidth <= w && doc.scrollHeight <= h;
   }, { w: size?.width ?? 0, h: size?.height ?? 0 });
 };
+const noSideScroll = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
 const box = async (page: Page, selector: string) => {
   const b = await page.locator(selector).first().boundingBox();
   if (!b) throw new Error(`${selector} has no box`);
@@ -19,7 +20,8 @@ const box = async (page: Page, selector: string) => {
 };
 
 /** 🎯 with one chip → S-03, checking each book step on the way to the first bookmark. */
-async function walkTheBook(page: Page) {
+/** `scrollOk`: on a very short window the page may scroll vertically (the book has a floor), but never sideways. */
+async function walkTheBook(page: Page, scrollOk = false) {
   await page.goto("/");
   await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
   await page.getByRole("button", { name: "데이터 분석", exact: true }).click();
@@ -33,7 +35,7 @@ async function walkTheBook(page: Page) {
   if (!closed) throw new Error("the closed cover has no box");
   expect(closed.height / closed.width).toBeGreaterThanOrEqual(1.35);              // a normal book, not a tall strip
   expect(closed.height / closed.width).toBeLessThanOrEqual(1.55);
-  expect(closed.width).toBeGreaterThanOrEqual(Math.min(viewport.width, 430) * 0.7); // and big
+  if (!scrollOk) expect(closed.width).toBeGreaterThanOrEqual(Math.min(viewport.width, 430) * 0.7); // and big (not on a very short window)
   expect(closed.y).toBeGreaterThanOrEqual(52);                                     // below the logo header
   // controller ruling: the hint sits right under the cover, the pair is centred — not pushed toward the bottom of the screen
   const hint = await page.getByText("눌러서 펼치기").boundingBox();
@@ -41,17 +43,17 @@ async function walkTheBook(page: Page) {
   const gap = hint.y - (closed.y + closed.height);
   expect(gap).toBeGreaterThanOrEqual(0);
   expect(gap).toBeLessThanOrEqual(40);
-  expect(await noPageScroll(page)).toBe(true);
+  expect(scrollOk ? await noSideScroll(page) : await noPageScroll(page)).toBe(true);
 
   await cover.click();                                                            // S-04
   await expect(page.getByRole("heading", { name: "당신이 찾는 책" })).toBeVisible();
   await expect(page.getByRole("button", { name: "다음 장" })).toBeEnabled();
-  expect(await noPageScroll(page)).toBe(true);
+  expect(scrollOk ? await noSideScroll(page) : await noPageScroll(page)).toBe(true);
 
   await page.getByRole("button", { name: "다음 장" }).click();                    // S-05
   await expect(page.getByText("1 / 5")).toBeVisible();
   await expect(page.getByRole("button", { name: "궁금해요" })).toBeEnabled();
-  expect(await noPageScroll(page)).toBe(true);
+  expect(scrollOk ? await noSideScroll(page) : await noPageScroll(page)).toBe(true);
 
   const column = await box(page, ".column");
   const bookmark = await box(page, "article");
@@ -92,3 +94,23 @@ test("desktop: the book scene leaves the 430px column, buttons stay a short row"
   expect((curious?.x ?? 0) + (curious?.width ?? 0) - (pass?.x ?? 0)).toBeLessThanOrEqual(480);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
+
+// Short laptop windows (1366 × 768 ≈ 650 tall, 1280 × 720 ≈ 600 tall): the bookmark must stay inside the book and off the buttons.
+for (const [width, height] of [[1366, 650], [1280, 600]]) {
+  test(`desktop ${width} × ${height}: the bookmark stays inside the book, clear of the buttons`, async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "laptop", "desktop layout only");
+    await page.setViewportSize({ width, height });
+    await walkTheBook(page, true);
+    const card = await box(page, "article");
+    const stage = await page.getByText("1 / 5").locator("xpath=..").boundingBox();   // the stage is exactly the book's box
+    const pass = await page.getByRole("button", { name: "패스" }).boundingBox();
+    const curious = await page.getByRole("button", { name: "궁금해요" }).boundingBox();
+    if (!stage || !pass || !curious) throw new Error("layout boxes missing");
+    expect(card.y + card.height).toBeLessThanOrEqual(stage.y + stage.height);
+    for (const b of [pass, curious]) {
+      const apart = card.y + card.height <= b.y || b.y + b.height <= card.y || card.x + card.width <= b.x || b.x + b.width <= card.x;
+      expect(apart).toBe(true);
+    }
+    expect(await noSideScroll(page)).toBe(true);
+  });
+}

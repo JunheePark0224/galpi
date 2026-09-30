@@ -5,10 +5,11 @@
 .scene {
   --book-h: clamp(340px, calc(100dvh - 304px), 420px);
   --bm-scale: 1;
+  --bm-room: calc(106px * var(--bm-scale));   /* the bookmark's part above the book (plus 6px of air, see padding-top) */
   --cover-zoom: 1.6;   /* S-03 phone: a 1 : 1.45 cover about 270–320px wide (lift and hint pull: the phone block below) */
   --cover-lift: -10%; --hint-pull: 0px;
   display: flex; flex-direction: column; gap: var(--space-4);
-  padding-top: calc(106px * var(--bm-scale) + 6px);
+  padding-top: calc(var(--bm-room) + 6px);
   overflow-x: clip;   /* the zoomed closed book's empty half must not widen the page (a phone would zoom out) */
 }
 /* Height left for the book = viewport − header 52 − main padding 8 + 16 − room above (106 × scale + 6) − gap 16
@@ -29,7 +30,7 @@
     --cover-h: calc(var(--scene-w) * 0.5 * 1.45 * var(--cover-zoom));
     --hint-h: 20px;
     --group-h: calc(var(--cover-h) + var(--space-3) + var(--hint-h));
-    --group-top: calc((var(--book-h) + var(--space-4) + var(--hint-h) - var(--group-h) - (106px * var(--bm-scale) + 6px)) / 2);
+    --group-top: calc((var(--book-h) + var(--space-4) + var(--hint-h) - var(--group-h) - (var(--bm-room) + 6px)) / 2);
     --cover-lift: calc(var(--group-top) + var(--cover-h) / 2 - var(--book-h) / 2);
     --hint-pull: calc(var(--group-top) + var(--cover-h) + var(--space-3) - var(--book-h) - var(--space-4));
   }
@@ -40,9 +41,15 @@
 @media (min-width: 768px) {
   .scene {
     --cover-zoom: 1.2; --cover-lift: -10%;   /* the cover is already a 1 : 1.4 page: grow it upward into the room above */
-    --bm-scale: 1.25;
-    --book-h: min(calc(100dvh - 198px - 106px * var(--bm-scale)), calc((min(92vw, 1000px) - 10px) / 1.43));
+    --bm-scale: 1;
+    /* Floor 340px: on a very short window the page scrolls rather than the bookmark overlapping the buttons. */
+    --book-h: max(340px, min(calc(100dvh - 198px - var(--bm-room)), calc((min(92vw, 1000px) - 10px) / 1.43)));
   }
+}
+/* The card reaches 264 × scale into the book, so the book (100dvh − 198 − 106 × scale) must be at least that tall:
+   100dvh ≥ 198 + 370 × scale → scale 1.25 needs 661px, 1.4 needs 716px, 1.6 needs 790px (bands sit above those). */
+@media (min-width: 768px) and (min-height: 680px) {
+  .scene { --bm-scale: 1.25; }
 }
 @media (min-width: 768px) and (min-height: 880px) {
   .scene { --bm-scale: 1.4; }
@@ -56,7 +63,7 @@
 }
 /* Centred on the gutter (the spine line), between the two pages. */
 .slot {
-  position: absolute; top: calc(-106px * var(--bm-scale)); left: 0; right: 0; z-index: 3;
+  position: absolute; top: calc(-1 * var(--bm-room)); left: 0; right: 0; z-index: 3;
   display: flex; justify-content: center; pointer-events: none;
 }
 .scaled { transform: scale(var(--bm-scale)); transform-origin: 50% 0; }
