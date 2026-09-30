@@ -294,3 +294,34 @@ describe("readAnonId (read-only, for the privacy page)", () => {
     }
   });
 });
+
+describe("ensureAnonId (used as the Amplitude device id)", () => {
+  beforeEach(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+    vi.resetModules();
+  });
+
+  it("returns the stored id without changing it", async () => {
+    localStorage.setItem("galpi.anon", "11111111-1111-4111-8111-111111111111");
+    const { ensureAnonId } = await import("./common");
+    expect(ensureAnonId()).toBe("11111111-1111-4111-8111-111111111111");
+    expect(localStorage.getItem("galpi.anon")).toBe("11111111-1111-4111-8111-111111111111");
+  });
+
+  it("creates and stores an id when none exists, and commonProps then uses the same one", async () => {
+    const { ensureAnonId, commonProps: fresh } = await import("./common");
+    const id = ensureAnonId();
+    expect(id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(localStorage.getItem("galpi.anon")).toBe(id);
+    expect(ensureAnonId()).toBe(id);
+    expect(fresh().anon_id).toBe(id);
+  });
+
+  it("does not start a session or mark the browser as seen (only commonProps does)", async () => {
+    const { ensureAnonId } = await import("./common");
+    ensureAnonId();
+    expect(sessionStorage.length).toBe(0);
+    expect(localStorage.getItem("galpi.seen")).toBeNull();
+  });
+});

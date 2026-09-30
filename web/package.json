@@ -14,6 +14,7 @@
     "books:import": "tsx scripts/import-books.ts"
   },
   "dependencies": {
+    "@amplitude/unified": "^1.1.38",
     "@supabase/supabase-js": "^2.117.2",
     "motion": "^13.4.6",
     "next": "16.3.6",

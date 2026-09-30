@@ -91,6 +91,9 @@ export function readAnonId(): string | null {
   return read(store("local"), ANON) ?? memory[ANON] ?? null;
 }
 
+/** The id this browser already has, or a new one (stored like commonProps would). Starts no session. Amplitude's device id. */
+export function ensureAnonId(): string { return getOrCreate(store("local"), ANON).value; }
+
 export function setEntry(next: CommonProps["entry"]): void { writeSession(ENTRY, next ?? ""); }
 export function nextRound(): void { writeSession(ROUND, String(currentRound() + 1)); }
 export function setUserId(id: string | null): void { userId = id; }

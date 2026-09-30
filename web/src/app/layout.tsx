@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Gowun_Batang, Gowun_Dodum } from "next/font/google";
+import { AmplitudeInit } from "@/components/AmplitudeInit";
 import { Footer } from "@/components/Footer";
 import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={`${batang.variable} ${dodum.variable}`}>
       <body>
+        <AmplitudeInit />
         <div className="column">
           <SiteHeader />
           <main>{children}</main>

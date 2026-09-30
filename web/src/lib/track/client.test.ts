@@ -1,9 +1,13 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { sendToAmplitude } from "./amplitude";
 import { track } from "./client";
+
+vi.mock("./amplitude", () => ({ sendToAmplitude: vi.fn(), startAmplitude: vi.fn() }));
 
 describe("track", () => {
   const originalBeacon = Object.getOwnPropertyDescriptor(navigator, "sendBeacon");
 
+  beforeEach(() => { vi.mocked(sendToAmplitude).mockReset(); });
   afterEach(() => {
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
@@ -42,5 +46,29 @@ describe("track", () => {
     const [url, opts] = fetchMock.mock.calls[0];
     expect(url).toBe("/api/track");
     expect(opts.method).toBe("POST");
+  });
+
+  it("also hands the same event to Amplitude with the common props", () => {
+    Object.defineProperty(navigator, "sendBeacon", { value: vi.fn().mockReturnValue(true), configurable: true });
+    track("chip_selected", { question: "len", value: "short" });
+    expect(sendToAmplitude).toHaveBeenCalledTimes(1);
+    const [name, props, common] = vi.mocked(sendToAmplitude).mock.calls[0];
+    expect(name).toBe("chip_selected");
+    expect(props).toEqual({ question: "len", value: "short" });
+    expect(common?.anon_id).toMatch(/^[0-9a-f-]{36}$/);
+  });
+
+  it("still sends to Supabase (/api/track) when Amplitude throws", () => {
+    const send = vi.fn().mockReturnValue(true);
+    Object.defineProperty(navigator, "sendBeacon", { value: send, configurable: true });
+    vi.mocked(sendToAmplitude).mockImplementation(() => { throw new Error("amplitude down"); });
+    expect(() => track("visit")).not.toThrow();
+    expect(send).toHaveBeenCalledTimes(1);
+  });
+
+  it("still sends to Amplitude when the Supabase path fails", () => {
+    Object.defineProperty(navigator, "sendBeacon", { value: () => { throw new Error("offline"); }, configurable: true });
+    track("visit");
+    expect(sendToAmplitude).toHaveBeenCalledTimes(1);
   });
 });
