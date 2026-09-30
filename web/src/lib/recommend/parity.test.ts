@@ -36,6 +36,6 @@ describe("leaf draw matches src/simulate_draws.py (τ=1.0, Δ=2)", () => {
     expect(n).toBe(1875);
     expect(Math.abs((100 * filled) / n - metrics.fill_pct)).toBeLessThanOrEqual(3);
     expect(Math.abs(overlap / n - metrics.overlap)).toBeLessThanOrEqual(0.05);
-    expect(Math.abs(genres / n - metrics.genres_per_draw)).toBeLessThanOrEqual(0.2);
+    expect(Math.abs(genres / n - metrics.genres_first_draw)).toBeLessThanOrEqual(0.2);
   });
 });
