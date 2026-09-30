@@ -20,3 +20,8 @@ web/.next/
 web/coverage/
 web/playwright-report/
 web/test-results/
+
+# not for a public repo (third-party / personal data) — kept locally, removed from history 09-30
+Reference.pdf
+data/raw/app_reviews/
+data/raw/d4l_keywords/
