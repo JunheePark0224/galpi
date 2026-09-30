@@ -1,0 +1,11 @@
+.wrap { display: flex; flex-direction: column; gap: var(--space-2); }
+.row { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+.id {
+  flex: 1 1 200px; min-width: 0; padding: var(--space-3);
+  border: 1px solid var(--paper-line); border-radius: var(--radius-card);
+  background: var(--paper-deep); color: var(--ink);
+  font-family: inherit; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; user-select: all;
+}
+.copy { padding: 0 var(--space-4); min-width: var(--touch); }
+.note { margin: 0; font-size: 12px; color: var(--ink-muted); }
+.none { margin: 0; font-size: 14px; color: var(--ink-muted); }

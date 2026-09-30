@@ -244,3 +244,39 @@ describe("entry and round survive a reload in the same tab session", () => {
     expect(p.entry).toBeNull();
   });
 });
+
+describe("readAnonId (read-only, for the privacy page)", () => {
+  beforeEach(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+    vi.resetModules();
+  });
+
+  it("returns the stored anonymous id", async () => {
+    localStorage.setItem("galpi.anon", "11111111-1111-4111-8111-111111111111");
+    const { readAnonId } = await import("./common");
+    expect(readAnonId()).toBe("11111111-1111-4111-8111-111111111111");
+  });
+
+  it("returns null and creates nothing when no id exists", async () => {
+    const { readAnonId, commonProps: fresh } = await import("./common");
+    expect(readAnonId()).toBeNull();
+    expect(localStorage.length).toBe(0);
+    expect(sessionStorage.length).toBe(0);
+    // the read must not leave an id in memory either: the first real id is created later, by commonProps
+    expect(readAnonId()).toBeNull();
+    const created = fresh().anon_id;
+    expect(readAnonId()).toBe(created);
+  });
+
+  it("returns null when storage access throws", async () => {
+    const original = Object.getOwnPropertyDescriptor(window, "localStorage");
+    try {
+      Object.defineProperty(window, "localStorage", { configurable: true, get() { throw new Error("blocked"); } });
+      const { readAnonId } = await import("./common");
+      expect(readAnonId()).toBeNull();
+    } finally {
+      if (original) Object.defineProperty(window, "localStorage", original);
+    }
+  });
+});

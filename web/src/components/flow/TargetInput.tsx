@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useRef, useState, type FormEvent } from "react";
 import type { Way } from "@/lib/recommend";
 import { Button } from "@/components/Button";
@@ -85,7 +86,9 @@ export function TargetInput({ initial, edit, onSubmit }: Props) {
               주제나 고민을 적어 주세요 · 제목·작가로 찾을 땐{" "}
               <a href={YES24_HOME} target="_blank" rel="noopener noreferrer">예스24 검색을 이용해 주세요 ↗</a>
             </p>
-            <p className={styles.hint}>이름·연락처는 적지 마세요</p>
+            <p className={styles.hint}>
+              <span>이름·연락처는 적지 마세요</span> · <Link href="/privacy" className={styles.policy}>처리방침</Link>
+            </p>
           </>
         )}
         {missing && <p role="alert" className={styles.missing}>{MISSING_WHAT}</p>}

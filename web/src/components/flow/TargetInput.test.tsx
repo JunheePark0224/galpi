@@ -73,6 +73,13 @@ describe("TargetInput (S-02 🎯)", () => {
     expect(screen.getByText("이름·연락처는 적지 마세요")).toBeInTheDocument();
   });
 
+  it("links the privacy policy in the same tab next to the no-contact-info notice", () => {
+    render(<TargetInput initial={{ ...EMPTY_FORM, free: "" }} edit={false} onSubmit={vi.fn()} />);
+    const link = screen.getByRole("link", { name: "처리방침" });
+    expect(link).toHaveAttribute("href", "/privacy");
+    expect(link).not.toHaveAttribute("target");
+  });
+
   it("starts from the previous answers when editing", () => {
     render(<TargetInput initial={{ topic: "통계", free: null, len: "thick", way: "개념" }} edit onSubmit={vi.fn()} />);
     expect(screen.getByRole("button", { name: "통계" })).toHaveAttribute("aria-pressed", "true");

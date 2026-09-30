@@ -85,6 +85,11 @@ export function detectDevice(ua: string): { device: "phone" | "desktop"; in_app_
   return { device: phone ? "phone" : "desktop", in_app_browser: inApp };
 }
 
+/** Read-only: the id this browser already has, or null. Never creates or stores one (privacy page). */
+export function readAnonId(): string | null {
+  return read(store("local"), ANON) ?? memory[ANON] ?? null;
+}
+
 export function setEntry(next: CommonProps["entry"]): void { writeSession(ENTRY, next ?? ""); }
 export function nextRound(): void { writeSession(ROUND, String(currentRound() + 1)); }
 export function setUserId(id: string | null): void { userId = id; }
