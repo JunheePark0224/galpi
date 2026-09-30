@@ -43,7 +43,7 @@ Last Updated: 2026-09-29
 - [ ] P6 Amplitude 전달, 이벤트 전수 점검, 대시보드
 - [x] 배포 전 준비(P7에서 당김) — 처리방침 v0 `/privacy`·1년 자동 삭제, 같은 출처·요청 한도·크기 상한·보안 헤더, `/design` 숨김, `deploy.md` (9/30)
 - [x] **첫 배포** — https://galpi-omega.vercel.app (GitHub `JunheePark0224/galpi` 공개, 기록에서 앱 리뷰·Reference.pdf·정보나루 원본 제거) (9/30)
-- [ ] 디자인 반영 — Stitch 시안 적용, 로고 SVG, 저자 줄, 로고 머리글 (`docs/plans/2026-09-30-design-pass.md`)
+- [x] 디자인 반영 — Stitch 시안 적용, 로고 SVG, 저자 줄, 로고 머리글, 화면 가득 책·가운데 책갈피·데스크톱 넓게 (`docs/plans/2026-09-30-design-pass.md`) (9/30)
 - [ ] P7 휴대폰·카톡 브라우저 점검, 5명 반응, 테스트 기록 지우기
 
 ### 📚 데이터

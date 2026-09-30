@@ -110,3 +110,4 @@ Last Updated: 2026-09-29
 - GitHub 공개 저장소: 기록 전체 검사 → 앱 리뷰(작성자 실명)·Reference.pdf·정보나루 원본을 기록에서 제거(사용자가 filter-branch 실행, 백업 `Portfolio/backups/`), 키 값 0건 확인
 - Vercel: Aside로 프로젝트 설정(루트 `web`, 환경변수 이름) → 사용자가 값 입력·배포 → **https://galpi-omega.vercel.app**. 배포 후 점검: 200/404/보안 헤더/다른 출처 403/🍃 완주/Supabase 31건 저장. Preview에는 `TRACK_STORE=off`
 - 사용자 판단: 동작은 되지만 Stitch 디자인이 빠짐 → **디자인 반영 단계**를 5명 반응 전에 추가 (저자 줄, 로고 SVG, 로고 머리글)
+- 디자인 반영 완료 (9/30) — `docs/plans/2026-09-30-design-pass.md`. 다음: P7 휴대폰·카톡 브라우저 점검 → 5명 반응
