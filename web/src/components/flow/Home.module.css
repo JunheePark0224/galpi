@@ -1,18 +1,56 @@
 .home { display: flex; flex-direction: column; gap: var(--space-5); padding-bottom: var(--space-5); }
-.top { display: flex; justify-content: flex-end; min-height: var(--touch); }
-.accountSlot { width: 72px; height: var(--touch); }
-.hero { padding: var(--space-6) 0 var(--space-4); text-align: center; }
-.logo { margin: 0; font-size: 28px; }
-.tagline { margin: var(--space-2) 0 0; color: var(--ink-soft); }
+.hero { display: flex; flex-direction: column; align-items: center; padding-top: var(--space-4); text-align: center; }
+.logo { margin: 0; font-size: 28px; line-height: 1.3; }
+.tagline { margin: var(--space-1) 0 0; color: var(--ink-soft); }
+
+/* P-01 book: landscape cloth cover, spine on the left, two frosted bookmarks peeking above (static — no blur needed). */
+.shelf { position: relative; width: 224px; height: 176px; margin-top: var(--space-5); padding-top: 32px; }
+.cover {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 144px; border-radius: var(--radius-book);
+  background: var(--leather-grain), var(--leather-sheen), var(--cloth);
+  box-shadow: inset 0 0 0 2px var(--cloth-edge), var(--shadow-book);
+}
+.spine {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 18px; border-radius: 3px 0 0 3px;
+  background: var(--spine-shade), var(--cloth-edge);
+}
+.spine::before, .spine::after {
+  content: ""; position: absolute; left: 3px; right: 3px; height: 2px; border-radius: 1px; background: var(--foil-line);
+}
+.spine::before { top: 18px; }
+.spine::after { bottom: 18px; }
+.mark { margin-left: 18px; color: var(--foil); }
+.peek {
+  position: absolute; top: 6px; width: 34px; height: 48px;
+  border-radius: 17px 17px 2px 2px; background: var(--frost-fallback);
+  border: var(--frost-edge); box-shadow: 0 1px 0 var(--paper-line);
+}
+.peek::before { /* the string */
+  content: ""; position: absolute; top: -14px; left: 50%; width: 1.5px; height: 18px; margin-left: -0.75px; background: var(--tone);
+}
+.peek::after { /* the arched window */
+  content: ""; position: absolute; top: 8px; left: 7px; right: 7px; height: 18px; border-radius: 10px 10px 2px 2px;
+  background: var(--tone); opacity: 0.35;
+}
+.peek:nth-child(1) { left: 44px; transform: rotate(-4deg); }
+.peek:nth-child(2) { right: 52px; top: 0; transform: rotate(3deg); }
+
 .entries { display: flex; flex-direction: column; gap: var(--space-3); }
 .entry {
-  display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-1);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
   width: 100%; min-height: 88px; padding: var(--space-4);
-  border: 1px solid var(--paper-line); border-radius: var(--radius-card);
-  background: var(--paper); color: var(--ink); font: inherit; text-align: left; cursor: pointer;
-  box-shadow: 0 1px 0 var(--paper-line);
+  border: var(--card-edge); border-radius: var(--radius-card);
+  background: var(--card-bg); color: var(--ink); font: inherit; text-align: left; cursor: pointer;
+  box-shadow: var(--shadow-soft);
 }
 .entry:active { background: var(--paper-deep); }
 .entry:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.entryText { display: flex; flex-direction: column; gap: var(--space-1); }
 .entryTitle { font-family: var(--font-batang), serif; font-size: 18px; font-weight: 700; }
 .entryDesc { font-size: 13px; color: var(--ink-muted); }
+.go {
+  display: flex; flex-shrink: 0; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%; background: var(--paper-deep); color: var(--ink-soft);
+}
+.arrow { display: block; }

@@ -11,9 +11,10 @@ describe("Home (S-01)", () => {
     expect(onStart.mock.calls).toEqual([["target"], ["leaf"]]);
   });
 
-  it("keeps the top-right login place empty and not clickable (P5)", () => {
+  it("has no login place before P5 — only the two entries can be pressed", () => {
     render(<Home onStart={vi.fn()} />);
-    expect(screen.getByTestId("account-slot")).toBeEmptyDOMElement();
+    expect(screen.queryByTestId("account-slot")).toBeNull();
+    expect(screen.queryByText("로그인")).toBeNull();
     expect(screen.getAllByRole("button")).toHaveLength(2);
     expect(screen.getByRole("heading", { name: "갈피" })).toBeInTheDocument();
     expect(screen.getByText("읽을 책, 갈피가 안 잡힐 때")).toBeInTheDocument();
