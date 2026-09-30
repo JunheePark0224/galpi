@@ -7,4 +7,4 @@ export { LEAF_PARAMS, TARGET_PARAMS } from "./params";
 export { drawBookmarks, weightedPick, type DrawInput, type DrawOptions } from "./draw";
 export { coverageNotice, EXHAUSTED_NOTICE } from "./notice";
 export { truncateIntro } from "./intro";
-export { reasonLine } from "./reason";
+export { reasonLine, AXIS_LABEL, WAY_LABEL, type Reason } from "./reason";

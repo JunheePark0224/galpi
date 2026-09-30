@@ -56,9 +56,32 @@ describe("drawBookmarks", () => {
   });
 
   it("is reproducible with the same seed and varies with another", () => {
-    const a = drawBookmarks(pool, { score: byTemp, maxPossible: 3 }, opts({ rng: mulberry32(9) }));
-    const b = drawBookmarks(pool, { score: byTemp, maxPossible: 3 }, opts({ rng: mulberry32(9) }));
-    expect(a.picks.map((p) => p.book.id)).toEqual(b.picks.map((p) => p.book.id));
+    const run = (seed: number) => drawBookmarks(pool, { score: byTemp, maxPossible: 3 }, opts({ rng: mulberry32(seed) })).picks.map((p) => p.book.id);
+    expect(run(9)).toEqual(run(9));
+    expect(run(9)).not.toEqual(run(10));
+  });
+
+  it("excludes books with a non-finite score and returns promptly", () => {
+    const nanForB = (b: Book) => (b.genre === "B" ? Number.NaN : byTemp(b));
+    const res = drawBookmarks(pool, { score: nanForB, maxPossible: 3 }, opts());
+    expect(res.picks.filter((p) => p.kind === "recommended").every((p) => p.book.genre !== "B")).toBe(true);
+    expect(res.picks.every((p) => Number.isFinite(p.score))).toBe(true);
+    const infForA = (b: Book) => (b.genre === "A" ? Number.POSITIVE_INFINITY : byTemp(b));
+    const res2 = drawBookmarks(pool, { score: infForA, maxPossible: 3 }, opts());
+    expect(res2.picks.filter((p) => p.kind === "recommended").every((p) => p.book.genre !== "A")).toBe(true);
+  });
+
+  it("gives an empty exhausted result when every score is NaN", () => {
+    const res = drawBookmarks(pool, { score: () => Number.NaN, maxPossible: 3 }, opts());
+    expect(res).toEqual({ picks: [], widened: false, exhausted: true });
+  });
+
+  it("scores a random pick with a non-finite score as 0", () => {
+    const nanForD = (b: Book) => (b.genre === "D" ? Number.NaN : byTemp(b));
+    const res = drawBookmarks(pool, { score: nanForD, maxPossible: 3 }, opts({ inRandomPool: (b) => b.genre === "D" }));
+    const random = res.picks.find((p) => p.kind === "random");
+    expect(random?.book.genre).toBe("D");
+    expect(random?.score).toBe(0);
   });
 
   it("widens beyond delta when the top tier is too small", () => {

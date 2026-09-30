@@ -1,13 +1,13 @@
 import { lengthTag } from "./length";
 import { AXES, type AxisKey, type Book, type LeafAnswers, type TargetAnswers } from "./types";
 
-const AXIS_LABEL: Record<AxisKey, [string, string]> = {
+export const AXIS_LABEL: Record<AxisKey, [string, string]> = {
   temp: ["따뜻함", "여운"], pull: ["문장", "몰입"], gain: ["알게 됨", "마음"], world: ["현실", "딴 세상"],
 };
-const WAY_LABEL = { 개념: "개념부터 쉽게", 실습: "따라 하며 실습", 사례: "사례로 술술" } as const;
+export const WAY_LABEL = { 개념: "개념부터 쉽게", 실습: "따라 하며 실습", 사례: "사례로 술술" } as const;
 const MAX_ITEMS = 5;
 
-type Reason = { label: "나온 이유" | "이 책은"; items: string[] };
+export type Reason = { label: "나온 이유" | "이 책은"; items: string[] };
 
 export function reasonLine(book: Book, answers: LeafAnswers | TargetAnswers): Reason {
   if (book.entry === "target") {

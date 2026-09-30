@@ -57,7 +57,7 @@ export function drawBookmarks(books: Book[], input: DrawInput, opts: DrawOptions
   for (const book of books) {
     if (opts.seen.has(book.id)) continue;
     const score = input.score(book);
-    if (score !== null) cands.push({ book, score });
+    if (score !== null && Number.isFinite(score)) cands.push({ book, score });   // NaN/±Infinity would spin the widening loop forever
   }
   if (!cands.length) return { picks: [], widened: false, exhausted: true };
 
@@ -80,6 +80,9 @@ export function drawBookmarks(books: Book[], input: DrawInput, opts: DrawOptions
   const exhausted = recommended.length < RECOMMENDED || (input.maxPossible > 0 && mean < GOOD_SHARE * input.maxPossible);
 
   const picks: DrawPick[] = recommended.map((c) => ({ book: c.book, score: c.score, kind: "recommended" }));
-  if (random) picks.push({ book: random, score: input.score(random) ?? 0, kind: "random" });
+  if (random) {
+    const randomScore = input.score(random);
+    picks.push({ book: random, score: randomScore !== null && Number.isFinite(randomScore) ? randomScore : 0, kind: "random" });
+  }
   return { picks: shuffle(picks, opts.rng), widened: d > opts.delta, exhausted };
 }
