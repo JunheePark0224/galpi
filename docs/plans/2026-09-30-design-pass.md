@@ -4,7 +4,7 @@
 
 **Goal:** 배포된 P3 흐름(S-01 처음 → S-02 🍃/🎯 → S-03 책 → S-04 첫 장 → S-05 책갈피 5장 → 궁금해요 목록)에 Stitch 시안(P-00~P-05)의 모양을 입힌다 — 모든 화면 위 작은 로고 머리글(Stitch 로고를 SVG로 다시 그림, 파비콘 겸용), 종이·가죽 질감, **S-03부터 화면을 채우는 책**(책갈피는 두 쪽 사이 가운데에서 크게, 데스크톱에서는 430px 기둥을 벗어나 화면 크기로), 책갈피 **저자 줄**. 동작·이벤트·문구·테스트는 그대로 둔다.
 
-**Architecture:** 다시 쓰지 않고 기존 스택(CSS modules + `tokens.css` + Motion) 위에서 CSS와 작은 컴포넌트만 바꾼다. 새 파일은 `Logo.tsx`·`SiteHeader.tsx`·`app/icon.svg`·`e2e/scene.spec.ts`뿐. 질감은 `tokens.css`의 CSS 그라디언트 + 인라인 SVG 노이즈(data URI) — 그림 파일 없음, 움직이는 요소에 `filter` 없음, 그림자는 움직이지 않음. 책 장면 크기는 `BookScene.module.css`의 `--book-h`(책 높이)·`--bm-scale`(책갈피 배율)을 화면 높이 구간과 데스크톱 구간으로 정하고, 책갈피는 **transform scale로 통째로** 키워 160 × 344 글자 맞춤 검사(`e2e/design.spec.ts`)가 어느 크기에서나 그대로 유효하다. 데스크톱(폭 768px 이상)에서는 `.column:has([data-wide-scene])`로 책 장면일 때만 기둥을 푼다. 저자는 `data/processed/d1_selected.csv`의 `author`를 정리(`cleanAuthor`)해 `books.json`에 넣는다.
+**Architecture:** 다시 쓰지 않고 기존 스택(CSS modules + `tokens.css` + Motion) 위에서 CSS와 작은 컴포넌트만 바꾼다. 새 파일은 `Logo.tsx`·`SiteHeader.tsx`·`BookmarkFrame.module.css`·`app/icon.svg`·`e2e/scene.spec.ts`뿐. 질감은 `tokens.css`의 CSS 그라디언트 + 인라인 SVG 노이즈(data URI) — 그림 파일 없음, 움직이는 요소에 `filter` 없음, 그림자는 움직이지 않음. 책 장면 크기는 `BookScene.module.css`의 `--book-h`(책 높이)·`--bm-scale`(책갈피 배율)을 화면 높이 구간과 데스크톱 구간으로 정하고, 책갈피는 **transform scale로 통째로** 키워 160 × 344 글자 맞춤 검사(`e2e/design.spec.ts`)가 어느 크기에서나 그대로 유효하다. 데스크톱(폭 768px 이상)에서는 `.column:has([data-wide-scene])`로 책 장면일 때만 기둥을 푼다. 저자는 `data/processed/d1_selected.csv`의 `author`를 정리(`cleanAuthor`)해 `books.json`에 넣는다.
 
 **Tech Stack:** Next.js 16.3.6 (App Router) · React 19.2.8 · TypeScript · CSS modules · Motion 13.4 (`motion/react`) · tsx 4.23 · Vitest 5 + Testing Library · Playwright 1.63 (phone = Pixel 7 412 × 839, laptop = 1440 × 900, 포트 3217)
 
@@ -12,11 +12,12 @@
 
 **계획 속 코드 검증 (09-30):** 임시 폴더에 현재 `web/`을 두 벌 복사(`before/` = 지금 코드, `after/` = 이 계획 적용; `node_modules` 복사, `.env.local`은 지움 → 실제 Supabase에 쓰지 않음)하고 이 계획의 코드를 태스크 순서(데이터 → 로고·머리글 → S-01 → 책갈피 → 책 장면 → S-02·끝)로 넣으며 확인했다. 최종 상태:
 - `npm run books:import` 200권·키워드 20개 — `books.json` 차이는 `"author"` 줄 200개뿐, `vocab.json` 변화 없음
-- Vitest **47파일 353개 통과** (시작 45/331 → Task 1 347 → Task 2 351 → Task 3 351 → Task 4 352 → Task 5 353 → Task 6 353), `src/lib/recommend` 커버리지 100% 유지(`test:cov` 종료 코드 0)
+- Vitest **47파일 356개 통과** (시작 45/331 → Task 1 347 → Task 2 351 → Task 3 351 → Task 4 352 → Task 5 353 → Task 6 356), `src/lib/recommend` 커버리지 100% 유지(`test:cov` 종료 코드 0)
 - `tsc`·`eslint` 오류·경고 0, `next build` 통과(`/icon.svg` 라우트 생성)
 - Playwright **56개**(시작 48 + 새 4개 × 2프로젝트, 휴대폰에서 데스크톱 전용 1개 skip) `--repeat-each=2` → 110 통과·2 skip
-- 휴대폰 375 × 667·430 × 932, 노트북 1440 × 900 스크린샷 before/after 7화면씩: **S-03·S-04·S-05는 세 크기 모두 세로 스크롤 없음**, 데스크톱 책 장면은 기둥 밖으로(펼친 책 약 800 × 560). S-02 🎯 입력은 원래도 스크롤하는 화면(375 × 667에서 788 → 824px)
-- 검증 중 고친 것: ① 저자 줄을 넣자 글자 ×1.15에서 61권이 넘침 → 글자 크기는 그대로, 간격만 줄임(gap 4→3, 위 여백 18→16, 제목 줄높이 1.4→1.3, 한 줄 1.35→1.3, 이름표 위아래 4→2, "갈피" 줄높이 1.2→1) ② 두 사람 이름이 긴 2권이 ×1.0에서 잘림 → 두 이름 합이 10자를 넘으면 "첫 이름 외" ③ 한 사람의 긴 이름에 "외"가 붙던 버그(세네카) → 두 이름일 때만 ④ 0.7px 차이로 "갈피" 표시가 카드 밖 → ①의 줄높이 1 ⑤ 모듈 CSS의 rgba 리터럴을 새 토큰으로(`--card-bg` 등) ⑥ 스크린샷은 뽑기 응답(같은 5권)과 `Math.random` 씨앗을 고정해 before/after가 같은 책을 보여 주게 함
+- 휴대폰 375 × 667·430 × 932, 노트북 1440 × 900 스크린샷 before/after 7화면 + S-02 🍃 꾹 누르는 중 1장씩: **S-03·S-04·S-05는 세 크기 모두 세로 스크롤 없음**, 데스크톱 책 장면은 기둥 밖으로(펼친 책 약 800 × 560). S-02 🎯 입력은 원래도 스크롤하는 화면(375 × 667에서 788 → 824px)
+- 검증 중 고친 것: ① 저자 줄을 넣자 글자 ×1.15에서 61권이 넘침 → 글자 크기는 그대로, 간격만 줄임(gap 4→3, 위 여백 18→16, 제목 줄높이 1.4→1.3, 한 줄 1.35→1.3, 이름표 위아래 4→2, "갈피" 줄높이 1.2→1) ② 두 사람 이름이 긴 2권이 ×1.0에서 잘림 → 두 이름 합이 10자를 넘으면 "첫 이름 외" ③ 한 사람의 긴 이름에 "외"가 붙던 버그(세네카) → 두 이름일 때만 ④ 0.7px 차이로 "갈피" 표시가 카드 밖 → ①의 줄높이 1 ⑤ 모듈 CSS의 rgba 리터럴을 새 토큰으로(`--card-bg` 등) ⑥ 스크린샷은 뽑기 응답(같은 5권)과 `Math.random` 씨앗을 고정해 before/after가 같은 책을 보여 주게 함 ⑦ (2차, 사용자 검토 뒤) 닫힌 표지를 보통 책 비율로 바꾸자 휴대폰에서 확대된 책의 빈 절반이 페이지를 옆으로 넓혀 휴대폰 브라우저가 화면을 454px로 축소함 — 기존 "세로 스크롤 없음" 검사는 이것을 못 잡았다 → `.scene`에 `overflow-x: clip`, `scene.spec`은 `innerWidth`·`scrollWidth`까지 설정한 크기와 비교
+- 2차 변경(09-30 사용자 검토, 커밋 `4713a57`의 PRD F-03·balance-game 2절·DESIGN C-07/C-08·context 행): 닫힌 표지 1 : 1.45, 책갈피 모양 밸런스 카드, 꾹 누르는 동안 흐린 안내 — 위 숫자는 이것까지 넣은 최종 상태
 - 스크린샷: `C:/Users/jukun/AppData/Local/Temp/claude/C--Users-jukun-Desktop-Portfolio/80e21b37-563b-4270-bfad-a792df827472/scratchpad/design-pass/shots/` (`before-*.png`·`after-*.png`, 나란히 비교는 `pairs/`)
 
 ## Global Constraints
@@ -25,14 +26,14 @@
 - PRD에 없는 기능은 만들지 않는다. `docs/stitch/exports/README.md`의 **따르지 않을 부분 11건은 만들지 않는다**: 아래 메뉴 바, 로고 옆 영어 "Recommendations", 프로필 그림, "평범은 책들은 서재 보관함에 바로 담깁니다", 모두 빈 세기 점(점은 답을 따른다), "갈피를 터치하여 자세히 펼쳐보세요", "취향 일치도 92%", "갈피 코멘터리", 공유 버튼, 읽기 조건 희귀 책갈피, 수채화 동물 그림
 - **로그인 글자·자리 없음 (P5까지).** 머리글 로고는 누를 수 없는 그림(링크 아님 — 새 동작을 만들지 않는다)
 - 동작·이벤트·흐름·저장은 그대로. `Flow.tsx`·`lib/flow/*`·`lib/recommend/*`·`lib/track/*`는 건드리지 않는다
-- **문구는 한 글자도 바꾸지 않는다. 새 문구 없음.** 책 표지 라벨은 S-01 태그라인("읽을 책, 갈피가 안 잡힐 때"), 책등은 "갈피"를 다시 쓴다. 저자는 데이터(서지 정보)
+- **문구는 한 글자도 바꾸지 않는다. 새 문구는 하나뿐** — 꾹 누르는 동안의 안내 "끌리는 쪽을 고를수록 더 잘 맞아요"(PRD F-03, `BalanceGame.tsx`의 상수 `HOLD_HINT` 한 곳). 책 표지 라벨은 S-01 태그라인("읽을 책, 갈피가 안 잡힐 때"), 책등은 "갈피"를 다시 쓴다. 저자는 데이터(서지 정보)
 - 색·간격·모서리는 `tokens.css` 변수만(새 값은 Task 2에서 토큰으로 추가). 12px 미만 글씨 금지. 반투명(책갈피) 위 글자는 `ink`만(DESIGN 7절)
 - 누르는 곳 44px 이상. 한 화면에 주 버튼 하나. 반응·다음 버튼은 책 아래. 다크 모드 없음
 - **민음사 모양 금지** — 네모 카드·왼쪽 세로 띠·두 줄 색 띠. 궁금해요 목록 항목에도 왼쪽 색 띠를 쓰지 않는다
 - 움직임은 T-06 그대로(`lib/motion.ts`). 닫힌 책 확대(S-03)도 `OPEN_COVER`와 같은 1000ms로 1배로 돌아온다. 움직이는 것은 transform·opacity만 — `filter`·그림자 애니메이션 없음. 책갈피가 움직이는 동안 반투명 흐림을 끈다(기존 `data-moving`)
 - 질감은 CSS/SVG만. 그림 파일을 추가하지 않는다(파비콘 `icon.svg` 4.7KB는 SVG)
 - 책 데이터는 우리 것만: isbn · 우리 태그 · 우리 한 줄 + 제목·**저자**(`d1_selected.csv`, 이미 git에 있는 서지 정보). YES24 책소개·가격·표지·평점은 없다
-- **사용자 추가 지시 (09-30, 구속)**: ① S-03부터 책이 화면을 채운다 — 휴대폰 375 × 667~430 × 932에서 책은 기둥 폭 가득·화면 높이만큼, **375 × 667에서 페이지 스크롤 없음**, 버튼은 책 아래·바닥 표시는 맨 아래 ② 책갈피는 **두 쪽 사이 가운데(책 사이)**에 꽂혀 올라오고, 책과 함께 커진다(1 : 2.15, 아치 창·제비꼬리·끈 유지, 200권 맞춤 검사 ×1.0·×1.15 통과) ③ 닫힌 표지가 크고 P-01/P-04처럼(가죽 질감·책등 글씨·제목) ④ 첫 장(S-04)도 큰 책에서 읽기 쉽게 ⑤ **데스크톱(폭 768px 이상)에서 S-03~S-05는 430px 기둥을 벗어나** 펼친 책 폭 ≈ min(92vw, 1000px)·높이 ≈ 남은 높이 중 작은 쪽에 맞춤, 책갈피도 같이, 버튼 줄은 가운데 최대 480px. S-01·S-02·궁금해요 목록은 430px 기둥 그대로
+- **사용자 추가 지시 (09-30, 구속)**: ① S-03부터 책이 화면을 채운다 — 휴대폰 375 × 667~430 × 932에서 책은 기둥 폭 가득·화면 높이만큼, **375 × 667에서 페이지 스크롤 없음**, 버튼은 책 아래·바닥 표시는 맨 아래 ② 책갈피는 **두 쪽 사이 가운데(책 사이)**에 꽂혀 올라오고, 책과 함께 커진다(1 : 2.15, 아치 창·제비꼬리·끈 유지, 200권 맞춤 검사 ×1.0·×1.15 통과) ③ 닫힌 표지가 크고 P-01/P-04처럼(가죽 질감·책등 글씨·제목) ④ 첫 장(S-04)도 큰 책에서 읽기 쉽게 ⑤ **데스크톱(폭 768px 이상)에서 S-03~S-05는 430px 기둥을 벗어나** 펼친 책 폭 ≈ min(92vw, 1000px)·높이 ≈ 남은 높이 중 작은 쪽에 맞춤, 책갈피도 같이, 버튼 줄은 가운데 최대 480px. S-01·S-02·궁금해요 목록은 430px 기둥 그대로 ⑥ (2차) 닫힌 표지(S-03)는 휴대폰에서도 **보통 책 비율 약 1 : 1.4~1.5**, 폭은 들어가는 만큼 크게, 위아래 여백을 두고 가운데 — 데스크톱은 그대로, 펼친 책·책갈피 크기도 그대로 ⑦ (2차) 밸런스 선택지 카드는 **책갈피 모양**(반투명 필름·아치 창·제비꼬리·끈과 구멍·바느질 선), 아치 창 자리에 선택지 글씨(15px 이상, 2~3줄), 동물·이름표·제목·한 줄 없음, 375px에서 카드 약 150~160px 둘 + vs, 카드 전체가 버튼(44px 이상), 좌우 바꿈(5~8번)·250ms 두 번 누름 막기·E-24 그대로, 책갈피 모양은 공유(중복 CSS 없이) ⑧ (2차) 꾹 누르는 동안 버튼 글씨가 흐린 안내로 바뀌고(같은 칸, 자리 미리 잡아 흔들림 없음, 12px 이상) 떼면 돌아옴. 0.8초 타이머·게이지·E-25·Enter 길게 그대로, 접근 이름은 계속 "갈피를 못 잡겠어요", 안내는 누를 때 한 번만 조용히 읽어 줌
 - 이벤트는 `track()` 하나. `next dev`·Vitest·E2E는 `TRACK_STORE=off`
 - 파일 하나 300줄 이하. 커밋 메시지는 영어 conventional commits, 저장소 기록처럼 끝에 `Co-Authored-By` 줄
 
@@ -42,7 +43,7 @@
 |---|---|---|
 | 로고(jpg) | 명조 글자 "갈피" + 작은 책·책갈피 아이콘 | 고운바탕 Bold 글자 윤곽(SIL OFL 1.1)을 SVG 경로로 + 아이콘을 선으로 다시 그림. 머리글·파비콘 |
 | P-01 | 로고·태그라인, 책 한 권 + 꽂힌 책갈피 둘, 입구 카드(→ 원) | 책 그림은 글자 없이(영어 "Volume I"·"Galpi Archive"·"갈피의 서재"는 새 문구라 뺌). "조용히 머무는 책의 공간" 뺌 |
-| P-02 | 9칸 진행 막대, 흰 카드 둘 + vs, 꾹 누르기 알약 | 카드 아이콘·작은 부제("새벽의 쓸쓸함")는 새 문구라 뺌 |
+| P-02 | 9칸 진행 막대, 카드 둘 + vs, 꾹 누르기 알약 | 카드는 흰 카드 대신 **책갈피 모양**(2차, DESIGN C-07). 카드 아이콘·작은 부제("새벽의 쓸쓸함")는 새 문구라 뺌 |
 | P-03 | 필수/선택 알약, 흰 입력 칸, 책 아이콘 주 버튼 | 뒤로 가기 화살표는 새 동작이라 뺌 |
 | P-04 | 가죽 표지·책등 세로 글씨, 종이 쪽지 안내(테이프) | 책등 글씨는 "갈피 기록부" 대신 "갈피". 첫 장은 왼쪽 = 제목 쪽, 오른쪽 = 요약 |
 | P-05 | 반투명 책갈피·저자 줄, 책 아래 버튼, 쪽 번호 알약 "2 / 5" | 책갈피는 오른쪽 쪽이 아니라 **두 쪽 사이 가운데**(사용자 지시). "n / 5"는 버튼 줄에서 쪽 아래 오른쪽 알약으로 |
@@ -65,11 +66,13 @@
 | `web/src/app/layout.tsx` | 머리글 넣기 | 2 |
 | `web/src/app/icon.svg` (새) · `web/src/app/favicon.ico` (삭제) | 파비콘 = 로고 | 2 |
 | `web/src/components/flow/Home.tsx` (+css, +test) | S-01: 제목·태그라인·책 그림·입구 카드, 로그인 자리 없앰 | 3 |
+| `web/src/components/BookmarkFrame.module.css` (새) | 책갈피 모양(끈·필름·제비꼬리·구멍·바느질 선) — 책갈피와 밸런스 카드가 같이 씀 | 4 |
 | `web/src/components/Bookmark.tsx` (+css, +test), `GenreTag.module.css` | 저자 줄, 가운데 정렬, 간격 | 4 |
-| `web/src/components/flow/Book.tsx` (+css) | 가죽 표지·책등·라벨, 천 테두리, 닫힌 책 확대 | 5 |
+| `web/src/components/flow/Book.tsx` (+css) | 가죽 표지·책등·라벨, 천 테두리, 닫힌 책(휴대폰 1 : 1.45) 확대 | 5 |
 | `web/src/components/flow/BookScene.tsx` (+css, +test) | 화면 가득, 가운데 책갈피, 쪽 번호, 데스크톱 넓게 | 5 |
 | `web/src/components/flow/FirstPage.tsx` (+css) | 왼쪽 제목 쪽 + 오른쪽 요약 | 5 |
-| `web/src/components/flow/BalanceGame.module.css`, `HoldButton.module.css` | S-02 🍃 모양 | 6 |
+| `web/src/components/flow/BalanceGame.tsx` (+css, +test) | S-02 🍃 책갈피 모양 카드(C-07), `HOLD_HINT` | 6 |
+| `web/src/components/flow/HoldButton.tsx` (+css, +test) | 누르는 동안 흐린 안내(C-08) | 6 |
 | `web/src/components/flow/TargetInput.tsx` (+css) | S-02 🎯 모양, 주 버튼 책 아이콘 | 6 |
 | `web/src/components/flow/EndList.tsx` (+css, +test) | 궁금해요 목록 모양, 저자 | 6 |
 | `web/e2e/design.spec.ts` | 머리글·아이콘, 저자 포함 200권 맞춤 | 2·4 |
@@ -90,13 +93,12 @@
 
 - [ ] **Step 0: 작업 브랜치**
 
-`feat/design-pass`는 이미 있다(문서 커밋 `3cad687`까지). 이 계획 파일만 새로 있어야 한다 — 먼저 커밋한다.
+`feat/design-pass`는 이미 있고, 이 계획과 2차 문서 변경은 `4713a57`에 커밋돼 있다(이 계획을 고친 판이면 그 뒤 커밋). 작업 트리가 깨끗해야 한다.
 ```bash
 cd Galpi
 git switch feat/design-pass
-git status --short   # ?? docs/plans/2026-09-30-design-pass.md 한 줄뿐이어야 한다
-git add docs/plans/2026-09-30-design-pass.md
-git commit -m "docs: add the design-pass implementation plan"
+git log --oneline -1   # 4713a57 이후
+git status --short     # 아무것도 없어야 한다
 ```
 
 - [ ] **Step 1: 실패하는 테스트 — 저자 정리와 CSV 읽기**
@@ -1040,11 +1042,12 @@ git commit -m "feat(home): Stitch P-01 look — cloth book with peeking bookmark
 ### Task 4: 책갈피 저자 줄 — 200권 맞춤 검사 ×1.0·×1.15
 
 **Files:**
+- Create: `web/src/components/BookmarkFrame.module.css`
 - Modify: `web/src/components/Bookmark.tsx`, `web/src/components/Bookmark.module.css`, `web/src/components/GenreTag.module.css`, `web/src/components/Bookmark.test.tsx`, `web/src/components/flow/BookScene.test.tsx`, `web/e2e/design.spec.ts`
 
 **Interfaces:**
 - Consumes: `BookCard.author` (Task 1)
-- Produces: 책갈피 카드 자식 순서 `[hole, window, tag, title, author, line, stitch, mark]` (e2e 맞춤 검사가 이 순서로 읽는다) · 읽어 주는 이름 `"제목, 저자, 한 줄, 장르"` (DESIGN 7절을 Task 7에서 고침)
+- Produces: `BookmarkFrame.module.css`의 클래스 `frame`(바깥, 끈 자리 26px, `data-moving`이면 흐림 끔) · `string` · `film`(반투명·제비꼬리·세로 flex) · `hole` · `stitch` — 색은 부모의 `--tone`. Task 6의 밸런스 카드가 같은 클래스를 쓴다 · 책갈피 카드 자식 순서 `[hole, window, tag, title, author, line, stitch, mark]` (e2e 맞춤 검사가 이 순서로 읽는다) · 읽어 주는 이름 `"제목, 저자, 한 줄, 장르"` (DESIGN 7절을 Task 7에서 고침)
 
 **맞춤 판단 (검증 결과):** 160 × 344 틀(B안)에 저자 줄(12px, 한 줄)을 그냥 넣으면 ×1.15에서 61권이 넘친다(최대 약 16px). 틀 크기(사용자 결정)와 글자 크기(T-04)는 그대로 두고 **간격만** 줄이는 것이 가장 작은 고침이다: 요소 사이 4 → 3px, 위 여백 18 → 16px(구멍 7 + 8 = 15 아래), 제목 줄높이 1.4 → 1.3, 한 줄 1.35 → 1.3, 이름표 위아래 4 → 2px, "갈피" 줄높이 1.2 → 1. 저자는 한 줄 고정(`nowrap` + `…`) — ×1.0에서는 모두 온전히 보이고(두 이름이 10자를 넘으면 Task 1에서 "첫 이름 외"), ×1.15에서 아주 긴 한 사람 이름(예: 루키우스 안나이우스 세네카)만 "…"로 끝난다. 제목 두 줄·한 줄 네 줄 규칙은 그대로.
 
@@ -1158,7 +1161,41 @@ Expected: Vitest FAIL(저자 줄·이름 없음) / e2e FAIL — 카드 자식이
 
 - [ ] **Step 3: 구현**
 
-`web/src/components/Bookmark.tsx` 전체:
+`web/src/components/BookmarkFrame.module.css` (예전 `Bookmark.module.css`의 끈·필름·구멍·바느질 선을 옮긴 것 — 값은 그대로):
+```css
+/* The bookmark shape (DESIGN 4절), shared by C-02 bookmarks and C-07 balance cards: a string with a knot (~26px above),
+   a frost film with the swallowtail notch (7% of the height), a punched hole (8px) and a dashed stitch line.
+   Sizes and contents stay with each component. Never the Minumsa shape — no square card, no left band, no stripes. */
+.frame { position: relative; padding-top: 26px; }
+.string {
+  position: absolute; top: 0; left: 50%; z-index: 1;
+  width: 1.5px; height: 37px; margin-left: -0.75px; background: var(--tone);
+}
+.string::before {
+  content: ""; position: absolute; top: -3px; left: 50%;
+  width: 7px; height: 7px; margin-left: -3.5px; border-radius: 50%; background: var(--tone);
+}
+.film {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  border: var(--frost-edge); border-radius: var(--radius-bookmark);
+  background: var(--frost-bg);
+  -webkit-backdrop-filter: var(--frost-blur); backdrop-filter: var(--frost-blur);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 93%, 0 100%);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .film { background: var(--frost-fallback); }
+}
+/* T-03: no blur while moving (low-end Android). */
+.frame[data-moving] .film { background: var(--frost-fallback); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.hole {
+  position: absolute; top: 7px; left: 50%; width: 8px; height: 8px; margin-left: -4px;
+  border-radius: 50%; background: var(--paper-deep); box-shadow: inset 0 0 0 1px var(--paper-line);
+}
+.stitch { width: 100%; margin-top: auto; border-top: 1.5px dashed var(--tone); }
+```
+
+`web/src/components/Bookmark.tsx` 전체 (DOM 순서는 그대로, 모양 클래스만 공유 모듈에서):
 ```tsx
 import type { CSSProperties } from "react";
 import type { ArtCombo } from "@/lib/art/combine";
@@ -1166,32 +1203,33 @@ import { toneOf } from "@/lib/books/taxonomy";
 import type { BookCard } from "@/lib/books/types";
 import { BookmarkArt } from "./BookmarkArt";
 import { GenreTag } from "./GenreTag";
+import frame from "./BookmarkFrame.module.css";
 import styles from "./Bookmark.module.css";
 
 interface Props { card: BookCard; art: ArtCombo; moving?: boolean }
 
 /**
  * C-02 (DESIGN 4절): frost film, arched window, name tag, title, author (PRD F-08), one-liner, stitch line, swallowtail, string.
- * Never the Minumsa shape — no square card, no left vertical band, no two colour stripes.
+ * The shape is shared with the balance cards (BookmarkFrame.module.css).
  */
 export function Bookmark({ card, art, moving = false }: Props) {
   const tone = toneOf(card);
   return (
     <article
-      className={styles.bookmark}
+      className={`${frame.frame} ${styles.bookmark}`}
       data-moving={moving ? "" : undefined}
       aria-label={`${card.title}, ${card.author}, ${card.oneLiner}, ${card.genre}`}
       style={{ "--tone": tone.bg } as CSSProperties}
     >
-      <span className={styles.string} aria-hidden="true" />
-      <div className={styles.card} aria-hidden="true">
-        <span className={styles.hole} />
+      <span className={frame.string} aria-hidden="true" />
+      <div className={`${frame.film} ${styles.card}`} aria-hidden="true">
+        <span className={frame.hole} />
         <div className={styles.window}><BookmarkArt art={art} clipId={`arch-${card.id}`} /></div>
         <GenreTag card={card} />
         <h3 className={styles.title}>{card.title}</h3>
         <p className={styles.author}>{card.author}</p>
         <p className={styles.line}>{card.oneLiner}</p>
-        <span className={styles.stitch} />
+        <span className={frame.stitch} />
         <span className={styles.mark}>갈피</span>
       </div>
     </article>
@@ -1201,39 +1239,15 @@ export function Bookmark({ card, art, moving = false }: Props) {
 
 `web/src/components/Bookmark.module.css` 전체:
 ```css
-/* DESIGN 4절: 160 × 344 (09-30: +24px so large text fits), string ~26px above, hole 8px, window = card − 18, swallowtail notch 7%.
+/* DESIGN 4절: 160 × 344 (09-30: +24px so large text fits); the shape itself (string, film, notch, hole, stitch) is
+   BookmarkFrame.module.css. Window = card − 18.
    Text room: 2-line title + 1-line author + 4-line one-liner fits all 200 real books at normal and x1.15 text
    (e2e/design.spec.ts); nothing in the column may shrink. The author line (09-30) was paid for with tighter spacing, not
    smaller text: gap 4 → 3px, top padding 18 → 16px, title line-height 1.4 → 1.3, one-liner 1.35 → 1.3, name tag padding
    4 → 2px, "갈피" line-height 1.2 → 1. The notch is 7% of the height, so the bottom padding stays 25px to keep "갈피" above it.
    The book scene may scale the whole bookmark up (transform), never its parts. */
-.bookmark { position: relative; width: 160px; padding-top: 26px; }
-.string {
-  position: absolute; top: 0; left: 50%; z-index: 1;
-  width: 1.5px; height: 37px; margin-left: -0.75px; background: var(--tone);
-}
-.string::before {
-  content: ""; position: absolute; top: -3px; left: 50%;
-  width: 7px; height: 7px; margin-left: -3.5px; border-radius: 50%; background: var(--tone);
-}
-.card {
-  position: relative;
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  height: 344px; padding: 16px 9px 25px; text-align: center;
-  border: var(--frost-edge); border-radius: var(--radius-bookmark);
-  background: var(--frost-bg);
-  -webkit-backdrop-filter: var(--frost-blur); backdrop-filter: var(--frost-blur);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 93%, 0 100%);
-}
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .card { background: var(--frost-fallback); }
-}
-/* T-03: no blur while moving (low-end Android). */
-.bookmark[data-moving] .card { background: var(--frost-fallback); -webkit-backdrop-filter: none; backdrop-filter: none; }
-.hole {
-  position: absolute; top: 7px; left: 50%; width: 8px; height: 8px; margin-left: -4px;
-  border-radius: 50%; background: var(--paper-deep); box-shadow: inset 0 0 0 1px var(--paper-line);
-}
+.bookmark { width: 160px; }
+.card { gap: 3px; height: 344px; padding: 16px 9px 25px; text-align: center; }
 .window { flex-shrink: 0; width: 100%; }
 .title {
   flex-shrink: 0; margin: 0; font-size: 15px; line-height: 1.3; color: var(--ink);
@@ -1248,7 +1262,6 @@ export function Bookmark({ card, art, moving = false }: Props) {
   flex-shrink: 0; margin: 0; font-size: 13px; line-height: 1.3; color: var(--ink);
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden;
 }
-.stitch { width: 100%; margin-top: auto; border-top: 1.5px dashed var(--tone); }
 .mark { align-self: center; line-height: 1; font-family: var(--font-batang), serif; font-size: 12px; font-weight: 700; color: var(--ink); }
 ```
 
@@ -1272,7 +1285,7 @@ Expected: Vitest **352개 PASS** / design.spec 전부 PASS — 두 맞춤 테스
 - [ ] **Step 5: Commit**
 
 ```bash
-git add web/src/components/Bookmark.tsx web/src/components/Bookmark.module.css web/src/components/GenreTag.module.css web/src/components/Bookmark.test.tsx web/src/components/flow/BookScene.test.tsx web/e2e/design.spec.ts
+git add web/src/components/BookmarkFrame.module.css web/src/components/Bookmark.tsx web/src/components/Bookmark.module.css web/src/components/GenreTag.module.css web/src/components/Bookmark.test.tsx web/src/components/flow/BookScene.test.tsx web/e2e/design.spec.ts
 git commit -m "feat(bookmark): author line under the title, all 200 books still fit at x1.0 and x1.15"
 ```
 
@@ -1286,7 +1299,7 @@ git commit -m "feat(bookmark): author line under the title, all 200 books still 
 
 **Interfaces:**
 - Consumes: `LogoMark` (Task 2), 토큰(Task 2), 저자 줄 있는 `Bookmark` (Task 4), `OPEN_COVER`·`FLIP_PAGE` (`lib/motion.ts`)
-- Produces: `COVER_ZOOM = 1.2` (`Book.tsx`) · `FirstPageTitle({ entry })` (`FirstPage.tsx`, S-04 왼쪽 쪽) · 책 장면 뿌리에 `data-wide-scene` · CSS 변수 `--book-h`(책 높이), `--bm-scale`(책갈피 배율) — `BookScene.module.css`의 `.scene`에서만 정한다. `Book`은 `var(--book-h, 340px)`를 읽는다
+- Produces: `Book`의 바깥 `.zoom`(닫혀 있으면 `data-closed`) · `FirstPageTitle({ entry })` (`FirstPage.tsx`, S-04 왼쪽 쪽) · 책 장면 뿌리에 `data-wide-scene` · CSS 변수 `--book-h`(책 높이), `--bm-scale`(책갈피 배율), `--cover-zoom`·`--cover-lift`(닫힌 책 확대·올림) — `BookScene.module.css`의 `.scene`에서만 정한다. `Book`은 `var(--book-h, 340px)` 등을 읽는다
 
 **크기 규칙 (검증한 값):**
 
@@ -1297,7 +1310,12 @@ git commit -m "feat(bookmark): author line under the title, all 200 books still 
 | 휴대폰, 높이 ≥ 880 | 1.4 | clamp(500, 100dvh − 348, 600) | 430 × 932 → 584 |
 | 데스크톱(폭 ≥ 768) | 1.25 / 높이 ≥ 880: 1.4 / ≥ 1000: 1.6 | min(100dvh − 198 − 106 × 배율, (min(92vw, 1000) − 10) / 1.43), 폭 = 높이 × 1.43 | 1440 × 900 → 약 791 × 554 |
 
-높이에서 빼는 값 = 머리글 52 + main 여백 8 + 16 + 책 위 공간(106 × 배율 + 6, 책갈피가 책 위로 나오는 부분) + 틈 16 + 버튼 44 + 바닥 표시 52 + 여유 4. 책갈피 카드는 책 안으로 264 × 배율만 들어가므로 모든 구간에서 책 높이보다 짧다. 닫힌 책(S-03)은 1.2배로 보이다 펼치면서 1배가 된다 — 확대는 아래쪽 기준(`originY: 1`)이라 책 위 공간(0.2 × 책 높이 < 106 × 배율)으로만 커지고 아래 안내·버튼을 가리지 않는다. 데스크톱의 펼친 책은 두 쪽이 1 : 1.4(책 모양), 휴대폰은 기둥 폭에 맞춰 쪽이 세로로 긴 기록부 모양이다.
+| 닫힌 책(S-03) | 표지 | 확대·올림 | 확인 |
+|---|---|---|---|
+| 휴대폰(폭 < 768) | 1 : 1.45 (표지 폭 × 1.45, 쪽 높이 가운데) — 뒤의 긴 쪽·판은 닫혀 있는 동안 투명 | 1.6배, 책 높이의 −12% | 375 × 667 → 약 274 × 398, 머리글과 안내 사이 가운데 / 430 × 932 → 약 318 × 462 |
+| 데스크톱 | 쪽 그대로(1 : 1.4) | 1.2배, −10% (= 아래 기준으로 위로 커짐) | 1440 × 900 → 약 480 × 677 |
+
+높이에서 빼는 값 = 머리글 52 + main 여백 8 + 16 + 책 위 공간(106 × 배율 + 6, 책갈피가 책 위로 나오는 부분) + 틈 16 + 버튼 44 + 바닥 표시 52 + 여유 4. 책갈피 카드는 책 안으로 264 × 배율만 들어가므로 모든 구간에서 책 높이보다 짧다. 닫힌 책은 바깥 `.zoom`의 CSS transform(`--dur-open-cover`·`--ease-open`)으로 확대·올림했다가 펼치면서 1배가 되고, 휴대폰에서는 표지 앞면만 1 : 1.45로 짧게 두고 뒤의 쪽·판은 투명도(opacity)로 나타난다 — 움직이는 것은 transform·opacity뿐. 확대된 책의 빈 절반이 페이지를 옆으로 넓히지 않도록 `.scene`은 `overflow-x: clip`(세로는 그대로 — 책갈피가 위로 나온다). 데스크톱의 펼친 책은 두 쪽이 1 : 1.4(책 모양), 휴대폰은 기둥 폭에 맞춰 쪽이 세로로 긴 기록부 모양이다(펼친 뒤만).
 
 - [ ] **Step 1: 실패하는 테스트**
 
@@ -1309,7 +1327,14 @@ import { test } from "./helpers";
 // Design pass: from S-03 on, the book fills the column and the whole scene fits the screen without page scroll.
 test.use({ reducedMotion: "reduce" });
 
-const noPageScroll = (page: Page) => page.evaluate(() => document.documentElement.scrollHeight <= window.innerHeight);
+/** Neither way: a phone browser zooms the whole page out when something sticks out sideways, so compare with the set size. */
+const noPageScroll = (page: Page) => {
+  const size = page.viewportSize();
+  return page.evaluate(({ w, h }) => {
+    const doc = document.documentElement;
+    return window.innerWidth === w && doc.scrollWidth <= w && doc.scrollHeight <= h;
+  }, { w: size?.width ?? 0, h: size?.height ?? 0 });
+};
 const box = async (page: Page, selector: string) => {
   const b = await page.locator(selector).first().boundingBox();
   if (!b) throw new Error(`${selector} has no box`);
@@ -1328,7 +1353,11 @@ async function walkTheBook(page: Page) {
   const viewport = page.viewportSize();
   if (!viewport) throw new Error("viewport is not set");
   const closed = await cover.boundingBox();
-  expect(closed?.height ?? 0).toBeGreaterThanOrEqual(viewport.height * 0.6);      // the cover fills the screen's height
+  if (!closed) throw new Error("the closed cover has no box");
+  expect(closed.height / closed.width).toBeGreaterThanOrEqual(1.35);              // a normal book, not a tall strip
+  expect(closed.height / closed.width).toBeLessThanOrEqual(1.55);
+  expect(closed.width).toBeGreaterThanOrEqual(Math.min(viewport.width, 430) * 0.7); // and big
+  expect(closed.y).toBeGreaterThanOrEqual(52);                                     // below the logo header
   expect(await noPageScroll(page)).toBe(true);
 
   await cover.click();                                                            // S-04
@@ -1409,7 +1438,7 @@ test("desktop: the book scene leaves the 430px column, buttons stay a short row"
 - [ ] **Step 2: 실패 확인**
 
 Run: `cd web && npx vitest run src/components/flow/BookScene.test.tsx && npx playwright test e2e/scene.spec.ts e2e/flow-target.spec.ts`
-Expected: Vitest FAIL(제목과 요약이 같은 쪽) / scene.spec FAIL — 닫힌 표지 높이가 화면의 60% 미만(340px), 375 × 667에서 머리글 때문에 스크롤, 책갈피가 가운데가 아님 / flow-target laptop FAIL — 기둥이 430
+Expected: Vitest FAIL(제목과 요약이 같은 쪽) / scene.spec FAIL — 닫힌 표지가 1 : 2(170 × 340)라 비율·폭 단언 실패, 375 × 667에서 머리글 때문에 스크롤, 책갈피가 가운데가 아님 / flow-target laptop FAIL — 기둥이 430
 
 - [ ] **Step 3: 책(C-01) — 가죽 표지, 책등, 라벨, 천 테두리**
 
@@ -1422,9 +1451,6 @@ import { LogoMark } from "@/components/Logo";
 import { FLIP_PAGE, OPEN_COVER } from "@/lib/motion";
 import styles from "./Book.module.css";
 
-/** S-03: the closed book is shown this much larger (its cover is the thing to see and press); it settles to 1 as it opens. */
-export const COVER_ZOOM = 1.2;
-
 interface Props {
   open: boolean;
   onPress?: () => void;   // S-03 only
@@ -1434,43 +1460,40 @@ interface Props {
 
 /**
  * C-01 — leather cover over a cream page (CSS 3D: perspective + backface), with a cloth rim around the open spread.
- * Closed, the cover is centred and zoomed; opening swings it left around the spine (T-06 open-cover) while the book settles
- * to full size. The zoom grows upward (origin at the bottom) into the room the scene keeps for the bookmark, so nothing
- * below moves. Transform only — no filter, no animated shadow. initial={false}: a resumed flow does not replay it.
+ * Closed, the cover is centred, lifted and zoomed by the scene (--cover-zoom, --cover-lift on the wrapper, a CSS transition
+ * with the open-cover timing); on a phone the closed cover is a normal book (1 : 1.45) and the tall pages behind it stay
+ * hidden until it opens. Opening swings the cover left around the spine (T-06) while the book settles to full size.
+ * Transform and opacity only — no filter, no animated shadow. initial={false}: a resumed flow does not replay it.
  */
 export function Book({ open, onPress, left, right }: Props) {
   return (
-    <motion.div
-      className={styles.book}
-      style={{ originY: 1 }}
-      initial={false}
-      animate={open ? { x: "0%", scale: 1 } : { x: `${-25 * COVER_ZOOM}%`, scale: COVER_ZOOM }}
-      transition={OPEN_COVER}
-    >
-      <div className={styles.board} aria-hidden="true" />
-      <div className={styles.pageRight}>{right}</div>
-      <motion.div className={styles.cover} initial={false} animate={{ rotateY: open ? -180 : 0 }} transition={OPEN_COVER}>
-        <button
-          type="button"
-          className={styles.front}
-          onClick={onPress}
-          disabled={!onPress}
-          aria-label="책 펼치기"
-          aria-hidden={open || undefined}
-          tabIndex={open ? -1 : undefined}
-        >
-          <span className={styles.spine} aria-hidden="true"><span className={styles.spineTitle}>갈피</span></span>
-          <span className={styles.frame} aria-hidden="true">
-            <span className={styles.plate}>
-              <span className={styles.coverTitle}>갈피</span>
-              <span className={styles.coverLine}>읽을 책, 갈피가 안 잡힐 때</span>
+    <div className={styles.zoom} data-closed={open ? undefined : ""}>
+      <motion.div className={styles.book} initial={false} animate={{ x: open ? "0%" : "-25%" }} transition={OPEN_COVER}>
+        <div className={styles.board} aria-hidden="true" />
+        <div className={styles.pageRight}>{right}</div>
+        <motion.div className={styles.cover} initial={false} animate={{ rotateY: open ? -180 : 0 }} transition={OPEN_COVER}>
+          <button
+            type="button"
+            className={styles.front}
+            onClick={onPress}
+            disabled={!onPress}
+            aria-label="책 펼치기"
+            aria-hidden={open || undefined}
+            tabIndex={open ? -1 : undefined}
+          >
+            <span className={styles.spine} aria-hidden="true"><span className={styles.spineTitle}>갈피</span></span>
+            <span className={styles.frame} aria-hidden="true">
+              <span className={styles.plate}>
+                <span className={styles.coverTitle}>갈피</span>
+                <span className={styles.coverLine}>읽을 책, 갈피가 안 잡힐 때</span>
+              </span>
+              <LogoMark className={styles.coverMark} width={40} />
             </span>
-            <LogoMark className={styles.coverMark} width={40} />
-          </span>
-        </button>
-        <div className={styles.back}><div className={styles.pageLeft}>{left}</div></div>
+          </button>
+          <div className={styles.back}><div className={styles.pageLeft}>{left}</div></div>
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -1499,6 +1522,10 @@ export function RuledPage({ turn = 0 }: { turn?: number }) {
    The height comes from the scene (--book-h). The cover boards stand 5px out around the pages (the cloth rim);
    the scene keeps that 5px free on each side. */
 .book { position: relative; width: 100%; height: var(--book-h, 340px); perspective: 1600px; }
+/* S-03 closed: centred, lifted and zoomed (values from the scene); settles to 1 as the cover opens (T-06 open-cover). */
+.zoom { transition: transform var(--dur-open-cover) var(--ease-open); }
+.zoom[data-closed] { transform: translateY(var(--cover-lift, -10%)) scale(var(--cover-zoom, 1.2)); }
+.board, .pageRight { transition: opacity var(--dur-open-cover) var(--ease-open); }
 /* back board under the right-hand page — also the closed book's back cover edge */
 .board {
   position: absolute; top: -5px; bottom: -5px; left: 50%; right: -5px;
@@ -1573,6 +1600,11 @@ export function RuledPage({ turn = 0 }: { turn?: number }) {
 .sheet {
   position: absolute; inset: 0; transform-origin: left center;
   background: var(--paper); border-left: 1px solid var(--paper-line);
+}
+/* Phone: the closed cover is a normal book, 1 : 1.45, in the middle of the tall page; the pages and board wait behind it. */
+@media (max-width: 767px) {
+  .zoom[data-closed] .board, .zoom[data-closed] .pageRight { opacity: 0; }
+  .front { top: 50%; bottom: auto; height: auto; aspect-ratio: 1 / 1.45; translate: 0 -50%; }
 }
 ```
 
@@ -1820,8 +1852,10 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
 .scene {
   --book-h: clamp(340px, calc(100dvh - 304px), 420px);
   --bm-scale: 1;
+  --cover-zoom: 1.6; --cover-lift: -12%;   /* S-03 phone: a 1 : 1.45 cover about 270–320px wide, centred between header and hint */
   display: flex; flex-direction: column; gap: var(--space-4);
   padding-top: calc(106px * var(--bm-scale) + 6px);
+  overflow-x: clip;   /* the zoomed closed book's empty half must not widen the page (a phone would zoom out) */
 }
 /* Height left for the book = viewport − header 52 − main padding 8 + 16 − room above (106 × scale + 6) − gap 16
    − buttons 44 − footer 52, less 4px of slack. */
@@ -1836,6 +1870,7 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
    band; the buttons stay a centred row of at most 480px. Kept after the phone bands so it wins on a desktop. */
 @media (min-width: 768px) {
   .scene {
+    --cover-zoom: 1.2; --cover-lift: -10%;   /* the cover is already a 1 : 1.4 page: grow it upward into the room above */
     --bm-scale: 1.25;
     --book-h: min(calc(100dvh - 198px - 106px * var(--bm-scale)), calc((min(92vw, 1000px) - 10px) / 1.43));
   }
@@ -1886,7 +1921,7 @@ Expected: 오류 0 / Vitest **353개 PASS** / e2e 전부 PASS — phone 27 + lap
 
 - [ ] **Step 7: 눈으로 확인 (휴대폰 흔들림·성능)**
 
-`npm run dev` → 크롬 개발자 도구 기기 모드 375 × 667, 430 × 932, 그리고 창 1440 × 900에서 🍃 한 번 완주. 확인할 것: 닫힌 책을 누르면 표지가 왼쪽으로 넘어가며 책이 1배로 줄어든다(1초) / 책갈피가 두 쪽 사이에서 올라오고, 올라오는 동안은 흐림이 꺼져 있다가 멈추면 켜진다 / 궁금해요 = 위로 기울며, 패스 = 아래로 / 오른쪽 쪽이 한 장 넘어간다 / Performance 패널 CPU 4× 느리게에서 긴 프레임이 이어지지 않는다(움직이는 것은 transform·opacity뿐) / `prefers-reduced-motion`(렌더링 탭)이면 확대·회전 없이 바로 바뀐다
+`npm run dev` → 크롬 개발자 도구 기기 모드 375 × 667, 430 × 932, 그리고 창 1440 × 900에서 🍃 한 번 완주. 확인할 것: 휴대폰에서 닫힌 책이 보통 책 모양이고, 누르면 표지가 왼쪽으로 넘어가며 긴 쪽이 나타나고 책이 1배로 줄어든다(1초), 페이지가 옆으로 밀리거나 축소되지 않는다 / 책갈피가 두 쪽 사이에서 올라오고, 올라오는 동안은 흐림이 꺼져 있다가 멈추면 켜진다 / 궁금해요 = 위로 기울며, 패스 = 아래로 / 오른쪽 쪽이 한 장 넘어간다 / Performance 패널 CPU 4× 느리게에서 긴 프레임이 이어지지 않는다(움직이는 것은 transform·opacity뿐) / `prefers-reduced-motion`(렌더링 탭)이면 확대·회전 없이 바로 바뀐다
 
 - [ ] **Step 8: Commit**
 
@@ -1897,14 +1932,14 @@ git commit -m "feat(book): the book fills the screen, leather cover, bookmark ri
 
 ---
 
-### Task 6: S-02 🍃 밸런스·S-02 🎯 입력·궁금해요 목록
+### Task 6: S-02 🍃 책갈피 모양 카드·꾹 누르기 안내, S-02 🎯 입력, 궁금해요 목록
 
 **Files:**
-- Modify: `web/src/components/flow/BalanceGame.module.css`, `web/src/components/flow/HoldButton.module.css`, `web/src/components/flow/TargetInput.tsx`, `web/src/components/flow/TargetInput.module.css`, `web/src/components/flow/EndList.tsx`, `web/src/components/flow/EndList.module.css`, `web/src/components/flow/EndList.test.tsx`
+- Modify: `web/src/components/flow/BalanceGame.tsx`, `web/src/components/flow/BalanceGame.module.css`, `web/src/components/flow/BalanceGame.test.tsx`, `web/src/components/flow/HoldButton.tsx`, `web/src/components/flow/HoldButton.module.css`, `web/src/components/flow/HoldButton.test.tsx`, `web/src/components/flow/TargetInput.tsx`, `web/src/components/flow/TargetInput.module.css`, `web/src/components/flow/EndList.tsx`, `web/src/components/flow/EndList.module.css`, `web/src/components/flow/EndList.test.tsx`
 
 **Interfaces:**
-- Consumes: 토큰(Task 2), `toneOf` (`lib/books/taxonomy`), `BookCard.author` (Task 1)
-- Produces: 모양만. 버튼 이름·이벤트 그대로(🎯 주 버튼 이름은 아이콘이 `aria-hidden`이라 계속 "책 펼치기")
+- Consumes: 토큰(Task 2), `BookmarkFrame.module.css`의 `frame`·`string`·`film`·`hole`·`stitch` (Task 4), `toneOf` (`lib/books/taxonomy`), `BookCard.author` (Task 1)
+- Produces: `HOLD_HINT` (`BalanceGame.tsx`, 문구 한 곳) · `HoldButton({ label, hint?, onHold, onCancel })` — `aria-label={label}`, 누르는 동안 `data-holding`과 `role="status"` 한 줄에 `hint`. 카드 버튼은 그대로 `data-side="left" | "right"`, 이름 = 선택지 글자. 이벤트 E-24·E-25 그대로. 🎯 주 버튼 이름은 아이콘이 `aria-hidden`이라 계속 "책 펼치기"
 
 - [ ] **Step 1: 실패하는 테스트**
 
@@ -1913,10 +1948,47 @@ git commit -m "feat(book): the book fills the screen, leather cover, bookmark ri
     expect(screen.getAllByRole("listitem").map((li) => li.textContent)).toEqual(["에세이책 a저자 a한 줄 a", "에세이책 c저자 c한 줄 c"]);
 ```
 
+`web/src/components/flow/HoldButton.test.tsx` — 첫 줄 import에 `within`을 더하고(`import { act, fireEvent, render, screen, within } from "@testing-library/react";`), `it("still holds from the primary button …` **앞에** 추가:
+```tsx
+  it("shows the faint hint in its own box while held, keeps its name, and restores the label on release", () => {
+    const hint = "끌리는 쪽을 고를수록 더 잘 맞아요";
+    render(<HoldButton label="갈피를 못 잡겠어요" hint={hint} onHold={vi.fn()} onCancel={vi.fn()} />);
+    const button = screen.getByRole("button", { name: "갈피를 못 잡겠어요" });
+    expect(within(button).getByText(hint)).toBeInTheDocument();          // laid out from the start: no jump when it shows
+    expect(screen.getByRole("status")).toBeEmptyDOMElement();
+    fireEvent.pointerDown(button);
+    expect(button).toHaveAttribute("data-holding");
+    expect(button).toHaveAccessibleName("갈피를 못 잡겠어요");
+    expect(screen.getByRole("status")).toHaveTextContent(hint);         // announced politely, once per hold
+    fireEvent.pointerUp(button);
+    expect(button).not.toHaveAttribute("data-holding");
+    expect(screen.getByRole("status")).toBeEmptyDOMElement();
+  });
+
+```
+
+`web/src/components/flow/BalanceGame.test.tsx` — import를 `import { BalanceGame, HOLD_HINT, TAP_GUARD_MS } from "./BalanceGame";`로 바꾸고, `it("marks answered and 못 잡겠어요 cells …` **앞에** 추가:
+```tsx
+  it("draws each choice as a bookmark with the words in its window and no animal", () => {
+    render(<BalanceGame choices={["A"]} edit={false} onAnswer={vi.fn()} />);
+    const card = screen.getByRole("button", { name: "다음 장이 궁금해 못 자는 밤" });
+    expect(card).toHaveTextContent(/^다음 장이 궁금해 못 자는 밤$/);   // nothing else on the card: no tag, title or one-liner
+    expect(card.querySelector("svg, image, img")).toBeNull();
+    expect(card).toHaveAttribute("data-side", "right");
+  });
+
+  it("holds the hint copy in one constant", () => {
+    render(<BalanceGame choices={[]} edit={false} onAnswer={vi.fn()} />);
+    fireEvent.pointerDown(screen.getByRole("button", { name: "갈피를 못 잡겠어요" }));
+    expect(screen.getByRole("status")).toHaveTextContent(HOLD_HINT);
+  });
+
+```
+
 - [ ] **Step 2: 실패 확인**
 
-Run: `cd web && npx vitest run src/components/flow/EndList.test.tsx`
-Expected: FAIL — 저자가 목록에 없음
+Run: `cd web && npx vitest run src/components/flow`
+Expected: FAIL — 저자가 목록에 없음 / `HOLD_HINT` 없음 / `role="status"` 없음
 
 - [ ] **Step 3: 궁금해요 목록**
 
@@ -1977,7 +2049,93 @@ export function EndList({ picks, reactions, onHome }: Props) {
 .line { font-size: 13px; color: var(--ink-soft); }
 ```
 
-- [ ] **Step 4: S-02 🍃 (P-02)**
+- [ ] **Step 4: S-02 🍃 — 책갈피 모양 카드(C-07)와 꾹 누르기 안내(C-08)**
+
+카드 폭: 375px 휴대폰의 본문 343px = 카드 둘 + vs 28 + 틈 6 × 2 → 카드 약 151px, 넓은 화면에서도 160px까지. 아치 창은 폭 × 1.1 높이(윗변 반지름 = 폭의 절반), 가장 긴 선택지("다음 장이 궁금해 못 자는 밤", ""앉은 자리에서 다 읽었어"")도 16px 세 줄로 들어간다. 필름·제비꼬리·끈·구멍·바느질 선은 `BookmarkFrame.module.css` 그대로, 끈·바느질 색은 `--cloth`. 카드는 움직이지 않으니 흐림은 켜 둔다(누름 표시는 창 색만 바꿈 — transform 없음).
+
+`web/src/components/flow/BalanceGame.tsx` 전체:
+```tsx
+"use client";
+import { useEffect, useRef } from "react";
+import type { BalanceChoice } from "@/lib/recommend";
+import { QUESTIONS } from "@/lib/flow/questions";
+import { track } from "@/lib/track/client";
+import frame from "@/components/BookmarkFrame.module.css";
+import { HoldButton } from "./HoldButton";
+import styles from "./BalanceGame.module.css";
+
+interface Props {
+  choices: readonly BalanceChoice[];
+  edit: boolean;
+  onAnswer: (choice: BalanceChoice) => void;
+}
+
+/** A card tap this soon after a question appears is the tail of a double tap on the previous one, not an answer. */
+export const TAP_GUARD_MS = 250;
+/** PRD F-03 · balance-game.md 2절 (09-30): shown in the hold button while it is pressed. One place to change it. */
+export const HOLD_HINT = "끌리는 쪽을 고를수록 더 잘 맞아요";
+
+type Side = { side: "left" | "right"; choice: "A" | "B"; text: string };
+
+/** C-07 card: the bookmark shape with the choice in the arched window instead of a picture. The whole card is the button. */
+function ChoiceCard({ s, onChoose }: { s: Side; onChoose: (s: Side) => void }) {
+  return (
+    <button type="button" className={`${frame.frame} ${styles.card}`} data-side={s.side} onClick={() => onChoose(s)}>
+      <span className={frame.string} aria-hidden="true" />
+      <span className={`${frame.film} ${styles.film}`}>
+        <span className={frame.hole} aria-hidden="true" />
+        <span className={styles.window}>{s.text}</span>
+        <span className={frame.stitch} aria-hidden="true" />
+      </span>
+    </button>
+  );
+}
+
+/** S-02 🍃 (C-07): nine two-way questions, tap to go on; the second question of each axis swaps sides. */
+export function BalanceGame({ choices, edit, onAnswer }: Props) {
+  const i = Math.min(choices.length, QUESTIONS.length - 1);
+  const q = QUESTIONS[i];
+  const shownAt = useRef(0);
+  useEffect(() => { shownAt.current = performance.now(); }, [i]);
+  const elapsed = () => Math.round(performance.now() - shownAt.current);
+
+  const left: Side = q.aOnLeft ? { side: "left", choice: "A", text: q.a } : { side: "left", choice: "B", text: q.b };
+  const right: Side = q.aOnLeft ? { side: "right", choice: "B", text: q.b } : { side: "right", choice: "A", text: q.a };
+
+  const choose = (s: Side) => {
+    if (elapsed() < TAP_GUARD_MS) return;
+    track("balance_answered", { question: q.n, choice: s.choice, side: s.side, ms: elapsed(), edit });
+    onAnswer(s.choice);
+  };
+  const unsure = () => {
+    track("balance_answered", { question: q.n, choice: "unsure", side: null, ms: elapsed(), edit });
+    onAnswer("unsure");
+  };
+  const cancelled = (heldMs: number) => track("unsure_hold_cancelled", { question: q.n, held_ms: heldMs, edit });
+
+  return (
+    <section className={styles.game} aria-labelledby="balance-question">
+      <ol className={styles.progress} aria-hidden="true">
+        {QUESTIONS.map((question, k) => (
+          <li
+            key={question.n}
+            className={styles.cell}
+            data-state={k < choices.length ? (choices[k] === "unsure" ? "unsure" : "done") : k === i ? "now" : undefined}
+          />
+        ))}
+      </ol>
+      <p className={styles.count}>{`${i + 1} / ${QUESTIONS.length}`}</p>
+      <h1 id="balance-question" className={styles.question}>{q.text}</h1>
+      <div className={styles.pair}>
+        <ChoiceCard s={left} onChoose={choose} />
+        <span className={styles.vs} aria-hidden="true">vs</span>
+        <ChoiceCard s={right} onChoose={choose} />
+      </div>
+      <HoldButton key={q.n} label="갈피를 못 잡겠어요" hint={HOLD_HINT} onHold={unsure} onCancel={cancelled} />
+    </section>
+  );
+}
+```
 
 `web/src/components/flow/BalanceGame.module.css` 전체:
 ```css
@@ -1988,23 +2146,128 @@ export function EndList({ picks, reactions, onHome }: Props) {
 .cell[data-state="unsure"] { background: var(--ink-muted); opacity: 0.45; }
 .cell[data-state="now"] { background: var(--ink-muted); }
 .count { margin: 0; font-size: 12px; color: var(--ink-muted); text-align: right; }
-.question { margin: var(--space-2) 0 var(--space-4); font-size: 20px; line-height: 1.5; text-align: center; word-break: keep-all; }
-/* P-02: two frosted cards resting on the paper, "vs" in a small seal between. The choice reads in the title font.
-   P-02 note: choices wrapped too narrowly — two wide cards, keep-all line breaks. */
-.pair { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: var(--space-2); }
-.card {
-  min-height: 160px; padding: var(--space-5) var(--space-3);
-  border: var(--card-edge); border-radius: var(--radius-card);
-  background: var(--card-bg); color: var(--ink); box-shadow: var(--shadow-soft);
-  font: inherit; font-family: var(--font-batang), serif; font-size: 16px; font-weight: 700; line-height: 1.6;
-  word-break: keep-all; cursor: pointer;
+.question { margin: var(--space-2) 0 var(--space-3); font-size: 20px; line-height: 1.5; text-align: center; word-break: keep-all; }
+/* C-07 (09-30): two bookmark-shaped cards, "vs" in a small seal between — about 150–160px each, so they fit a 375px phone. */
+.pair {
+  display: grid; grid-template-columns: minmax(0, 160px) auto minmax(0, 160px);
+  justify-content: center; align-items: stretch; gap: 6px;
 }
-.card:active { background: var(--paper-deep); }
+.card {
+  --tone: var(--cloth);
+  display: flex; flex-direction: column; width: 100%; margin: 0; padding: 26px 0 0;
+  border: 0; background: none; color: var(--ink); font: inherit; text-align: center; cursor: pointer;
+}
 .card:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.film { flex: 1; gap: 10px; padding: 16px 9px 22px; }
+/* The arched window (arch radius = half its width) holds the choice instead of a picture. P-02 note: keep-all breaks. */
+.window {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; aspect-ratio: 1 / 1.1; padding: 22% 10px 10px;
+  border-radius: 50% 50% 6px 6px / 45.5% 45.5% 6px 6px;
+  background: var(--paper-deep);
+  font-family: var(--font-batang), serif; font-size: 16px; font-weight: 700; line-height: 1.45; word-break: keep-all;
+}
+.card:active .window { background: var(--paper-line); }
 .vs {
   align-self: center; display: flex; align-items: center; justify-content: center;
-  width: 32px; height: 32px; border-radius: 50%; background: var(--paper-deep);
+  width: 28px; height: 28px; border-radius: 50%; background: var(--paper-deep);
   font-family: var(--font-batang), serif; font-size: 13px; color: var(--ink-muted);
+}
+```
+
+`web/src/components/flow/HoldButton.tsx` 전체 (타이머·게이지·키보드·포인터 처리는 그대로, 글자 두 겹과 `role="status"`만 새것):
+```tsx
+"use client";
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import styles from "./HoldButton.module.css";
+
+/** DESIGN T-06 hold: the timer decides when it passes; the gauge only shows it (a janky frame cannot delay it). */
+export const HOLD_MS = 800;
+const HOLD_KEYS = new Set(["Enter", " "]);
+
+interface Props {
+  label: string;
+  /** C-08 (09-30): faint text shown in place of the label while pressing. */
+  hint?: string;
+  onHold: () => void;
+  onCancel: (heldMs: number) => void;
+}
+
+/**
+ * C-08 — "갈피를 못 잡겠어요": press and hold for 0.8s (pointer, Enter or Space). While pressing, the label gives way to the
+ * faint hint in the same box (both are laid out on top of each other, so nothing moves). The name stays the label; the hint
+ * is announced once per hold through a polite status line.
+ */
+export function HoldButton({ label, hint, onHold, onCancel }: Props) {
+  const [holding, setHolding] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const startedAt = useRef(0);
+
+  useEffect(() => () => {
+    if (timer.current) clearTimeout(timer.current);
+  }, []);
+
+  const start = () => {
+    if (timer.current) return;
+    startedAt.current = performance.now();
+    setHolding(true);
+    timer.current = setTimeout(() => {
+      timer.current = null;
+      setHolding(false);
+      onHold();
+    }, HOLD_MS);
+  };
+
+  const stop = () => {
+    if (!timer.current) return;
+    clearTimeout(timer.current);
+    timer.current = null;
+    setHolding(false);
+    onCancel(Math.round(performance.now() - startedAt.current));
+  };
+
+  const onPointerDown = (e: PointerEvent<HTMLButtonElement>) => {
+    if (e.button !== 0) return;       // right / middle click is not a hold (touch and left click are button 0)
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // synthetic pointer (tests) — capture is only a nicety
+    }
+    start();
+  };
+  const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+    if (!HOLD_KEYS.has(e.key)) return;
+    e.preventDefault();               // no click on Enter keydown
+    if (!e.repeat) start();
+  };
+  const onKeyUp = (e: KeyboardEvent<HTMLButtonElement>) => {
+    if (HOLD_KEYS.has(e.key)) stop();
+  };
+
+  return (
+    <>
+      <button
+        type="button"
+        className={styles.hold}
+        aria-label={label}
+        data-holding={holding ? "" : undefined}
+        onPointerDown={onPointerDown}
+        onPointerUp={stop}
+        onPointerCancel={stop}
+        onPointerLeave={stop}
+        onContextMenu={(e) => e.preventDefault()}
+        onKeyDown={onKeyDown}
+        onKeyUp={onKeyUp}
+      >
+        <span className={styles.gauge} aria-hidden="true" />
+        <span className={styles.texts} aria-hidden="true">
+          <span className={styles.label}>{label}</span>
+          {hint && <span className={styles.hint}>{hint}</span>}
+        </span>
+      </button>
+      {hint && <span className={styles.announce} role="status">{holding ? hint : ""}</span>}
+    </>
+  );
 }
 ```
 
@@ -2024,7 +2287,17 @@ export function EndList({ picks, reactions, onHome }: Props) {
   transform: scaleX(0); transform-origin: left center;
 }
 .hold[data-holding] .gauge { transform: scaleX(1); transition: transform var(--dur-hold) linear; }
-.label { position: relative; }
+/* Label and hint share one grid cell: the button is as wide as the longer one, so swapping them moves nothing. */
+.texts { position: relative; display: grid; }
+.label, .hint { grid-area: 1 / 1; }
+.hint { visibility: hidden; font-size: 12px; color: var(--ink-muted); }
+.hold[data-holding] .label { visibility: hidden; }
+.hold[data-holding] .hint { visibility: visible; }
+/* Read by screen readers only (once per hold). */
+.announce {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; border: 0;
+}
 ```
 
 - [ ] **Step 5: S-02 🎯 (P-03)**
@@ -2086,13 +2359,15 @@ function BookIcon() {
 - [ ] **Step 6: 통과 확인**
 
 Run: `cd web && npx vitest run && npm run lint && npm run e2e`
-Expected: Vitest **353개 PASS** / e2e 전부 PASS (🎯 "책 펼치기" 두 번 누르기, "직접 쓰기"·칩 이름, 🍃 `[data-side="left"]`, 꾹 누르기 Enter 모두 그대로)
+Expected: Vitest **356개 PASS** / e2e 전부 PASS (🎯 "책 펼치기" 두 번 누르기, "직접 쓰기"·칩 이름, 🍃 `[data-side="left"]`, 꾹 누르기 Enter·`unsure_hold_cancelled` 모두 그대로)
+
+눈으로: 375 × 667에서 🍃 1번 — 카드 둘이 한 줄에, 끈·구멍·아치 창·바느질 선·제비꼬리가 보이고 동물은 없다. 2번("다음 장이 궁금해 못 자는 밤")이 창 안에 세 줄로. "갈피를 못 잡겠어요"를 누르고 있으면 같은 칸에 흐린 안내가 뜨고 버튼 크기가 변하지 않으며, 떼면 돌아온다
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add web/src/components/flow/BalanceGame.module.css web/src/components/flow/HoldButton.module.css web/src/components/flow/TargetInput.tsx web/src/components/flow/TargetInput.module.css web/src/components/flow/EndList.tsx web/src/components/flow/EndList.module.css web/src/components/flow/EndList.test.tsx
-git commit -m "feat(flow): Stitch look for the balance game, target input and curious list"
+git add web/src/components/flow/BalanceGame.tsx web/src/components/flow/BalanceGame.module.css web/src/components/flow/BalanceGame.test.tsx web/src/components/flow/HoldButton.tsx web/src/components/flow/HoldButton.module.css web/src/components/flow/HoldButton.test.tsx web/src/components/flow/TargetInput.tsx web/src/components/flow/TargetInput.module.css web/src/components/flow/EndList.tsx web/src/components/flow/EndList.module.css web/src/components/flow/EndList.test.tsx
+git commit -m "feat(flow): bookmark-shaped balance cards with a hold hint, Stitch look for target input and curious list"
 ```
 
 ---
@@ -2115,11 +2390,11 @@ git commit -m "feat(flow): Stitch look for the balance game, target input and cu
 ② T-04b 둘째 불릿 다음에 추가:
 ```markdown
 - **책 장면(S-03~S-05)은 데스크톱에서 기둥을 벗어나 화면에 맞춰 커진다** (09-30) — 폭 768px 이상에서 펼친 책은 두 쪽이 1 : 1.4인 모양으로 화면 높이와 폭(최대 1000px) 중 작은 쪽에 맞추고, 책갈피도 함께 커진다(1.25~1.6배). 버튼은 책 아래 가운데 한 줄(최대 480px). 처음·밸런스·입력·궁금해요 목록은 430px 기둥 그대로
-- 휴대폰에서도 S-03~S-05는 기둥 폭을 채우고 화면 높이만큼 커진다 — 375 × 667에서 스크롤 없음, 높이 780·880px부터 책갈피 1.25·1.4배
+- 휴대폰에서도 S-04·S-05의 펼친 책은 기둥 폭을 채우고 화면 높이만큼 커진다 — 375 × 667에서 스크롤 없음, 높이 780·880px부터 책갈피 1.25·1.4배. 닫힌 책(S-03)은 보통 책 비율(1 : 1.45)로 크게, 머리글과 안내 사이 가운데
 ```
 ③ T-06 표 아래에 한 줄:
 ```markdown
-닫힌 책(S-03)은 1.2배로 보이다가 `open-cover`(1000ms) 동안 1배로 돌아온다. 움직이는 것은 transform·opacity만 — filter·그림자는 움직이지 않는다.
+닫힌 책(S-03)은 휴대폰 1.6배·데스크톱 1.2배로 보이다가 `open-cover`(1000ms) 동안 1배로 돌아오고, 휴대폰에서는 그동안 긴 쪽이 나타난다(opacity). 움직이는 것은 transform·opacity만 — filter·그림자는 움직이지 않는다.
 ```
 ④ T-06 다음에 새 절:
 ```markdown
@@ -2138,22 +2413,29 @@ git commit -m "feat(flow): Stitch look for the balance game, target input and cu
 | `shadow-soft` · `shadow-book` · `shadow-plate` | 움직이지 않는 그림자 | 카드 · 책 · 표지 라벨 |
 | `header-h` | `52px` | 로고 머리글 |
 ```
-⑤ 3절 표: C-01 핵심을 `가죽 표지(cloth + 결·광택, 책등 세로 글씨 "갈피", 종이 제목 라벨 — S-01 태그라인) + 크림 책장(옅은 줄) + 5px 천 테두리. 화면 가득(T-04b). 표지 열기(닫힌 책 1.2배 → 1배)·장 넘기기`로, C-02 핵심을 `… + 장르 이름표 + 제목 + **저자 줄** + 한 줄 + …`로, C-06에 `쪽 번호 "n / 5"는 오른쪽 쪽 아래 알약(P-05)`을 덧붙인다
+⑤ 3절 표: C-01 핵심을 `가죽 표지(cloth + 결·광택, 책등 세로 글씨 "갈피", 종이 제목 라벨 — S-01 태그라인) + 크림 책장(옅은 줄) + 5px 천 테두리. 화면 가득(T-04b). 닫힌 표지는 휴대폰에서 1 : 1.45. 표지 열기·장 넘기기`로, C-02 핵심을 `… + 장르 이름표 + 제목 + **저자 줄** + 한 줄 + …`로, C-06에 `쪽 번호 "n / 5"는 오른쪽 쪽 아래 알약(P-05)`을 덧붙인다
 ⑥ 4절 그림에서 `│ 제목     │  ← 고운바탕 15/700, 두 줄까지` 다음 줄에 `│ 저자     │  ← 고운돋움 12, 한 줄 (넘치면 …), 두 이름이 길면 "첫 이름 외"`를 넣고, 표 끝에 두 행 추가:
 ```markdown
 | 글자 간격 (09-30 저자 줄) | 요소 사이 3px, 위 여백 16px, 제목 줄높이 1.3, 한 줄 1.3, 이름표 위아래 2px, "갈피" 줄높이 1 — 글자 크기는 그대로. 200권 ×1.0·×1.15 맞춤은 `web/e2e/design.spec.ts` |
 | 책 장면에서 | 두 쪽 사이 가운데(책 사이)에 꽂혀 올라온다. 크기는 통째로 1~1.6배(transform) — 틀 안 배치는 160 × 344와 같다 |
 ```
-⑦ A-05 행의 누가 칸 끝에 `→ **적용(09-30)**: 고운바탕 Bold 글자 윤곽 + 선으로 그린 책·리본, \`web/src/components/Logo.tsx\`·\`web/src/app/icon.svg\``를 덧붙인다
+⑦ A-05 행의 누가 칸 끝에 덧붙인다:
+```markdown
+→ **적용(09-30)**: 고운바탕 Bold 글자 윤곽 + 선으로 그린 책·리본, `web/src/components/Logo.tsx`·`web/src/app/icon.svg`
+```
 ⑧ 6절 S-01 행: `로고(A-05) 머리글, 제목·태그라인, 책 그림, 🎯/🍃 두 입구 카드, C-15 (우측 위 로그인/내 서재는 P5)`
 ⑨ 7절: `책갈피는 "제목, 한 줄, 장르"를 읽어준다` → `책갈피는 "제목, 저자, 한 줄, 장르"를 읽어준다`
 ⑩ 8절: `- [ ] 로고 다듬기 (A-05)` → `- [x] 로고 (A-05) — Stitch 로고를 SVG로 (09-30)`
+⑪ C-07·C-08 행은 `4713a57`에서 이미 고쳐져 있으니 건드리지 않는다. 4절 표 끝에 한 행만 덧붙인다:
+```markdown
+| 모양 공유 | 끈·필름·제비꼬리·구멍·바느질 선은 `web/src/components/BookmarkFrame.module.css` 하나 — C-02와 C-07(밸런스 카드)이 같이 쓴다 |
+```
 
 - [ ] **Step 2: `docs/context.md`**
 
 맨 위 `Last Updated`를 `2026-09-30 — 디자인 반영`으로 바꾸고, 09-30 결정 표 끝(보안 행 다음)에 추가:
 ```markdown
-| 09-30 | 디자인 반영 구현: 모든 화면 위 로고 머리글(누를 수 없는 그림, 로그인 자리 없음 — P3의 빈 자리 `account-slot`도 없앰), Stitch 로고 = 고운바탕 Bold 윤곽 SVG(파비콘 겸용, 기본 favicon.ico 삭제). **S-03부터 책이 화면을 채운다** — 휴대폰은 기둥 폭·화면 높이(375 × 667에서 스크롤 없음), 데스크톱(≥ 768px)은 기둥을 벗어나 1 : 1.43 펼침, 책갈피는 **두 쪽 사이 가운데**에서 통째로 1~1.6배. 쪽 번호는 오른쪽 쪽 아래 알약(P-05). 첫 장은 왼쪽 제목 쪽 + 오른쪽 요약. 저자 = `d1_selected.csv` author 정리(역자·그림은 버리고, 셋 이상·등저·두 이름 10자 초과는 "첫 이름 외"), 책갈피 읽기 이름에 저자 추가. 저자 줄 자리는 글자 크기 대신 간격을 줄여 마련(×1.15에서 61권 넘침 → 0) | 사용자 지시(화면 가득·가운데 책갈피·표지 크게·데스크톱 넓게). 새 문구를 만들지 않으려고 표지 라벨은 S-01 태그라인, 책등은 "갈피"(시안의 "갈피 기록부"·"Volume I"은 새 문구). 반투명 위 글자는 ink(DESIGN 7절)라 저자도 ink 12px |
+| 09-30 | 디자인 반영 구현: 모든 화면 위 로고 머리글(누를 수 없는 그림, 로그인 자리 없음 — P3의 빈 자리 `account-slot`도 없앰), Stitch 로고 = 고운바탕 Bold 윤곽 SVG(파비콘 겸용, 기본 favicon.ico 삭제). **S-03부터 책이 화면을 채운다** — 휴대폰은 기둥 폭·화면 높이(375 × 667에서 스크롤 없음), 데스크톱(≥ 768px)은 기둥을 벗어나 1 : 1.43 펼침, 책갈피는 **두 쪽 사이 가운데**에서 통째로 1~1.6배. 쪽 번호는 오른쪽 쪽 아래 알약(P-05). 첫 장은 왼쪽 제목 쪽 + 오른쪽 요약. 닫힌 표지 비율·책갈피 모양 밸런스 카드·꾹 누르기 안내는 바로 위 09-30 행대로(모양은 `BookmarkFrame.module.css` 공유, 안내 문구는 `HOLD_HINT` 한 곳, 화면 읽기 이름은 "갈피를 못 잡겠어요" 유지·안내는 누를 때 한 번 status로). 저자 = `d1_selected.csv` author 정리(역자·그림은 버리고, 셋 이상·등저·두 이름 10자 초과는 "첫 이름 외"), 책갈피 읽기 이름에 저자 추가. 저자 줄 자리는 글자 크기 대신 간격을 줄여 마련(×1.15에서 61권 넘침 → 0) | 사용자 지시(화면 가득·가운데 책갈피·표지 크게·데스크톱 넓게). 새 문구를 만들지 않으려고 표지 라벨은 S-01 태그라인, 책등은 "갈피"(시안의 "갈피 기록부"·"Volume I"은 새 문구). 반투명 위 글자는 ink(DESIGN 7절)라 저자도 ink 12px |
 ```
 
 - [ ] **Step 3: `docs/tasks.md`, `docs/process.md`**
@@ -2176,9 +2458,9 @@ npx vitest run && npm run test:cov
 npm run build
 npx playwright test --repeat-each=2
 ```
-Expected: 오류 0 / Vitest 47파일 353개, 커버리지 기준 통과(`src/lib/recommend` 100%) / build 통과 / Playwright 110 passed · 2 skipped
+Expected: 오류 0 / Vitest 47파일 356개, 커버리지 기준 통과(`src/lib/recommend` 100%) / build 통과 / Playwright 110 passed · 2 skipped
 
-눈으로 확인(스크린샷 폴더의 `after-*`와 같은지): 375 × 667·430 × 932·1440 × 900에서 S-01 · S-02 🍃 · S-02 🎯 · S-03 · S-04 · S-05 · 궁금해요 목록. 따르지 않을 부분 11건이 하나도 없는지, 로그인 글자가 없는지, 12px 미만 글씨가 없는지(개발자 도구 Computed), 주 버튼이 화면마다 하나인지.
+눈으로 확인(스크린샷 폴더의 `after-*`와 같은지): 375 × 667·430 × 932·1440 × 900에서 S-01 · S-02 🍃(평소·꾹 누르는 중) · S-02 🎯 · S-03 · S-04 · S-05 · 궁금해요 목록. 따르지 않을 부분 11건이 하나도 없는지, 로그인 글자가 없는지, 12px 미만 글씨가 없는지(개발자 도구 Computed), 주 버튼이 화면마다 하나인지.
 
 - [ ] **Step 5: 코드 리뷰 요청**
 
@@ -2203,6 +2485,7 @@ git commit -m "docs: record the design pass — full-screen book, gutter bookmar
 - [ ] ④ 모든 화면 위 작은 로고 머리글, 로그인 글자·자리 없음(Task 2·3)
 - [ ] ⑤ 동작·이벤트·문구·테스트 그대로(모든 태스크의 e2e), 토큰만(Task 2 + Task 7 grep), 12px 이상·44px 이상·주 버튼 하나·버튼은 책 아래·다크 모드 없음·민음사 모양 없음·T-06·움직이는 동안 흐림 끔(Task 5 Step 7)
 - [ ] ⑥ 질감 CSS/SVG만, 저사양 안드로이드(움직이는 요소에 filter 없음, 그림자 애니메이션 없음 — Task 5 Step 7)
+- [ ] 2차: 휴대폰 닫힌 표지 1 : 1.45(Task 5, `scene.spec.ts` 비율 단언) · 책갈피 모양 밸런스 카드, 동물 없음(Task 4 공유 모양 + Task 6) · 꾹 누르는 동안 흐린 안내, 이름 유지(Task 6)
 - [ ] 추가 지시: S-03부터 화면 가득·375 × 667 스크롤 없음·가운데 책갈피·큰 표지·읽기 쉬운 첫 장(Task 5, `scene.spec.ts`) · 데스크톱 책 장면은 기둥 밖(Task 5, `scene.spec.ts`·`flow-target.spec.ts`, DESIGN T-04b는 Task 7)
 
 ---
@@ -2219,7 +2502,9 @@ git commit -m "docs: record the design pass — full-screen book, gutter bookmar
 | P-04 책등 "갈피 기록부", P-01 "갈피의 서재·Volume I·Galpi Archive" | 책등 "갈피", 표지 라벨 = S-01 태그라인 | 새 문구 금지 |
 | P3: "n / 전체"는 버튼 아래 | 오른쪽 쪽 아래 알약(P-05) | 시안 + 375 × 667에서 스크롤 없이 책을 키울 높이 확보. 글자·위치 찾기(`getByText`) 그대로 |
 | T-04b: 데스크톱 전용 레이아웃 없음 | 책 장면만 폭 768px 이상에서 기둥을 벗어남(`:has()`) | 사용자 지시(09-30). 나머지 화면은 기둥 그대로 |
-| 책 모양 = 쪽 1 : 1.4 | 휴대폰은 기둥 폭 × 화면 높이라 쪽이 세로로 긴 기록부 모양(최대 약 1 : 3), 데스크톱은 1 : 1.4 | 사용자 지시 "책 폭 가득, 쪽은 더 길게"와 "스크롤 없음"을 동시에 — 닫힌 표지도 길쭉해짐(사용자 확인 필요) |
+| 책 모양 = 쪽 1 : 1.4 | 펼친 책: 휴대폰은 기둥 폭 × 화면 높이라 쪽이 세로로 긴 기록부 모양(최대 약 1 : 3), 데스크톱은 1 : 1.4. 닫힌 표지는 어디서나 보통 책 비율(휴대폰 1 : 1.45) | 사용자 지시 "펼친 책은 폭 가득·쪽은 더 길게·스크롤 없음"(1차)과 "닫힌 표지는 책 비율"(2차). 휴대폰에서는 표지(짧음)와 펼친 쪽(긺)의 키가 달라, 닫혀 있는 동안 긴 쪽을 투명하게 두고 펼치며 나타나게 함 |
+| P3 C-07 흰 카드 / 책갈피(C-02)의 1 : 2.15 | 밸런스 카드는 책갈피 모양이지만 약 150 × 220(아치 창 + 바느질 선만) | 한 화면에 카드 둘 + 질문 + 꾹 누르기가 375 × 667에 스크롤 없이 들어가야 함. 이름표·제목·한 줄 자리가 없으니 짧게 |
+| HoldButton 글씨 = 버튼 이름 | 이름은 `aria-label`로 "갈피를 못 잡겠어요" 고정, 보이는 두 글씨는 `aria-hidden`, 안내는 옆의 `role="status"`에 누를 때만 | 보이는 글씨가 바뀌어도 화면 읽기 이름은 그대로 — 안내는 한 번만 읽힘 |
 | T-04 로고 28/700 | 머리글 로고 SVG 높이 34px(글자 약 23px), S-01 제목 글자 28px 그대로 | 머리글은 작게(사용자 결정 4) |
 | create-next-app `favicon.ico` | 삭제, `app/icon.svg` | 로고를 파비콘으로(사용자 결정 3) |
 | 이름표 위아래 여백 4px | 2px (끝 목록 알약도 같이) | 저자 줄 자리 |
