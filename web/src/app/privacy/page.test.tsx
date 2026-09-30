@@ -1,6 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import PrivacyPage, { CONTACT_PENDING } from "./page";
+import { CONTACT_PENDING } from "@/lib/privacy";
+import PrivacyPage from "./page";
 
 describe("/privacy (S-10 v0)", () => {
   beforeEach(() => localStorage.clear());
@@ -15,6 +16,9 @@ describe("/privacy (S-10 v0)", () => {
     expect(rows).toHaveLength(5); // header + 4
     expect(screen.getByRole("columnheader", { name: "모으는 것" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "왜" })).toBeInTheDocument();
+    expect(screen.getByText("누른 버튼과 누른 시각, 고른 입구(🎯/🍃), 본 책갈피, 궁금해요/패스, 밸런스 게임 답과 답하는 데 걸린 시간, 고친 답, 몇 번째 뽑기인지")).toBeInTheDocument();
+    expect(screen.getByText("기기 종류(휴대폰/컴퓨터), 앱 안 브라우저 여부, 들어온 곳(이전 페이지 주소), 화면 버전")).toBeInTheDocument();
+    expect(screen.getByText(/\(최대 30자\) — 그 글에서 찾은 주제·키워드도 함께/)).toBeInTheDocument();
     expect(screen.getByText("같은 사람이 다시 왔는지 세기 위해")).toBeInTheDocument();
     expect(screen.getByText("추천이 잘 맞는지 분석하기 위해")).toBeInTheDocument();
     expect(screen.getByText("화면이 잘 동작하는지 확인하기 위해")).toBeInTheDocument();
@@ -26,7 +30,7 @@ describe("/privacy (S-10 v0)", () => {
     render(<PrivacyPage />);
     expect(screen.getByText("수집일로부터 1년이 지나면 자동으로 지워져요.")).toBeInTheDocument();
     expect(screen.getByText(/Supabase\(데이터베이스 서비스\)에 저장되고/)).toBeInTheDocument();
-    expect(screen.getByText(/사이트는 Vercel에서 운영돼요/)).toBeInTheDocument();
+    expect(screen.getByText(/사이트는 Vercel에서 운영돼요. 두 서비스의 서버는 해외에 있을 수 있어요./)).toBeInTheDocument();
     expect(screen.getByText("다른 곳에 주지 않아요.")).toBeInTheDocument();
     expect(screen.getByText(/새로 전달하는 곳이 생기면 이 페이지에 먼저 적어요/)).toBeInTheDocument();
   });

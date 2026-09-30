@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AnonIdView } from "@/components/privacy/AnonIdView";
+import { CONTACT_PENDING, UPDATED } from "@/lib/privacy";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = { title: "개인정보 처리방침 · 갈피" };
-
-export const UPDATED = "2026-09-30";
-export const CONTACT_PENDING = "문의 이메일은 곧 적어 둘게요";
 
 /** Inlined at build time; empty until the contact address exists — the page still works. */
 function Contact() {
@@ -38,15 +36,15 @@ export default function PrivacyPage() {
             <td>같은 사람이 다시 왔는지 세기 위해</td>
           </tr>
           <tr>
-            <td>누른 버튼, 본 책갈피, 궁금해요/패스, 밸런스 게임 답</td>
+            <td>누른 버튼과 누른 시각, 고른 입구(🎯/🍃), 본 책갈피, 궁금해요/패스, 밸런스 게임 답과 답하는 데 걸린 시간, 고친 답, 몇 번째 뽑기인지</td>
             <td>추천이 잘 맞는지 분석하기 위해</td>
           </tr>
           <tr>
-            <td>기기 종류(휴대폰/컴퓨터), 앱 안 브라우저 여부, 들어온 곳(이전 페이지 주소)</td>
+            <td>기기 종류(휴대폰/컴퓨터), 앱 안 브라우저 여부, 들어온 곳(이전 페이지 주소), 화면 버전</td>
             <td>화면이 잘 동작하는지 확인하기 위해</td>
           </tr>
           <tr>
-            <td>🎯 {"\"직접 쓰기\""}에 적은 글 (최대 30자)</td>
+            <td>🎯 {"\"직접 쓰기\""}에 적은 글 (최대 30자) — 그 글에서 찾은 주제·키워드도 함께</td>
             <td>사람들이 찾는 주제를 알고 책을 늘리기 위해 — <strong>이름·연락처는 적지 마세요</strong></td>
           </tr>
         </tbody>
@@ -56,7 +54,7 @@ export default function PrivacyPage() {
         <h2 className={styles.h2}>보관</h2>
         <p>
           모은 정보는 Supabase(데이터베이스 서비스)에 저장되고, <strong>수집일로부터 1년이 지나면 자동으로 지워져요.</strong>{" "}
-          사이트는 Vercel에서 운영돼요.
+          사이트는 Vercel에서 운영돼요. 두 서비스의 서버는 해외에 있을 수 있어요.
         </p>
       </section>
 

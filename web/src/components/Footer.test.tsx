@@ -9,5 +9,6 @@ describe("Footer", () => {
     const link = screen.getByRole("link", { name: "처리방침" });
     expect(link).toHaveAttribute("href", "/privacy");
     expect(link).not.toHaveAttribute("target");
+    expect(link).toHaveStyle({ color: "var(--ink)", textDecoration: "underline" });
   });
 });
