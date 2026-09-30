@@ -11,7 +11,8 @@ export default defineConfig({
     reuseExistingServer: false,
     timeout: 180_000,
     // Next does not let .env files override an already-set env var: E2E never writes to the real events table.
-    env: { TRACK_STORE: "off" },
+    // BOOKS_SOURCE=sample: flows draw from the 30-book fixture so assertions never depend on the real catalogue.
+    env: { TRACK_STORE: "off", BOOKS_SOURCE: "sample" },
   },
   use: { baseURL: `http://localhost:${PORT}` },
   projects: [
