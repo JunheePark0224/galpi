@@ -12,6 +12,9 @@
   --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px;
   --radius-card: 12px; --radius-pill: 9999px; --radius-book: 2px 10px 10px 2px; --radius-bookmark: 10px 10px 0 0;
   --touch: 44px; --column: 430px; --header-h: 52px;
+  /* The screen height the book scene is sized by: the small viewport (browser toolbars showing), so the book does not
+     resize while a phone's toolbar collapses. Browsers without svh get 100vh (a plain length, never an invalid unit). */
+  --screen-h: 100vh;
   --dur-open-cover: 1000ms; --dur-flip-page: 550ms; --dur-bookmark-rise: 600ms;
   --dur-bookmark-away: 450ms; --dur-bookmark-down: 400ms; --dur-hold: 800ms; --dur-card-flip: 500ms;
   --ease-open: cubic-bezier(.6, .05, .25, 1); --ease-flip: cubic-bezier(.5, 0, .3, 1);
@@ -32,4 +35,7 @@
   --shadow-plate: 0 1px 2px rgba(0, 0, 0, 0.25);     /* the paper label on the cover */
   --shadow-soft: 0 4px 16px -4px rgba(43, 39, 36, 0.12);   /* cards resting on paper (static only) */
   --shadow-book: 0 18px 30px -16px rgba(43, 39, 36, 0.45); /* the book on the desk (static only) */
+}
+@supports (height: 1svh) {
+  :root { --screen-h: 100svh; }
 }

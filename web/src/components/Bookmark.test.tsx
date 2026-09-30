@@ -26,6 +26,19 @@ describe("Bookmark", () => {
     expect(title.nextElementSibling).toHaveTextContent("천아침");
   });
 
+  it("leaves the author out when a flow saved before the author field has none", () => {
+    const old = { ...leaf, author: undefined } as unknown as BookCard;   // sessionStorage from before the deploy
+    const { container } = render(<Bookmark card={old} art={art} />);
+    expect(screen.getByRole("article", { name: "천천히 걷는 아침, 오늘 아침은 몇 걸음이었을까요?, 에세이" })).toBeInTheDocument();
+    expect(container.textContent).not.toContain("undefined");
+    expect(screen.getByText("천천히 걷는 아침").nextElementSibling).toHaveTextContent("오늘 아침은 몇 걸음이었을까요?");
+  });
+
+  it("treats an empty author the same way", () => {
+    render(<Bookmark card={{ ...leaf, author: "" }} art={art} />);
+    expect(screen.getByRole("article", { name: "천천히 걷는 아침, 오늘 아침은 몇 걸음이었을까요?, 에세이" })).toBeInTheDocument();
+  });
+
   it("draws the chosen animal inside its own arched window", () => {
     const { container } = render(<Bookmark card={leaf} art={art} />);
     expect(container.querySelector("image")?.getAttribute("href")).toBe("/animals/fox.svg");

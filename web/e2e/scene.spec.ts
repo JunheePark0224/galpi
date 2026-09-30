@@ -13,6 +13,19 @@ const noPageScroll = (page: Page) => {
   }, { w: size?.width ?? 0, h: size?.height ?? 0 });
 };
 const noSideScroll = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
+/** Real phone browsers show less than the screen: 375 × 548 = an iPhone SE in Safari, 375 × 559 in KakaoTalk, 360 × 620 an Android in KakaoTalk. */
+const noSizeJump = (page: Page) => {
+  const size = page.viewportSize();
+  return page.evaluate((w) => window.innerWidth === w && document.documentElement.scrollWidth <= w, size?.width ?? 0);
+};
+async function expectOnScreen(page: Page, name: string) {
+  const b = await page.getByRole("button", { name }).boundingBox();
+  const viewport = page.viewportSize();
+  if (!b || !viewport) throw new Error(`${name} has no box`);
+  expect(b.y).toBeGreaterThanOrEqual(0);
+  expect(b.y + b.height).toBeLessThanOrEqual(viewport.height);
+  expect(b.x + b.width).toBeLessThanOrEqual(viewport.width);
+}
 const box = async (page: Page, selector: string) => {
   const b = await page.locator(selector).first().boundingBox();
   if (!b) throw new Error(`${selector} has no box`);
@@ -20,8 +33,12 @@ const box = async (page: Page, selector: string) => {
 };
 
 /** 🎯 with one chip → S-03, checking each book step on the way to the first bookmark. */
-/** `scrollOk`: on a very short window the page may scroll vertically (the book has a floor), but never sideways. */
-async function walkTheBook(page: Page, scrollOk = false) {
+/** `fit`: no page scroll at all. `scrollOk`: on a very short window the page may scroll vertically (the book has a floor),
+ *  but never sideways. `buttons`: a short phone viewport — the footer may fall below the fold, the action buttons may not. */
+async function walkTheBook(page: Page, mode: "fit" | "scrollOk" | "buttons" = "fit") {
+  const scrollOk = mode === "scrollOk";
+  const buttons = mode === "buttons";
+  const fits = async () => (buttons ? noSizeJump(page) : scrollOk ? noSideScroll(page) : noPageScroll(page));
   await page.goto("/");
   await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
   await page.getByRole("button", { name: "데이터 분석", exact: true }).click();
@@ -43,17 +60,19 @@ async function walkTheBook(page: Page, scrollOk = false) {
   const gap = hint.y - (closed.y + closed.height);
   expect(gap).toBeGreaterThanOrEqual(0);
   expect(gap).toBeLessThanOrEqual(40);
-  expect(scrollOk ? await noSideScroll(page) : await noPageScroll(page)).toBe(true);
+  expect(await fits()).toBe(true);
 
   await cover.click();                                                            // S-04
   await expect(page.getByRole("heading", { name: "당신이 찾는 책" })).toBeVisible();
   await expect(page.getByRole("button", { name: "다음 장" })).toBeEnabled();
-  expect(scrollOk ? await noSideScroll(page) : await noPageScroll(page)).toBe(true);
+  expect(await fits()).toBe(true);
+  if (buttons) await expectOnScreen(page, "다음 장");
 
   await page.getByRole("button", { name: "다음 장" }).click();                    // S-05
   await expect(page.getByText("1 / 5")).toBeVisible();
   await expect(page.getByRole("button", { name: "궁금해요" })).toBeEnabled();
-  expect(scrollOk ? await noSideScroll(page) : await noPageScroll(page)).toBe(true);
+  expect(await fits()).toBe(true);
+  if (buttons) for (const name of ["패스", "궁금해요"]) await expectOnScreen(page, name);
 
   const column = await box(page, ".column");
   const bookmark = await box(page, "article");
@@ -71,6 +90,20 @@ test("S-03 → S-05 fit a 375 × 667 phone with the bookmark in the gutter", asy
   const { bookmark } = await walkTheBook(page);
   expect(bookmark.width).toBeGreaterThanOrEqual(159);                              // the 160px frame, never smaller
 });
+
+for (const [width, height] of [[375, 548], [375, 559], [360, 620]]) {
+  test(`a short phone viewport ${width} × ${height}: the buttons stay on screen and the bookmark stays in the book`, async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "phone", "phone layout only");
+    await page.setViewportSize({ width, height });
+    await walkTheBook(page, "buttons");
+    const card = await box(page, "article");
+    const stage = await page.getByText("1 / 5").locator("xpath=..").boundingBox();
+    if (!stage) throw new Error("the stage has no box");
+    expect(card.y + card.height).toBeLessThanOrEqual(stage.y + stage.height);
+    expect(card.x).toBeGreaterThanOrEqual(0);
+    expect(card.x + card.width).toBeLessThanOrEqual(width);
+  });
+}
 
 test("on a tall screen the book and the bookmark grow", async ({ page }) => {
   const { bookmark, viewport } = await walkTheBook(page);                         // phone: Pixel 7 · laptop: 1440 × 900
@@ -100,7 +133,7 @@ for (const [width, height] of [[1366, 650], [1280, 600]]) {
   test(`desktop ${width} × ${height}: the bookmark stays inside the book, clear of the buttons`, async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== "laptop", "desktop layout only");
     await page.setViewportSize({ width, height });
-    await walkTheBook(page, true);
+    await walkTheBook(page, "scrollOk");
     const card = await box(page, "article");
     const stage = await page.getByText("1 / 5").locator("xpath=..").boundingBox();   // the stage is exactly the book's box
     const pass = await page.getByRole("button", { name: "패스" }).boundingBox();
@@ -114,3 +147,28 @@ for (const [width, height] of [[1366, 650], [1280, 600]]) {
     expect(await noSideScroll(page)).toBe(true);
   });
 }
+
+// A browser without :has() (Firefox < 121, Safari < 15.4) keeps the 430px column; the book must fit it, not be clipped by it.
+// Chromium has :has(), so the test makes every stylesheet believe it does not: the one `@supports selector(:has(*))` test
+// that guards the desktop sizes (BookScene.module.css) and the column release (globals.css) is rewritten to one that fails.
+test("desktop without :has(): the book scene keeps the 430px column and the flow still completes", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "laptop", "desktop layout only");
+  let rewritten = 0;
+  await page.route(/\.css(\?.*)?$/, async (route) => {
+    const response = await route.fetch();
+    const css = await response.text();
+    const legacy = css.replaceAll(/@supports\s+selector\(:has\(\*\)\)/g, () => { rewritten += 1; return "@supports (not (display: block))"; });
+    await route.fulfill({ response, body: legacy });
+  });
+  await walkTheBook(page, "scrollOk");
+  expect(rewritten).toBeGreaterThan(0);                                            // the switch really was in the served CSS
+  const column = await box(page, ".column");
+  expect(column.width).toBeLessThanOrEqual(430);
+  const book = await box(page, "article");                                         // the bookmark on S-05 is inside the column
+  expect(book.x).toBeGreaterThanOrEqual(column.x);
+  expect(book.x + book.width).toBeLessThanOrEqual(column.x + column.width);
+  const stage = await page.getByText("1 / 5").locator("xpath=..").boundingBox();   // and so is the whole book
+  if (!stage) throw new Error("the stage has no box");
+  expect(stage.x).toBeGreaterThanOrEqual(column.x);
+  expect(stage.x + stage.width).toBeLessThanOrEqual(column.x + column.width);
+});

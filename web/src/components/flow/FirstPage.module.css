@@ -25,13 +25,16 @@
 @media (min-height: 780px) {
   .row { font-size: 14px; }
 }
-/* T-04b desktop: the pages are about 400px wide — the words grow with them. */
-@media (min-width: 768px) {
-  .title { font-size: 28px; }
-  .caption { font-size: 15px; }
-  .page { padding: var(--space-5) var(--space-5) var(--space-5) var(--space-6); }
-  .row { padding: var(--space-2) 0; font-size: 16px; }
-  .note { font-size: 14px; }
+/* T-04b desktop: the pages are about 400px wide — the words grow with them. Only where the scene left the 430px column
+   (the same :has() test as BookScene.module.css): a browser without :has() keeps the phone sizes. */
+@supports selector(:has(*)) {
+  @media (min-width: 768px) {
+    .title { font-size: 28px; }
+    .caption { font-size: 15px; }
+    .page { padding: var(--space-5) var(--space-5) var(--space-5) var(--space-6); }
+    .row { padding: var(--space-2) 0; font-size: 16px; }
+    .note { font-size: 14px; }
+  }
 }
 /* C-14: a paper slip, taped to the page. */
 .note {

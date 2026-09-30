@@ -3,63 +3,73 @@
    Room above the book = the bookmark's part that sticks out (DESIGN 4절: 80px card + 26px string = 106px at scale 1).
    The bookmark grows by a uniform transform, so the text-fit check of the 160 × 344 frame (e2e/design.spec.ts) holds. */
 .scene {
-  --book-h: clamp(340px, calc(100dvh - 304px), 420px);
+  /* Phone: the whole scene down to the button row must be on screen in the small viewport (iPhone SE with Safari's toolbars
+     ≈ 375 × 548, KakaoTalk ≈ 559), so the footer may fall below the fold. Book = screen − everything around it:
+     header 52 + main padding 8 + room above 112 + gap 16 + buttons 44 = 232, plus 20px of air below the buttons = 252.
+     On a taller screen the footer (52) fits too: its share fades in from 560px to 612px so the book never jumps. The 270px
+     floor still holds the bookmark card (it reaches 264px into the book at scale 1). --screen-h is svh (tokens.css). */
+  --book-h: clamp(270px, calc(var(--screen-h) - 252px - clamp(0px, calc(var(--screen-h) - 560px), 52px)), 420px);
   --bm-scale: 1;
   --bm-room: calc(106px * var(--bm-scale));   /* the bookmark's part above the book (plus 6px of air, see padding-top) */
   --cover-zoom: 1.6;   /* S-03 phone: a 1 : 1.45 cover about 270–320px wide (lift and hint pull: the phone block below) */
   --cover-lift: -10%; --hint-pull: 0px;
   display: flex; flex-direction: column; gap: var(--space-4);
   padding-top: calc(var(--bm-room) + 6px);
-  overflow-x: clip;   /* the zoomed closed book's empty half must not widen the page (a phone would zoom out) */
+  /* The zoomed closed book's empty half must not widen the page (a phone would zoom out). Browsers without `overflow: clip`
+     (Safari < 16) get `body { overflow-x: hidden }` from globals.css instead: `hidden` here would make the scene a scroll box. */
+  overflow-x: clip;
 }
-/* Height left for the book = viewport − header 52 − main padding 8 + 16 − room above (106 × scale + 6) − gap 16
-   − buttons 44 − footer 52, less 4px of slack. */
+/* Taller phones: height left for the book = viewport − header 52 − main padding 8 + 16 − room above (106 × scale + 6)
+   − gap 16 − buttons 44 − footer 52, less 4px of slack. */
 @media (min-height: 780px) {
-  .scene { --book-h: clamp(420px, calc(100dvh - 332px), 520px); --bm-scale: 1.25; }
+  .scene { --book-h: clamp(420px, calc(var(--screen-h) - 332px), 520px); --bm-scale: 1.25; }
 }
 @media (min-height: 880px) {
-  .scene { --book-h: clamp(500px, calc(100dvh - 348px), 600px); --bm-scale: 1.4; }
+  .scene { --book-h: clamp(500px, calc(var(--screen-h) - 348px), 600px); --bm-scale: 1.4; }
 }
-/* S-03 phone: the cover and the hint under it are one group, centred between the header and where the hint would sit
-   (the hint stays in layout, so nothing below it moves — it is only pulled up by transform). The cover is half the scene
-   wide (the column, less the main padding) at 1 : 1.45, scaled by --cover-zoom; its top may reach into the room above the
-   book. lift = where the group puts the cover's centre − the book's centre; pull = where the hint should be − where it sits. */
-@media (max-width: 767px) {
-  .scene {
-    --scene-w: calc(min(100vw, var(--column)) - 2 * var(--space-4));
-    --cover-h: calc(var(--scene-w) * 0.5 * 1.45 * var(--cover-zoom));
-    --hint-h: 20px;
-    --group-h: calc(var(--cover-h) + var(--space-3) + var(--hint-h));
-    --group-top: calc((var(--book-h) + var(--space-4) + var(--hint-h) - var(--group-h) - (var(--bm-room) + 6px)) / 2);
-    --cover-lift: calc(var(--group-top) + var(--cover-h) / 2 - var(--book-h) / 2);
-    --hint-pull: calc(var(--group-top) + var(--cover-h) + var(--space-3) - var(--book-h) - var(--space-4));
-  }
-}
-/* T-04b desktop (≥ 768px wide): the scene has left the 430px column (globals.css). The spread keeps book proportions —
-   two 1 : 1.4 pages, 1.43 : 1 — as large as the screen allows and at most 1000px wide; the bookmark grows by height
-   band; the buttons stay a centred row of at most 480px. Kept after the phone bands so it wins on a desktop. */
-@media (min-width: 768px) {
-  .scene {
-    --cover-zoom: 1.2; --cover-lift: -10%;   /* the cover is already a 1 : 1.4 page: grow it upward into the room above */
-    --bm-scale: 1;
-    /* Floor 340px: on a very short window the page scrolls rather than the bookmark overlapping the buttons. */
-    --book-h: max(340px, min(calc(100dvh - 198px - var(--bm-room)), calc((min(92vw, 1000px) - 10px) / 1.43)));
-  }
-}
-/* The card reaches 264 × scale into the book, so the book (100dvh − 198 − 106 × scale) must be at least that tall:
-   100dvh ≥ 198 + 370 × scale → scale 1.25 needs 661px, 1.4 needs 716px, 1.6 needs 790px (bands sit above those). */
-@media (min-width: 768px) and (min-height: 680px) {
-  .scene { --bm-scale: 1.25; }
-}
-@media (min-width: 768px) and (min-height: 880px) {
-  .scene { --bm-scale: 1.4; }
-}
-@media (min-width: 768px) and (min-height: 1000px) {
-  .scene { --bm-scale: 1.6; }
+/* S-03 (the phone layout, and the layout of any browser that keeps the 430px column): the cover and the hint under it are
+   one group, centred between the header and where the hint would sit (the hint stays in layout, so nothing below it moves —
+   it is only pulled up by transform). The cover is half the scene wide (the column, less the main padding) at 1 : 1.45,
+   scaled by --cover-zoom; its top may reach into the room above the book, but never above the scene (on a very short screen
+   the group is pushed down instead, so the zoomed cover never touches the header).
+   lift = where the group puts the cover's centre − the book's centre; pull = where the hint should be − where it sits. */
+.scene {
+  --scene-w: calc(min(100vw, var(--column)) - 2 * var(--space-4));
+  --cover-h: calc(var(--scene-w) * 0.5 * 1.45 * var(--cover-zoom));
+  --hint-h: 20px;
+  --group-h: calc(var(--cover-h) + var(--space-3) + var(--hint-h));
+  --group-top: max(calc((var(--book-h) + var(--space-4) + var(--hint-h) - var(--group-h) - (var(--bm-room) + 6px)) / 2), calc(-1 * (var(--bm-room) + 6px)));
+  --cover-lift: calc(var(--group-top) + var(--cover-h) / 2 - var(--book-h) / 2);
+  --hint-pull: calc(var(--group-top) + var(--cover-h) + var(--space-3) - var(--book-h) - var(--space-4));
 }
 .stage { position: relative; margin: 0 5px; }   /* the cloth rim stands 5px out */
-@media (min-width: 768px) {
-  .stage { width: calc(var(--book-h) * 1.43); margin: 0 auto; }
+/* T-04b desktop (≥ 768px wide): the scene has left the 430px column (globals.css). The spread keeps book proportions —
+   two 1 : 1.4 pages, 1.43 : 1 — as large as the screen allows and at most 1000px wide; the bookmark grows by height
+   band; the buttons stay a centred row of at most 480px. Kept after the phone rules so it wins on a desktop.
+   All of it sits behind the same `:has()` test as the column release (globals.css): a browser without :has() keeps the
+   430px column, and a 1000px book would be clipped by it — there the scene keeps the phone layout above. */
+@supports selector(:has(*)) {
+  @media (min-width: 768px) {
+    .scene {
+      --cover-zoom: 1.2; --cover-lift: -10%; --hint-pull: 0px;   /* the cover is already a 1 : 1.4 page: grow it upward into the room above */
+      --bm-scale: 1;
+      /* Floor 340px: on a very short window the page scrolls rather than the bookmark overlapping the buttons. */
+      --book-h: max(340px, min(calc(var(--screen-h) - 198px - var(--bm-room)), calc((min(92vw, 1000px) - 10px) / 1.43)));
+    }
+    .stage { width: calc(var(--book-h) * 1.43); margin: 0 auto; }
+    .actions { width: 100%; max-width: 480px; margin: 0 auto; }
+  }
+  /* The card reaches 264 × scale into the book, so the book (100svh − 198 − 106 × scale) must be at least that tall:
+     100svh ≥ 198 + 370 × scale → scale 1.25 needs 661px, 1.4 needs 716px, 1.6 needs 790px (bands sit above those). */
+  @media (min-width: 768px) and (min-height: 680px) {
+    .scene { --bm-scale: 1.25; }
+  }
+  @media (min-width: 768px) and (min-height: 880px) {
+    .scene { --bm-scale: 1.4; }
+  }
+  @media (min-width: 768px) and (min-height: 1000px) {
+    .scene { --bm-scale: 1.6; }
+  }
 }
 /* Centred on the gutter (the spine line), between the two pages. */
 .slot {
@@ -77,6 +87,3 @@
 .actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--space-3); }
 .actions > button { flex: 1 1 0; min-width: 120px; }
 .error { flex-basis: 100%; margin: 0; text-align: center; font-size: 13px; }
-@media (min-width: 768px) {
-  .actions { width: 100%; max-width: 480px; margin: 0 auto; }
-}

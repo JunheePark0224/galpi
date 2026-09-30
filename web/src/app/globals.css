@@ -11,6 +11,7 @@ body {
 }
 .column {
   max-width: var(--column);
+  min-height: 100vh;   /* fallback for browsers without dvh */
   min-height: 100dvh;
   margin: 0 auto;
   background: var(--paper-grain), var(--paper);
@@ -20,8 +21,15 @@ body {
 }
 .column > main { flex: 1; padding: var(--space-2) var(--space-4) var(--space-4); }
 /* T-04b (09-30): on a desktop the book scenes (S-03~S-05) leave the 430px column and grow with the screen. */
-@media (min-width: 768px) {
-  .column:has([data-wide-scene]) { max-width: none; }
+/* Behind the same @supports test as BookScene's desktop sizes: one switch — without :has() the column stays and the book fits it. */
+@supports selector(:has(*)) {
+  @media (min-width: 768px) {
+    .column:has([data-wide-scene]) { max-width: none; }
+  }
+}
+/* Safari < 16 has no `overflow-x: clip`, which BookScene uses so the zoomed closed book cannot widen the page. */
+@supports not (overflow-x: clip) {
+  body { overflow-x: hidden; }
 }
 h1, h2, h3, .serif { font-family: var(--font-batang), serif; font-weight: 700; }
 @media (prefers-reduced-motion: reduce) {
