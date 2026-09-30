@@ -1,0 +1,18 @@
+.home { display: flex; flex-direction: column; gap: var(--space-5); padding-bottom: var(--space-5); }
+.top { display: flex; justify-content: flex-end; min-height: var(--touch); }
+.accountSlot { width: 72px; height: var(--touch); }
+.hero { padding: var(--space-6) 0 var(--space-4); text-align: center; }
+.logo { margin: 0; font-size: 28px; }
+.tagline { margin: var(--space-2) 0 0; color: var(--ink-soft); }
+.entries { display: flex; flex-direction: column; gap: var(--space-3); }
+.entry {
+  display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-1);
+  width: 100%; min-height: 88px; padding: var(--space-4);
+  border: 1px solid var(--paper-line); border-radius: var(--radius-card);
+  background: var(--paper); color: var(--ink); font: inherit; text-align: left; cursor: pointer;
+  box-shadow: 0 1px 0 var(--paper-line);
+}
+.entry:active { background: var(--paper-deep); }
+.entry:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.entryTitle { font-family: var(--font-batang), serif; font-size: 18px; font-weight: 700; }
+.entryDesc { font-size: 13px; color: var(--ink-muted); }
