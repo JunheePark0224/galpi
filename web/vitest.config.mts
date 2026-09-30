@@ -9,6 +9,11 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
-    coverage: { provider: "v8", include: ["src/lib/**"], exclude: ["src/**/*.test.*", "src/**/__fixtures__/**"] },
+    coverage: {
+      provider: "v8",
+      include: ["src/lib/**"],
+      exclude: ["src/**/*.test.*", "src/**/__fixtures__/**", "src/lib/recommend/index.ts", "src/lib/recommend/types.ts"],
+      thresholds: { "src/lib/recommend/**": { lines: 100, branches: 100, functions: 100, statements: 100 } },
+    },
   },
 });
