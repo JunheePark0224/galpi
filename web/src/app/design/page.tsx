@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { Button } from "@/components/Button";
 import { Bookmark } from "@/components/Bookmark";
 import { artFromSeed } from "@/lib/art/combine";
@@ -11,7 +12,9 @@ const DEMO: BookCard[] = [
 const COLORS = ["paper", "paper-deep", "paper-line", "cloth", "ink", "ink-soft", "ink-muted"];
 const GENRES = ["korean-fiction", "world-fiction", "sf-fantasy", "mystery", "essay", "poetry", "humanities", "science", "art-travel"];
 
+/** Token/component sheet for development. Not part of the product: a 404 on the public production site. */
 export default function DesignPage() {
+  if (process.env.VERCEL_ENV === "production") notFound();
   return (
     <>
       <h1>디자인 확인</h1>
