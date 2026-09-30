@@ -13,12 +13,12 @@ body {
   max-width: var(--column);
   min-height: 100dvh;
   margin: 0 auto;
-  background: var(--paper);
+  background: var(--paper-grain), var(--paper);
   box-shadow: 0 0 0 1px var(--paper-line);
   display: flex;
   flex-direction: column;
 }
-.column > main { flex: 1; padding: var(--space-4); }
+.column > main { flex: 1; padding: var(--space-2) var(--space-4) var(--space-4); }
 h1, h2, h3, .serif { font-family: var(--font-batang), serif; font-weight: 700; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }

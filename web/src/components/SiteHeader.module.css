@@ -1,0 +1,2 @@
+.header { display: flex; align-items: center; height: var(--header-h); padding: 0 var(--space-4); }
+.logo { display: block; color: var(--ink); }

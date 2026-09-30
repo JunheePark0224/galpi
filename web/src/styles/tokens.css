@@ -11,9 +11,25 @@
   --field-data: #3A6684; --field-ai: #5E55A0; --field-habit: #9E6232;
   --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px;
   --radius-card: 12px; --radius-pill: 9999px; --radius-book: 2px 10px 10px 2px; --radius-bookmark: 10px 10px 0 0;
-  --touch: 44px; --column: 430px;
+  --touch: 44px; --column: 430px; --header-h: 52px;
   --dur-open-cover: 1000ms; --dur-flip-page: 550ms; --dur-bookmark-rise: 600ms;
   --dur-bookmark-away: 450ms; --dur-bookmark-down: 400ms; --dur-hold: 800ms; --dur-card-flip: 500ms;
   --ease-open: cubic-bezier(.6, .05, .25, 1); --ease-flip: cubic-bezier(.5, 0, .3, 1);
   --ease-rise: cubic-bezier(.34, 1.56, .64, 1);
+
+  /* Design pass (09-30): textures and depth, CSS/SVG only — no image files, nothing animated. */
+  --foil: #EAD9B0;                                   /* gold-foil letters on cloth: 5.3 : 1 on cloth, 7.7 : 1 on cloth-edge */
+  --paper-rule: rgba(221, 208, 180, 0.55);           /* ruled lines on pages */
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .48 0 0 0 0 .38 0 0 0 0 .28 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --leather-grain: radial-gradient(rgba(250, 245, 234, 0.12) 0.8px, transparent 1.2px) 0 0 / 5px 5px;
+  --leather-sheen: linear-gradient(100deg, rgba(0, 0, 0, 0.16), rgba(255, 255, 255, 0.07) 45%, rgba(0, 0, 0, 0.12));
+  --card-bg: rgba(255, 255, 255, 0.55);              /* cards and chips resting on the paper — whiter, no blur */
+  --card-edge: 1px solid rgba(221, 208, 180, 0.7);
+  --field-bg: #FFFFFF;                               /* text input */
+  --foil-line: rgba(234, 217, 176, 0.45);            /* blind-stamped lines and bands on leather */
+  --spine-shade: linear-gradient(90deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.06) 75%, rgba(255, 255, 255, 0.08));
+  --tape: rgba(255, 255, 255, 0.7);                  /* the tape on a C-14 paper slip */
+  --shadow-plate: 0 1px 2px rgba(0, 0, 0, 0.25);     /* the paper label on the cover */
+  --shadow-soft: 0 4px 16px -4px rgba(43, 39, 36, 0.12);   /* cards resting on paper (static only) */
+  --shadow-book: 0 18px 30px -16px rgba(43, 39, 36, 0.45); /* the book on the desk (static only) */
 }

@@ -30,6 +30,17 @@ test("footer credits YES24", async ({ page }) => {
   await expect(page.getByText("예스24와 무관한 개인 프로젝트")).toBeVisible();
 });
 
+test("every page has the small logo header, no login yet, and the SVG icon", async ({ page, request }) => {
+  for (const path of ["/", "/privacy"]) {
+    await page.goto(path);
+    await expect(page.locator("header").first().getByRole("img", { name: "갈피" })).toBeVisible();
+    await expect(page.getByText("로그인")).toHaveCount(0);
+  }
+  const icon = await request.get("/icon.svg");
+  expect(icon.status()).toBe(200);
+  expect(icon.headers()["content-type"]).toContain("image/svg+xml");
+});
+
 test("frost and book tokens exist for bookmarks", async ({ page }) => {
   await page.goto("/design");
   const values = await page.evaluate(() => {
