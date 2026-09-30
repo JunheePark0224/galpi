@@ -15,9 +15,15 @@ const target: BookCard = {
 const art: ArtCombo = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false };
 
 describe("Bookmark", () => {
-  it("reads title, one-liner and genre as one label", () => {
+  it("reads title, author, one-liner and genre as one label", () => {
     render(<Bookmark card={leaf} art={art} />);
-    expect(screen.getByRole("article", { name: "천천히 걷는 아침, 오늘 아침은 몇 걸음이었을까요?, 에세이" })).toBeInTheDocument();
+    expect(screen.getByRole("article", { name: "천천히 걷는 아침, 천아침, 오늘 아침은 몇 걸음이었을까요?, 에세이" })).toBeInTheDocument();
+  });
+
+  it("shows the author small, right under the title (PRD F-08)", () => {
+    render(<Bookmark card={leaf} art={art} />);
+    const title = screen.getByText("천천히 걷는 아침");
+    expect(title.nextElementSibling).toHaveTextContent("천아침");
   });
 
   it("draws the chosen animal inside its own arched window", () => {

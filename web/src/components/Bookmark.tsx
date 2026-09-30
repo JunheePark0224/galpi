@@ -4,31 +4,33 @@ import { toneOf } from "@/lib/books/taxonomy";
 import type { BookCard } from "@/lib/books/types";
 import { BookmarkArt } from "./BookmarkArt";
 import { GenreTag } from "./GenreTag";
+import frame from "./BookmarkFrame.module.css";
 import styles from "./Bookmark.module.css";
 
 interface Props { card: BookCard; art: ArtCombo; moving?: boolean }
 
 /**
- * C-02 (DESIGN 4절): frost film, arched window, name tag, title, one-liner, stitch line, swallowtail, string.
- * Never the Minumsa shape — no square card, no left vertical band, no two colour stripes.
+ * C-02 (DESIGN 4절): frost film, arched window, name tag, title, author (PRD F-08), one-liner, stitch line, swallowtail, string.
+ * The shape is shared with the balance cards (BookmarkFrame.module.css).
  */
 export function Bookmark({ card, art, moving = false }: Props) {
   const tone = toneOf(card);
   return (
     <article
-      className={styles.bookmark}
+      className={`${frame.frame} ${styles.bookmark}`}
       data-moving={moving ? "" : undefined}
-      aria-label={`${card.title}, ${card.oneLiner}, ${card.genre}`}
+      aria-label={`${card.title}, ${card.author}, ${card.oneLiner}, ${card.genre}`}
       style={{ "--tone": tone.bg } as CSSProperties}
     >
-      <span className={styles.string} aria-hidden="true" />
-      <div className={styles.card} aria-hidden="true">
-        <span className={styles.hole} />
+      <span className={frame.string} aria-hidden="true" />
+      <div className={`${frame.film} ${styles.card}`} aria-hidden="true">
+        <span className={frame.hole} />
         <div className={styles.window}><BookmarkArt art={art} clipId={`arch-${card.id}`} /></div>
         <GenreTag card={card} />
         <h3 className={styles.title}>{card.title}</h3>
+        <p className={styles.author}>{card.author}</p>
         <p className={styles.line}>{card.oneLiner}</p>
-        <span className={styles.stitch} />
+        <span className={frame.stitch} />
         <span className={styles.mark}>갈피</span>
       </div>
     </article>

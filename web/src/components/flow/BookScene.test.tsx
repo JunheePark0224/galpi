@@ -87,7 +87,7 @@ describe("BookScene", () => {
 
   it("S-05: the bookmark sits on the book, pass / curious below, with the count of a short draw", () => {
     render(<BookScene state={{ ...first, step: "bookmarks", index: 1, draw: view(3) }} {...handlers()} />);
-    expect(screen.getByRole("article", { name: "책 1, 한 줄 1, 통계" })).toBeInTheDocument();
+    expect(screen.getByRole("article", { name: "책 1, 저자 1, 한 줄 1, 통계" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "패스" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "궁금해요" })).toBeInTheDocument();
     expect(screen.getByText("2 / 3")).toBeInTheDocument();

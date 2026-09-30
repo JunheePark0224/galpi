@@ -1,0 +1,30 @@
+/* The bookmark shape (DESIGN 4절), shared by C-02 bookmarks and C-07 balance cards: a string with a knot (~26px above),
+   a frost film with the swallowtail notch (7% of the height), a punched hole (8px) and a dashed stitch line.
+   Sizes and contents stay with each component. Never the Minumsa shape — no square card, no left band, no stripes. */
+.frame { position: relative; padding-top: 26px; }
+.string {
+  position: absolute; top: 0; left: 50%; z-index: 1;
+  width: 1.5px; height: 37px; margin-left: -0.75px; background: var(--tone);
+}
+.string::before {
+  content: ""; position: absolute; top: -3px; left: 50%;
+  width: 7px; height: 7px; margin-left: -3.5px; border-radius: 50%; background: var(--tone);
+}
+.film {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  border: var(--frost-edge); border-radius: var(--radius-bookmark);
+  background: var(--frost-bg);
+  -webkit-backdrop-filter: var(--frost-blur); backdrop-filter: var(--frost-blur);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 93%, 0 100%);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .film { background: var(--frost-fallback); }
+}
+/* T-03: no blur while moving (low-end Android). */
+.frame[data-moving] .film { background: var(--frost-fallback); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.hole {
+  position: absolute; top: 7px; left: 50%; width: 8px; height: 8px; margin-left: -4px;
+  border-radius: 50%; background: var(--paper-deep); box-shadow: inset 0 0 0 1px var(--paper-line);
+}
+.stitch { width: 100%; margin-top: auto; border-top: 1.5px dashed var(--tone); }
