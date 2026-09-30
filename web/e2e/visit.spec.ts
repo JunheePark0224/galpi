@@ -1,4 +1,5 @@
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./helpers";
 
 test("sends exactly one visit event and the server accepts it", async ({ page }) => {
   const bodies: string[] = [];

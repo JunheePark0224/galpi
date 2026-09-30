@@ -3,8 +3,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { POST } from "./route";
 
 const NINE = ["A", "unsure", "B", "A", "A", "B", "B", "A", "A"];
-const req = (body: unknown) =>
-  new Request("http://x/api/books/draw", { method: "POST", body: typeof body === "string" ? body : JSON.stringify(body) });
+const ORIGIN = "http://x";
+const from = (ip: string) => ({ origin: ORIGIN, "x-forwarded-for": ip });
+const req = (body: unknown, headers: Record<string, string> = from("9.9.9.9")) =>
+  new Request("http://x/api/books/draw", { method: "POST", body: typeof body === "string" ? body : JSON.stringify(body), headers });
 
 describe("POST /api/books/draw", () => {
   beforeEach(() => vi.stubEnv("BOOKS_SOURCE", "sample"));
@@ -36,6 +38,22 @@ describe("POST /api/books/draw", () => {
     expect(Object.keys(body.picks[0].card).sort()).toEqual(["entry", "field", "genre", "id", "oneLiner", "oneLinerStyle", "title"]);
   });
 
+  it("refuses another origin with 403", async () => {
+    const res = await POST(req({ entry: "leaf", choices: NINE }, { origin: "https://evil.example", "x-forwarded-for": "9.9.9.9" }));
+    expect(res.status).toBe(403);
+  });
+
+  it("refuses a request with neither Origin nor Referer", async () => {
+    expect((await POST(req({ entry: "leaf", choices: NINE }, {}))).status).toBe(403);
+  });
+
+  it("answers 429 with Retry-After after 60 draws a minute from one address", async () => {
+    for (let i = 0; i < 60; i++) expect((await POST(req({ entry: "leaf", choices: NINE, seed: i }, from("7.7.7.7")))).status).toBe(200);
+    const res = await POST(req({ entry: "leaf", choices: NINE }, from("7.7.7.7")));
+    expect(res.status).toBe(429);
+    expect(Number(res.headers.get("Retry-After"))).toBeGreaterThan(0);
+  });
+
   it.each([
     ["not JSON", "{"],
     ["an unknown entry", { entry: "shelf" }],
@@ -49,8 +67,12 @@ describe("POST /api/books/draw", () => {
     ["seen that is not a list of ids", { entry: "leaf", choices: NINE, seen: "9790000000001" }],
     ["a seen id that is not a string", { entry: "leaf", choices: NINE, seen: [9790000000001] }],
     ["a negative seed", { entry: "leaf", choices: NINE, seed: -1 }],
-    ["a body over the size cap", { entry: "leaf", choices: NINE, seen: Array.from({ length: 2500 }, (_, i) => `id-${i}-padding`) }],
   ])("rejects %s with 400", async (_, body) => {
     expect((await POST(req(body))).status).toBe(400);
+  });
+
+  it("rejects a body over the size cap with 413", async () => {
+    const seen = Array.from({ length: 2500 }, (_, i) => `id-${i}-padding`);
+    expect((await POST(req({ entry: "leaf", choices: NINE, seen }))).status).toBe(413);
   });
 });

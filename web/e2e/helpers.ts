@@ -1,4 +1,18 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, test as base, type Page } from "@playwright/test";
+
+/** A stable pseudo address per test (from its id), so the API's per-address rate limit sees one visitor per test, as in production. */
+function clientIp(testId: string): string {
+  let h = 2166136261;
+  for (const ch of testId) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0;
+  return `10.${h & 255}.${(h >>> 8) & 255}.${((h >>> 16) & 254) + 1}`;
+}
+
+/** `test` whose requests carry x-forwarded-for like a proxy would; every spec imports this instead of @playwright/test's. */
+export const test = base.extend({
+  extraHTTPHeaders: async ({}, provide, testInfo) => {
+    await provide({ "x-forwarded-for": clientIp(testInfo.testId) });
+  },
+});
 
 export interface Sent { name: string; props: Record<string, unknown>; common: Record<string, unknown> }
 

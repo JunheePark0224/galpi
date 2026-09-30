@@ -1,5 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
-import { named, reactToBookmarks, recordEvents } from "./helpers";
+import { expect, type Page } from "@playwright/test";
+import { named, reactToBookmarks, recordEvents, test } from "./helpers";
 
 test.use({ reducedMotion: "reduce" });
 

@@ -1,5 +1,5 @@
-import { expect, test } from "@playwright/test";
-import { named, reactToBookmarks, recordEvents } from "./helpers";
+import { expect } from "@playwright/test";
+import { named, reactToBookmarks, recordEvents, test } from "./helpers";
 
 // Motion and CSS shorten to fades under reduced motion — same flow, faster run. Books: BOOKS_SOURCE=sample.
 test.use({ reducedMotion: "reduce" });

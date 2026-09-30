@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
-import { expect, test } from "@playwright/test";
+import { expect } from "@playwright/test";
+import { test } from "./helpers";
 
 test("design page shows tokens and buttons", async ({ page }) => {
   await page.goto("/design");

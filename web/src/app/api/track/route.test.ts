@@ -7,7 +7,10 @@ import { POST } from "./route";
 
 const common = { anon_id: "a", user_id: null, session_id: "s", round: 1, entry: null, screen_version: "v1",
   referrer: "", returning: false, device: "phone", in_app_browser: false };
-const req = (body: unknown) => new Request("http://x/api/track", { method: "POST", body: JSON.stringify(body) });
+const ORIGIN = "http://x";
+const from = (ip: string) => ({ origin: ORIGIN, "x-forwarded-for": ip });
+const req = (body: unknown, headers: Record<string, string> = from("9.9.9.9")) =>
+  new Request("http://x/api/track", { method: "POST", body: JSON.stringify(body), headers });
 
 describe("POST /api/track", () => {
   afterEach(() => vi.clearAllMocks());
@@ -24,15 +27,40 @@ describe("POST /api/track", () => {
     expect(saveEvent).not.toHaveBeenCalled();
   });
 
-  it("rejects bodies that are too large", async () => {
+  it("rejects bodies that are too large with 413", async () => {
     const res = await POST(req({ name: "visit", props: { big: "x".repeat(9000) }, common }));
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(413);
   });
 
   it("measures the size limit in bytes, not characters", async () => {
     const res = await POST(req({ name: "visit", props: { big: "가".repeat(3000) }, common }));
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(413);
     expect(saveEvent).not.toHaveBeenCalled();
+  });
+
+  it("refuses another origin with 403 and stores nothing", async () => {
+    const res = await POST(req({ name: "visit", props: {}, common }, { origin: "https://evil.example", "x-forwarded-for": "9.9.9.9" }));
+    expect(res.status).toBe(403);
+    expect(await res.json()).toEqual({ error: "forbidden" });
+    expect(saveEvent).not.toHaveBeenCalled();
+  });
+
+  it("refuses a request with neither Origin nor Referer", async () => {
+    expect((await POST(req({ name: "visit", props: {}, common }, {}))).status).toBe(403);
+    expect(saveEvent).not.toHaveBeenCalled();
+  });
+
+  it("accepts a same-site Referer when there is no Origin", async () => {
+    expect((await POST(req({ name: "visit", props: {}, common }, { referer: "http://x/privacy" }))).status).toBe(202);
+  });
+
+  it("answers 429 with Retry-After after 120 events a minute from one address", async () => {
+    for (let i = 0; i < 120; i++) expect((await POST(req({ name: "visit", props: {}, common }, from("7.7.7.7")))).status).toBe(202);
+    const res = await POST(req({ name: "visit", props: {}, common }, from("7.7.7.7")));
+    expect(res.status).toBe(429);
+    expect(Number(res.headers.get("Retry-After"))).toBeGreaterThan(0);
+    // another address is not affected
+    expect((await POST(req({ name: "visit", props: {}, common }, from("7.7.7.8")))).status).toBe(202);
   });
 
   it("rejects non-object bodies", async () => {
@@ -48,8 +76,30 @@ describe("POST /api/track", () => {
     expect(saveEvent).not.toHaveBeenCalled();
   });
 
-  it("treats array props as empty", async () => {
-    const res = await POST(req({ name: "visit", props: [1], common }));
+  it("rejects a common block with a missing key, a wrong type or a too-long string", async () => {
+    const missing: Record<string, unknown> = { ...common };
+    delete missing.anon_id;
+    for (const bad of [missing, { ...common, round: "1" }, { ...common, device: "tablet" }, { ...common, referrer: "x".repeat(501) }, { ...common, anon_id: "x".repeat(201) }]) {
+      expect((await POST(req({ name: "visit", props: {}, common: bad }))).status).toBe(400);
+    }
+    expect(saveEvent).not.toHaveBeenCalled();
+  });
+
+  it("drops keys that are not in the common schema", async () => {
+    const res = await POST(req({ name: "visit", props: {}, common: { ...common, evil: "x".repeat(100), admin: true } }));
+    expect(res.status).toBe(202);
+    expect(saveEvent).toHaveBeenCalledWith({ name: "visit", props: {}, common });
+  });
+
+  it("rejects props that are not an object", async () => {
+    for (const props of [[1], "x", 1, null]) {
+      expect((await POST(req({ name: "visit", props, common }))).status).toBe(400);
+    }
+    expect(saveEvent).not.toHaveBeenCalled();
+  });
+
+  it("treats missing props as empty", async () => {
+    const res = await POST(req({ name: "visit", common }));
     expect(res.status).toBe(202);
     expect(saveEvent).toHaveBeenCalledWith({ name: "visit", props: {}, common });
   });
@@ -63,7 +113,7 @@ describe("POST /api/track", () => {
   });
 
   it("rejects invalid JSON", async () => {
-    const res = await POST(new Request("http://x/api/track", { method: "POST", body: "{" }));
+    const res = await POST(new Request("http://x/api/track", { method: "POST", body: "{", headers: from("9.9.9.9") }));
     expect(res.status).toBe(400);
   });
 });
