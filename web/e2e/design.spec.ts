@@ -39,3 +39,8 @@ test("frost and book tokens exist for bookmarks", async ({ page }) => {
   // the production build minifies rgba(255, 255, 255, 0.8) to #fffc
   expect(edge).toMatch(/^1px solid (rgba\(255, 255, 255, 0\.8\)|#fffc)$/);
 });
+
+test("design page shows a bookmark with its reading label", async ({ page }) => {
+  await page.goto("/design");
+  await expect(page.getByRole("article", { name: /천천히 걷는 아침/ })).toBeVisible();
+});
