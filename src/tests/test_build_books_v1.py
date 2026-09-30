@@ -121,3 +121,33 @@ def test_report_flags_low_confidence():
                        low_confidence={"T1": "개념/실습 애매", "ZZ": "not in selection"})
     flags = {f["isbn"]: f["reasons"] for f in rep["flags"]}
     assert "AI 확신 낮음: 개념/실습 애매" in flags["T1"] and "ZZ" not in flags
+
+
+def test_world_retag_overrides_ai_world_only():
+    retag = {"L1": {"world": -1, "was": 1, "evidence": "x"}, "T1": {"world": 1}}
+    books = by_isbn(merge_books(SELECTED, KEYWORDS, AI, world_retag=retag)[0])
+    assert books["L1"]["axes"] == {"temp": 1, "pull": -1, "gain": 0, "world": -1}  # other axes stay AI
+    assert books["T1"]["axes"] is None                                             # target ignores retag
+    assert AI["L1"]["axes"]["world"] == 1                                          # inputs are not mutated
+
+
+def test_world_retag_ignores_invalid_values():
+    for bad in (2, "1", None, True, 0.0):
+        retag = {"L1": {"world": bad}}
+        books = by_isbn(merge_books(SELECTED, KEYWORDS, AI, world_retag=retag)[0])
+        assert books["L1"]["axes"]["world"] == 1, bad
+
+
+def test_review_beats_retag_beats_ai():
+    retag = {"L1": {"world": 0}}
+    # retag beats AI (AI says +1)
+    books = by_isbn(merge_books(SELECTED, KEYWORDS, AI, world_retag=retag)[0])
+    assert books["L1"]["axes"]["world"] == 0
+    # ok=true review beats retag, and keeps the retag for axes the review does not set
+    ov = {"L1": {"axes": {"world": -1}, "ok": True}}
+    books = by_isbn(merge_books(SELECTED, KEYWORDS, AI, ov, world_retag=retag)[0])
+    assert books["L1"]["axes"]["world"] == -1
+    # a review without world (or with ok=false) leaves the retag in force
+    for ov in ({"L1": {"axes": {"temp": -1}, "ok": True}}, {"L1": {"axes": {"world": -1}, "ok": False}}):
+        books = by_isbn(merge_books(SELECTED, KEYWORDS, AI, ov, world_retag=retag)[0])
+        assert books["L1"]["axes"]["world"] == 0

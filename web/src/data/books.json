@@ -69,7 +69,7 @@
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 0,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -90,7 +90,7 @@
    "temp": -1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -223,7 +223,7 @@
    "temp": -1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -337,7 +337,7 @@
    "temp": -1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -394,7 +394,7 @@
    "temp": -1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -410,7 +410,7 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 1,
+   "temp": 0,
    "pull": 0,
    "gain": 0,
    "world": 0
@@ -430,7 +430,7 @@
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 1,
+   "pull": 0,
    "gain": 0,
    "world": 0
   },
@@ -451,7 +451,7 @@
    "temp": -1,
    "pull": 0,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -459,7 +459,7 @@
   "isbn": "9788925588735",
   "title": "프로젝트 헤일메리",
   "pages": 692,
-  "one_liner": "과학과 우주 이야기 속으로, 손에서 놓지 못하고 달려가 볼까요?",
+  "one_liner": "과학과 우주 이야기 속으로, 짜릿한 모험을 떠나볼까요?",
   "one_liner_style": "question",
   "entry": "leaf",
   "genre": "SF·판타지",
@@ -715,7 +715,7 @@
   "way": null,
   "axes": {
    "temp": 0,
-   "pull": 1,
+   "pull": 0,
    "gain": -1,
    "world": -1
   },
@@ -734,7 +734,7 @@
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 0,
+   "pull": -1,
    "gain": -1,
    "world": 0
   },
@@ -774,7 +774,7 @@
    "temp": -1,
    "pull": -1,
    "gain": 0,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -812,7 +812,7 @@
    "temp": 0,
    "pull": -1,
    "gain": 0,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -831,7 +831,7 @@
    "temp": -1,
    "pull": -1,
    "gain": 0,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -839,7 +839,7 @@
   "isbn": "9791190174756",
   "title": "칵테일, 러브, 좀비",
   "pages": 165,
-  "one_liner": "물귀신과 숲귀신이 사랑에 빠진다면 어떤 이야기가 될까요?",
+  "one_liner": "사랑과 좀비와 귀신이 뒤섞인 이야기가 궁금하지 않나요?",
   "one_liner_style": "question",
   "entry": "leaf",
   "genre": "추리·스릴러",
@@ -847,7 +847,7 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": -1,
    "pull": -1,
    "gain": -1,
    "world": -1
@@ -926,7 +926,7 @@
    "temp": -1,
    "pull": -1,
    "gain": 0,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -945,7 +945,7 @@
    "temp": -1,
    "pull": -1,
    "gain": 0,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1002,7 +1002,7 @@
    "temp": 1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1021,7 +1021,7 @@
    "temp": 1,
    "pull": 0,
    "gain": 0,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1040,7 +1040,7 @@
    "temp": 1,
    "pull": 0,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1059,7 +1059,7 @@
    "temp": -1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1078,7 +1078,7 @@
    "temp": 1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1095,9 +1095,9 @@
   "way": null,
   "axes": {
    "temp": 0,
-   "pull": -1,
+   "pull": 0,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1115,8 +1115,8 @@
   "axes": {
    "temp": 0,
    "pull": 1,
-   "gain": 0,
-   "world": 0
+   "gain": -1,
+   "world": 1
   },
   "keywords": []
  },
@@ -1135,7 +1135,7 @@
    "temp": 1,
    "pull": 0,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1154,7 +1154,7 @@
    "temp": 1,
    "pull": 0,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1192,7 +1192,7 @@
    "temp": 1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1249,7 +1249,7 @@
    "temp": -1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1268,7 +1268,7 @@
    "temp": 0,
    "pull": 0,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1306,7 +1306,7 @@
    "temp": -1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1325,7 +1325,7 @@
    "temp": 0,
    "pull": 0,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1363,7 +1363,7 @@
    "temp": -1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1401,7 +1401,7 @@
    "temp": -1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1439,7 +1439,7 @@
    "temp": -1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1458,7 +1458,7 @@
    "temp": 0,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1474,10 +1474,10 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": -1,
+   "temp": 0,
    "pull": 1,
    "gain": 0,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1496,7 +1496,7 @@
    "temp": 1,
    "pull": -1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1515,7 +1515,7 @@
    "temp": 1,
    "pull": -1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1534,7 +1534,7 @@
    "temp": 0,
    "pull": 0,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1553,7 +1553,7 @@
    "temp": 0,
    "pull": 0,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1591,7 +1591,7 @@
    "temp": 1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1665,7 +1665,7 @@
   "way": null,
   "axes": {
    "temp": 0,
-   "pull": 1,
+   "pull": 0,
    "gain": 1,
    "world": 0
   },
@@ -1762,7 +1762,7 @@
    "temp": 0,
    "pull": 0,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1876,7 +1876,7 @@
    "temp": 0,
    "pull": -1,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1895,7 +1895,7 @@
    "temp": 0,
    "pull": 1,
    "gain": 0,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -2010,7 +2010,7 @@
   "genre": "데이터 분석",
   "field": "데이터·통계",
   "topic": "데이터 분석",
-  "way": "개념",
+  "way": "사례",
   "axes": null,
   "keywords": [
    "시각화",
@@ -2700,7 +2700,7 @@
   "isbn": "9791124516157",
   "title": "바로바로 제미나이 X 구글 AI",
   "pages": 376,
-  "one_liner": "구글 계정 하나로 제미나이와 노트북LM을 업무에 쓰는 법을 알려줘요",
+  "one_liner": "구글의 다양한 AI 도구를 업무에 활용하는 법을 알려줘요",
   "one_liner_style": "summary",
   "entry": "target",
   "genre": "AI 활용",
@@ -3288,7 +3288,7 @@
   "genre": "습관·집중",
   "field": "습관·자기계발",
   "topic": "습관·집중",
-  "way": "실습",
+  "way": "개념",
   "axes": null,
   "keywords": [
    "습관",
@@ -3451,7 +3451,7 @@
   "genre": "시간·생산성",
   "field": "습관·자기계발",
   "topic": "시간·생산성",
-  "way": "개념",
+  "way": "사례",
   "axes": null,
   "keywords": [
    "일하는 법"

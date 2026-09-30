@@ -1,9 +1,12 @@
 """D3-3: merge selection + keywords + AI tags (+ human review) into the `books` table, and report.
 
+Merge order per book: AI tags -> world_retag.json -> d4_review.json (human review beats retag beats AI).
 Merges, per book (200 in total):
   - data/processed/d1_selected.csv               entry, slot, title, pages
   - data/processed/keyword_tags_draft.json       target keywords (status "picked" only)
   - data/processed/d3/ai_tags_batch_*.json       axes / way / one-liner from the AI taggers
+  - data/processed/d3/world_retag.json (optional) {isbn: {world: -1|0|1, ...}} — re-judged world axis
+    under the 09-30 rule; overrides axes.world of the AI tags for the listed leaf books
   - data/processed/d4_review.json (optional)     human overrides {isbn: {axes?, way?, one_liner?, ok}}
     (the D4 page saves {saved_at, answers: {...}}; both shapes are accepted; only ok=true applies)
 
@@ -41,6 +44,7 @@ AI_DIR = PROCESSED / "d3"
 LOW_CONF = AI_DIR / "low_confidence.json"
 CURATION = PROCESSED / "d1_curation.json"
 REVIEW = PROCESSED / "d4_review.json"
+RETAG = AI_DIR / "world_retag.json"
 OUT_DRAFT = PROCESSED / "books_v1_draft.json"
 OUT_FINAL = PROCESSED / "books_v1.json"
 OUT_REPORT = PROCESSED / "d3_report.json"
@@ -79,6 +83,14 @@ def unwrap_review(raw: dict) -> dict[str, dict]:
     """d4_review.json is {saved_at, answers: {...}}; a bare {isbn: {...}} map is accepted too."""
     answers = raw.get("answers") if isinstance(raw.get("answers"), dict) else raw
     return {k: v for k, v in answers.items() if isinstance(v, dict)}
+
+
+def apply_world_retag(tag: dict, retag: dict | None, entry: str) -> dict:
+    """New tag dict with the re-judged world axis on top (leaf only; a valid -1/0/1 int only)."""
+    world = (retag or {}).get("world")
+    if entry != "leaf" or type(world) is not int or world not in (-1, 0, 1):
+        return dict(tag)
+    return {**tag, "axes": {**(tag.get("axes") or {}), "world": world}}
 
 
 def apply_override(tag: dict, override: dict | None, entry: str) -> dict:
@@ -140,17 +152,20 @@ def make_book(row: dict, keywords: dict[str, list[str]], tag: dict) -> Book:
 
 def merge_books(selected: list[dict], keywords: dict[str, list[str]], ai_tags: dict[str, dict],
                 overrides: dict[str, dict] | None = None,
-                strict: bool = True) -> tuple[list[Book], dict[str, list[str]]]:
+                strict: bool = True,
+                world_retag: dict[str, dict] | None = None) -> tuple[list[Book], dict[str, list[str]]]:
     """Pure merge. Returns (books with complete tags in selection order, {isbn: problems}).
 
     strict=True raises MissingTagsError instead of returning problems.
     """
     overrides = overrides or {}
+    world_retag = world_retag or {}
     books: list[Book] = []
     problems: dict[str, list[str]] = {}
     for row in selected:
         isbn, entry, slot = row["isbn"], row["entry"], row["slot"]
-        tag = apply_override(ai_tags.get(isbn) or {}, overrides.get(isbn), entry)
+        retagged = apply_world_retag(ai_tags.get(isbn) or {}, world_retag.get(isbn), entry)
+        tag = apply_override(retagged, overrides.get(isbn), entry)
         reasons = tag_problems(entry, tag)
         if entry == "target" and slot not in FIELD_OF_SLOT:
             reasons.append(f"알 수 없는 슬롯({slot})")
@@ -262,6 +277,11 @@ def load_ai_tags() -> dict[str, dict]:
     return tags
 
 
+def load_world_retag() -> dict[str, dict]:
+    """{isbn: {world, was, evidence}} from the world-axis re-judgement (optional file)."""
+    return json.loads(RETAG.read_text(encoding="utf-8")) if RETAG.exists() else {}
+
+
 def load_low_confidence() -> dict[str, str]:
     """{isbn: reason} the taggers reported as hard / low-confidence (optional file)."""
     return json.loads(LOW_CONF.read_text(encoding="utf-8")) if LOW_CONF.exists() else {}
@@ -309,7 +329,8 @@ def main() -> int:
     overrides = unwrap_review(json.loads(REVIEW.read_text(encoding="utf-8"))) if reviewed else {}
     try:
         books, problems = merge_books(selected, load_keywords(), load_ai_tags(), overrides,
-                                      strict=not args.allow_partial)
+                                      strict=not args.allow_partial,
+                                      world_retag=load_world_retag())
     except MissingTagsError as err:
         print(f"ERROR: {err}", file=sys.stderr)
         for isbn, reasons in err.problems.items():
