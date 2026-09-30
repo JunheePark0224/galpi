@@ -48,7 +48,7 @@ export default function PrivacyPage() {
             <td>사람들이 찾는 주제를 알고 책을 늘리기 위해 — <strong>이름·연락처는 적지 마세요</strong></td>
           </tr>
           <tr>
-            <td>Amplitude가 자동으로 모으는 것: 페이지 이동, 누른 버튼·링크, 기기·브라우저 종류, 언어, IP 주소와 그걸로 짐작한 대략적인 지역</td>
+            <td>Amplitude가 자동으로 모으는 것: 페이지 주소(광고 태그 포함)와 페이지 이동, 누른 버튼·링크, 입력값을 뺀 입력 양식 사용 기록, 페이지 속도 측정, 같은 곳을 되풀이해 누르는 행동, 실패한 네트워크 요청 기록, 기기·브라우저 종류, 언어, IP 주소와 그걸로 짐작한 대략적인 지역</td>
             <td>어디서 그만두는지 살펴보기 위해</td>
           </tr>
           <tr>
@@ -72,7 +72,7 @@ export default function PrivacyPage() {
       <section className={styles.section}>
         <h2 className={styles.h2}>기록을 전달하는 곳</h2>
         <p>
-          위 기록은 분석 서비스 Amplitude(서버는 미국에 있어요)에도 보내요. Amplitude는 브라우저에 쿠키를 남겨요.
+          위 기록은 분석 서비스 Amplitude(서버는 미국에 있어요)에도 보내요. Amplitude는 브라우저의 쿠키와 저장 공간에 식별 값을 남겨요.
           이 밖의 곳에는 주지 않아요. 새로 전달하는 곳이 생기면 이 페이지에 먼저 적어요.
         </p>
       </section>

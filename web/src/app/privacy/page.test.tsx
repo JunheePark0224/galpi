@@ -28,7 +28,7 @@ describe("/privacy (S-10)", () => {
 
   it("lists what Amplitude collects on its own and the sampled screen recording with masked inputs", () => {
     render(<PrivacyPage />);
-    expect(screen.getByText("Amplitude가 자동으로 모으는 것: 페이지 이동, 누른 버튼·링크, 기기·브라우저 종류, 언어, IP 주소와 그걸로 짐작한 대략적인 지역")).toBeInTheDocument();
+    expect(screen.getByText("Amplitude가 자동으로 모으는 것: 페이지 주소(광고 태그 포함)와 페이지 이동, 누른 버튼·링크, 입력값을 뺀 입력 양식 사용 기록, 페이지 속도 측정, 같은 곳을 되풀이해 누르는 행동, 실패한 네트워크 요청 기록, 기기·브라우저 종류, 언어, IP 주소와 그걸로 짐작한 대략적인 지역")).toBeInTheDocument();
     expect(screen.getByText("화면 움직임 녹화 — 방문자 5명 중 1명꼴이고, 입력칸에 쓴 글은 가려서 저장돼요")).toBeInTheDocument();
     expect(screen.getByText("어디서 막히는지 다시 보기 위해")).toBeInTheDocument();
   });
@@ -46,7 +46,7 @@ describe("/privacy (S-10)", () => {
     expect(screen.queryByRole("heading", { name: "다른 곳에 주지 않아요." })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2, name: "기록을 전달하는 곳" })).toBeInTheDocument();
     expect(screen.getByText(/분석 서비스 Amplitude\(서버는 미국에 있어요\)에도 보내요/)).toBeInTheDocument();
-    expect(screen.getByText(/Amplitude는 브라우저에 쿠키를 남겨요/)).toBeInTheDocument();
+    expect(screen.getByText(/Amplitude는 브라우저의 쿠키와 저장 공간에 식별 값을 남겨요/)).toBeInTheDocument();
     expect(screen.getByText(/새로 전달하는 곳이 생기면 이 페이지에 먼저 적어요/)).toBeInTheDocument();
   });
 

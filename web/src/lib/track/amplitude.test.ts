@@ -1,9 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CommonProps } from "./schema";
 
-const initAll = vi.fn();
-const amplitudeTrack = vi.fn();
-vi.mock("@amplitude/unified", () => ({ initAll: (...a: unknown[]) => initAll(...a), track: (...a: unknown[]) => amplitudeTrack(...a) }));
+const { sdk, fakeSdk } = vi.hoisted(() => {
+  const state = { loaded: 0, initAll: vi.fn(), track: vi.fn() };
+  const factory = () => {
+    state.loaded += 1;
+    return { initAll: (...a: unknown[]) => state.initAll(...a), track: (...a: unknown[]) => state.track(...a) };
+  };
+  return { sdk: state, fakeSdk: factory };
+});
+vi.mock("@amplitude/unified", fakeSdk);
 
 const KEY_NAME = "NEXT_PUBLIC_AMPLITUDE_API_KEY";
 const FAKE_KEY = "test-key-not-real";
@@ -13,152 +19,240 @@ const common: CommonProps = {
   screen_version: "v1", referrer: "https://x.example/", returning: true, device: "phone", in_app_browser: false,
 };
 
-async function load() {
-  return import("./amplitude");
-}
+const load = () => import("./amplitude");
+/** requestIdleCallback that runs at once, so a test decides when "idle" happens by calling startAmplitude. */
+const idleNow = () => vi.stubGlobal("requestIdleCallback", (cb: () => void) => { cb(); return 1; });
+const ready = () => vi.waitFor(() => expect(sdk.initAll).toHaveBeenCalled());
+const pause = () => new Promise((r) => setTimeout(r, 20));
 
-describe("amplitude init", () => {
-  beforeEach(() => {
-    vi.resetModules();
-    initAll.mockReset().mockResolvedValue(undefined);
-    amplitudeTrack.mockReset();
-    localStorage.clear();
-    sessionStorage.clear();
-  });
-  afterEach(() => {
-    vi.unstubAllEnvs();
-    vi.restoreAllMocks();
-  });
+beforeEach(() => {
+  vi.resetModules();
+  sdk.loaded = 0;
+  sdk.initAll.mockReset().mockResolvedValue(undefined);
+  sdk.track.mockReset();
+  localStorage.clear();
+  sessionStorage.clear();
+});
+afterEach(() => {
+  vi.unstubAllEnvs();
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+  vi.useRealTimers();
+});
 
-  it("does not call initAll without a key and warns exactly once", async () => {
+describe("without a key", () => {
+  it("never loads the SDK, warns exactly once and sends nothing", async () => {
     vi.stubEnv(KEY_NAME, "");
+    idleNow();
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const { startAmplitude } = await load();
+    const { startAmplitude, sendToAmplitude } = await load();
     startAmplitude();
     startAmplitude();
-    expect(initAll).not.toHaveBeenCalled();
+    sendToAmplitude("visit", {}, common);
+    await pause();
+    expect(sdk.loaded).toBe(0);
+    expect(sdk.initAll).not.toHaveBeenCalled();
+    expect(sdk.track).not.toHaveBeenCalled();
     expect(warn).toHaveBeenCalledTimes(1);
     expect(warn).toHaveBeenCalledWith("Amplitude API key missing — analytics disabled");
   });
 
   it("treats a blank key like a missing one", async () => {
     vi.stubEnv(KEY_NAME, "   ");
+    idleNow();
     vi.spyOn(console, "warn").mockImplementation(() => {});
     const { startAmplitude } = await load();
     startAmplitude();
-    expect(initAll).not.toHaveBeenCalled();
+    await pause();
+    expect(sdk.loaded).toBe(0);
+  });
+});
+
+describe("with a key", () => {
+  beforeEach(() => vi.stubEnv(KEY_NAME, FAKE_KEY));
+
+  it("does not touch the SDK until the browser is idle (first paint first)", async () => {
+    const idle = vi.fn();
+    vi.stubGlobal("requestIdleCallback", idle);
+    const { startAmplitude } = await load();
+    startAmplitude();
+    await pause();
+    expect(idle).toHaveBeenCalledTimes(1);
+    expect(idle.mock.calls[0][1]).toEqual({ timeout: 2000 });
+    expect(sdk.loaded).toBe(0);
+    idle.mock.calls[0][0]();
+    await ready();
+    expect(sdk.loaded).toBe(1);
   });
 
-  it("calls initAll exactly once with autocapture, 20% replay and the Galpi anonymous id as deviceId", async () => {
-    vi.stubEnv(KEY_NAME, FAKE_KEY);
+  it("falls back to a timer where requestIdleCallback does not exist", async () => {
+    vi.useFakeTimers();
+    vi.stubGlobal("requestIdleCallback", undefined);
+    const { startAmplitude } = await load();
+    startAmplitude();
+    await vi.advanceTimersByTimeAsync(500);
+    expect(sdk.loaded).toBe(0);
+    await vi.advanceTimersByTimeAsync(1500);
+    vi.useRealTimers();
+    await ready();
+    expect(sdk.initAll).toHaveBeenCalledTimes(1);
+  });
+
+  it("calls initAll exactly once: autocapture, 20% replay, engagement skipped, deviceId = anonymous id", async () => {
+    idleNow();
     const { startAmplitude } = await load();
     startAmplitude();
     startAmplitude();
-    expect(initAll).toHaveBeenCalledTimes(1);
-    const [key, options] = initAll.mock.calls[0];
+    await ready();
+    startAmplitude();
+    expect(sdk.initAll).toHaveBeenCalledTimes(1);
+    const [key, options] = sdk.initAll.mock.calls[0];
     expect(key).toBe(FAKE_KEY);
     const stored = localStorage.getItem("galpi.anon");
     expect(stored).toMatch(/^[0-9a-f-]{36}$/);
     expect(options).toEqual({
       analytics: { autocapture: true, deviceId: stored },
       sessionReplay: { sampleRate: 0.2, privacyConfig: { defaultMaskLevel: "medium" } },
+      engagement: { skip: true },
     });
   });
 
   it("reuses an anonymous id that is already stored", async () => {
-    vi.stubEnv(KEY_NAME, FAKE_KEY);
+    idleNow();
     localStorage.setItem("galpi.anon", "22222222-2222-4222-8222-222222222222");
     const { startAmplitude } = await load();
     startAmplitude();
-    expect(initAll.mock.calls[0][1].analytics.deviceId).toBe("22222222-2222-4222-8222-222222222222");
+    await ready();
+    expect(sdk.initAll.mock.calls[0][1].analytics.deviceId).toBe("22222222-2222-4222-8222-222222222222");
   });
 
-  it("never throws when initAll throws or rejects, and stops sending afterwards", async () => {
-    vi.stubEnv(KEY_NAME, FAKE_KEY);
-    initAll.mockImplementation(() => { throw new Error("boom"); });
+  it("holds events sent before the SDK is loaded and flushes them in order once initAll has been called", async () => {
+    const idle = vi.fn();
+    vi.stubGlobal("requestIdleCallback", idle);
+    const { startAmplitude, sendToAmplitude } = await load();
+    startAmplitude();
+    sendToAmplitude("visit", {}, common);
+    sendToAmplitude("entry_selected", { entry: "target" }, common);
+    expect(sdk.track).not.toHaveBeenCalled();
+    idle.mock.calls[0][0]();
+    await vi.waitFor(() => expect(sdk.track).toHaveBeenCalledTimes(2));
+    expect(sdk.track.mock.calls.map((c) => c[0])).toEqual(["visit", "entry_selected"]);
+    expect(sdk.track.mock.calls[0][1].prompt_version).toBe("BA400.4");
+    // later events go straight through
+    sendToAmplitude("book_opened", {}, common);
+    expect(sdk.track).toHaveBeenCalledTimes(3);
+  });
+
+  it("keeps at most 50 waiting events", async () => {
+    const idle = vi.fn();
+    vi.stubGlobal("requestIdleCallback", idle);
+    const { startAmplitude, sendToAmplitude } = await load();
+    startAmplitude();
+    for (let i = 0; i < 80; i++) sendToAmplitude("chip_selected", { i }, common);
+    idle.mock.calls[0][0]();
+    await vi.waitFor(() => expect(sdk.track).toHaveBeenCalled());
+    expect(sdk.track).toHaveBeenCalledTimes(50);
+    expect(sdk.track.mock.calls[0][1].i).toBe(0);
+  });
+
+  it("never throws when initAll throws, stops sending and does not retry", async () => {
+    idleNow();
+    sdk.initAll.mockImplementation(() => { throw new Error("boom"); });
     const { startAmplitude, sendToAmplitude } = await load();
     expect(() => startAmplitude()).not.toThrow();
+    await ready();
+    await pause();
     sendToAmplitude("visit", {}, common);
-    expect(amplitudeTrack).not.toHaveBeenCalled();
+    startAmplitude();
+    await pause();
+    expect(sdk.track).not.toHaveBeenCalled();
+    expect(sdk.initAll).toHaveBeenCalledTimes(1);
   });
 
-  it("swallows a rejected init promise", async () => {
-    vi.stubEnv(KEY_NAME, FAKE_KEY);
-    initAll.mockRejectedValue(new Error("network"));
-    const { startAmplitude } = await load();
+  it("does not initialise twice after a rejected init (a later route change calls start again)", async () => {
+    idleNow();
+    sdk.initAll.mockRejectedValue(new Error("plugin step failed"));
+    const { startAmplitude, sendToAmplitude } = await load();
+    startAmplitude();
+    await ready();
+    await pause();
+    startAmplitude();
+    await pause();
+    expect(sdk.initAll).toHaveBeenCalledTimes(1);
+    sendToAmplitude("visit", {}, common);
+    expect(sdk.track).not.toHaveBeenCalled();
+  });
+
+  it("never throws when the SDK chunk fails to load", async () => {
+    idleNow();
+    vi.doMock("@amplitude/unified", () => { throw new Error("chunk load failed"); });
+    const { startAmplitude, sendToAmplitude } = await load();
     expect(() => startAmplitude()).not.toThrow();
-    await Promise.resolve();
-    await Promise.resolve();
+    await pause();
+    expect(() => sendToAmplitude("visit", {}, common)).not.toThrow();
+    vi.doMock("@amplitude/unified", fakeSdk);
   });
 });
 
 describe("sendToAmplitude", () => {
   beforeEach(() => {
-    vi.resetModules();
-    initAll.mockReset().mockResolvedValue(undefined);
-    amplitudeTrack.mockReset();
-    localStorage.clear();
     vi.stubEnv(KEY_NAME, FAKE_KEY);
-  });
-  afterEach(() => {
-    vi.unstubAllEnvs();
-    vi.restoreAllMocks();
+    idleNow();
   });
 
-  it("sends nothing while Amplitude is off", async () => {
-    vi.stubEnv(KEY_NAME, "");
-    vi.spyOn(console, "warn").mockImplementation(() => {});
-    const { startAmplitude, sendToAmplitude } = await load();
-    startAmplitude();
+  async function started() {
+    const m = await load();
+    m.startAmplitude();
+    await ready();
+    return m.sendToAmplitude;
+  }
+
+  it("drops events while Amplitude has not been started (for example on /privacy)", async () => {
+    const { sendToAmplitude } = await load();
     sendToAmplitude("entry_selected", { entry: "leaf" }, common);
-    expect(amplitudeTrack).not.toHaveBeenCalled();
+    await pause();
+    expect(sdk.track).not.toHaveBeenCalled();
   });
 
   it("sends the same event name and props plus the analysis-relevant common props", async () => {
-    const { startAmplitude, sendToAmplitude } = await load();
-    startAmplitude();
-    sendToAmplitude("chip_selected", { question: "topic", value: "history", edit: false }, common);
-    expect(amplitudeTrack).toHaveBeenCalledTimes(1);
-    expect(amplitudeTrack).toHaveBeenCalledWith("chip_selected", {
+    const send = await started();
+    send("chip_selected", { question: "topic", value: "history", edit: false }, common);
+    expect(sdk.track).toHaveBeenCalledTimes(1);
+    expect(sdk.track).toHaveBeenCalledWith("chip_selected", {
       entry: "leaf", round: 2, screen_version: "v1", device: "phone", in_app_browser: false, returning: true,
       question: "topic", value: "history", edit: false,
     });
   });
 
   it("keeps the event's own props when a name collides with a common prop", async () => {
-    const { startAmplitude, sendToAmplitude } = await load();
-    startAmplitude();
-    sendToAmplitude("entry_selected", { entry: "target" }, { ...common, entry: null });
-    expect(amplitudeTrack.mock.calls[0][1].entry).toBe("target");
+    const send = await started();
+    send("entry_selected", { entry: "target" }, { ...common, entry: null });
+    expect(sdk.track.mock.calls[0][1].entry).toBe("target");
   });
 
   it("leaves out entry when the visitor has not chosen one yet", async () => {
-    const { startAmplitude, sendToAmplitude } = await load();
-    startAmplitude();
-    sendToAmplitude("visit", {}, { ...common, entry: null });
-    expect(amplitudeTrack.mock.calls[0][1]).not.toHaveProperty("entry");
+    const send = await started();
+    send("visit", {}, { ...common, entry: null });
+    expect(sdk.track.mock.calls[0][1]).not.toHaveProperty("entry");
   });
 
   it("adds prompt_version only to visit", async () => {
-    const { startAmplitude, sendToAmplitude } = await load();
-    startAmplitude();
-    sendToAmplitude("visit", {}, common);
-    sendToAmplitude("book_opened", {}, common);
-    expect(amplitudeTrack.mock.calls[0][1].prompt_version).toBe("BA400.4");
-    expect(amplitudeTrack.mock.calls[1][1]).not.toHaveProperty("prompt_version");
+    const send = await started();
+    send("visit", {}, common);
+    send("book_opened", {}, common);
+    expect(sdk.track.mock.calls[0][1].prompt_version).toBe("BA400.4");
+    expect(sdk.track.mock.calls[1][1]).not.toHaveProperty("prompt_version");
   });
 
   it("sends props alone when common props are unavailable", async () => {
-    const { startAmplitude, sendToAmplitude } = await load();
-    startAmplitude();
-    sendToAmplitude("book_opened", { a: 1 }, null);
-    expect(amplitudeTrack).toHaveBeenCalledWith("book_opened", { a: 1 });
+    const send = await started();
+    send("book_opened", { a: 1 }, null);
+    expect(sdk.track).toHaveBeenCalledWith("book_opened", { a: 1 });
   });
 
   it("never throws when Amplitude's track throws", async () => {
-    const { startAmplitude, sendToAmplitude } = await load();
-    startAmplitude();
-    amplitudeTrack.mockImplementation(() => { throw new Error("sdk broke"); });
-    expect(() => sendToAmplitude("visit", {}, common)).not.toThrow();
+    const send = await started();
+    sdk.track.mockImplementation(() => { throw new Error("sdk broke"); });
+    expect(() => send("visit", {}, common)).not.toThrow();
   });
 });
