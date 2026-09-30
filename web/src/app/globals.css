@@ -1,5 +1,6 @@
 @import "../styles/tokens.css";
 
+:root { color-scheme: only light; }  /* no dark mode — keep forced-dark browsers from inverting colours */
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body {
