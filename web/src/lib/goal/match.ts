@@ -1,0 +1,60 @@
+import { TOPIC_CHIPS, TOPICS, type Topic } from "@/lib/books/taxonomy";
+import type { Vocab } from "@/lib/books/types";
+
+/** target-chips.md 1절: 직접 쓰기 is 30 characters. */
+export const GOAL_MAX = 30;
+
+export interface GoalMatch {
+  text: string;          // what the person wrote, trimmed, at most 30 characters (E-21)
+  topic: Topic;
+  keywords: string[];    // only names from our closed keyword list
+  matched: boolean;      // false: nothing in our list matched — topic is only the nearest guess
+  method: "word";        // P4 adds "llm"
+}
+
+const squash = (s: string) => s.toLowerCase().replace(/\s+/g, "");
+
+function bigrams(s: string): Set<string> {
+  const out = new Set<string>();
+  for (let i = 0; i < s.length - 1; i++) out.add(s.slice(i, i + 2));
+  return out;
+}
+
+/** Topic name, chip label, folded / too-common words and keyword names, cut at "·" and spaces (2+ letters). */
+function topicWords(topic: Topic, vocab: Vocab): string[] {
+  const label = TOPIC_CHIPS.find((c) => c.topic === topic)?.label ?? topic;
+  const words = [topic, label, ...(vocab[topic]?.terms ?? []), ...Object.keys(vocab[topic]?.keywords ?? {})];
+  return [...new Set(words.flatMap((w) => w.split(/[·\s]+/)).map(squash).filter((w) => w.length >= 2))];
+}
+
+/** Highest score wins; chip order breaks ties; all zero keeps the first chip. */
+function rank(score: (topic: Topic) => number): { topic: Topic; score: number } {
+  return TOPICS.reduce<{ topic: Topic; score: number }>((best, topic) => {
+    const s = score(topic);
+    return s > best.score ? { topic, score: s } : best;
+  }, { topic: TOPICS[0], score: 0 });
+}
+
+/** P3 word matching for 직접 쓰기 — only inside our topics and keywords (P4 puts the LLM in front of this). */
+export function matchGoal(input: string, vocab: Vocab): GoalMatch {
+  const text = input.trim().slice(0, GOAL_MAX);
+  const flat = squash(text);
+  const base = { text, keywords: [] as string[], method: "word" as const };
+  if (!flat) return { ...base, topic: TOPICS[0], matched: false };
+
+  let top: { topic: Topic; keywords: string[] } | null = null;
+  for (const topic of TOPICS) {
+    const hits = Object.entries(vocab[topic]?.keywords ?? {})
+      .filter(([, pattern]) => new RegExp(pattern, "i").test(text))
+      .map(([name]) => name);
+    if (hits.length > (top?.keywords.length ?? 0)) top = { topic, keywords: hits };
+  }
+  if (top) return { ...base, ...top, matched: true };
+
+  const byWords = rank((topic) => topicWords(topic, vocab).filter((w) => flat.includes(w)).length);
+  if (byWords.score > 0) return { ...base, topic: byWords.topic, matched: true };
+
+  const grams = bigrams(flat);
+  const nearest = rank((topic) => topicWords(topic, vocab).reduce((n, w) => n + [...bigrams(w)].filter((g) => grams.has(g)).length, 0));
+  return { ...base, topic: nearest.topic, matched: false };
+}
