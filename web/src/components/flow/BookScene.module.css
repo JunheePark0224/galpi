@@ -1,0 +1,12 @@
+/* The bookmark sticks out above the book by ~25% of its height (DESIGN 4절): 80px card + 26px string = 106px. */
+.scene { display: flex; flex-direction: column; gap: var(--space-4); padding-top: 112px; }
+.stage { position: relative; }
+.slot {
+  position: absolute; top: -106px; left: 50%; z-index: 3; width: 50%;
+  display: flex; justify-content: center; pointer-events: none;
+}
+.hint { margin: 0; text-align: center; font-size: 13px; color: var(--ink-muted); }
+.actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--space-3); }
+.actions > button { flex: 1 1 0; min-width: 120px; }
+.count { flex-basis: 100%; margin: 0; text-align: center; font-size: 12px; color: var(--ink-muted); }
+.error { flex-basis: 100%; margin: 0; text-align: center; font-size: 13px; }

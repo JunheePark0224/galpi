@@ -1,0 +1,9 @@
+.end { display: flex; flex-direction: column; gap: var(--space-5); padding-top: var(--space-6); }
+.title { margin: 0; font-size: 20px; }
+.list { display: flex; flex-direction: column; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
+.item {
+  display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-1);
+  padding: var(--space-4); border: 1px solid var(--paper-line); border-radius: var(--radius-card); background: var(--paper);
+}
+.bookTitle { font-family: var(--font-batang), serif; font-size: 15px; }
+.line { font-size: 13px; color: var(--ink-soft); }

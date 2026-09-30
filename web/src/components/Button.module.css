@@ -12,3 +12,6 @@
 .btn:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
 .primary { background: var(--ink); color: var(--paper); }
 .secondary { background: var(--paper); color: var(--ink); }
+
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn:disabled:active { transform: none; }
