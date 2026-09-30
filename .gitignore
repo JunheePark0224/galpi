@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+!web/.env.development
 web/.env.local
 # third-party text we may not redistribute (YES24 terms)
 data/raw/yes24/

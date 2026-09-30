@@ -211,3 +211,36 @@ describe("commonProps returning is fixed per session", () => {
     expect(fresh().returning).toBe(false);
   });
 });
+
+describe("entry and round survive a reload in the same tab session", () => {
+  beforeEach(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+    vi.resetModules();
+  });
+
+  it("reads entry and round back after the module is loaded again", async () => {
+    const before = await import("./common");
+    before.setEntry("target");
+    before.nextRound();
+    vi.resetModules();
+    const after = await import("./common");
+    const p = after.commonProps();
+    expect(p.entry).toBe("target");
+    expect(p.round).toBe(2);
+  });
+
+  it("clears entry back to null", async () => {
+    const m = await import("./common");
+    m.setEntry("leaf");
+    m.setEntry(null);
+    expect(m.commonProps().entry).toBeNull();
+  });
+
+  it("starts at round 1 with no entry in a new session", async () => {
+    const m = await import("./common");
+    const p = m.commonProps();
+    expect(p.round).toBe(1);
+    expect(p.entry).toBeNull();
+  });
+});

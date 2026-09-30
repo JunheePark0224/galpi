@@ -27,3 +27,15 @@ test("footer credits YES24", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("예스24와 무관한 개인 프로젝트")).toBeVisible();
 });
+
+test("frost and book tokens exist for bookmarks", async ({ page }) => {
+  await page.goto("/design");
+  const values = await page.evaluate(() => {
+    const s = getComputedStyle(document.documentElement);
+    return ["--frost-blur", "--frost-edge", "--radius-book", "--radius-bookmark"].map((k) => s.getPropertyValue(k).trim());
+  });
+  const [blur, edge, book, bookmark] = values;
+  expect([blur, book, bookmark]).toEqual(["blur(3px) saturate(1.1)", "2px 10px 10px 2px", "10px 10px 0 0"]);
+  // the production build minifies rgba(255, 255, 255, 0.8) to #fffc
+  expect(edge).toMatch(/^1px solid (rgba\(255, 255, 255, 0\.8\)|#fffc)$/);
+});

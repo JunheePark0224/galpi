@@ -3,12 +3,15 @@
   --cloth: #7A4A2E; --cloth-edge: #5A3420;
   --ink: #2B2724; --ink-soft: #4A433D; --ink-muted: #7A6048; --blush: #E8998A;
   --frost-bg: rgba(250, 250, 247, 0.6); --frost-fallback: #F4F1EA;
+  --frost-blur: blur(3px) saturate(1.1); --frost-edge: 1px solid rgba(255, 255, 255, 0.8);
+  --shadow-ink: rgba(43, 39, 36, 0.25);
   --genre-korean-fiction: #A94C60; --genre-world-fiction: #7E5595; --genre-sf-fantasy: #44548F;
   --genre-mystery: #3E474C; --genre-essay: #4A7456; --genre-poetry: #A0593F; --genre-humanities: #7D6337;
   --genre-science: #2B7178; --genre-art-travel: #B8912F;
   --field-data: #3A6684; --field-ai: #5E55A0; --field-habit: #9E6232;
   --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px;
-  --radius-card: 12px; --radius-pill: 9999px; --touch: 44px; --column: 430px;
+  --radius-card: 12px; --radius-pill: 9999px; --radius-book: 2px 10px 10px 2px; --radius-bookmark: 10px 10px 0 0;
+  --touch: 44px; --column: 430px;
   --dur-open-cover: 1000ms; --dur-flip-page: 550ms; --dur-bookmark-rise: 600ms;
   --dur-bookmark-away: 450ms; --dur-bookmark-down: 400ms; --dur-hold: 800ms; --dur-card-flip: 500ms;
   --ease-open: cubic-bezier(.6, .05, .25, 1); --ease-flip: cubic-bezier(.5, 0, .3, 1);

@@ -4,9 +4,10 @@ const ANON = "galpi.anon";
 const SEEN = "galpi.seen";
 const SESSION = "galpi.session";
 const RETURNING = "galpi.returning";
+// entry and round live in sessionStorage: a reload in the same tab keeps them (the flow screen resumes too).
+const ENTRY = "galpi.entry";
+const ROUND = "galpi.round";
 
-let entry: CommonProps["entry"] = null;
-let round = 1;
 let userId: string | null = null;
 
 // In-memory storage for stable IDs when storage is unavailable
@@ -59,14 +60,33 @@ function getOrCreate(s: Storage | null, key: string): { value: string; created: 
   return { value, created: true };
 }
 
+function readSession(key: string): string | undefined {
+  return read(store("session"), key) ?? memory[key];
+}
+
+function writeSession(key: string, value: string): void {
+  memory[key] = value;
+  write(store("session"), key, value);
+}
+
+function currentEntry(): CommonProps["entry"] {
+  const value = readSession(ENTRY);
+  return value === "leaf" || value === "target" ? value : null;
+}
+
+function currentRound(): number {
+  const n = Number(readSession(ROUND));
+  return Number.isInteger(n) && n >= 1 ? n : 1;
+}
+
 export function detectDevice(ua: string): { device: "phone" | "desktop"; in_app_browser: boolean } {
   const phone = /Mobi|Android|iPhone|iPod/i.test(ua);
   const inApp = /KAKAOTALK|Instagram|FBAN|FBAV|NAVER\(inapp|Line\//i.test(ua);
   return { device: phone ? "phone" : "desktop", in_app_browser: inApp };
 }
 
-export function setEntry(next: CommonProps["entry"]): void { entry = next; }
-export function nextRound(): void { round += 1; }
+export function setEntry(next: CommonProps["entry"]): void { writeSession(ENTRY, next ?? ""); }
+export function nextRound(): void { writeSession(ROUND, String(currentRound() + 1)); }
 export function setUserId(id: string | null): void { userId = id; }
 
 export function commonProps(): CommonProps {
@@ -92,8 +112,8 @@ export function commonProps(): CommonProps {
     anon_id: anon.value,
     user_id: userId,
     session_id: sessionId.value,
-    round,
-    entry,
+    round: currentRound(),
+    entry: currentEntry(),
     screen_version: SCREEN_VERSION,
     referrer: typeof document === "undefined" ? "" : document.referrer,
     returning,
