@@ -3,17 +3,17 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CONTACT_PENDING } from "@/lib/privacy";
 import PrivacyPage from "./page";
 
-describe("/privacy (S-10 v0)", () => {
+describe("/privacy (S-10)", () => {
   beforeEach(() => localStorage.clear());
   afterEach(() => vi.unstubAllEnvs());
 
-  it("shows the title, the date and the four collected items", () => {
+  it("shows the title, the date and the six collected items", () => {
     render(<PrivacyPage />);
     expect(screen.getByRole("heading", { level: 1, name: "개인정보 처리방침" })).toBeInTheDocument();
     expect(screen.getByText(/2026-09-30/)).toBeInTheDocument();
     expect(screen.getByText("갈피는 이름·이메일·전화번호를 받지 않아요.")).toBeInTheDocument();
     const rows = within(screen.getByRole("table")).getAllByRole("row");
-    expect(rows).toHaveLength(5); // header + 4
+    expect(rows).toHaveLength(7); // header + 6
     expect(screen.getByRole("columnheader", { name: "모으는 것" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "왜" })).toBeInTheDocument();
     expect(screen.getByText("누른 버튼과 누른 시각, 고른 입구(🎯/🍃), 본 책갈피, 궁금해요/패스, 밸런스 게임 답과 답하는 데 걸린 시간, 고친 답, 몇 번째 뽑기인지")).toBeInTheDocument();
@@ -26,13 +26,33 @@ describe("/privacy (S-10 v0)", () => {
     expect(screen.getByText("이름·연락처는 적지 마세요")).toBeInTheDocument();
   });
 
-  it("states the one-year retention, the hosts and the no-sharing promise", () => {
+  it("lists what Amplitude collects on its own and the sampled screen recording with masked inputs", () => {
+    render(<PrivacyPage />);
+    expect(screen.getByText("Amplitude가 자동으로 모으는 것: 페이지 이동, 누른 버튼·링크, 기기·브라우저 종류, 언어, IP 주소와 그걸로 짐작한 대략적인 지역")).toBeInTheDocument();
+    expect(screen.getByText("화면 움직임 녹화 — 방문자 5명 중 1명꼴이고, 입력칸에 쓴 글은 가려서 저장돼요")).toBeInTheDocument();
+    expect(screen.getByText("어디서 막히는지 다시 보기 위해")).toBeInTheDocument();
+  });
+
+  it("scopes the one-year deletion to Supabase and names the hosts", () => {
     render(<PrivacyPage />);
     expect(screen.getByText("수집일로부터 1년이 지나면 자동으로 지워져요.")).toBeInTheDocument();
-    expect(screen.getByText(/Supabase\(데이터베이스 서비스\)에 저장되고/)).toBeInTheDocument();
+    expect(screen.getByText(/Supabase\(데이터베이스 서비스\)에 저장된 기록은/)).toBeInTheDocument();
     expect(screen.getByText(/사이트는 Vercel에서 운영돼요. 두 서비스의 서버는 해외에 있을 수 있어요./)).toBeInTheDocument();
-    expect(screen.getByText("다른 곳에 주지 않아요.")).toBeInTheDocument();
+    expect(screen.getByText(/Amplitude에 전달된 기록은 Amplitude가 따로 보관해요/)).toBeInTheDocument();
+  });
+
+  it("discloses Amplitude instead of promising to share with nobody", () => {
+    render(<PrivacyPage />);
+    expect(screen.queryByRole("heading", { name: "다른 곳에 주지 않아요." })).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "기록을 전달하는 곳" })).toBeInTheDocument();
+    expect(screen.getByText(/분석 서비스 Amplitude\(서버는 미국에 있어요\)에도 보내요/)).toBeInTheDocument();
+    expect(screen.getByText(/Amplitude는 브라우저에 쿠키를 남겨요/)).toBeInTheDocument();
     expect(screen.getByText(/새로 전달하는 곳이 생기면 이 페이지에 먼저 적어요/)).toBeInTheDocument();
+  });
+
+  it("says Amplitude records are deleted together with the rest on request", () => {
+    render(<PrivacyPage />);
+    expect(screen.getByText(/그 번호의 기록을 모두 지워요. Amplitude에 전달된 기록도 함께 지워요/)).toBeInTheDocument();
   });
 
   it("shows the fallback line when no contact email is set", () => {

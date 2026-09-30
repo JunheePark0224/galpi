@@ -27,6 +27,7 @@ Last Updated: 2026-09-30
 | `SUPABASE_URL` | 설정 | 설정 안 함 | Supabase 프로젝트 URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | 설정 (**Sensitive/secret**) | 설정 안 함 | 서버에서만 쓰는 키. `NEXT_PUBLIC_` 접두사를 붙이지 않는다 |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | 설정 | 설정 | `/privacy`에 표시되는 문의 이메일. 빌드 때 박히므로 바꾸면 다시 배포 |
+| `NEXT_PUBLIC_AMPLITUDE_API_KEY` | 설정 | **설정 안 함** | Amplitude 공개 수집용 키(브라우저에 들어가는 키라 `NEXT_PUBLIC_`). 빌드 때 박히므로 바꾸면 다시 배포. 없으면 Amplitude가 꺼지고 콘솔에 경고 한 줄만 남는다 |
 | `TRACK_STORE` | 설정 안 함 | **`off`** | Preview 배포가 실제 `events`에 쓰지 않게 한다 |
 | `BOOKS_SOURCE` | **어디에도 두지 않는다** | 두지 않는다 | `sample`은 테스트용 30권 — 두면 실제 책이 안 나온다 |
 
@@ -56,6 +57,9 @@ Last Updated: 2026-09-30
 - [ ] `/design`이 **404**다
 - [ ] `/robots.txt`에 `Disallow: /design`, `Disallow: /api/`가 있다
 - [ ] `/privacy`에 문의 이메일이 보인다 (없다는 문구가 아니라)
+- [ ] Production에서 첫 화면을 열면 Amplitude Live/User Lookup에 `visit`(`prompt_version` = `BA400.4`)이 뜨고, 그 device_id가 Supabase `events.common->>'anon_id'`와 같다
+- [ ] Amplitude 프로젝트의 Session Replay 설정이 샘플링 20%·입력 가림이다 (대시보드 값이 코드의 값보다 우선한다)
+- [ ] Preview 배포에서는 Amplitude로 나가는 요청이 없다 (키를 Preview에 넣지 않았으니)
 - [ ] 다른 사이트에서 `/api/track`을 부르면 403이다 (선택):
   ```
   curl -i -X POST https://<배포 주소>/api/track -H "Content-Type: application/json" -H "Origin: https://example.com" -d "{}"

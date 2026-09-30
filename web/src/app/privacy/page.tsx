@@ -13,7 +13,7 @@ function Contact() {
   return <a href={`mailto:${email}`}>{email}</a>;
 }
 
-/** S-10 v0 (F-16): only what is collected before login. Login, saves, Anthropic and Amplitude join with those features. */
+/** S-10 (F-16): what is collected before login, including what goes to Amplitude. Login, saves and Anthropic join with those features. */
 export default function PrivacyPage() {
   return (
     <article className={styles.page}>
@@ -47,25 +47,39 @@ export default function PrivacyPage() {
             <td>🎯 {"\"직접 쓰기\""}에 적은 글 (최대 30자) — 그 글에서 찾은 주제·키워드도 함께</td>
             <td>사람들이 찾는 주제를 알고 책을 늘리기 위해 — <strong>이름·연락처는 적지 마세요</strong></td>
           </tr>
+          <tr>
+            <td>Amplitude가 자동으로 모으는 것: 페이지 이동, 누른 버튼·링크, 기기·브라우저 종류, 언어, IP 주소와 그걸로 짐작한 대략적인 지역</td>
+            <td>어디서 그만두는지 살펴보기 위해</td>
+          </tr>
+          <tr>
+            <td>화면 움직임 녹화 — 방문자 5명 중 1명꼴이고, 입력칸에 쓴 글은 가려서 저장돼요</td>
+            <td>어디서 막히는지 다시 보기 위해</td>
+          </tr>
         </tbody>
       </table>
 
       <section className={styles.section}>
         <h2 className={styles.h2}>보관</h2>
         <p>
-          모은 정보는 Supabase(데이터베이스 서비스)에 저장되고, <strong>수집일로부터 1년이 지나면 자동으로 지워져요.</strong>{" "}
+          Supabase(데이터베이스 서비스)에 저장된 기록은 <strong>수집일로부터 1년이 지나면 자동으로 지워져요.</strong>{" "}
           사이트는 Vercel에서 운영돼요. 두 서비스의 서버는 해외에 있을 수 있어요.
+        </p>
+        <p>
+          Amplitude에 전달된 기록은 Amplitude가 따로 보관해요.
         </p>
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.h2}>다른 곳에 주지 않아요.</h2>
-        <p>새로 전달하는 곳이 생기면 이 페이지에 먼저 적어요.</p>
+        <h2 className={styles.h2}>기록을 전달하는 곳</h2>
+        <p>
+          위 기록은 분석 서비스 Amplitude(서버는 미국에 있어요)에도 보내요. Amplitude는 브라우저에 쿠키를 남겨요.
+          이 밖의 곳에는 주지 않아요. 새로 전달하는 곳이 생기면 이 페이지에 먼저 적어요.
+        </p>
       </section>
 
       <section className={styles.section}>
         <h2 className={styles.h2}>지우고 싶다면</h2>
-        <p>아래 익명 번호를 적어 문의 이메일로 보내 주세요. 그 번호의 기록을 모두 지워요.</p>
+        <p>아래 익명 번호를 적어 문의 이메일로 보내 주세요. 그 번호의 기록을 모두 지워요. Amplitude에 전달된 기록도 함께 지워요.</p>
         <AnonIdView />
       </section>
 

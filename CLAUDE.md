@@ -46,7 +46,7 @@ web/             Next.js 앱 (P0부터)
 ## 기술
 
 - 웹: Next.js (TypeScript) + Motion + CSS 3D, Supabase(카카오·구글 로그인, Postgres), Vercel
-- 기록: `track()` 하나 → Supabase `events` 원본 → 서버에서 Amplitude 전달
+- 기록: `track()` 하나 → Supabase `events` 원본 + 같은 이벤트를 브라우저에서 Amplitude로 (키는 Production에만, 익명 번호 = device_id)
 - 직접 쓰기 분류: Claude Haiku, 우리 주제·키워드 목록 안에서만, 3초 넘으면 단어 매칭
 - 추천 로직은 화면과 떨어진 순수 함수 + 테스트 100% (P1). `src/simulate_draws.py`와 같은 분포가 나와야 한다
 - Python 스크립트는 `PYTHONIOENCODING=utf-8`로 실행 (Windows cp949 문제)
