@@ -22,6 +22,14 @@ describe("weightedPick", () => {
     const got = weightedPick(cands, 3, 0, mulberry32(3), 99);
     expect(got.map((c) => c.score)).toEqual([3, 3, 3]);
   });
+  it("samples with weight e^((score - top)/tau) when tau > 0", () => {
+    const cands = [{ book: mk("hi", "A", 1), score: 3 }, { book: mk("lo", "B", 0), score: 0 }];
+    let hi = 0;
+    for (let seed = 1; seed <= 2000; seed++) {
+      if (weightedPick(cands, 1, 1, mulberry32(seed), 99)[0].book.id === "hi") hi++;
+    }
+    expect(Math.abs(hi / 2000 - Math.exp(3) / (Math.exp(3) + 1))).toBeLessThan(0.02);
+  });
   it("respects the per-genre cap", () => {
     const cands = pool.map((b) => ({ book: b, score: byTemp(b)! }));
     const got = weightedPick(cands, 4, 0, mulberry32(3), 2);

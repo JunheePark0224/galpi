@@ -28,4 +28,15 @@ describe("reasonLine", () => {
     expect(reasonLine(targetBook, { topic: "통계", way: null, len: 0, keywords: [] }))
       .toEqual({ label: "나온 이유", items: ["통계"] });
   });
+  it("describes an other-topic target book instead of claiming a reason", () => {
+    expect(reasonLine(targetBook, { topic: "AI 활용", way: "개념", len: 1, keywords: ["확률"] }))
+      .toEqual({ label: "이 책은", items: ["통계", "개념부터 쉽게"] });
+  });
+  it("adds 두껍게 for a target book of 300+ pages when thick was chosen", () => {
+    const thick: TargetBook = { ...targetBook, pages: 320 };
+    expect(reasonLine(thick, { topic: "통계", way: null, len: -1, keywords: [] }))
+      .toEqual({ label: "나온 이유", items: ["통계", "두껍게"] });
+    expect(reasonLine(targetBook, { topic: "통계", way: null, len: -1, keywords: [] }))
+      .toEqual({ label: "나온 이유", items: ["통계"] });
+  });
 });

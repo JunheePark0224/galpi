@@ -15,7 +15,7 @@ export type BalanceChoice = "A" | "B" | "unsure";
 export interface LeafAnswers { temp: number; pull: number; gain: number; world: number; len: Tag }
 export interface TargetAnswers { topic: string; way: Way | null; len: Tag; keywords: string[] }
 
-export interface Pick { book: Book; score: number; kind: "recommended" | "random" }
-export interface DrawResult { picks: Pick[]; widened: boolean; exhausted: boolean }
+export interface DrawPick { book: Book; score: number; kind: "recommended" | "random" }
+export interface DrawResult { picks: DrawPick[]; widened: boolean; exhausted: boolean }
 
 export const AXES: readonly AxisKey[] = ["temp", "pull", "gain", "world"];

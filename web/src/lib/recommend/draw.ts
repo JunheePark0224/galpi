@@ -1,5 +1,5 @@
 import { GOOD_SHARE, RECOMMENDED } from "./params";
-import type { Book, DrawResult, Pick, Rng } from "./types";
+import type { Book, DrawResult, DrawPick, Rng } from "./types";
 
 type Scored = { book: Book; score: number };
 
@@ -79,7 +79,7 @@ export function drawBookmarks(books: Book[], input: DrawInput, opts: DrawOptions
   const mean = recommended.reduce((s, c) => s + c.score, 0) / Math.max(recommended.length, 1);
   const exhausted = recommended.length < RECOMMENDED || (input.maxPossible > 0 && mean < GOOD_SHARE * input.maxPossible);
 
-  const picks: Pick[] = recommended.map((c) => ({ book: c.book, score: c.score, kind: "recommended" }));
+  const picks: DrawPick[] = recommended.map((c) => ({ book: c.book, score: c.score, kind: "recommended" }));
   if (random) picks.push({ book: random, score: input.score(random) ?? 0, kind: "random" });
   return { picks: shuffle(picks, opts.rng), widened: d > opts.delta, exhausted };
 }

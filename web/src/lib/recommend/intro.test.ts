@@ -25,4 +25,13 @@ describe("truncateIntro", () => {
     const out = truncateIntro(`“${"나".repeat(130)}!”\n\n다음 문장.`);
     expect(out.text).toBe(`“${"나".repeat(130)}!”`);
   });
+  it("never splits inside Node.js or 3.12", () => {
+    const text = "Node.js 3.12 버전을 다룹니다. 두 번째 문장.";
+    expect(truncateIntro(text)).toEqual({ text, truncated: false });
+  });
+  it("keeps Node.js and 3.12 intact when truncating", () => {
+    const first = `Node.js 3.12 ${"가".repeat(110)}.`;
+    const out = truncateIntro(`${first} 다음 문장입니다.`);
+    expect(out).toEqual({ text: first, truncated: true });
+  });
 });
