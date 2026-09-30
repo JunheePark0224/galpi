@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { track } from "@/lib/track/client";
-import { BalanceGame, TAP_GUARD_MS } from "./BalanceGame";
+import { BalanceGame, HOLD_HINT, TAP_GUARD_MS } from "./BalanceGame";
 
 vi.mock("@/lib/track/client", () => ({ track: vi.fn() }));
 
@@ -48,6 +48,20 @@ describe("BalanceGame", () => {
     act(() => { vi.advanceTimersByTime(800); });
     expect(onAnswer).toHaveBeenCalledWith("unsure");
     expect(track).toHaveBeenCalledWith("balance_answered", expect.objectContaining({ question: 2, choice: "unsure", side: null }));
+  });
+
+  it("draws each choice as a bookmark with the words in its window and no animal", () => {
+    render(<BalanceGame choices={["A"]} edit={false} onAnswer={vi.fn()} />);
+    const card = screen.getByRole("button", { name: "다음 장이 궁금해 못 자는 밤" });
+    expect(card).toHaveTextContent(/^다음 장이 궁금해 못 자는 밤$/);   // nothing else on the card: no tag, title or one-liner
+    expect(card.querySelector("svg, image, img")).toBeNull();
+    expect(card).toHaveAttribute("data-side", "right");
+  });
+
+  it("holds the hint copy in one constant", () => {
+    render(<BalanceGame choices={[]} edit={false} onAnswer={vi.fn()} />);
+    fireEvent.pointerDown(screen.getByRole("button", { name: "갈피를 못 잡겠어요" }));
+    expect(screen.getByRole("status")).toHaveTextContent(HOLD_HINT);
   });
 
   it("marks answered and 못 잡겠어요 cells in the progress bar", () => {

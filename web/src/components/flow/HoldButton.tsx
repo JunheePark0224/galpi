@@ -8,12 +8,18 @@ const HOLD_KEYS = new Set(["Enter", " "]);
 
 interface Props {
   label: string;
+  /** C-08 (09-30): faint text shown in place of the label while pressing. */
+  hint?: string;
   onHold: () => void;
   onCancel: (heldMs: number) => void;
 }
 
-/** C-08 — "갈피를 못 잡겠어요": press and hold for 0.8s (pointer, Enter or Space). */
-export function HoldButton({ label, onHold, onCancel }: Props) {
+/**
+ * C-08 — "갈피를 못 잡겠어요": press and hold for 0.8s (pointer, Enter or Space). While pressing, the label gives way to the
+ * faint hint in the same box (both are laid out on top of each other, so nothing moves). The name stays the label; the hint
+ * is announced once per hold through a polite status line.
+ */
+export function HoldButton({ label, hint, onHold, onCancel }: Props) {
   const [holding, setHolding] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startedAt = useRef(0);
@@ -60,20 +66,27 @@ export function HoldButton({ label, onHold, onCancel }: Props) {
   };
 
   return (
-    <button
-      type="button"
-      className={styles.hold}
-      data-holding={holding ? "" : undefined}
-      onPointerDown={onPointerDown}
-      onPointerUp={stop}
-      onPointerCancel={stop}
-      onPointerLeave={stop}
-      onContextMenu={(e) => e.preventDefault()}
-      onKeyDown={onKeyDown}
-      onKeyUp={onKeyUp}
-    >
-      <span className={styles.gauge} aria-hidden="true" />
-      <span className={styles.label}>{label}</span>
-    </button>
+    <>
+      <button
+        type="button"
+        className={styles.hold}
+        aria-label={label}
+        data-holding={holding ? "" : undefined}
+        onPointerDown={onPointerDown}
+        onPointerUp={stop}
+        onPointerCancel={stop}
+        onPointerLeave={stop}
+        onContextMenu={(e) => e.preventDefault()}
+        onKeyDown={onKeyDown}
+        onKeyUp={onKeyUp}
+      >
+        <span className={styles.gauge} aria-hidden="true" />
+        <span className={styles.texts} aria-hidden="true">
+          <span className={styles.label}>{label}</span>
+          {hint && <span className={styles.hint}>{hint}</span>}
+        </span>
+      </button>
+      {hint && <span className={styles.announce} role="status">{holding ? hint : ""}</span>}
+    </>
   );
 }

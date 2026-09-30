@@ -15,6 +15,14 @@ export const MISSING_WHAT = "보기 하나를 고르거나 직접 써 주세요"
 const YES24_HOME = "https://www.yes24.com/";
 
 interface Props { initial: TargetForm; edit: boolean; onSubmit: (form: TargetForm) => void }
+/** P-03: an open-book mark before the label (decorative — the button still reads "책 펼치기"). */
+function BookIcon() {
+  return (
+    <svg className={styles.icon} viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+      <path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5zm0 0v13" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 /** S-02 🎯 (C-09): one screen — 무엇을 (required: 6 chips or 직접 쓰기) · 분량 · 읽는 방식. */
 export function TargetInput({ initial, edit, onSubmit }: Props) {
@@ -116,7 +124,7 @@ export function TargetInput({ initial, edit, onSubmit }: Props) {
         </div>
       </div>
 
-      <Button type="submit" className={styles.submit}>책 펼치기</Button>
+      <Button type="submit" className={styles.submit}><BookIcon />책 펼치기</Button>
     </form>
   );
 }

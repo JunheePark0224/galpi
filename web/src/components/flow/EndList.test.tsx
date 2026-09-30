@@ -14,7 +14,7 @@ describe("EndList", () => {
     const onHome = vi.fn();
     render(<EndList picks={[pick("a"), pick("b"), pick("c")]} reactions={["curious", "pass", "curious"]} onHome={onHome} />);
     expect(screen.getByRole("heading", { name: "궁금해요 책" })).toBeInTheDocument();
-    expect(screen.getAllByRole("listitem").map((li) => li.textContent)).toEqual(["에세이책 a한 줄 a", "에세이책 c한 줄 c"]);
+    expect(screen.getAllByRole("listitem").map((li) => li.textContent)).toEqual(["에세이책 a저자 a한 줄 a", "에세이책 c저자 c한 줄 c"]);
     fireEvent.click(screen.getByRole("button", { name: "처음으로" }));
     expect(onHome).toHaveBeenCalledTimes(1);
   });

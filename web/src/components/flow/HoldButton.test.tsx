@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { HOLD_MS, HoldButton } from "./HoldButton";
 
@@ -61,6 +61,21 @@ describe("HoldButton", () => {
     fireEvent.pointerUp(button, { button: 2 });
     expect(onHold).not.toHaveBeenCalled();
     expect(onCancel).not.toHaveBeenCalled();
+  });
+
+  it("shows the faint hint in its own box while held, keeps its name, and restores the label on release", () => {
+    const hint = "끌리는 쪽을 고를수록 더 잘 맞아요";
+    render(<HoldButton label="갈피를 못 잡겠어요" hint={hint} onHold={vi.fn()} onCancel={vi.fn()} />);
+    const button = screen.getByRole("button", { name: "갈피를 못 잡겠어요" });
+    expect(within(button).getByText(hint)).toBeInTheDocument();          // laid out from the start: no jump when it shows
+    expect(screen.getByRole("status")).toBeEmptyDOMElement();
+    fireEvent.pointerDown(button);
+    expect(button).toHaveAttribute("data-holding");
+    expect(button).toHaveAccessibleName("갈피를 못 잡겠어요");
+    expect(screen.getByRole("status")).toHaveTextContent(hint);         // announced politely, once per hold
+    fireEvent.pointerUp(button);
+    expect(button).not.toHaveAttribute("data-holding");
+    expect(screen.getByRole("status")).toBeEmptyDOMElement();
   });
 
   it("still holds from the primary button (touch and left click are button 0)", () => {

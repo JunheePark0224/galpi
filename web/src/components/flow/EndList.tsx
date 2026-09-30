@@ -1,5 +1,7 @@
+import type { CSSProperties } from "react";
 import { Button } from "@/components/Button";
 import { GenreTag } from "@/components/GenreTag";
+import { toneOf } from "@/lib/books/taxonomy";
 import type { PickView, Reaction } from "@/lib/flow/state";
 import styles from "./EndList.module.css";
 
@@ -15,9 +17,10 @@ export function EndList({ picks, reactions, onHome }: Props) {
           <h1 className={styles.title}>궁금해요 책</h1>
           <ul className={styles.list}>
             {curious.map((p) => (
-              <li key={p.card.id} className={styles.item}>
+              <li key={p.card.id} className={styles.item} style={{ "--tone": toneOf(p.card).bg } as CSSProperties}>
                 <GenreTag card={p.card} />
                 <strong className={styles.bookTitle}>{p.card.title}</strong>
+                <span className={styles.author}>{p.card.author}</span>
                 <span className={styles.line}>{p.card.oneLiner}</span>
               </li>
             ))}
