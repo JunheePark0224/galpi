@@ -1,0 +1,477 @@
+{
+  "9788925588735": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": -1,
+      "gain": 0,
+      "world": -1
+    },
+    "one_liner": "과학과 우주 이야기 속으로, 손에서 놓지 못하고 달려가 볼까요?",
+    "one_liner_style": "question",
+    "evidence": "과학·우주 소재의 전개 중심 SF"
+  },
+  "9791163501190": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": -1,
+      "gain": 0,
+      "world": -1
+    },
+    "one_liner": "죽음을 코앞에 두고도 글을 쓰는 주인공, 열두 편에서 만나 볼까요?",
+    "one_liner_style": "question",
+    "evidence": "단편 열두 편, 이야기꾼의 SF"
+  },
+  "9791189836542": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": -1,
+      "world": -1
+    },
+    "one_liner": "메이드 카페의 마녀와 드래곤이 만나면 어떤 웃픈 일이 벌어질까요?",
+    "one_liner_style": "question",
+    "evidence": "위트 있는 판타지 초단편"
+  },
+  "9791191824582": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": -1,
+      "gain": -1,
+      "world": -1
+    },
+    "one_liner": "믿음의 수녀와 의심하는 과학 유튜버가 국경을 넘으면 무엇을 마주할까요?",
+    "one_liner_style": "question",
+    "evidence": "이야기 위주 SF 로드트립"
+  },
+  "9788962622508": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": 1,
+      "world": 0
+    },
+    "one_liner": "원자까지 내려가 바라보면 나와 세계는 어떻게 달라 보일까요?",
+    "one_liner_style": "question",
+    "evidence": "물리로 존재를 다시 보는 교양"
+  },
+  "9791176611466": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": -1,
+      "gain": 1,
+      "world": 0
+    },
+    "one_liner": "빅뱅에서 나까지 이어진 138억 년 우주 이야기가 궁금하지 않나요?",
+    "one_liner_style": "question",
+    "evidence": "우주 역사를 술술 풀어 아는 재미"
+  },
+  "9788932024639": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": -1,
+      "world": 0
+    },
+    "one_liner": "침묵에서 건져 올린 언어를 한 편씩 밑줄 그으며 읽어 볼까요?",
+    "one_liner_style": "question",
+    "evidence": "어둡고 조용한 여운의 시집"
+  },
+  "9791194280958": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": -1,
+      "world": 0
+    },
+    "one_liner": "서시와 별 헤는 밤에 담긴 자기 성찰을 오늘 밤 읽어 볼까요?",
+    "one_liner_style": "question",
+    "evidence": "성찰이 담긴 시어의 음미"
+  },
+  "9788956605593": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": 1,
+      "world": 0
+    },
+    "one_liner": "돈과 지위에 따라 흔들리는 마음의 뿌리는 어디에 있을까요?",
+    "one_liner_style": "question",
+    "evidence": "지위 불안의 원인·해법을 탐구"
+  },
+  "9791162145043": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 1,
+      "pull": 1,
+      "gain": -1,
+      "world": 0
+    },
+    "one_liner": "지친 하루 끝에 다정한 문장 몇 줄이면 조금 나아질까요?",
+    "one_liner_style": "question",
+    "evidence": "응원 문장으로 마음을 달래는 글"
+  },
+  "9791169852180": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 1,
+      "pull": 0,
+      "gain": 0,
+      "world": 0
+    },
+    "one_liner": "짜증 나 한마디에 눌러 담은 마음에 알맞은 이름을 붙여 볼까요?",
+    "one_liner_style": "question",
+    "evidence": "감정 단어를 배우고 마음도 풀어줌"
+  },
+  "9791193300800": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+    },
+    "one_liner": "환하게 웃던 사진 속 두 사람에게는 어떤 이야기가 숨어 있을까요?",
+    "one_liner_style": "question",
+    "evidence": "가족 회고록, 따뜻한 사연 중심"
+  },
+  "9791176881456": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": -1,
+      "gain": 1,
+      "world": 0
+    },
+    "one_liner": "익숙한 명화 속 숨은 디테일을 찾으면 어떤 사건이 보일까요?",
+    "one_liner_style": "question",
+    "evidence": "명화의 단서를 풀어 새로 알게 됨"
+  },
+  "9788932909349": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 1,
+      "pull": 0,
+      "gain": -1,
+      "world": 1
+    },
+    "one_liner": "호쾌하게 살아가는 자유인 곁에 서면 내 삶은 어떻게 보일까요?",
+    "one_liner_style": "question",
+    "evidence": "자유인 곁에서 삶을 되돌아봄"
+  },
+  "9788937461033": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": 0,
+      "gain": -1,
+      "world": 1
+    },
+    "one_liner": "어느 세계에도 속하지 못한 사람의 내면을 끝까지 따라가 볼까요?",
+    "one_liner_style": "question",
+    "evidence": "파멸하는 내면의 서늘한 심리묘사"
+  },
+  "9788972917793": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": 0,
+      "gain": -1,
+      "world": 0
+    },
+    "one_liner": "전쟁과 혼란 속에서 인간성은 어떻게 무너지고 변할까요?",
+    "one_liner_style": "question",
+    "evidence": "전쟁 속 인간성 파괴, 서늘한 여운"
+  },
+  "9788936812621": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": 0,
+      "gain": -1,
+      "world": 1
+    },
+    "one_liner": "극한의 시련 속에서도 삶의 이유를 붙드는 힘은 어디서 올까요?",
+    "one_liner_style": "question",
+    "evidence": "수용소 체험에서 길어 올린 삶의 의미"
+  },
+  "9791168340770": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": -1,
+      "world": 0
+    },
+    "one_liner": "과거 탓을 멈추고 지금 여기에서 변할 수 있다면 무엇부터 할까요?",
+    "one_liner_style": "question",
+    "evidence": "대화로 풀어 마음을 움직이는 심리학"
+  },
+  "9791199489561": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": 1,
+      "gain": -1,
+      "world": 0
+    },
+    "one_liner": "하루가 늘 바쁜데 공허하다면 내 시간은 누가 가져갔을까요?",
+    "one_liner_style": "question",
+    "evidence": "짧은 글 55편, 고전의 문장과 위로"
+  },
+  "9791127562632": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": 0,
+      "world": 0
+    },
+    "one_liner": "역사 속 희대의 악인이 다른 몸으로 살아 있다면 어떨까요?",
+    "one_liner_style": "question",
+    "evidence": "음모론 소재의 긴박한 미스터리"
+  },
+  "9791168343764": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": 0,
+      "world": 0
+    },
+    "one_liner": "자정까지 두 사람에게 들려줘야 하는 저주의 이야기, 버틸 수 있을까요?",
+    "one_liner_style": "question",
+    "evidence": "공포·오컬트, 긴장 속 전개"
+  },
+  "9791190174756": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": -1,
+      "gain": -1,
+      "world": -1
+    },
+    "one_liner": "물귀신과 숲귀신이 사랑에 빠진다면 어떤 이야기가 될까요?",
+    "one_liner_style": "question",
+    "evidence": "귀신·좀비가 나오는 단편 네 편"
+  },
+  "9788936434120": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": 0,
+      "gain": -1,
+      "world": 1
+    },
+    "one_liner": "광주의 상처를 여러 목소리로 듣고 나면 마음에 무엇이 남을까요?",
+    "one_liner_style": "question",
+    "evidence": "역사의 상처가 오래 서늘하게 남음"
+  },
+  "9788998441012": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": -1,
+      "world": 1
+    },
+    "one_liner": "쌍둥이로 태어나 갈라진 인생을 보며 내 삶을 돌아보게 될까요?",
+    "one_liner_style": "question",
+    "evidence": "엇갈린 삶을 보며 마음이 달라짐"
+  },
+  "9791169087520": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": 0,
+      "world": 0
+    },
+    "one_liner": "사이비 종교의 집단 자살 뒤에 감춰진 진실을 따라가 볼까요?",
+    "one_liner_style": "question",
+    "evidence": "사이비 사건의 진실을 쫓는 전개"
+  },
+  "9788960309258": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "AI에게 메일·회의·문서 업무를 직접 시켜 바로 쓸 결과물을 만들어요",
+    "one_liner_style": "summary",
+    "evidence": "업무별 프롬프트 따라 하기"
+  },
+  "9791140719914": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "클로드 코드로 바이브 코딩을 시작해 스킬과 서브에이전트까지 익혀요",
+    "one_liner_style": "summary",
+    "evidence": "설치·여러 실습 프로젝트 중심"
+  },
+  "9791175790896": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "코딩을 몰라도 클로드로 글쓰기부터 웹사이트 만들기까지 따라 해요",
+    "one_liner_style": "summary",
+    "evidence": "영상·실습 파일로 따라 하는 입문"
+  },
+  "9791194383772": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "코덱스로 프롬프트 기초부터 MCP와 스킬 활용까지 실전 개발을 익혀요",
+    "one_liner_style": "summary",
+    "evidence": "CLI 설치와 만들기 예제 중심"
+  },
+  "9791199529847": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "15가지 실습 프로젝트로 설치부터 배포까지 나만의 웹 앱을 만들어요",
+    "one_liner_style": "summary",
+    "evidence": "프로젝트 15개를 따라 하며 완주"
+  },
+  "9791156646532": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "R 문법과 데이터프레임을 예제로 익히며 데이터 분석을 시작해요",
+    "one_liner_style": "summary",
+    "evidence": "예제 실습과 실전 분석 프로젝트"
+  },
+  "9791163035725": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "실습 예제 300개로 MySQL 설치부터 조인과 뷰까지 SQL을 익혀요",
+    "one_liner_style": "summary",
+    "evidence": "예제 300개 실습, 설치부터 실무까지"
+  },
+  "9791189909109": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "그래프와 차트를 왜곡 없이 그리는 원리와 색 쓰는 법을 알려줘요",
+    "one_liner_style": "summary",
+    "evidence": "시각화 원리·스케일 개념 설명"
+  },
+  "9791196203757": {
+    "entry": "target",
+    "way": "사례",
+    "one_liner": "강의와 매출, 서버 같은 시나리오별 대시보드를 하나씩 설계해 봐요",
+    "one_liner_style": "summary",
+    "evidence": "업무 시나리오별 대시보드 사례"
+  },
+  "9788947549394": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "팀과 재택근무, 사무실 환경에서 뇌가 일하는 원리를 쉽게 짚어 줘요",
+    "one_liner_style": "summary",
+    "evidence": "뇌 작동 원리를 근무 상황에 적용"
+  },
+  "9791139718805": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "스마트폰에 뺏긴 집중력을 뇌의 생체 리듬과 호르몬으로 풀어 줘요",
+    "one_liner_style": "summary",
+    "evidence": "집중 저하의 뇌과학적 원인 설명"
+  },
+  "9791166572012": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "전두엽을 젊게 지키는 63가지 생활습관을 하나씩 알려줘요",
+    "one_liner_style": "summary",
+    "evidence": "바로 해볼 생활습관 모음"
+  },
+  "9791188102259": {
+    "entry": "target",
+    "way": "사례",
+    "one_liner": "실패를 겪은 저자가 목표 대신 시스템으로 성공한 경험을 들려줘요",
+    "one_liner_style": "summary",
+    "evidence": "저자의 실패·성공 경험담 중심"
+  },
+  "9788965966500": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "내 시간을 팔지 않고 사는 사고방식, 바이백 원칙을 알려줘요",
+    "one_liner_style": "summary",
+    "evidence": "재생산·집중·차단 원칙 설명"
+  },
+  "9791162998328": {
+    "entry": "target",
+    "way": "사례",
+    "one_liner": "새벽 4시에 일어나 자격증과 박사학위까지 이룬 경험을 들려줘요",
+    "one_liner_style": "summary",
+    "evidence": "저자의 새벽 활용 성공 경험담"
+  },
+  "9791171830909": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "긴급한 일에 속지 않고 목표와 계획으로 시간을 설계하는 원리를 알려줘요",
+    "one_liner_style": "summary",
+    "evidence": "목표·계획 단계별 시간관리 원리"
+  },
+  "9791193000717": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "메일과 보고서, 회의록을 챗GPT 프롬프트로 빠르게 쓰는 법을 보여줘요",
+    "one_liner_style": "summary",
+    "evidence": "글쓰기 프롬프트 예시와 결과 제시"
+  },
+  "9788965404446": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "노션 페이지와 데이터베이스부터 AI 업무 자동화까지 차근차근 따라 해요",
+    "one_liner_style": "summary",
+    "evidence": "화면 따라 하기, 연습 페이지 제작"
+  },
+  "9791158392260": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "파이썬 문법부터 익혀 지루한 엑셀 업무를 자동으로 처리해요",
+    "one_liner_style": "summary",
+    "evidence": "예제 코드로 엑셀 자동화 실습"
+  },
+  "9791189028619": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "엑셀 함수를 외우지 않고 원리로 이해해 AI와 함께 업무에 써요",
+    "one_liner_style": "summary",
+    "evidence": "암기 대신 원리 이해가 중심"
+  },
+  "9791194383130": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "파일과 엑셀, 워드, PDF 처리를 파이썬 코드로 자동화하는 프로그램을 만들어요",
+    "one_liner_style": "summary",
+    "evidence": "실전 자동화 프로그램 23개 제작"
+  },
+  "9788947526562": {
+    "entry": "target",
+    "way": "사례",
+    "one_liner": "도박과 여론조사 같은 일상 사례로 숫자에 속지 않는 눈을 길러 줘요",
+    "one_liner_style": "summary",
+    "evidence": "일상 사례로 푸는 통계"
+  },
+  "9788965022893": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "히스토그램과 평균, 분산, 표준편차의 뜻을 쉽게 짚어 줘요",
+    "one_liner_style": "summary",
+    "evidence": "기초 통계 개념을 차례로 설명"
+  },
+  "9791140714568": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "상관과 인과, 정규화처럼 실무에서 헷갈리는 통계 개념을 풀어 줘요",
+    "one_liner_style": "summary",
+    "evidence": "궁금증별 통계 개념 해설"
+  },
+  "9791163033073": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "17가지 통계 기초와 생활 속 문제로 베이즈 통계를 쉽게 익혀요",
+    "one_liner_style": "summary",
+    "evidence": "기초 개념 후 베이즈로 확장"
+  }
+}

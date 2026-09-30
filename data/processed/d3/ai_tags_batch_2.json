@@ -1,0 +1,477 @@
+{
+  "9788937417566": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": -1,
+      "world": -1
+    },
+    "one_liner": "인공지능 친구의 눈에 비친 사람들은 어떤 모습일까요?",
+    "one_liner_style": "question",
+    "evidence": "AI 로봇과 소녀의 이야기, 담담하게 마음을 건드림"
+  },
+  "9791168344198": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": -1,
+      "world": -1
+    },
+    "one_liner": "시간을 되돌릴 수 있어도 되돌리지 못하는 건 무엇일까요?",
+    "one_liner_style": "question",
+    "evidence": "시간 여행 설정, 사랑과 구원의 따뜻한 위로"
+  },
+  "9791190090018": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": -1,
+      "world": -1
+    },
+    "one_liner": "과학도가 쓴 일곱 편의 SF에서 아름다운 존재들은 어디에 있을까요?",
+    "one_liner_style": "question",
+    "evidence": "SF 단편집, 낯선 세계 속 존재와 감정을 다룸"
+  },
+  "9791194413394": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": -1,
+      "world": -1
+    },
+    "one_liner": "하루에 열여섯 번 해가 뜨고 지는 곳에서 지구는 어떻게 보일까요?",
+    "one_liner_style": "question",
+    "evidence": "우주정거장 하루를 서정적 문장으로 그린 소설"
+  },
+  "9788962627145": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": 1,
+      "world": 0
+    },
+    "one_liner": "물리학자의 눈으로 보면 인간의 변치 않는 본성은 무엇일까요?",
+    "one_liner_style": "question",
+    "evidence": "과학으로 인간과 사회를 풀어 새로 알게 되는 글"
+  },
+  "9791189327156": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": -1,
+      "gain": 0,
+      "world": 1
+    },
+    "one_liner": "오래된 도감 속 물고기가 사라지면 삶의 의미는 어디에 남을까요?",
+    "one_liner_style": "question",
+    "evidence": "실제 이야기가 이어지는 전개에 끌려 읽는 논픽션"
+  },
+  "9788954619578": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": -1,
+      "world": 0
+    },
+    "one_liner": "슬픔과 죽음을 곁에 두고도 다정해질 수 있을까요?",
+    "one_liner_style": "question",
+    "evidence": "죽음과 슬픔을 노래한 시, 여운이 길게 남음"
+  },
+  "9788901299730": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": -1,
+      "gain": -1,
+      "world": 0
+    },
+    "one_liner": "부족하다는 말에 지친 날, 나는 무엇에만 마음을 쓸까요?",
+    "one_liner_style": "question",
+    "evidence": "입담 있는 사례로 술술, 마음가짐이 달라지는 책"
+  },
+  "9788970128337": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": 1,
+      "gain": 0,
+      "world": 0
+    },
+    "one_liner": "매일 길 위를 달리는 소설가는 무엇을 배울까요?",
+    "one_liner_style": "question",
+    "evidence": "달리기와 글쓰기를 잇는 담백한 에세이 문장"
+  },
+  "9791162145418": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": -1,
+      "world": 0
+    },
+    "one_liner": "놓아야 할 사랑을 붙잡을 때, 마음은 어디까지 가라앉을까요?",
+    "one_liner_style": "question",
+    "evidence": "사랑의 어두운 면을 쓴 서정적 산문, 먹먹함"
+  },
+  "9791173323027": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 1,
+      "pull": 0,
+      "gain": -1,
+      "world": 0
+    },
+    "one_liner": "받은 마음을 되돌려주는 일상은 우리를 어떻게 지켜 줄까요?",
+    "one_liner_style": "question",
+    "evidence": "호의와 따뜻한 진심을 모은 산문, 마음이 데워짐"
+  },
+  "9791194184645": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+    },
+    "one_liner": "말 못 하는 아들을 두고 떠나야 하는 아버지는 무엇을 남길까요?",
+    "one_liner_style": "question",
+    "evidence": "실제 부자의 회고록, 사연에 몰입하고 마음이 움직임"
+  },
+  "9791191114591": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": 1,
+      "gain": 0,
+      "world": 0
+    },
+    "one_liner": "여행이 끝난 뒤 돌아온 일상은 어떻게 다르게 보일까요?",
+    "one_liner_style": "question",
+    "evidence": "사유와 문장이 돋보이는 여행 산문"
+  },
+  "9788937443848": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": 0,
+      "gain": 0,
+      "world": 1
+    },
+    "one_liner": "죽음 앞에 서서야 마주하는 나는 어떤 사람일까요?",
+    "one_liner_style": "question",
+    "evidence": "소외된 현대인의 실존, 건조하고 서늘한 여운"
+  },
+  "9788937461088": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 1,
+      "pull": 0,
+      "gain": 0,
+      "world": 0
+    },
+    "one_liner": "요리 한 접시에 담긴 사랑과 욕망은 어떤 맛일까요?",
+    "one_liner_style": "question",
+    "evidence": "요리로 풀어낸 밝고 생동감 있는 사랑 이야기"
+  },
+  "9791159921445": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": 0,
+      "world": 0
+    },
+    "one_liner": "부활의 소식과 파멸의 공포 속에서 사람들은 무엇에 매달릴까요?",
+    "one_liner_style": "question",
+    "evidence": "묵시록적 분위기, 밀도 높은 긴 문장이 중심"
+  },
+  "9788972917038": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": 1,
+      "world": 0
+    },
+    "one_liner": "무엇을 가졌는가보다 어떻게 존재하는가를 물으면 삶은 어떻게 달라질까요?",
+    "one_liner_style": "question",
+    "evidence": "두 삶의 방식을 분석하는 사상서, 개념을 새로 앎"
+  },
+  "9791192372730": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": -1,
+      "world": 0
+    },
+    "one_liner": "타인의 시선에 흔들릴 때 나를 지켜 줄 단단한 태도는 무엇일까요?",
+    "one_liner_style": "question",
+    "evidence": "위로 없이 직면을 요구하는 잠언식 짧은 글"
+  },
+  "9791199889378": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": -1,
+      "world": 0
+    },
+    "one_liner": "비교에 지친 마음이 행복을 찾아가는 길은 어디에 있을까요?",
+    "one_liner_style": "question",
+    "evidence": "심리학 사례로 술술 읽히고 마음을 다독임"
+  },
+  "9791138483995": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": -1,
+      "gain": 0,
+      "world": 1
+    },
+    "one_liner": "추리소설가와 편집자, 독자가 얽힌 사건은 얼마나 웃길까요?",
+    "one_liner_style": "question",
+    "evidence": "빠른 호흡의 블랙 코미디 단편, 손을 못 놓음"
+  },
+  "9791170522454": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": -1,
+      "gain": 0,
+      "world": -1
+    },
+    "one_liner": "호랑이와 인어가 얽힌 사랑은 어떻게 아찔해질까요?",
+    "one_liner_style": "question",
+    "evidence": "죽은 자, 호랑이, 인어가 나오는 로맨스릴러"
+  },
+  "9791191043419": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": 0,
+      "world": 1
+    },
+    "one_liner": "향수 홍보용 도시전설이 현실이 되면 소녀들은 어떻게 될까요?",
+    "one_liner_style": "question",
+    "evidence": "도시전설이 현실이 되는 서스펜스, 몰입해서 읽음"
+  },
+  "9788936439743": {
+    "entry": "leaf",
+    "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": 0,
+      "world": 1
+    },
+    "one_liner": "길티 클럽에서 갈월동 집까지, 이 시대 사람들은 어떤 얼굴일까요?",
+    "one_liner_style": "question",
+    "evidence": "취재 기반 현실 서사, 서늘하고 몰입감이 강함"
+  },
+  "9791124575178": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": -1,
+      "world": -1
+    },
+    "one_liner": "잠 못 드는 청년이 꿈 가게에서 찾는 건 무엇일까요?",
+    "one_liner_style": "question",
+    "evidence": "꿈 가게가 나오는 판타지, 따뜻한 성장 이야기"
+  },
+  "9791194891178": {
+    "entry": "leaf",
+    "axes": {
+      "temp": 0,
+      "pull": -1,
+      "gain": 0,
+      "world": -1
+    },
+    "one_liner": "빵과 똑같은 애벌레로 인생 역전을 꿈꾸면 어떻게 될까요?",
+    "one_liner_style": "question",
+    "evidence": "가상의 식용 애벌레가 나오는 풍자적 전개"
+  },
+  "9791124373071": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "글과 이미지, 음악, 영상을 AI로 만드는 기초 요령을 따라 익혀요",
+    "one_liner_style": "summary",
+    "evidence": "초보자도 따라 하는 실습 중심 생성형 AI 가이드"
+  },
+  "9791163037057": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "GPT API로 업무 자동화 프로그램과 협업하는 에이전트를 직접 만들어요",
+    "one_liner_style": "summary",
+    "evidence": "API와 랭체인으로 에이전트를 만드는 실습 예제"
+  },
+  "9791189028589": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "세 가지 AI의 강점을 내 업무 상황에 맞게 골라 쓰는 법을 알려줘요",
+    "one_liner_style": "summary",
+    "evidence": "업무별 프롬프트와 도구 선택을 익히는 실전서"
+  },
+  "9791194383796": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "제미나이로 영상 제작과 보고서 작성 같은 업무를 빠르게 줄여요",
+    "one_liner_style": "summary",
+    "evidence": "81개 예제를 하나씩 따라 하는 구성"
+  },
+  "9788931480634": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "흩어진 데이터를 모아 정제하고 파워BI로 시각화해 공유하는 법을 알려줘요",
+    "one_liner_style": "summary",
+    "evidence": "수집부터 공유까지 실제 흐름으로 예제 학습"
+  },
+  "9791158395483": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "통계 기초부터 머신러닝까지 분석 업무 단계를 쉬운 개념으로 이해해요",
+    "one_liner_style": "summary",
+    "evidence": "수식 줄이고 통계와 분석 개념을 풀어 설명"
+  },
+  "9791169210287": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "코랩과 파이썬으로 데이터 분석을 처음부터 혼자 익히도록 도와줘요",
+    "one_liner_style": "summary",
+    "evidence": "코랩 실습과 확인 문제가 있는 자습서"
+  },
+  "9791192469317": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "엑셀로 공공데이터를 불러와 통계 분석까지 해 보는 법을 알려줘요",
+    "one_liner_style": "summary",
+    "evidence": "엑셀 도구로 데이터 수집과 분석을 실습"
+  },
+  "9791197149887": {
+    "entry": "target",
+    "way": "사례",
+    "one_liner": "직장 만화 속 에피소드로 상관관계와 실험 같은 데이터 상식을 익혀요",
+    "one_liner_style": "summary",
+    "evidence": "만화와 글로 보여 주는 직장 속 데이터 오해"
+  },
+  "9788965294931": {
+    "entry": "target",
+    "way": "사례",
+    "one_liner": "부담 없이 하루 두 쪽부터 읽기 루틴을 붙이는 방법을 알려줘요",
+    "one_liner_style": "summary",
+    "evidence": "독서를 쉽게 만드는 저자 이야기와 요령 중심"
+  },
+  "9791139723281": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "스트레스와 번아웃을 다스리는 다섯 가지 리셋 방법을 뇌과학으로 알려줘요",
+    "one_liner_style": "summary",
+    "evidence": "뇌가 스트레스에 반응하는 원리를 설명"
+  },
+  "9791167740984": {
+    "entry": "target",
+    "way": "사례",
+    "one_liner": "산만해지는 이유를 개인 의지가 아닌 사회 구조에서 찾아 줘요",
+    "one_liner_style": "summary",
+    "evidence": "전문가 취재와 이야기로 집중력 문제를 풀어감"
+  },
+  "9791193865156": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "불안과 무기력이 뇌의 자연스러운 반응임을 알고 마음을 다스려요",
+    "one_liner_style": "summary",
+    "evidence": "뇌 작동 방식으로 마음 문제를 풀어 설명"
+  },
+  "9788994938011": {
+    "entry": "target",
+    "way": "사례",
+    "one_liner": "성공한 사람들의 사례와 함께 메모 도구와 기술, 활용법을 익혀요",
+    "one_liner_style": "summary",
+    "evidence": "성공 사례와 이야기 형식으로 메모 효과 전달"
+  },
+  "9791164139934": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "전략기획의 프레임으로 회사와 고객을 설득하는 기획 실무를 익혀요",
+    "one_liner_style": "summary",
+    "evidence": "기획의 틀과 사고방식을 설명하는 실무서"
+  },
+  "9791185584454": {
+    "entry": "target",
+    "way": "사례",
+    "one_liner": "일주일에 몇 시간만 일하고 원하는 삶을 누리는 방식을 알려줘요",
+    "one_liner_style": "summary",
+    "evidence": "저자의 경험과 사례로 풀어 가는 자유로운 삶"
+  },
+  "9791194777441": {
+    "entry": "target",
+    "way": "사례",
+    "one_liner": "실천하기 쉬운 계획 공식으로 한정된 시간을 내 뜻대로 쓰는 법을 알려줘요",
+    "one_liner_style": "summary",
+    "evidence": "교대 간호사였던 저자의 경험담에서 출발"
+  },
+  "9791140713127": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "엑셀과 워드 같은 M365 앱에서 코파일럿과 프롬프트로 일하는 법을 따라 해요",
+    "one_liner_style": "summary",
+    "evidence": "앱별 실습 따라 하기 중심"
+  },
+  "9791163034858": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "코딩 경험 없이 스크립트를 짜서 일일 보고서 발송 같은 반복 업무를 없애요",
+    "one_liner_style": "summary",
+    "evidence": "환경 설정부터 코드 입력까지 단계별 따라 하기"
+  },
+  "9791191407310": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "메모와 일정, 문서, 메일을 AI와 연동해 나만의 업무 시스템을 만들어요",
+    "one_liner_style": "summary",
+    "evidence": "도구 설정과 연동 방법을 직접 해 보는 가이드"
+  },
+  "9791194587330": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "분산된 도구를 한곳에 모아 정리하는 사용법을 따라 익혀요",
+    "one_liner_style": "summary",
+    "evidence": "설치, 계정 만들기부터 화면별 사용법 안내"
+  },
+  "9788956749075": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "파이썬 코드로 회귀와 분류, 그룹화, 차원 축소까지 차근차근 익혀요",
+    "one_liner_style": "summary",
+    "evidence": "파이썬 도구와 라이브러리로 분석을 실습"
+  },
+  "9788965403388": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "확률과 가설검정, 베이즈까지 통계의 사고방식을 쉬운 개념으로 익혀요",
+    "one_liner_style": "summary",
+    "evidence": "수식은 줄이고 통계 개념을 그림으로 설명"
+  },
+  "9791161754727": {
+    "entry": "target",
+    "way": "개념",
+    "one_liner": "회귀에서 신경망까지 머신러닝 알고리즘의 통계 이론을 깊이 이해해요",
+    "one_liner_style": "summary",
+    "evidence": "알고리즘의 이론적 배경 설명이 중심"
+  },
+  "9791169213196": {
+    "entry": "target",
+    "way": "실습",
+    "one_liner": "파이썬 코드를 돌려 보며 기술통계와 가설검정을 직관적으로 이해해요",
+    "one_liner_style": "summary",
+    "evidence": "이론과 함께 파이썬 실습으로 통계를 배움"
+  }
+}

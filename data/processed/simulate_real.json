@@ -1,0 +1,21 @@
+{
+ "kind": "leaf",
+ "tau": 1.0,
+ "delta": 2,
+ "books": 100,
+ "combos": 1875,
+ "fill_pct": 96.5,
+ "depth_mean": 2.61,
+ "depth4_pct": 34.9,
+ "genres_per_draw": 3.93,
+ "first_draw_genres": 3.85,
+ "overlap_same_answers": 0.23,
+ "exposure_gini": 0.15,
+ "never_shown": 0,
+ "source": "books_v1_draft.json",
+ "criteria": {
+  "fill_ge_95": true,
+  "genres_per_draw_ge_3_5": true,
+  "first_draw_genres_ge_3_5": true
+ }
+}
