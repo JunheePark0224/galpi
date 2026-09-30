@@ -1,5 +1,6 @@
-/* DESIGN 4절: 1 : 2 (160 × 320), string ~26px above, hole 8px, window = card − 18, swallowtail notch 7%.
-   Text room: 2-line title + 4-line one-liner fits all 200 real books (checked in a browser); nothing in the column may shrink. */
+/* DESIGN 4절: 160 × 344 (09-30: +24px so large text fits), string ~26px above, hole 8px, window = card − 18, swallowtail notch 7%.
+   Text room: 2-line title + 4-line one-liner fits all 200 real books at normal and x1.15 text (checked in a browser); nothing in the column may shrink.
+   The notch is 7% of the height, so the bottom padding is 25px (was 23px) to keep "갈피" above it. */
 .bookmark { position: relative; width: 160px; padding-top: 26px; }
 .string {
   position: absolute; top: 0; left: 50%; z-index: 1;
@@ -12,7 +13,7 @@
 .card {
   position: relative;
   display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-1);
-  height: 320px; padding: 18px 9px 23px;
+  height: 344px; padding: 18px 9px 25px;
   border: var(--frost-edge); border-radius: var(--radius-bookmark);
   background: var(--frost-bg);
   -webkit-backdrop-filter: var(--frost-blur); backdrop-filter: var(--frost-blur);

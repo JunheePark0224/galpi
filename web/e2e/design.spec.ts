@@ -47,31 +47,40 @@ test("design page shows a bookmark with its reading label", async ({ page }) => 
   await expect(page.getByRole("article", { name: /천천히 걷는 아침/ })).toBeVisible();
 });
 
-// C-02 text room: the longest real title and one-liner must fit the 160 x 320 frame (title may clamp at 2 lines, the one-liner may not).
-test("every real book's title and one-liner fit the bookmark frame", async ({ page }) => {
-  const books = JSON.parse(readFileSync("src/data/books.json", "utf8")) as { isbn: string; title: string; one_liner: string }[];
-  expect(books).toHaveLength(200);
-  await page.goto("/design");
-  await page.evaluate(() => document.fonts.ready);
+// C-02 text room: the longest real title and one-liner must fit the 160 x 344 frame (title may clamp at 2 lines, the one-liner may not).
+// The second run scales title, one-liner, name tag and "갈피" by 1.15 (Android large-text setting) and also requires the
+// stitch line and "갈피" to sit above the swallowtail notch (7% of the card height, cut into the bottom centre).
+for (const scale of [1, 1.15]) {
+  test(`every real book's title and one-liner fit the bookmark frame at text x${scale}`, async ({ page }) => {
+    const books = JSON.parse(readFileSync("src/data/books.json", "utf8")) as { isbn: string; title: string; one_liner: string }[];
+    expect(books).toHaveLength(200);
+    await page.goto("/design");
+    await page.evaluate(() => document.fonts.ready);
 
-  const problems = await page.evaluate((all) => {
-    const card = document.querySelector("article")?.children[1] as HTMLElement;
-    const [, win, , title, line, stitch, mark] = Array.from(card.children) as HTMLElement[];
-    const room = card.getBoundingClientRect().bottom - parseFloat(getComputedStyle(card).paddingBottom) - 1;
-    const naturalWindow = win.getBoundingClientRect().width * 0.76;     // art viewBox is 100 x 76
-    const found: string[] = [];
-    for (const b of all) {
-      title.textContent = b.title;
-      line.textContent = b.one_liner;
-      const why: string[] = [];
-      if (line.scrollHeight > line.clientHeight + 1) why.push("one-liner is cut");
-      if (title.getBoundingClientRect().height > 2 * parseFloat(getComputedStyle(title).lineHeight) + 1) why.push("title over 2 lines");
-      if (line.getBoundingClientRect().bottom > stitch.getBoundingClientRect().top) why.push("text runs into the stitch line");
-      if (mark.getBoundingClientRect().bottom > room + 0.5) why.push("갈피 mark leaves the card");
-      if (Math.abs(win.getBoundingClientRect().height - naturalWindow) > 1) why.push("window is squeezed");
-      if (why.length) found.push(`${b.isbn}: ${why.join(", ")}`);
-    }
-    return found;
-  }, books.map(({ isbn, title, one_liner }) => ({ isbn, title, one_liner })));
-  expect(problems).toEqual([]);
-});
+    const problems = await page.evaluate(({ all, textScale }) => {
+      const card = document.querySelector("article")?.children[1] as HTMLElement;
+      const [, win, tag, title, line, stitch, mark] = Array.from(card.children) as HTMLElement[];
+      for (const el of [tag, title, line, mark]) el.style.fontSize = `${parseFloat(getComputedStyle(el).fontSize) * textScale}px`;
+      const cardBox = card.getBoundingClientRect();
+      const room = cardBox.bottom - parseFloat(getComputedStyle(card).paddingBottom) - 1;
+      const notchY = cardBox.top + cardBox.height * 0.93;                // lowest point of the frame at the centre
+      const naturalWindow = win.getBoundingClientRect().width * 0.76;     // art viewBox is 100 x 76
+      const found: string[] = [];
+      for (const b of all) {
+        title.textContent = b.title;
+        line.textContent = b.one_liner;
+        const why: string[] = [];
+        if (line.scrollHeight > line.clientHeight + 1) why.push("one-liner is cut");
+        if (title.getBoundingClientRect().height > 2 * parseFloat(getComputedStyle(title).lineHeight) + 1) why.push("title over 2 lines");
+        if (line.getBoundingClientRect().bottom > stitch.getBoundingClientRect().top) why.push("text runs into the stitch line");
+        if (mark.getBoundingClientRect().bottom > room + 0.5) why.push("갈피 mark leaves the card");
+        if (mark.getBoundingClientRect().bottom > notchY) why.push("갈피 mark is caught by the swallowtail notch");
+        if (stitch.getBoundingClientRect().bottom > mark.getBoundingClientRect().top) why.push("stitch line overlaps 갈피");
+        if (Math.abs(win.getBoundingClientRect().height - naturalWindow) > 1) why.push("window is squeezed");
+        if (why.length) found.push(`${b.isbn}: ${why.join(", ")}`);
+      }
+      return found;
+    }, { all: books.map(({ isbn, title, one_liner }) => ({ isbn, title, one_liner })), textScale: scale });
+    expect(problems).toEqual([]);
+  });
+}
