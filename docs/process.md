@@ -111,3 +111,9 @@ Last Updated: 2026-09-30
 - Vercel: Aside로 프로젝트 설정(루트 `web`, 환경변수 이름) → 사용자가 값 입력·배포 → **https://galpi-omega.vercel.app**. 배포 후 점검: 200/404/보안 헤더/다른 출처 403/🍃 완주/Supabase 31건 저장. Preview에는 `TRACK_STORE=off`
 - 사용자 판단: 동작은 되지만 Stitch 디자인이 빠짐 → **디자인 반영 단계**를 5명 반응 전에 추가 (저자 줄, 로고 SVG, 로고 머리글)
 - 디자인 반영 완료 (9/30) — `docs/plans/2026-09-30-design-pass.md`. 다음: P7 휴대폰·카톡 브라우저 점검 → 5명 반응
+
+### 09-30 저녁 — 디자인 반영·다크 모드 배포, Amplitude·택소노미 (중단 지점)
+- 배포(main): 디자인 반영(`8886223`) + 다크 모드 강제 방지 `color-scheme: only light`(`fba8256`) → galpi-omega.vercel.app
+- 브랜치 `feat/amplitude`(아직 main 아님): Amplitude 브라우저 SDK(`d2bb548`·`839f9a5`·`148cf4b`, 리뷰·재검토 통과 — 지연 로딩, engagement 끔, 녹화 20%·입력 가림, 처리방침 공개) + 택소노미 문서 v0.2(`0cef9d8`, `docs/taxonomy.md`·`taxonomy.csv`, 사용자 결정 반영)
+- **다음에 이어서 할 일 (A 단계)**: ① 택소노미 개발 계획서 `docs/plans/2026-09-30-taxonomy-dev.md` 작성(중단됨 — 처음부터 다시) → ② SDD로 구현(이름 바꾸기, goal_submitted, 회차 규칙, goal_text는 Supabase만, EVENT_SPEC 타입 검사, CSV↔코드 자동 검사, Amplitude 대기열 보완, CLAUDE.md 규칙) → ③ main 병합·배포(사용자 허락) → ④ 사용자가 Vercel Production에 `NEXT_PUBLIC_AMPLITUDE_API_KEY` + Amplitude 대시보드 Session Replay 20%·입력 가림 → ⑤ Amplitude 커넥터로 카탈로그 등록·대시보드
+- 그 뒤: P4 → P5 → P7(5명 반응) → P8·P9 (전체 목록은 대화 09-30 "남은 단계")
