@@ -21,17 +21,20 @@ test("🎯 chips → book → first page → five bookmarks → curious list", a
 
   await expect(page.getByText("1 / 5")).toBeVisible();
   if (testInfo.project.name === "laptop") {
+    // DESIGN T-04b (09-30): on a desktop the book scene leaves the 430px column — the bookmark stays on screen, no sideways scroll
     const column = await page.locator(".column").boundingBox();
     const bookmark = await page.getByRole("article").boundingBox();
     if (!column || !bookmark) throw new Error("layout boxes missing");
-    expect(column.width).toBe(430);
-    expect(bookmark.x).toBeGreaterThanOrEqual(column.x);
-    expect(bookmark.x + bookmark.width).toBeLessThanOrEqual(column.x + column.width);
+    expect(column.width).toBeGreaterThan(430);
+    expect(bookmark.x).toBeGreaterThanOrEqual(0);
+    expect(bookmark.x + bookmark.width).toBeLessThanOrEqual(1440);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   }
   await reactToBookmarks(page, ["궁금해요", "패스", "궁금해요", "패스", "궁금해요"]);
 
   await expect(page.getByRole("heading", { name: "궁금해요 책" })).toBeVisible();
   await expect(page.getByRole("listitem")).toHaveCount(3);
+  if (testInfo.project.name === "laptop") expect((await page.locator(".column").boundingBox())?.width).toBe(430);  // back in the column
   await page.getByRole("button", { name: "처음으로" }).click();
   await expect(page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ })).toBeVisible();
 

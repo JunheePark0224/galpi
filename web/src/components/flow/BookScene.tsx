@@ -7,7 +7,7 @@ import type { FlowState, Reaction } from "@/lib/flow/state";
 import { firstPageNotices } from "@/lib/flow/summary";
 import { BOOKMARK_AWAY, BOOKMARK_DOWN, BOOKMARK_RISE } from "@/lib/motion";
 import { Book, RuledPage } from "./Book";
-import { FirstPage } from "./FirstPage";
+import { FirstPage, FirstPageTitle } from "./FirstPage";
 import styles from "./BookScene.module.css";
 
 /** No wording in the docs for a failed draw request — new copy, logged in context.md. */
@@ -32,7 +32,10 @@ interface Props {
   onHome: () => void;
 }
 
-/** S-03 · S-04 · S-05 share one book so the cover keeps its place between steps. Buttons sit below the book. */
+/**
+ * S-03 · S-04 · S-05 share one book so the cover keeps its place between steps. The book fills the column; the bookmark
+ * rises out of the gutter, centred between the two pages. Buttons sit below the book; the page count is the folio.
+ */
 export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onHome }: Props) {
   const [busy, setBusy] = useState(true);            // a bookmark is still moving: reactions wait (and frost stays off)
   const [last, setLast] = useState<Reaction>("pass");
@@ -49,6 +52,7 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
     onReact(reaction);
   };
 
+  const left = step === "first" && state.opened ? <FirstPageTitle entry={state.entry ?? "leaf"} /> : <RuledPage />;
   const right = step === "bookmarks"
     ? <RuledPage turn={state.index} />
     : state.opened && (
@@ -62,9 +66,10 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
     );
 
   return (
-    <div className={styles.scene}>
+    <div className={styles.scene} data-wide-scene="">
       <div className={styles.stage}>
-        <Book open={state.opened} onPress={step === "book" ? onOpen : undefined} left={<RuledPage />} right={right} />
+        <Book open={state.opened} onPress={step === "book" ? onOpen : undefined} left={left} right={right} />
+        {pick && <p className={styles.folio}>{`${state.index + 1} / ${picks.length}`}</p>}
         {pick && (
           <div className={styles.slot}>
             <AnimatePresence mode="wait" custom={last}>
@@ -77,7 +82,7 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
                 exit="gone"
                 onAnimationComplete={(definition) => { if (definition === "shown") setBusy(false); }}
               >
-                <Bookmark card={pick.card} art={pick.art} moving={busy} />
+                <div className={styles.scaled}><Bookmark card={pick.card} art={pick.art} moving={busy} /></div>
               </motion.div>
             </AnimatePresence>
           </div>
@@ -109,7 +114,6 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
         <div className={styles.actions}>
           <Button variant="secondary" disabled={busy} onClick={() => react("pass")}>패스</Button>
           <Button disabled={busy} onClick={() => react("curious")}>궁금해요</Button>
-          <p className={styles.count}>{`${state.index + 1} / ${picks.length}`}</p>
         </div>
       )}
     </div>

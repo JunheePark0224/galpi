@@ -1,6 +1,7 @@
 "use client";
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
+import { LogoMark } from "@/components/Logo";
 import { FLIP_PAGE, OPEN_COVER } from "@/lib/motion";
 import styles from "./Book.module.css";
 
@@ -12,28 +13,41 @@ interface Props {
 }
 
 /**
- * C-01 — cloth cover over a cream page (CSS 3D: perspective + backface). Closed, the cover is centred;
- * opening swings it left around the spine (T-06 open-cover). initial={false}: a resumed flow does not replay it.
+ * C-01 — leather cover over a cream page (CSS 3D: perspective + backface), with a cloth rim around the open spread.
+ * Closed, the cover is centred, lifted and zoomed by the scene (--cover-zoom, --cover-lift on the wrapper, a CSS transition
+ * with the open-cover timing); on a phone the closed cover is a normal book (1 : 1.45) and the tall pages behind it stay
+ * hidden until it opens. Opening swings the cover left around the spine (T-06) while the book settles to full size.
+ * Transform and opacity only — no filter, no animated shadow. initial={false}: a resumed flow does not replay it.
  */
 export function Book({ open, onPress, left, right }: Props) {
   return (
-    <motion.div className={styles.book} initial={false} animate={{ x: open ? "0%" : "-25%" }} transition={OPEN_COVER}>
-      <div className={styles.pageRight}>{right}</div>
-      <motion.div className={styles.cover} initial={false} animate={{ rotateY: open ? -180 : 0 }} transition={OPEN_COVER}>
-        <button
-          type="button"
-          className={styles.front}
-          onClick={onPress}
-          disabled={!onPress}
-          aria-label="책 펼치기"
-          aria-hidden={open || undefined}
-          tabIndex={open ? -1 : undefined}
-        >
-          <span className={styles.coverTitle}>갈피</span>
-        </button>
-        <div className={styles.back}>{left}</div>
+    <div className={styles.zoom} data-closed={open ? undefined : ""}>
+      <motion.div className={styles.book} initial={false} animate={{ x: open ? "0%" : "-25%" }} transition={OPEN_COVER}>
+        <div className={styles.board} aria-hidden="true" />
+        <div className={styles.pageRight}>{right}</div>
+        <motion.div className={styles.cover} initial={false} animate={{ rotateY: open ? -180 : 0 }} transition={OPEN_COVER}>
+          <button
+            type="button"
+            className={styles.front}
+            onClick={onPress}
+            disabled={!onPress}
+            aria-label="책 펼치기"
+            aria-hidden={open || undefined}
+            tabIndex={open ? -1 : undefined}
+          >
+            <span className={styles.spine} aria-hidden="true"><span className={styles.spineTitle}>갈피</span></span>
+            <span className={styles.frame} aria-hidden="true">
+              <span className={styles.plate}>
+                <span className={styles.coverTitle}>갈피</span>
+                <span className={styles.coverLine}>읽을 책, 갈피가 안 잡힐 때</span>
+              </span>
+              <LogoMark className={styles.coverMark} width={40} />
+            </span>
+          </button>
+          <div className={styles.back}><div className={styles.pageLeft}>{left}</div></div>
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
 

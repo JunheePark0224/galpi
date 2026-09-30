@@ -29,6 +29,14 @@ describe("BookScene", () => {
     expect(h.onOpen).toHaveBeenCalledTimes(1);
   });
 
+  it("S-04: the title page faces the summary once the book is open", () => {
+    render(<BookScene state={{ ...first, entry: "leaf", choices: ["A", "A", "A", "A", "A", "A", "A", "A", "A"] }} {...handlers()} />);
+    const heading = screen.getByRole("heading", { name: "당신이 찾는 책" });
+    const summaryPage = screen.getByText("분량").closest("ul")?.parentElement;
+    expect(summaryPage).toBeTruthy();
+    expect(summaryPage?.contains(heading)).toBe(false);
+  });
+
   it("S-04: summary on the page, one edit and the next page below the book", () => {
     const h = handlers();
     render(<BookScene state={first} {...h} />);

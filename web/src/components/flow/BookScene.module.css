@@ -1,13 +1,75 @@
-/* The bookmark sticks out above the book by ~25% of its height (DESIGN 4절): 80px card + 26px string = 106px.
-   The card grew to 344px (09-30) downward only, so the book and buttons do not move (card ends 264px into the 340px book). */
-.scene { display: flex; flex-direction: column; gap: var(--space-4); padding-top: 112px; }
-.stage { position: relative; }
+/* The scene fills the column (design pass 09-30): the book is the full width and as tall as the screen allows without
+   page scroll on a 375 × 667 phone; on taller screens the book and the bookmark grow (--book-h, --bm-scale).
+   Room above the book = the bookmark's part that sticks out (DESIGN 4절: 80px card + 26px string = 106px at scale 1).
+   The bookmark grows by a uniform transform, so the text-fit check of the 160 × 344 frame (e2e/design.spec.ts) holds. */
+.scene {
+  --book-h: clamp(340px, calc(100dvh - 304px), 420px);
+  --bm-scale: 1;
+  --cover-zoom: 1.6;   /* S-03 phone: a 1 : 1.45 cover about 270–320px wide (lift and hint pull: the phone block below) */
+  --cover-lift: -10%; --hint-pull: 0px;
+  display: flex; flex-direction: column; gap: var(--space-4);
+  padding-top: calc(106px * var(--bm-scale) + 6px);
+  overflow-x: clip;   /* the zoomed closed book's empty half must not widen the page (a phone would zoom out) */
+}
+/* Height left for the book = viewport − header 52 − main padding 8 + 16 − room above (106 × scale + 6) − gap 16
+   − buttons 44 − footer 52, less 4px of slack. */
+@media (min-height: 780px) {
+  .scene { --book-h: clamp(420px, calc(100dvh - 332px), 520px); --bm-scale: 1.25; }
+}
+@media (min-height: 880px) {
+  .scene { --book-h: clamp(500px, calc(100dvh - 348px), 600px); --bm-scale: 1.4; }
+}
+/* S-03 phone: the cover and the hint under it are one group, centred between the header and where the hint would sit
+   (the hint stays in layout, so nothing below it moves — it is only pulled up by transform). The cover is half the scene
+   wide (the column, less the main padding) at 1 : 1.45, scaled by --cover-zoom; its top may reach into the room above the
+   book. lift = where the group puts the cover's centre − the book's centre; pull = where the hint should be − where it sits. */
+@media (max-width: 767px) {
+  .scene {
+    --scene-w: calc(min(100vw, var(--column)) - 2 * var(--space-4));
+    --cover-h: calc(var(--scene-w) * 0.5 * 1.45 * var(--cover-zoom));
+    --hint-h: 20px;
+    --group-h: calc(var(--cover-h) + var(--space-3) + var(--hint-h));
+    --group-top: calc((var(--book-h) + var(--space-4) + var(--hint-h) - var(--group-h) - (106px * var(--bm-scale) + 6px)) / 2);
+    --cover-lift: calc(var(--group-top) + var(--cover-h) / 2 - var(--book-h) / 2);
+    --hint-pull: calc(var(--group-top) + var(--cover-h) + var(--space-3) - var(--book-h) - var(--space-4));
+  }
+}
+/* T-04b desktop (≥ 768px wide): the scene has left the 430px column (globals.css). The spread keeps book proportions —
+   two 1 : 1.4 pages, 1.43 : 1 — as large as the screen allows and at most 1000px wide; the bookmark grows by height
+   band; the buttons stay a centred row of at most 480px. Kept after the phone bands so it wins on a desktop. */
+@media (min-width: 768px) {
+  .scene {
+    --cover-zoom: 1.2; --cover-lift: -10%;   /* the cover is already a 1 : 1.4 page: grow it upward into the room above */
+    --bm-scale: 1.25;
+    --book-h: min(calc(100dvh - 198px - 106px * var(--bm-scale)), calc((min(92vw, 1000px) - 10px) / 1.43));
+  }
+}
+@media (min-width: 768px) and (min-height: 880px) {
+  .scene { --bm-scale: 1.4; }
+}
+@media (min-width: 768px) and (min-height: 1000px) {
+  .scene { --bm-scale: 1.6; }
+}
+.stage { position: relative; margin: 0 5px; }   /* the cloth rim stands 5px out */
+@media (min-width: 768px) {
+  .stage { width: calc(var(--book-h) * 1.43); margin: 0 auto; }
+}
+/* Centred on the gutter (the spine line), between the two pages. */
 .slot {
-  position: absolute; top: -106px; left: 50%; z-index: 3; width: 50%;
+  position: absolute; top: calc(-106px * var(--bm-scale)); left: 0; right: 0; z-index: 3;
   display: flex; justify-content: center; pointer-events: none;
 }
-.hint { margin: 0; text-align: center; font-size: 13px; color: var(--ink-muted); }
+.scaled { transform: scale(var(--bm-scale)); transform-origin: 50% 0; }
+/* P-05: the page count sits on the page like a folio, bottom right — clear of the centred bookmark. */
+.folio {
+  position: absolute; right: var(--space-3); bottom: var(--space-2); z-index: 1; margin: 0;
+  padding: 0 var(--space-2); border-radius: var(--radius-pill); background: var(--paper-deep);
+  font-size: 12px; line-height: 22px; color: var(--ink-soft);
+}
+.hint { margin: 0; text-align: center; font-size: 13px; line-height: var(--hint-h, 20px); color: var(--ink-muted); translate: 0 var(--hint-pull); }
 .actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--space-3); }
 .actions > button { flex: 1 1 0; min-width: 120px; }
-.count { flex-basis: 100%; margin: 0; text-align: center; font-size: 12px; color: var(--ink-muted); }
 .error { flex-basis: 100%; margin: 0; text-align: center; font-size: 13px; }
+@media (min-width: 768px) {
+  .actions { width: 100%; max-width: 480px; margin: 0 auto; }
+}
