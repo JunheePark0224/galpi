@@ -164,8 +164,9 @@ test("S-06 C-16: the S-05 bookmark peeks out of the cover, pulls out, flips to �
   const mark = (await stage.locator("[data-pull]").boundingBox())!;
   const cover = (await page.locator("[data-pose] > div").last().boundingBox())!;
   expect(mark.y + mark.height).toBeLessThanOrEqual(cover.y + cover.height + 1);
-  await expect(page.getByRole("link", { name: "예스24에서 보기 ↗" })).toHaveAttribute("data-variant", "primary");
-  await expect(page.getByText("내 책갈피에 꽂기")).toHaveCount(0);
+  // P5 (C-16): out, [내 책갈피에 꽂기] leads and YES24 steps down — one main button (login is on in E2E)
+  await expect(page.getByRole("button", { name: "내 책갈피에 꽂기" })).toHaveAttribute("data-variant", "primary");
+  await expect(page.getByRole("link", { name: "예스24에서 보기 ↗" })).toHaveAttribute("data-variant", "secondary");
 
   // Back: 나온 이유 and its items, 만난 날 today.
   await page.getByRole("button", { name: "뒷면 보기" }).click();

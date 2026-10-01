@@ -11,7 +11,7 @@ test("🎯 input → 처리방침 link → /privacy → 처음으로", async ({ 
   await expect(page).toHaveURL(/\/privacy$/);
   await expect(page.getByRole("heading", { level: 1, name: "개인정보 처리방침" })).toBeVisible();
   await expect(page.getByText("수집일로부터 1년이 지나면 자동으로 지워져요.")).toBeVisible();
-  await expect(page.getByRole("table").getByRole("row")).toHaveCount(7);
+  await expect(page.getByRole("table").getByRole("row")).toHaveCount(10);   // header + 9 (P5: login, Google email, 내 책갈피)
   // the home visit already created this browser's id; /privacy only shows it
   const stored = await page.evaluate(() => localStorage.getItem("galpi.anon"));
   expect(stored).toMatch(/^[0-9a-f-]{36}$/);
