@@ -1,4 +1,4 @@
-/** Shared request guards for the public POST routes: same-origin, rate limit, body size cap. */
+/** Shared request guards for the public routes (POST and GET): same-origin, rate limit, body size cap, a daily budget for paid calls. */
 
 export type Capped = { ok: true; body: unknown } | { ok: false; response: Response };
 
@@ -17,12 +17,18 @@ const originOf = (value: string | null): string | null => {
 
 /**
  * True when the request comes from this site's own pages. Browsers always send Origin on a POST
- * (sendBeacon and fetch included); Referer is the fallback. Neither header = refused.
+ * (sendBeacon and fetch included); Referer is the fallback. With neither, a browser's `Sec-Fetch-Site: same-origin` is accepted
+ * (a same-origin fetch that had its Referer stripped); any other value or no header = refused. A present Origin or Referer
+ * always decides, so a cross-site Origin is refused whatever Sec-Fetch-Site says. Like Origin, the header can be forged by a
+ * script outside a browser: this is a guard against other sites, not against scripts (the rate limit and budgets cover those).
  * Behind a proxy the public host and scheme arrive in x-forwarded-host / x-forwarded-proto.
  */
 export function sameOrigin(req: Request): boolean {
   const claimed = originOf(req.headers.get("origin")) ?? originOf(req.headers.get("referer"));
-  if (!claimed) return false;
+  if (!claimed) {
+    const headerOnly = !req.headers.get("origin") && !req.headers.get("referer");
+    return headerOnly && req.headers.get("sec-fetch-site")?.trim().toLowerCase() === "same-origin";
+  }
   const url = new URL(req.url);
   const allowed = new Set([url.origin]);
   const forwarded = req.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
@@ -68,6 +74,25 @@ export function rateLimit(key: string, limit: number, windowMs: number): RateRes
   windows.delete(key);            // re-insert so the newest window sits last
   windows.set(key, { count: 1, resetAt: now + windowMs });
   return { ok: true };
+}
+
+// A per-instance daily budget for calls that cost money: one counter per name, restarted when the UTC date changes.
+const budgets = new Map<string, { day: string; used: number }>();
+
+/** For tests: forget every daily counter. */
+export const resetDailyBudgets = (): void => budgets.clear();
+
+/** Takes one call from today's budget: true while there is some left, false once `limit` calls have been taken today (UTC). */
+export function takeDailyBudget(name: string, limit: number): boolean {
+  const day = new Date().toISOString().slice(0, 10);
+  const current = budgets.get(name);
+  if (!current || current.day !== day) {
+    budgets.set(name, { day, used: 1 });
+    return limit >= 1;
+  }
+  if (current.used >= limit) return false;
+  current.used += 1;
+  return true;
 }
 
 /** Reads the body as JSON without ever holding more than maxBytes: 413 when over, 400 when not JSON. */
