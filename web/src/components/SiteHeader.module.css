@@ -1,2 +1,4 @@
 .header { display: flex; align-items: center; height: var(--header-h); padding: 0 var(--space-4); }
+.home { display: inline-flex; align-items: center; min-height: var(--touch); color: var(--ink); text-decoration: none; }
+.home:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
 .logo { display: block; color: var(--ink); }

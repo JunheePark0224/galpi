@@ -1,0 +1,48 @@
+import { cleanAuthor, type Bib } from "./normalize";
+import type { Vocab } from "./types";
+
+type Row = Record<string, unknown>;
+
+const STATUSES = ["picked", "reserve", "dropped"];
+const bad = (isbn: unknown, why: string) => new Error(`${String(isbn || "(no isbn)")}: ${why}`);
+
+/** One picked book of data/processed/additions/*.json → a books_v1-shaped row (slot = topic). */
+function toRow(b: Row, vocab: Vocab): Row {
+  if (b.entry !== "target") throw bad(b.isbn, "only 🎯 books can be added for now");
+  const topic = String(b.topic ?? "");
+  const allowed = vocab[topic]?.keywords ?? {};
+  const keywords = Array.isArray(b.keywords) ? b.keywords : [];
+  for (const k of keywords) if (!Object.hasOwn(allowed, String(k))) throw bad(b.isbn, `keyword ${String(k)} is not in ${topic}`);
+  return {
+    isbn: b.isbn, entry: "target", slot: topic, pages: b.pages, way: b.way, keywords: [...keywords],
+    one_liner: b.one_liner, one_liner_style: b.one_liner_style,
+  };
+}
+
+/**
+ * books_v1 rows + the picked books of every additions file (D-B/D-C; the 10-01 pilot is the first) → rows and bib
+ * for normalizeCatalog. Base rows keep their order and content; additions come after, file by file. Reserve and
+ * dropped books stay out. Only our tags, titles and authors are in these files — no YES24 text.
+ */
+export function mergeAdditions(baseRows: readonly Row[], baseBib: ReadonlyMap<string, Bib>, files: readonly unknown[], vocab: Vocab) {
+  const rows: Row[] = [...baseRows];
+  const bib = new Map(baseBib);
+  const seen = new Set(baseRows.map((r) => String(r.isbn)));
+  for (const f of files) {
+    const books = (f as { books?: unknown }).books;
+    if (!Array.isArray(books)) throw new Error("additions file needs a books list");
+    for (const b of books as Row[]) {
+      if (!STATUSES.includes(String(b.status))) throw bad(b.isbn, `unknown status ${String(b.status)}`);
+      if (b.status !== "picked") continue;
+      const isbn = String(b.isbn ?? "");
+      if (seen.has(isbn)) throw bad(isbn, "already in books");
+      const title = typeof b.title === "string" ? b.title.trim() : "";
+      const author = typeof b.author === "string" ? cleanAuthor(b.author) : "";
+      if (!title || !author) throw bad(isbn, "an added book needs title and author");
+      rows.push(toRow(b, vocab));
+      bib.set(isbn, { title, author });
+      seen.add(isbn);
+    }
+  }
+  return { rows, bib };
+}

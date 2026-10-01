@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import vocab from "@/data/vocab.json";
+import { activeTopics, activeVocab } from "@/lib/books/active";
 import { TOPICS } from "@/lib/books/taxonomy";
 import type { Vocab } from "@/lib/books/types";
 import { CLASSIFY_MODEL, classifySchema, classifySystemPrompt, keywordAliases, parseClassification } from "./classify";
@@ -33,9 +34,33 @@ describe("classify prompt and schema", () => {
     const schema = classifySchema(VOCAB) as { properties: Record<string, { enum?: string[]; items?: { enum: string[] } }> };
     const names = schema.properties.keywords.items?.enum ?? [];
     expect(schema.properties.topic.enum).toEqual([...TOPICS]);
-    expect(names).toEqual(expect.arrayContaining(["SQL", "마음·회복", "일하는 법"]));
+    expect(names).toEqual(expect.arrayContaining(["SQL", "번아웃·스트레스", "일하는 법"]));
+    expect(names).not.toContain("마음·회복"); // moved out of 습관·집중 when 마음 돌보기 turned on (10-01 pilot)
     expect(new Set(names).size).toBe(names.length);
     expect(schema).toMatchObject({ required: ["topic", "keywords", "matched"], additionalProperties: false });
+  });
+});
+
+describe("only active topics reach the model (D-A, 10 books)", () => {
+  // 시간·생산성 has 9 books here: it must not be offered, named in the schema, or accepted back.
+  const books = TOPICS.flatMap((topic) => Array.from({ length: topic === "시간·생산성" ? 9 : 10 }, () => ({ entry: "target" as const, topic })));
+  const ACTIVE = activeVocab(VOCAB, activeTopics(books));
+
+  it("leaves an inactive topic and its keywords out of the prompt", () => {
+    const prompt = classifySystemPrompt(ACTIVE);
+    expect(prompt).not.toContain("시간·생산성");
+    expect(prompt).not.toContain("일하는 법");
+    expect(prompt).toContain("- 습관·집중: keywords [");
+  });
+
+  it("leaves an inactive topic and its keywords out of the schema enums", () => {
+    const schema = classifySchema(ACTIVE) as { properties: Record<string, { enum?: string[]; items?: { enum: string[] } }> };
+    expect(schema.properties.topic.enum).toEqual(TOPICS.filter((t) => t !== "시간·생산성"));
+    expect(schema.properties.keywords.items?.enum).not.toContain("일하는 법");
+  });
+
+  it("voids an answer that names an inactive topic", () => {
+    expect(parseClassification(answer({ topic: "시간·생산성", keywords: [], matched: true }), "시간 관리", ACTIVE)).toBeNull();
   });
 });
 
@@ -50,8 +75,8 @@ describe("parseClassification", () => {
 
 
   it("turns a good answer into a GoalMatch (method llm)", () => {
-    expect(parseClassification(answer({ topic: "습관·집중", keywords: ["마음·회복"], matched: true }), "  번아웃 극복  ", VOCAB))
-      .toEqual({ text: "번아웃 극복", topic: "습관·집중", keywords: ["마음·회복"], matched: true, method: "llm" });
+    expect(parseClassification(answer({ topic: "마음 돌보기", keywords: ["번아웃·스트레스"], matched: true }), "  번아웃 극복  ", VOCAB))
+      .toEqual({ text: "번아웃 극복", topic: "마음 돌보기", keywords: ["번아웃·스트레스"], matched: true, method: "llm" });
   });
 
   it("drops keywords of another topic, unknown names and repeats, keeping at most five", () => {

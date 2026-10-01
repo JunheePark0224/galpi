@@ -5,7 +5,10 @@ import type { PropsOf } from "@/lib/track/schema";
 
 export type LenChoice = "thin" | "normal" | "thick";
 
-/** S-02 🎯 inputs. free !== null means 직접 쓰기 (then topic is null). Empty optional fields mean 상관없음. */
+/**
+ * S-02 🎯 inputs. Since 입력 B (10-01) the screen always sends `free` (the 무엇을 field) with topic null; a saved form from
+ * before B may still carry a chosen topic with free null. Empty optional fields mean 상관없음.
+ */
 export interface TargetForm { topic: Topic | null; free: string | null; len: LenChoice | null; way: Way | null }
 
 export const EMPTY_FORM: TargetForm = { topic: null, free: null, len: null, way: null };
@@ -21,7 +24,7 @@ export const WAY_CHIPS: readonly { value: Way; label: string }[] = [
   { value: "실습", label: `${WAY_LABEL.실습} (바로 써먹기)` },
   { value: "사례", label: WAY_LABEL.사례 },
 ];
-export const FREE_PLACEHOLDER = "SQL, 엑셀 함수, 번아웃, 발표 준비 …";
+export const FREE_PLACEHOLDER = "요즘 알고 싶은 걸 적어 주세요 (30자)";
 
 export function formReady(f: TargetForm): boolean {
   return f.free !== null ? f.free.trim().length > 0 : f.topic !== null;
@@ -36,7 +39,11 @@ export function targetAnswersFrom(f: TargetForm, goal: GoalMatch | null): Target
   };
 }
 
-/** E-26 goal_submitted: the 🎯 form passed its check. topic = the chosen key, or the one the written goal matched. */
+/**
+ * E-26 goal_submitted: the 🎯 form passed its check. topic = the chosen key, or the one the goal matched.
+ * is_free_text = the visitor's own words: false for an untouched example chip (보기 그대로), as it was for a topic chip before B.
+ */
 export function goalSubmittedProps(f: TargetForm, goal: GoalMatch | null, isEdit: boolean): PropsOf<"goal_submitted"> {
-  return { topic: targetAnswersFrom(f, goal).topic, is_free_text: f.free !== null, len: f.len, way: f.way, is_edit: isEdit };
+  const isFreeText = f.free !== null && goal?.method !== "example";
+  return { topic: targetAnswersFrom(f, goal).topic, is_free_text: isFreeText, len: f.len, way: f.way, is_edit: isEdit };
 }

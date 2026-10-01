@@ -32,7 +32,7 @@ export const EVENT_SPEC = {
   site_visited: { prompt_version: { type: "string", only: "amplitude" } },
   entry_selected: {},
   chip_selected: {
-    chip_type: { type: ["topic", "len", "way"] },
+    chip_type: { type: ["example", "len", "way"] },
     chip_value: { type: "string", nullable: true },
     is_edit: IS_EDIT,
   },

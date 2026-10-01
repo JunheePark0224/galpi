@@ -10,7 +10,11 @@ const DEMO: BookCard[] = [
 ];
 
 const COLORS = ["paper", "paper-deep", "paper-line", "cloth", "ink", "ink-soft", "ink-muted"];
-const GENRES = ["korean-fiction", "world-fiction", "sf-fantasy", "mystery", "essay", "poetry", "humanities", "science", "art-travel"];
+const GENRES = [
+  "korean-fiction", "world-fiction", "sf-fantasy", "mystery", "essay", "poetry", "humanities", "science", "art-travel",
+  "history", "society", "horror",
+];
+const FIELDS = ["data", "ai", "habit", "money", "mind", "career"];
 
 /** Token/component sheet for development. Not part of the product: a 404 on the public production site. */
 export default function DesignPage() {
@@ -20,7 +24,7 @@ export default function DesignPage() {
       <h1>디자인 확인</h1>
       <h2>색</h2>
       <ul style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, padding: 0, listStyle: "none" }}>
-        {[...COLORS.map((c) => `--${c}`), ...GENRES.map((g) => `--genre-${g}`)].map((v) => (
+        {[...COLORS.map((c) => `--${c}`), ...GENRES.map((g) => `--genre-${g}`), ...FIELDS.map((f) => `--field-${f}`)].map((v) => (
           <li key={v} data-token={v} style={{ fontSize: 12 }}>
             <div style={{ height: 40, borderRadius: 8, background: `var(${v})`, border: "1px solid var(--paper-line)" }} />
             {v}

@@ -1,7 +1,9 @@
 import { artsForDraw } from "@/lib/art/combine";
+import { topicsIn } from "@/lib/books/active";
 import { TOPICS } from "@/lib/books/taxonomy";
 import type { DrawResponse, Vocab } from "@/lib/books/types";
 import { GOAL_MAX, matchGoal, type GoalMatch } from "@/lib/goal/match";
+import { exampleGoal } from "./examples";
 import type { DrawView, FlowState } from "./state";
 import { targetAnswersFrom } from "./target";
 
@@ -64,4 +66,9 @@ export async function classifyGoal(text: string, vocab: Vocab): Promise<GoalMatc
     // offline or timed out: fall through
   }
   return matchGoal(trimmed, vocab);
+}
+
+/** S-02 🎯 B: an untouched example chip has its fixed match (no request); any other text is sorted by classifyGoal. */
+export async function goalFor(text: string, vocab: Vocab): Promise<GoalMatch> {
+  return exampleGoal(text, topicsIn(vocab)) ?? classifyGoal(text, vocab);
 }

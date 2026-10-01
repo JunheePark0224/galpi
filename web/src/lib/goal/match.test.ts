@@ -14,6 +14,7 @@ const VOCAB: Vocab = {
     },
     terms: [],
   },
+  글쓰기: { keywords: { "에세이·책 쓰기": "에세이 ?쓰기|책 ?쓰기" }, terms: [] },
   "업무 자동화": { keywords: { "파이썬 자동화": "파이썬|Python", "AI 업무 활용": "챗GPT|ChatGPT|생성형 ?AI" }, terms: ["노션"] },
   "습관·집중": { keywords: { "마음·회복": "회복 ?탄력성|스트레스|번아웃|불안" }, terms: ["도파민"] },
   "시간·생산성": { keywords: { "일하는 법": "일 ?잘하는|업무 ?효율|생산성" }, terms: ["시간 관리"] },
@@ -44,6 +45,11 @@ describe("matchGoal", () => {
     expect(matchGoal("파이썬으로 엑셀 정리", VOCAB)).toMatchObject({ topic: "업무 자동화", keywords: ["파이썬 자동화"] });
   });
 
+  it("lets the topic's own name settle a word tie: 쓰기 is in AI 활용's label and in 글쓰기", () => {
+    expect(matchGoal("소설 쓰기", VOCAB)).toMatchObject({ topic: "글쓰기", keywords: [], matched: true });
+    expect(matchGoal("AI 잘 쓰기", VOCAB)).toMatchObject({ topic: "AI 활용", matched: true });
+  });
+
   it("finds worries, not only subjects", () => {
     expect(matchGoal("번아웃", VOCAB)).toMatchObject({ topic: "습관·집중", keywords: ["마음·회복"], matched: true });
   });
@@ -57,6 +63,20 @@ describe("matchGoal", () => {
   it("says honestly when nothing in our list matched", () => {
     expect(matchGoal("발표 준비", VOCAB)).toEqual({ text: "발표 준비", topic: "데이터 분석", keywords: [], matched: false, method: "word" });
     expect(matchGoal("   ", VOCAB)).toMatchObject({ matched: false, text: "" });
+  });
+
+  it("searches only the topics of the vocabulary it is given (the active ones)", () => {
+    const rest: Vocab = Object.fromEntries(Object.entries(VOCAB).filter(([topic]) => topic !== "습관·집중"));
+    expect(matchGoal("번아웃", VOCAB)).toMatchObject({ topic: "습관·집중", matched: true });
+    expect(matchGoal("번아웃", rest)).toMatchObject({ matched: false });
+    // the topic's own name is not a way in either while it is off
+    expect(matchGoal("집중이 안 돼요", VOCAB)).toMatchObject({ topic: "습관·집중", matched: true });
+    expect(matchGoal("집중이 안 돼요", rest)).toMatchObject({ topic: "데이터 분석", matched: false });
+  });
+
+  it("still answers (unmatched, first topic) when no topic is active", () => {
+    expect(matchGoal("집중이 안 돼요", {})).toMatchObject({ topic: "데이터 분석", keywords: [], matched: false });
+    expect(matchGoal("", {})).toMatchObject({ topic: "데이터 분석", matched: false });
   });
 
   it("keeps at most 30 characters", () => {

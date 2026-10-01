@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { ACTIVE_VOCAB } from "@/lib/books/catalog";
 import type { GoalMatch } from "@/lib/goal/match";
 import { resetDailyBudgets } from "@/lib/server/guard";
 import { classifyWithClaude } from "@/lib/server/llm";
@@ -38,6 +39,22 @@ describe("POST /api/goal/classify", () => {
     expect(await (await post({ text: "번아웃" })).json()).toEqual(LLM_GOAL);
     expect(vi.mocked(classifyWithClaude).mock.calls[0][0]).toBe("번아웃");
     expect(vi.mocked(classifyWithClaude).mock.calls[0][2]).toEqual({ apiKey: "test-key-not-real" });
+  });
+
+  // Until the 10-01 pilot this asserted 주식 → nearest active topic (matched false): 돈 관리·투자 had 0 books. The pilot
+  // added 15 books to each new topic, so all 12 are on; the off-topic case is covered with fixtures in active.test.ts.
+  it("sorts into a new topic once it has 10+ books (주식 → 돈 관리·투자 after the 10-01 pilot)", async () => {
+    vi.stubEnv("ANTHROPIC_API_KEY", "");
+    const goal = (await (await post({ text: "주식 투자 입문" }, { origin: ORIGIN, "x-forwarded-for": "8.8.4.5" })).json()) as GoalMatch;
+    expect(goal).toMatchObject({ topic: "돈 관리·투자", keywords: ["주식"], matched: true, method: "word" });
+    expect(Object.keys(ACTIVE_VOCAB)).toContain("돈 관리·투자");
+  });
+
+  it("gives Claude the active topics only (D-A: 10 books or more)", async () => {
+    vi.stubEnv("ANTHROPIC_API_KEY", "test-key-not-real");
+    vi.mocked(classifyWithClaude).mockResolvedValue({ ok: true, goal: LLM_GOAL });
+    await post({ text: "번아웃" }, { origin: ORIGIN, "x-forwarded-for": "8.8.4.4" });
+    expect(vi.mocked(classifyWithClaude).mock.calls[0][1]).toBe(ACTIVE_VOCAB);
   });
 
   it("falls back to word matching on a timeout and logs only the reason, never the note", async () => {

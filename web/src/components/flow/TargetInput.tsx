@@ -1,9 +1,10 @@
 "use client";
 import Link from "next/link";
-import { useRef, useState, type FormEvent } from "react";
+import { useState, type FormEvent, type KeyboardEvent } from "react";
 import type { Way } from "@/lib/recommend";
 import { Button } from "@/components/Button";
-import { TOPIC_CHIPS, type Topic } from "@/lib/books/taxonomy";
+import type { Topic } from "@/lib/books/taxonomy";
+import { shownExamples } from "@/lib/flow/examples";
 import { FREE_PLACEHOLDER, LEN_CHIPS, WAY_CHIPS, formReady, type LenChoice, type TargetForm } from "@/lib/flow/target";
 import { GOAL_MAX } from "@/lib/goal/match";
 import { track } from "@/lib/track/client";
@@ -14,8 +15,11 @@ export const MISSING_WHAT = "보기 하나를 고르거나 직접 써 주세요"
 // Plain text link, new tab, no logo; a search page would need the typed text in the URL — the home page has search.
 const YES24_HOME = "https://www.yes24.com/";
 
-/** busy: a written goal is being sorted (/api/goal/classify, up to ~3 s) — the form waits instead of sending twice. */
-interface Props { initial: TargetForm; edit: boolean; busy?: boolean; onSubmit: (form: TargetForm) => void }
+/**
+ * busy: a written goal is being sorted (/api/goal/classify, up to ~3 s) — the form waits instead of sending twice.
+ * topics: the active 🎯 topics — an example chip whose topic is not among them is not shown.
+ */
+interface Props { initial: TargetForm; edit: boolean; busy?: boolean; topics: readonly Topic[]; onSubmit: (form: TargetForm) => void }
 /** P-03: an open-book mark before the label (decorative — the button still reads "책 펼치기"). */
 function BookIcon() {
   return (
@@ -25,22 +29,23 @@ function BookIcon() {
   );
 }
 
-/** S-02 🎯 (C-09): one screen — 무엇을 (required: 6 chips or 직접 쓰기) · 분량 · 읽는 방식. */
-export function TargetInput({ initial, edit, busy = false, onSubmit }: Props) {
-  const [form, setForm] = useState<TargetForm>(initial);
+/**
+ * S-02 🎯 (C-09, 입력 B 10-01): one screen — 무엇을 (required: the field, with example chips under it that fill it) · 분량 ·
+ * 읽는 방식. A form saved before B (a topic, no text) starts with an empty field: 무엇을 is asked again.
+ */
+export function TargetInput({ initial, edit, busy = false, topics, onSubmit }: Props) {
+  const [form, setForm] = useState<TargetForm>({ ...initial, topic: null, free: initial.free ?? "" });
   const [missing, setMissing] = useState(false);
-  const freeInput = useRef<HTMLInputElement>(null);
+  const text = form.free ?? "";
+  const examples = shownExamples(topics);
 
-  const change = (patch: Partial<TargetForm>, chipType: "topic" | "len" | "way", chipValue: string | null) => {
+  const change = (patch: Partial<TargetForm>, chipType: "example" | "len" | "way", chipValue: string | null) => {
     setForm((f) => ({ ...f, ...patch }));
     setMissing(false);
     track("chip_selected", { chip_type: chipType, chip_value: chipValue, is_edit: edit });
   };
-  const pickTopic = (topic: Topic) => change({ topic, free: null }, "topic", topic);
-  const pickFree = () => {
-    change({ topic: null, free: form.free ?? "" }, "topic", "free");
-    setTimeout(() => freeInput.current?.focus(), 0);
-  };
+  // No focus on purpose: on a phone that would pop the keyboard over the rest of the form.
+  const pickExample = (phrase: string) => change({ free: phrase }, "example", phrase);
   const toggleLen = (len: LenChoice) => {
     const next = form.len === len ? null : len;
     change({ len: next }, "len", next);
@@ -50,14 +55,24 @@ export function TargetInput({ initial, edit, busy = false, onSubmit }: Props) {
     change({ way: next }, "way", next);
   };
 
-  const submit = (e: FormEvent) => {
-    e.preventDefault();
+  const send = () => {
     if (busy) return;
     if (!formReady(form)) {
       setMissing(true);
       return;
     }
-    onSubmit({ ...form, free: form.free === null ? null : form.free.trim().slice(0, GOAL_MAX) });
+    onSubmit({ ...form, free: text.trim().slice(0, GOAL_MAX) });
+  };
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    send();
+  };
+  // A one-line answer in a two-line box: Enter sends, line breaks become spaces. Not mid-composition of a Korean syllable —
+  // Safari ends the composition before the Enter keydown, which then only shows as keyCode 229.
+  const enter = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key !== "Enter" || e.nativeEvent.isComposing || e.keyCode === 229) return;
+    e.preventDefault();
+    send();
   };
 
   return (
@@ -68,40 +83,38 @@ export function TargetInput({ initial, edit, busy = false, onSubmit }: Props) {
         <p id="what-label" className={styles.label}>
           무엇을 알고 싶어요 <span className={missing ? styles.required : styles.badge}>필수</span>
         </p>
-        <div className={styles.chips}>
-          {TOPIC_CHIPS.map((c) => (
-            <button key={c.topic} type="button" className={styles.chip}
-              aria-pressed={form.free === null && form.topic === c.topic} onClick={() => pickTopic(c.topic)}>
-              {c.label}
-            </button>
-          ))}
-          <button type="button" className={styles.chip} aria-pressed={form.free !== null} onClick={pickFree}>직접 쓰기</button>
-        </div>
-        {form.free !== null && (
-          <>
-            <input
-              ref={freeInput}
-              className={styles.input}
-              aria-label="직접 쓰기"
-              data-amp-mask
-              maxLength={GOAL_MAX}
-              placeholder={FREE_PLACEHOLDER}
-              value={form.free}
-              onChange={(e) => {
-                const free = e.target.value;
-                setForm((f) => ({ ...f, free }));
-                setMissing(false);
-              }}
-            />
-            <p className={styles.hint}>
-              주제나 고민을 적어 주세요 · 제목·작가로 찾을 땐{" "}
-              <a href={YES24_HOME} target="_blank" rel="noopener noreferrer">예스24 검색을 이용해 주세요 ↗</a>
-            </p>
-            <p className={styles.hint}>
-              <span>이름·연락처는 적지 마세요</span> · <Link href="/privacy" className={styles.policy}>처리방침</Link>
-            </p>
-          </>
+        <textarea
+          className={styles.input}
+          aria-label="무엇을 알고 싶어요"
+          data-amp-mask
+          rows={2}
+          maxLength={GOAL_MAX}
+          placeholder={FREE_PLACEHOLDER}
+          value={text}
+          onKeyDown={enter}
+          onChange={(e) => {
+            const free = e.target.value.replace(/[\r\n]+/g, " ");
+            setForm((f) => ({ ...f, free }));
+            setMissing(false);
+          }}
+        />
+        {examples.length > 0 && (
+          <div role="group" aria-label="예시" className={styles.chips}>
+            {examples.map((c) => (
+              <button key={c.text} type="button" className={styles.chip} aria-pressed={text.trim() === c.text}
+                disabled={busy} onClick={() => pickExample(c.text)}>
+                {c.text}
+              </button>
+            ))}
+          </div>
         )}
+        <p className={styles.hint}>
+          주제나 고민을 적어 주세요 · 제목·작가로 찾을 땐{" "}
+          <a href={YES24_HOME} target="_blank" rel="noopener noreferrer">예스24 검색을 이용해 주세요 ↗</a>
+        </p>
+        <p className={styles.hint}>
+          <span>이름·연락처는 적지 마세요</span> · <Link href="/privacy" className={styles.policy}>처리방침</Link>
+        </p>
         {missing && <p role="alert" className={styles.missing}>{MISSING_WHAT}</p>}
       </div>
 
@@ -109,7 +122,7 @@ export function TargetInput({ initial, edit, busy = false, onSubmit }: Props) {
         <p id="len-label" className={styles.label}>분량 <span className={styles.badge}>선택</span></p>
         <div className={styles.chips}>
           {LEN_CHIPS.map((c) => (
-            <button key={c.value} type="button" className={styles.chip} aria-pressed={form.len === c.value} onClick={() => toggleLen(c.value)}>
+            <button key={c.value} type="button" className={styles.chip} aria-pressed={form.len === c.value} disabled={busy} onClick={() => toggleLen(c.value)}>
               {c.label}
             </button>
           ))}
@@ -120,7 +133,7 @@ export function TargetInput({ initial, edit, busy = false, onSubmit }: Props) {
         <p id="way-label" className={styles.label}>읽는 방식 <span className={styles.badge}>선택</span></p>
         <div className={styles.chips}>
           {WAY_CHIPS.map((c) => (
-            <button key={c.value} type="button" className={styles.chip} aria-pressed={form.way === c.value} onClick={() => toggleWay(c.value)}>
+            <button key={c.value} type="button" className={styles.chip} aria-pressed={form.way === c.value} disabled={busy} onClick={() => toggleWay(c.value)}>
               {c.label}
             </button>
           ))}

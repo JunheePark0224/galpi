@@ -4,11 +4,16 @@ import { named, reactToBookmarks, recordEvents, specMismatches, test } from "./h
 // Motion and CSS shorten to fades under reduced motion — same flow, faster run. Books: BOOKS_SOURCE=sample.
 test.use({ reducedMotion: "reduce" });
 
-test("🎯 chips → book → first page → five bookmarks → 궁금해요 books one by one → the end", async ({ page }, testInfo) => {
+const FIELD = { name: "무엇을 알고 싶어요" } as const;
+
+test("🎯 example chip → book → first page → five bookmarks → 궁금해요 books one by one → the end", async ({ page }, testInfo) => {
   const { events, statuses } = await recordEvents(page);
+  let classifyAsked = 0;
+  await page.route("**/api/goal/classify", (route) => { classifyAsked += 1; return route.continue(); });
   await page.goto("/");
   await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
-  await page.getByRole("button", { name: "데이터 분석", exact: true }).click();
+  await page.getByRole("button", { name: "데이터 분석", exact: true }).click();     // an example chip fills the field
+  await expect(page.getByRole("textbox", FIELD)).toHaveValue("데이터 분석");
   await page.getByRole("button", { name: "얇게", exact: true }).click();
   await page.getByRole("button", { name: "따라 하며 실습 (바로 써먹기)" }).click();
   await page.getByRole("button", { name: "책 펼치기" }).click();          // S-02 submit
@@ -51,10 +56,14 @@ test("🎯 chips → book → first page → five bookmarks → 궁금해요 boo
   // taxonomy 3-1a: home_clicked carries the round it ends, the restart is round 2
   expect(named(events, "entry_selected").map((e) => [e.props, e.common.entry, e.common.round])).toEqual([[{}, "target", 1], [{}, "leaf", 2]]);
   expect(named(events, "home_clicked")[0].common.round).toBe(1);
-  expect(named(events, "chip_selected").map((e) => [e.props.chip_type, e.props.chip_value])).toEqual([["topic", "데이터 분석"], ["len", "thin"], ["way", "실습"]]);
+  expect(named(events, "chip_selected").map((e) => [e.props.chip_type, e.props.chip_value])).toEqual([["example", "데이터 분석"], ["len", "thin"], ["way", "실습"]]);
   expect(named(events, "goal_submitted").map((e) => e.props)).toEqual([
     { topic: "데이터 분석", is_free_text: false, len: "thin", way: "실습", is_edit: false },
   ]);
+  // an untouched example is matched from its fixed table: no sorting request, and no E-21 / E-22 (not the visitor's own words)
+  expect(classifyAsked).toBe(0);
+  expect(named(events, "free_goal_written")).toHaveLength(0);
+  expect(named(events, "goal_coverage_checked")).toHaveLength(0);
   expect(named(events, "book_opened")).toHaveLength(1);
   const shown = named(events, "bookmark_shown");
   expect(shown).toHaveLength(5);
@@ -81,8 +90,7 @@ test("🎯 written goal → honest count → one edit → five bookmarks", async
   await page.getByRole("button", { name: "책 펼치기" }).click();          // nothing chosen yet
   // getByText, not getByRole("alert"): Next adds its own empty role="alert" route announcer.
   await expect(page.getByText("보기 하나를 고르거나 직접 써 주세요")).toBeVisible();
-  await page.getByRole("button", { name: "직접 쓰기" }).click();
-  await page.getByRole("textbox", { name: "직접 쓰기" }).fill("SQL 공부");
+  await page.getByRole("textbox", FIELD).fill("SQL 공부");
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await page.getByRole("button", { name: "책 펼치기" }).click();          // open the book
 
@@ -91,7 +99,7 @@ test("🎯 written goal → honest count → one edit → five bookmarks", async
   await expect(page.getByText("조건에 딱 맞는 책은 여기까지예요")).toHaveCount(0);
 
   await page.getByRole("button", { name: "한 번 고치기" }).click();
-  await expect(page.getByRole("textbox", { name: "직접 쓰기" })).toHaveValue("SQL 공부");
+  await expect(page.getByRole("textbox", FIELD)).toHaveValue("SQL 공부");
   await page.getByRole("button", { name: "얇게", exact: true }).click();
   await page.getByRole("button", { name: "책 펼치기" }).click();          // straight back to the open book
   await expect(page.getByText(notice)).toBeVisible();
@@ -112,7 +120,7 @@ test("🎯 written goal → honest count → one edit → five bookmarks", async
   ]);
   expect(named(events, "goal_coverage_checked")[0].props).toEqual({ coverage_bucket: "1-3", found_count: 2 });
   expect(named(events, "first_page_edited").map((e) => e.props)).toEqual([{ changed_items: ["len"] }]);
-  expect(named(events, "chip_selected").map((e) => [e.props.chip_value, e.props.is_edit])).toEqual([["free", false], ["thin", true]]);
+  expect(named(events, "chip_selected").map((e) => [e.props.chip_value, e.props.is_edit])).toEqual([["thin", true]]);
   expect(specMismatches(events)).toEqual([]);
 });
 
@@ -120,8 +128,7 @@ test("🎯 a 30-character goal with no spaces wraps inside the first page", asyn
   const long = "가나다라마바사아자차".repeat(3);
   await page.goto("/");
   await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
-  await page.getByRole("button", { name: "직접 쓰기" }).click();
-  await page.getByRole("textbox", { name: "직접 쓰기" }).fill(long);
+  await page.getByRole("textbox", FIELD).fill(long);
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await expect(page.getByRole("heading", { name: "당신이 찾는 책" })).toBeVisible();
@@ -148,8 +155,7 @@ test("🎯 a written goal sorted by the LLM: the button waits, the topic comes f
   });
   await page.goto("/");
   await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
-  await page.getByRole("button", { name: "직접 쓰기" }).click();
-  await page.getByRole("textbox", { name: "직접 쓰기" }).fill("번아웃이 와요");
+  await page.getByRole("textbox", FIELD).fill("번아웃이 와요");
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await expect(page.getByRole("button", { name: "책 펼치기" })).toBeDisabled();      // sorting: no second submit
   release();
@@ -168,10 +174,28 @@ test("🎯 the classifier failing never blocks the flow: the browser matches wor
   await page.route("**/api/goal/classify", (route) => route.fulfill({ status: 500, json: { error: "boom" } }));
   await page.goto("/");
   await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
-  await page.getByRole("button", { name: "직접 쓰기" }).click();
-  await page.getByRole("textbox", { name: "직접 쓰기" }).fill("SQL 공부");
+  await page.getByRole("textbox", FIELD).fill("SQL 공부");
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await expect(page.getByText("눌러서 펼치기")).toBeVisible();
   await expect.poll(() => named(events, "free_goal_written").length).toBe(1);
   expect(named(events, "free_goal_written")[0].props).toMatchObject({ topic: "데이터 분석", keywords: ["SQL"], method: "word" });
+});
+
+test("🎯 an example chip the visitor edits becomes their own words: sorted, E-21, is_free_text true", async ({ page }) => {
+  const { events } = await recordEvents(page);
+  await page.goto("/");
+  await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
+  await page.getByRole("button", { name: "AI 잘 쓰기", exact: true }).click();
+  const field = page.getByRole("textbox", FIELD);
+  await expect(field).toHaveValue("AI 잘 쓰기");
+  await field.fill("AI 잘 쓰기 처음");
+  await expect(page.getByRole("button", { name: "AI 잘 쓰기", exact: true })).toHaveAttribute("aria-pressed", "false");
+  await field.press("Enter");                                              // Enter sends, like [책 펼치기]
+  await expect(page.getByText("눌러서 펼치기")).toBeVisible();
+
+  await expect.poll(() => named(events, "free_goal_written").length).toBe(1);
+  expect(named(events, "free_goal_written")[0].props).toMatchObject({ goal_text: "AI 잘 쓰기 처음", topic: "AI 활용" });
+  expect(named(events, "goal_submitted")[0].props).toMatchObject({ topic: "AI 활용", is_free_text: true });
+  expect(named(events, "chip_selected").map((e) => [e.props.chip_type, e.props.chip_value])).toEqual([["example", "AI 잘 쓰기"]]);
+  expect(specMismatches(events)).toEqual([]);
 });

@@ -1,3 +1,4 @@
+import { topicsIn } from "@/lib/books/active";
 import { MAX_KEYWORDS, TOPIC_CHIPS, TOPICS, type Topic } from "@/lib/books/taxonomy";
 import type { Vocab } from "@/lib/books/types";
 
@@ -9,7 +10,8 @@ export interface GoalMatch {
   topic: Topic;
   keywords: string[];    // only names from our closed keyword list
   matched: boolean;      // false: nothing in our list matched — topic is only the nearest guess
-  method: "word" | "llm"; // llm: Claude Haiku sorted it (P4, /api/goal/classify); word: this file
+  method: "word" | "llm" | "example"; // llm: Claude Haiku sorted it (P4, /api/goal/classify); word: this file; example: an
+                                       // untouched S-02 example chip (lib/flow/examples.ts) — not the visitor's own words
 }
 
 const squash = (s: string) => s.toLowerCase().replace(/\s+/g, "");
@@ -27,23 +29,27 @@ function topicWords(topic: Topic, vocab: Vocab): string[] {
   return [...new Set(words.flatMap((w) => w.split(/[·\s]+/)).map(squash).filter((w) => w.length >= 2))];
 }
 
-/** Highest score wins; chip order breaks ties; all zero keeps the first chip. */
-function rank(score: (topic: Topic) => number): { topic: Topic; score: number } {
-  return TOPICS.reduce<{ topic: Topic; score: number }>((best, topic) => {
+/** Highest score wins; topic order breaks ties; all zero keeps the first topic. */
+function rank(topics: readonly Topic[], score: (topic: Topic) => number): { topic: Topic; score: number } {
+  return topics.reduce<{ topic: Topic; score: number }>((best, topic) => {
     const s = score(topic);
     return s > best.score ? { topic, score: s } : best;
-  }, { topic: TOPICS[0], score: 0 });
+  }, { topic: topics[0] ?? TOPICS[0], score: 0 });
 }
 
-/** Word matching for 직접 쓰기 — only inside our topics and keywords. The fallback behind the LLM (P4) and offline. */
+/**
+ * Word matching for 직접 쓰기 — only inside the topics and keywords of `vocab` (callers pass the active ones,
+ * lib/books/active.ts). The fallback behind the LLM (P4) and offline.
+ */
 export function matchGoal(input: string, vocab: Vocab): GoalMatch {
   const text = input.trim().slice(0, GOAL_MAX);
   const flat = squash(text);
+  const topics = topicsIn(vocab);
   const base = { text, keywords: [] as string[], method: "word" as const };
-  if (!flat) return { ...base, topic: TOPICS[0], matched: false };
+  if (!flat) return { ...base, topic: topics[0] ?? TOPICS[0], matched: false };
 
   let top: { topic: Topic; keywords: string[] } | null = null;
-  for (const topic of TOPICS) {
+  for (const topic of topics) {
     const hits = Object.entries(vocab[topic]?.keywords ?? {})
       .filter(([, pattern]) => new RegExp(pattern, "i").test(text))
       .map(([name]) => name);
@@ -52,10 +58,15 @@ export function matchGoal(input: string, vocab: Vocab): GoalMatch {
   // The server takes at most MAX_KEYWORDS: keep the first ones in vocab order.
   if (top) return { ...base, topic: top.topic, keywords: top.keywords.slice(0, MAX_KEYWORDS), matched: true };
 
-  const byWords = rank((topic) => topicWords(topic, vocab).filter((w) => flat.includes(w)).length);
+  // A word that is part of the topic's own name counts double: "소설 쓰기" shares 쓰기 with AI 활용's label ("AI 똑똑하게 쓰기")
+  // and 글쓰기's keyword name, and the topic name is what settles it. Other ties stay with topic order.
+  const byWords = rank(topics, (topic) => {
+    const name = squash(topic);
+    return topicWords(topic, vocab).filter((w) => flat.includes(w)).reduce((n, w) => n + (name.includes(w) ? 2 : 1), 0);
+  });
   if (byWords.score > 0) return { ...base, topic: byWords.topic, matched: true };
 
   const grams = bigrams(flat);
-  const nearest = rank((topic) => topicWords(topic, vocab).reduce((n, w) => n + [...bigrams(w)].filter((g) => grams.has(g)).length, 0));
+  const nearest = rank(topics, (topic) => topicWords(topic, vocab).reduce((n, w) => n + [...bigrams(w)].filter((g) => grams.has(g)).length, 0));
   return { ...base, topic: nearest.topic, matched: false };
 }

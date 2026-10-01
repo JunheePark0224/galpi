@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useReducer, useState } from "react";
 import { MotionConfig } from "motion/react";
-import vocab from "@/data/vocab.json";
 import type { BalanceChoice, Entry } from "@/lib/recommend";
 import { newArtSeed } from "@/lib/art/combine";
+import { topicsIn } from "@/lib/books/active";
 import { loadDetail } from "@/lib/books/detailClient";
 import type { Vocab } from "@/lib/books/types";
-import { classifyGoal, drawBody, requestDraw, toDrawView } from "@/lib/flow/api";
+import { drawBody, goalFor, requestDraw, toDrawView } from "@/lib/flow/api";
 import { curiousPicks, flowReducer, type FlowAction, type FlowState, type Reaction } from "@/lib/flow/state";
 import { loadFlow, saveFlow } from "@/lib/flow/storage";
 import { coverageBucket, editedQuestions, editedTargetFields } from "@/lib/flow/summary";
@@ -21,10 +21,11 @@ import { Home } from "./Home";
 import { ResultBook } from "./ResultBook";
 import { TargetInput } from "./TargetInput";
 
-const VOCAB = vocab as Vocab;
-
-/** S-01 → S-05 → S-06 → S-08. Cross-screen events are sent here, in the handlers (never from effects). */
-export function Flow() {
+/**
+ * S-01 → S-05 → S-06 → S-08. Cross-screen events are sent here, in the handlers (never from effects).
+ * vocab: the active 🎯 topics only (FlowRoot) — the word matching used when /api/goal/classify cannot answer.
+ */
+export function Flow({ vocab }: { vocab: Vocab }) {
   const [state, dispatch] = useReducer(flowReducer, undefined, loadFlow);
   const [classifying, setClassifying] = useState(false);
 
@@ -34,7 +35,7 @@ export function Flow() {
   const runDraw = async (s: FlowState) => {
     try {
       const res = await requestDraw(drawBody(s));
-      if (s.entry === "target" && s.goal) {
+      if (s.entry === "target" && s.goal && s.goal.method !== "example") {   // E-22: own words only, like E-21
         const found = s.goal.matched ? (res.found ?? 0) : 0;
         track("goal_coverage_checked", { coverage_bucket: coverageBucket(found), found_count: found });
       }
@@ -87,17 +88,20 @@ export function Flow() {
     }
   };
 
-  /** 직접 쓰기 is sorted first (Claude Haiku on the server, word matching as the fallback); E-26 and E-21 follow with the result. */
+  /**
+   * The 무엇을 text is matched first: an untouched example chip from its fixed table, anything else sorted (Claude Haiku on the
+   * server, word matching as the fallback). E-26 follows with the result, and E-21 only for the visitor's own words.
+   */
   const submitTarget = async (form: TargetForm) => {
     if (classifying) return;
     let goal: GoalMatch | null = null;
     if (form.free !== null) {
       setClassifying(true);
-      goal = await classifyGoal(form.free, VOCAB);
+      goal = await goalFor(form.free, vocab);
       setClassifying(false);
     }
     track("goal_submitted", goalSubmittedProps(form, goal, state.edited));
-    if (goal) {
+    if (goal && goal.method !== "example") {
       track("free_goal_written", {
         goal_text: goal.text, topic: goal.topic, keywords: goal.keywords, is_matched: goal.matched, method: goal.method,
       });
@@ -153,7 +157,7 @@ export function Flow() {
     <MotionConfig reducedMotion="user">
       {state.step === "home" && <Home onStart={start} />}
       {state.step === "leaf" && <BalanceGame choices={state.choices} edit={state.edited} onAnswer={answer} />}
-      {state.step === "target" && <TargetInput initial={state.form} edit={state.edited} busy={classifying} onSubmit={submitTarget} />}
+      {state.step === "target" && <TargetInput initial={state.form} edit={state.edited} busy={classifying} topics={topicsIn(vocab)} onSubmit={submitTarget} />}
       {inBook && (
         <BookScene
           state={state}
