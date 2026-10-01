@@ -34,7 +34,8 @@ describe("POST /api/books/draw", () => {
 
   it("sends only what a bookmark shows — no scores, no tags", async () => {
     const body = await (await POST(req({ entry: "leaf", choices: NINE, seed: 3 }))).json();
-    expect(Object.keys(body.picks[0]).sort()).toEqual(["card", "kind"]);
+    expect(Object.keys(body.picks[0]).sort()).toEqual(["card", "kind", "reason"]);
+    expect(body.picks[0].reason).toMatchObject({ label: expect.stringMatching(/^(나온 이유|이 책은)$/), items: expect.any(Array) });
     expect(Object.keys(body.picks[0].card).sort()).toEqual(["author", "entry", "field", "genre", "id", "oneLiner", "oneLinerStyle", "title"]);
   });
 

@@ -1,6 +1,7 @@
 import type { BalanceChoice, Entry } from "@/lib/recommend";
 import type { ArtCombo } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
+import type { Reason } from "@/lib/recommend";
 import type { GoalMatch } from "@/lib/goal/match";
 import { QUESTIONS } from "./questions";
 import { EMPTY_FORM, type TargetForm } from "./target";
@@ -8,7 +9,7 @@ import { EMPTY_FORM, type TargetForm } from "./target";
 export type Step = "home" | "leaf" | "target" | "book" | "first" | "bookmarks" | "end";
 export const STEPS: readonly Step[] = ["home", "leaf", "target", "book", "first", "bookmarks", "end"];
 export type Reaction = "pass" | "curious";
-export interface PickView { card: BookCard; kind: "recommended" | "random"; art: ArtCombo }
+export interface PickView { card: BookCard; kind: "recommended" | "random"; art: ArtCombo; reason: Reason }
 export interface DrawView { picks: PickView[]; exhausted: boolean; found: number | null; keywords: string[] }
 export type DrawStatus = "idle" | "loading" | "ready" | "error";
 

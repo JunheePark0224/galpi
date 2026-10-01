@@ -23,7 +23,7 @@ export async function requestDraw(body: Record<string, unknown>): Promise<DrawRe
 export function toDrawView(res: DrawResponse, artSeed: number): DrawView {
   const arts = artsForDraw(res.picks.length, artSeed);
   return {
-    picks: res.picks.map((p, i) => ({ card: p.card, kind: p.kind, art: arts[i] })),
+    picks: res.picks.map((p, i) => ({ card: p.card, kind: p.kind, art: arts[i], reason: p.reason })),
     exhausted: res.exhausted,
     found: res.found,
     keywords: res.keywords,

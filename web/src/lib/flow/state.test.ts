@@ -8,6 +8,7 @@ const view = (n: number): DrawView => ({
     card: { id: `b${i}`, entry: "leaf" as const, title: `책 ${i}`, author: `저자 ${i}`, genre: "에세이", field: null, oneLiner: "한 줄일까요?", oneLinerStyle: "question" as const },
     kind: i === 0 ? ("random" as const) : ("recommended" as const),
     art,
+    reason: { label: "나온 이유" as const, items: ["따뜻함"] },
   })),
   exhausted: false, found: null, keywords: [],
 });

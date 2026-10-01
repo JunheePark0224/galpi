@@ -7,6 +7,7 @@ const pick = (id: string): PickView => ({
   card: { id, entry: "leaf", title: `책 ${id}`, author: `저자 ${id}`, genre: "에세이", field: null, oneLiner: `한 줄 ${id}`, oneLinerStyle: "question" },
   kind: "recommended",
   art: { animal: "cat", bg: "peach", sky: "moon", ground: "none", rare: false },
+  reason: { label: "나온 이유", items: ["마음"] },
 });
 
 describe("EndList", () => {
