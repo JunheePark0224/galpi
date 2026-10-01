@@ -45,7 +45,7 @@ class Known:
 
     def plus(self, cands: list[Candidate]) -> "Known":
         authors = Counter(self.authors)
-        authors.update(author_key(c.author) for c in cands)
+        authors.update(k for c in cands if (k := author_key(c.author)))  # no author → nothing to count
         return Known(self.isbns | {c.isbn for c in cands}, self.titles | {norm_title(c.title) for c in cands},
                      dict(authors))
 
@@ -58,7 +58,7 @@ def author_key(name: str) -> str:
 def known_from(books: list[dict], additions: list[dict]) -> Known:
     added = [b["isbn"] for doc in additions for b in doc.get("books", [])]
     return Known(frozenset([b["isbn"] for b in books] + added), frozenset(norm_title(b["title"]) for b in books),
-                 dict(Counter(author_key(b["author"]) for b in books)))
+                 dict(Counter(k for b in books if (k := author_key(b["author"])))))
 
 
 def yes24_env() -> dict:
@@ -89,7 +89,7 @@ def find(env: dict, want: Want, rule: dict, known: Known) -> list[Candidate]:
         if c["isbn"] in known.isbns or norm_title(c["title"]) in known.titles:
             continue
         who = author_key(c.get("author") or "")
-        if authors[who] >= MAX_PER_AUTHOR:
+        if who and authors[who] >= MAX_PER_AUTHOR:  # books with no author never share one counter
             continue
         tries += 1
         d = detail(env, c["isbn"])
@@ -99,5 +99,6 @@ def find(env: dict, want: Want, rule: dict, known: Known) -> list[Candidate]:
         out.append(Candidate(want.entry, want.slot, c["isbn"], c["title"], c.get("author") or "", pages_of(d),
                              d.get("link") or "", clean(cd.get("bookIntroduction") or "", INTRO_MAX),
                              clean(cd.get("tableOfContents") or "", TOC_MAX)))
-        authors[who] += 1
+        if who:
+            authors[who] += 1
     return out

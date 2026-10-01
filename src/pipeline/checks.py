@@ -1,6 +1,6 @@
 """Rule checks and the two-pass decision (design 2-1 "checks", 10-01 two blind passes).
 
-rule_issues: the one-liner rules of check_one_liners.check_line (length, hype, title repeat, grounded in intro/TOC), the
+rule_issues (+ scrub): the one-liner rules of check_one_liners.check_line (length, hype, title repeat, grounded in intro/TOC), the
 style (🍃 question ends with "?", 🎯 summary does not), evidence at most EVIDENCE_MAX chars, and no copying — a run of
 COPY_RUN characters (spaces ignored) shared with the YES24 intro/TOC means our words were not our own.
 disagreements: why a person should look — the two passes differ on fit / keywords / way / an axis, or pass A is unsure.
@@ -17,6 +17,8 @@ from .prompt import AXES, EVIDENCE_MAX
 
 COPY_RUN = 10
 AUTO = "ai-agree"
+# issue text per model-written field that can copy the YES24 text; a field with its issue is never stored (see scrub)
+COPY_ISSUES = {"one_liner": "한 줄이 책소개를 베낌", "evidence": "근거가 책소개를 베낌", "why": "판단 이유가 책소개를 베낌"}
 
 
 def _squash(s: str) -> str:
@@ -31,7 +33,7 @@ def copied_run(text: str, material: str) -> int:
     return SequenceMatcher(None, a, b, autojunk=False).find_longest_match(0, len(a), 0, len(b)).size
 
 
-def rule_issues(entry: str, tag: dict, title: str, material: str) -> list[str]:
+def rule_issues(entry: str, tag: dict, title: str, material: str, second: dict | None = None) -> list[str]:
     line, evidence = tag["one_liner"], tag["evidence"]
     issues = list(check_line(line, title, material)["issues"])
     if entry == "leaf" and not line.endswith("?"):
@@ -43,10 +45,20 @@ def rule_issues(entry: str, tag: dict, title: str, material: str) -> list[str]:
     elif len(evidence) > EVIDENCE_MAX:
         issues.append(f"근거 김({len(evidence)}자)")
     if copied_run(evidence, material) >= COPY_RUN:
-        issues.append("근거가 책소개를 베낌")
+        issues.append(COPY_ISSUES["evidence"])
     if copied_run(line, material) >= COPY_RUN:
-        issues.append("한 줄이 책소개를 베낌")
+        issues.append(COPY_ISSUES["one_liner"])
+    if second is not None and copied_run(second.get("why", ""), material) >= COPY_RUN:  # pass B's reason: same check
+        issues.append(COPY_ISSUES["why"])
     return issues
+
+
+def scrub(tag: dict, second: dict, issues: list[str]) -> tuple[dict, dict]:
+    """Copies of both answers where a field that failed the YES24-copy check is blanked: the issue flag stays in `issues`,
+    the copied words are never written to a file, a PR or an eval row."""
+    blank = {f for f, text in COPY_ISSUES.items() if text in issues}
+    return ({k: ("" if k in blank else v) for k, v in tag.items()},
+            {k: ("" if k in blank else v) for k, v in second.items()})
 
 
 def disagreements(entry: str, a: dict, b: dict) -> list[str]:

@@ -69,3 +69,13 @@ def test_a_failed_list_is_recorded_not_raised(tmp_path, monkeypatch):
     before = len(collect_candidates.FAILURES)
     assert find(ENV, WANT, RULE, Known(frozenset(), frozenset(), {})) == []
     assert len(collect_candidates.FAILURES) == before + 1
+
+
+def test_books_with_no_author_do_not_share_one_counter(cache):
+    assert author_key("") == ""
+    known = known_from([{"isbn": f"x{i}", "title": f"t{i}", "author": ""} for i in range(3)], [])
+    assert known.authors == {}                                   # nothing counted for "no author"
+    items = [yes24_item(f"979000000002{i}", t, "", i + 1) for i, t in enumerate(["주식 기초 다지기", "배당주 이야기", "주식 투자 수업 노트", "주식 차트 읽기"])]
+    write_cache(cache, {"주식": items}, items)
+    out = find(ENV, WANT, RULE, known)
+    assert len(out) == 4 and known.plus(out).authors == {}       # none blocked by a cap, none counted

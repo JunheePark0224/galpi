@@ -8,7 +8,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from pipeline.candidates import Candidate  # noqa: E402
-from pipeline.checks import AUTO, copied_run, decide, disagreements, rule_issues  # noqa: E402
+from pipeline.checks import AUTO, copied_run, decide, disagreements, rule_issues, scrub  # noqa: E402
 from pipeline.merge import additions_doc, keyword_hints, record, write_doc  # noqa: E402
 from pipeline.tagger import parse  # noqa: E402
 from pipeline_fakes import INTRO, TOC, check_answer, tag_answer  # noqa: E402
@@ -68,3 +68,25 @@ def test_record_holds_our_tags_only(tmp_path):
     text = path.read_text(encoding="utf-8")
     assert json.loads(text)["batch"] == "daily" and "\r\n" not in text
     assert INTRO[:20] not in text and "계좌와 주문" not in text   # no YES24 text in the repo
+
+
+def test_the_second_opinions_reason_gets_the_same_copy_check_and_copied_fields_are_scrubbed():
+    a = tag_answer("target", evidence="계좌 만들기부터 배당과 분산")
+    b = check_answer("target", why="계좌 만들기부터 배당과 분산 투자까지 차근차근")
+    issues = rule_issues("target", a, "제목", MATERIAL, b)
+    assert "판단 이유가 책소개를 베낌" in issues and "근거가 책소개를 베낌" in issues
+    safe_a, safe_b = scrub(a, b, issues)
+    assert safe_a["evidence"] == "" and safe_b["why"] == "" and safe_a["one_liner"] == a["one_liner"]
+    assert a["evidence"] and b["why"]                                      # the inputs are not changed
+    clean_a, clean_b = tag_answer("target"), check_answer("target")
+    assert rule_issues("target", clean_a, "제목", MATERIAL, clean_b) == []
+    assert scrub(clean_a, clean_b, []) == (clean_a, clean_b)
+
+
+def test_record_never_stores_words_that_failed_the_copy_check():
+    a = tag_answer("target", evidence="계좌 만들기부터 배당과 분산")
+    b = check_answer("target", why="계좌 만들기부터 배당과 분산 투자까지 차근차근")
+    issues = rule_issues("target", a, CAND.title, MATERIAL, b)
+    rec = record(CAND, a, b, [], issues, "reserve", None, [])
+    assert rec["evidence"] == "" and rec["second"]["why"] == "" and "근거가 책소개를 베낌" in rec["issues"]
+    assert "계좌 만들기" not in json.dumps(rec, ensure_ascii=False)

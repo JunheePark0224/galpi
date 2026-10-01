@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from pipeline import evaluate  # noqa: E402
-from pipeline_fakes import INTRO, TOC, FakeClient, agreeing, kind_of, message  # noqa: E402
+from pipeline_fakes import INTRO, TOC, FakeClient, agreeing, check_answer, kind_of, message, tag_answer  # noqa: E402
 
 
 def gold(isbn, entry, **f):
@@ -111,3 +111,22 @@ def test_main_runs_prints_estimate_first_then_measured_usage_and_never_prints_th
     assert out.index("estimate") < out.index("measured") and "input_tokens" in out and "sk-test-secret-value" not in out + captured.err
     saved = json.loads(next((tmp_path / "eval").glob("*-claude-haiku-4-5.json")).read_text(encoding="utf-8"))
     assert saved["estimate"]["total_usd"][1] > 0 and saved["usage"]["claude-haiku-4-5"]["calls"] == 8 and "intro" not in json.dumps(saved)
+
+
+def test_eval_rows_keep_only_the_issue_flag_for_words_that_copied_the_yes24_text(tmp_path):
+    detail = _cache(tmp_path, ["1"])
+    copied = "계좌 만들기부터 배당과 분산 투자까지"      # a run taken straight from the fixture's intro
+
+    def copying(kwargs):
+        entry, kind = kind_of(kwargs)
+        if kind == "tag":
+            return message(tag_answer(entry) | {"evidence": copied})
+        return message(check_answer(entry) | {"why": copied})
+
+    vocab = {"돈 관리·투자": {"kept": {"주식": {"pattern": "주식"}}}}
+    out = evaluate.run_model(FakeClient(copying), "claude-haiku-4-5", "claude-haiku-4-5",
+                             [gold("1", "target", keywords=["주식"], way="개념")], vocab, detail)
+    row = out["rows"][0]
+    assert "근거가 책소개를 베낌" in row["issues"] and "판단 이유가 책소개를 베낌" in row["issues"]
+    assert row["tag"]["evidence"] == "" and row["second"]["why"] == ""
+    assert "계좌 만들기" not in json.dumps(out, ensure_ascii=False)

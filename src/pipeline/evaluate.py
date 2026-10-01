@@ -37,11 +37,11 @@ from pick_pilot import clean
 
 from . import ADDITIONS, KST, PIPELINE, ROOT, VOCAB
 from .candidates import INTRO_MAX, TOC_MAX, Candidate
-from .checks import disagreements, rule_issues
+from .checks import disagreements, rule_issues, scrub
 from .config import MODELS
 from .merge import keyword_hints
 from .prompt import AXES, schema, system_prompt, user_message
-from .tagger import CACHE_READ, CACHE_WRITE, PRICES, TaggerStop, Usage, call, parse
+from .tagger import CACHE_READ, CACHE_WRITE, PRICES, Breaker, TaggerStop, Usage, call, parse
 
 PROCESSED = ROOT / "data" / "processed"
 OUT = PIPELINE / "eval"
@@ -100,7 +100,7 @@ def score(rows: list[dict]) -> dict:
 
 def run_model(client, model: str, second: str, golds: list[dict], vocab: dict, detail_dir: Path) -> dict:
     prompts = {k: system_prompt(vocab, k) for k in ("tag", "check")}
-    rows, usage, skipped, failed = [], {}, 0, Counter()
+    rows, usage, skipped, failed, breaker = [], {}, 0, Counter(), Breaker()
     for g in golds:
         cand = candidate(g, detail_dir)
         if cand is None:
@@ -109,8 +109,8 @@ def run_model(client, model: str, second: str, golds: list[dict], vocab: dict, d
         kept = vocab[cand.slot]["kept"] if cand.entry == "target" else {}
         names = list(kept)
         user = user_message(cand.entry, cand.slot, cand.title, cand.intro, cand.toc, keyword_hints(cand, kept) if kept else [])
-        raw_a, ua, why_a = call(client, model, prompts["tag"], user, schema(cand.entry, "tag", names))
-        raw_b, ub, why_b = call(client, second, prompts["check"], user, schema(cand.entry, "check", names))
+        raw_a, ua, why_a = call(client, model, prompts["tag"], user, schema(cand.entry, "tag", names), breaker)
+        raw_b, ub, why_b = call(client, second, prompts["check"], user, schema(cand.entry, "check", names), breaker)
         for m, u in ((model, ua), (second, ub)):
             usage[m] = usage.get(m, Usage()).plus(u)
         a = parse(raw_a, cand.entry, "tag", names) if raw_a else None
@@ -118,10 +118,11 @@ def run_model(client, model: str, second: str, golds: list[dict], vocab: dict, d
         if a is None or b is None:
             failed[why_a if a is None else why_b] += 1
             continue
-        rows.append({"isbn": g["isbn"], "entry": g["entry"], "source": g["source"], "tag": a, "second": b,
+        issues = rule_issues(cand.entry, a, cand.title, f"{cand.intro} {cand.toc}", b)
+        safe_a, safe_b = scrub(a, b, issues)  # a field that copied the YES24 text is not kept in the row, only its issue
+        rows.append({"isbn": g["isbn"], "entry": g["entry"], "source": g["source"], "tag": safe_a, "second": safe_b,
                      "wrong": wrong_fields(g, a, names if cand.entry == "target" else None),
-                     "flags": disagreements(cand.entry, a, b),
-                     "issues": rule_issues(cand.entry, a, cand.title, f"{cand.intro} {cand.toc}")})
+                     "flags": disagreements(cand.entry, a, b), "issues": issues})
     tagged = len(rows) or 1
     cost = sum(u.cost(m) for m, u in usage.items())
     return {"model": model, "second_model": second, "skipped_no_text": skipped, "failed": dict(failed),
@@ -218,7 +219,7 @@ def main(argv: list[str] | None = None) -> int:
         try:
             result = run_model(client, model, args.second, golds, vocab, args.detail_dir)
         except TaggerStop as stop:
-            print(f"STOPPED: the API refused the key ({stop}); no more calls", file=sys.stderr)
+            print(f"STOPPED: {stop}; no more calls", file=sys.stderr)
             return 1
         total += result["cost_usd"]
         (OUT / f"{today}-{model}.json").write_text(

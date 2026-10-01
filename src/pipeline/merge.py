@@ -11,6 +11,7 @@ from pathlib import Path
 from apply_review import FIELD_OF_TOPIC
 
 from .candidates import Candidate
+from .checks import scrub
 
 NOTE = ("Daily pipeline: pass A (model) tags, pass B (second_model) checks blind. Our tags only — no YES24 intro/TOC. "
         "auto=ai-agree: both passes agreed, accepted without human review (not in the agreement figures).")
@@ -25,6 +26,7 @@ def keyword_hints(cand: Candidate, kept: dict[str, dict]) -> list[str]:
 
 def record(cand: Candidate, a: dict, b: dict, flags: list[str], issues: list[str], status: str, auto: str | None,
            hints: list[str]) -> dict:
+    a, b = scrub(a, b, issues)  # a field that copied the YES24 text is stored blank, only its issue flag stays
     out = {"isbn": cand.isbn, "title": cand.title, "author": cand.author, "pages": cand.pages, "entry": cand.entry}
     if cand.entry == "target":
         out |= {"topic": cand.slot, "field": FIELD_OF_TOPIC[cand.slot], "keywords": a["keywords"],

@@ -6,14 +6,14 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import anthropic
-import httpx
+import httpx2 as httpx
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from pipeline import ROOT, VOCAB  # noqa: E402
 from pipeline.prompt import PromptError, aliases, schema, system_prompt, table_after, user_message  # noqa: E402
-from pipeline.tagger import TaggerStop, Usage, call, parse, request  # noqa: E402
+from pipeline.tagger import MODEL_OPTIONS, Breaker, TaggerStop, Usage, call, parse, request  # noqa: E402
 from pipeline_fakes import FakeClient, check_answer, message, tag_answer  # noqa: E402
 
 VOC = json.loads(VOCAB.read_text(encoding="utf-8"))
@@ -123,3 +123,72 @@ def test_parse_drops_what_is_outside_our_lists():
     assert parse(tag_answer("leaf", one_liner="  "), "leaf", "tag", []) is None
     assert parse(tag_answer("leaf", confidence=7), "leaf", "tag", [])["confidence"] == 1.0
     assert parse(check_answer("leaf"), "leaf", "check", [])["axes"] == {"temp": 1, "pull": -1, "gain": 0, "world": 1}
+
+
+def test_sonnet_gets_room_for_its_thinking_and_the_options_are_copied_per_call():
+    assert request("claude-sonnet-5-5", "s", "u", {})["max_tokens"] == 4096
+    assert request("claude-haiku-4-5", "s", "u", {})["max_tokens"] == 2048
+    first = request("claude-haiku-4-5", "s", "u", {})
+    first["extra_body"]["temperature"] = 1
+    assert MODEL_OPTIONS["claude-haiku-4-5"]["extra_body"] == {"temperature": 0}
+    assert request("claude-haiku-4-5", "s", "u", {})["extra_body"] == {"temperature": 0}
+
+
+def test_parse_clips_the_second_opinions_reason_and_rejects_axis_values_that_are_not_ints():
+    why = check_answer("target", why="가" * 80)
+    assert parse(why, "target", "check", ["주식"])["why"] == "가" * 30
+    for bad in (1.0, True, "1", 2):
+        assert parse(tag_answer("leaf", world=bad), "leaf", "tag", []) is None
+
+
+def _failing(exc):
+    def f(kw):
+        raise exc
+    return FakeClient(f)
+
+
+def _call_with(client, breaker):
+    return call(client, "claude-haiku-4-5", "s", "u", {}, breaker)
+
+
+def test_five_api_failures_in_a_row_stop_the_run_but_a_success_resets_the_count():
+    server = _failing(_status(anthropic.InternalServerError, 500))
+    breaker = Breaker()
+    for _ in range(4):
+        assert _call_with(server, breaker)[2] == "http_500"
+    with pytest.raises(TaggerStop, match="5 API failures in a row"):
+        _call_with(server, breaker)
+    breaker = Breaker()
+    for _ in range(4):
+        _call_with(server, breaker)
+    assert _call_with(FakeClient(lambda kw: message(tag_answer("target"))), breaker)[2] == "ok"            # the API answered → start over
+    for _ in range(4):
+        assert _call_with(server, breaker)[2] == "http_500"
+    refusal = FakeClient(lambda kw: message({}, stop="refusal"))
+    assert _call_with(refusal, breaker)[2] == "refusal"            # a book-level failure is not the API's
+    for _ in range(4):
+        assert _call_with(server, breaker)[2] == "http_500"
+
+
+def test_connection_errors_count_too():
+    down = _failing(anthropic.APIConnectionError(request=httpx.Request("POST", "https://api.anthropic.com/v1/messages")))
+    breaker = Breaker(limit=3)
+    for _ in range(2):
+        assert _call_with(down, breaker)[2] == "connection"
+    with pytest.raises(TaggerStop, match="connection"):
+        _call_with(down, breaker)
+
+
+@pytest.mark.parametrize("msg, word", [("Your credit balance is too low", "credit"), ("model: claude-x not allowed", "model"),
+                                       ("workspace spend limit reached", "limit")])
+def test_a_400_about_the_model_or_the_account_stops_at_once(msg, word):
+    req = httpx.Request("POST", "https://api.anthropic.com/v1/messages")
+    err = anthropic.BadRequestError(msg, response=httpx.Response(400, request=req), body=None)
+    with pytest.raises(TaggerStop, match=f"http_400 about {word}"):
+        _call_with(_failing(err), Breaker())
+
+
+def test_an_ordinary_400_is_one_failed_book():
+    req = httpx.Request("POST", "https://api.anthropic.com/v1/messages")
+    err = anthropic.BadRequestError("messages: roles must alternate", response=httpx.Response(400, request=req), body=None)
+    assert _call_with(_failing(err), Breaker())[2] == "http_400"
