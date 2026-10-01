@@ -125,3 +125,10 @@ Last Updated: 2026-10-01
 - Amplitude 대기열: init 전 이벤트도 받고(키 있을 때만, 50개) 원래 시각으로 넘김
 - 자동 검사: `taxonomy.test.ts`(csv 13열·명명·csv ↔ `EVENT_SPEC` ↔ md 제목 ↔ `track()` 호출), E2E가 보낸 이벤트마다 props·common 키를 명세와 대조
 - **다음에 이어서 할 일**: ③ main 병합·배포(사용자 허락) → ④ 사용자가 Vercel Production에 `NEXT_PUBLIC_AMPLITUDE_API_KEY` + Amplitude 대시보드 Session Replay 20%·입력 가림 → ⑤ Amplitude 커넥터로 카탈로그 등록(csv Description·Category)·대시보드 → P7 전 Supabase 테스트 기록 지우기
+
+### 10-01 — 택소노미 개발·Amplitude 실가동 (A 단계 완료)
+- 택소노미 개발(`docs/plans/2026-10-01-taxonomy-dev.md`): 이름 바꾸기, `goal_submitted`, 회차 규칙, `goal_text`는 Supabase만, EVENT_SPEC 타입 검사 + 서버 검사, CSV↔md↔코드 자동 검사 11개, Amplitude 대기열 보완 → main `7a0300e` 배포
+- Amplitude 실가동: 사용자가 Vercel Production에 키 → Aside로 Redeploy. Session Replay(`galpi` 870203) 20%·마스킹 중간·동적 샘플링 끔. 점검: 새 이름으로 수집, device_id = anon_id, `free_goal_written`에 글 없음
+- Amplitude 카탈로그: 이벤트 25·속성 38 등록(설명·타입·허용값). 대시보드 "갈피 핵심 지표 v1"(차트 17, 기간 10-02 00:00 UTC부터) https://app.amplitude.com/analytics/silent-surf-305627/dashboard/n5w9r3vr — 판 단위 지표·질문별 효과·못 찾은 요청은 SQL로(P8)
+- 사용자 할 일: Amplitude 프로젝트 시간대 Asia/Seoul로 변경(현재 UTC)
+- 다음: P4(계획서 작성 중) → P5 → P7
