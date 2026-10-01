@@ -132,3 +132,8 @@ Last Updated: 2026-10-01
 - Amplitude 카탈로그: 이벤트 25·속성 38 등록(설명·타입·허용값). 대시보드 "갈피 핵심 지표 v1"(차트 17, 기간 10-02 00:00 UTC부터) https://app.amplitude.com/analytics/silent-surf-305627/dashboard/n5w9r3vr — 판 단위 지표·질문별 효과·못 찾은 요청은 SQL로(P8)
 - 사용자 할 일: Amplitude 프로젝트 시간대 Asia/Seoul로 변경(현재 UTC)
 - 다음: P4(계획서 작성 중) → P5 → P7
+
+### 10-01 — P4 결과·서버 (`docs/plans/2026-10-01-p4-results-server.md`)
+- `/api/books/[isbn]`(YES24 → 카카오 → 빈 정보, 짧은 캐시, 우리 책만), 뽑기 응답에 나온 이유, S-06 한 권씩·S-08 다시 뽑기/처음으로, `/api/goal/classify`(Claude Haiku, 3초 → 단어 매칭), `/privacy`에 Anthropic
+- 이벤트: E-09·10·18·19·23 live (taxonomy v0.4) — planned-P4 0
+- **다음**: 사용자 — Vercel 키 3개, `npm run goal:grade` 채점 → main 병합·배포(허락) → P5

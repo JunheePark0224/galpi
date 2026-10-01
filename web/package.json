@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:cov": "vitest run --coverage",
     "e2e": "playwright test",
-    "books:import": "tsx scripts/import-books.ts"
+    "books:import": "tsx scripts/import-books.ts",
+    "goal:grade": "tsx scripts/grade-goals.ts"
   },
   "dependencies": {
     "@amplitude/unified": "^1.1.38",

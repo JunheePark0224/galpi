@@ -38,7 +38,9 @@ Last Updated: 2026-10-01
 - [x] P0 셋업 — Next.js·테스트·Supabase·`track()`·git, `visit`이 Supabase에 저장 확인 (9/30, main 병합)
 - [x] P1 추천 로직 — 🍃·🎯 점수, 5권 뽑기, 안내 문구, 설명 자르기, 나온 이유 (커버리지 100%, Python 분포 일치) (9/30, main 병합)
 - [x] P3 흐름 화면 — S-01~05 + 궁금해요 목록, `/api/books/draw`, 이벤트 E-01·02·03·05·06·07·08·20·21·22·24·25, 🎯·🍃 완주 E2E(휴대폰·노트북) (`docs/plans/2026-09-30-p3-flow-screens.md`)
-- [ ] P4 결과·서버 — 실제 200권, YES24, S-06·08, 직접 쓰기 분류
+- [ ] P4 결과·서버 — 실제 200권, YES24, S-06·08, 직접 쓰기 분류 (`docs/plans/2026-10-01-p4-results-server.md`)
+  - [x] 코드: `/api/books/[isbn]`(YES24 → 카카오 → 빈 정보), S-06·S-08, 나온 이유, 다시 뽑기, `/api/goal/classify`, 처리방침 Anthropic, 이벤트 E-09·10·18·19·23 live
+  - [ ] 사용자: Vercel Production에 `YES24_API_KEY`·`KAKAO_REST_KEY`·`ANTHROPIC_API_KEY` (`deploy.md` 3절), `web/.env.local`에 `ANTHROPIC_API_KEY` → `npm run goal:grade` → `docs/goal-grading.md` 30개 채점
 - [ ] P5 로그인·보관·내 서재·처리방침
 - [ ] P6 Amplitude 전달, 이벤트 전수 점검, 대시보드
 - [x] 배포 전 준비(P7에서 당김) — 처리방침 v0 `/privacy`·1년 자동 삭제, 같은 출처·요청 한도·크기 상한·보안 헤더, `/design` 숨김, `deploy.md` (9/30)

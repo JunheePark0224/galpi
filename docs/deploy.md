@@ -30,6 +30,9 @@ Last Updated: 2026-09-30
 | `NEXT_PUBLIC_AMPLITUDE_API_KEY` | 설정 | **설정 안 함** | Amplitude 공개 수집용 키(브라우저에 들어가는 키라 `NEXT_PUBLIC_`). 빌드 때 박히므로 바꾸면 다시 배포. 없으면 Amplitude가 꺼지고 콘솔에 경고 한 줄만 남는다 |
 | `TRACK_STORE` | 설정 안 함 | **`off`** | Preview 배포가 실제 `events`에 쓰지 않게 한다 |
 | `BOOKS_SOURCE` | **어디에도 두지 않는다** | 두지 않는다 | `sample`은 테스트용 30권 — 두면 실제 책이 안 나온다 |
+| `YES24_API_KEY` | 설정 (**Sensitive**) | 설정 안 함 | S-06 책 정보(P4). 서버에서만 읽는다. 없으면 카카오로, 둘 다 없으면 책 정보 없이 화면만 |
+| `KAKAO_REST_KEY` | 설정 (**Sensitive**) | 설정 안 함 | 예스24가 실패할 때 표지·가격만 대신(PRD F-14) |
+| `ANTHROPIC_API_KEY` | 설정 (**Sensitive**) | 설정 안 함 | 🎯 직접 쓰기 분류(Claude Haiku). 없으면 단어 매칭만. `/privacy`에 Anthropic 전달이 적혀 있어야 넣는다 |
 
 - [ ] Production 값과 Preview 값을 위 표대로 각 환경 칸에 따로 넣었다
 - [ ] `SUPABASE_SERVICE_ROLE_KEY`는 Sensitive로 표시했다 (저장 후 다시 볼 수 없게)
