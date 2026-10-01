@@ -43,6 +43,20 @@ def test_pr_body_is_honest_about_unreviewed_books_and_holds_no_yes24_text():
     assert not body.startswith("> ⚠") and "상태:" not in body                  # a normal day has no status banner
 
 
+def test_counts_come_from_the_file_and_held_books_name_why_they_wait():
+    doc = doc_of(2)
+    doc["books"].append({"title": "엇갈린 책", "entry": "target", "topic": "돈 관리·투자", "keywords": [], "way": "개념", "one_liner": "한 줄",
+                         "status": "reserve", "flags": ["way"], "issues": [], "isbn": "3"})
+    body = report.pr_body({}, doc, LEAF, SIM_OK, True, GRAD)                      # no run summary at all
+    assert "넣음 **3권** (두 AI 일치·사람 안 봄 2 · 검수 필요 1)" in body
+    assert "| 엇갈린 책 | 두 AI가 엇갈림: way |" in body
+
+
+def test_graduation_line_shows_both_figures():
+    body = report.pr_body(OK, doc_of(), LEAF, SIM_OK, False, {**GRAD, "sample_n": 12, "sample_changed": 1})
+    assert "일치 책 표본 12권 중 바뀐 책 1권" in body and "10권 이상" in body and "5% 이하" in body
+
+
 def test_the_unseen_share_of_agreed_books_is_stated_with_numbers():
     body = report.pr_body(OK, doc_of(20), LEAF, SIM_OK, False, GRAD, sample_rate=0.1)
     assert "**20권**" in body and "표본은 2권" in body and "**나머지 18권은 사람이 확인하지 않았어요**" in body

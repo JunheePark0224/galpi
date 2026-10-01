@@ -97,7 +97,7 @@ delete from events where created_at < '<배포 시각>';
 - [ ] 워크플로는 main에 있어야 돈다: `daily-books`(매일 06:00 KST, 손으로 실행하면 `dry_run` 기본), `weekly-sample`(월 09:00 KST, `auto_merge`가 true일 때만 이슈)
 - [ ] 열린 `books/` PR이 있으면 그날은 쉰다 — 검수·병합하면 다음 날 이어서 (`dry_run`은 돈다)
 - [ ] 첫 한 바퀴: Actions → daily-books → Run workflow → `dry_run` 켜 둔 채 `count` 5 → 끝나면 실행 화면의 Summary(PR 본문 미리보기)와 Artifacts의 `dry-run-<날짜>`(우리 태그 파일·요약, 7일)를 본다
-- 설정: `data/pipeline/config.json`(`daily_count`·`auto_merge`·`sample_rate`·`model`·`second_model`). `auto_merge`는 졸업 기준(연속 3회 모든 항목 95%+)을 넘고 **사용자가 승인했을 때만** true
+- 설정: `data/pipeline/config.json`(`daily_count`·`auto_merge`·`sample_rate`·`model`·`second_model`). `auto_merge`는 졸업 기준을 **둘 다** 넘고 **사용자가 승인했을 때만** true — ① 연속 3회, 사람이 본 책(엇갈린 책 + 일치 책 표본)의 모든 항목 95%+ ② 그 3회에 본 일치 책이 10권 이상이고 바뀐 책이 5% 이하. 검수 때 두 숫자가 함께 출력되고 PR 본문 맨 아래에도 보인다. 일치한 책 중 표본 밖은 사람이 보지 않는다
 - 검수: 그날 PR 브랜치에서 `PYTHONIOENCODING=utf-8 python -m src.pipeline.review <날짜>` → 로컬 페이지(예스24 글이 보이므로 `data/processed/check/`에만 저장, 커밋 안 함) → 내려받기 → `--apply <파일>` → `cd web && npm run books:import` → PR 브랜치에 커밋. 엇갈린 책과 함께 두 AI가 같게 본 책의 10% 표본도 기본으로 보인다(끄려면 `--no-sample`)
 - 실패하면 그날은 PR이 없고 Actions 기록에 이유(예스24 경로 이름·오류 종류)만 남는다. 도중에 멈추면(`partial`) 된 만큼만 PR에 들어가고 본문 맨 위에 이유가 보인다. 예스24 책소개·목차는 어디에도 남지 않는다
 

@@ -17,7 +17,7 @@ from simulate_draws import leaf_users
 from simulate_real import FILL_TARGET, GENRES_TARGET, evaluate, leaf_pool
 
 from . import ADDITIONS, AGREEMENT, BOOKS, RUNS
-from .agreement_log import STREAK, graduation, read_rows
+from .agreement_log import MAX_SAMPLE_CHANGED, MIN_SAMPLE, STREAK, graduation, read_rows
 from .config import load_config
 from .gaps import GENRE_TARGET, TOPIC_TARGET, tally
 from .prompt import AXES
@@ -56,7 +56,8 @@ def book_line(b: dict) -> str:
 
 
 def held_line(b: dict) -> str:
-    return f"| {cell(b['title'])} | {cell(', '.join(b.get('issues') or []) or '-')} |"
+    why = [*(b.get("issues") or []), *(f"두 AI가 엇갈림: {f}" for f in b.get("flags") or [])]
+    return f"| {cell(b['title'])} | {cell(', '.join(why) or '-')} |"
 
 
 def status_banner(summary: dict) -> list[str]:
@@ -88,9 +89,10 @@ def pr_body(summary: dict, doc: dict, books: list[dict], sim: dict, auto_merge: 
     held = [b for b in doc["books"] if b["status"] == "reserve"]
     t = tally(books)
     warn = warnings(sim, axis_shares(books))
+    n_auto = sum(bool(b.get("auto")) for b in picked)  # counted from the file, not the run summary (which may be missing)
     lines = [
         f"## 오늘의 새 책 {doc['date']}", "", *status_banner(summary),
-        f"- 넣음 **{len(picked)}권** (두 AI 일치·사람 안 봄 {summary.get('auto_agreed', 0)} · 검수 필요 {summary.get('flagged', 0)}) · "
+        f"- 넣음 **{len(picked)}권** (두 AI 일치·사람 안 봄 {n_auto} · 검수 필요 {len(picked) - n_auto}) · "
         f"대기 {len(held)} · 뺌 {summary.get('dropped', 0)} · 후보 {summary.get('candidates', 0)} / 계획 {summary.get('wanted', 0)}",
         f"- 모델 {doc['model']} → 확인 {doc['second_model']} · 비용 약 ${summary.get('cost_usd', 0)}"
         + (f" · 멈춤: {summary['stopped']}" if summary.get("stopped") else ""),
@@ -100,11 +102,13 @@ def pr_body(summary: dict, doc: dict, books: list[dict], sim: dict, auto_merge: 
         f"(기준 {FILL_TARGET}%) · 뽑기당 장르 {sim['genres_per_draw']} (기준 {GENRES_TARGET})", "",
         *(["### ⚠ 경고", *[f"- {w}" for w in warn], ""] if warn else []),
         "### 넣은 책", "| 제목 | 우리 태그 | 한 줄 | 상태 |", "|---|---|---|---|", *map(book_line, picked), "",
-        *(["### 대기한 책 (규칙 검사에 걸림 — 검수 페이지에서 고쳐 넣을 수 있어요)", "| 제목 | 걸린 이유 |", "|---|---|",
+        *(["### 대기한 책 (규칙 검사에 걸렸거나, 자동 병합 중 두 AI가 엇갈림 — 검수 페이지에서 고쳐 넣을 수 있어요)", "| 제목 | 걸린 이유 |", "|---|---|",
            *map(held_line, held), ""] if held else []),
         "### 검수", f"`PYTHONIOENCODING=utf-8 python -m src.pipeline.review {doc['date']}` → 페이지 → 내려받기 → `--apply` → "
         "`cd web && npm run books:import` → 이 PR 브랜치에 커밋.", *review_notes(doc, auto_merge, sample_rate),
-        f"졸업 연속 {grad['streak']}/{STREAK}" + (" — **졸업 기준 충족: auto_merge를 켤지 사용자에게 묻기**" if grad["graduated"] and not auto_merge else ""),
+        f"졸업 연속 {grad['streak']}/{STREAK} · 일치 책 표본 {grad.get('sample_n', 0)}권 중 바뀐 책 {grad.get('sample_changed', 0)}권 "
+        f"(졸업: {MIN_SAMPLE}권 이상, 바뀐 비율 {MAX_SAMPLE_CHANGED:.0f}% 이하)"
+        + (" — **졸업 기준 충족(두 가지 모두): auto_merge를 켤지 사용자에게 묻기**" if grad["graduated"] and not auto_merge else ""),
     ]
     return "\n".join(lines) + "\n"
 

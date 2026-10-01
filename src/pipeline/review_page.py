@@ -81,11 +81,13 @@ function card(b){const c=cur(b), why=[...(b.flags||[]).map(f=>FLAG[f]||f),...(b.
   <div class="row"><span class="lab">결정</span><select data-act="status">${STATUS.map(([v,l])=>`<option value="${v}" ${v===c.status?"selected":""}>${l}</option>`).join("")}</select>
   <button class="ok" data-act="ok">${c.ok?"확인함 ✓":"맞아요"}</button></div></div>`}
 function render(){
+ const open=[...document.querySelectorAll("details[open]")].map(d=>(d.closest(".card")||{}).id+"|"+d.className);
  document.getElementById("app").innerHTML=BOOKS.map(card).join("");
+ document.querySelectorAll("details").forEach(d=>{if(open.includes((d.closest(".card")||{}).id+"|"+d.className))d.open=true});
  document.getElementById("prog").textContent=`확인 ${BOOKS.filter(b=>cur(b).ok).length}/${BOOKS.length}`}
 const bookOf=e=>{const el=e.target.closest(".card");return el&&BOOKS.find(x=>"b"+x.isbn===el.id)};
 const fromAi=(b,n)=>{const o=n===1?b:b.second||{};
- return {...(b.entry==="target"?{keywords:[...(o.keywords||[])],way:o.way}:{axes:{...o.axes}}),status:o.fits===false?"dropped":"picked"}};
+ return {...(b.entry==="target"?{keywords:[...(o.keywords||[])],way:o.way}:{axes:{...o.axes}}),status:o.fits===false?"dropped":cur(b).status}};  // never promotes a held book: the decision stays as it is
 document.addEventListener("click",e=>{const b=bookOf(e); if(!b)return; const c=cur(b), k=e.target.dataset.kw, act=e.target.dataset.act;
  if(k!==undefined){put(b,{keywords:c.keywords.includes(k)?c.keywords.filter(x=>x!==k):[...c.keywords,k].slice(0,3)});return}
  if(act==="pick1"||act==="pick2"){st[b.isbn]={...c,...fromAi(b,act==="pick1"?1:2),ok:true,pick:act==="pick1"?"ai1":"ai2"};save();render();return}

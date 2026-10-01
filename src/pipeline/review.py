@@ -26,8 +26,8 @@ from build_pilot_review import keyword_definitions, yes24_text
 from collect_candidates import detail
 
 from . import ADDITIONS, AGREEMENT, VOCAB
-from .agreement import apply_answers, stats_row
-from .agreement_log import below, graduation, read_rows, upsert, write_rows
+from .agreement import apply_answers, screened, stats_row
+from .agreement_log import MAX_SAMPLE_CHANGED, MIN_SAMPLE, STREAK, below, graduation, read_rows, upsert, write_rows
 from .candidates import yes24_env
 from .config import load_config
 from .gaps import GENRE_TARGET
@@ -96,8 +96,11 @@ def build_page(name: str, picked: list[tuple[Path, dict, list[str]]], vocab: dic
 
 
 def apply(name: str, batch: str, picked: list[tuple[Path, dict, list[str]]], download: Path,
-          vocab: dict) -> tuple[dict, Counter]:
-    """Writes the answers into the additions files and the day's row into agreement.csv. Returns (row, tally)."""
+          vocab: dict) -> tuple[dict, Counter, dict[str, list[str]]]:
+    """Writes the answers into the additions files and the day's row into agreement.csv. Returns (row, tally, refused).
+    The row covers every reviewed book of the day's file (a daily batch) or just the books answered now (a weekly sample),
+    so applying in two sittings, or the same download again, gives the same row. A pick whose one-liner breaks the rules is
+    refused (the book stays as it was; the rest of the download is still applied)."""
     answers = unwrap(json.loads(download.read_text(encoding="utf-8")))
     if not answers:
         raise ReviewError("no confirmed answers in the download")
@@ -106,16 +109,18 @@ def apply(name: str, batch: str, picked: list[tuple[Path, dict, list[str]]], dow
     if stray:
         raise ReviewError(f"answers for books not on this page: {stray[:5]}")
     kept = {t: v.get("kept", {}) for t, v in vocab.items()}
-    total = Counter()
+    total, refused = Counter(), {}
     for path, doc, isbns in picked:
-        new_doc, tally = apply_answers(doc, {i: a for i, a in answers.items() if i in isbns}, kept)
+        ok, bad = screened({b["isbn"]: b for b in doc["books"]}, {i: a for i, a in answers.items() if i in isbns})
+        refused |= bad
+        new_doc, tally = apply_answers(doc, ok, kept, None if batch == "daily" else set(ok))
         path.write_text(json.dumps(new_doc, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="")
         total += tally
     if batch != "daily":
         total["auto_agreed"] = 0  # a sample row counts only what the person looked at
     row = stats_row(name, batch, total)
     write_rows(AGREEMENT, upsert(read_rows(AGREEMENT), row))
-    return row, total
+    return row, total, refused
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -139,18 +144,23 @@ def main(argv: list[str] | None = None) -> int:
         build_page(name, picked, vocab)
         return 0
     try:
-        row, tally = apply(name, batch, picked, args.apply, vocab)
+        row, tally, refused = apply(name, batch, picked, args.apply, vocab)
     except ReviewError as err:
         print(f"ERROR: {err}", file=sys.stderr)
         return 1
     print("agreement (human-reviewed only): " + ", ".join(f"{k} {v}" for k, v in row.items() if k not in ("date", "batch")))
+    for isbn, problems in refused.items():
+        print(f"REFUSED {isbn}: not picked, the one-liner must be fixed first — {', '.join(problems)}")
     if tally["sample_n"]:
         print(f"of the AI-agreed books a person looked at: {tally['sample_n']}, changed {tally['sample_changed']}")
     if args.sample and below(row):
         print(f"⚠ below 90%: {', '.join(below(row))} — suggest setting auto_merge back to false (design 2-3)")
     grad = graduation(read_rows(AGREEMENT))
-    note = " — GRADUATED: ask the user before auto_merge true" if grad["graduated"] else ""
-    print(f"graduation streak {grad['streak']}/3{note}")
+    print(f"graduation: streak {grad['streak']}/{STREAK} (every field >= 95% on the books a person looked at) · agreed books looked at "
+          f"over the last {STREAK} reviews: {grad['sample_n']} (need >= {MIN_SAMPLE}), changed {grad['sample_changed']} "
+          f"(need <= {MAX_SAMPLE_CHANGED:.0f}%)")
+    if grad["graduated"] and not load_config().auto_merge:
+        print("GRADUATED on both counts: ask the user before auto_merge true")
     print("next: cd web && npm run books:import, then commit the additions file, books.json and agreement.csv")
     return 0
 

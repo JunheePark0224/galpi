@@ -6,13 +6,17 @@ books accepted because the two passes agreed (`auto: "ai-agree"`) are counted ap
 about accuracy. Dropped books are counted apart (`dropped`); a book the person keeps as a reserve is not counted.
 
 The trial sample: a person also looks at a share of the agreed books. Such a book loses its auto mark, keeps `sampled: true`
-and is counted like any reviewed book (so the figures also say how often an agreed book was still wrong); the tally
-`sample_n` / `sample_changed` reports them apart. 🎯 answers are checked by apply_review.checked_answer, the pilot's rules.
+and is counted like any reviewed book; the tally `sample_n` / `sample_changed` reports them apart (changed = any field, the
+status, or the line differs from pass A) — that, not the mixed shares, says how often an agreed book was still wrong.
+The day's tally is computed from EVERY reviewed book of the file (`tally_of`), not from the latest download, so applying in
+two sittings or applying a download again gives the same row. 🎯 answers are checked by apply_review.checked_answer (the
+pilot's rules); `screened` refuses to pick a book whose one-liner breaks the rules instead of aborting the whole apply.
 """
 from collections import Counter
 
 from apply_review import FIELD_OF_TOPIC, ReviewError, draft_of
 from apply_review import checked_answer as checked_target
+from check_one_liners import check_line
 
 from .agreement_log import LEAF_FIELDS, TARGET_FIELDS
 from .checks import AUTO
@@ -20,6 +24,7 @@ from .gaps import GENRE_TARGET
 from .prompt import AXES
 
 STATUSES = ("picked", "reserve", "dropped")
+NO_LINE = "(한 줄 없음)"  # a book that is dropped / held needs no line, but the stored record keeps one
 
 
 def checked_leaf(isbn: str, ans: dict) -> dict:
@@ -45,11 +50,33 @@ def same_fields(entry: str, a: dict, d: dict) -> dict[str, bool]:
             "one_liner": a["one_liner"] == d["one_liner"].strip()}
 
 
-def apply_answers(doc: dict, answers: dict[str, dict], kept: dict[str, dict]) -> tuple[dict, Counter]:
-    """New doc with the human answers applied (the input is not changed) + a tally: n_target, n_leaf, dropped,
-    same:<field> counts over the books that stay picked, sample_n / sample_changed over the agreed books a person looked
-    at, and auto_agreed (books still accepted without a human look)."""
-    books, tally = [], Counter()
+def tally_of(doc: dict, only: set[str] | None = None) -> Counter:
+    """The agreement tally of every human-reviewed book of `doc` (or just those in `only`): n_target, n_leaf, dropped,
+    same:<field> over the books that stay picked, sample_n / sample_changed over the agreed books a person looked at, and
+    auto_agreed (books still accepted without a human look)."""
+    tally = Counter()
+    for b in doc["books"]:
+        if not b.get("reviewed") or (only is not None and b["isbn"] not in only):
+            continue
+        draft = draft_of(b)
+        same = same_fields(b["entry"], b, draft)
+        if b.get("sampled"):
+            tally["sample_n"] += 1
+            tally["sample_changed"] += not all(same.values()) or b["status"] != draft["status"]
+        if b["status"] != "picked":
+            tally["dropped"] += b["status"] == "dropped"
+            continue
+        tally[f"n_{b['entry']}"] += 1
+        tally.update(f"same:{f}" for f, ok in same.items() if ok)
+    tally["auto_agreed"] = sum(b.get("auto") == AUTO and b["status"] == "picked" for b in doc["books"])
+    return tally
+
+
+def apply_answers(doc: dict, answers: dict[str, dict], kept: dict[str, dict],
+                  only: set[str] | None = None) -> tuple[dict, Counter]:
+    """New doc with the human answers applied (the input is not changed) + the tally of the whole file (`tally_of`;
+    `only` limits it to some books, for a weekly sample row that must count just what was looked at)."""
+    books = []
     for book in doc["books"]:
         ans = answers.get(book["isbn"])
         if ans is None:
@@ -62,23 +89,38 @@ def apply_answers(doc: dict, answers: dict[str, dict], kept: dict[str, dict]) ->
             a = {**a, "field": FIELD_OF_TOPIC[a["topic"]]}
         else:
             a = checked_leaf(book["isbn"], ans)
-        draft = draft_of(book)
         sampled = book.get("auto") == AUTO or bool(book.get("sampled"))
-        books.append({**{k: v for k, v in book.items() if k != "auto"}, **a, "draft": draft, "reviewed": True,
+        books.append({**{k: v for k, v in book.items() if k != "auto"}, **a, "draft": draft_of(book), "reviewed": True,
                       **({"sampled": True} if sampled else {})})
-        same = same_fields(book["entry"], a, draft)
-        if sampled:
-            tally["sample_n"] += 1
-            tally["sample_changed"] += not all(same.values())
-        if a["status"] != "picked":
-            tally["dropped"] += a["status"] == "dropped"
-            continue
-        tally[f"n_{book['entry']}"] += 1
-        tally.update(f"same:{f}" for f, ok in same.items() if ok)
     live = [b for b in books if b["status"] == "picked"]
     new_doc = {**doc, "books": books, "reviewed": bool(live) and all(b.get("reviewed") for b in live)}
-    tally["auto_agreed"] = sum(b.get("auto") == AUTO and b["status"] == "picked" for b in books)
-    return new_doc, tally
+    return new_doc, tally_of(new_doc, only)
+
+
+def line_problems(book: dict, line: str) -> list[str]:
+    """Why a one-liner cannot go into the app: empty, or breaks the line rules (length, hype, title repeat — grounding needs
+    the YES24 text, which is not here) or the style of its entry (🍃 a question, 🎯 a summary)."""
+    if not line:
+        return ["한 줄이 비어 있어요"]
+    out = [i for i in check_line(line, book.get("title", ""), line)["issues"] if not i.startswith("근거")]
+    if book["entry"] == "leaf" and not line.endswith("?"):
+        out.append("질문형인데 ?로 끝나지 않음")
+    if book["entry"] == "target" and line.endswith("?"):
+        out.append("요약형인데 물음표로 끝남")
+    return out
+
+
+def screened(books: dict[str, dict], answers: dict[str, dict]) -> tuple[dict[str, dict], dict[str, list[str]]]:
+    """(answers that can be applied, {isbn: problems} for the picks refused). A book is only picked with a line that passes
+    the rules — it stays as it was otherwise; dropping or holding a book never needs a line."""
+    ok, refused = {}, {}
+    for isbn, ans in answers.items():
+        book, line = books.get(isbn), str(ans.get("one_liner") or "").strip()
+        if book is not None and ans.get("status", "picked") == "picked" and (problems := line_problems(book, line)):
+            refused[isbn] = problems
+        else:
+            ok[isbn] = ans if line or ans.get("status", "picked") == "picked" else {**ans, "one_liner": NO_LINE}
+    return ok, refused
 
 
 def stats_row(date: str, batch: str, tally: Counter) -> dict:
@@ -87,4 +129,5 @@ def stats_row(date: str, batch: str, tally: Counter) -> dict:
     return {"date": date, "batch": batch, "n": str(nt + nl), **{f: share(f, nt) for f in TARGET_FIELDS},
             "one_liner": share("one_liner", nt + nl), "dropped": str(tally["dropped"]),
             "auto_agreed": str(tally["auto_agreed"]), "n_target": str(nt), "n_leaf": str(nl),
-            **{f: share(f, nl) for f in LEAF_FIELDS}}
+            **{f: share(f, nl) for f in LEAF_FIELDS},
+            "sample_n": str(tally["sample_n"]), "sample_changed": str(tally["sample_changed"])}

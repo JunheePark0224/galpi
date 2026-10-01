@@ -1,7 +1,7 @@
 """Samples a person checks (design 2-3): the trial sample of a day and the weekly sample after graduation.
 
 Trial (auto_merge false — a person reviews every day's PR): `trial_sample` = a fixed `sample_rate` share of the day's books
-that were accepted because both passes agreed (seeded by the date). review.py shows them by default, so the agreement
+that were accepted because both passes agreed (seeded by the date; stable across applies). review.py shows them by default, so the agreement
 figures also say how often an agreed book was still wrong; the PR body says how many agreed books stay unseen.
 Weekly (auto_merge true): `sample_rate` of last week's daily additions as a GitHub issue body.
 
@@ -24,8 +24,11 @@ from .config import load_config
 
 
 def agreed_isbns(doc: dict) -> list[str]:
-    """The day's books accepted because both passes agreed and nobody has looked at yet."""
-    return sorted(b["isbn"] for b in doc["books"] if b.get("auto") == AUTO and b["status"] == "picked" and not b.get("reviewed"))
+    """The day's agreed books: accepted because both passes agreed (`auto`, nobody has looked) or looked at as a sample
+    already (`sampled`). A person's answer turns `auto` into `sampled`, so this list — and the draw from it — does not change
+    when a review is applied."""
+    return sorted(b["isbn"] for b in doc["books"]
+                  if b.get("sampled") or (b.get("auto") == AUTO and b["status"] == "picked" and not b.get("reviewed")))
 
 
 def sample_size(n_agreed: int, rate: float) -> int:
@@ -33,7 +36,8 @@ def sample_size(n_agreed: int, rate: float) -> int:
 
 
 def trial_sample(doc: dict, rate: float) -> list[str]:
-    """A fixed share of the day's agreed books (seeded by the date), reviewed by default during the trial."""
+    """A fixed share of the day's agreed books (seeded by the date), reviewed by default during the trial. The same books
+    come back after a review is applied and the page is built again."""
     agreed = agreed_isbns(doc)
     return sorted(random.Random(doc["date"]).sample(agreed, sample_size(len(agreed), rate)))
 

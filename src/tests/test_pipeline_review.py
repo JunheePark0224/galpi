@@ -120,20 +120,48 @@ def day(d, **f):
 
 
 ALL_96 = dict(topic=96, keywords=96, way=96, one_liner=96, genre=96, temp=96, pull=96, gain=96, world=96)
+SAMPLED = dict(sample_n=4, sample_changed=0)  # 3 days x 4 = 12 agreed books looked at, none changed
 
 
-def test_graduation_needs_three_days_over_95_covering_every_field():
-    assert graduation([day("10-01", **ALL_96), day("10-02", **ALL_96)])["graduated"] is False
-    three = [day("10-01", **ALL_96), day("10-02", topic=100), day("10-03", **ALL_96)]
-    assert graduation(three) == {"streak": 3, "graduated": True, "missing_fields": []}
-    broken = [*three, day("10-04", **{**ALL_96, "world": 94})]
+def test_graduation_needs_three_days_over_95_covering_every_field_and_a_clean_sample():
+    assert graduation([day("10-01", **ALL_96, **SAMPLED), day("10-02", **ALL_96, **SAMPLED)])["graduated"] is False
+    three = [day("10-01", **ALL_96, **SAMPLED), day("10-02", topic=100, **SAMPLED), day("10-03", **ALL_96, **SAMPLED)]
+    assert graduation(three) == {"streak": 3, "graduated": True, "missing_fields": [], "sample_n": 12, "sample_changed": 0,
+                                 "sample_ok": True}
+    broken = [*three, day("10-04", **{**ALL_96, "world": 94}, **SAMPLED)]
     assert graduation(broken)["streak"] == 0
-    only_target = [day(f"10-0{i}", topic=100, keywords=100, way=100, one_liner=100) for i in (1, 2, 3)]
+    only_target = [day(f"10-0{i}", topic=100, keywords=100, way=100, one_liner=100, **SAMPLED) for i in (1, 2, 3)]
     assert graduation(only_target)["graduated"] is False and "world" in graduation(only_target)["missing_fields"]
     assert graduation([{**day("10-09", **ALL_96), "batch": "pilot"}])["streak"] == 0  # pilot rows never count
     quiet = [three[0], three[1], day("10-025"), three[2]]                         # a day with no review in between
     assert graduation(quiet)["streak"] == 3
     assert below(day("x", topic=89.9, way=95)) == ["topic"]
+
+
+def test_the_flagged_books_alone_cannot_graduate_and_a_bad_sample_cannot_be_diluted():
+    flagged_only = [day(f"10-0{i}", **ALL_96) for i in (1, 2, 3)]            # no agreed book was ever looked at
+    assert graduation(flagged_only) == {"streak": 3, "graduated": False, "missing_fields": [], "sample_n": 0,
+                                        "sample_changed": 0, "sample_ok": False}
+    small = [day(f"10-0{i}", **ALL_96, sample_n=3, sample_changed=0) for i in (1, 2, 3)]
+    assert graduation(small)["sample_ok"] is False and graduation(small)["sample_n"] == 9      # fewer than MIN_SAMPLE
+    bad = [day("10-01", **ALL_96, sample_n=7, sample_changed=1), day("10-02", **ALL_96, sample_n=7, sample_changed=1),
+           day("10-03", **ALL_96, sample_n=6, sample_changed=1)]                # 3 of 20 changed = 15%
+    assert graduation(bad)["graduated"] is False and graduation(bad)["sample_changed"] == 3
+    edge = [day(f"10-0{i}", **ALL_96, sample_n=7, sample_changed=0) for i in (1, 2)] + [day("10-03", **ALL_96, sample_n=6, sample_changed=1)]
+    assert graduation(edge)["graduated"] is True                              # 1 of 20 = 5%: allowed
+
+
+def test_the_sample_counts_reach_the_csv(tmp_path):
+    agreed = target("2", auto="ai-agree", flags=[])
+    other = target("5", auto="ai-agree", flags=[])
+    new, tally = apply_answers({"date": "d", "batch": "daily", "books": [agreed, other]}, {"2": ans(agreed, way="사례")}, KEPT)
+    row = stats_row("d", "daily", tally)
+    assert (row["sample_n"], row["sample_changed"]) == ("1", "1") and set(row) <= set(HEAD)
+    write_rows(tmp_path / "a.csv", [row])
+    assert read_rows(tmp_path / "a.csv")[0]["sample_changed"] == "1"
+    # a sampled book the person dropped counts as changed even though no tag differs
+    new2, tally2 = apply_answers({"date": "d", "batch": "daily", "books": [agreed]}, {"2": ans(agreed, status="dropped")}, KEPT)
+    assert (tally2["sample_n"], tally2["sample_changed"], tally2["dropped"]) == (1, 1, 1)
 
 
 def test_which_books_need_a_look_and_how_the_trial_sample_is_drawn():
@@ -252,3 +280,71 @@ def test_weekly_sample_is_fixed_by_the_week():
 def test_no_weekly_sample_while_people_review_every_day(tmp_path, capsys):
     assert sample.main(["--out", str(tmp_path / "issue.md")]) == 0  # saved config: auto_merge false
     assert not (tmp_path / "issue.md").exists() and "auto_merge is off" in capsys.readouterr().out
+
+
+def test_the_trial_sample_stays_the_same_after_a_review_is_applied():
+    doc = {"date": "2026-10-05", "batch": "daily", "books": [target(str(i), auto="ai-agree", flags=[]) for i in range(35)]}
+    first = sample.trial_sample(doc, 0.1)
+    assert len(first) == 4
+    answers = {i: ans(next(b for b in doc["books"] if b["isbn"] == i)) for i in first}
+    after, _ = apply_answers(doc, answers, KEPT)
+    assert sample.trial_sample(after, 0.1) == first                  # the same books come back on a rebuilt page
+    assert all(b["sampled"] for b in after["books"] if b["isbn"] in first) and len(sample.agreed_isbns(after)) == 35
+
+
+def test_the_day_row_covers_every_reviewed_book_of_the_file_not_just_the_latest_download(files):
+    tmp, path = files
+    d = doc_of()
+    for name, isbn, over in (("a.json", "1", {"way": "사례"}), ("b.json", "3", {})):    # two sittings
+        (tmp / name).write_text(json.dumps({"answers": {isbn: ans(next(b for b in d["books"] if b["isbn"] == isbn), **over)}}),
+                                encoding="utf-8")
+        assert review.main(["2026-10-05", "--apply", str(tmp / name)]) == 0
+    row = read_rows(tmp / "agreement.csv")[0]
+    assert row["n"] == "2" and row["n_target"] == "1" and row["n_leaf"] == "1" and row["way"] == "0.0" and row["world"] == "100.0"
+    review.main(["2026-10-05", "--apply", str(tmp / "a.json")])                          # the first one again
+    again = read_rows(tmp / "agreement.csv")
+    assert len(again) == 1 and again[0] == row
+
+
+def test_a_weekly_sample_row_counts_only_the_books_answered_now(files, monkeypatch):
+    tmp, path = files
+    d = doc_of()
+    (tmp / "a.json").write_text(json.dumps({"answers": {"1": ans(d["books"][0], way="사례")}}), encoding="utf-8")
+    review.main(["2026-10-05", "--apply", str(tmp / "a.json")])                          # book 1 is human reviewed
+    picks = [(path, json.loads(path.read_text(encoding="utf-8")), ["1", "2"])]
+    (tmp / "w.json").write_text(json.dumps({"answers": {"2": ans(d["books"][1])}}), encoding="utf-8")
+    row, tally, _ = review.apply("2026-W41", "sample-2026-W41", picks, tmp / "w.json", VOCAB)
+    assert row["n"] == "1" and row["way"] == "100.0" and row["sample_n"] == "1" and row["auto_agreed"] == "0"   # not book 1 (way 0.0)
+
+
+def test_a_pick_with_a_failing_line_is_refused_but_the_rest_of_the_download_is_applied(files, capsys):
+    tmp, path = files
+    d = doc_of()
+    held = d["books"][3]                                                                # reserve: its line is 9 chars
+    short = ans(held, status="picked", one_liner="짧은 한 줄?")
+    fine = ans(d["books"][2], axes={**AX, "world": -1})
+    (tmp / "dl.json").write_text(json.dumps({"answers": {"4": short, "3": fine}}), encoding="utf-8")
+    assert review.main(["2026-10-05", "--apply", str(tmp / "dl.json")]) == 0
+    out = capsys.readouterr().out
+    assert "REFUSED 4" in out and "짧음" in out
+    saved = {b["isbn"]: b for b in json.loads(path.read_text(encoding="utf-8"))["books"]}
+    assert saved["4"]["status"] == "reserve" and "reviewed" not in saved["4"]            # stays held, untouched
+    assert saved["3"]["reviewed"] is True and saved["3"]["axes"]["world"] == -1           # the other answer went through
+    # a blank line on a dropped / held book is fine (it never goes into the app); on a pick it is refused, not a crash
+    scrubbed = doc_of()
+    scrubbed["books"][0] = {**scrubbed["books"][0], "one_liner": ""}
+    path.write_text(json.dumps(scrubbed, ensure_ascii=False), encoding="utf-8")
+    (tmp / "dl2.json").write_text(json.dumps({"answers": {"1": ans(scrubbed["books"][0], status="dropped")}}), encoding="utf-8")
+    assert review.main(["2026-10-05", "--apply", str(tmp / "dl2.json")]) == 0
+    assert json.loads(path.read_text(encoding="utf-8"))["books"][0]["status"] == "dropped"
+    (tmp / "dl3.json").write_text(json.dumps({"answers": {"2": ans(scrubbed["books"][1], one_liner="")}}), encoding="utf-8")
+    assert review.main(["2026-10-05", "--apply", str(tmp / "dl3.json")]) == 0 and "REFUSED 2" in capsys.readouterr().out
+
+
+def test_the_pick_buttons_never_promote_a_held_book_and_the_page_keeps_open_details(files):
+    tmp, _ = files
+    review.main(["2026-10-05"])
+    script = (tmp / "pages" / "2026-10-05.html").read_text(encoding="utf-8")
+    assert 'status:o.fits===false?"dropped":cur(b).status' in script                  # keep the decision, drop only when AI says no fit
+    assert 'status:o.fits===false?"dropped":"picked"' not in script
+    assert 'querySelectorAll("details[open]")' in script and "d.open=true" in script   # a re-render keeps the open details
