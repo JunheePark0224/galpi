@@ -1,6 +1,7 @@
 import { WAY_LABEL, type Tag, type TargetAnswers, type Way } from "@/lib/recommend";
 import { TOPIC_CHIPS, type Topic } from "@/lib/books/taxonomy";
 import type { GoalMatch } from "@/lib/goal/match";
+import type { PropsOf } from "@/lib/track/schema";
 
 export type LenChoice = "thin" | "normal" | "thick";
 
@@ -33,4 +34,9 @@ export function targetAnswersFrom(f: TargetForm, goal: GoalMatch | null): Target
     len: LEN_CHIPS.find((c) => c.value === f.len)?.tag ?? 0,
     keywords: goal?.keywords ?? [],
   };
+}
+
+/** E-26 goal_submitted: the 🎯 form passed its check. topic = the chosen key, or the one the written goal matched. */
+export function goalSubmittedProps(f: TargetForm, goal: GoalMatch | null, isEdit: boolean): PropsOf<"goal_submitted"> {
+  return { topic: targetAnswersFrom(f, goal).topic, is_free_text: f.free !== null, len: f.len, way: f.way, is_edit: isEdit };
 }

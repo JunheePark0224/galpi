@@ -90,7 +90,7 @@ describe("edit tracking and coverage buckets", () => {
   it("lists changed 🎯 fields", () => {
     const before = { topic: null, free: "SQL", len: null, way: null } as const;
     expect(editedTargetFields(before, { ...before, len: "thin" })).toEqual(["len"]);
-    expect(editedTargetFields(before, { ...before, free: null, topic: "통계", way: "개념" })).toEqual(["what", "way"]);
+    expect(editedTargetFields(before, { ...before, free: null, topic: "통계", way: "개념" })).toEqual(["topic", "way"]);
     expect(editedTargetFields(before, { ...before })).toEqual([]);
   });
 

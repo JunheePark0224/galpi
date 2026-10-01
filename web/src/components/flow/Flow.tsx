@@ -9,7 +9,7 @@ import { drawBody, requestDraw, toDrawView } from "@/lib/flow/api";
 import { flowReducer, type FlowAction, type FlowState, type Reaction } from "@/lib/flow/state";
 import { loadFlow, saveFlow } from "@/lib/flow/storage";
 import { coverageBucket, editedQuestions, editedTargetFields } from "@/lib/flow/summary";
-import type { TargetForm } from "@/lib/flow/target";
+import { goalSubmittedProps, type TargetForm } from "@/lib/flow/target";
 import { matchGoal } from "@/lib/goal/match";
 import { setEntry } from "@/lib/track/common";
 import { track } from "@/lib/track/client";
@@ -33,7 +33,7 @@ export function Flow() {
       const res = await requestDraw(drawBody(s));
       if (s.entry === "target" && s.goal) {
         const found = s.goal.matched ? (res.found ?? 0) : 0;
-        track("goal_coverage", { bucket: coverageBucket(found), found });
+        track("goal_coverage_checked", { coverage_bucket: coverageBucket(found), found_count: found });
       }
       dispatch({ type: "drawn", id: s.drawId, draw: toDrawView(res, newArtSeed()) });
     } catch {
@@ -53,34 +53,37 @@ export function Flow() {
     const pick = s.draw?.picks[s.index];
     if (!pick) return;
     track("bookmark_shown", {
-      book_id: pick.card.id, index: s.index + 1, one_liner_style: pick.card.oneLinerStyle, kind: pick.kind, art: pick.art,
+      book_id: pick.card.id, position: s.index + 1, one_liner_style: pick.card.oneLinerStyle, pick_type: pick.kind, art: pick.art,
     });
   };
 
   const start = (entry: Entry) => {
     setEntry(entry);
-    track("entry_selected", { entry });
+    track("entry_selected", {});    // the entry itself is the common `entry`, set just above
     act({ type: "start", entry });
   };
 
   const answer = (choice: BalanceChoice) => {
     const next = act({ type: "answer", choice });
     if (next.drawId !== state.drawId && state.prevChoices) {
-      track("first_page_edited", { entry: "leaf", items: editedQuestions(state.prevChoices, next.choices) });
+      track("first_page_edited", { changed_items: editedQuestions(state.prevChoices, next.choices) });
     }
   };
 
   const submitTarget = (form: TargetForm) => {
     const goal = form.free !== null ? matchGoal(form.free, VOCAB) : null;
+    track("goal_submitted", goalSubmittedProps(form, goal, state.edited));
     if (goal) {
-      track("goal_free_written", { text: goal.text, topic: goal.topic, keywords: goal.keywords, matched: goal.matched, method: goal.method });
+      track("free_goal_written", {
+        goal_text: goal.text, topic: goal.topic, keywords: goal.keywords, is_matched: goal.matched, method: goal.method,
+      });
     }
-    if (state.prevForm) track("first_page_edited", { entry: "target", items: editedTargetFields(state.prevForm, form) });
+    if (state.prevForm) track("first_page_edited", { changed_items: editedTargetFields(state.prevForm, form) });
     act({ type: "submitTarget", form, goal });
   };
 
   const open = () => {
-    track("book_opened");
+    track("book_opened", {});
     act({ type: "open" });
   };
 
@@ -92,13 +95,16 @@ export function Flow() {
   const react = (reaction: Reaction) => {
     const pick = state.draw?.picks[state.index];
     if (state.step !== "bookmarks" || !pick) return;
-    track("bookmark_reacted", { book_id: pick.card.id, index: state.index + 1, reaction, kind: pick.kind });
+    track("bookmark_reacted", {
+      book_id: pick.card.id, position: state.index + 1, reaction, pick_type: pick.kind, one_liner_style: pick.card.oneLinerStyle,
+    });
     const next = act({ type: "react", reaction });
     if (next.step === "bookmarks") trackShown(next);
   };
 
-  const home = () => {
-    track("home_clicked", { curious: state.reactions.filter((r) => r === "curious").length });
+  /** [처음으로] — source: first_page = S-04 dead end (draw failed / no books), end = after the bookmarks (taxonomy E-20). */
+  const home = (source: "first_page" | "end") => {
+    track("home_clicked", { curious_count: state.reactions.filter((r) => r === "curious").length, source });
     setEntry(null);
     act({ type: "home" });
   };
@@ -118,10 +124,10 @@ export function Flow() {
           onNext={nextPage}
           onRetry={() => act({ type: "retry" })}
           onReact={react}
-          onHome={home}
+          onHome={() => home("first_page")}
         />
       )}
-      {state.step === "end" && <EndList picks={state.draw?.picks ?? []} reactions={state.reactions} onHome={home} />}
+      {state.step === "end" && <EndList picks={state.draw?.picks ?? []} reactions={state.reactions} onHome={() => home("end")} />}
     </MotionConfig>
   );
 }

@@ -30,14 +30,14 @@ export function TargetInput({ initial, edit, onSubmit }: Props) {
   const [missing, setMissing] = useState(false);
   const freeInput = useRef<HTMLInputElement>(null);
 
-  const change = (patch: Partial<TargetForm>, question: "topic" | "len" | "way", value: string | null) => {
+  const change = (patch: Partial<TargetForm>, chipType: "topic" | "len" | "way", chipValue: string | null) => {
     setForm((f) => ({ ...f, ...patch }));
     setMissing(false);
-    track("chip_selected", { question, value, edit });
+    track("chip_selected", { chip_type: chipType, chip_value: chipValue, is_edit: edit });
   };
   const pickTopic = (topic: Topic) => change({ topic, free: null }, "topic", topic);
   const pickFree = () => {
-    change({ topic: null, free: form.free ?? "" }, "topic", "direct");
+    change({ topic: null, free: form.free ?? "" }, "topic", "free");
     setTimeout(() => freeInput.current?.focus(), 0);
   };
   const toggleLen = (len: LenChoice) => {

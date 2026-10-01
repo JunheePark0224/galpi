@@ -80,10 +80,10 @@ function currentRound(): number {
   return Number.isInteger(n) && n >= 1 ? n : 1;
 }
 
-export function detectDevice(ua: string): { device: "phone" | "desktop"; in_app_browser: boolean } {
+export function detectDevice(ua: string): { device: "phone" | "desktop"; is_in_app_browser: boolean } {
   const phone = /Mobi|Android|iPhone|iPod/i.test(ua);
   const inApp = /KAKAOTALK|Instagram|FBAN|FBAV|NAVER\(inapp|Line\//i.test(ua);
-  return { device: phone ? "phone" : "desktop", in_app_browser: inApp };
+  return { device: phone ? "phone" : "desktop", is_in_app_browser: inApp };
 }
 
 /** Read-only: the id this browser already has, or null. Never creates or stores one (privacy page). */
@@ -112,7 +112,7 @@ export function commonProps(): CommonProps {
     memory[RETURNING] = flag;
     write(session, RETURNING, flag);
   }
-  const returning = (read(session, RETURNING) ?? memory[RETURNING]) === "1";
+  const isReturning = (read(session, RETURNING) ?? memory[RETURNING]) === "1";
 
   memory[SEEN] = "1";
   write(local, SEEN, "1");
@@ -125,7 +125,7 @@ export function commonProps(): CommonProps {
     entry: currentEntry(),
     screen_version: SCREEN_VERSION,
     referrer: typeof document === "undefined" ? "" : cutText(document.referrer, MAX_REFERRER),
-    returning,
+    is_returning: isReturning,
     ...detectDevice(typeof navigator === "undefined" ? "" : navigator.userAgent),
   };
 }

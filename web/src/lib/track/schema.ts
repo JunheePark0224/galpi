@@ -1,12 +1,107 @@
-export const EVENT_NAMES = [
-  "visit", "entry_selected", "chip_selected", "book_opened", "first_page_edited",
-  "bookmark_shown", "bookmark_reacted", "result_viewed", "result_book_viewed", "save_clicked",
-  "login_prompt_shown", "login_started", "login_completed", "book_saved", "book_unsaved",
-  "library_viewed", "yes24_clicked", "redraw_clicked", "home_clicked", "goal_free_written",
-  "goal_coverage", "description_expanded", "balance_answered", "unsure_hold_cancelled",
-] as const;
+/**
+ * Event names and props — the code copy of docs/taxonomy.md (the source) and docs/taxonomy.csv (its machine copy).
+ * Change all three in one commit (taxonomy 7-1); src/lib/track/taxonomy.test.ts fails when they drift.
+ */
 
-export type EventName = (typeof EVENT_NAMES)[number];
+/** "string" | "number" | "boolean" | "object", or the allowed values of an enum (null in the list = nullable). */
+export type PropType = "string" | "number" | "boolean" | "object" | readonly (string | null)[];
+
+export interface PropSpec {
+  readonly type: PropType;
+  /** csv Array = TRUE: a list of `type` values. */
+  readonly array?: true;
+  /** A non-enum value that may be null (csv Value Example lists `null`). */
+  readonly nullable?: true;
+  /** csv Note "Supabase only" / "Amplitude only" (taxonomy 2-7): sent to that destination alone. */
+  readonly only?: "supabase" | "amplitude";
+  /** Longest string the server keeps (UTF-16 units). */
+  readonly max?: number;
+}
+
+const BOOK_ID = { type: "string" } as const;
+const POSITION = { type: "number" } as const;
+const IS_EDIT = { type: "boolean" } as const;
+const QUESTION_NO = { type: "number" } as const;
+const PICK_TYPE = { type: ["recommended", "random"] } as const;
+const ONE_LINER_STYLE = { type: ["summary", "question"] } as const;
+const CURIOUS_COUNT = { type: "number" } as const;
+const PROVIDER = { type: ["kakao", "google"] } as const;
+
+/** Every live and planned event (taxonomy 4-1), in PRD order. Props are the event's own; common props are separate. */
+export const EVENT_SPEC = {
+  site_visited: { prompt_version: { type: "string", only: "amplitude" } },
+  entry_selected: {},
+  chip_selected: {
+    chip_type: { type: ["topic", "len", "way"] },
+    chip_value: { type: "string", nullable: true },
+    is_edit: IS_EDIT,
+  },
+  book_opened: {},
+  first_page_edited: { changed_items: { type: "string", array: true } },
+  bookmark_shown: { book_id: BOOK_ID, position: POSITION, one_liner_style: ONE_LINER_STYLE, pick_type: PICK_TYPE, art: { type: "object" } },
+  bookmark_reacted: {
+    book_id: BOOK_ID, position: POSITION, reaction: { type: ["pass", "curious"] }, pick_type: PICK_TYPE, one_liner_style: ONE_LINER_STYLE,
+  },
+  result_viewed: { curious_count: CURIOUS_COUNT },
+  result_book_viewed: { book_id: BOOK_ID, position: POSITION, pick_type: PICK_TYPE },
+  save_clicked: { book_id: BOOK_ID, is_logged_in: { type: "boolean" } },
+  login_prompt_shown: { source: { type: ["save", "header"] } },
+  login_started: { provider: PROVIDER },
+  login_completed: { provider: PROVIDER, is_first_login: { type: "boolean" } },
+  book_saved: { book_id: BOOK_ID, is_auto_save: { type: "boolean" } },
+  book_unsaved: { book_id: BOOK_ID },
+  library_viewed: { saved_count: { type: "number" } },
+  yes24_link_clicked: { book_id: BOOK_ID, source: { type: ["result", "library"] }, pick_type: { type: [null, "recommended", "random"] } },
+  redraw_clicked: { curious_count: CURIOUS_COUNT },
+  home_clicked: { curious_count: CURIOUS_COUNT, source: { type: ["first_page", "end"] } },
+  free_goal_written: {
+    goal_text: { type: "string", only: "supabase", max: 30 },
+    topic: { type: "string" },
+    keywords: { type: "string", array: true },
+    is_matched: { type: "boolean" },
+    method: { type: ["word", "llm"] },
+  },
+  goal_coverage_checked: { coverage_bucket: { type: ["0", "1-3", "4+"] }, found_count: { type: "number" } },
+  description_expanded: { book_id: BOOK_ID, pick_type: PICK_TYPE },
+  balance_answered: {
+    question_no: QUESTION_NO,
+    choice: { type: ["A", "B", "unsure"] },
+    side: { type: [null, "left", "right"] },
+    elapsed_ms: { type: "number" },
+    is_edit: IS_EDIT,
+  },
+  unsure_hold_cancelled: { question_no: QUESTION_NO, held_ms: { type: "number" }, is_edit: IS_EDIT },
+  goal_submitted: {
+    topic: { type: "string" },
+    is_free_text: { type: "boolean" },
+    len: { type: [null, "thin", "normal", "thick"] },
+    way: { type: [null, "개념", "실습", "사례"] },
+    is_edit: IS_EDIT,
+  },
+} as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
+
+type Spec = typeof EVENT_SPEC;
+export type EventName = keyof Spec;
+export const EVENT_NAMES = Object.keys(EVENT_SPEC) as EventName[];
+
+type BaseOf<T> = T extends "string" ? string
+  : T extends "number" ? number
+  : T extends "boolean" ? boolean
+  : T extends "object" ? object
+  : T extends readonly (infer V)[] ? V
+  : never;
+type ValueOf<P> = P extends { type: infer T }
+  ? P extends { array: true } ? BaseOf<T>[] : BaseOf<T> | (P extends { nullable: true } ? null : never)
+  : never;
+type Sent<N extends EventName> = { [K in keyof Spec[N] as Spec[N][K] extends { only: "amplitude" } ? never : K]: ValueOf<Spec[N][K]> };
+
+/** What a screen passes to track(name, props). Amplitude-only props are added by the Amplitude path, never by callers. */
+export type PropsOf<N extends EventName> = keyof Sent<N> extends never ? Record<string, never> : Sent<N>;
+
+/** Own keys only: "constructor" or "__proto__" are not event names. */
+export function isEventName(x: unknown): x is EventName {
+  return typeof x === "string" && Object.prototype.hasOwnProperty.call(EVENT_SPEC, x);
+}
 
 export interface CommonProps {
   anon_id: string;
@@ -16,15 +111,15 @@ export interface CommonProps {
   entry: "leaf" | "target" | null;
   screen_version: string;
   referrer: string;
-  returning: boolean;
+  is_returning: boolean;
   device: "phone" | "desktop";
-  in_app_browser: boolean;
+  is_in_app_browser: boolean;
 }
 
-const NAMES = new Set<string>(EVENT_NAMES);
-export function isEventName(x: unknown): x is EventName {
-  return typeof x === "string" && NAMES.has(x);
-}
+/** taxonomy.md 3-1 — the csv `*` rows. parseCommon returns exactly these keys. */
+export const COMMON_KEYS = [
+  "anon_id", "user_id", "session_id", "round", "entry", "screen_version", "referrer", "is_returning", "device", "is_in_app_browser",
+] as const satisfies readonly (keyof CommonProps)[];
 
 export const SCREEN_VERSION = "v1";
 
@@ -44,14 +139,16 @@ const text = (x: unknown, max: number, min = 0): x is string => typeof x === "st
 export function parseCommon(x: unknown): CommonProps | null {
   if (typeof x !== "object" || x === null || Array.isArray(x)) return null;
   const c = x as Record<string, unknown>;
-  const { anon_id, user_id, session_id, round, entry, screen_version, referrer, returning, device, in_app_browser } = c;
+  const { anon_id, user_id, session_id, round, entry, screen_version, referrer, is_returning, device, is_in_app_browser } = c;
   if (!text(anon_id, MAX_ID, 1) || !text(session_id, MAX_ID, 1) || !text(screen_version, MAX_ID, 1)) return null;
   if (user_id !== null && !text(user_id, MAX_ID)) return null;
   if (typeof referrer !== "string") return null;
   if (typeof round !== "number" || !Number.isInteger(round) || round < 0 || round > MAX_ROUND) return null;
   if (entry !== null && entry !== "leaf" && entry !== "target") return null;
   if (device !== "phone" && device !== "desktop") return null;
-  if (typeof returning !== "boolean" || typeof in_app_browser !== "boolean") return null;
+  if (typeof is_returning !== "boolean" || typeof is_in_app_browser !== "boolean") return null;
   // referrer comes from the visitor's browser and may be a long URL: keep the event, cut the value.
-  return { anon_id, user_id, session_id, round, entry, screen_version, referrer: cutText(referrer, MAX_REFERRER), returning, device, in_app_browser };
+  return {
+    anon_id, user_id, session_id, round, entry, screen_version, referrer: cutText(referrer, MAX_REFERRER), is_returning, device, is_in_app_browser,
+  };
 }

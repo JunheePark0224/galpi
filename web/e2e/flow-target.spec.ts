@@ -39,18 +39,23 @@ test("🎯 chips → book → first page → five bookmarks → curious list", a
   await expect(page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ })).toBeVisible();
 
   await expect.poll(() => named(events, "home_clicked").length).toBe(1);
-  expect(named(events, "visit")).toHaveLength(1);
-  expect(named(events, "entry_selected").map((e) => e.props)).toEqual([{ entry: "target" }]);
-  expect(named(events, "chip_selected").map((e) => [e.props.question, e.props.value])).toEqual([["topic", "데이터 분석"], ["len", "thin"], ["way", "실습"]]);
+  expect(named(events, "site_visited")).toHaveLength(1);
+  expect(named(events, "entry_selected").map((e) => [e.props, e.common.entry])).toEqual([[{}, "target"]]);
+  expect(named(events, "chip_selected").map((e) => [e.props.chip_type, e.props.chip_value])).toEqual([["topic", "데이터 분석"], ["len", "thin"], ["way", "실습"]]);
+  expect(named(events, "goal_submitted").map((e) => e.props)).toEqual([
+    { topic: "데이터 분석", is_free_text: false, len: "thin", way: "실습", is_edit: false },
+  ]);
   expect(named(events, "book_opened")).toHaveLength(1);
   const shown = named(events, "bookmark_shown");
   expect(shown).toHaveLength(5);
   expect(new Set(shown.map((e) => e.props.book_id)).size).toBe(5);
-  expect(shown.filter((e) => e.props.kind === "random")).toHaveLength(1);
+  expect(shown.filter((e) => e.props.pick_type === "random")).toHaveLength(1);
   expect(shown.every((e) => e.common.entry === "target" && e.common.round === 1 && e.props.one_liner_style === "summary")).toBe(true);
-  expect(shown.map((e) => e.props.index)).toEqual([1, 2, 3, 4, 5]);
-  expect(named(events, "bookmark_reacted").map((e) => e.props.reaction)).toEqual(["curious", "pass", "curious", "pass", "curious"]);
-  expect(named(events, "home_clicked")[0]).toMatchObject({ props: { curious: 3 }, common: { entry: "target" } });
+  expect(shown.map((e) => e.props.position)).toEqual([1, 2, 3, 4, 5]);
+  const reacted = named(events, "bookmark_reacted");
+  expect(reacted.map((e) => e.props.reaction)).toEqual(["curious", "pass", "curious", "pass", "curious"]);
+  expect(reacted.every((e) => e.props.one_liner_style === "summary")).toBe(true);
+  expect(named(events, "home_clicked")[0]).toMatchObject({ props: { curious_count: 3, source: "end" }, common: { entry: "target" } });
   await expect.poll(() => statuses.length).toBe(events.length);
   expect(statuses.every((s) => s === 202)).toBe(true);
 });
@@ -83,13 +88,17 @@ test("🎯 written goal → honest count → one edit → five bookmarks", async
   await expect(page.getByRole("button", { name: "처음으로" })).toBeVisible();
 
   await expect.poll(() => named(events, "bookmark_reacted").length).toBe(5);
-  expect(named(events, "goal_free_written").map((e) => e.props)).toEqual([
-    { text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], matched: true, method: "word" },
-    { text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], matched: true, method: "word" },
+  expect(named(events, "free_goal_written").map((e) => e.props)).toEqual([
+    { goal_text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" },
+    { goal_text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" },
   ]);
-  expect(named(events, "goal_coverage")[0].props).toEqual({ bucket: "1-3", found: 2 });
-  expect(named(events, "first_page_edited").map((e) => e.props)).toEqual([{ entry: "target", items: ["len"] }]);
-  expect(named(events, "chip_selected").map((e) => [e.props.value, e.props.edit])).toEqual([["direct", false], ["thin", true]]);
+  expect(named(events, "goal_submitted").map((e) => e.props)).toEqual([
+    { topic: "데이터 분석", is_free_text: true, len: null, way: null, is_edit: false },
+    { topic: "데이터 분석", is_free_text: true, len: "thin", way: null, is_edit: true },
+  ]);
+  expect(named(events, "goal_coverage_checked")[0].props).toEqual({ coverage_bucket: "1-3", found_count: 2 });
+  expect(named(events, "first_page_edited").map((e) => e.props)).toEqual([{ changed_items: ["len"] }]);
+  expect(named(events, "chip_selected").map((e) => [e.props.chip_value, e.props.is_edit])).toEqual([["free", false], ["thin", true]]);
 });
 
 test("🎯 a 30-character goal with no spaces wraps inside the first page", async ({ page }) => {

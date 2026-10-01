@@ -71,12 +71,12 @@ export function editedQuestions(before: readonly BalanceChoice[], after: readonl
   return after.flatMap((c, i) => (c !== before[i] ? [`q${i + 1}`] : []));
 }
 
-/** E-06 items for 🎯: "what" (topic or written goal), "len", "way". */
+/** E-06 changed_items for 🎯: "topic" (chosen topic or written goal — the E-03 chip_type name), "len", "way". */
 export function editedTargetFields(before: TargetForm, after: TargetForm): string[] {
   const what = before.topic !== after.topic || (before.free === null) !== (after.free === null)
     || (before.free ?? "").trim() !== (after.free ?? "").trim();
   return [
-    ...(what ? ["what"] : []),
+    ...(what ? ["topic"] : []),
     ...(before.len !== after.len ? ["len"] : []),
     ...(before.way !== after.way ? ["way"] : []),
   ];

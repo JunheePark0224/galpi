@@ -5,7 +5,7 @@ type Sdk = typeof import("@amplitude/unified");
 type Waiting = readonly [EventName, Record<string, unknown>];
 
 const KEY_MISSING = "Amplitude API key missing — analytics disabled";
-/** Instructor's install check (wizard step 6): the load event carries this. We reuse `visit` instead of a new event name. */
+/** Instructor's install check (wizard step 6): `site_visited` carries this (EVENT_SPEC: prompt_version, Amplitude only). */
 const PROMPT_VERSION = "BA400.4";
 const REPLAY_SAMPLE_RATE = 0.2;
 /** The SDK is ~120 KB gzip: load it when the browser is idle, and no later than this after the page asked for it. */
@@ -85,10 +85,10 @@ export function sendToAmplitude(name: EventName, props: Record<string, unknown>,
       round: common.round,
       screen_version: common.screen_version,
       device: common.device,
-      in_app_browser: common.in_app_browser,
-      returning: common.returning,
+      is_in_app_browser: common.is_in_app_browser,
+      is_returning: common.is_returning,
     };
-    const event: Waiting = [name, { ...shared, ...props, ...(name === "visit" ? { prompt_version: PROMPT_VERSION } : {}) }];
+    const event: Waiting = [name, { ...shared, ...props, ...(name === "site_visited" ? { prompt_version: PROMPT_VERSION } : {}) }];
     if (sdk) give(sdk, event);
     else if (waiting.length < MAX_WAITING) waiting.push(event);
   } catch {

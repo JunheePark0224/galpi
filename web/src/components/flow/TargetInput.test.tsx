@@ -28,9 +28,9 @@ describe("TargetInput (S-02 🎯)", () => {
     submit();
     expect(onSubmit).toHaveBeenCalledWith({ topic: "AI 활용", free: null, len: "thin", way: "사례" });
     expect(vi.mocked(track).mock.calls).toEqual([
-      ["chip_selected", { question: "topic", value: "AI 활용", edit: false }],
-      ["chip_selected", { question: "len", value: "thin", edit: false }],
-      ["chip_selected", { question: "way", value: "사례", edit: false }],
+      ["chip_selected", { chip_type: "topic", chip_value: "AI 활용", is_edit: false }],
+      ["chip_selected", { chip_type: "len", chip_value: "thin", is_edit: false }],
+      ["chip_selected", { chip_type: "way", chip_value: "사례", is_edit: false }],
     ]);
   });
 
@@ -40,7 +40,7 @@ describe("TargetInput (S-02 🎯)", () => {
     fireEvent.click(thin);
     fireEvent.click(thin);
     expect(thin).toHaveAttribute("aria-pressed", "false");
-    expect(track).toHaveBeenLastCalledWith("chip_selected", { question: "len", value: null, edit: false });
+    expect(track).toHaveBeenLastCalledWith("chip_selected", { chip_type: "len", chip_value: null, is_edit: false });
   });
 
   it("takes a written goal instead of a topic, trimmed", () => {
@@ -53,6 +53,7 @@ describe("TargetInput (S-02 🎯)", () => {
     fireEvent.change(box, { target: { value: "  SQL 공부  " } });
     submit();
     expect(onSubmit).toHaveBeenCalledWith({ topic: null, free: "SQL 공부", len: null, way: null });
+    expect(track).toHaveBeenCalledWith("chip_selected", { chip_type: "topic", chip_value: "free", is_edit: false });
   });
 
   it("counts an empty written goal as missing", () => {
@@ -85,6 +86,6 @@ describe("TargetInput (S-02 🎯)", () => {
     expect(screen.getByRole("button", { name: "통계" })).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByRole("button", { name: "두꺼워도 좋아요" })).toHaveAttribute("aria-pressed", "true");
     fireEvent.click(screen.getByRole("button", { name: "보통" }));
-    expect(track).toHaveBeenCalledWith("chip_selected", { question: "len", value: "normal", edit: true });
+    expect(track).toHaveBeenCalledWith("chip_selected", { chip_type: "len", chip_value: "normal", is_edit: true });
   });
 });

@@ -8,7 +8,7 @@ const createClient = vi.fn(() => ({ from }));
 vi.mock("server-only", () => ({}));
 vi.mock("@supabase/supabase-js", () => ({ createClient }));
 
-const event = { name: "visit", props: {}, common: {} };
+const event = { name: "site_visited", props: {}, common: {} };
 
 async function loadStore() {
   vi.resetModules();

@@ -1,24 +1,53 @@
 import { describe, expect, it } from "vitest";
-import { cutText, EVENT_NAMES, isEventName, parseCommon } from "./schema";
+import { COMMON_KEYS, cutText, EVENT_NAMES, EVENT_SPEC, isEventName, parseCommon, type PropsOf } from "./schema";
 
 describe("event schema", () => {
-  it("lists the 24 PRD events in order (E-04 removed)", () => {
-    expect(EVENT_NAMES).toHaveLength(24);
-    expect(EVENT_NAMES[0]).toBe("visit");
-    expect(EVENT_NAMES[23]).toBe("unsure_hold_cancelled");
+  it("lists the 25 taxonomy events in PRD order (E-04 removed, E-26 last)", () => {
+    expect(EVENT_NAMES).toHaveLength(25);
+    expect(EVENT_NAMES[0]).toBe("site_visited");
+    expect(EVENT_NAMES[24]).toBe("goal_submitted");
+    expect(EVENT_NAMES).not.toContain("visit");
   });
 
-  it("accepts only known names", () => {
+  it("accepts only known names, never inherited object keys", () => {
     expect(isEventName("bookmark_reacted")).toBe(true);
     expect(isEventName("drop_table")).toBe(false);
+    expect(isEventName("constructor")).toBe(false);
+    expect(isEventName("__proto__")).toBe(false);
     expect(isEventName(42)).toBe(false);
+  });
+
+  it("marks goal_text Supabase only and prompt_version Amplitude only (taxonomy 2-7)", () => {
+    expect(EVENT_SPEC.free_goal_written.goal_text).toMatchObject({ only: "supabase", max: 30 });
+    expect(EVENT_SPEC.site_visited.prompt_version).toMatchObject({ only: "amplitude" });
+  });
+
+  it("types the props of each event from the spec (checked by tsc)", () => {
+    const shown: PropsOf<"bookmark_shown"> = {
+      book_id: "9788998441012", position: 1, one_liner_style: "summary", pick_type: "random", art: { animal: "fox" },
+    };
+    const goal: PropsOf<"free_goal_written"> = { goal_text: "SQL", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" };
+    const visit: PropsOf<"site_visited"> = {};
+    // @ts-expect-error — `kind` is the old name of pick_type (taxonomy 4-4)
+    const old: PropsOf<"bookmark_reacted"> = { book_id: "1", position: 1, reaction: "pass", pick_type: "random", one_liner_style: "summary", kind: "random" };
+    // @ts-expect-error — entry_selected has no props of its own (props.entry was removed)
+    const entry: PropsOf<"entry_selected"> = { entry: "leaf" };
+    // @ts-expect-error — side is an enum: left, right or null
+    const side: PropsOf<"balance_answered"> = { question_no: 1, choice: "A", side: "middle", elapsed_ms: 1, is_edit: false };
+    expect([shown, goal, visit, old, entry, side]).toHaveLength(6);
   });
 });
 
 const good = { anon_id: "a", user_id: null, session_id: "s", round: 1, entry: null, screen_version: "v1",
-  referrer: "", returning: false, device: "phone", in_app_browser: false };
+  referrer: "", is_returning: false, device: "phone", is_in_app_browser: false };
 
 describe("parseCommon", () => {
+  it("returns exactly the COMMON_KEYS (taxonomy 3-1: Boolean names start with is_)", () => {
+    expect(Object.keys(parseCommon(good) ?? {}).sort()).toEqual([...COMMON_KEYS].sort());
+    expect(COMMON_KEYS).toContain("is_returning");
+    expect(COMMON_KEYS).toContain("is_in_app_browser");
+  });
+
   it("accepts a complete common block and returns only the known keys", () => {
     expect(parseCommon(good)).toEqual(good);
     expect(parseCommon({ ...good, entry: "leaf", user_id: "u1", round: 1000, device: "desktop" })).toMatchObject({ entry: "leaf", user_id: "u1" });
@@ -51,8 +80,8 @@ describe("parseCommon", () => {
     ["entry unknown", { entry: "shelf" }],
     ["entry undefined", { entry: undefined }],
     ["device tablet", { device: "tablet" }],
-    ["returning string", { returning: "false" }],
-    ["in_app_browser 0", { in_app_browser: 0 }],
+    ["is_returning string", { is_returning: "false" }],
+    ["is_in_app_browser 0", { is_in_app_browser: 0 }],
   ])("rejects %s", (_, patch) => expect(parseCommon({ ...good, ...patch })).toBeNull());
 
   it("cuts a referrer over 500 characters instead of rejecting it (ids stay strict)", () => {

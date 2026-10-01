@@ -16,7 +16,7 @@ const FAKE_KEY = "test-key-not-real";
 
 const common: CommonProps = {
   anon_id: "11111111-1111-4111-8111-111111111111", user_id: null, session_id: "s1", round: 2, entry: "leaf",
-  screen_version: "v1", referrer: "https://x.example/", returning: true, device: "phone", in_app_browser: false,
+  screen_version: "v1", referrer: "https://x.example/", is_returning: true, device: "phone", is_in_app_browser: false,
 };
 
 const load = () => import("./amplitude");
@@ -48,7 +48,7 @@ describe("without a key", () => {
     const { startAmplitude, sendToAmplitude } = await load();
     startAmplitude();
     startAmplitude();
-    sendToAmplitude("visit", {}, common);
+    sendToAmplitude("site_visited", {}, common);
     await pause();
     expect(sdk.loaded).toBe(0);
     expect(sdk.initAll).not.toHaveBeenCalled();
@@ -131,12 +131,12 @@ describe("with a key", () => {
     vi.stubGlobal("requestIdleCallback", idle);
     const { startAmplitude, sendToAmplitude } = await load();
     startAmplitude();
-    sendToAmplitude("visit", {}, common);
+    sendToAmplitude("site_visited", {}, common);
     sendToAmplitude("entry_selected", { entry: "target" }, common);
     expect(sdk.track).not.toHaveBeenCalled();
     idle.mock.calls[0][0]();
     await vi.waitFor(() => expect(sdk.track).toHaveBeenCalledTimes(2));
-    expect(sdk.track.mock.calls.map((c) => c[0])).toEqual(["visit", "entry_selected"]);
+    expect(sdk.track.mock.calls.map((c) => c[0])).toEqual(["site_visited", "entry_selected"]);
     expect(sdk.track.mock.calls[0][1].prompt_version).toBe("BA400.4");
     // later events go straight through
     sendToAmplitude("book_opened", {}, common);
@@ -162,7 +162,7 @@ describe("with a key", () => {
     expect(() => startAmplitude()).not.toThrow();
     await ready();
     await pause();
-    sendToAmplitude("visit", {}, common);
+    sendToAmplitude("site_visited", {}, common);
     startAmplitude();
     await pause();
     expect(sdk.track).not.toHaveBeenCalled();
@@ -179,7 +179,7 @@ describe("with a key", () => {
     startAmplitude();
     await pause();
     expect(sdk.initAll).toHaveBeenCalledTimes(1);
-    sendToAmplitude("visit", {}, common);
+    sendToAmplitude("site_visited", {}, common);
     expect(sdk.track).not.toHaveBeenCalled();
   });
 
@@ -189,7 +189,7 @@ describe("with a key", () => {
     const { startAmplitude, sendToAmplitude } = await load();
     expect(() => startAmplitude()).not.toThrow();
     await pause();
-    expect(() => sendToAmplitude("visit", {}, common)).not.toThrow();
+    expect(() => sendToAmplitude("site_visited", {}, common)).not.toThrow();
     vi.doMock("@amplitude/unified", fakeSdk);
   });
 });
@@ -216,11 +216,11 @@ describe("sendToAmplitude", () => {
 
   it("sends the same event name and props plus the analysis-relevant common props", async () => {
     const send = await started();
-    send("chip_selected", { question: "topic", value: "history", edit: false }, common);
+    send("chip_selected", { chip_type: "topic", chip_value: "데이터 분석", is_edit: false }, common);
     expect(sdk.track).toHaveBeenCalledTimes(1);
     expect(sdk.track).toHaveBeenCalledWith("chip_selected", {
-      entry: "leaf", round: 2, screen_version: "v1", device: "phone", in_app_browser: false, returning: true,
-      question: "topic", value: "history", edit: false,
+      entry: "leaf", round: 2, screen_version: "v1", device: "phone", is_in_app_browser: false, is_returning: true,
+      chip_type: "topic", chip_value: "데이터 분석", is_edit: false,
     });
   });
 
@@ -232,13 +232,13 @@ describe("sendToAmplitude", () => {
 
   it("leaves out entry when the visitor has not chosen one yet", async () => {
     const send = await started();
-    send("visit", {}, { ...common, entry: null });
+    send("site_visited", {}, { ...common, entry: null });
     expect(sdk.track.mock.calls[0][1]).not.toHaveProperty("entry");
   });
 
-  it("adds prompt_version only to visit", async () => {
+  it("adds prompt_version only to site_visited", async () => {
     const send = await started();
-    send("visit", {}, common);
+    send("site_visited", {}, common);
     send("book_opened", {}, common);
     expect(sdk.track.mock.calls[0][1].prompt_version).toBe("BA400.4");
     expect(sdk.track.mock.calls[1][1]).not.toHaveProperty("prompt_version");
@@ -253,6 +253,6 @@ describe("sendToAmplitude", () => {
   it("never throws when Amplitude's track throws", async () => {
     const send = await started();
     sdk.track.mockImplementation(() => { throw new Error("sdk broke"); });
-    expect(() => send("visit", {}, common)).not.toThrow();
+    expect(() => send("site_visited", {}, common)).not.toThrow();
   });
 });

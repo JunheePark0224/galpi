@@ -4,11 +4,11 @@ import { commonProps, detectDevice, nextRound, setEntry } from "./common";
 describe("detectDevice", () => {
   it("detects a phone inside the KakaoTalk in-app browser", () => {
     const ua = "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 Mobile Safari/537.36 KAKAOTALK 10.8.0";
-    expect(detectDevice(ua)).toEqual({ device: "phone", in_app_browser: true });
+    expect(detectDevice(ua)).toEqual({ device: "phone", is_in_app_browser: true });
   });
   it("detects a desktop browser", () => {
     const ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140.0 Safari/537.36";
-    expect(detectDevice(ua)).toEqual({ device: "desktop", in_app_browser: false });
+    expect(detectDevice(ua)).toEqual({ device: "desktop", is_in_app_browser: false });
   });
 });
 
@@ -22,12 +22,12 @@ describe("commonProps", () => {
   it("keeps the same anonymous id within a page load", () => {
     const first = commonProps();
     expect(first.anon_id).toMatch(/^[0-9a-f-]{36}$/);
-    expect(first.returning).toBe(false);
+    expect(first.is_returning).toBe(false);
     sessionStorage.clear();
     const second = commonProps();
     expect(second.anon_id).toBe(first.anon_id);
     expect(second.session_id).toBe(first.session_id);
-    expect(second.returning).toBe(false);
+    expect(second.is_returning).toBe(false);
   });
 
   it("cuts a very long document.referrer to 500 characters", () => {
@@ -80,8 +80,8 @@ describe("commonProps", () => {
 
       expect(first.anon_id).toBe(second.anon_id);
       expect(first.session_id).toBe(second.session_id);
-      expect(first.returning).toBe(false);
-      expect(second.returning).toBe(false);
+      expect(first.is_returning).toBe(false);
+      expect(second.is_returning).toBe(false);
     } finally {
       if (originalLocal) {
         Object.defineProperty(window, "localStorage", originalLocal);
@@ -123,8 +123,8 @@ describe("commonProps", () => {
 
       expect(first.anon_id).toBe(second.anon_id);
       expect(first.session_id).toBe(second.session_id);
-      expect(first.returning).toBe(false);
-      expect(second.returning).toBe(false);
+      expect(first.is_returning).toBe(false);
+      expect(second.is_returning).toBe(false);
     } finally {
       if (originalLocal) {
         Object.defineProperty(window, "localStorage", originalLocal);
@@ -174,7 +174,7 @@ describe("commonProps", () => {
     // First page load: create anon_id and store in localStorage
     const firstPageLoad = commonProps();
     const storedAnonId = firstPageLoad.anon_id;
-    expect(firstPageLoad.returning).toBe(false);
+    expect(firstPageLoad.is_returning).toBe(false);
 
     // New page load: localStorage persists, sessionStorage cleared, memory empty
     vi.resetModules();
@@ -187,7 +187,7 @@ describe("commonProps", () => {
     const secondPageLoad = freshCommonProps();
 
     expect(secondPageLoad.anon_id).toBe(storedAnonId);
-    expect(secondPageLoad.returning).toBe(true);
+    expect(secondPageLoad.is_returning).toBe(true);
   });
 });
 
@@ -204,8 +204,8 @@ describe("commonProps returning is fixed per session", () => {
     const { commonProps: fresh } = await import("./common");
     const first = fresh();
     const second = fresh();
-    expect(first.returning).toBe(true);
-    expect(second.returning).toBe(true);
+    expect(first.is_returning).toBe(true);
+    expect(second.is_returning).toBe(true);
     expect(second.session_id).toBe(first.session_id);
   });
 
@@ -213,16 +213,16 @@ describe("commonProps returning is fixed per session", () => {
     localStorage.setItem("galpi.anon", "11111111-1111-4111-8111-111111111111");
     localStorage.setItem("galpi.seen", "1");
     const a = await import("./common");
-    expect(a.commonProps().returning).toBe(true);
+    expect(a.commonProps().is_returning).toBe(true);
     vi.resetModules();
     const b = await import("./common");
-    expect(b.commonProps().returning).toBe(true);
+    expect(b.commonProps().is_returning).toBe(true);
   });
 
   it("stays false on every call of a first-ever visit", async () => {
     const { commonProps: fresh } = await import("./common");
-    expect(fresh().returning).toBe(false);
-    expect(fresh().returning).toBe(false);
+    expect(fresh().is_returning).toBe(false);
+    expect(fresh().is_returning).toBe(false);
   });
 });
 

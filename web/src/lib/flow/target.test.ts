@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { EMPTY_FORM, WAY_CHIPS, formReady, targetAnswersFrom } from "./target";
+import { EMPTY_FORM, WAY_CHIPS, formReady, goalSubmittedProps, targetAnswersFrom } from "./target";
 
 describe("🎯 form", () => {
   it("needs a topic or a non-empty written goal", () => {
@@ -18,6 +18,14 @@ describe("🎯 form", () => {
   it("takes topic and keywords from a written goal", () => {
     const goal = { text: "SQL", topic: "데이터 분석" as const, keywords: ["SQL"], matched: true, method: "word" as const };
     expect(targetAnswersFrom({ ...EMPTY_FORM, free: "SQL" }, goal)).toEqual({ topic: "데이터 분석", way: null, len: 0, keywords: ["SQL"] });
+  });
+
+  it("builds E-26 goal_submitted props: chosen topic, or the topic the written goal matched", () => {
+    expect(goalSubmittedProps({ topic: "통계", free: null, len: "thin", way: "실습" }, null, false))
+      .toEqual({ topic: "통계", is_free_text: false, len: "thin", way: "실습", is_edit: false });
+    const goal = { text: "SQL", topic: "데이터 분석" as const, keywords: ["SQL"], matched: true, method: "word" as const };
+    expect(goalSubmittedProps({ ...EMPTY_FORM, free: "SQL" }, goal, true))
+      .toEqual({ topic: "데이터 분석", is_free_text: true, len: null, way: null, is_edit: true });
   });
 
   it("labels 읽는 방식 chips as target-chips.md does", () => {

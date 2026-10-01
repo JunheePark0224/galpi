@@ -1,7 +1,7 @@
 import { expect } from "@playwright/test";
 import { test } from "./helpers";
 
-test("sends exactly one visit event and the server accepts it", async ({ page }) => {
+test("sends exactly one site_visited event and the server accepts it", async ({ page }) => {
   const bodies: string[] = [];
   const statuses: number[] = [];
   const payloads: unknown[] = [];
@@ -18,7 +18,7 @@ test("sends exactly one visit event and the server accepts it", async ({ page })
   await page.waitForTimeout(500);
   expect(bodies).toHaveLength(1);
   const sent = JSON.parse(bodies[0]);
-  expect(sent.name).toBe("visit");
+  expect(sent.name).toBe("site_visited");
   expect(sent.common.screen_version).toBe("v1");
   expect(sent.common.anon_id).toMatch(/^[0-9a-f-]{36}$/);
   expect(statuses[0]).toBe(202);

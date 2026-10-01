@@ -2,8 +2,8 @@ import { expect } from "@playwright/test";
 import { test } from "./helpers";
 
 const common = { anon_id: "e2e", user_id: null, session_id: "e2e", round: 1, entry: null, screen_version: "v1",
-  referrer: "", returning: false, device: "desktop", in_app_browser: false };
-const event = { name: "visit", props: {}, common };
+  referrer: "", is_returning: false, device: "desktop", is_in_app_browser: false };
+const event = { name: "site_visited", props: {}, common };
 
 // The production build behind `next start`, hit without a browser page: same-origin must be enforced there too.
 test("track refuses a request from another origin, or with no origin at all", async ({ request, baseURL }) => {

@@ -44,12 +44,12 @@ test("🍃 nine answers (one held 못 잡겠어요) → book → five bookmarks"
   await expect.poll(() => named(events, "bookmark_reacted").length).toBe(5);
   const answers = named(events, "balance_answered");
   expect(answers).toHaveLength(9);
-  expect(answers[0].props).toMatchObject({ question: 1, choice: "unsure", side: null, edit: false });
-  expect(answers[4].props).toMatchObject({ question: 5, choice: "B", side: "left" });
-  expect(answers.every((e) => typeof e.props.ms === "number")).toBe(true);
+  expect(answers[0].props).toMatchObject({ question_no: 1, choice: "unsure", side: null, is_edit: false });
+  expect(answers[4].props).toMatchObject({ question_no: 5, choice: "B", side: "left" });
+  expect(answers.every((e) => typeof e.props.elapsed_ms === "number")).toBe(true);
   const cancelled = named(events, "unsure_hold_cancelled");
   expect(cancelled).toHaveLength(1);
-  expect(cancelled[0].props.question).toBe(1);
+  expect(cancelled[0].props.question_no).toBe(1);
   expect(cancelled[0].props.held_ms as number).toBeGreaterThan(200);
   const shown = named(events, "bookmark_shown");
   expect(shown).toHaveLength(5);
@@ -74,8 +74,8 @@ test("🍃 a reload keeps the page and the entry/round of later events", async (
   await page.reload();
   await expect(page.getByText("2 / 5")).toBeVisible();
   await expect(page.getByRole("article")).toHaveAttribute("aria-label", label ?? "");
-  await expect.poll(() => named(events, "visit").length).toBe(2);
-  expect(named(events, "visit")[1].common).toMatchObject({ entry: "leaf", round: 1 });
+  await expect.poll(() => named(events, "site_visited").length).toBe(2);
+  expect(named(events, "site_visited")[1].common).toMatchObject({ entry: "leaf", round: 1 });
   expect(named(events, "bookmark_shown")).toHaveLength(2);              // a reload is not a new showing
 });
 
@@ -100,7 +100,7 @@ test("🍃 a draw that keeps failing still lets the person go back to the start"
   await page.getByRole("button", { name: "처음으로" }).click();
   await expect(page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ })).toBeVisible();
   await expect.poll(() => named(events, "home_clicked").length).toBe(1);
-  expect(named(events, "home_clicked")[0].props).toEqual({ curious: 0 });
+  expect(named(events, "home_clicked")[0].props).toEqual({ curious_count: 0, source: "first_page" });
 });
 
 test("🍃 one failed draw, then 다시 시도 brings the book", async ({ page }) => {

@@ -23,7 +23,7 @@ describe("BalanceGame", () => {
     expect(screen.getByText("1 / 9")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "몽글몽글 따뜻함" }));
     expect(onAnswer).toHaveBeenCalledWith("A");
-    expect(track).toHaveBeenCalledWith("balance_answered", expect.objectContaining({ question: 1, choice: "A", side: "left", edit: false }));
+    expect(track).toHaveBeenCalledWith("balance_answered", { question_no: 1, choice: "A", side: "left", elapsed_ms: expect.any(Number), is_edit: false });
   });
 
   it("puts A on the right from question 5", () => {
@@ -33,7 +33,7 @@ describe("BalanceGame", () => {
     expect(container.querySelector('[data-side="left"]')).toHaveTextContent("빗소리처럼 쓸쓸한 책");
     fireEvent.click(screen.getByRole("button", { name: "빗소리처럼 쓸쓸한 책" }));
     expect(onAnswer).toHaveBeenCalledWith("B");
-    expect(track).toHaveBeenCalledWith("balance_answered", expect.objectContaining({ question: 5, choice: "B", side: "left", edit: true }));
+    expect(track).toHaveBeenCalledWith("balance_answered", expect.objectContaining({ question_no: 5, choice: "B", side: "left", is_edit: true }));
   });
 
   it("answers 못 잡겠어요 after the hold and logs a cancelled hold before it", () => {
@@ -43,11 +43,11 @@ describe("BalanceGame", () => {
     fireEvent.pointerDown(hold);
     act(() => { vi.advanceTimersByTime(200); });
     fireEvent.pointerUp(hold);
-    expect(track).toHaveBeenCalledWith("unsure_hold_cancelled", expect.objectContaining({ question: 2, held_ms: expect.any(Number) }));
+    expect(track).toHaveBeenCalledWith("unsure_hold_cancelled", { question_no: 2, held_ms: expect.any(Number), is_edit: false });
     fireEvent.pointerDown(hold);
     act(() => { vi.advanceTimersByTime(800); });
     expect(onAnswer).toHaveBeenCalledWith("unsure");
-    expect(track).toHaveBeenCalledWith("balance_answered", expect.objectContaining({ question: 2, choice: "unsure", side: null }));
+    expect(track).toHaveBeenCalledWith("balance_answered", expect.objectContaining({ question_no: 2, choice: "unsure", side: null }));
   });
 
   it("draws each choice as a bookmark with the words in its window and no animal", () => {
@@ -90,6 +90,6 @@ describe("BalanceGame", () => {
     fireEvent.click(card());
     expect(onAnswer).toHaveBeenCalledTimes(2);
     expect(onAnswer).toHaveBeenLastCalledWith("A");
-    expect(track).toHaveBeenLastCalledWith("balance_answered", expect.objectContaining({ question: 2, choice: "A" }));
+    expect(track).toHaveBeenLastCalledWith("balance_answered", expect.objectContaining({ question_no: 2, choice: "A" }));
   });
 });

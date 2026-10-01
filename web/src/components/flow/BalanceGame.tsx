@@ -47,14 +47,14 @@ export function BalanceGame({ choices, edit, onAnswer }: Props) {
 
   const choose = (s: Side) => {
     if (elapsed() < TAP_GUARD_MS) return;
-    track("balance_answered", { question: q.n, choice: s.choice, side: s.side, ms: elapsed(), edit });
+    track("balance_answered", { question_no: q.n, choice: s.choice, side: s.side, elapsed_ms: elapsed(), is_edit: edit });
     onAnswer(s.choice);
   };
   const unsure = () => {
-    track("balance_answered", { question: q.n, choice: "unsure", side: null, ms: elapsed(), edit });
+    track("balance_answered", { question_no: q.n, choice: "unsure", side: null, elapsed_ms: elapsed(), is_edit: edit });
     onAnswer("unsure");
   };
-  const cancelled = (heldMs: number) => track("unsure_hold_cancelled", { question: q.n, held_ms: heldMs, edit });
+  const cancelled = (heldMs: number) => track("unsure_hold_cancelled", { question_no: q.n, held_ms: heldMs, is_edit: edit });
 
   return (
     <section className={styles.game} aria-labelledby="balance-question">
