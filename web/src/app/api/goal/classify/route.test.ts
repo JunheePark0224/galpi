@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { ACTIVE_VOCAB } from "@/lib/books/catalog";
 import type { GoalMatch } from "@/lib/goal/match";
 import { resetDailyBudgets } from "@/lib/server/guard";
 import { classifyWithClaude } from "@/lib/server/llm";
@@ -38,6 +39,13 @@ describe("POST /api/goal/classify", () => {
     expect(await (await post({ text: "번아웃" })).json()).toEqual(LLM_GOAL);
     expect(vi.mocked(classifyWithClaude).mock.calls[0][0]).toBe("번아웃");
     expect(vi.mocked(classifyWithClaude).mock.calls[0][2]).toEqual({ apiKey: "test-key-not-real" });
+  });
+
+  it("gives Claude the active topics only (D-A: 10 books or more)", async () => {
+    vi.stubEnv("ANTHROPIC_API_KEY", "test-key-not-real");
+    vi.mocked(classifyWithClaude).mockResolvedValue({ ok: true, goal: LLM_GOAL });
+    await post({ text: "번아웃" }, { origin: ORIGIN, "x-forwarded-for": "8.8.4.4" });
+    expect(vi.mocked(classifyWithClaude).mock.calls[0][1]).toBe(ACTIVE_VOCAB);
   });
 
   it("falls back to word matching on a timeout and logs only the reason, never the note", async () => {

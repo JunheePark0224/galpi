@@ -59,6 +59,20 @@ describe("matchGoal", () => {
     expect(matchGoal("   ", VOCAB)).toMatchObject({ matched: false, text: "" });
   });
 
+  it("searches only the topics of the vocabulary it is given (the active ones)", () => {
+    const rest: Vocab = Object.fromEntries(Object.entries(VOCAB).filter(([topic]) => topic !== "습관·집중"));
+    expect(matchGoal("번아웃", VOCAB)).toMatchObject({ topic: "습관·집중", matched: true });
+    expect(matchGoal("번아웃", rest)).toMatchObject({ matched: false });
+    // the topic's own name is not a way in either while it is off
+    expect(matchGoal("집중이 안 돼요", VOCAB)).toMatchObject({ topic: "습관·집중", matched: true });
+    expect(matchGoal("집중이 안 돼요", rest)).toMatchObject({ topic: "데이터 분석", matched: false });
+  });
+
+  it("still answers (unmatched, first topic) when no topic is active", () => {
+    expect(matchGoal("집중이 안 돼요", {})).toMatchObject({ topic: "데이터 분석", keywords: [], matched: false });
+    expect(matchGoal("", {})).toMatchObject({ topic: "데이터 분석", matched: false });
+  });
+
   it("keeps at most 30 characters", () => {
     expect(matchGoal(`  ${"가".repeat(40)}  `, VOCAB).text).toHaveLength(GOAL_MAX);
   });

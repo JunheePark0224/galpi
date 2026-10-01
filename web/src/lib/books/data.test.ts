@@ -2,8 +2,11 @@ import { describe, expect, it } from "vitest";
 import real from "@/data/books.json";
 import sample from "@/data/books.sample.json";
 import vocab from "@/data/vocab.json";
+import { classifySchema, classifySystemPrompt } from "@/lib/goal/classify";
+import { MIN_ACTIVE_TOPIC_BOOKS, activeTopics } from "./active";
+import { ACTIVE_VOCAB } from "./catalog";
 import { normalizeCatalog } from "./normalize";
-import { TOPICS } from "./taxonomy";
+import { TOPIC_CHIPS, TOPICS } from "./taxonomy";
 import type { CatalogBook } from "./types";
 
 const asRows = (books: CatalogBook[]) => books.map((b) => ({ ...b, slot: b.entry === "leaf" ? b.genre : b.topic }));
@@ -22,6 +25,25 @@ describe("app book data", () => {
     expect(target).toHaveLength(18);
     expect(target.filter((b) => b.topic === "데이터 분석")).toHaveLength(5);
     expect(target.filter((b) => b.keywords.includes("SQL"))).toHaveLength(2);
+  });
+
+  it("activates exactly the topics with 10+ books in books.json — the classifier sees only those", () => {
+    const books = real as unknown as CatalogBook[];
+    const count = (t: string) => books.filter((b) => b.entry === "target" && b.topic === t).length;
+    const active = activeTopics(books);
+    expect(Object.keys(ACTIVE_VOCAB)).toEqual(active);
+    const enumTopics = (classifySchema(ACTIVE_VOCAB) as { properties: { topic: { enum: string[] } } }).properties.topic.enum;
+    expect(enumTopics).toEqual(active);
+    const prompt = classifySystemPrompt(ACTIVE_VOCAB);
+    for (const t of TOPICS) {
+      expect(count(t) >= MIN_ACTIVE_TOPIC_BOOKS).toBe(active.includes(t));
+      expect(prompt.includes(`- ${t}`)).toBe(active.includes(t));
+    }
+  });
+
+  it("shows a chip only for an active topic (S-02 keeps its six until D-D)", () => {
+    const active = activeTopics(real as unknown as CatalogBook[]);
+    expect(TOPIC_CHIPS.map((c) => c.topic).filter((t) => !active.includes(t))).toEqual([]);
   });
 
   it("vocab.json covers all six topics with the 20 keywords of v1.1", () => {

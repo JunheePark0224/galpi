@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useReducer, useState } from "react";
 import { MotionConfig } from "motion/react";
-import vocab from "@/data/vocab.json";
 import type { BalanceChoice, Entry } from "@/lib/recommend";
 import { newArtSeed } from "@/lib/art/combine";
 import { loadDetail } from "@/lib/books/detailClient";
@@ -21,10 +20,11 @@ import { Home } from "./Home";
 import { ResultBook } from "./ResultBook";
 import { TargetInput } from "./TargetInput";
 
-const VOCAB = vocab as Vocab;
-
-/** S-01 → S-05 → S-06 → S-08. Cross-screen events are sent here, in the handlers (never from effects). */
-export function Flow() {
+/**
+ * S-01 → S-05 → S-06 → S-08. Cross-screen events are sent here, in the handlers (never from effects).
+ * vocab: the active 🎯 topics only (FlowRoot) — the word matching used when /api/goal/classify cannot answer.
+ */
+export function Flow({ vocab }: { vocab: Vocab }) {
   const [state, dispatch] = useReducer(flowReducer, undefined, loadFlow);
   const [classifying, setClassifying] = useState(false);
 
@@ -93,7 +93,7 @@ export function Flow() {
     let goal: GoalMatch | null = null;
     if (form.free !== null) {
       setClassifying(true);
-      goal = await classifyGoal(form.free, VOCAB);
+      goal = await classifyGoal(form.free, vocab);
       setClassifying(false);
     }
     track("goal_submitted", goalSubmittedProps(form, goal, state.edited));

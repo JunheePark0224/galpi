@@ -1,5 +1,4 @@
-import vocab from "@/data/vocab.json";
-import type { Vocab } from "@/lib/books/types";
+import { ACTIVE_VOCAB } from "@/lib/books/catalog";
 import { GOAL_MAX, matchGoal } from "@/lib/goal/match";
 import { guardJson, takeDailyBudget } from "@/lib/server/guard";
 import { classifyWithClaude } from "@/lib/server/llm";
@@ -9,7 +8,7 @@ const PER_MINUTE = 10;            // one per [책 펼치기]; the one edit makes
 const LLM_CALLS_PER_DAY = 300;    // per instance, UTC day; ~US$0.0018 a call → about US$0.55 a day at most per instance
 
 /**
- * POST /api/goal/classify { text } → GoalMatch (target-chips 3절). Claude Haiku sorts the note into our list when
+ * POST /api/goal/classify { text } → GoalMatch (target-chips 3절). Claude Haiku sorts the note into our active topics when
  * ANTHROPIC_API_KEY is set; no key, a failure, 3 seconds or a used-up daily budget → the same word matching the browser used
  * in P3 (method "word").
  * The note itself is never logged.
@@ -24,12 +23,12 @@ export async function POST(request: Request): Promise<Response> {
   const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
   if (apiKey) {
     if (takeDailyBudget("classify-llm", LLM_CALLS_PER_DAY)) {
-      const result = await classifyWithClaude(text, vocab as Vocab, { apiKey });
+      const result = await classifyWithClaude(text, ACTIVE_VOCAB, { apiKey });
       if (result.ok) return Response.json(result.goal);
       console.warn("classify: fell back to word matching", result.reason);
     } else {
       console.warn("classify: fell back to word matching", "budget");
     }
   }
-  return Response.json(matchGoal(text, vocab as Vocab));
+  return Response.json(matchGoal(text, ACTIVE_VOCAB));
 }

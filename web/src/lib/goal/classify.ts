@@ -1,4 +1,5 @@
-import { MAX_KEYWORDS, TOPIC_CHIPS, TOPICS, type Topic } from "@/lib/books/taxonomy";
+import { topicsIn } from "@/lib/books/active";
+import { MAX_KEYWORDS, TOPIC_CHIPS, type Topic } from "@/lib/books/taxonomy";
 import type { Vocab } from "@/lib/books/types";
 import { GOAL_MAX, type GoalMatch } from "./match";
 
@@ -42,9 +43,12 @@ const keywordText = (vocab: Vocab, topic: Topic): string =>
     })
     .join(", ");
 
-/** The closed list, written out for the model: topic (chip label) → keywords, plus words that fold into the topic. */
+/**
+ * The closed list, written out for the model: topic (chip label) → keywords, plus words that fold into the topic.
+ * Only the topics in `vocab` — callers pass the active ones (lib/books/active.ts), so a topic with too few books is not offered.
+ */
 export function classifySystemPrompt(vocab: Vocab): string {
-  const lines = TOPICS.map((topic) => {
+  const lines = topicsIn(vocab).map((topic) => {
     const label = TOPIC_CHIPS.find((c) => c.topic === topic)?.label ?? topic;
     const also = vocab[topic]?.terms ?? [];
     const named = label === topic ? topic : `${topic} (${label})`;
@@ -64,13 +68,14 @@ export function classifySystemPrompt(vocab: Vocab): string {
   ].join("\n");
 }
 
-/** Structured-output schema: the model can only name our topics and keywords (enums). */
+/** Structured-output schema: the model can only name the topics and keywords in `vocab` (enums). */
 export function classifySchema(vocab: Vocab): Record<string, unknown> {
-  const all = [...new Set(TOPICS.flatMap((t) => keywordNames(vocab, t)))];
+  const topics = topicsIn(vocab);
+  const all = [...new Set(topics.flatMap((t) => keywordNames(vocab, t)))];
   return {
     type: "object",
     properties: {
-      topic: { type: "string", enum: [...TOPICS] },
+      topic: { type: "string", enum: topics },
       keywords: { type: "array", items: { type: "string", enum: all } },
       matched: { type: "boolean" },
     },
@@ -80,8 +85,8 @@ export function classifySchema(vocab: Vocab): Record<string, unknown> {
 }
 
 /**
- * The model's JSON → GoalMatch (method "llm"), or null when it is not usable. Anything outside our list is dropped:
- * an unknown topic voids the answer, keywords of another topic are discarded, at most MAX_KEYWORDS remain.
+ * The model's JSON → GoalMatch (method "llm"), or null when it is not usable. Anything outside `vocab` is dropped:
+ * an unknown (or inactive) topic voids the answer, keywords of another topic are discarded, at most MAX_KEYWORDS remain.
  */
 export function parseClassification(raw: string, input: string, vocab: Vocab): GoalMatch | null {
   let answer: unknown;
@@ -92,7 +97,7 @@ export function parseClassification(raw: string, input: string, vocab: Vocab): G
   }
   if (typeof answer !== "object" || answer === null) return null;
   const { topic, keywords, matched } = answer as Record<string, unknown>;
-  if (typeof topic !== "string" || !(TOPICS as readonly string[]).includes(topic) || typeof matched !== "boolean") return null;
+  if (typeof topic !== "string" || !(topicsIn(vocab) as string[]).includes(topic) || typeof matched !== "boolean") return null;
   if (!Array.isArray(keywords)) return null;
   const known = keywordNames(vocab, topic as Topic);
   const picked = matched ? [...new Set(keywords.filter((k): k is string => typeof k === "string" && known.includes(k)))] : [];
