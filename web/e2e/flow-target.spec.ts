@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { named, reactToBookmarks, recordEvents, test } from "./helpers";
+import { named, reactToBookmarks, recordEvents, specMismatches, test } from "./helpers";
 
 // Motion and CSS shorten to fades under reduced motion — same flow, faster run. Books: BOOKS_SOURCE=sample.
 test.use({ reducedMotion: "reduce" });
@@ -61,6 +61,7 @@ test("🎯 chips → book → first page → five bookmarks → curious list", a
   expect(named(events, "home_clicked")[0]).toMatchObject({ props: { curious_count: 3, source: "end" }, common: { entry: "target" } });
   await expect.poll(() => statuses.length).toBe(events.length);
   expect(statuses.every((s) => s === 202)).toBe(true);
+  expect(specMismatches(events)).toEqual([]);
 });
 
 test("🎯 written goal → honest count → one edit → five bookmarks", async ({ page }) => {
@@ -102,6 +103,7 @@ test("🎯 written goal → honest count → one edit → five bookmarks", async
   expect(named(events, "goal_coverage_checked")[0].props).toEqual({ coverage_bucket: "1-3", found_count: 2 });
   expect(named(events, "first_page_edited").map((e) => e.props)).toEqual([{ changed_items: ["len"] }]);
   expect(named(events, "chip_selected").map((e) => [e.props.chip_value, e.props.is_edit])).toEqual([["free", false], ["thin", true]]);
+  expect(specMismatches(events)).toEqual([]);
 });
 
 test("🎯 a 30-character goal with no spaces wraps inside the first page", async ({ page }) => {

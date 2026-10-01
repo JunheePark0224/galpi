@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { named, reactToBookmarks, recordEvents, test } from "./helpers";
+import { named, reactToBookmarks, recordEvents, specMismatches, test } from "./helpers";
 
 test.use({ reducedMotion: "reduce" });
 
@@ -57,6 +57,7 @@ test("🍃 nine answers (one held 못 잡겠어요) → book → five bookmarks"
   expect(shown.every((e) => typeof (e.props.art as { animal?: string }).animal === "string")).toBe(true);
   await expect.poll(() => statuses.length).toBe(events.length);
   expect(statuses.every((s) => s === 202)).toBe(true);
+  expect(specMismatches(events)).toEqual([]);
 });
 
 test("🍃 a reload keeps the page and the entry/round of later events", async ({ page }) => {
@@ -101,6 +102,7 @@ test("🍃 a draw that keeps failing still lets the person go back to the start"
   await expect(page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ })).toBeVisible();
   await expect.poll(() => named(events, "home_clicked").length).toBe(1);
   expect(named(events, "home_clicked")[0].props).toEqual({ curious_count: 0, source: "first_page" });
+  expect(specMismatches(events)).toEqual([]);
 });
 
 test("🍃 one failed draw, then 다시 시도 brings the book", async ({ page }) => {
