@@ -67,7 +67,7 @@ describe("LoginSheet (S-07, C-12)", () => {
     fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
     expect(screen.queryByRole("dialog")).toBeNull();
     act(() => openLoginSheet("header"));
-    fireEvent.click(screen.getByTestId("login-backdrop"));
+    fireEvent.click(screen.getByTestId("sheet-backdrop"));
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 

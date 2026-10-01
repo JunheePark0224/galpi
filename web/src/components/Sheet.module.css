@@ -1,0 +1,12 @@
+/* Bottom sheet (DESIGN C-12; also S-09). */
+.layer { position: fixed; inset: 0; z-index: 50; display: flex; align-items: flex-end; justify-content: center; }
+.backdrop { position: absolute; inset: 0; background: rgba(43, 39, 36, 0.35); }
+.sheet {
+  position: relative; width: 100%; max-width: var(--column); max-height: 92vh; overflow-y: auto;
+  padding: var(--space-3) var(--space-5) calc(var(--space-5) + env(safe-area-inset-bottom));
+  border-radius: 18px 18px 0 0; background: var(--paper-grain), var(--paper); box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.15);
+  animation: rise 220ms var(--ease-flip);
+}
+.grab { display: block; width: 40px; height: 4px; margin: 0 auto var(--space-3); border-radius: 2px; background: var(--paper-line); }
+.title { margin: 0; font-size: 20px; line-height: 1.4; }
+@keyframes rise { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }

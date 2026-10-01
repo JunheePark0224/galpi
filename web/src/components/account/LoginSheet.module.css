@@ -1,13 +1,4 @@
-/* S-07 (C-12, 시안 ②): bottom sheet over a dimmed page. Provider buttons in their own brand colours. */
-.layer { position: fixed; inset: 0; z-index: 50; display: flex; align-items: flex-end; justify-content: center; }
-.backdrop { position: absolute; inset: 0; background: rgba(43, 39, 36, 0.35); }
-.sheet {
-  position: relative; width: 100%; max-width: var(--column); padding: var(--space-3) var(--space-5) calc(var(--space-5) + env(safe-area-inset-bottom));
-  border-radius: 18px 18px 0 0; background: var(--paper-grain), var(--paper); box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.15);
-  animation: rise 220ms var(--ease-flip);
-}
-.grab { display: block; width: 40px; height: 4px; margin: 0 auto var(--space-3); border-radius: 2px; background: var(--paper-line); }
-.title { margin: 0; font-size: 20px; line-height: 1.4; }
+/* S-07 (C-12, 시안 ②) inside the shared Sheet. Provider buttons in their own brand colours. */
 .lead { margin: var(--space-1) 0 var(--space-2); font-size: 13px; color: var(--ink-soft); }
 .provider {
   display: flex; align-items: center; justify-content: center; gap: var(--space-2); width: 100%; min-height: 48px; margin-top: var(--space-2);
@@ -21,4 +12,3 @@
 .foot { display: flex; align-items: center; justify-content: center; margin-top: var(--space-2); font-size: 12px; color: var(--ink-muted); }
 .link { display: inline-flex; align-items: center; min-height: var(--touch); color: var(--ink-muted); }
 .close { min-height: var(--touch); min-width: var(--touch); border: 0; background: none; color: var(--ink-muted); font: inherit; font-size: 12px; cursor: pointer; }
-@keyframes rise { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }

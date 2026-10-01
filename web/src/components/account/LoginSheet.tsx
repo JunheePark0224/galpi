@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useState } from "react";
+import { Sheet } from "@/components/Sheet";
 import { closeLoginSheet, useLoginSheet, type LoginSource } from "@/lib/account/store";
 import { startLogin } from "@/lib/auth/browser";
 import type { Provider } from "@/lib/auth/next";
@@ -10,7 +11,6 @@ const TITLE: Record<LoginSource, string> = {
   save: "내 책갈피에 꽂으려면 로그인해 주세요",
   header: "로그인하고 내 책갈피를 모아 보세요",
 };
-const FOCUSABLE = "button:not([disabled]), a[href]";
 
 function KakaoMark() {
   return (
@@ -38,26 +38,16 @@ function GoogleMark() {
  */
 export function LoginSheet() {
   const sheet = useLoginSheet();
-  const titleId = useId();
-  const box = useRef<HTMLDivElement>(null);
-  const opener = useRef<Element | null>(null);
+  const source = sheet?.source ?? null;
+  return source ? <LoginChoices key={source} source={source} /> : null;
+}
+
+/** The open sheet: E-12 once when it appears; its state starts fresh every time it opens. */
+function LoginChoices({ source }: { source: LoginSource }) {
   const [leaving, setLeaving] = useState<Provider | null>(null);
   const [failed, setFailed] = useState(false);
-  const source = sheet?.source ?? null;
 
-  useEffect(() => {
-    if (!source) return;
-    opener.current = document.activeElement;
-    track("login_prompt_shown", { source });
-    box.current?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
-    return () => {
-      setLeaving(null);
-      setFailed(false);
-      if (opener.current instanceof HTMLElement) opener.current.focus();
-    };
-  }, [source]);
-
-  if (!source) return null;
+  useEffect(() => { track("login_prompt_shown", { source }); }, [source]);
 
   const login = async (provider: Provider) => {
     setFailed(false);
@@ -70,47 +60,23 @@ export function LoginSheet() {
     }
   };
 
-  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Escape") {
-      e.preventDefault();
-      closeLoginSheet();
-      return;
-    }
-    if (e.key !== "Tab" || !box.current) return;
-    const items = [...box.current.querySelectorAll<HTMLElement>(FOCUSABLE)];
-    const first = items[0];
-    const last = items[items.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
-  };
-
   return (
-    <div className={styles.layer}>
-      <div className={styles.backdrop} data-testid="login-backdrop" onClick={closeLoginSheet} aria-hidden="true" />
-      <div ref={box} className={styles.sheet} role="dialog" aria-modal="true" aria-labelledby={titleId} onKeyDown={onKeyDown}>
-        <span className={styles.grab} aria-hidden="true" />
-        <h2 id={titleId} className={styles.title}>{TITLE[source]}</h2>
-        <p className={styles.lead}>
-          이름·연락처는 받지 않아요. 구글은 로그인 확인용 이메일만 로그인 서비스에 남아요. 처음 로그인한 방법으로 다시 들어와 주세요.
-        </p>
-        <button type="button" className={`${styles.provider} ${styles.kakao}`} disabled={leaving !== null} onClick={() => void login("kakao")}>
-          <KakaoMark />카카오로 계속하기
-        </button>
-        <button type="button" className={`${styles.provider} ${styles.google}`} disabled={leaving !== null} onClick={() => void login("google")}>
-          <GoogleMark />Google로 계속하기
-        </button>
-        {failed && <p role="alert" className={styles.error}>로그인을 시작하지 못했어요. 잠시 뒤 다시 눌러 주세요.</p>}
-        <div className={styles.foot}>
-          <a href="/privacy" target="_blank" rel="noopener" className={styles.link}>개인정보 처리방침</a>
-          <span aria-hidden="true"> · </span>
-          <button type="button" className={styles.close} onClick={closeLoginSheet}>닫기</button>
-        </div>
+    <Sheet title={TITLE[source]} onClose={closeLoginSheet}>
+      <p className={styles.lead}>
+        이름·연락처는 받지 않아요. 구글은 로그인 확인용 이메일만 로그인 서비스에 남아요. 처음 로그인한 방법으로 다시 들어와 주세요.
+      </p>
+      <button type="button" className={`${styles.provider} ${styles.kakao}`} disabled={leaving !== null} onClick={() => void login("kakao")}>
+        <KakaoMark />카카오로 계속하기
+      </button>
+      <button type="button" className={`${styles.provider} ${styles.google}`} disabled={leaving !== null} onClick={() => void login("google")}>
+        <GoogleMark />Google로 계속하기
+      </button>
+      {failed && <p role="alert" className={styles.error}>로그인을 시작하지 못했어요. 잠시 뒤 다시 눌러 주세요.</p>}
+      <div className={styles.foot}>
+        <a href="/privacy" target="_blank" rel="noopener" className={styles.link}>개인정보 처리방침</a>
+        <span aria-hidden="true"> · </span>
+        <button type="button" className={styles.close} onClick={closeLoginSheet}>닫기</button>
       </div>
-    </div>
+    </Sheet>
   );
 }

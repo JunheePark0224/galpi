@@ -1,0 +1,56 @@
+"use client";
+import { useEffect, useId, useRef, type KeyboardEvent, type ReactNode } from "react";
+import styles from "./Sheet.module.css";
+
+const FOCUSABLE = "button:not([disabled]), a[href], input:not([disabled])";
+
+interface Props { title: string; onClose: () => void; children: ReactNode }
+
+/**
+ * A sheet from the bottom over a dimmed page (S-07 C-12, S-09 back face / rod picker). A modal dialog: focus goes to its
+ * first control and stays inside (Tab wraps), Escape and a tap outside close it, focus returns to what opened it.
+ * Rendered only while open — the parent decides.
+ */
+export function Sheet({ title, onClose, children }: Props) {
+  const titleId = useId();
+  const box = useRef<HTMLDivElement>(null);
+  const close = useRef(onClose);
+  useEffect(() => { close.current = onClose; }, [onClose]);
+
+  useEffect(() => {
+    const opener = document.activeElement;
+    box.current?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
+    return () => { if (opener instanceof HTMLElement && opener.isConnected) opener.focus(); };
+  }, []);
+
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      close.current();
+      return;
+    }
+    if (e.key !== "Tab" || !box.current) return;
+    const items = [...box.current.querySelectorAll<HTMLElement>(FOCUSABLE)];
+    if (items.length === 0) return;
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
+
+  return (
+    <div className={styles.layer}>
+      <div className={styles.backdrop} data-testid="sheet-backdrop" onClick={() => close.current()} aria-hidden="true" />
+      <div ref={box} className={styles.sheet} role="dialog" aria-modal="true" aria-labelledby={titleId} onKeyDown={onKeyDown}>
+        <span className={styles.grab} aria-hidden="true" />
+        <h2 id={titleId} className={styles.title}>{title}</h2>
+        {children}
+      </div>
+    </div>
+  );
+}
