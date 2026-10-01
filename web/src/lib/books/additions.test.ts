@@ -49,10 +49,23 @@ describe("mergeAdditions", () => {
       .toThrow("9790000000001: already in books");
   });
 
-  it("rejects an unknown status, a missing title and a non-target entry", () => {
+  it("adds a 🍃 book of the daily pipeline with its genre and axes", () => {
+    const leaf = book({ isbn: "9793333333333", entry: "leaf", genre: "호러·괴담", topic: undefined, keywords: undefined,
+      way: undefined, axes: { temp: -1, pull: -1, gain: 0, world: -1 }, one_liner: "그 집에서는 왜 밤마다 문이 열릴까요?",
+      one_liner_style: "question" });
+    const { rows, bib } = mergeAdditions(BASE_ROWS, BASE_BIB, [file([leaf])], VOCAB);
+    expect(rows[1]).toEqual({ isbn: "9793333333333", entry: "leaf", slot: "호러·괴담", pages: 415,
+      axes: { temp: -1, pull: -1, gain: 0, world: -1 }, keywords: [], one_liner: "그 집에서는 왜 밤마다 문이 열릴까요?",
+      one_liner_style: "question" });
+    expect(normalizeCatalog(rows, bib).at(-1)).toMatchObject({ genre: "호러·괴담", topic: null, axes: { world: -1 } });
+    const odd = mergeAdditions([], new Map(), [file([{ ...leaf, genre: "요리" }])], VOCAB);
+    expect(() => normalizeCatalog(odd.rows, odd.bib)).toThrow("unknown leaf genre 요리");
+  });
+
+  it("rejects an unknown status, a missing title and an unknown entry", () => {
     expect(() => mergeAdditions([], new Map(), [file([book({ status: "maybe" })])], VOCAB)).toThrow("unknown status maybe");
     expect(() => mergeAdditions([], new Map(), [file([book({ title: "" })])], VOCAB)).toThrow("needs title and author");
-    expect(() => mergeAdditions([], new Map(), [file([book({ entry: "leaf" })])], VOCAB)).toThrow("only 🎯");
+    expect(() => mergeAdditions([], new Map(), [file([book({ entry: "both" })])], VOCAB)).toThrow("unknown entry both");
   });
 
   it("rejects a file without a books list", () => {
