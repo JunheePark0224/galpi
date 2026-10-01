@@ -108,13 +108,23 @@ export async function readJsonCapped(req: Request, maxBytes: number): Promise<Ca
   }
 }
 
+/**
+ * origin → rate (per minute), cheapest refusal first: the refusal to send, or null to go on. For a GET from our own pages
+ * the browser sends no Origin, so sameOrigin falls back to the Referer (Referrer-Policy strict-origin-when-cross-origin).
+ */
+export function guardRequest(req: Request, opts: { route: string; limit: number }): Response | null {
+  if (!sameOrigin(req)) return reject(403, "forbidden");
+  const rate = rateLimit(clientKey(req, opts.route), opts.limit, 60_000);
+  if (!rate.ok) return reject(429, "too many requests", { "Retry-After": String(rate.retryAfter) });
+  return null;
+}
+
 /** origin → rate → size, in that order (cheapest refusal first). */
 export async function guardJson(
   req: Request,
   opts: { route: string; limit: number; maxBytes: number },
 ): Promise<Capped> {
-  if (!sameOrigin(req)) return { ok: false, response: reject(403, "forbidden") };
-  const rate = rateLimit(clientKey(req, opts.route), opts.limit, 60_000);
-  if (!rate.ok) return { ok: false, response: reject(429, "too many requests", { "Retry-After": String(rate.retryAfter) }) };
+  const refused = guardRequest(req, opts);
+  if (refused) return { ok: false, response: refused };
   return readJsonCapped(req, opts.maxBytes);
 }
