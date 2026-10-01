@@ -40,6 +40,15 @@ describe("classify prompt and schema", () => {
 });
 
 describe("parseClassification", () => {
+  it("keeps a topic's lone keyword only when the note's words match it", () => {
+    const sql = answer({ topic: "데이터 분석", keywords: ["SQL"], matched: true });
+    expect(parseClassification(sql, "태블로 대시보드", VOCAB)?.keywords).toEqual([]);
+    expect(parseClassification(sql, "쿼리 짜는 법", VOCAB)?.keywords).toEqual(["SQL"]);
+    expect(parseClassification(answer({ topic: "통계", keywords: ["확률"], matched: true }), "베이즈 정리", VOCAB)?.keywords)
+      .toEqual(["확률"]);
+  });
+
+
   it("turns a good answer into a GoalMatch (method llm)", () => {
     expect(parseClassification(answer({ topic: "습관·집중", keywords: ["마음·회복"], matched: true }), "  번아웃 극복  ", VOCAB))
       .toEqual({ text: "번아웃 극복", topic: "습관·집중", keywords: ["마음·회복"], matched: true, method: "llm" });

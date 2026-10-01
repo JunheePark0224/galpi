@@ -95,6 +95,9 @@ export function parseClassification(raw: string, input: string, vocab: Vocab): G
   if (typeof topic !== "string" || !(TOPICS as readonly string[]).includes(topic) || typeof matched !== "boolean") return null;
   if (!Array.isArray(keywords)) return null;
   const known = keywordNames(vocab, topic as Topic);
-  const kept = matched ? [...new Set(keywords.filter((k): k is string => typeof k === "string" && known.includes(k)))] : [];
+  const picked = matched ? [...new Set(keywords.filter((k): k is string => typeof k === "string" && known.includes(k)))] : [];
+  // Measured 10-01: Haiku tags nearly every 데이터 분석 note with its only keyword (태블로·판다스·피벗 → SQL), so a lone
+  // keyword needs the note's own words (the vocab pattern). Topics with several keywords keep the model's picks.
+  const kept = known.length === 1 ? picked.filter((k) => new RegExp(vocab[topic as Topic].keywords[k], "i").test(input)) : picked;
   return { text: input.trim().slice(0, GOAL_MAX), topic: topic as Topic, keywords: kept.slice(0, MAX_KEYWORDS), matched, method: "llm" };
 }
