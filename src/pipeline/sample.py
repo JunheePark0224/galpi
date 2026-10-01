@@ -65,6 +65,11 @@ def sample_books(docs: list[tuple[Path, dict]], week: str, rate: float) -> list[
     return random.Random(week).sample(pool, sample_size(len(pool), rate))
 
 
+def cell(text: object) -> str:
+    """Text for a markdown table cell (PR body, weekly issue): no pipe, no line break."""
+    return str(text).replace("|", "\\|").replace("\n", " ")
+
+
 def tags_of(b: dict) -> str:
     if b["entry"] == "target":
         return f"🎯 {b['topic']} · {', '.join(b['keywords']) or '키워드 없음'} · {b['way']}"
@@ -73,7 +78,7 @@ def tags_of(b: dict) -> str:
 
 def issue_body(week: str, picks: list[tuple[Path, dict]], rate: float) -> str:
     way_in = lambda b: "AI 일치" if b.get("auto") else "검수됨" if b.get("reviewed") else "-"  # noqa: E731
-    rows = [f"| {b['isbn']} | {b['title']} | {tags_of(b)} | {b['one_liner']} | {way_in(b)} |" for _, b in picks]
+    rows = [f"| {b['isbn']} | {cell(b['title'])} | {cell(tags_of(b))} | {cell(b['one_liner'])} | {way_in(b)} |" for _, b in picks]
     return "\n".join([
         f"지난주({week}) 매일 추가분에서 {rate:.0%}를 뽑았어요 — {len(picks)}권.", "",
         "| ISBN | 제목 | 우리 태그 | 한 줄 | 들어온 길 |", "|---|---|---|---|---|", *rows, "",

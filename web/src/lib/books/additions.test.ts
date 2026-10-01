@@ -29,6 +29,13 @@ describe("mergeAdditions", () => {
     expect(BASE_BIB.has("9791111111111")).toBe(false);
   });
 
+  it("leaves a book waiting for review (daily pipeline, flagged) out of the catalogue until a person picks it", () => {
+    const waiting = book({ isbn: "9794444444444", status: "review", flags: ["way"] });
+    const { rows, bib } = mergeAdditions(BASE_ROWS, BASE_BIB, [file([waiting, book()])], VOCAB);
+    expect(rows.map((r) => r.isbn)).toEqual(["9790000000001", "9791111111111"]);
+    expect(bib.has("9794444444444")).toBe(false);
+  });
+
   it("keeps the base rows exactly as they were (same objects, same order)", () => {
     const { rows } = mergeAdditions(BASE_ROWS, BASE_BIB, [], VOCAB);
     expect(rows).toEqual(BASE_ROWS);

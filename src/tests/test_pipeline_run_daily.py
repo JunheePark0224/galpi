@@ -63,11 +63,12 @@ def test_a_day_writes_our_tags_and_a_summary(day):
     client = FakeClient(mixed)
     s = run_daily.run("2026-10-05", CFG, ENV, client)
     assert s["status"] == "ok" and s["wanted"] == 4 and s["slots"] == ["돈 관리·투자/주식 4"] and s["candidates"] == 4
-    assert (s["picked"], s["reserve"], s["dropped"], s["auto_agreed"], s["flagged"]) == (3, 1, 0, 2, 1)
+    assert (s["picked"], s["review"], s["reserve"], s["dropped"], s["auto_agreed"], s["flagged"]) == (2, 1, 1, 0, 2, 1)
     assert s["usage"]["claude-haiku-4-5"]["calls"] == 8 and s["cost_usd"] > 0
     doc = json.loads((day / "2026-10-05.json").read_text(encoding="utf-8"))
     by = {b["title"]: b for b in doc["books"]}
     assert by["처음 주식 공부"]["auto"] == "ai-agree" and by["주식 배당 입문"]["flags"] == ["way"]
+    assert by["처음 주식 공부"]["status"] == "picked" and by["주식 배당 입문"]["status"] == "review"  # flagged: not live until a review
     assert by["주식 투자 수업"]["status"] == "reserve" and by["주식 투자 수업"]["issues"]
     text = (day / "2026-10-05.json").read_text(encoding="utf-8")
     assert INTRO[:20] not in text and "계좌와 주문" not in text
@@ -196,6 +197,31 @@ def test_a_candidate_without_author_or_pages_is_not_tagged_and_not_written(day):
     assert (rec, why) == (None, "incomplete_candidate") and client.messages.calls == []
     with pytest.raises(ValueError, match="needs an author"):
         record(cand, tag_answer("target"), check_answer("target"), [], [], "picked", None, [])
+
+
+def test_a_run_whose_books_keep_failing_stops_early_to_save_cost(day, monkeypatch):
+    monkeypatch.setattr(run_daily, "MIN_ATTEMPTS", 3)
+
+    def broken_after_the_first(kwargs):
+        text = kwargs["messages"][0]["content"]
+        if "처음 주식 공부" in text:
+            return agreeing(kwargs)
+        return message({"fits": True}, stop="max_tokens")                       # book-level failure: the breaker never sees it
+    client = FakeClient(broken_after_the_first)
+    s = run_daily.run("2026-10-05", CFG, ENV, client)
+    assert s["status"] == "partial" and s["tagged"] == 1 and s["reasons"] == {"ok": 1, "max_tokens": 2}
+    assert s["stopped"] == "2 of 3 books failed (max_tokens) — over 30%, stopped to save cost"
+    assert len(client.messages.calls) == 4                                       # book 4 was never tried
+    assert [b["title"] for b in json.loads((day / "2026-10-05.json").read_text(encoding="utf-8"))["books"]] == ["처음 주식 공부"]
+
+
+def test_a_few_failures_do_not_stop_a_long_enough_run(day, monkeypatch):
+    monkeypatch.setattr(run_daily, "MIN_ATTEMPTS", 4)
+
+    def one_bad(kwargs):
+        return message({"fits": True}, stop="max_tokens") if "주식 투자 수업" in kwargs["messages"][0]["content"] else agreeing(kwargs)
+    s = run_daily.run("2026-10-05", CFG, ENV, FakeClient(one_bad))               # 1 of 4 = 25% <= 30%
+    assert s["status"] == "ok" and s["tagged"] == 3 and s["stopped"] is None
 
 
 def test_yes24_failing_ends_the_day(day, monkeypatch, tmp_path):

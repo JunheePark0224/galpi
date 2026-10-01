@@ -5,8 +5,10 @@ style (🍃 question ends with "?", 🎯 summary does not), evidence at most EVI
 COPY_RUN characters (spaces ignored) shared with the YES24 intro/TOC means our words were not our own.
 disagreements: why a person should look — the two passes differ on fit / keywords / way / an axis, or pass A is unsure.
 decide: rule issues → reserve (대기, never merged as is); both passes say it does not fit → dropped; a disagreement →
-picked for review (auto_merge false) or reserve (auto_merge true: nobody looks before merge, so it waits); otherwise
-picked and auto-accepted (`auto: "ai-agree"`) — counted apart from human-reviewed books (agreement.py).
+"review" (auto_merge false: waits in the file, NOT in books.json, until a person's --apply sets picked / dropped / reserve —
+merging the PR without reviewing cannot put an unreviewed flagged book into the app) or reserve (auto_merge true: nobody
+looks before merge, so it waits too); otherwise picked and auto-accepted (`auto: "ai-agree"`) — counted apart from
+human-reviewed books (agreement.py). Only "picked" books reach books.json (web/src/lib/books/additions.ts).
 """
 from difflib import SequenceMatcher
 
@@ -95,5 +97,5 @@ def decide(a: dict, b: dict, flags: list[str], issues: list[str], auto_merge: bo
     if issues:
         return "reserve", None
     if flags:
-        return ("reserve" if auto_merge else "picked"), None
+        return ("reserve" if auto_merge else "review"), None
     return "picked", AUTO

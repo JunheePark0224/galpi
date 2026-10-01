@@ -92,7 +92,7 @@ def apply_answers(doc: dict, answers: dict[str, dict], kept: dict[str, dict],
         sampled = book.get("auto") == AUTO or bool(book.get("sampled"))
         books.append({**{k: v for k, v in book.items() if k != "auto"}, **a, "draft": draft_of(book), "reviewed": True,
                       **({"sampled": True} if sampled else {})})
-    live = [b for b in books if b["status"] == "picked"]
+    live = [b for b in books if b["status"] in ("picked", "review")]  # a book still waiting for a person is not "reviewed"
     new_doc = {**doc, "books": books, "reviewed": bool(live) and all(b.get("reviewed") for b in live)}
     return new_doc, tally_of(new_doc, only)
 

@@ -8,6 +8,9 @@ Exit 0: done (also "nothing to fill" and "no usable candidates", i.e. YES24 answ
 missing key, YES24 failed, the run stopped before any book was finished, or candidates were found and none could be tagged. Failure rules (design 2-1):
   YES24 gives no candidate and a call failed → `yes24_failed`, no file (so no PR); only the failed API paths are named
   (a call that worked but listed nothing is not a failure: `no_candidates`, exit 0)
+  more than MAX_FAILED_SHARE of the books tried failing after MIN_ATTEMPTS books (book-level failures do not trip the breaker)
+  → the run stops there as `partial` (or `anthropic_failed` with nothing finished), so a systematic break costs ~10 books,
+  not a whole day
   a key is refused (401/403), the model is unknown (404) or the account is the problem (400), or one model's calls fail
   STOP_LIMIT times in a row (tagger.Breaker, one streak per pass) → the run stops there; the books finished before it are
   written as `partial`, and if there are none it is `anthropic_failed` with no file
@@ -15,6 +18,8 @@ missing key, YES24 failed, the run stopped before any book was finished, or cand
 YES24 text (intro, TOC) lives on the Candidate in memory and goes to the tagger only; the additions file, the summary and
 stdout carry our tags and counts. Do not set ANTHROPIC_LOG=debug (the SDK would log request bodies with YES24 text).
 The summary goes to data/pipeline/runs/<date>.json (git-ignored) and stdout.
+A local run reuses the YES24 lists cached under data/raw/yes24/ (kept forever; only new searches are fetched), so its candidate
+pool can differ from the fresh one CI builds.
 """
 import argparse
 import json
@@ -37,6 +42,7 @@ from .slots import keyword_rule, slot_rule
 from .tagger import Breaker, TaggerStop, Usage, call, parse
 
 
+MIN_ATTEMPTS, MAX_FAILED_SHARE = 10, 0.30  # a run whose books keep failing (max_tokens, refusal, invalid answer…) stops here
 EMPTY_RESULT = " -> no items"  # collect_candidates.cached_get: the call worked but listed nothing — not a YES24 failure
 
 
@@ -104,7 +110,7 @@ def run(date: str, cfg: Config, env: dict, client) -> dict:
     if not cands:
         return summary | {"status": "yes24_failed" if yes24_fail else "no_candidates"}
     prompts = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}
-    recs, reasons, ledger, stopped, breaker = [], Counter(), {}, None, Breaker()
+    recs, reasons, ledger, stopped, breaker, tried = [], Counter(), {}, None, Breaker(), 0
     for cand in cands:
         try:
             rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger)
@@ -116,9 +122,16 @@ def run(date: str, cfg: Config, env: dict, client) -> dict:
         reasons[why] += 1
         if rec:
             recs.append(rec)
+        if why != "incomplete_candidate":  # that one cost nothing
+            tried += 1
+        if tried >= MIN_ATTEMPTS and 1 - len(recs) / tried > MAX_FAILED_SHARE:
+            top = max((r for r in reasons if r != "ok"), key=reasons.get, default="unknown")
+            stopped = f"{tried - len(recs)} of {tried} books failed ({top}) — over {MAX_FAILED_SHARE:.0%}, stopped to save cost"
+            break
     status = Counter(r["status"] for r in recs)
     summary |= {"tagged": len(recs), "reasons": dict(reasons), "stopped": stopped,
-                "picked": status["picked"], "reserve": status["reserve"], "dropped": status["dropped"],
+                "picked": status["picked"], "review": status["review"], "reserve": status["reserve"],
+                "dropped": status["dropped"],
                 "auto_agreed": sum(r.get("auto") == "ai-agree" for r in recs),
                 "flagged": sum(bool(r["flags"]) and r["status"] != "dropped" for r in recs),
                 "usage": {m: u.__dict__ for m, u in ledger.items()},

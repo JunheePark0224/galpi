@@ -57,7 +57,7 @@ def test_disagreements_name_each_field():
 def test_decide():
     a, b = tag_answer("target"), check_answer("target")
     assert decide(a, b, [], [], auto_merge=False) == ("picked", AUTO)
-    assert decide(a, b, ["way"], [], auto_merge=False) == ("picked", None)      # a person reviews the PR
+    assert decide(a, b, ["way"], [], auto_merge=False) == ("review", None)      # waits in the file until a person applies a review
     assert decide(a, b, ["way"], [], auto_merge=True) == ("reserve", None)      # nobody looks before merge → waits
     assert decide(a, b, [], ["짧음(5자)"], auto_merge=False) == ("reserve", None)
     assert decide({**a, "fits": False}, {**b, "fits": False}, ["fits"], [], False) == ("dropped", None)

@@ -3,7 +3,8 @@ import type { Vocab } from "./types";
 
 type Row = Record<string, unknown>;
 
-const STATUSES = ["picked", "reserve", "dropped"];
+// "review": a daily-pipeline book the two AI passes disagreed on, waiting for a person (src/pipeline/review.py --apply) — not imported
+const STATUSES = ["picked", "review", "reserve", "dropped"];
 const bad = (isbn: unknown, why: string) => new Error(`${String(isbn || "(no isbn)")}: ${why}`);
 
 /**
@@ -30,7 +31,7 @@ function toRow(b: Row, vocab: Vocab): Row {
 
 /**
  * books_v1 rows + the picked books of every additions file (the 10-01 pilot, then the daily pipeline) → rows and bib
- * for normalizeCatalog. Base rows keep their order and content; additions come after, file by file. Reserve and
+ * for normalizeCatalog. Base rows keep their order and content; additions come after, file by file. Review, reserve and
  * dropped books stay out. Only our tags, titles and authors are in these files — no YES24 text.
  */
 export function mergeAdditions(baseRows: readonly Row[], baseBib: ReadonlyMap<string, Bib>, files: readonly unknown[], vocab: Vocab) {

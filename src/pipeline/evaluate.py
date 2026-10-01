@@ -21,7 +21,8 @@ Usage (from the checkout; real API calls — costs money):
   PYTHONIOENCODING=utf-8 python -m src.pipeline.evaluate --models claude-haiku-4-5,claude-sonnet-5-5 --limit 80
   PYTHONIOENCODING=utf-8 python -m src.pipeline.evaluate --rescore data/pipeline/eval/<date>-<model>.json   # offline re-scoring
   (--limit 0 = every gold book; --detail-dir ../Galpi/data/raw/yes24/detail from a worktree without the cache)
-Output: data/pipeline/eval/<date>-<model>.json — scores, flags, token use and our tags only (no YES24 text).
+Output: data/pipeline/eval/<date>-<model>.json — scores, flags, token use and our tags. Model-written evidence can still echo a
+short YES24 phrase (a copy run of 9 characters or fewer passes the scrub), so the folder is git-ignored and local only.
 """
 import argparse
 import csv

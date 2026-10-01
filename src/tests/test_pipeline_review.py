@@ -348,3 +348,37 @@ def test_the_pick_buttons_never_promote_a_held_book_and_the_page_keeps_open_deta
     assert 'status:o.fits===false?"dropped":cur(b).status' in script                  # keep the decision, drop only when AI says no fit
     assert 'status:o.fits===false?"dropped":"picked"' not in script
     assert 'querySelectorAll("details[open]")' in script and "d.open=true" in script   # a re-render keeps the open details
+
+
+def test_a_flagged_book_waits_with_status_review_until_a_person_applies_a_review(files):
+    tmp, path = files
+    flagged = doc_of()
+    flagged["books"][0] = {**flagged["books"][0], "status": "review"}
+    flagged["books"][2] = {**flagged["books"][2], "status": "review"}
+    path.write_text(json.dumps(flagged, ensure_ascii=False), encoding="utf-8")
+    assert [b["isbn"] for b in flagged["books"] if review.needs_look(b)] == ["1", "3", "4"]       # still on the page
+    assert "1" not in sample.agreed_isbns(flagged)
+    assert [b["isbn"] for _, b in sample.sample_books([(path, flagged)], "2026-W41", 1.0)] == ["2"]   # waiting books are not sampled
+    (tmp / "dl.json").write_text(json.dumps({"answers": {"1": ans(flagged["books"][0], status="picked")}}), encoding="utf-8")
+    assert review.main(["2026-10-05", "--apply", str(tmp / "dl.json")]) == 0
+    saved = json.loads(path.read_text(encoding="utf-8"))
+    assert [b["status"] for b in saved["books"]] == ["picked", "picked", "review", "reserve"]         # book 3 still waits
+    assert saved["reviewed"] is False                                                                # a waiting book is not reviewed
+    kept = {t: v.get("kept", {}) for t, v in VOCAB.items()}
+    dropped, tally = apply_answers(saved, {"3": ans(saved["books"][2], status="dropped")}, kept)
+    assert dropped["books"][2]["status"] == "dropped" and tally["dropped"] == 1
+
+
+def test_the_page_defaults_a_waiting_book_to_picked_so_one_confirm_puts_it_in(files):
+    tmp, _ = files
+    review.main(["2026-10-05"])
+    script = (tmp / "pages" / "2026-10-05.html").read_text(encoding="utf-8")
+    assert 'status:b.status==="reserve"?"reserve":"picked"' in script                 # review → picked in the form
+
+
+def test_the_weekly_issue_table_escapes_pipes_and_line_breaks():
+    book = target("1", title="제목 | 둘\n셋", one_liner="한 줄 | 또 한 줄")
+    body = sample.issue_body("2026-W42", [(Path("x.json"), book)], 0.1)
+    row = next(line for line in body.splitlines() if line.startswith("| 1 |"))
+    escaped = chr(92) + "|"
+    assert f"제목 {escaped} 둘 셋" in row and f"한 줄 {escaped} 또 한 줄" in row and row.count("|") - row.count(escaped) == 6
