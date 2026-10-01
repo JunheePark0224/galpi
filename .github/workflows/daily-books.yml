@@ -1,0 +1,127 @@
+# D-B daily book pipeline (docs/plans/2026-10-01-d-stage-design.md 2-1, plan 2026-10-01-d-b-daily-pipeline.md).
+# 06:00 KST every day + by hand (dry_run: everything but the PR). One PR per day, and only one open at a time —
+# books.json would conflict between stacked PRs, so a day with an earlier books/ PR still open is skipped.
+# YES24 book text only reaches the tagger in memory: nothing below prints, uploads or commits it.
+# The two API keys are given to ONE step (Tag today's books) and are never echoed; ANTHROPIC_LOG stays unset (debug
+# logging would print request bodies, which hold YES24 text).
+name: daily-books
+
+on:
+  schedule:
+    - cron: "0 21 * * *" # 21:00 UTC = 06:00 KST
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run everything but open no PR"
+        type: boolean
+        default: true
+      count:
+        description: "Books today (empty = daily_count in data/pipeline/config.json)"
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: daily-books
+  cancel-in-progress: false
+
+env:
+  DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      date: ${{ steps.day.outputs.date }}
+      go: ${{ steps.day.outputs.go }}
+    steps:
+      - name: Day (KST) and open books/ PRs
+        id: day
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "date=$(TZ=Asia/Seoul date +%F)" >> "$GITHUB_OUTPUT"
+          open=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --json headRefName \
+            --jq '[.[] | select(.headRefName | startswith("books/"))] | length')
+          if [ "$open" = "0" ] || [ "$DRY_RUN" = "true" ]; then echo "go=true" >> "$GITHUB_OUTPUT"; else
+            echo "go=false" >> "$GITHUB_OUTPUT"
+            echo "A books/ PR is still open — review and merge it first. Skipped today." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  books:
+    needs: gate
+    if: needs.gate.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      PYTHONIOENCODING: utf-8
+      DAY: ${{ needs.gate.outputs.date }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Python deps and tests
+        run: |
+          pip install -r requirements.txt
+          python -m pytest src/tests -q
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Web deps
+        working-directory: web
+        run: npm ci
+
+      - name: Tag today's books
+        id: run
+        env:
+          YES24_API_KEY: ${{ secrets.YES24_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          COUNT: ${{ inputs.count }}
+        run: |
+          python -m src.pipeline.run_daily --date "$DAY" ${COUNT:+--count "$COUNT"}
+          if [ -f "data/processed/additions/$DAY.json" ]; then echo "added=true" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Import into books.json and test the app data
+        if: steps.run.outputs.added == 'true'
+        working-directory: web
+        run: npm run books:import && npm test
+
+      - name: PR body
+        if: steps.run.outputs.added == 'true'
+        run: |
+          python -m src.pipeline.report --date "$DAY" --out "$RUNNER_TEMP/pr.md"
+          cat "$RUNNER_TEMP/pr.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Keep the dry run's result (our tags only)
+        if: steps.run.outputs.added == 'true' && env.DRY_RUN == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dry-run-${{ needs.gate.outputs.date }}
+          path: |
+            data/processed/additions/${{ needs.gate.outputs.date }}.json
+            data/pipeline/runs/${{ needs.gate.outputs.date }}.json
+          retention-days: 7
+
+      - name: Open the PR (merge it too when auto_merge is true)
+        if: steps.run.outputs.added == 'true' && env.DRY_RUN != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch="books/$DAY"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add "data/processed/additions/$DAY.json" web/src/data/books.json web/src/data/vocab.json
+          git commit -m "data: daily books $DAY"
+          git push -u origin "$branch"
+          gh pr create --base main --head "$branch" --title "오늘의 새 책 $DAY" --body-file "$RUNNER_TEMP/pr.md"
+          if [ "$(jq -r .auto_merge data/pipeline/config.json)" = "true" ]; then
+            for i in 1 2 3; do gh pr merge "$branch" --squash --delete-branch && break; sleep 15; done
+          fi
