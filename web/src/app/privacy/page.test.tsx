@@ -19,7 +19,7 @@ describe("/privacy (S-10)", () => {
     expect(screen.getByText("누른 버튼과 누른 시각, 고른 입구(🎯/🍃), 본 책갈피, 궁금해요/패스, 밸런스 게임 답과 답하는 데 걸린 시간, 고친 답, 몇 번째 뽑기인지")).toBeInTheDocument();
     expect(screen.getByText("기기 종류(휴대폰/컴퓨터), 앱 안 브라우저 여부, 들어온 곳(이전 페이지 주소), 화면 버전")).toBeInTheDocument();
     expect(screen.getByRole("cell", { name: /직접 쓰기/ }))
-      .toHaveTextContent("🎯 \"직접 쓰기\"에 적은 글 (최대 30자, 갈피의 데이터베이스에만 저장) — 그 글에서 찾은 주제·키워드는 Amplitude에도 함께 보내요");
+      .toHaveTextContent("🎯 \"직접 쓰기\"에 적은 글 (최대 30자, 갈피의 데이터베이스에만 저장, 주제를 찾을 때 Anthropic에 보내요) — 그 글에서 찾은 주제·키워드는 Amplitude에도 함께 보내요");
     expect(screen.getByText("같은 사람이 다시 왔는지 세기 위해")).toBeInTheDocument();
     expect(screen.getByText("추천이 잘 맞는지 분석하기 위해")).toBeInTheDocument();
     expect(screen.getByText("화면이 잘 동작하는지 확인하기 위해")).toBeInTheDocument();
@@ -57,6 +57,17 @@ describe("/privacy (S-10)", () => {
     expect(onlyHere.tagName).toBe("STRONG");
     expect(onlyHere.closest("section")).toHaveTextContent(/위 기록은 분석 서비스 Amplitude\(서버는 미국에 있어요\)에도 보내요\. 다만/);
     expect(screen.getByText("갈피의 데이터베이스에만 저장").tagName).toBe("STRONG");
+  });
+
+  it("names Anthropic as where the written goal goes for sorting, and only that text (P4, taxonomy 6-2)", () => {
+    render(<PrivacyPage />);
+    const sent = screen.getByText(/에 적은 글은 우리 주제·키워드 중 어디에 맞는지 찾으려고 Anthropic\(AI 서비스 Claude, 서버는 미국에 있어요\)에 보내요\.$/);
+    expect(sent.tagName).toBe("STRONG");
+    const section = sent.closest("section");
+    expect(section).toHaveTextContent("보내는 것은 그 글(최대 30자)뿐이고, 익명 번호나 다른 기록은 함께 보내지 않아요.");
+    expect(section).toHaveTextContent("Anthropic은 API로 받은 글을 AI 학습에 쓰지 않고, 30일 안에 지운다고 밝히고 있어요");
+    expect(section).toHaveTextContent("이 밖의 곳에는 주지 않아요.");
+    expect(screen.getByRole("cell", { name: /주제를 찾을 때 Anthropic에 보내요/ })).toBeInTheDocument();
   });
 
   it("says Amplitude records are deleted together with the rest on request", () => {

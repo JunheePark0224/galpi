@@ -798,7 +798,7 @@ Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나
 
 | 항목 | 규칙 |
 |---|---|
-| `goal_text` | 최대 30자, 앞뒤 공백 제거. 입력칸 아래 "이름·연락처는 적지 마세요". **Supabase에만 저장한다 — Amplitude 사본에는 이 속성을 넣지 않는다**(결정 2026-09-30, 9절 Q3). 못 찾은 요청 분석(5-3)은 SQL로 하므로 잃는 것이 없다. Amplitude에는 `topic`·`keywords`·`is_matched`·`method`가 간다. 처리방침에 저장 명시, **Amplitude로는 안 간다는 문장은 v0.3에서 추가(6-3)**. P4에서 Anthropic(분류) 전달이 생기면 처리방침에 먼저 추가. 첫 장(S-04)이 이 글을 화면에 보이면 Session Replay(20%)가 화면 글자를 담을 수 있다 — v0.3: 직접 쓴 글이 있는 첫 장(`FirstPage.tsx`)과 글을 쓰는 입력 칸(`TargetInput.tsx`)에 `data-amp-mask`를 달아 리플레이에서 가린다 (v0.3.1: 입력 칸도 — 대시보드의 가림 수준이 `light`로 바뀌어도 가려진다) |
+| `goal_text` | 최대 30자, 앞뒤 공백 제거. 입력칸 아래 "이름·연락처는 적지 마세요". **Supabase에만 저장한다 — Amplitude 사본에는 이 속성을 넣지 않는다**(결정 2026-09-30, 9절 Q3). 못 찾은 요청 분석(5-3)은 SQL로 하므로 잃는 것이 없다. Amplitude에는 `topic`·`keywords`·`is_matched`·`method`가 간다. 처리방침에 저장 명시, **Amplitude로는 안 간다는 문장은 v0.3에서 추가(6-3)**. **P4**: 주제를 찾으려고 이 글만 Anthropic(Claude Haiku)에 보낸다 — 익명 번호·공통 속성·다른 기록은 보내지 않고, 서버 로그에도 글을 남기지 않는다. 처리방침에 먼저 적었다(6-3b). 첫 장(S-04)이 이 글을 화면에 보이면 Session Replay(20%)가 화면 글자를 담을 수 있다 — v0.3: 직접 쓴 글이 있는 첫 장(`FirstPage.tsx`)과 글을 쓰는 입력 칸(`TargetInput.tsx`)에 `data-amp-mask`를 달아 리플레이에서 가린다 (v0.3.1: 입력 칸도 — 대시보드의 가림 수준이 `light`로 바뀌어도 가려진다) |
 | `referrer` | 500자에서 자름. Supabase에만. 검색 주소 등 쿼리 문자열에 개인 정보가 섞일 수 있어, 필요하면 호스트만 남기는 것을 검토 |
 | `anon_id` | 처리방침 "지우고 싶다면"에서 이 번호로 삭제 요청을 받는다 — 값의 형식·위치를 바꾸면 처리방침 화면도 함께 |
 | Autocapture·Session Replay | IP·대략적 지역·누른 요소가 Amplitude로 간다(처리방침에 명시). 리플레이는 입력칸을 가린다 — 새 입력칸도 가림 대상인지 확인 |
@@ -814,6 +814,10 @@ Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나
 
 - 함께 고칠 것: `web/src/app/privacy/page.test.tsx`(문장 단정이 있으면), `lib/privacy.ts`의 `UPDATED`(갱신일), `PRD.md` F-16 v0 서술 한 줄, 이 문서 6-2·7-1의 확인 체크.
 - 그대로 두는 것: "Amplitude가 자동으로 모으는 것" 행, 화면 녹화 행, "지우고 싶다면"(삭제 요청 시 Amplitude 기록도 함께 지움) — 이번 결정과 무관.
+
+### 6-3b. 처리방침 변경 — P4 (Anthropic)
+
+P4의 `/api/goal/classify`가 직접 쓴 글(≤30자)을 Anthropic API로 보낸다(target-chips 3절). 7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고쳤다 — 표의 직접 쓰기 행에 "주제를 찾을 때 Anthropic에 보내요", "기록을 전달하는 곳"에 받는 곳(Anthropic, 미국)·보내는 것(그 글뿐)·Anthropic이 밝힌 처리(API 입력을 학습에 쓰지 않음 — Commercial Terms B, 30일 안에 삭제 — Privacy Center, 예외 있음). 이벤트 속성은 그대로(`method`가 `llm`이 될 뿐).
 
 ### 6-4. 보관
 
