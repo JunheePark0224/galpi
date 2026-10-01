@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { AnonIdView } from "@/components/privacy/AnonIdView";
 import { CONTACT_PENDING, UPDATED } from "@/lib/privacy";
 import styles from "./page.module.css";
@@ -97,7 +96,8 @@ export default function PrivacyPage() {
 
       <footer className={styles.end}>
         <p>갈피는 예스24와 무관한 개인 포트폴리오 프로젝트예요.</p>
-        <Link href="/" className={styles.back}>처음으로</Link>
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- a full navigation on purpose: the flow starts at S-01 (loadFlow) */}
+        <a href="/" className={styles.back}>처음으로</a>
       </footer>
     </article>
   );
