@@ -26,5 +26,6 @@ test("without an Amplitude key nothing is sent to amplitude.com, no SDK code is 
   for (const script of scripts) expect(await script.text, script.url).not.toContain("api2.amplitude.com");
   expect(hosts.filter((h) => h.endsWith("amplitude.com"))).toEqual([]);
   expect(loads).toBe(2);                                    // / , then 처음으로 = a full navigation to /
-  expect(warnings.filter((w) => w.includes("Amplitude API key missing — analytics disabled"))).toHaveLength(loads);
+  // the warning comes from an effect after the page shows, so the second one may land a moment after the last assertion
+  await expect.poll(() => warnings.filter((w) => w.includes("Amplitude API key missing — analytics disabled")).length).toBe(loads);
 });
