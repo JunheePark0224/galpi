@@ -7,6 +7,7 @@
 | taxonomy v0.3.1 | 2026-10-01 | v0.3 최종 검토 | 입력 칸 가림·허용 목록·검사 #11·표현 정리 (8절) |
 | taxonomy v0.4 | 2026-10-01 | P4 결과·서버 `plans/2026-10-01-p4-results-server.md` | S-06·S-08 이벤트 live (8절) |
 | taxonomy v0.5 | 2026-10-01 | D-D 입력 B안 (PRD F-02, context 10-01) | E-03 `chip_type` "example", E-26 `is_free_text` = 예시 칩 글 그대로면 FALSE (8절) |
+| taxonomy v0.5.1 | 2026-10-01 | 최종 검토 (integrate/pilot) | home-nav `round` 변경 기록·3-1a 함수 이름 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -212,7 +213,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 - **+1은 E-19·E-20을 보낸 직후**에 한다. 그 이벤트 자체는 **끝나는 판의 round**를 싣고(그 판의 `curious_count`와 같은 판), 그다음 이벤트(`entry_selected` 등)부터 새 값을 싣는다.
 - [처음으로]는 S-04(뽑기 실패·책 없음)에서 눌러도 똑같이 +1 한다(`source=first_page`) — 끝난 판과 새 판을 섞지 않는다. 이용자가 [처음으로] 뒤 아무것도 하지 않고 나가도 부작용이 없다(다음 이벤트가 없다).
 - 이 규칙이 없으면 [처음으로] 뒤 재시작이 앞 판과 `(session_id, round)`가 같아져 두 판이 한 판으로 섞인다(5-1).
-- **새로 열기 (10-01)**: 흐름 복원은 문서를 불러온 방식으로 가른다 — `reload`·`back_forward`·`document.wasDiscarded`면 이어가고, 그 밖의 `navigate`(주소 입력·링크·로고)면 S-01에서 시작한다. 이때 이 탭에서 이미 본 책(`seen`)은 그대로 제외한다. 판 도중이었다면 round +1과 `entry` null은 이 문서의 `site_visited`를 보내기 **전에** 정해진다(그 방문이 새 판의 첫 이벤트). 구현은 `web/src/lib/flow/storage.ts`의 `shouldResume`·`loadFlow`.
+- **새로 열기 (10-01)**: 흐름 복원은 문서를 불러온 방식으로 가른다 — `reload`·`back_forward`·`document.wasDiscarded`면 이어가고, 그 밖의 `navigate`(주소 입력·링크·로고)면 S-01에서 시작한다. 이때 이 탭에서 이미 본 책(`seen`)은 그대로 제외한다. 판 도중이었다면 round +1과 `entry` null은 이 문서의 `site_visited`를 보내기 **전에** 정해진다(그 방문이 새 판의 첫 이벤트). 구현은 `web/src/lib/flow/storage.ts`의 `shouldResume`(이어갈지 판정)·`settleOpen`(문서마다 한 번 정해 `TrackVisit`이 `site_visited` 전에 부름).
 - **구현 (v0.3)**: `track()`이 `ROUND_ENDING_EVENTS`(`schema.ts` — E-19·E-20)를 두 곳에 보낸 **직후** `nextRound()`를 부른다. 화면 코드는 round를 만지지 않는다 — P4의 [다시 뽑기]는 E-19를 보내기만 하면 된다.
 
 **유저 속성으로 올리지 않는 이유**: 꿀팁 3편의 기준(오래 유지되는가)으로 보면 입구·회차·화면 버전·기기·재방문 여부는 한 사람 안에서도 바뀐다 → 모두 이벤트 속성. 지금 코드(`amplitude.ts`)도 그렇게 보낸다.
@@ -932,6 +933,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.3.1 | 2026-10-01 | Claude (최종 검토 반영) | 직접 쓰기 입력 칸에 `data-amp-mask`(Session Replay 가림이 대시보드 수준과 무관하게 코드로 보장 — 6-2). `forAmplitude`는 허용 목록 방식(명세에 있고 `Supabase only`가 아닌 속성만). 자동 검사 #11 추가 — 이벤트별 속성 표 ↔ csv (7-3). 옛 표현을 구현된 상태로 고침(2-7 a·b, 2-8, 4-1, 4-4, 7-3 ①). 배포 체크리스트(`deploy.md`)에 Production 키 설정 뒤 개인정보 확인 추가. 이벤트·속성 변경 없음 |
 | v0.4 | 2026-10-01 | Claude (P4 구현) | S-06에서 E-09 `result_viewed`·E-10 `result_book_viewed`(`pick_type` 포함)·E-23 `description_expanded`·E-18 `yes24_link_clicked`(`source`=result, `pick_type`), S-08에서 E-19 `redraw_clicked`를 심어 `live`로(E-19 뒤 round +1은 v0.3의 `track()` 그대로). E-20 설명에서 P3 임시 화면 문구를 뺌. 이벤트 이름·속성 변경 없음 |
 | v0.5 | 2026-10-01 | Claude (D-D 입력 B안) | S-02 🎯가 큰 무엇을 칸 + 예시 칩 6개로(PRD F-02, context 10-01). E-03 `chip_type` 값 "topic" → "example"(예시 칩을 누를 때, `chip_value` = 칩 글). E-26 `is_free_text`는 이름·뜻 그대로 "보기 vs 직접 쓰기"(Q-10 ②) — FALSE = 예시 칩 글을 고치지 않고 제출. 그 글은 칩마다 정해 둔 주제·키워드로 바로 연결(Claude 호출 없음)되고 E-21·E-22는 남지 않는다(주제 칩 때와 같음). 고친 글은 직접 쓴 말 — 분류, E-21·E-22. 새 이벤트·속성 없음 |
+| v0.5.1 | 2026-10-01 | Claude (최종 검토 반영) | 로고·주소로 새로 열기 규칙(home-nav)의 `round` 변경을 기록: 판 도중이던 흐름을 `navigate`로 새로 열면 round +1(이벤트 없음)·`entry` null이 `site_visited`보다 먼저 정해진다(3-1a·E-01, `storage.ts`의 `settleOpen`). 3-1a의 구현 함수 이름을 고침. 저장 흐름 `VERSION` 2 → 3(마음·회복이 키워드에서 빠졌으므로 배포 전 저장 흐름은 처음부터). 이벤트·속성 이름·값 변경 없음 |
 
 ---
 
