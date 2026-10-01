@@ -71,7 +71,7 @@ export function editedQuestions(before: readonly BalanceChoice[], after: readonl
   return after.flatMap((c, i) => (c !== before[i] ? [`q${i + 1}`] : []));
 }
 
-/** E-06 changed_items for 🎯: "topic" (chosen topic or written goal — the E-03 chip_type name), "len", "way". */
+/** E-06 changed_items for 🎯: "topic" (the 무엇을 field — chosen topic before 입력 B, its text since), "len", "way". */
 export function editedTargetFields(before: TargetForm, after: TargetForm): string[] {
   const what = before.topic !== after.topic || (before.free === null) !== (after.free === null)
     || (before.free ?? "").trim() !== (after.free ?? "").trim();

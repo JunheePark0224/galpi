@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import real from "@/data/books.json";
 import sample from "@/data/books.sample.json";
 import vocab from "@/data/vocab.json";
+import { shownExamples } from "@/lib/flow/examples";
 import { classifySchema, classifySystemPrompt } from "@/lib/goal/classify";
 import { matchGoal } from "@/lib/goal/match";
 import { MIN_ACTIVE_TOPIC_BOOKS, activeTopics } from "./active";
@@ -47,11 +48,11 @@ describe("app book data", () => {
     expect(TOPIC_CHIPS.map((c) => c.topic).filter((t) => !active.includes(t))).toEqual([]);
   });
 
-  it("vocab.json covers all twelve topics: the 20 keywords of v1.1 and the 33 D-A drafts (target-chips 2-1)", () => {
+  it("vocab.json covers all twelve topics: the 19 keywords of v1.1 left after 마음·회복 moved out, and the 33 D-A drafts (target-chips 2-1)", () => {
     expect(Object.keys(vocab)).toEqual([...TOPICS]);
     const count = (topics: readonly string[]) =>
       topics.reduce((n, t) => n + Object.keys((vocab as Vocab)[t].keywords).length, 0);
-    expect(count(TOPICS.slice(0, 6))).toBe(20);
+    expect(count(TOPICS.slice(0, 6))).toBe(19);
     expect(count(TOPICS.slice(6))).toBe(33);
     expect(Object.keys(vocab["돈 관리·투자"].keywords)).toEqual(["재테크 기초", "주식", "ETF·펀드", "부동산·청약", "연금·노후", "돈의 심리"]);
   });
@@ -65,6 +66,28 @@ describe("app book data", () => {
     ["문해력 키우기", "글쓰기", ["문해력·어휘"]], ["카피라이팅", "글쓰기", ["카피라이팅"]],
   ])("a D-A draft pattern catches %s → %s %j (once its topic is on)", (note, topic, keywords) => {
     expect(matchGoal(note, vocab as Vocab)).toMatchObject({ topic, keywords, matched: true });
+  });
+
+  it("never sends an example chip to a keyword with fewer than 4 books (the coverage note starts below 4)", () => {
+    const books = real as unknown as CatalogBook[];
+    const active = activeTopics(books);
+    for (const chip of shownExamples(active)) {
+      for (const k of chip.keywords) {
+        const n = books.filter((b) => b.entry === "target" && b.topic === chip.topic && b.keywords.includes(k)).length;
+        expect(n, `${chip.text} → ${chip.topic}/${k}`).toBeGreaterThanOrEqual(4);
+      }
+    }
+  });
+
+  it.each([
+    ["글 잘 쓰기 연습", "글쓰기"], ["소설 쓰기", "글쓰기"], ["문장 쓰기", "글쓰기"], ["AI 잘 쓰기", "AI 활용"],
+  ])("word matching sends %s to %s, not to the topic that shares 쓰기", (note, topic) => {
+    expect(matchGoal(note, ACTIVE_VOCAB)).toMatchObject({ topic, matched: true });
+  });
+
+  it("word matching reads 회사 그만두고 싶어요 as 이직·퇴사", () => {
+    expect(matchGoal("회사 그만두고 싶어요", ACTIVE_VOCAB)).toMatchObject({ topic: "취업·커리어", keywords: ["이직·퇴사"], matched: true });
+    expect(matchGoal("회사를 그만두고 싶어요", ACTIVE_VOCAB)).toMatchObject({ topic: "취업·커리어", keywords: ["이직·퇴사"] });
   });
 
   it("keeps 마음·회복 in 습관·집중 only until 마음 돌보기 turns on (its 5 books are re-tagged in D-C)", () => {

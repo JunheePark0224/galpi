@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { AnonIdView } from "@/components/privacy/AnonIdView";
 import { CONTACT_PENDING, UPDATED } from "@/lib/privacy";
 import styles from "./page.module.css";
@@ -44,7 +43,7 @@ export default function PrivacyPage() {
             <td>화면이 잘 동작하는지 확인하기 위해</td>
           </tr>
           <tr>
-            <td>🎯 {"\"직접 쓰기\""}에 적은 글 (최대 30자, <strong>갈피의 데이터베이스에만 저장</strong>, 주제를 찾을 때 Anthropic에 보내요) — 그 글에서 찾은 주제·키워드는 Amplitude에도 함께 보내요</td>
+            <td>🎯 {"\"무엇을 알고 싶어요\""} 칸에 적은 글 (최대 30자, <strong>갈피의 데이터베이스에만 저장</strong>, 주제를 찾을 때 Anthropic에 보내요) — 그 글에서 찾은 주제·키워드는 Amplitude에도 함께 보내요</td>
             <td>사람들이 찾는 주제를 알고 책을 늘리기 위해 — <strong>이름·연락처는 적지 마세요</strong></td>
           </tr>
           <tr>
@@ -73,12 +72,13 @@ export default function PrivacyPage() {
         <h2 className={styles.h2}>기록을 전달하는 곳</h2>
         <p>
           위 기록은 분석 서비스 Amplitude(서버는 미국에 있어요)에도 보내요.{" "}
-          <strong>다만 🎯 {"\"직접 쓰기\""}에 적은 글은 Amplitude에 보내지 않고, 갈피의 데이터베이스(Supabase)에만 저장해요.</strong>{" "}
+          <strong>다만 🎯 {"\"무엇을 알고 싶어요\""} 칸에 적은 글은 Amplitude에 보내지 않고, 갈피의 데이터베이스(Supabase)에만 저장해요.</strong>{" "}
           Amplitude는 브라우저의 쿠키와 저장 공간에 식별 값을 남겨요.
         </p>
         <p>
-          <strong>🎯 {"\"직접 쓰기\""}에 적은 글은 우리 주제·키워드 중 어디에 맞는지 찾으려고 Anthropic(AI 서비스 Claude, 서버는 미국에 있어요)에 보내요.</strong>{" "}
+          <strong>🎯 {"\"무엇을 알고 싶어요\""} 칸에 적은 글은 우리 주제·키워드 중 어디에 맞는지 찾으려고 Anthropic(AI 서비스 Claude, 서버는 미국에 있어요)에 보내요.</strong>{" "}
           보내는 것은 그 글(최대 30자)뿐이고, 익명 번호나 다른 기록은 함께 보내지 않아요.
+          예시 칩의 말을 그대로 내면 Anthropic에 보내지 않아요.
           Anthropic은 API로 받은 글을 AI 학습에 쓰지 않고, 30일 안에 지운다고 밝히고 있어요(약관 위반 확인처럼 정해진 경우는 예외예요).
           이 밖의 곳에는 주지 않아요. 새로 전달하는 곳이 생기면 이 페이지에 먼저 적어요.
         </p>
@@ -97,7 +97,8 @@ export default function PrivacyPage() {
 
       <footer className={styles.end}>
         <p>갈피는 예스24와 무관한 개인 포트폴리오 프로젝트예요.</p>
-        <Link href="/" className={styles.back}>처음으로</Link>
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- a full navigation on purpose: the flow starts at S-01 (loadFlow) */}
+        <a href="/" className={styles.back}>처음으로</a>
       </footer>
     </article>
   );

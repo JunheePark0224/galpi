@@ -6,7 +6,6 @@ test.use({ reducedMotion: "reduce" });
 test("🎯 input → 처리방침 link → /privacy → 처음으로", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
-  await page.getByRole("button", { name: "직접 쓰기", exact: true }).click();
   await page.getByRole("link", { name: "처리방침" }).first().click();
 
   await expect(page).toHaveURL(/\/privacy$/);
@@ -20,8 +19,9 @@ test("🎯 input → 처리방침 link → /privacy → 처음으로", async ({ 
 
   await page.getByRole("link", { name: "처음으로" }).click();
   await expect(page).toHaveURL(/\/$/);
-  // flow state lives in sessionStorage, so coming back resumes the 🎯 input screen
-  await expect(page.getByRole("heading", { name: "알고 싶은 게 있어요" })).toBeVisible();
+  // 처음으로 is a fresh open: S-01, not the 🎯 input screen it left
+  await expect(page.getByRole("button", { name: /알고 싶은 게 있어요/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ })).toBeVisible();
 });
 
 test("a first visit straight to /privacy records nothing and creates no id", async ({ page }) => {
