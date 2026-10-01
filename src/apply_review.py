@@ -144,6 +144,15 @@ def line_warnings(doc: dict) -> list[str]:
     return out
 
 
+def shown(path: Path) -> str:
+    """Path relative to the repo root for display; a relative path is resolved first, one outside the repo stays absolute."""
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(ROOT))
+    except ValueError:
+        return str(resolved)
+
+
 def main() -> int:
     if len(sys.argv) != 3:
         print(__doc__)
@@ -176,7 +185,7 @@ def main() -> int:
     print(f"auto-accepted without human review (AI-1 = AI-2): {stats['auto_agreed']} — not in the agreement figures")
     for w_ in line_warnings(new_doc):
         print("  check:", w_)
-    print(f"saved: {path.relative_to(ROOT)} · {AGREEMENT.relative_to(ROOT)} — next: cd web && npm run books:import")
+    print(f"saved: {shown(path)} · {shown(AGREEMENT)} — next: cd web && npm run books:import")
     return 0
 
 

@@ -6,8 +6,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from apply_review import (CSV_HEAD, ReviewError, apply_answers, line_warnings, unwrap,  # noqa: E402
-                          upsert_row)
+from apply_review import (CSV_HEAD, ROOT, ReviewError, apply_answers, line_warnings, shown,  # noqa: E402
+                          unwrap, upsert_row)
 from build_pilot_review import add_second_opinion, flag_reasons  # noqa: E402
 
 KEPT = {"돈 관리·투자": {"주식": {}, "ETF·펀드": {}}, "경제 상식": {"금리·환율": {}}}
@@ -181,3 +181,12 @@ def test_line_warnings_flag_length_and_question_marks_only_for_picked_books():
                      book("3", status="dropped", one_liner="짧아요")]}
     warnings = line_warnings(doc)
     assert len(warnings) == 2 and "짧음" in warnings[0] and "물음표" in warnings[1]
+
+
+def test_shown_resolves_a_relative_path_instead_of_raising(monkeypatch, tmp_path):
+    monkeypatch.chdir(ROOT)
+    rel = Path("data/processed/additions/2026-10-01-pilot.json")  # what the CLI gets when run from the repo root
+    assert shown(rel) == str(Path("data/processed/additions/2026-10-01-pilot.json"))
+    assert shown(ROOT / "data" / "pipeline" / "agreement.csv") == str(Path("data/pipeline/agreement.csv"))
+    outside = tmp_path / "x.json"
+    assert shown(outside) == str(outside.resolve())  # outside the repo: absolute, no ValueError
