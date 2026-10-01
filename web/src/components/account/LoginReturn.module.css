@@ -1,0 +1,5 @@
+.notice {
+  position: fixed; left: 50%; bottom: calc(var(--space-5) + env(safe-area-inset-bottom)); z-index: 40; transform: translateX(-50%);
+  width: calc(100% - 2 * var(--space-4)); max-width: calc(var(--column) - 2 * var(--space-4)); margin: 0; padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-card); background: var(--ink); color: var(--paper); font-size: 13px; text-align: center;
+}

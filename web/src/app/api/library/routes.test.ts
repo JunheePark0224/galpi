@@ -43,11 +43,11 @@ describe("내 책갈피 routes", () => {
   afterEach(() => { configured = true; userId = "u1"; vi.clearAllMocks(); });
 
   it("/api/me says whether someone is logged in and how many bookmarks — and that login is off without config", async () => {
-    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: true, loggedIn: true, count: 0 });
+    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: true, loggedIn: true, id: "u1", count: 0 });
     userId = null;
-    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: true, loggedIn: false, count: 0 });
+    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: true, loggedIn: false, id: null, count: 0 });
     configured = false;
-    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: false, loggedIn: false, count: 0 });
+    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: false, loggedIn: false, id: null, count: 0 });
   });
 
   it("needs a login (401) and the Supabase config (503); other sites are refused", async () => {

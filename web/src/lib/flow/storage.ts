@@ -1,3 +1,4 @@
+import { readLoginMark } from "@/lib/auth/next";
 import { nextRound, setEntry } from "@/lib/track/common";
 import { INITIAL, STEPS, type FlowState } from "./state";
 
@@ -8,10 +9,11 @@ const VERSION = 4;   // 2 (P4): picks carry their reason, S-06 keeps its place; 
 /**
  * Resume only when the load is a reload or a history traversal, or the tab was discarded and restored (KakaoTalk's in-app
  * browser reloads often; Chrome discards background tabs). A fresh "navigate" (typed address, opened link, logo) starts at S-01.
- * Without navigation timing (`undefined`) resuming is the safe, old behaviour.
+ * Without navigation timing (`undefined`) resuming is the safe, old behaviour. Coming back from a login (/auth/callback
+ * adds ?login=, P5) also resumes: the person returns to the book they were keeping, not to S-01.
  */
-export function shouldResume(navType: string | undefined, wasDiscarded: boolean): boolean {
-  return wasDiscarded || navType === undefined || navType === "reload" || navType === "back_forward";
+export function shouldResume(navType: string | undefined, wasDiscarded: boolean, fromLogin = false): boolean {
+  return fromLogin || wasDiscarded || navType === undefined || navType === "reload" || navType === "back_forward";
 }
 
 function readSaved(): FlowState | null {
@@ -60,7 +62,8 @@ export function settleOpen(): void {
   try {
     const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
     const discarded = (document as Document & { wasDiscarded?: boolean }).wasDiscarded === true;
-    restoreFlow(shouldResume(nav?.type, discarded));
+    const fromLogin = readLoginMark(new URLSearchParams(window.location.search)) !== null;
+    restoreFlow(shouldResume(nav?.type, discarded, fromLogin));
   } catch {
     // no navigation timing or storage: resuming (nothing to change) is the safe old behaviour
   }

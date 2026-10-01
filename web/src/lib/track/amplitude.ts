@@ -1,3 +1,4 @@
+import type { Provider } from "@/lib/auth/next";
 import { ensureAnonId } from "./common";
 import { forAmplitude } from "./props";
 import type { CommonProps, EventName } from "./schema";
@@ -24,6 +25,8 @@ let warned = false;
 let failed = false;    // loading or init broke: stop sending
 let sdk: Sdk | null = null;
 let waiting: Waiting[] = [];
+/** A login (or logout) that happened before the SDK arrived — applied first, so the waiting events carry the person. */
+let identity: { userId: string | null; provider?: Provider } | null = null;
 
 function whenIdle(run: () => void): void {
   if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(run, { timeout: IDLE_TIMEOUT_MS });
@@ -31,6 +34,15 @@ function whenIdle(run: () => void): void {
 }
 
 const apiKey = (): string => (process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY ?? "").trim();
+
+function applyIdentity(loaded: Sdk, who: { userId: string | null; provider?: Provider }): void {
+  try {
+    loaded.setUserId(who.userId ?? undefined);
+    if (who.userId && who.provider) loaded.identify(new loaded.Identify().set("login_provider", who.provider));
+  } catch {
+    // Amplitude failing must not touch the Supabase path or the screen
+  }
+}
 
 function give(loaded: Sdk, [name, props, options]: Waiting): void {
   try {
@@ -53,6 +65,8 @@ async function load(key: string): Promise<void> {
     });
     // The SDK queues events itself until its init finishes, so hand over the waiting ones now.
     sdk = loaded;
+    if (identity) applyIdentity(loaded, identity);
+    identity = null;
     const pending = waiting;
     waiting = [];
     pending.forEach((event) => give(loaded, event));
@@ -103,3 +117,14 @@ export function sendToAmplitude(name: EventName, props: Record<string, unknown>,
     // building the event must not touch the Supabase path or the screen
   }
 }
+
+/**
+ * taxonomy 3-2: after login (E-14) the person's Supabase id joins their device_id, and `login_provider` is the one user
+ * property; on logout the id is cleared so later events on this device are not filed under them. Never a name or email.
+ */
+export function setAmplitudeUser(userId: string | null, provider?: Provider): void {
+  if (failed || !apiKey()) return;
+  if (sdk) applyIdentity(sdk, { userId, provider });
+  else identity = { userId, provider };
+}
+

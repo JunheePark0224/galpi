@@ -68,10 +68,10 @@ click,보관,SDK,save_clicked,S-06 꺼낸 책갈피 아래 [내 책갈피에 꽂
 system,보관,SDK,book_saved,"꽂기가 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 꽂기(같은 책 화면으로 돌아온 뒤). 새 책갈피는 첫 막대 맨 앞",book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-15,planned-P5
 system,보관,SDK,book_saved,"꽂기가 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 꽂기(같은 책 화면으로 돌아온 뒤). 새 책갈피는 첫 막대 맨 앞",is_auto_save,로그인 직후 자동 보관인지,FALSE,Boolean,"TRUE, FALSE",,E-15,planned-P5
 click,보관,SDK,book_unsaved,S-09 내 책갈피에서 책갈피 뒷면의 [빼기]를 확인까지 누를 때,book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-16,planned-P5
-view,로그인,SDK,login_prompt_shown,S-07 로그인 창이 뜰 때,source,어디서 열렸는지,FALSE,String,"""save"", ""header""","save=[내 책갈피에 꽂기], header=우측 위 [로그인]",E-12,planned-P5
-click,로그인,SDK,login_started,S-07 카카오/구글 버튼을 누를 때 (외부 로그인으로 떠나기 직전),provider,로그인 방식,FALSE,String,"""kakao"", ""google""",,E-13,planned-P5
-system,로그인,SDK,login_completed,"로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트). /auth/callback이 붙인 표시를 보고 돌아온 화면이 한 번 보냄",provider,로그인 방식,FALSE,String,"""kakao"", ""google""",,E-14,planned-P5
-system,로그인,SDK,login_completed,"로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트). /auth/callback이 붙인 표시를 보고 돌아온 화면이 한 번 보냄",is_first_login,처음 로그인(이용자가 새로 생김)인지,FALSE,Boolean,"TRUE, FALSE",,E-14,planned-P5
+view,로그인,SDK,login_prompt_shown,S-07 로그인 창이 뜰 때,source,어디서 열렸는지,FALSE,String,"""save"", ""header""","save=[내 책갈피에 꽂기], header=우측 위 [로그인]",E-12,live
+click,로그인,SDK,login_started,S-07 카카오/구글 버튼을 누를 때 (외부 로그인으로 떠나기 직전),provider,로그인 방식,FALSE,String,"""kakao"", ""google""",,E-13,live
+system,로그인,SDK,login_completed,"로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트). /auth/callback이 붙인 표시를 보고 돌아온 화면이 한 번 보냄",provider,로그인 방식,FALSE,String,"""kakao"", ""google""",,E-14,live
+system,로그인,SDK,login_completed,"로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트). /auth/callback이 붙인 표시를 보고 돌아온 화면이 한 번 보냄",is_first_login,처음 로그인(이용자가 새로 생김)인지,FALSE,Boolean,"TRUE, FALSE",,E-14,live
 view,내 책갈피,SDK,library_viewed,S-09 내 책갈피를 열 때 (목록을 불러온 뒤),saved_count,보관한 책 수,FALSE,Number,"0, 3, 12",,E-17,planned-P5
 click,내 책갈피,SDK,shelf_created,"S-09 [＋ 막대 추가]로 막대가 생겼을 때 (저장 성공 뒤). 첫 꽂기 때 저절로 만드는 첫 막대는 남지 않음. 막대 이름은 넣지 않음",shelf_count,만든 뒤 이 사람의 막대 수 (최대 5),FALSE,Number,"2, 5",v0.8 · 신규 이벤트,E-29,planned-P5
 click,내 책갈피,SDK,bookmark_moved,"S-09에서 책갈피를 다른 막대로 옮겼을 때 (저장 성공 뒤). 같은 막대에 다시 놓으면(취소) 남지 않음. 막대 이름·번호는 넣지 않음",book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",v0.8 · 신규 이벤트,E-30,planned-P5

@@ -2,10 +2,20 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CommonProps } from "./schema";
 
 const { sdk, fakeSdk } = vi.hoisted(() => {
-  const state = { loaded: 0, initAll: vi.fn(), track: vi.fn() };
+  const state = { loaded: 0, initAll: vi.fn(), track: vi.fn(), setUserId: vi.fn(), identify: vi.fn(), order: [] as string[] };
+  class Identify {
+    readonly props: Record<string, unknown> = {};
+    set(key: string, value: unknown) { this.props[key] = value; return this; }
+  }
   const factory = () => {
     state.loaded += 1;
-    return { initAll: (...a: unknown[]) => state.initAll(...a), track: (...a: unknown[]) => state.track(...a) };
+    return {
+      initAll: (...a: unknown[]) => state.initAll(...a),
+      track: (...a: unknown[]) => { state.order.push(`track:${String(a[0])}`); return state.track(...a); },
+      setUserId: (...a: unknown[]) => { state.order.push(`user:${String(a[0])}`); return state.setUserId(...a); },
+      identify: (...a: unknown[]) => state.identify(...a),
+      Identify,
+    };
   };
   return { sdk: state, fakeSdk: factory };
 });
@@ -30,6 +40,9 @@ beforeEach(() => {
   sdk.loaded = 0;
   sdk.initAll.mockReset().mockResolvedValue(undefined);
   sdk.track.mockReset();
+  sdk.setUserId.mockReset();
+  sdk.identify.mockReset();
+  sdk.order = [];
   localStorage.clear();
   sessionStorage.clear();
 });
@@ -301,5 +314,62 @@ describe("sendToAmplitude", () => {
     const send = await started();
     sdk.track.mockImplementation(() => { throw new Error("sdk broke"); });
     expect(() => send("site_visited", {}, common)).not.toThrow();
+  });
+});
+
+describe("setAmplitudeUser (taxonomy 3-2, v0.8)", () => {
+  it("does nothing without a key", async () => {
+    vi.stubEnv(KEY_NAME, "");
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { setAmplitudeUser, startAmplitude } = await load();
+    startAmplitude();
+    setAmplitudeUser("22222222-2222-4222-8222-222222222222", "kakao");
+    await pause();
+    expect(sdk.loaded).toBe(0);
+  });
+
+  it("names the person and the one user property login_provider once the SDK is there", async () => {
+    vi.stubEnv(KEY_NAME, FAKE_KEY);
+    idleNow();
+    const { setAmplitudeUser, startAmplitude } = await load();
+    startAmplitude();
+    await ready();
+    setAmplitudeUser("22222222-2222-4222-8222-222222222222", "google");
+    expect(sdk.setUserId).toHaveBeenCalledWith("22222222-2222-4222-8222-222222222222");
+    expect(sdk.identify).toHaveBeenCalledWith(expect.objectContaining({ props: { login_provider: "google" } }));
+  });
+
+  it("applies a login that came before the SDK, ahead of the waiting events", async () => {
+    vi.stubEnv(KEY_NAME, FAKE_KEY);
+    let idle: () => void = () => {};
+    vi.stubGlobal("requestIdleCallback", (cb: () => void) => { idle = cb; return 1; });
+    const { sendToAmplitude, setAmplitudeUser, startAmplitude } = await load();
+    startAmplitude();
+    sendToAmplitude("login_completed", { provider: "kakao", is_first_login: true }, common);
+    setAmplitudeUser("22222222-2222-4222-8222-222222222222", "kakao");
+    idle();
+    await ready();
+    expect(sdk.order).toEqual(["user:22222222-2222-4222-8222-222222222222", "track:login_completed"]);
+  });
+
+  it("forgets the person on logout (no provider sent)", async () => {
+    vi.stubEnv(KEY_NAME, FAKE_KEY);
+    idleNow();
+    const { setAmplitudeUser, startAmplitude } = await load();
+    startAmplitude();
+    await ready();
+    setAmplitudeUser(null);
+    expect(sdk.setUserId).toHaveBeenCalledWith(undefined);
+    expect(sdk.identify).not.toHaveBeenCalled();
+  });
+
+  it("never throws when the SDK does", async () => {
+    vi.stubEnv(KEY_NAME, FAKE_KEY);
+    idleNow();
+    const { setAmplitudeUser, startAmplitude } = await load();
+    startAmplitude();
+    await ready();
+    sdk.setUserId.mockImplementation(() => { throw new Error("x"); });
+    expect(() => setAmplitudeUser("22222222-2222-4222-8222-222222222222", "kakao")).not.toThrow();
   });
 });

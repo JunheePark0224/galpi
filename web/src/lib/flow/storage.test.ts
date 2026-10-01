@@ -56,6 +56,13 @@ describe("shouldResume (reload / back-forward / discarded resume; a fresh open d
   });
 });
 
+describe("shouldResume after a login (P5 decision 5: back to the same book, not the start)", () => {
+  it("resumes a fresh navigation that comes back from /auth/callback", () => {
+    expect(shouldResume("navigate", false, true)).toBe(true);
+    expect(shouldResume("navigate", false, false)).toBe(false);
+  });
+});
+
 describe("restoreFlow on a fresh open", () => {
   const midRound: FlowState = { ...INITIAL, step: "bookmarks", entry: "leaf", choices: ["A", "B"], index: 2, reactions: ["curious", "pass"], seen: ["b1", "b2"] };
 

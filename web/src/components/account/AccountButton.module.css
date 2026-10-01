@@ -1,0 +1,9 @@
+/* Header top right (시안 ① — small text, underlined, 44px tall). */
+.account {
+  display: inline-flex; align-items: center; gap: 4px; min-height: var(--touch); min-width: var(--touch);
+  padding: 0 var(--space-1); border: 0; background: none; color: var(--ink-soft);
+  font: inherit; font-size: 14px; text-decoration: none; cursor: pointer;
+}
+.label { border-bottom: 1px solid var(--paper-line); }
+.account:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.slot { display: inline-block; min-height: var(--touch); }

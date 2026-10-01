@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Gowun_Batang, Gowun_Dodum } from "next/font/google";
 import { AmplitudeInit } from "@/components/AmplitudeInit";
 import { Footer } from "@/components/Footer";
+import { LoginReturn } from "@/components/account/LoginReturn";
+import { LoginSheet } from "@/components/account/LoginSheet";
 import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
 
@@ -25,6 +27,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SiteHeader />
           <main>{children}</main>
           <Footer />
+          {/* after the page: TrackVisit's flow restore reads the login mark before LoginReturn takes it off the address */}
+          <LoginReturn />
+          <LoginSheet />
         </div>
       </body>
     </html>

@@ -251,7 +251,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 ### 4-1. 한눈에 보기
 
-상태 (v0.8): live 20 · planned-P4 0 · planned-P5 9 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned는 P5(보관·로그인·내 책갈피). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로
+상태 (v0.8): live 23 · planned-P4 0 · planned-P5 6 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned는 P5(보관·로그인·내 책갈피). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로
 
 | ID | 제안 이름 | 이전 이름 | 분류 | 트리거 | 상태 |
 |---|---|---|---|---|---|
@@ -276,9 +276,9 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-11 | `save_clicked` | 같음 | 보관 | click | planned-P5 |
 | E-15 | `book_saved` | 같음 | 보관 | system | planned-P5 |
 | E-16 | `book_unsaved` | 같음 | 보관 | click | planned-P5 |
-| E-12 | `login_prompt_shown` | 같음 | 로그인 | view | planned-P5 |
-| E-13 | `login_started` | 같음 | 로그인 | click | planned-P5 |
-| E-14 | `login_completed` | 같음 | 로그인 | system | planned-P5 |
+| E-12 | `login_prompt_shown` | 같음 | 로그인 | view | live |
+| E-13 | `login_started` | 같음 | 로그인 | click | live |
+| E-14 | `login_completed` | 같음 | 로그인 | system | live |
 | E-17 | `library_viewed` | 같음 | 내 책갈피 | view | planned-P5 |
 | E-29 | `shelf_created` | (없음, v0.8) | 내 책갈피 | click | planned-P5 |
 | E-30 | `bookmark_moved` | (없음, v0.8) | 내 책갈피 | click | planned-P5 |
@@ -604,7 +604,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 로그인 | view | planned-P5 | 같음 |
+| 로그인 | view | live | 같음 |
 
 **언제**: S-07 로그인 창이 뜰 때  
 **분석 질문**: Q-12
@@ -617,7 +617,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 로그인 | click | planned-P5 | 같음 |
+| 로그인 | click | live | 같음 |
 
 **언제**: S-07 카카오/구글 버튼을 누를 때 (외부 로그인으로 떠나기 직전)  
 **분석 질문**: Q-12, Q-14
@@ -630,7 +630,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 로그인 | system | planned-P5 | 같음 |
+| 로그인 | system | live | 같음 |
 
 **언제**: 로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트). `/auth/callback`이 붙인 표시를 보고 돌아온 화면이 한 번 보낸다  
 **분석 질문**: Q-12, Q-14

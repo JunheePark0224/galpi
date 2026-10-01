@@ -1,9 +1,10 @@
+import { AccountButton } from "./account/AccountButton";
 import { Logo } from "./Logo";
 import styles from "./SiteHeader.module.css";
 
 /**
  * Small logo header on every screen (DESIGN A-05). The logo is a plain `<a>` home — a real navigation, so the flow starts at
- * S-01 (see loadFlow). No login place until P5: a button that does nothing would confuse.
+ * S-01 (see loadFlow). Top right: [로그인] / [내 책갈피 N] (P5, AccountButton).
  */
 export function SiteHeader() {
   return (
@@ -12,6 +13,7 @@ export function SiteHeader() {
       <a href="/" className={styles.home} aria-label="갈피 처음 화면">
         <Logo className={styles.logo} />
       </a>
+      <AccountButton />
     </header>
   );
 }
