@@ -12,7 +12,7 @@ describe("/privacy (S-10)", () => {
     expect(screen.getByRole("heading", { level: 1, name: "개인정보 처리방침" })).toBeInTheDocument();
     expect(screen.getByText(/2026-10-01/)).toBeInTheDocument();
     expect(screen.getByText("갈피는 이름·전화번호를 받지 않아요.")).toBeInTheDocument();
-    expect(screen.getByText(/이메일은 구글로 로그인할 때만, 로그인 확인용으로 로그인 서비스에 남아요\./)).toBeInTheDocument();
+    expect(screen.getByText(/이메일·닉네임은 로그인할 때 로그인 확인용으로 로그인 서비스에만 남고, 갈피는 쓰지 않아요\./)).toBeInTheDocument();
     const rows = within(screen.getByRole("table")).getAllByRole("row");
     expect(rows).toHaveLength(10); // header + 9 (P5: login, Google email, 내 책갈피)
     expect(screen.getByRole("columnheader", { name: "모으는 것" })).toBeInTheDocument();
@@ -125,7 +125,7 @@ describe("/privacy (S-10)", () => {
     render(<PrivacyPage />);
     expect(screen.getByText(/구글로 로그인하면 구글이 주는 이메일 주소가 로그인 서비스\(Supabase Auth\) 저장소에 남아요/)).toBeInTheDocument();
     expect(screen.getByText(/기록·분석에는 쓰지 않고, Amplitude에도 보내지 않아요/)).toBeInTheDocument();
-    expect(screen.getByText(/카카오로 로그인하면 이메일을 받지 않아요/)).toBeInTheDocument();
+    expect(screen.getByText(/카카오로 로그인할 때 이메일·닉네임·프로필 사진 제공에 동의하면 그 값도 로그인 서비스 저장소에만 남아요 — 동의하지 않아도 로그인돼요/)).toBeInTheDocument();
   });
 
   it("lists 내 책갈피 with the rod names kept only in Galpi's database", () => {

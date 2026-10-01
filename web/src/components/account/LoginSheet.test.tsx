@@ -34,7 +34,7 @@ describe("LoginSheet (S-07, C-12)", () => {
     render(<LoginSheet />);
     act(() => openLoginSheet("header"));
     expect(screen.getByRole("dialog", { name: "로그인하고 내 책갈피를 모아 보세요" })).toBeInTheDocument();
-    expect(screen.getByText(/이름·연락처는 받지 않아요/)).toBeInTheDocument();
+    expect(screen.getByText(/갈피는 이름·연락처를 쓰지 않아요/)).toBeInTheDocument();
     expect(track).toHaveBeenCalledWith("login_prompt_shown", { source: "header" });
   });
 

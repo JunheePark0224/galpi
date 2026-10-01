@@ -71,7 +71,7 @@ function LoginChoices({ source }: { source: LoginSource }) {
   return (
     <Sheet title={TITLE[source]} onClose={close}>
       <p className={styles.lead}>
-        이름·연락처는 받지 않아요. 구글은 로그인 확인용 이메일만 로그인 서비스에 남아요. 처음 로그인한 방법으로 다시 들어와 주세요.
+        갈피는 이름·연락처를 쓰지 않아요. 이메일·닉네임은 로그인 확인용으로 로그인 서비스에만 남아요. 처음 로그인한 방법으로 다시 들어와 주세요.
       </p>
       <button type="button" className={`${styles.provider} ${styles.kakao}`} disabled={leaving !== null} onClick={() => void login("kakao")}>
         <KakaoMark />카카오로 계속하기
