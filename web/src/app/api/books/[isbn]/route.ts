@@ -1,5 +1,5 @@
 import { catalog } from "@/lib/books/catalog";
-import { bookDetail, CACHE_SECONDS } from "@/lib/server/bookDetail";
+import { bookDetail, cacheSecondsFor } from "@/lib/server/bookDetail";
 import { guardRequest } from "@/lib/server/guard";
 
 const ISBN13 = /^97[89]\d{10}$/;
@@ -18,7 +18,8 @@ export async function GET(request: Request, ctx: { params: Promise<{ isbn: strin
     return Response.json({ error: "unknown book" }, { status: 404 });
   }
   const detail = await bookDetail(isbn);
-  // The browser keeps a real answer for the cache hour; an empty one is asked again next time.
-  const cacheControl = detail.source ? `private, max-age=${CACHE_SECONDS}` : "no-store";
+  // The browser keeps a real answer as long as the server does (YES24: an hour, Kakao-only: 10 minutes); an empty one is asked again next time.
+  const seconds = cacheSecondsFor(detail);
+  const cacheControl = seconds > 0 ? `private, max-age=${seconds}` : "no-store";
   return Response.json(detail, { headers: { "Cache-Control": cacheControl } });
 }

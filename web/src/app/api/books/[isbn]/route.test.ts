@@ -57,6 +57,11 @@ describe("GET /api/books/[isbn]", () => {
     expect(fetchMock.mock.calls[1][1]?.headers).toMatchObject({ Authorization: "KakaoAK test-kakao-key" });
   });
 
+  it("lets the browser keep a Kakao-only answer for 10 minutes, not an hour", async () => {
+    fetchMock.mockResolvedValueOnce(json({ success: false }, 500)).mockResolvedValueOnce(json(kakao));
+    expect((await req(ISBN)).headers.get("Cache-Control")).toBe("private, max-age=600");
+  });
+
   it("answers an empty detail (200, not cached) when both sources are down or time out", async () => {
     fetchMock.mockRejectedValueOnce(new DOMException("timed out", "TimeoutError")).mockRejectedValueOnce(new TypeError("fetch failed"));
     const res = await req(ISBN);

@@ -44,6 +44,13 @@ describe("fromYes24", () => {
     expect(d).toMatchObject({ cover: null, link: yes24SearchUrl(ISBN) });
     expect(fromYes24(withItem({ cover: "not a url" }), ISBN)?.cover).toBeNull();
   });
+  it("drops a cover or link with credentials or a non-default port in it", () => {
+    for (const cover of ["https://user:pw@image.yes24.com/x.jpg", "https://image.yes24.com:8443/x.jpg"]) {
+      expect(fromYes24(withItem({ cover }), ISBN)?.cover).toBeNull();
+    }
+    expect(fromYes24(withItem({ link: "https://www.yes24.com:444/product/goods/1" }), ISBN)?.link).toBe(yes24SearchUrl(ISBN));
+    expect(fromYes24(withItem({ cover: "https://image.yes24.com:443/x.jpg" }), ISBN)?.cover).toBe("https://image.yes24.com/x.jpg");
+  });
   it("is null for a failure, an empty list or another book", () => {
     expect(fromYes24({ success: false, errorCode: "E01" }, ISBN)).toBeNull();
     expect(fromYes24({ success: true, data: { items: [] } }, ISBN)).toBeNull();

@@ -28,13 +28,13 @@ export function emptyDetail(isbn: string): BookDetail {
   return { source: null, cover: null, price: null, rating: null, pages: null, intro: "", link: yes24SearchUrl(isbn) };
 }
 
-/** https URL on an allowed host (http is upgraded), else null. */
+/** https URL on an allowed host (http is upgraded), else null. No credentials or non-default port: only the plain host. */
 function safeUrl(x: unknown, allowed: (host: string) => boolean): string | null {
   if (typeof x !== "string" || !x) return null;
   try {
     const url = new URL(x);
     if (url.protocol !== "https:" && url.protocol !== "http:") return null;
-    if (!allowed(url.hostname)) return null;
+    if (!allowed(url.hostname) || url.username || url.password || url.port) return null;
     url.protocol = "https:";
     return url.toString();
   } catch {
