@@ -1,0 +1,801 @@
+{
+ "date": "2026-10-01",
+ "batch": "pilot",
+ "tagger": "AI-2",
+ "note": "Blind second tagging pass: written keyword definitions (docs/target-chips.md) + YES24 intro/TOC, made before reading AI-1's tags. Only the 90 picked books.",
+ "books": [
+  {
+   "isbn": "9791168342941",
+   "keywords": [
+    "연금·노후"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "연금계좌 4개로 노후 자금 준비"
+  },
+  {
+   "isbn": "9791193904435",
+   "keywords": [
+    "부동산·청약"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "소설 속 과외로 부동산 기초 익힘"
+  },
+  {
+   "isbn": "9791188331796",
+   "keywords": [
+    "돈의 심리"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "돈을 대하는 태도와 부자의 철학"
+  },
+  {
+   "isbn": "9791168343443",
+   "keywords": [
+    "돈의 심리"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "부와 행동에 얽힌 스무 가지 이야기"
+  },
+  {
+   "isbn": "9791164847983",
+   "keywords": [
+    "ETF·펀드"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "ETF 고르고 포트폴리오 짜는 법"
+  },
+  {
+   "isbn": "9788962604658",
+   "keywords": [],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "투자 전반의 원칙과 리스크 사고"
+  },
+  {
+   "isbn": "9788901294179",
+   "keywords": [
+    "ETF·펀드",
+    "연금·노후"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "미국 ETF 3개로 은퇴 준비"
+  },
+  {
+   "isbn": "9791158883591",
+   "keywords": [
+    "돈의 심리"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "부자 아빠 vs 가난한 아빠의 돈 교훈"
+  },
+  {
+   "isbn": "9791130668895",
+   "keywords": [
+    "주식"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "데이트레이더의 70년 실전 경험담"
+  },
+  {
+   "isbn": "9788957822401",
+   "keywords": [
+    "주식"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "가치투자 원칙을 다룬 고전"
+  },
+  {
+   "isbn": "9791191378061",
+   "keywords": [
+    "부동산·청약"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "부동산 시장 흐름 읽는 입문서"
+  },
+  {
+   "isbn": "9791158513269",
+   "keywords": [
+    "재테크 기초"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "월급 관리와 부자 습관 로드맵"
+  },
+  {
+   "isbn": "9791140712090",
+   "keywords": [
+    "재테크 기초"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "월급쟁이용 재테크 전반 상식"
+  },
+  {
+   "isbn": "9788960306134",
+   "keywords": [
+    "재테크 기초"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "소비 줄이기와 예산 세우기 경험담"
+  },
+  {
+   "isbn": "9791140716999",
+   "keywords": [
+    "주식"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "주식 계좌부터 매매까지 따라 하기"
+  },
+  {
+   "isbn": "9791140704385",
+   "keywords": [
+    "금리·환율"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "금리·물가 등 경제 핵심 14강"
+  },
+  {
+   "isbn": "9788957365793",
+   "keywords": [
+    "경제사·자본주의"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "빚과 은행으로 본 자본주의 구조"
+  },
+  {
+   "isbn": "9791124073483",
+   "keywords": [
+    "트렌드"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "내년 소비 트렌드 키워드 전망"
+  },
+  {
+   "isbn": "9788901248684",
+   "keywords": [
+    "행동경제학"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "행동경제학 40년 연구와 일화"
+  },
+  {
+   "isbn": "9791189352479",
+   "keywords": [
+    "금리·환율"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "금리와 환율 한 쌍으로 이해"
+  },
+  {
+   "isbn": "9791194530107",
+   "keywords": [
+    "금리·환율"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "달러·엔 흐름과 금리 환경"
+  },
+  {
+   "isbn": "9791193282533",
+   "keywords": [],
+   "way": "개념",
+   "topic_fit": "doubtful",
+   "note": "경제 기초 후 투자 안내로 이어짐",
+   "topic_why": "돈 관리·투자 쪽 성격이 강한 투자 입문서"
+  },
+  {
+   "isbn": "9788935212323",
+   "keywords": [
+    "행동경제학"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "비합리적 선택을 실험으로 보여줌"
+  },
+  {
+   "isbn": "9791191183351",
+   "keywords": [
+    "경제 뉴스 읽기"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "경제기사 읽는 눈 기르는 문답"
+  },
+  {
+   "isbn": "9791124539040",
+   "keywords": [
+    "경제 뉴스 읽기"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "생활 속 경제 질문을 쉽게 풀이"
+  },
+  {
+   "isbn": "9788901268095",
+   "keywords": [],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "일상 속 가격·시장 원리 풀이"
+  },
+  {
+   "isbn": "9791168344006",
+   "keywords": [
+    "경제 뉴스 읽기"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "관세·환율 전쟁 등 세계경제 읽기"
+  },
+  {
+   "isbn": "9788934965961",
+   "keywords": [
+    "경제사·자본주의"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "경제 사상가들의 아이디어 흐름"
+  },
+  {
+   "isbn": "9791140712779",
+   "keywords": [],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "경제 용어 152개 사전식 입문"
+  },
+  {
+   "isbn": "9791198987631",
+   "keywords": [
+    "경제 뉴스 읽기"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "관세·저성장 등 세계경제 현안"
+  },
+  {
+   "isbn": "9791186757093",
+   "keywords": [
+    "자존감"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "자존감 원리와 키우는 방법"
+  },
+  {
+   "isbn": "9788991799073",
+   "keywords": [
+    "자존감"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "자존감 이론서 고전"
+  },
+  {
+   "isbn": "9791156757344",
+   "keywords": [
+    "우울"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "뇌과학으로 풀어 본 우울"
+  },
+  {
+   "isbn": "9791189217167",
+   "keywords": [
+    "우울",
+    "감정 다루기"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "부정감정을 알아차려 우울 다룸"
+  },
+  {
+   "isbn": "9788974796594",
+   "keywords": [
+    "명상·마음챙김"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "마음챙김 명상 수행 안내"
+  },
+  {
+   "isbn": "9791192389790",
+   "keywords": [
+    "번아웃·스트레스"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "직무 불일치로 보는 번아웃"
+  },
+  {
+   "isbn": "9791157689842",
+   "keywords": [
+    "번아웃·스트레스"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "번아웃 막는 38가지 활력 습관"
+  },
+  {
+   "isbn": "9791188096428",
+   "keywords": [
+    "감정 다루기"
+   ],
+   "way": "개념",
+   "topic_fit": "doubtful",
+   "note": "감정 생성 이론 설명이 중심",
+   "topic_why": "돌보는 방법보다 뇌과학 이론서 성격"
+  },
+  {
+   "isbn": "9788932476346",
+   "keywords": [
+    "감정 다루기"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "감정 조절의 원리와 방법"
+  },
+  {
+   "isbn": "9788901297477",
+   "keywords": [
+    "감정 다루기"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "감정을 반응이 아닌 선택으로"
+  },
+  {
+   "isbn": "9791188632077",
+   "keywords": [
+    "감정 다루기"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "가짜감정 뒤 진짜감정을 상담 사례로"
+  },
+  {
+   "isbn": "9791173350030",
+   "keywords": [],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "멘탈 단련 행동 강령과 사례"
+  },
+  {
+   "isbn": "9788999731419",
+   "keywords": [],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "어린 시절 상처 치유 연습"
+  },
+  {
+   "isbn": "9791191369564",
+   "keywords": [
+    "불안·걱정",
+    "감정 다루기"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "불안과 감정 기복 다스리는 법"
+  },
+  {
+   "isbn": "9791193081143",
+   "keywords": [
+    "명상·마음챙김"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "내면 의식을 살피는 명상 안내"
+  },
+  {
+   "isbn": "9788950950002",
+   "keywords": [
+    "설득·협상"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "설득의 여섯 가지 원칙"
+  },
+  {
+   "isbn": "9791187142560",
+   "keywords": [
+    "호감·사회생활"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "호감 얻는 인간관계 원칙"
+  },
+  {
+   "isbn": "9788934989738",
+   "keywords": [
+    "설득·협상"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "협상의 3요소와 스타일"
+  },
+  {
+   "isbn": "9791185952987",
+   "keywords": [
+    "말투·대화법"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "말 그릇 키우는 대화 태도"
+  },
+  {
+   "isbn": "9791124370988",
+   "keywords": [
+    "말투·대화법"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "말투 한 끗을 사례로 보여줌"
+  },
+  {
+   "isbn": "9791199247888",
+   "keywords": [
+    "호감·사회생활"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "호감 주는 태도와 비언어 습관"
+  },
+  {
+   "isbn": "9788950998790",
+   "keywords": [
+    "거리 두기",
+    "말투·대화법"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "마음의 거리두기와 비폭력 대화"
+  },
+  {
+   "isbn": "9791192625355",
+   "keywords": [
+    "갈등·무례 대처"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "무례한 사람에게 대처하는 말"
+  },
+  {
+   "isbn": "9791168341234",
+   "keywords": [
+    "말투·대화법"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "발성·발음 훈련으로 말하기"
+  },
+  {
+   "isbn": "9791194415374",
+   "keywords": [
+    "갈등·무례 대처"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "호구 벗고 선 긋는 무례력"
+  },
+  {
+   "isbn": "9791198476494",
+   "keywords": [
+    "말투·대화법"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "부정하지 않는 대화법"
+  },
+  {
+   "isbn": "9788901290669",
+   "keywords": [
+    "말투·대화법"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "호감 주는 말하기 전략"
+  },
+  {
+   "isbn": "9791193000090",
+   "keywords": [
+    "발표"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "생각정리로 스피치 구성"
+  },
+  {
+   "isbn": "9791192357188",
+   "keywords": [
+    "발표"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "발표 공식 3단계"
+  },
+  {
+   "isbn": "9791193937143",
+   "keywords": [
+    "호감·사회생활"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "호감 가는 사람의 매력 관찰"
+  },
+  {
+   "isbn": "9791170431305",
+   "keywords": [
+    "자소서·면접"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "스펙보다 태도로 푸는 면접"
+  },
+  {
+   "isbn": "9791170437321",
+   "keywords": [
+    "자소서·면접"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "생각 중심 자소서 쓰는 순서"
+  },
+  {
+   "isbn": "9791124571019",
+   "keywords": [
+    "자소서·면접"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "링크드인으로 취업 준비"
+  },
+  {
+   "isbn": "9791197980725",
+   "keywords": [
+    "이직·퇴사"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "이직 진단부터 경력기술서까지"
+  },
+  {
+   "isbn": "9791158393335",
+   "keywords": [
+    "직장 생활"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "막내용 업무 정리와 시간 관리"
+  },
+  {
+   "isbn": "9791191266467",
+   "keywords": [
+    "퍼스널 브랜딩"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "생각을 글로 브랜딩하고 수익화"
+  },
+  {
+   "isbn": "9791160022247",
+   "keywords": [
+    "직장 생활"
+   ],
+   "way": "개념",
+   "topic_fit": "doubtful",
+   "note": "직장 상사·동료 관계 다룸",
+   "topic_why": "대화·관계와 겹침: 관계 중심 책"
+  },
+  {
+   "isbn": "9791167471901",
+   "keywords": [],
+   "way": "사례",
+   "topic_fit": "doubtful",
+   "note": "PD 직업 일상을 풀어쓴 에세이",
+   "topic_why": "취업 방법서가 아니라 직업 에세이"
+  },
+  {
+   "isbn": "9791197867101",
+   "keywords": [
+    "커리어 설계",
+    "자소서·면접"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "직무별 합격 사례 모음"
+  },
+  {
+   "isbn": "9791170520108",
+   "keywords": [
+    "커리어 설계"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "성격 유형으로 직업 찾기"
+  },
+  {
+   "isbn": "9791192389844",
+   "keywords": [
+    "직장 생활"
+   ],
+   "way": "개념",
+   "topic_fit": "doubtful",
+   "note": "직장 내 8가지 유형 관계법",
+   "topic_why": "대화·관계와 겹침: 관계 중심 책"
+  },
+  {
+   "isbn": "9788925573021",
+   "keywords": [
+    "퍼스널 브랜딩"
+   ],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "퇴사 후 브랜딩한 경험담"
+  },
+  {
+   "isbn": "9791124205501",
+   "keywords": [
+    "자소서·면접",
+    "이직·퇴사"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "개발자 이력서부터 이직까지"
+  },
+  {
+   "isbn": "9791168322721",
+   "keywords": [
+    "이직·퇴사",
+    "커리어 설계"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "이직 이유와 커리어 성장 전략"
+  },
+  {
+   "isbn": "9791190938167",
+   "keywords": [
+    "이직·퇴사"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "이직 Q&A로 준비하는 법"
+  },
+  {
+   "isbn": "9791190710589",
+   "keywords": [
+    "문해력·어휘"
+   ],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "어휘력이 중요한 이유와 활용"
+  },
+  {
+   "isbn": "9788965133520",
+   "keywords": [],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "글쓰기 기능과 논증 원칙"
+  },
+  {
+   "isbn": "9791185152431",
+   "keywords": [],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "군더더기 문장 다듬는 교정 이야기"
+  },
+  {
+   "isbn": "9791173324901",
+   "keywords": [],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "작가가 말하는 창작의 연장통"
+  },
+  {
+   "isbn": "9791139724363",
+   "keywords": [
+    "카피라이팅"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "카피 쓰는 법과 공식"
+  },
+  {
+   "isbn": "9791194442097",
+   "keywords": [],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "명료한 논픽션 글쓰기 원칙"
+  },
+  {
+   "isbn": "9788990701626",
+   "keywords": [
+    "에세이·책 쓰기"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "책 쓰기 준비부터 진행"
+  },
+  {
+   "isbn": "9791190216555",
+   "keywords": [
+    "에세이·책 쓰기"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "에세이 쓰기와 책 내기"
+  },
+  {
+   "isbn": "9791192099118",
+   "keywords": [],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "글쓰기 수업 기록과 성찰"
+  },
+  {
+   "isbn": "9791199491731",
+   "keywords": [
+    "문해력·어휘"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "어휘와 문장 오류 고치기"
+  },
+  {
+   "isbn": "9791157063482",
+   "keywords": [],
+   "way": "사례",
+   "topic_fit": "fits",
+   "note": "대통령 연설 비서관의 글쓰기"
+  },
+  {
+   "isbn": "9791192908298",
+   "keywords": [],
+   "way": "개념",
+   "topic_fit": "doubtful",
+   "note": "영어 글쓰기 원리를 다룬 책",
+   "topic_why": "영어 문장·인지과학 중심이라 한국어 글쓰기와 거리 있음"
+  },
+  {
+   "isbn": "9788968333767",
+   "keywords": [
+    "문해력·어휘"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "8주 문해력 트레이닝"
+  },
+  {
+   "isbn": "9791193926574",
+   "keywords": [
+    "카피라이팅"
+   ],
+   "way": "실습",
+   "topic_fit": "fits",
+   "note": "업무용 카피 7일 입문"
+  },
+  {
+   "isbn": "9791189328672",
+   "keywords": [],
+   "way": "개념",
+   "topic_fit": "fits",
+   "note": "기자의 글쓰기 기본 원칙"
+  }
+ ]
+}

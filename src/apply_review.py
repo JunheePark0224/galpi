@@ -8,7 +8,14 @@ status, ok}}}. Only ok=true answers apply. The first time a book is reviewed its
 Agreement (design 2-3): per field, the share of reviewed books the person did not change — topic, keywords
 (same set), way, one_liner (same text). Books the person dropped are counted apart (`dropped`), not in the
 field shares; reserves the person moved in are counted like the others. One row per (date, batch) in
-data/pipeline/agreement.csv: date, batch, n, topic, keywords, way, one_liner (percent), dropped.
+data/pipeline/agreement.csv: date, batch, n, topic, keywords, way, one_liner (percent), dropped, auto_agreed.
+
+Second tagging pass (build_pilot_review.py --flagged): books where our draft (AI-1) and a blind second tagger (AI-2)
+agreed are sent as ok answers with `auto: "ai-agree"` — accepted WITHOUT human review. They are kept apart:
+`n` and the percentages cover human-reviewed books only, `auto_agreed` counts the auto-accepted ones, and such a
+book is stored with reviewed=false + auto="ai-agree" (a human answer for the same book always wins and removes
+the mark). So the figures say how often a human agreed with our draft where a human looked; they say nothing
+about the books nobody looked at.
 
 Usage:  PYTHONIOENCODING=utf-8 python src/apply_review.py data/processed/additions/2026-10-01-pilot.json <review.json>
 Then:   cd web && npm run books:import
@@ -26,7 +33,8 @@ AGREEMENT = ROOT / "data" / "pipeline" / "agreement.csv"
 FIELDS = ("topic", "keywords", "way", "one_liner")
 WAYS = ("개념", "실습", "사례")
 STATUSES = ("picked", "reserve", "dropped")
-CSV_HEAD = ["date", "batch", "n", *FIELDS, "dropped"]
+AUTO = "ai-agree"
+CSV_HEAD = ["date", "batch", "n", *FIELDS, "dropped", "auto_agreed"]
 FIELD_OF_TOPIC = {
     "데이터 분석": "데이터·통계", "통계": "데이터·통계", "AI 활용": "AI·IT 활용", "업무 자동화": "AI·IT 활용",
     "습관·집중": "습관·자기계발", "시간·생산성": "습관·자기계발", "돈 관리·투자": "돈·경제", "경제 상식": "돈·경제",
@@ -67,13 +75,17 @@ def checked_answer(isbn: str, ans: dict, kept: dict[str, dict]) -> dict:
     status = ans.get("status", "picked")
     if status not in STATUSES:
         raise ReviewError(f"{isbn}: unknown status {status}")
+    if ans.get("auto") not in (None, AUTO):
+        raise ReviewError(f"{isbn}: unknown auto mark {ans.get('auto')}")
+    if ans.get("auto") and status != "picked":
+        raise ReviewError(f"{isbn}: an auto-accepted book must stay picked")
     return {"topic": topic, "keywords": keywords, "way": ans["way"], "one_liner": line, "status": status}
 
 
 def apply_answers(doc: dict, answers: dict[str, dict], kept: dict[str, dict]) -> tuple[dict, dict]:
     """New additions doc with the answers applied + agreement stats. The input doc is not changed."""
     books, same = [], {f: 0 for f in FIELDS}
-    n = dropped = 0
+    n = dropped = auto = 0
     for book in doc["books"]:
         ans = answers.get(book["isbn"])
         if ans is None:
@@ -81,7 +93,15 @@ def apply_answers(doc: dict, answers: dict[str, dict], kept: dict[str, dict]) ->
             continue
         a = checked_answer(book["isbn"], ans, kept)
         draft = draft_of(book)
-        books.append({**book, **a, "field": FIELD_OF_TOPIC[a["topic"]], "draft": draft, "reviewed": True})
+        if ans.get("auto"):  # accepted without a human look: never counted as agreement, never over a human answer
+            if book.get("reviewed") is True:
+                books.append(dict(book))
+                continue
+            books.append({**book, **a, "field": FIELD_OF_TOPIC[a["topic"]], "draft": draft, "reviewed": False, "auto": AUTO})
+            auto += 1
+            continue
+        human = {k: v for k, v in book.items() if k != "auto"}
+        books.append({**human, **a, "field": FIELD_OF_TOPIC[a["topic"]], "draft": draft, "reviewed": True})
         if a["status"] == "dropped":
             dropped += 1
             continue
@@ -93,15 +113,17 @@ def apply_answers(doc: dict, answers: dict[str, dict], kept: dict[str, dict]) ->
         same["way"] += a["way"] == draft["way"]
         same["one_liner"] += a["one_liner"] == draft["one_liner"].strip()
     live = [b for b in books if b["status"] == "picked"]
-    new_doc = {**doc, "books": books, "reviewed": bool(live) and all(b.get("reviewed") for b in live)}
+    new_doc = {**doc, "books": books, "reviewed": bool(live) and all(b.get("reviewed") for b in live),
+               "auto_accepted": sum(b.get("auto") == AUTO for b in books)}
     shares = {f: round(100 * same[f] / n, 1) if n else None for f in FIELDS}
-    return new_doc, {"date": doc.get("date", ""), "batch": doc.get("batch", ""), "n": n, **shares, "dropped": dropped}
+    return new_doc, {"date": doc.get("date", ""), "batch": doc.get("batch", ""), "n": n, **shares, "dropped": dropped,
+                     "auto_agreed": new_doc["auto_accepted"]}
 
 
 def upsert_row(rows: list[dict], stats: dict) -> list[dict]:
     """Rows with the (date, batch) row replaced or appended — applying again does not add a second row."""
     key = (str(stats["date"]), str(stats["batch"]))
-    row = {k: "" if stats[k] is None else str(stats[k]) for k in CSV_HEAD}
+    row = {k: "" if stats.get(k) is None else str(stats[k]) for k in CSV_HEAD}
     out = [r for r in rows if (r.get("date"), r.get("batch")) != key]
     return [*out, row]
 
@@ -149,7 +171,9 @@ def main() -> int:
         w.writerows(upsert_row(rows, stats))
     picked = sum(b["status"] == "picked" for b in new_doc["books"])
     print(f"applied {len(answers)} answers · picked {picked} · reviewed file: {new_doc['reviewed']}")
-    print("agreement " + " · ".join(f"{f} {stats[f]}%" for f in FIELDS) + f" (n={stats['n']}, dropped {stats['dropped']})")
+    print("agreement (human-reviewed books only) " + " · ".join(f"{f} {stats[f]}%" for f in FIELDS)
+          + f" (n={stats['n']}, dropped {stats['dropped']})")
+    print(f"auto-accepted without human review (AI-1 = AI-2): {stats['auto_agreed']} — not in the agreement figures")
     for w_ in line_warnings(new_doc):
         print("  check:", w_)
     print(f"saved: {path.relative_to(ROOT)} · {AGREEMENT.relative_to(ROOT)} — next: cd web && npm run books:import")
