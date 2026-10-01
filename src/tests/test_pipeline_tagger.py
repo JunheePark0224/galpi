@@ -225,3 +225,11 @@ def test_a_breaker_stop_carries_no_chained_sdk_exception_either():
 def test_a_successful_call_with_an_unusable_answer_is_still_ok_at_the_call_level():
     # call() reports "ok" (the API worked); labelling the book "unusable" is the caller's job (evaluate.run_model)
     assert _call_with(FakeClient(lambda kw: message(tag_answer("target", way="기타"))), Breaker())[2] == "ok"
+
+
+def test_fits_is_judged_at_topic_level_not_keyword():
+    """10-01 review: pass B said a 설득·협상 book did not fit because it was found while filling 호감·사회생활."""
+    from pipeline import prompt
+    text = " ".join(prompt.COMMON)
+    assert "주제 수준으로만 판단한다" in text
+    assert "어떤 키워드를 찾다가 나왔는지" in text
