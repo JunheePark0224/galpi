@@ -1,9 +1,11 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { emptyDetail, type BookDetail } from "@/lib/books/detail";
 import { loadDetail } from "@/lib/books/detailClient";
+import { forgetPullHintForTests, metDate, PULL_HINT_KEY } from "@/lib/flow/bookmarkPull";
 import type { PickView } from "@/lib/flow/state";
 import { track } from "@/lib/track/client";
+import { FLIP_BACK, FLIP_FRONT, PULL_HINT, PULL_IN, PULL_OUT } from "./BookmarkInBook";
 import { INTRO_HEADING, LAST_BOOK, NEXT_BOOK, NO_INTRO, ResultBook } from "./ResultBook";
 
 vi.mock("@/lib/track/client", () => ({ track: vi.fn() }));
@@ -28,7 +30,11 @@ const show = (detail: BookDetail, position = 1, total = 2, onNext = vi.fn()) => 
 };
 
 describe("ResultBook (S-06, C-11)", () => {
-  afterEach(() => vi.clearAllMocks());
+  afterEach(() => {
+    vi.clearAllMocks();
+    window.localStorage.clear();
+    forgetPullHintForTests();
+  });
 
   it("shows the big cover, title, rating · price · pages and a folded YES24 intro — no 나온 이유 line (10-01)", async () => {
     show(DETAIL);
@@ -114,5 +120,121 @@ describe("ResultBook (S-06, C-11)", () => {
     render(<ResultBook pick={pick} position={1} total={1} onNext={vi.fn()} />);
     expect(screen.getByRole("link", { name: "예스24에서 보기 ↗" })).toHaveAttribute("href", emptyDetail(ISBN).link);
     expect(screen.queryByText(NO_INTRO)).toBeNull();
+  });
+});
+
+describe("ResultBook — the bookmark in the book (C-16)", () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.useRealTimers();
+    window.localStorage.clear();
+    forgetPullHintForTests();
+  });
+
+  const stage = () => document.querySelector("[data-pose]") as HTMLElement;
+  const pullButton = () => screen.getByRole("button", { name: PULL_OUT });
+
+  it("peeks the very bookmark of S-05 (pick.art) out of the cover, as a closed disclosure button", async () => {
+    show(DETAIL);
+    await screen.findByRole("img", { name: "여름의 우편함 표지" });
+    expect(stage()).toHaveAttribute("data-pose", "in");
+    expect(stage().querySelector("image")).toHaveAttribute("href", "/animals/cat.svg");
+    expect(pullButton()).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("button", { name: FLIP_BACK })).toBeNull();
+    expect(screen.queryByText("만난 날")).toBeNull();                              // the back is not there while it is in
+  });
+
+  it("pulls it out on a tap (E-27 with book, position, pick type), then puts it back on a second tap", async () => {
+    show(DETAIL, 2, 3);
+    fireEvent.click(pullButton());
+    const out = screen.getByRole("button", { name: PULL_IN });
+    expect(out).toHaveAttribute("aria-expanded", "true");
+    expect(stage()).toHaveAttribute("data-pose", "out");
+    expect(track).toHaveBeenCalledWith("bookmark_pulled", { book_id: ISBN, position: 2, pick_type: "random" });
+    expect(screen.getByRole("button", { name: FLIP_BACK })).toBeInTheDocument();
+
+    fireEvent.click(out);
+    expect(pullButton()).toHaveAttribute("aria-expanded", "false");
+    expect(stage()).toHaveAttribute("data-pose", "in");
+    expect(screen.queryByRole("button", { name: FLIP_BACK })).toBeNull();
+    expect(vi.mocked(track).mock.calls.filter(([name]) => name === "bookmark_pulled")).toHaveLength(1);
+  });
+
+  it("goes opaque over the cover (T-03 exception) and back to the frost film once it is in again", () => {
+    show(DETAIL);
+    const film = () => stage().querySelector("article")!;
+    expect(film()).not.toHaveAttribute("data-moving");
+    fireEvent.click(pullButton());
+    expect(film()).toHaveAttribute("data-moving");
+    fireEvent.click(screen.getByRole("button", { name: PULL_IN }));
+    fireEvent.animationEnd(stage().querySelector("[data-pull]")!);
+    expect(film()).not.toHaveAttribute("data-moving");
+  });
+
+  it("flips to the back: title, 나온 이유 and its items, 만난 날 today (E-28 once per turn to the back)", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date(2026, 9, 1, 21, 0));
+    show(DETAIL);
+    fireEvent.click(pullButton());
+    fireEvent.click(screen.getByRole("button", { name: FLIP_BACK }));
+
+    const back = screen.getByRole("article", { name: "여름의 우편함 책갈피 뒷면" });
+    expect(within(back).getByText("나온 이유")).toBeInTheDocument();
+    expect(within(back).getAllByRole("listitem").map((li) => li.textContent)).toEqual(["따뜻함", "현실"]);
+    expect(within(back).getByText("만난 날")).toBeInTheDocument();
+    expect(within(back).getByText(metDate(new Date(2026, 9, 1)))).toBeInTheDocument();
+    expect(stage()).toHaveAttribute("data-flipped");
+    expect(track).toHaveBeenCalledWith("bookmark_flipped", { book_id: ISBN, pick_type: "random" });
+
+    fireEvent.click(screen.getByRole("button", { name: FLIP_FRONT }));
+    expect(stage()).not.toHaveAttribute("data-flipped");
+    expect(vi.mocked(track).mock.calls.filter(([name]) => name === "bookmark_flipped")).toHaveLength(1);
+  });
+
+  it("puts a flipped bookmark back front side first", () => {
+    show(DETAIL);
+    fireEvent.click(pullButton());
+    fireEvent.click(screen.getByRole("button", { name: FLIP_BACK }));
+    fireEvent.click(screen.getByRole("button", { name: PULL_IN }));
+    expect(stage()).not.toHaveAttribute("data-flipped");
+  });
+
+  it("pulls it out when dragged up, without the tap that follows putting it straight back", () => {
+    show(DETAIL);
+    const button = pullButton();
+    fireEvent.pointerDown(button, { clientY: 300, pointerId: 1 });
+    fireEvent.pointerMove(button, { clientY: 290, pointerId: 1 });
+    expect(stage()).toHaveAttribute("data-pose", "in");                           // 10px is not a drag yet
+    fireEvent.pointerMove(button, { clientY: 260, pointerId: 1 });
+    expect(stage()).toHaveAttribute("data-pose", "out");
+    fireEvent.pointerUp(button, { clientY: 260, pointerId: 1 });
+    fireEvent.click(button);
+    expect(stage()).toHaveAttribute("data-pose", "out");
+    fireEvent.click(button);                                                         // the next real tap still works
+    expect(stage()).toHaveAttribute("data-pose", "in");
+    expect(vi.mocked(track).mock.calls.filter(([name]) => name === "bookmark_pulled")).toHaveLength(1);
+  });
+
+  it("shows the paper slip hint only the first time in this browser, and drops it once pulled", () => {
+    show(DETAIL);
+    expect(screen.getByText(PULL_HINT)).toBeInTheDocument();
+    expect(window.localStorage.getItem(PULL_HINT_KEY)).toBe("1");
+    fireEvent.click(pullButton());
+    expect(screen.queryByText(PULL_HINT)).toBeNull();
+  });
+
+  it("does not show the hint again for the next book", () => {
+    window.localStorage.setItem(PULL_HINT_KEY, "1");
+    show(DETAIL);
+    expect(screen.queryByText(PULL_HINT)).toBeNull();
+  });
+
+  it("keeps [예스24에서 보기] the one primary button, pulled or not — no keep button before P5", async () => {
+    show(DETAIL);
+    const link = await screen.findByRole("link", { name: "예스24에서 보기 ↗" });
+    expect(link).toHaveAttribute("data-variant", "primary");
+    fireEvent.click(pullButton());
+    expect(link).toHaveAttribute("data-variant", "primary");
+    expect(screen.queryByText(/내 책갈피에 꽂기|로그인하면/)).toBeNull();
   });
 });

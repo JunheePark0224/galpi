@@ -78,6 +78,8 @@ export const EVENT_SPEC = {
     way: { type: [null, "개념", "실습", "사례"] },
     is_edit: IS_EDIT,
   },
+  bookmark_pulled: { book_id: BOOK_ID, position: POSITION, pick_type: PICK_TYPE },
+  bookmark_flipped: { book_id: BOOK_ID, pick_type: PICK_TYPE },
 } as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
 
 type Spec = typeof EVENT_SPEC;

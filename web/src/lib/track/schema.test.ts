@@ -2,10 +2,11 @@ import { describe, expect, it } from "vitest";
 import { COMMON_KEYS, cutText, EVENT_NAMES, EVENT_SPEC, isEventName, parseCommon, type PropsOf } from "./schema";
 
 describe("event schema", () => {
-  it("lists the 25 taxonomy events in PRD order (E-04 removed, E-26 last)", () => {
-    expect(EVENT_NAMES).toHaveLength(25);
+  it("lists the 27 taxonomy events in PRD order (E-04 removed, E-28 last)", () => {
+    expect(EVENT_NAMES).toHaveLength(27);
     expect(EVENT_NAMES[0]).toBe("site_visited");
     expect(EVENT_NAMES[24]).toBe("goal_submitted");
+    expect(EVENT_NAMES.slice(25)).toEqual(["bookmark_pulled", "bookmark_flipped"]);   // v0.7, C-16
     expect(EVENT_NAMES).not.toContain("visit");
   });
 
