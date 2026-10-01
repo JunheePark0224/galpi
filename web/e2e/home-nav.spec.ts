@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { test } from "./helpers";
+import { named, recordEvents, test } from "./helpers";
 
 test.use({ reducedMotion: "reduce" });
 
@@ -29,6 +29,18 @@ test("a reload resumes mid-flow, but opening the address again starts at S-01 in
   await page.goto("/");                                       // typed address / opened link
   await expectHome(page);
   expect(await round(page)).toBe("2");                        // the unfinished round is left behind
+});
+
+test("the visit of a fresh open mid-flow is the new game's (round + 1, no entry); a reload keeps both", async ({ page }) => {
+  const { events } = await recordEvents(page);
+  await startLeaf(page);
+  await expect.poll(() => named(events, "site_visited").length).toBe(1);
+  await page.reload();
+  await expect.poll(() => named(events, "site_visited").length).toBe(2);
+  expect(named(events, "site_visited")[1].common).toMatchObject({ round: 1, entry: "leaf" });
+  await page.goto("/");
+  await expect.poll(() => named(events, "site_visited").length).toBe(3);
+  expect(named(events, "site_visited")[2].common).toMatchObject({ round: 2, entry: null });
 });
 
 test("the header logo returns to S-01 from mid-flow", async ({ page }) => {

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { INITIAL, type FlowState } from "./state";
-import { commonProps } from "@/lib/track/common";
+import { commonProps, setEntry } from "@/lib/track/common";
 import { FLOW_KEY, loadFlow, restoreFlow, saveFlow, shouldResume } from "./storage";
 
 describe("flow storage", () => {
@@ -71,6 +71,16 @@ describe("restoreFlow on a fresh open", () => {
     expect(commonProps().round).toBe(before + 1);
   });
 
+  it("clears the entry chosen in the abandoned round, but not when the saved flow was at home", () => {
+    setEntry("leaf");
+    saveFlow({ ...INITIAL, seen: ["b1"] });
+    restoreFlow(false);
+    expect(commonProps().entry).toBe("leaf");
+    saveFlow(midRound);
+    restoreFlow(false);
+    expect(commonProps().entry).toBeNull();
+  });
+
   it("does not move the round when the saved flow was already at home", () => {
     saveFlow({ ...INITIAL, seen: ["b1"] });
     const before = commonProps().round;
@@ -122,6 +132,8 @@ describe("loadFlow reads the navigation type of this document load", () => {
 
   afterEach(() => {
     Reflect.deleteProperty(document, "wasDiscarded");
+    vi.restoreAllMocks();
+    sessionStorage.clear();
   });
 
   it.each(["reload", "back_forward"])("resumes on %s", async (type) => {
@@ -157,6 +169,19 @@ describe("loadFlow reads the navigation type of this document load", () => {
     const { loadFlow: load, saveFlow: save } = await freshLoad();
     save(mid);
     expect(load()).toEqual(mid);
+  });
+
+  it("settleOpen decides first and loadFlow adds nothing: one round move, entry cleared", async () => {
+    stubNavigation("navigate");
+    const { loadFlow: load, saveFlow: save, settleOpen } = await freshLoad();
+    const { commonProps: common, setEntry: entry } = await import("@/lib/track/common");
+    entry("leaf");
+    save(mid);
+    const before = common().round;
+    settleOpen();
+    settleOpen();
+    expect(load()).toEqual({ ...INITIAL, seen: ["x"] });
+    expect(common()).toMatchObject({ round: before + 1, entry: null });
   });
 
   it("decides once per document: a later mount (browser back from /privacy) resumes", async () => {

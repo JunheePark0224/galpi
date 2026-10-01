@@ -211,7 +211,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 - **+1은 E-19·E-20을 보낸 직후**에 한다. 그 이벤트 자체는 **끝나는 판의 round**를 싣고(그 판의 `curious_count`와 같은 판), 그다음 이벤트(`entry_selected` 등)부터 새 값을 싣는다.
 - [처음으로]는 S-04(뽑기 실패·책 없음)에서 눌러도 똑같이 +1 한다(`source=first_page`) — 끝난 판과 새 판을 섞지 않는다. 이용자가 [처음으로] 뒤 아무것도 하지 않고 나가도 부작용이 없다(다음 이벤트가 없다).
 - 이 규칙이 없으면 [처음으로] 뒤 재시작이 앞 판과 `(session_id, round)`가 같아져 두 판이 한 판으로 섞인다(5-1).
-- **새로 열기 (10-01)**: 흐름 복원은 문서를 불러온 방식으로 가른다 — `reload`·`back_forward`·`document.wasDiscarded`면 이어가고, 그 밖의 `navigate`(주소 입력·링크·로고)면 S-01에서 시작한다. 이때 이 탭에서 이미 본 책(`seen`)은 그대로 제외한다. 구현은 `web/src/lib/flow/storage.ts`의 `shouldResume`·`loadFlow`.
+- **새로 열기 (10-01)**: 흐름 복원은 문서를 불러온 방식으로 가른다 — `reload`·`back_forward`·`document.wasDiscarded`면 이어가고, 그 밖의 `navigate`(주소 입력·링크·로고)면 S-01에서 시작한다. 이때 이 탭에서 이미 본 책(`seen`)은 그대로 제외한다. 판 도중이었다면 round +1과 `entry` null은 이 문서의 `site_visited`를 보내기 **전에** 정해진다(그 방문이 새 판의 첫 이벤트). 구현은 `web/src/lib/flow/storage.ts`의 `shouldResume`·`loadFlow`.
 - **구현 (v0.3)**: `track()`이 `ROUND_ENDING_EVENTS`(`schema.ts` — E-19·E-20)를 두 곳에 보낸 **직후** `nextRound()`를 부른다. 화면 코드는 round를 만지지 않는다 — P4의 [다시 뽑기]는 E-19를 보내기만 하면 된다.
 
 **유저 속성으로 올리지 않는 이유**: 꿀팁 3편의 기준(오래 유지되는가)으로 보면 입구·회차·화면 버전·기기·재방문 여부는 한 사람 안에서도 바뀐다 → 모두 이벤트 속성. 지금 코드(`amplitude.ts`)도 그렇게 보낸다.
