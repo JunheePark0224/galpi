@@ -29,12 +29,14 @@ function facts(d: BookDetail | null): string[] {
 }
 
 /**
- * S-06 (C-11), one 궁금해요 book: big cover → title → rating · price · pages → 나온 이유 → intro (folded) → buttons → credit.
+ * S-06 (C-11), one 궁금해요 book: big cover → title → rating · price · pages → intro (folded) → buttons → credit.
+ * No 나온 이유 line (10-01, user): 🎯 mostly repeats the chosen topic. The draw still carries `pick.reason` for the
+ * bookmark back in P5.
  * The parent keys it by book, so every book starts folded and loading. [보관] joins in P5 (a button that does nothing would
  * mislead — the same call as the empty login slot, context 09-30).
  */
 export function ResultBook({ pick, position, total, onNext }: Props) {
-  const { card, kind, reason } = pick;
+  const { card, kind } = pick;
   const [detail, setDetail] = useState<BookDetail | null>(null);
   const [expanded, setExpanded] = useState(false);
   // The cover URL that failed to load (not a boolean): another book brings another URL, so the failure resets by itself.
@@ -80,10 +82,6 @@ export function ResultBook({ pick, position, total, onNext }: Props) {
         <p className={styles.author}>{card.author}</p>
         {line.length > 0 && <p className={styles.facts}>{line.join(" · ")}</p>}
       </div>
-
-      <p className={styles.reason}>
-        <span className={styles.reasonLabel}>{reason.label}</span> {reason.items.join(" · ")}
-      </p>
 
       {detail === null ? (
         <div className={styles.skeleton} aria-hidden="true"><span /><span /><span /></div>

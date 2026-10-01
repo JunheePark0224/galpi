@@ -32,10 +32,10 @@ test("🎯 chips → book → first page → five bookmarks → 궁금해요 boo
   }
   await reactToBookmarks(page, ["궁금해요", "패스", "궁금해요", "패스", "궁금해요"]);
 
-  // S-06 with no book keys (E2E): the empty detail — our own cover, the reason, a note, and still a YES24 link
+  // S-06 with no book keys (E2E): the empty detail — our own cover, a note, and still a YES24 link (no 나온 이유 line since 10-01)
   await expect(page.getByText("궁금해요 1 / 3")).toBeVisible();
   await expect(page.getByText("책 소개를 불러오지 못했어요")).toBeVisible();
-  await expect(page.getByText(/^(나온 이유|이 책은)$/)).toBeVisible();          // the random pick may be from another topic
+  await expect(page.getByText(/^(나온 이유|이 책은)$/)).toHaveCount(0);
   if (testInfo.project.name === "laptop") expect((await page.locator(".column").boundingBox())?.width).toBe(430);  // back in the column
   await page.getByRole("button", { name: "다음 책" }).click();
   await page.getByRole("button", { name: "다음 책" }).click();

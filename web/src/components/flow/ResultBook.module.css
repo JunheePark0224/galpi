@@ -32,17 +32,6 @@
 .author { margin: 0; font-size: 13px; color: var(--ink-muted); }
 .facts { margin: 0; font-size: 13px; color: var(--ink-soft); }
 
-/* 나온 이유 — a paper slip (C-14 look), the label in ink so the reason reads as ours, not YES24's. */
-.reason {
-  position: relative; align-self: stretch; margin: var(--space-1) 0 0; padding: var(--space-3) var(--space-3) var(--space-2);
-  border-radius: var(--radius-card); background: var(--paper-deep); font-size: 13px; line-height: 1.5;
-}
-.reason::before {
-  content: ""; position: absolute; top: -5px; left: 50%; width: 40px; height: 10px; margin-left: -20px;
-  border-radius: 2px; background: var(--tape); box-shadow: 0 0 0 1px var(--paper-line);
-}
-.reasonLabel { font-weight: 700; }
-
 .intro { align-self: stretch; text-align: left; }
 .introHeading { margin: 0 0 var(--space-1); font-family: var(--font-dodum), sans-serif; font-weight: 400; font-size: 12px; color: var(--ink-muted); }
 .introText, .introFull { margin: 0; font-size: 14px; line-height: 1.75; }

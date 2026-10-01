@@ -30,13 +30,13 @@ const show = (detail: BookDetail, position = 1, total = 2, onNext = vi.fn()) => 
 describe("ResultBook (S-06, C-11)", () => {
   afterEach(() => vi.clearAllMocks());
 
-  it("shows the big cover, title, rating · price · pages, the reason and a folded YES24 intro", async () => {
+  it("shows the big cover, title, rating · price · pages and a folded YES24 intro — no 나온 이유 line (10-01)", async () => {
     show(DETAIL);
     expect(await screen.findByRole("img", { name: "여름의 우편함 표지" })).toHaveAttribute("src", DETAIL.cover);
     expect(screen.getByRole("heading", { level: 1, name: "여름의 우편함" })).toBeInTheDocument();
     expect(screen.getByText("궁금해요 1 / 2")).toBeInTheDocument();
     expect(screen.getByText("★ 9.4 · 14,400원 · 280쪽")).toBeInTheDocument();
-    expect(screen.getByText("나온 이유").parentElement).toHaveTextContent("나온 이유 따뜻함 · 현실");
+    expect(screen.queryByText(/나온 이유|이 책은/)).toBeNull();               // kept for the bookmark back (P5), not shown here
     expect(screen.getByRole("heading", { level: 2, name: INTRO_HEADING })).toBeInTheDocument();
     expect(screen.getByText(`${"가".repeat(80)}. ${"나".repeat(60)}.`)).toBeInTheDocument();
     expect(screen.getByText("정보 제공: 예스24")).toBeInTheDocument();
@@ -77,14 +77,14 @@ describe("ResultBook (S-06, C-11)", () => {
     expect(await screen.findByRole("button", { name: LAST_BOOK })).toBeInTheDocument();
   });
 
-  it("keeps working when YES24 and Kakao are both down: our own cover, the reason, a note, a YES24 search link", async () => {
+  it("keeps working when YES24 and Kakao are both down: our own cover, a note, a YES24 search link", async () => {
     show(emptyDetail(ISBN));
     expect(await screen.findByText(NO_INTRO)).toBeInTheDocument();
     expect(screen.queryByRole("img")).toBeNull();
     expect(screen.queryByText(/정보 제공/)).toBeNull();
     expect(screen.queryByText(/★|원|쪽/)).toBeNull();
     expect(screen.getByRole("link", { name: "예스24에서 보기 ↗" })).toHaveAttribute("href", emptyDetail(ISBN).link);
-    expect(screen.getByText("나온 이유")).toBeInTheDocument();
+    expect(screen.queryByText("나온 이유")).toBeNull();
   });
 
   it("swaps the cover for our cloth cover when the image fails to load, and tries again for the next book", async () => {
