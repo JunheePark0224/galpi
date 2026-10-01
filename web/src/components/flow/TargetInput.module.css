@@ -19,6 +19,8 @@
   background: var(--card-bg); color: var(--ink); font: inherit; font-size: 14px; cursor: pointer;
 }
 .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+/* while a written goal is sorted (busy) the chips hold still — no look change for a 1-3 s wait */
+.chip:disabled { cursor: default; }
 .chip:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
 /* 입력 B (10-01): the 무엇을 field comes first and big — two lines tall, a one-line answer (Enter sends). */
 .input {

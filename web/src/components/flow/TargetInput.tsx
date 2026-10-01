@@ -67,9 +67,10 @@ export function TargetInput({ initial, edit, busy = false, topics, onSubmit }: P
     e.preventDefault();
     send();
   };
-  // A one-line answer in a two-line box: Enter sends (not mid-composition of a Korean syllable), line breaks become spaces.
+  // A one-line answer in a two-line box: Enter sends, line breaks become spaces. Not mid-composition of a Korean syllable —
+  // Safari ends the composition before the Enter keydown, which then only shows as keyCode 229.
   const enter = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key !== "Enter" || e.nativeEvent.isComposing) return;
+    if (e.key !== "Enter" || e.nativeEvent.isComposing || e.keyCode === 229) return;
     e.preventDefault();
     send();
   };
@@ -100,7 +101,8 @@ export function TargetInput({ initial, edit, busy = false, topics, onSubmit }: P
         {examples.length > 0 && (
           <div role="group" aria-label="예시" className={styles.chips}>
             {examples.map((c) => (
-              <button key={c.text} type="button" className={styles.chip} aria-pressed={text === c.text} onClick={() => pickExample(c.text)}>
+              <button key={c.text} type="button" className={styles.chip} aria-pressed={text.trim() === c.text}
+                disabled={busy} onClick={() => pickExample(c.text)}>
                 {c.text}
               </button>
             ))}
@@ -120,7 +122,7 @@ export function TargetInput({ initial, edit, busy = false, topics, onSubmit }: P
         <p id="len-label" className={styles.label}>분량 <span className={styles.badge}>선택</span></p>
         <div className={styles.chips}>
           {LEN_CHIPS.map((c) => (
-            <button key={c.value} type="button" className={styles.chip} aria-pressed={form.len === c.value} onClick={() => toggleLen(c.value)}>
+            <button key={c.value} type="button" className={styles.chip} aria-pressed={form.len === c.value} disabled={busy} onClick={() => toggleLen(c.value)}>
               {c.label}
             </button>
           ))}
@@ -131,7 +133,7 @@ export function TargetInput({ initial, edit, busy = false, topics, onSubmit }: P
         <p id="way-label" className={styles.label}>읽는 방식 <span className={styles.badge}>선택</span></p>
         <div className={styles.chips}>
           {WAY_CHIPS.map((c) => (
-            <button key={c.value} type="button" className={styles.chip} aria-pressed={form.way === c.value} onClick={() => toggleWay(c.value)}>
+            <button key={c.value} type="button" className={styles.chip} aria-pressed={form.way === c.value} disabled={busy} onClick={() => toggleWay(c.value)}>
               {c.label}
             </button>
           ))}

@@ -6,6 +6,7 @@
 | taxonomy v0.3 | 2026-10-01 | 개발 라운드 `plans/2026-10-01-taxonomy-dev.md` | **구현 완료 — 코드가 이 문서를 따른다** (8절) |
 | taxonomy v0.3.1 | 2026-10-01 | v0.3 최종 검토 | 입력 칸 가림·허용 목록·검사 #11·표현 정리 (8절) |
 | taxonomy v0.4 | 2026-10-01 | P4 결과·서버 `plans/2026-10-01-p4-results-server.md` | S-06·S-08 이벤트 live (8절) |
+| taxonomy v0.5 | 2026-10-01 | D-D 입력 B안 (PRD F-02, context 10-01) | E-03 `chip_type` "example", E-26 `is_free_text` = 예시 칩 글 그대로면 FALSE (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -414,7 +415,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `changed_items` | `items` → `changed_items` | String[] | ["q2", "q6"], ["topic", "len"], [] | 바뀐 항목. 🍃 q1~q9(답이 바뀐 문항), 🎯 topic·len·way. 바뀐 것이 없으면 빈 배열 — 현재 🎯 "what" → "topic"(E-03 chip_type과 통일). 현재 보내는 props.entry는 삭제(공통 entry와 중복) |
+| `changed_items` | `items` → `changed_items` | String[] | ["q2", "q6"], ["topic", "len"], [] | 바뀐 항목. 🍃 q1~q9(답이 바뀐 문항), 🎯 topic·len·way. 바뀐 것이 없으면 빈 배열 — 현재 🎯 "what" → "topic"(무엇을 칸. v0.3에서 E-03 chip_type과 통일했으나 v0.5부터 E-03은 "example" — 이 값은 그대로). 현재 보내는 props.entry는 삭제(공통 entry와 중복) |
 
 #### E-07 `bookmark_shown`
 
@@ -673,7 +674,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 | E-22 | `found` | `found_count` | 개수는 `_count` |
 | E-06 | `entry` | (삭제) | 공통 `entry`와 중복 |
 | E-06 | `items` | `changed_items` | 무엇의 항목인지 |
-| E-06 | 🎯 값 `"what"` | 값 `"topic"` | E-03 `chip_type`과 같은 말 |
+| E-06 | 🎯 값 `"what"` | 값 `"topic"` | E-03 `chip_type`과 같은 말 (v0.3 당시. v0.5부터 E-03은 "example", E-06 값은 "topic" 그대로) |
 | E-07 · E-08 | `index` | `position` | 1부터 세는 자리 (`index`는 0부터로 읽힌다) |
 | E-07 · E-08 | `kind` | `pick_type` | 무엇의 종류인지 |
 | E-20 | `curious` | `curious_count` | 개수는 `_count` |
@@ -743,7 +744,7 @@ FN-2의 셋째 단계(`goal_submitted`)는 v0.3(2026-10-01)부터 쌓인다. 그
 | 망설임 | question_no별 `unsure_hold_cancelled` 수 / 답한 수 | question_no | Q-09 ⓪-2 |
 | 같은 축 일치율 | 한 판에서 (1,5)(2,6)(3,7)(4,8) 두 답이 모두 A/B일 때 같은 답인 비율 (is_edit=false) | 축 | Q-09 ⓪ |
 | 질문별 효과 | 🍃 판에서 그 축 답 방향 = 책 축 태그 방향일 때 vs 아닐 때 궁금해요율 (`book_id`로 `books.axes` 조인) | 축 | Q-09 ② |
-| 보기 vs 직접 쓰기 | `goal_submitted`의 is_free_text 비율, 각 판의 궁금해요율 | — | Q-10 ② |
+| 보기 vs 직접 쓰기 | `goal_submitted`의 is_free_text 비율, 각 판의 궁금해요율. v0.5(입력 B안)부터 FALSE = 예시 칩 글을 그대로 낸 것. **"예시 칩에서 시작해 고친" 판** = 같은 `session_id`·`round` 안에 `chip_selected`(chip_type=example)가 있고 `goal_submitted`가 is_free_text=TRUE인 판 (손으로 예시 칩 글과 똑같이 쓰면 칩 이벤트 없이 FALSE) | — | Q-10 ② |
 | 찾은 책 구간별 반응 | 판의 마지막 `goal_coverage_checked.coverage_bucket`별 궁금해요율·5장 완주율 | coverage_bucket | Q-10 ③ |
 | 못 찾은 요청 | `free_goal_written`에서 is_matched=false 또는 found_count<4의 goal_text 목록 | method | Q-10 ④ |
 | 요청 적중률 | `free_goal_written` 중 keywords가 1개 이상인 비율 | method | Q-10 |

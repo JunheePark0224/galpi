@@ -117,6 +117,30 @@ describe("TargetInput (S-02 🎯, B: field first, example chips under it)", () =
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
+  it("does not submit on the IME Enter some browsers send after composition ends (keyCode 229)", () => {
+    const onSubmit = show({ initial: { ...EMPTY_FORM, free: "번아웃" } });
+    fireEvent.keyDown(field(), { key: "Enter", keyCode: 229 });
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it("while sorting, ignores Enter and holds every chip so no chip_selected fires mid-classify", () => {
+    const onSubmit = show({ initial: { ...EMPTY_FORM, free: "SQL" }, busy: true });
+    fireEvent.keyDown(field(), { key: "Enter" });
+    expect(onSubmit).not.toHaveBeenCalled();
+    for (const name of ["데이터 분석", "얇게", "사례로 술술"]) {
+      const chip = screen.getByRole("button", { name });
+      expect(chip).toBeDisabled();
+      fireEvent.click(chip);
+    }
+    expect(field()).toHaveValue("SQL");
+    expect(track).not.toHaveBeenCalled();
+  });
+
+  it("marks the example that matches the text even with spaces at the ends (as the submit does)", () => {
+    show({ initial: { ...EMPTY_FORM, free: " 글 잘 쓰기 " } });
+    expect(screen.getByRole("button", { name: "글 잘 쓰기" })).toHaveAttribute("aria-pressed", "true");
+  });
+
   it("turns an optional chip off when tapped again", () => {
     show();
     const thin = screen.getByRole("button", { name: "얇게" });
