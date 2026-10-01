@@ -34,6 +34,7 @@ Last Updated: 2026-09-30
 | `KAKAO_REST_KEY` | 설정 (**Sensitive**) | 설정 안 함 | 예스24가 실패할 때 표지·가격만 대신(PRD F-14) |
 | `ANTHROPIC_API_KEY` | 설정 (**Sensitive**) | 설정 안 함 | 🎯 직접 쓰기 분류(Claude Haiku). 없으면 단어 매칭만. `/privacy`에 Anthropic 전달이 적혀 있어야 넣는다 |
 
+- [ ] Anthropic Console에서 이 키 전용 workspace를 만들고 월 사용 한도(예: $5)를 걸었다 — 사용자가 직접
 - [ ] Production 값과 Preview 값을 위 표대로 각 환경 칸에 따로 넣었다
 - [ ] `SUPABASE_SERVICE_ROLE_KEY`는 Sensitive로 표시했다 (저장 후 다시 볼 수 없게)
 - [ ] Preview에 `SUPABASE_*`를 넣지 않아도 `TRACK_STORE=off`가 있으면 저장되지 않는다 (둘 다 막는 편이 안전)
@@ -91,6 +92,6 @@ delete from events where created_at < '<배포 시각>';
 
 ## 알아 둘 것
 
-- 요청 한도(`/api/track` 분당 120, `/api/books/draw` 분당 60)는 서버리스 인스턴스 메모리에 있어 인스턴스마다 따로 센다. 스크립트 하나가 `events`를 채우는 것을 막는 정도이고, 트래픽이 커지면 Vercel Firewall이나 Upstash 같은 공유 저장소로 바꾼다.
+- 요청 한도(`/api/track` 분당 120, `/api/books/draw` 분당 60, `/api/books/[isbn]` 분당 60, `/api/goal/classify` 분당 10 + Claude 호출 하루 300번)는 서버리스 인스턴스 메모리에 있어 인스턴스마다 따로 센다. 스크립트 하나가 `events`를 채우거나 Claude 호출 비용을 키우는 것을 막는 정도이고 (하루 300번은 인스턴스마다·UTC 날짜 기준, 다 쓰면 단어 매칭으로 답한다), 트래픽이 커지면 Vercel Firewall이나 Upstash 같은 공유 저장소로 바꾼다.
 - 같은 출처 확인은 브라우저 요청만 걸러 낸다. 브라우저 밖에서 `Origin`을 직접 붙여 보내는 것은 막지 못한다 (한도와 크기·형식 검사가 그 몫).
 - 이 배포에는 로그인·저장이 없다 (P5). 카카오·구글 로그인 설정은 그때 한다.
