@@ -12,8 +12,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import collect_candidates  # noqa: E402
 from pipeline import run_daily  # noqa: E402
 from pipeline.config import load_config, parse_config  # noqa: E402
+from pipeline.candidates import Candidate  # noqa: E402
+from pipeline.merge import record  # noqa: E402
 from pipeline.tagger import Breaker  # noqa: E402
-from pipeline_fakes import INTRO, FakeClient, agreeing, kind_of, message, tag_answer, write_cache, yes24_item  # noqa: E402
+from pipeline_fakes import (INTRO, TOC, FakeClient, agreeing, check_answer, kind_of, message, tag_answer,  # noqa: E402
+                            write_cache, yes24_item)
 
 CFG = parse_config({"daily_count": 4, "auto_merge": False, "sample_rate": 0.1, "model": "claude-haiku-4-5",
                     "second_model": "claude-haiku-4-5"})
@@ -146,6 +149,53 @@ def test_a_dead_model_before_any_book_is_a_failed_day(day, monkeypatch):
     s = run_daily.run("2026-10-05", CFG, ENV, FakeClient(down))
     assert s["status"] == "anthropic_failed" and "2 API failures in a row" in s["stopped"]
     assert not (day / "2026-10-05.json").exists()
+
+
+def test_a_refused_key_after_some_books_keeps_the_finished_ones(day):
+    def refuse_third(kwargs):
+        if "주식 투자 수업" in kwargs["messages"][0]["content"]:
+            raise anthropic.PermissionDeniedError("no", response=httpx.Response(403, request=httpx.Request("POST", URL)), body=None)
+        return agreeing(kwargs)
+    s = run_daily.run("2026-10-05", CFG, ENV, FakeClient(refuse_third))
+    assert s["status"] == "partial" and s["stopped"] == "PermissionDeniedError" and s["tagged"] == 2
+    assert [b["title"] for b in json.loads((day / "2026-10-05.json").read_text(encoding="utf-8"))["books"]] == ["처음 주식 공부", "주식 배당 입문"]
+
+
+def test_an_unexpected_error_in_one_book_does_not_lose_the_others(day):
+    def odd(kwargs):
+        if "주식 배당 입문" in kwargs["messages"][0]["content"]:
+            raise ValueError("boom with 계좌와 주문 inside")
+        return agreeing(kwargs)
+    s = run_daily.run("2026-10-05", CFG, ENV, FakeClient(odd))
+    assert s["status"] == "ok" and s["tagged"] == 3 and s["reasons"] == {"ok": 3, "error:ValueError": 1}
+    assert "boom" not in json.dumps(s, ensure_ascii=False)               # the class name only, never the message
+
+
+def test_a_day_where_nothing_could_be_tagged_is_a_failed_run(day, monkeypatch, capsys):
+    monkeypatch.setattr(run_daily, "yes24_env", lambda: ENV)
+    monkeypatch.setattr(run_daily, "anthropic_key", lambda: "sk-test")
+    monkeypatch.setattr(run_daily, "load_config", lambda count=None: CFG)
+    monkeypatch.setattr(anthropic, "Anthropic", lambda **kw: FakeClient(lambda kwargs: message(tag_answer(kind_of(kwargs)[0], way="기타"))))
+    assert run_daily.main(["--date", "2026-10-05"]) == 1
+    out = capsys.readouterr().out
+    assert '"status": "no_books"' in out and '"invalid_answer": 4' in out and not (day / "2026-10-05.json").exists()
+
+
+def test_a_search_that_listed_nothing_is_not_a_yes24_failure(day, monkeypatch, tmp_path):
+    monkeypatch.setattr(collect_candidates, "RAW", tmp_path / "empty")
+    monkeypatch.setattr(collect_candidates, "get_json", lambda *a, **k: {"data": {"items": []}})
+    monkeypatch.setattr(collect_candidates, "time", type("T", (), {"sleep": staticmethod(lambda s: None)}))
+    s = run_daily.run("2026-10-05", CFG, ENV, FakeClient())
+    assert s["status"] == "no_candidates" and s["yes24_failures"] == 0 and s["yes24_empty"] == 1
+
+
+def test_a_candidate_without_author_or_pages_is_not_tagged_and_not_written(day):
+    cand = Candidate("target", "돈 관리·투자", "9790000000031", "제목", "", 0, "https://y/1", INTRO, TOC)
+    client = FakeClient()
+    rec, why = run_daily.tag_one(client, CFG, {}, {"돈 관리·투자": {"kept": {}}}, cand, Breaker(), {})
+    assert (rec, why) == (None, "incomplete_candidate") and client.messages.calls == []
+    with pytest.raises(ValueError, match="needs an author"):
+        record(cand, tag_answer("target"), check_answer("target"), [], [], "picked", None, [])
 
 
 def test_yes24_failing_ends_the_day(day, monkeypatch, tmp_path):

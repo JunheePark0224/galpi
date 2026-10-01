@@ -71,11 +71,17 @@ def test_a_failed_list_is_recorded_not_raised(tmp_path, monkeypatch):
     assert len(collect_candidates.FAILURES) == before + 1
 
 
-def test_books_with_no_author_do_not_share_one_counter(cache):
+def test_books_with_no_author_on_our_side_do_not_share_one_counter():
     assert author_key("") == ""
     known = known_from([{"isbn": f"x{i}", "title": f"t{i}", "author": ""} for i in range(3)], [])
     assert known.authors == {}                                   # nothing counted for "no author"
-    items = [yes24_item(f"979000000002{i}", t, "", i + 1) for i, t in enumerate(["주식 기초 다지기", "배당주 이야기", "주식 투자 수업 노트", "주식 차트 읽기"])]
+
+
+def test_a_candidate_without_author_or_pages_is_never_offered(cache):
+    items = [yes24_item("9790000000021", "주식 기초 다지기", "", 1), yes24_item("9790000000022", "배당주 이야기", "   ", 2),
+             yes24_item("9790000000023", "주식 투자 수업 노트", "가 저", 3, pages="쪽수 미상"),
+             yes24_item("9790000000024", "주식 차트 읽기", "나 저", 4)]
     write_cache(cache, {"주식": items}, items)
-    out = find(ENV, WANT, RULE, known)
-    assert len(out) == 4 and known.plus(out).authors == {}       # none blocked by a cap, none counted
+    details = [{**i, "pages": "쪽수 미상" if i["isbn13"].endswith("23") else 200} for i in items]
+    write_cache(cache, {"주식": items}, details)
+    assert [c.isbn for c in find(ENV, WANT, RULE, Known(frozenset(), frozenset(), {}))] == ["9790000000024"]

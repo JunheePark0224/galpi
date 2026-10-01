@@ -4,9 +4,10 @@ Usage (from the checkout):  PYTHONIOENCODING=utf-8 python -m src.pipeline.run_da
 Then:                        cd web && npm run books:import && npm test      (the workflow does both, then report.py)
 Keys: YES24_API_KEY / ANTHROPIC_API_KEY from the environment (Actions secrets) or the local .env — never printed.
 Models and counts come from data/pipeline/config.json (model = pass A, second_model = blind pass B).
-Exit 0: done (also "nothing to fill", "no usable candidates" and "no usable books today"); 1: missing key, YES24 gave
-nothing, or the run stopped before any book was finished. Failure rules (design 2-1):
-  YES24 gives no candidate at all  → `yes24_failed`, no file (so no PR); only the failed API paths are named
+Exit 0: done (also "nothing to fill" and "no usable candidates", i.e. YES24 answered but had nothing new); 1 (FAILED):
+missing key, YES24 failed, the run stopped before any book was finished, or candidates were found and none could be tagged. Failure rules (design 2-1):
+  YES24 gives no candidate and a call failed → `yes24_failed`, no file (so no PR); only the failed API paths are named
+  (a call that worked but listed nothing is not a failure: `no_candidates`, exit 0)
   a key is refused (401/403), the model is unknown (404) or the account is the problem (400), or one model's calls fail
   STOP_LIMIT times in a row (tagger.Breaker, one streak per pass) → the run stops there; the books finished before it are
   written as `partial`, and if there are none it is `anthropic_failed` with no file
@@ -36,6 +37,9 @@ from .slots import keyword_rule, slot_rule
 from .tagger import Breaker, TaggerStop, Usage, call, parse
 
 
+EMPTY_RESULT = " -> no items"  # collect_candidates.cached_get: the call worked but listed nothing — not a YES24 failure
+
+
 def load_state() -> tuple[list[dict], dict, list[dict]]:
     books = json.loads(BOOKS.read_text(encoding="utf-8"))
     vocab = json.loads(VOCAB.read_text(encoding="utf-8"))
@@ -62,6 +66,8 @@ def _spend(ledger: dict, model: str, used: Usage) -> None:
 def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, breaker: Breaker,
             ledger: dict) -> tuple[dict | None, str]:
     """(record or None, reason). Pass A tags, pass B checks blind; token use goes to `ledger`. Raises TaggerStop."""
+    if not cand.author.strip() or cand.pages <= 0:  # find() never offers one; a book that import would reject costs nothing
+        return None, "incomplete_candidate"
     kept = vocab[cand.slot]["kept"] if cand.entry == "target" else {}
     names, hints = list(kept), keyword_hints(cand, kept) if kept else []
     user = user_message(cand.entry, cand.slot, cand.title, cand.intro, cand.toc, hints)
@@ -91,8 +97,10 @@ def run(date: str, cfg: Config, env: dict, client) -> dict:
         return summary | {"status": "full"}
     fails_before = len(collect_candidates.FAILURES)
     cands = gather(env, wants, vocab, known_from(books, additions))
-    yes24_fail = [f.split(" -> ")[0] for f in collect_candidates.FAILURES[fails_before:]]  # paths only, never the answer
-    summary |= {"candidates": len(cands), "yes24_failures": len(yes24_fail), "yes24_failed_paths": sorted(set(yes24_fail))}
+    new_fails = collect_candidates.FAILURES[fails_before:]
+    yes24_fail = [f.split(" -> ")[0] for f in new_fails if not f.endswith(EMPTY_RESULT)]  # paths only, never the answer
+    summary |= {"candidates": len(cands), "yes24_failures": len(yes24_fail), "yes24_failed_paths": sorted(set(yes24_fail)),
+                "yes24_empty": len(new_fails) - len(yes24_fail)}
     if not cands:
         return summary | {"status": "yes24_failed" if yes24_fail else "no_candidates"}
     prompts = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}
@@ -103,6 +111,8 @@ def run(date: str, cfg: Config, env: dict, client) -> dict:
         except TaggerStop as err:
             stopped = str(err)
             break
+        except Exception as err:  # one odd book must not lose the finished ones; the class name is all that is kept
+            rec, why = None, f"error:{type(err).__name__}"
         reasons[why] += 1
         if rec:
             recs.append(rec)
@@ -117,6 +127,11 @@ def run(date: str, cfg: Config, env: dict, client) -> dict:
         return summary | {"status": "anthropic_failed" if stopped else "no_books"}
     write_doc(ADDITIONS / f"{date}.json", additions_doc(date, cfg.model, cfg.second_model, recs))
     return summary | {"status": "partial" if stopped else "ok", "file": f"data/processed/additions/{date}.json"}
+
+
+# exit 1 for the workflow: `no_books` = candidates were found but not one could be tagged (a systematic break — a changed
+# schema, an unparsable answer — that would otherwise look green and burn tokens every day)
+FAILED = ("yes24_failed", "anthropic_failed", "no_books")
 
 
 def anthropic_key() -> str:
@@ -147,7 +162,7 @@ def main(argv: list[str] | None = None) -> int:
     RUNS.mkdir(parents=True, exist_ok=True)
     (RUNS / f"{args.date}.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(json.dumps(summary, ensure_ascii=False, indent=1))
-    return 1 if summary["status"] in ("yes24_failed", "anthropic_failed") else 0
+    return 1 if summary["status"] in FAILED else 0
 
 
 if __name__ == "__main__":

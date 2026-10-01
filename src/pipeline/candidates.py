@@ -6,7 +6,8 @@ what is already ours — ISBNs in books.json or in any additions file (reserve a
 titles in books.json (other editions), at most MAX_PER_AUTHOR books per author (book-pool 1절).
 
 YES24 text (intro, TOC) stays in memory on the Candidate, for the tagger only. It is never written to the repo, a PR or a
-log (YES24 terms, design 2-1). The raw responses are cached by collect_candidates under data/raw/yes24/ (git-ignored).
+log (YES24 terms, design 2-1). A book without author or page count is never a candidate (books:import would fail on it).
+The raw responses are cached by collect_candidates under data/raw/yes24/ (git-ignored).
 """
 import os
 import re
@@ -88,12 +89,14 @@ def find(env: dict, want: Want, rule: dict, known: Known) -> list[Candidate]:
             break
         if c["isbn"] in known.isbns or norm_title(c["title"]) in known.titles:
             continue
-        who = author_key(c.get("author") or "")
-        if who and authors[who] >= MAX_PER_AUTHOR:  # books with no author never share one counter
+        if not (c.get("author") or "").strip():  # an added book needs an author: books:import fails on it, every day
+            continue
+        who = author_key(c["author"])
+        if who and authors[who] >= MAX_PER_AUTHOR:
             continue
         tries += 1
         d = detail(env, c["isbn"])
-        if not usable(d):
+        if not usable(d) or pages_of(d) <= 0:  # no page count: normalizeBook rejects the book, every day
             continue
         cd = d.get("contentDetail") or {}
         out.append(Candidate(want.entry, want.slot, c["isbn"], c["title"], c.get("author") or "", pages_of(d),

@@ -26,6 +26,8 @@ def keyword_hints(cand: Candidate, kept: dict[str, dict]) -> list[str]:
 
 def record(cand: Candidate, a: dict, b: dict, flags: list[str], issues: list[str], status: str, auto: str | None,
            hints: list[str]) -> dict:
+    if not cand.author.strip() or cand.pages <= 0:  # books:import rejects such a book for the whole run — never write one
+        raise ValueError(f"{cand.isbn}: a book needs an author and a page count")
     a, b = scrub(a, b, issues)  # a field that copied the YES24 text is stored blank, only its issue flag stays
     out = {"isbn": cand.isbn, "title": cand.title, "author": cand.author, "pages": cand.pages, "entry": cand.entry}
     if cand.entry == "target":

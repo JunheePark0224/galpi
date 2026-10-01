@@ -60,6 +60,10 @@ describe("mergeAdditions", () => {
     expect(normalizeCatalog(rows, bib).at(-1)).toMatchObject({ genre: "호러·괴담", topic: null, axes: { world: -1 } });
     const odd = mergeAdditions([], new Map(), [file([{ ...leaf, genre: "요리" }])], VOCAB);
     expect(() => normalizeCatalog(odd.rows, odd.bib)).toThrow("unknown leaf genre 요리");
+    for (const axes of [{ temp: 2, pull: -1, gain: 0, world: -1 }, { temp: "1", pull: -1, gain: 0, world: -1 }, { temp: 1, pull: -1, gain: 0 }]) {
+      const badAxis = mergeAdditions([], new Map(), [file([{ ...leaf, axes }])], VOCAB);
+      expect(() => normalizeCatalog(badAxis.rows, badAxis.bib)).toThrow("9793333333333");
+    }
   });
 
   it("rejects an unknown status, a missing title and an unknown entry", () => {
