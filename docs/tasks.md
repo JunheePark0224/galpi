@@ -44,7 +44,8 @@ Last Updated: 2026-10-01
   - [ ] 사용자: `docs/goal-grading.md` 30행 "채점" 칸에 O/△/X
 - [ ] 📚 D 단계 먼저(10-01 사용자 결정): 책 자동 추가 파이프라인(D-07) — 시험 운행 3~5일 검수 → 일치율 기준 넘으면 자동
   - [ ] D-A 분류 넓히기 — 🎯 12·🍃 12·키워드 초안·켜는 규칙 (`docs/plans/2026-10-01-d-a-taxonomy-widen.md`)
-  - [ ] D-B 파이프라인 · D-C 처음 채우기 · D-D 🎯 입력 B안 · D-E 서재 숫자
+  - [ ] D-B 파이프라인 (`docs/plans/2026-10-01-d-b-daily-pipeline.md`) — 코드·워크플로·문서 끝. 사용자: 병합 → Secrets 2개 → Actions 권한 → 예산 한도 → `dry_run` `count 5` 한 바퀴 (`docs/deploy.md` 7절)
+  - [ ] D-C 처음 채우기 · D-D 🎯 입력 B안 · D-E 서재 숫자
 - [ ] P5 로그인·보관·내 책갈피·처리방침
 - [ ] P6 Amplitude 전달, 이벤트 전수 점검, 대시보드
 - [x] 배포 전 준비(P7에서 당김) — 처리방침 v0 `/privacy`·1년 자동 삭제, 같은 출처·요청 한도·크기 상한·보안 헤더, `/design` 숨김, `deploy.md` (9/30)

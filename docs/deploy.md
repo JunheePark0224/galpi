@@ -90,6 +90,17 @@ select count(*) from events where created_at < '<배포 시각, 예: 2026-10-01 
 delete from events where created_at < '<배포 시각>';
 ```
 
+## 7. 매일 책 파이프라인 (GitHub Actions, D-B)
+
+- [ ] Settings → Secrets and variables → Actions → New repository secret: **`YES24_API_KEY`**, **`ANTHROPIC_API_KEY`**(`galpi` 워크스페이스 키) — 이름만 여기 적고 값은 어디에도 적지 않는다 (키는 `Tag today's books` 한 단계에만 들어가고 출력되지 않는다. `ANTHROPIC_LOG`는 설정하지 않는다 — 켜면 요청 본문의 예스24 글이 로그에 찍힌다)
+- [ ] Settings → Actions → General → Workflow permissions: **Read and write permissions** + **Allow GitHub Actions to create and approve pull requests**
+- [ ] 워크플로는 main에 있어야 돈다: `daily-books`(매일 06:00 KST, 손으로 실행하면 `dry_run` 기본), `weekly-sample`(월 09:00 KST, `auto_merge`가 true일 때만 이슈)
+- [ ] 열린 `books/` PR이 있으면 그날은 쉰다 — 검수·병합하면 다음 날 이어서 (`dry_run`은 돈다)
+- [ ] 첫 한 바퀴: Actions → daily-books → Run workflow → `dry_run` 켜 둔 채 `count` 5 → 끝나면 실행 화면의 Summary(PR 본문 미리보기)와 Artifacts의 `dry-run-<날짜>`(우리 태그 파일·요약, 7일)를 본다
+- 설정: `data/pipeline/config.json`(`daily_count`·`auto_merge`·`sample_rate`·`model`·`second_model`). `auto_merge`는 졸업 기준(연속 3회 모든 항목 95%+)을 넘고 **사용자가 승인했을 때만** true
+- 검수: 그날 PR 브랜치에서 `PYTHONIOENCODING=utf-8 python -m src.pipeline.review <날짜>` → 로컬 페이지(예스24 글이 보이므로 `data/processed/check/`에만 저장, 커밋 안 함) → 내려받기 → `--apply <파일>` → `cd web && npm run books:import` → PR 브랜치에 커밋. 엇갈린 책과 함께 두 AI가 같게 본 책의 10% 표본도 기본으로 보인다(끄려면 `--no-sample`)
+- 실패하면 그날은 PR이 없고 Actions 기록에 이유(예스24 경로 이름·오류 종류)만 남는다. 도중에 멈추면(`partial`) 된 만큼만 PR에 들어가고 본문 맨 위에 이유가 보인다. 예스24 책소개·목차는 어디에도 남지 않는다
+
 ## 알아 둘 것
 
 - 요청 한도(`/api/track` 분당 120, `/api/books/draw` 분당 60, `/api/books/[isbn]` 분당 60, `/api/goal/classify` 분당 10 + Claude 호출 하루 300번)는 서버리스 인스턴스 메모리에 있어 인스턴스마다 따로 센다. 스크립트 하나가 `events`를 채우거나 Claude 호출 비용을 키우는 것을 막는 정도이고 (하루 300번은 인스턴스마다·UTC 날짜 기준, 다 쓰면 단어 매칭으로 답한다), 트래픽이 커지면 Vercel Firewall이나 Upstash 같은 공유 저장소로 바꾼다.
