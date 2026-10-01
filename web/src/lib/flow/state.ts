@@ -1,14 +1,15 @@
 import type { BalanceChoice, Entry } from "@/lib/recommend";
 import type { ArtCombo } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
+import type { Reason } from "@/lib/recommend";
 import type { GoalMatch } from "@/lib/goal/match";
 import { QUESTIONS } from "./questions";
 import { EMPTY_FORM, type TargetForm } from "./target";
 
-export type Step = "home" | "leaf" | "target" | "book" | "first" | "bookmarks" | "end";
-export const STEPS: readonly Step[] = ["home", "leaf", "target", "book", "first", "bookmarks", "end"];
+export type Step = "home" | "leaf" | "target" | "book" | "first" | "bookmarks" | "result" | "end";
+export const STEPS: readonly Step[] = ["home", "leaf", "target", "book", "first", "bookmarks", "result", "end"];
 export type Reaction = "pass" | "curious";
-export interface PickView { card: BookCard; kind: "recommended" | "random"; art: ArtCombo }
+export interface PickView { card: BookCard; kind: "recommended" | "random"; art: ArtCombo; reason: Reason }
 export interface DrawView { picks: PickView[]; exhausted: boolean; found: number | null; keywords: string[] }
 export type DrawStatus = "idle" | "loading" | "ready" | "error";
 
@@ -27,12 +28,13 @@ export interface FlowState {
   edited: boolean;                        // the one edit of F-07 is used
   index: number;                          // current bookmark (0-based)
   reactions: Reaction[];
+  result: number;                         // S-06: which 궁금해요 book is shown (0-based)
   seen: string[];                         // books shown in this session — excluded from later draws (F-05)
 }
 
 export const INITIAL: FlowState = {
   step: "home", entry: null, choices: [], prevChoices: null, form: EMPTY_FORM, prevForm: null, goal: null,
-  status: "idle", drawId: 0, draw: null, opened: false, edited: false, index: 0, reactions: [], seen: [],
+  status: "idle", drawId: 0, draw: null, opened: false, edited: false, index: 0, reactions: [], result: 0, seen: [],
 };
 
 export type FlowAction =
@@ -46,11 +48,18 @@ export type FlowAction =
   | { type: "edit" }
   | { type: "next" }
   | { type: "react"; reaction: Reaction }
+  | { type: "nextResult" }
+  | { type: "redraw" }
   | { type: "home" };
 
 /** Ask for a new draw: to S-03 the first time, straight back to the open book after an edit. */
 function requestDraw(s: FlowState): FlowState {
   return { ...s, status: "loading", drawId: s.drawId + 1, draw: null, step: s.opened ? "first" : "book" };
+}
+
+/** The 궁금해요 books of this round, in bookmark order — S-06 shows them one by one. */
+export function curiousPicks(s: Pick<FlowState, "draw" | "reactions">): PickView[] {
+  return (s.draw?.picks ?? []).filter((_, i) => s.reactions[i] === "curious");
 }
 
 const addSeen = (seen: string[], id: string) => (seen.includes(id) ? seen : [...seen, id]);
@@ -86,9 +95,22 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
       if (s.step !== "bookmarks" || !s.draw) return s;
       const reactions = [...s.reactions, a.reaction];
       const index = s.index + 1;
-      if (index >= s.draw.picks.length) return { ...s, reactions, step: "end" };
+      if (index >= s.draw.picks.length) {
+        // PRD 2절: S-06 when something was 궁금해요, straight to S-08 when nothing was
+        return { ...s, reactions, result: 0, step: reactions.includes("curious") ? "result" : "end" };
+      }
       return { ...s, reactions, index, seen: addSeen(s.seen, s.draw.picks[index].card.id) };
     }
+    case "nextResult": {
+      if (s.step !== "result") return s;
+      const result = s.result + 1;
+      return result < curiousPicks(s).length ? { ...s, result } : { ...s, step: "end" };
+    }
+    case "redraw":
+      // F-10: same conditions, five new books (seen stay excluded), the earlier 궁금해요 do not carry over.
+      // A new round gets its own closed book (S-03) and its own one edit (F-07).
+      if (s.step !== "end") return s;
+      return requestDraw({ ...s, opened: false, edited: false, prevChoices: null, prevForm: null, index: 0, reactions: [], result: 0 });
     case "home":
       return { ...INITIAL, seen: s.seen };
   }

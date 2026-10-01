@@ -74,3 +74,24 @@ describe("drawTarget", () => {
     expect(res.exhausted).toBe(false);
   });
 });
+
+describe("나온 이유 (PRD F-09)", () => {
+  it("gives every 🎯 pick the reason line for the scored answers — same format for the random one", () => {
+    const res = drawTarget({ topic: "데이터 분석", way: null, len: 0, keywords: ["SQL", "없는 키워드"] }, none, mulberry32(2), BOOKS);
+    for (const p of res.picks) {
+      const book = byId.get(p.card.id);
+      if (book?.topic === "데이터 분석") {
+        expect(p.reason.label).toBe("나온 이유");
+        expect(p.reason.items[0]).toBe("데이터 분석");
+        expect(p.reason.items).not.toContain("없는 키워드");    // dropped before scoring, never claimed as a reason
+      } else {
+        expect(p.reason.label).toBe("이 책은");
+      }
+    }
+  });
+
+  it("names the matched 🍃 answers", () => {
+    const res = drawLeaf([...LEAF_CHOICES], none, mulberry32(7), BOOKS);
+    expect(res.picks.every((p) => ["나온 이유", "이 책은"].includes(p.reason.label) && p.reason.items.length > 0)).toBe(true);
+  });
+});

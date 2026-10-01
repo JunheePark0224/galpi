@@ -11,6 +11,16 @@ const submit = () => fireEvent.click(screen.getByRole("button", { name: "책 펼
 describe("TargetInput (S-02 🎯)", () => {
   afterEach(() => vi.clearAllMocks());
 
+  it("waits while a written goal is being sorted", () => {
+    const onSubmit = vi.fn();
+    render(<TargetInput initial={{ ...EMPTY_FORM, free: "SQL" }} edit={false} busy onSubmit={onSubmit} />);
+    const button = screen.getByRole("button", { name: "책 펼치기" });
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("aria-busy", "true");
+    fireEvent.submit(button.closest("form") as HTMLFormElement);
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
   it("stops with a notice when 무엇을 is empty", () => {
     const onSubmit = vi.fn();
     render(<TargetInput initial={EMPTY_FORM} edit={false} onSubmit={onSubmit} />);

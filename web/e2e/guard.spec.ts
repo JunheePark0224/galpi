@@ -17,3 +17,20 @@ test("draw refuses a request from another origin", async ({ request, baseURL }) 
   expect((await request.post("/api/books/draw", { data: body, headers: { origin: "https://evil.example" } })).status()).toBe(403);
   expect((await request.post("/api/books/draw", { data: body, headers: { origin: baseURL! } })).status()).toBe(200);
 });
+
+test("book detail answers our own pages only, and only for our books", async ({ request, baseURL }) => {
+  const isbn = "9790000000001";                                          // books.sample.json
+  expect((await request.get(`/api/books/${isbn}`, { headers: { referer: "https://evil.example/" } })).status()).toBe(403);
+  expect((await request.get(`/api/books/${isbn}`)).status()).toBe(403);   // no Origin, no Referer
+  const ok = await request.get(`/api/books/${isbn}`, { headers: { referer: `${baseURL}/` } });
+  expect(ok.status()).toBe(200);
+  expect((await ok.json()).source).toBeNull();                           // no keys in E2E: the empty detail
+  expect((await request.get("/api/books/9788998441012", { headers: { referer: `${baseURL}/` } })).status()).toBe(404);
+});
+
+test("goal classify refuses another origin and answers our own page with word matching (no key in E2E)", async ({ request, baseURL }) => {
+  expect((await request.post("/api/goal/classify", { data: { text: "SQL" }, headers: { origin: "https://evil.example" } })).status()).toBe(403);
+  const ok = await request.post("/api/goal/classify", { data: { text: "SQL 공부" }, headers: { origin: baseURL! } });
+  expect(ok.status()).toBe(200);
+  expect(await ok.json()).toMatchObject({ topic: "데이터 분석", keywords: ["SQL"], method: "word" });
+});

@@ -1,15 +1,17 @@
 import {
-  drawBookmarks, leafAnswersFrom, leafScore, maxPossibleLeaf, maxPossibleTarget, targetScore, LEAF_PARAMS, TARGET_PARAMS,
-  type BalanceChoice, type DrawResult, type Rng, type TargetAnswers,
+  drawBookmarks, leafAnswersFrom, leafScore, maxPossibleLeaf, maxPossibleTarget, reasonLine, targetScore, LEAF_PARAMS, TARGET_PARAMS,
+  type BalanceChoice, type DrawResult, type LeafAnswers, type Rng, type TargetAnswers,
 } from "@/lib/recommend";
 import { toBook, toCard } from "./catalog";
 import { FIELD_OF_TOPIC, type Topic } from "./taxonomy";
 import type { CatalogBook, DrawResponse } from "./types";
 
-function respond(res: DrawResult, pool: CatalogBook[], extra: Pick<DrawResponse, "found" | "keywords">): DrawResponse {
+function respond(
+  res: DrawResult, pool: CatalogBook[], answers: LeafAnswers | TargetAnswers, extra: Pick<DrawResponse, "found" | "keywords">,
+): DrawResponse {
   const byId = new Map(pool.map((b) => [b.isbn, b]));
   return {
-    picks: res.picks.map((p) => ({ card: toCard(byId.get(p.book.id) as CatalogBook), kind: p.kind })),
+    picks: res.picks.map((p) => ({ card: toCard(byId.get(p.book.id) as CatalogBook), kind: p.kind, reason: reasonLine(p.book, answers) })),
     exhausted: res.exhausted,
     widened: res.widened,
     ...extra,
@@ -25,7 +27,7 @@ export function drawLeaf(choices: BalanceChoice[], seen: ReadonlySet<string>, rn
     { score: (b) => (b.entry === "leaf" ? leafScore(b, answers) : null), maxPossible: maxPossibleLeaf(answers) },
     { ...LEAF_PARAMS, seen, rng, inRandomPool: (b) => b.entry === "leaf" },
   );
-  return respond(res, pool, { found: null, keywords: [] });
+  return respond(res, pool, answers, { found: null, keywords: [] });
 }
 
 /** 🎯: topic is required; keywords no book in the topic has are dropped before scoring; the random slot stays in the field. */
@@ -43,5 +45,5 @@ export function drawTarget(answers: TargetAnswers, seen: ReadonlySet<string>, rn
   const found = answers.keywords.length
     ? inTopic.filter((b) => b.keywords.some((k) => keywords.includes(k))).length
     : inTopic.length;
-  return respond(res, pool, { found, keywords });
+  return respond(res, pool, scored, { found, keywords });
 }

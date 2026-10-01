@@ -9,7 +9,7 @@ export interface GoalMatch {
   topic: Topic;
   keywords: string[];    // only names from our closed keyword list
   matched: boolean;      // false: nothing in our list matched — topic is only the nearest guess
-  method: "word";        // P4 adds "llm"
+  method: "word" | "llm"; // llm: Claude Haiku sorted it (P4, /api/goal/classify); word: this file
 }
 
 const squash = (s: string) => s.toLowerCase().replace(/\s+/g, "");
@@ -35,7 +35,7 @@ function rank(score: (topic: Topic) => number): { topic: Topic; score: number } 
   }, { topic: TOPICS[0], score: 0 });
 }
 
-/** P3 word matching for 직접 쓰기 — only inside our topics and keywords (P4 puts the LLM in front of this). */
+/** Word matching for 직접 쓰기 — only inside our topics and keywords. The fallback behind the LLM (P4) and offline. */
 export function matchGoal(input: string, vocab: Vocab): GoalMatch {
   const text = input.trim().slice(0, GOAL_MAX);
   const flat = squash(text);

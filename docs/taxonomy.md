@@ -5,6 +5,7 @@
 | taxonomy v0.2 | 2026-09-30 | 사용자 결정 5건(9절) · `PRD.md` v0.2 4절 · `proposal.md` 4-4 · `PHASES.md` P8·P9 · `balance-game.md` 4절 · `target-chips.md` 5·6절 · `plans/2026-09-30-amplitude.md` · 현재 코드(`web/src/lib/track/*`, `track()` 호출 14곳) | 사용자 결정 반영 |
 | taxonomy v0.3 | 2026-10-01 | 개발 라운드 `plans/2026-10-01-taxonomy-dev.md` | **구현 완료 — 코드가 이 문서를 따른다** (8절) |
 | taxonomy v0.3.1 | 2026-10-01 | v0.3 최종 검토 | 입력 칸 가림·허용 목록·검사 #11·표현 정리 (8절) |
+| taxonomy v0.4 | 2026-10-01 | P4 결과·서버 `plans/2026-10-01-p4-results-server.md` | S-06·S-08 이벤트 live (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -125,7 +126,7 @@
 | 보관 | S-06, S-09 | E-11, E-15, E-16 |
 | 로그인 | S-07 | E-12, E-13, E-14 |
 | 서재 | S-09 | E-17 |
-| 마무리 | S-08 (지금은 S-04·궁금해요 목록) | E-19, E-20 |
+| 마무리 | S-08 (E-20은 S-04의 막다른 길에서도) | E-19, E-20 |
 | 공통 | — | 공통 속성 (csv의 `*` 줄) |
 
 ### 2-6. 트리거 (Trigger)
@@ -236,7 +237,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 ### 4-1. 한눈에 보기
 
-상태 (v0.3): live 13 · planned-P4 5 · planned-P5 7 · planned-taxonomy 0. 4-4의 이름·속성 변경과 속성 추가 4건은 v0.3에서 코드에 반영 (P4 이벤트 E-10·E-18의 `pick_type`은 `EVENT_SPEC`에만 — 심는 것은 P4)
+상태 (v0.4): live 18 · planned-P4 0 · planned-P5 7 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned는 P5(보관·로그인·서재)
 
 | ID | 제안 이름 | 이전 이름 | 분류 | 트리거 | 상태 |
 |---|---|---|---|---|---|
@@ -252,10 +253,10 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-06 | `first_page_edited` | 같음 | 책펼치기 | submit | live |
 | E-07 | `bookmark_shown` | 같음 | 책갈피 | view | live |
 | E-08 | `bookmark_reacted` | 같음 | 책갈피 | click | live |
-| E-09 | `result_viewed` | 같음 | 결과 | view | planned-P4 |
-| E-10 | `result_book_viewed` | 같음 | 결과 | view | planned-P4 |
-| E-23 | `description_expanded` | 같음 | 결과 | click | planned-P4 |
-| E-18 | `yes24_link_clicked` | `yes24_clicked` (PRD) | 결과 | click | planned-P4 |
+| E-09 | `result_viewed` | 같음 | 결과 | view | live |
+| E-10 | `result_book_viewed` | 같음 | 결과 | view | live |
+| E-23 | `description_expanded` | 같음 | 결과 | click | live |
+| E-18 | `yes24_link_clicked` | `yes24_clicked` (PRD) | 결과 | click | live |
 | E-11 | `save_clicked` | 같음 | 보관 | click | planned-P5 |
 | E-15 | `book_saved` | 같음 | 보관 | system | planned-P5 |
 | E-16 | `book_unsaved` | 같음 | 보관 | click | planned-P5 |
@@ -263,7 +264,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-13 | `login_started` | 같음 | 로그인 | click | planned-P5 |
 | E-14 | `login_completed` | 같음 | 로그인 | system | planned-P5 |
 | E-17 | `library_viewed` | 같음 | 서재 | view | planned-P5 |
-| E-19 | `redraw_clicked` | 같음 | 마무리 | click | planned-P4 |
+| E-19 | `redraw_clicked` | 같음 | 마무리 | click | live |
 | E-20 | `home_clicked` | 같음 | 마무리 | click | live |
 
 E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아직 심지 않은 planned 이벤트도 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(25개 — `EVENT_NAMES`는 그 키).
@@ -349,7 +350,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 목표입력 | submit | live | (없음) → 신규 (accepted 2026-09-30, v0.3 구현) |
 
-**언제**: 🎯 입력 완료 — S-02 🎯 폼이 [책 펼치기]로 제출되어 입력이 통과될 때 (무엇을 칸이 비어 멈추면 남지 않음). 고치기 뒤 다시 제출할 때도 남음. 🍃의 "입력 완료"는 9번 문항 `balance_answered`  
+**언제**: 🎯 입력 완료 — S-02 🎯 폼이 [책 펼치기]로 제출되어 입력이 통과될 때 (무엇을 칸이 비어 멈추면 남지 않음). 고치기 뒤 다시 제출할 때도 남음. 🍃의 "입력 완료"는 9번 문항 `balance_answered`. 직접 쓰기면 분류가 끝난 뒤(보통 1초, 최대 5초)에 남음  
 **분석 질문**: Q-01, Q-10
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -366,7 +367,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 목표입력 | submit | live | `goal_free_written` → `free_goal_written` |
 
-**언제**: S-02 🎯에서 직접 쓰기 칸을 채워 제출할 때 (E-26과 같은 순간, 직접 쓰기일 때만). **Amplitude 사본**은 `goal_text` 없이 `topic`·`keywords`·`is_matched`·`method`만 간다  
+**언제**: S-02 🎯에서 직접 쓰기 칸을 채워 제출할 때 (E-26과 같은 순간, 직접 쓰기일 때만). 직접 쓰기면 분류가 끝난 뒤(보통 1초, 최대 5초)에 남음. **Amplitude 사본**은 `goal_text` 없이 `topic`·`keywords`·`is_matched`·`method`만 간다  
 **분석 질문**: Q-10
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -453,7 +454,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 결과 | view | planned-P4 | 같음 |
+| 결과 | view | live | 같음 |
 
 **언제**: S-06 궁금해요 책 보기 화면에 들어올 때 (궁금해요가 1개 이상일 때만 — 0개면 S-08로 바로 가서 남지 않음)  
 **분석 질문**: Q-01, Q-11
@@ -466,7 +467,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 결과 | view | planned-P4 | 같음 |
+| 결과 | view | live | 같음 |
 
 **언제**: S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩)  
 **분석 질문**: Q-11
@@ -481,7 +482,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 결과 | click | planned-P4 | 같음 |
+| 결과 | click | live | 같음 |
 
 **언제**: S-06 책 설명 [더 보기]를 누를 때  
 **분석 질문**: Q-11
@@ -495,7 +496,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 결과 | click | planned-P4 | `yes24_clicked` → `yes24_link_clicked` |
+| 결과 | click | live | `yes24_clicked` → `yes24_link_clicked` |
 
 **언제**: S-06 또는 S-09에서 [예스24에서 보기]를 누를 때 (새 탭)  
 **분석 질문**: Q-01, Q-11
@@ -604,7 +605,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 마무리 | click | planned-P4 | 같음 |
+| 마무리 | click | live | 같음 |
 
 **언제**: S-08 [다시 뽑기]를 누를 때. 이 이벤트는 끝나는 판의 round를 싣고, **보낸 직후 round +1** (3-1a)  
 **분석 질문**: Q-03
@@ -619,7 +620,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 마무리 | click | live | 같음 |
 
-**언제**: [처음으로]를 누를 때 — 지금은 S-04(뽑기 실패·책 없음)와 궁금해요 목록(P3 임시 S-06/S-08), P4부터 S-08. 이벤트는 끝나는 판의 round를 싣고, **보낸 직후 round +1 — 같은 탭에서 다시 시작하면 새 판** (3-1a)  
+**언제**: [처음으로]를 누를 때 — S-04(뽑기 실패·책 없음)와 S-08 마무리. 이벤트는 끝나는 판의 round를 싣고, **보낸 직후 round +1 — 같은 탭에서 다시 시작하면 새 판** (3-1a)  
 **분석 질문**: Q-01, Q-03
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -797,7 +798,7 @@ Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나
 
 | 항목 | 규칙 |
 |---|---|
-| `goal_text` | 최대 30자, 앞뒤 공백 제거. 입력칸 아래 "이름·연락처는 적지 마세요". **Supabase에만 저장한다 — Amplitude 사본에는 이 속성을 넣지 않는다**(결정 2026-09-30, 9절 Q3). 못 찾은 요청 분석(5-3)은 SQL로 하므로 잃는 것이 없다. Amplitude에는 `topic`·`keywords`·`is_matched`·`method`가 간다. 처리방침에 저장 명시, **Amplitude로는 안 간다는 문장은 v0.3에서 추가(6-3)**. P4에서 Anthropic(분류) 전달이 생기면 처리방침에 먼저 추가. 첫 장(S-04)이 이 글을 화면에 보이면 Session Replay(20%)가 화면 글자를 담을 수 있다 — v0.3: 직접 쓴 글이 있는 첫 장(`FirstPage.tsx`)과 글을 쓰는 입력 칸(`TargetInput.tsx`)에 `data-amp-mask`를 달아 리플레이에서 가린다 (v0.3.1: 입력 칸도 — 대시보드의 가림 수준이 `light`로 바뀌어도 가려진다) |
+| `goal_text` | 최대 30자, 앞뒤 공백 제거. 입력칸 아래 "이름·연락처는 적지 마세요". **Supabase에만 저장한다 — Amplitude 사본에는 이 속성을 넣지 않는다**(결정 2026-09-30, 9절 Q3). 못 찾은 요청 분석(5-3)은 SQL로 하므로 잃는 것이 없다. Amplitude에는 `topic`·`keywords`·`is_matched`·`method`가 간다. 처리방침에 저장 명시, **Amplitude로는 안 간다는 문장은 v0.3에서 추가(6-3)**. **P4**: 주제를 찾으려고 이 글만 Anthropic(Claude Haiku)에 보낸다 — 익명 번호·공통 속성·다른 기록은 보내지 않고, 서버 로그에도 글을 남기지 않는다. 처리방침에 먼저 적었다(6-3b). 첫 장(S-04)이 이 글을 화면에 보이면 Session Replay(20%)가 화면 글자를 담을 수 있다 — v0.3: 직접 쓴 글이 있는 첫 장(`FirstPage.tsx`)과 글을 쓰는 입력 칸(`TargetInput.tsx`)에 `data-amp-mask`를 달아 리플레이에서 가린다 (v0.3.1: 입력 칸도 — 대시보드의 가림 수준이 `light`로 바뀌어도 가려진다) |
 | `referrer` | 500자에서 자름. Supabase에만. 검색 주소 등 쿼리 문자열에 개인 정보가 섞일 수 있어, 필요하면 호스트만 남기는 것을 검토 |
 | `anon_id` | 처리방침 "지우고 싶다면"에서 이 번호로 삭제 요청을 받는다 — 값의 형식·위치를 바꾸면 처리방침 화면도 함께 |
 | Autocapture·Session Replay | IP·대략적 지역·누른 요소가 Amplitude로 간다(처리방침에 명시). 리플레이는 입력칸을 가린다 — 새 입력칸도 가림 대상인지 확인 |
@@ -813,6 +814,10 @@ Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나
 
 - 함께 고칠 것: `web/src/app/privacy/page.test.tsx`(문장 단정이 있으면), `lib/privacy.ts`의 `UPDATED`(갱신일), `PRD.md` F-16 v0 서술 한 줄, 이 문서 6-2·7-1의 확인 체크.
 - 그대로 두는 것: "Amplitude가 자동으로 모으는 것" 행, 화면 녹화 행, "지우고 싶다면"(삭제 요청 시 Amplitude 기록도 함께 지움) — 이번 결정과 무관.
+
+### 6-3b. 처리방침 변경 — P4 (Anthropic)
+
+P4의 `/api/goal/classify`가 직접 쓴 글(≤30자)을 Anthropic API로 보낸다(target-chips 3절). 7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고쳤다 — 표의 직접 쓰기 행에 "주제를 찾을 때 Anthropic에 보내요", "기록을 전달하는 곳"에 받는 곳(Anthropic, 미국)·보내는 것(그 글뿐)·Anthropic이 밝힌 처리(API 입력을 학습에 쓰지 않음 — Commercial Terms B, 30일 안에 삭제 — Privacy Center, 예외 있음). 이벤트 속성은 그대로(`method`가 `llm`이 될 뿐).
 
 ### 6-4. 보관
 
@@ -922,6 +927,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.2 | 2026-09-30 | Claude (사용자 결정 반영) | 사용자 결정 5건(9절). ① E-26 `goal_submitted` 추가 확정 → Status `planned-taxonomy`(새 상태), PRD 4절에도 추가. ② `round` +1 = [다시 뽑기] + 같은 탭 [처음으로](3-1a·5-1). ③ `goal_text`는 **Supabase only** — Amplitude 사본에서 뺌(2-7 속성 단위 예외·6-2), `/privacy` 고칠 문장 2개 기록(6-3). ④ 이름 변경 4건·속성·값 변경 19건·속성 추가 4건 모두 `accepted — dev round` — **한 번의 개발 라운드로, P7 전·Vercel Amplitude 키 설정 전**(4-4 표는 마이그레이션 명세로 유지). ⑤ Amplitude `setUserId`·`login_provider`는 **P5에서 결정**(3-2). Amplitude 검토의 개발 라운드 항목 2건 추가: 시작 전 이벤트도 큐에 받기, 큐 이벤트는 원래 `time` 유지(2-7). 상태 집계 `proposed` 1 → 0, `planned-taxonomy` 1 |
 | v0.3 | 2026-10-01 | Claude (개발 라운드) | **구현 완료** (`plans/2026-10-01-taxonomy-dev.md`). 4-4 마이그레이션 전부 코드에 반영 — 이벤트 이름 4건(E-18은 명세만), 속성·값 19건, 중복 `entry` 삭제 2건, 속성 추가 4건(E-08 `one_liner_style`·E-20 `source` 구현, E-10·E-18 `pick_type`은 명세만 — P4), E-26 `goal_submitted` 구현. `round` +1은 `track()`이 E-20·E-19를 보낸 직후(3-1a). `goal_text`는 Amplitude 사본과 Session Replay에서 빠지고 `/privacy`에 6-3 문장 2개(갱신일 10-01). `schema.ts`의 `EVENT_SPEC`·`PropsOf`로 `track()` 호출을 tsc가 검사, `/api/track`도 같은 명세로 props 검사. 자동 검사: `taxonomy.test.ts`(7-3 #1~#10), E2E `specMismatches`. Amplitude 대기열: 시작 전 이벤트도 받기(키 있을 때만)·원래 `time`. csv: 구현된 줄 `live`, E-10·E-18 `pick_type`은 `planned-P4`, E-01 Note에 `Amplitude only`, Note의 "현재 이름" → "이전 이름". Supabase의 테스트 기록은 옛 이름 그대로(P7에서 지움 — 옮기지 않음) |
 | v0.3.1 | 2026-10-01 | Claude (최종 검토 반영) | 직접 쓰기 입력 칸에 `data-amp-mask`(Session Replay 가림이 대시보드 수준과 무관하게 코드로 보장 — 6-2). `forAmplitude`는 허용 목록 방식(명세에 있고 `Supabase only`가 아닌 속성만). 자동 검사 #11 추가 — 이벤트별 속성 표 ↔ csv (7-3). 옛 표현을 구현된 상태로 고침(2-7 a·b, 2-8, 4-1, 4-4, 7-3 ①). 배포 체크리스트(`deploy.md`)에 Production 키 설정 뒤 개인정보 확인 추가. 이벤트·속성 변경 없음 |
+| v0.4 | 2026-10-01 | Claude (P4 구현) | S-06에서 E-09 `result_viewed`·E-10 `result_book_viewed`(`pick_type` 포함)·E-23 `description_expanded`·E-18 `yes24_link_clicked`(`source`=result, `pick_type`), S-08에서 E-19 `redraw_clicked`를 심어 `live`로(E-19 뒤 round +1은 v0.3의 `track()` 그대로). E-20 설명에서 P3 임시 화면 문구를 뺌. 이벤트 이름·속성 변경 없음 |
 
 ---
 

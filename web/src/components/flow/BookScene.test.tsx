@@ -10,6 +10,7 @@ const view = (n: number): DrawView => ({
     card: { id: `b${i}`, entry: "target" as const, title: `책 ${i}`, author: `저자 ${i}`, genre: "통계", field: "데이터·통계", oneLiner: `한 줄 ${i}`, oneLinerStyle: "summary" as const },
     kind: "recommended" as const,
     art,
+    reason: { label: "나온 이유" as const, items: ["통계"] },
   })),
   exhausted: false, found: null, keywords: [],
 });

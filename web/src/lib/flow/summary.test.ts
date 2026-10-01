@@ -15,6 +15,7 @@ const draw = (over: Partial<DrawView> = {}): DrawView =>
 const onePick: DrawView["picks"] = [{
   card: { id: "1", entry: "target", title: "t", author: "a", genre: "데이터 분석", field: "데이터·통계", oneLiner: "o", oneLinerStyle: "summary" },
   kind: "recommended", art: { animal: "cat", bg: "peach", sky: "moon", ground: "none", rare: false },
+  reason: { label: "나온 이유", items: ["데이터 분석"] },
 }];
 
 describe("tasteLines (from the raw answers, balance-game.md 2절)", () => {

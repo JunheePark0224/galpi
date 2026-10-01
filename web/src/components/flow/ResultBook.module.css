@@ -1,0 +1,64 @@
+/* S-06 (C-11) in the 430px column (DESIGN T-04b): one book at a time, cover first, buttons under the text. */
+.result {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-4);
+  padding-top: var(--space-2); text-align: center; word-break: keep-all;
+  animation: arrive 300ms ease-out;
+}
+@keyframes arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.progress {
+  margin: 0; padding: 0 var(--space-3); border-radius: var(--radius-pill); background: var(--paper-deep);
+  font-size: 12px; line-height: 24px; color: var(--ink-soft);
+}
+
+/* The big cover: a printed cover sits like a book on the desk (shadow-book); without one, our own cloth cover with the title. */
+.coverBox { width: min(56%, 200px); aspect-ratio: 1 / 1.45; }  /* the swap to the cloth cover must not move the page */
+.cover {
+  display: block; width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-book);
+  box-shadow: var(--shadow-book); background: var(--paper-deep);
+}
+.plainCover {
+  display: flex; align-items: center; justify-content: center; aspect-ratio: 1 / 1.45; padding: var(--space-4);
+  border-radius: var(--radius-book);
+  background: var(--leather-grain), var(--leather-sheen), var(--cloth);
+  box-shadow: inset 0 0 0 2px var(--cloth-edge), var(--shadow-book);
+}
+.plainCover span {
+  font-family: var(--font-batang), serif; font-weight: 700; font-size: 16px; line-height: 1.45; color: var(--foil);
+}
+
+.head { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); }
+.title { margin: var(--space-1) 0 0; font-size: 20px; line-height: 1.4; }
+.author { margin: 0; font-size: 13px; color: var(--ink-muted); }
+.facts { margin: 0; font-size: 13px; color: var(--ink-soft); }
+
+/* 나온 이유 — a paper slip (C-14 look), the label in ink so the reason reads as ours, not YES24's. */
+.reason {
+  position: relative; align-self: stretch; margin: var(--space-1) 0 0; padding: var(--space-3) var(--space-3) var(--space-2);
+  border-radius: var(--radius-card); background: var(--paper-deep); font-size: 13px; line-height: 1.5;
+}
+.reason::before {
+  content: ""; position: absolute; top: -5px; left: 50%; width: 40px; height: 10px; margin-left: -20px;
+  border-radius: 2px; background: var(--tape); box-shadow: 0 0 0 1px var(--paper-line);
+}
+.reasonLabel { font-weight: 700; }
+
+.intro { align-self: stretch; text-align: left; }
+.introHeading { margin: 0 0 var(--space-1); font-family: var(--font-dodum), sans-serif; font-weight: 400; font-size: 12px; color: var(--ink-muted); }
+.introText, .introFull { margin: 0; font-size: 14px; line-height: 1.75; }
+.introFull { white-space: pre-line; }
+.more {
+  min-height: var(--touch); padding: 0 var(--space-2); margin-left: calc(-1 * var(--space-2));
+  border: 0; background: none; font: inherit; font-size: 13px; color: var(--ink);
+  text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+.more:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.note { align-self: stretch; margin: 0; font-size: 13px; color: var(--ink-muted); }
+
+.skeleton { display: flex; flex-direction: column; gap: var(--space-2); align-self: stretch; }
+.skeleton span { height: 12px; border-radius: 6px; background: var(--paper-deep); }
+.skeleton span:last-child { width: 60%; }
+
+.actions { display: flex; gap: var(--space-3); align-self: stretch; }
+.actions > * { flex: 1 1 0; }
+.credit { margin: 0; font-size: 12px; color: var(--ink-muted); }

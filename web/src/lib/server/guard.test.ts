@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { clientKey, rateLimit, rateLimitKeyCount, readJsonCapped, sameOrigin } from "./guard";
+import { clientKey, rateLimit, rateLimitKeyCount, readJsonCapped, resetDailyBudgets, sameOrigin, takeDailyBudget } from "./guard";
 
 const post = (headers: Record<string, string> = {}, body = "{}", url = "https://galpi.example/api/track") =>
   new Request(url, { method: "POST", body, headers });
@@ -34,6 +34,40 @@ describe("sameOrigin", () => {
     expect(sameOrigin(post())).toBe(false);
     expect(sameOrigin(post({ origin: "null" }))).toBe(false);
     expect(sameOrigin(post({ referer: "not a url" }))).toBe(false);
+  });
+});
+
+describe("sameOrigin with Sec-Fetch-Site", () => {
+  it("accepts same-origin when Origin and Referer are both absent", () => {
+    expect(sameOrigin(post({ "sec-fetch-site": "same-origin" }))).toBe(true);
+  });
+
+  it("refuses same-site, cross-site and none when Origin and Referer are both absent", () => {
+    for (const site of ["same-site", "cross-site", "none"]) {
+      expect(sameOrigin(post({ "sec-fetch-site": site }))).toBe(false);
+    }
+  });
+
+  it("lets a present Origin or Referer decide, even against Sec-Fetch-Site", () => {
+    expect(sameOrigin(post({ origin: "https://evil.example", "sec-fetch-site": "same-origin" }))).toBe(false);
+    expect(sameOrigin(post({ referer: "https://evil.example/x", "sec-fetch-site": "same-origin" }))).toBe(false);
+    expect(sameOrigin(post({ origin: "https://galpi.example", "sec-fetch-site": "cross-site" }))).toBe(true);
+  });
+});
+
+describe("takeDailyBudget", () => {
+  beforeEach(() => {
+    resetDailyBudgets();
+    vi.useFakeTimers({ now: Date.parse("2026-10-01T12:00:00Z"), toFake: ["Date"] });
+  });
+  afterEach(() => vi.useRealTimers());
+
+  it("hands out `limit` calls a UTC day, then refuses until the date changes", () => {
+    for (let i = 0; i < 3; i++) expect(takeDailyBudget("a", 3)).toBe(true);
+    expect(takeDailyBudget("a", 3)).toBe(false);
+    expect(takeDailyBudget("b", 3)).toBe(true);           // names count separately
+    vi.setSystemTime(Date.parse("2026-10-02T00:00:00Z"));
+    expect(takeDailyBudget("a", 3)).toBe(true);
   });
 });
 

@@ -1,3 +1,4 @@
+import type { Reason } from "../recommend/reason";
 import type { AxisKey, DrawPick, Entry, Tag, Way } from "../recommend/types";
 
 export type OneLinerStyle = "summary" | "question";
@@ -30,7 +31,8 @@ export interface BookCard {
   oneLinerStyle: OneLinerStyle;
 }
 
-export interface CardPick { card: BookCard; kind: DrawPick["kind"] }
+/** reason: S-06 "나온 이유" (PRD F-09) — worked out on the server, where the tags are; random picks get the same format. */
+export interface CardPick { card: BookCard; kind: DrawPick["kind"]; reason: Reason }
 
 /**
  * POST /api/books/draw response.

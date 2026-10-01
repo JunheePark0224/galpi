@@ -1,7 +1,7 @@
 import { INITIAL, STEPS, type FlowState } from "./state";
 
 export const FLOW_KEY = "galpi.flow";
-const VERSION = 1;
+const VERSION = 2;   // 2 (P4): picks carry their reason, S-06 keeps its place — an older saved flow starts over
 
 /** Resume this tab's flow after a reload (KakaoTalk's in-app browser reloads often). A request cut off by the reload becomes a retry. */
 export function loadFlow(): FlowState {
