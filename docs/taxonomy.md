@@ -251,7 +251,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 ### 4-1. 한눈에 보기
 
-상태 (v0.8): live 25 · planned-P4 0 · planned-P5 4 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned는 P5(보관·로그인·내 책갈피). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로
+상태 (v0.8): live 29 · planned-P4 0 · planned-P5 0 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned는 P5(보관·로그인·내 책갈피). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로
 
 | ID | 제안 이름 | 이전 이름 | 분류 | 트리거 | 상태 |
 |---|---|---|---|---|---|
@@ -275,13 +275,13 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-18 | `yes24_link_clicked` | `yes24_clicked` (PRD) | 결과 | click | live |
 | E-11 | `save_clicked` | 같음 | 보관 | click | live |
 | E-15 | `book_saved` | 같음 | 보관 | system | live |
-| E-16 | `book_unsaved` | 같음 | 보관 | click | planned-P5 |
+| E-16 | `book_unsaved` | 같음 | 보관 | click | live |
 | E-12 | `login_prompt_shown` | 같음 | 로그인 | view | live |
 | E-13 | `login_started` | 같음 | 로그인 | click | live |
 | E-14 | `login_completed` | 같음 | 로그인 | system | live |
-| E-17 | `library_viewed` | 같음 | 내 책갈피 | view | planned-P5 |
-| E-29 | `shelf_created` | (없음, v0.8) | 내 책갈피 | click | planned-P5 |
-| E-30 | `bookmark_moved` | (없음, v0.8) | 내 책갈피 | click | planned-P5 |
+| E-17 | `library_viewed` | 같음 | 내 책갈피 | view | live |
+| E-29 | `shelf_created` | (없음, v0.8) | 내 책갈피 | click | live |
+| E-30 | `bookmark_moved` | (없음, v0.8) | 내 책갈피 | click | live |
 | E-19 | `redraw_clicked` | 같음 | 마무리 | click | live |
 | E-20 | `home_clicked` | 같음 | 마무리 | click | live |
 
@@ -591,7 +591,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 보관 | click | planned-P5 | 같음 |
+| 보관 | click | live | 같음 |
 
 **언제**: S-09 내 책갈피에서 책갈피 뒷면의 [빼기]를 확인까지 누를 때  
 **분석 질문**: Q-13
@@ -644,7 +644,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 내 책갈피 | view | planned-P5 | 같음 |
+| 내 책갈피 | view | live | 같음 |
 
 **언제**: S-09 내 책갈피를 열 때 (목록을 불러온 뒤)  
 **분석 질문**: Q-13
@@ -657,7 +657,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 내 책갈피 | click | planned-P5 | 신규 (v0.8) |
+| 내 책갈피 | click | live | 신규 (v0.8) |
 
 **언제**: S-09 [＋ 막대 추가]로 막대가 생겼을 때 (저장 성공 뒤). 첫 꽂기 때 서버가 저절로 만드는 첫 막대는 남지 않음. 막대 이름은 **넣지 않는다**(이용자가 쓴 글, 6-1)  
 **분석 질문**: Q-13
@@ -670,7 +670,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 내 책갈피 | click | planned-P5 | 신규 (v0.8) |
+| 내 책갈피 | click | live | 신규 (v0.8) |
 
 **언제**: S-09에서 책갈피를 다른 막대로 옮겼을 때 (저장 성공 뒤). 같은 막대에 다시 놓으면(취소) 남지 않음. 막대 이름·번호는 넣지 않는다  
 **분석 질문**: Q-13

@@ -1,0 +1,87 @@
+/* S-09 내 책갈피 — C-17 rods (DESIGN, 시안 2026-10-01-p5-move-bookmark.png). */
+.page { display: flex; flex-direction: column; gap: var(--space-2); padding-bottom: calc(var(--space-6) * 2); }
+.title { margin: var(--space-2) 0 0; font-size: 24px; line-height: 1.3; }
+.stat { margin: 0; font-size: 13px; color: var(--ink-soft); }
+.quiet { margin: var(--space-2) 0; font-size: 14px; color: var(--ink-soft); }
+.error { width: 100%; margin: 0; font-size: 13px; color: var(--genre-korean-fiction); }
+
+/* A rod: name row, leather rod, the bookmarks hanging below it (sideways scroll — the browser's own). */
+.shelf { position: relative; margin-top: var(--space-3); padding: var(--space-1) 0 0; border-radius: var(--radius-card); }
+.shelf[data-drop] { background: rgba(74, 116, 86, 0.1); outline: 2px dashed var(--genre-essay); outline-offset: 2px; }
+.shelfHead { display: flex; align-items: center; gap: var(--space-1); }
+.shelfName { margin: 0; font-size: 15px; line-height: 1.4; overflow-wrap: anywhere; }
+.iconButton {
+  min-width: var(--touch); min-height: var(--touch); border: 0; background: none; color: var(--ink-soft); font: inherit; cursor: pointer;
+}
+.rod { height: 4px; border-radius: 2px; background: var(--cloth-edge); }
+.row {
+  display: flex; gap: var(--space-2); margin: -2px 0 0; padding: 0 0 var(--space-2); list-style: none;
+  overflow-x: auto; scroll-snap-type: x proximity; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch;
+}
+.slot { flex: 0 0 auto; scroll-snap-align: start; }
+.slot:first-child { margin-left: var(--space-1); }
+
+/* A small C-02 on its string: 160 × 371 drawn at 58 % (≈ 93 × 215). */
+.hang {
+  display: block; padding: 0; border: 0; background: none; cursor: pointer;
+  -webkit-touch-callout: none; user-select: none; touch-action: pan-x pan-y;
+  transition: transform var(--dur-bookmark-down) var(--ease-rise), opacity 200ms;
+}
+.hang:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.hang[data-held] { transform: translateY(-14px) rotate(-3deg); filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.3)); }
+.shelf:has(.hang[data-held]) .hang:not([data-held]) { opacity: 0.35; }
+.mini { display: block; width: 93px; height: 215px; overflow: hidden; pointer-events: none; }
+.mini > * { transform: scale(0.58); transform-origin: top left; }
+
+.drop {
+  display: flex; align-items: center; justify-content: center; width: 100%; min-height: 160px;
+  border: 0; background: none; color: var(--genre-essay); font: inherit; font-size: 14px; cursor: pointer;
+}
+.drop:focus-visible { outline: 3px solid var(--field-data); outline-offset: -3px; }
+.empty { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); padding: var(--space-5) 0; font-size: 13px; color: var(--ink-muted); }
+.empty p { margin: 0; }
+
+.rename { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); margin-top: var(--space-2); }
+.nameInput {
+  flex: 1 1 140px; min-height: var(--touch); padding: 0 var(--space-3); border: var(--card-edge); border-radius: var(--radius-card);
+  background: var(--field-bg); color: var(--ink); font: inherit; font-size: 15px;
+}
+.nameInput:focus-visible { outline: 3px solid var(--field-data); outline-offset: 1px; }
+.textButton {
+  min-height: var(--touch); padding: 0 var(--space-2); border: 0; background: none; color: var(--ink);
+  font: inherit; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+.textButton:focus-visible, .addRod:focus-visible, .logout:focus-visible, .pick:focus-visible, .toastButton:focus-visible {
+  outline: 3px solid var(--field-data); outline-offset: 2px;
+}
+.addRod {
+  min-height: var(--touch); margin-top: var(--space-4); border: 1px dashed var(--paper-line); border-radius: var(--radius-pill);
+  background: none; color: var(--ink-soft); font: inherit; font-size: 14px; cursor: pointer;
+}
+.logout {
+  align-self: center; min-height: var(--touch); margin-top: var(--space-6); padding: 0 var(--space-3); border: 0; background: none;
+  color: var(--ink-muted); font: inherit; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(var(--space-4) + env(safe-area-inset-bottom)); z-index: 40; transform: translateX(-50%);
+  width: calc(100% - 2 * var(--space-4)); max-width: calc(var(--column) - 2 * var(--space-4)); margin: 0; padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-card); background: var(--ink); color: var(--paper); font-size: 13px; text-align: center;
+}
+.toastOk { background: var(--genre-essay); }
+.toastButton { min-height: 36px; border: 0; background: none; color: inherit; font: inherit; text-decoration: underline; cursor: pointer; }
+
+/* The back face sheet. */
+.backFace { display: flex; justify-content: center; margin: var(--space-3) 0; }
+.sheetActions { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-2); }
+.confirm { margin: 0; font-size: 14px; text-align: center; }
+.pickList { display: flex; flex-direction: column; gap: var(--space-1); margin: var(--space-3) 0; padding: 0; list-style: none; }
+.pick {
+  width: 100%; min-height: var(--touch); padding: 0 var(--space-3); border: 0; border-radius: 10px; background: var(--card-bg);
+  color: var(--ink); font: inherit; font-size: 15px; text-align: left; cursor: pointer;
+}
+.pick:disabled { color: var(--ink-muted); cursor: default; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hang { transition: none; }
+}

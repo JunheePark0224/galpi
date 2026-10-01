@@ -1,0 +1,105 @@
+import { act, renderHook, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import type { LibraryView } from "@/lib/library/types";
+
+const track = vi.fn();
+const request = vi.fn();
+const addSavedCount = vi.fn();
+const setSavedCount = vi.fn();
+vi.mock("@/lib/track/client", () => ({ track: (...a: unknown[]) => track(...a) }));
+vi.mock("@/lib/library/client", () => ({ libraryRequest: (...a: unknown[]) => request(...a) }));
+vi.mock("@/lib/account/store", () => ({
+  addSavedCount: (...a: unknown[]) => addSavedCount(...a),
+  setSavedCount: (...a: unknown[]) => setSavedCount(...a),
+}));
+import { useLibrary } from "./useLibrary";
+
+const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false } as const;
+const card = (id: string) => ({ id, entry: "leaf" as const, title: id, author: "가", genre: "한국 소설", field: null, oneLiner: "?", oneLinerStyle: "question" as const });
+const VIEW: LibraryView = {
+  count: 1, animals: 1,
+  shelves: [
+    { id: "a", name: "첫 막대", position: 0, bookmarks: [{ isbn: "1", art: { ...ART }, reason: { label: "이 책은", items: [] }, metOn: "2026-10-01", card: card("1") }] },
+    { id: "b", name: "둘", position: 1, bookmarks: [] },
+  ],
+};
+const ok = (body: unknown = { ok: true }) => ({ ok: true, status: 200, body });
+
+describe("useLibrary (S-09)", () => {
+  afterEach(() => vi.clearAllMocks());
+
+  it("loads the rods, sends E-17 with the count once, and keeps the header count right", async () => {
+    request.mockResolvedValue(ok(VIEW));
+    const { result } = renderHook(() => useLibrary());
+    await waitFor(() => expect(result.current.status).toBe("ready"));
+    expect(result.current.view).toEqual(VIEW);
+    expect(request).toHaveBeenCalledWith("GET", "/api/library");
+    expect(track).toHaveBeenCalledWith("library_viewed", { saved_count: 1 });
+    expect(setSavedCount).toHaveBeenCalledWith(1);
+    await act(async () => { await result.current.reload(); });
+    expect(track.mock.calls.filter(([n]) => n === "library_viewed")).toHaveLength(1);
+  });
+
+  it("says when it could not load, and when the login ran out", async () => {
+    request.mockResolvedValueOnce({ ok: false, status: 500, body: null });
+    const failed = renderHook(() => useLibrary());
+    await waitFor(() => expect(failed.result.current.status).toBe("error"));
+    request.mockResolvedValueOnce({ ok: false, status: 401, body: null });
+    const out = renderHook(() => useLibrary());
+    await waitFor(() => expect(out.result.current.status).toBe("login"));
+    expect(track).not.toHaveBeenCalled();
+  });
+
+  it("moves a bookmark (E-30 with the way it was moved) and reloads", async () => {
+    request.mockResolvedValue(ok(VIEW));
+    const { result } = renderHook(() => useLibrary());
+    await waitFor(() => expect(result.current.status).toBe("ready"));
+    request.mockResolvedValueOnce(ok()).mockResolvedValueOnce(ok(VIEW));
+    let done = false;
+    await act(async () => { done = await result.current.move("1", "b", "hold"); });
+    expect(done).toBe(true);
+    expect(request).toHaveBeenCalledWith("PATCH", "/api/library/saves", { isbn: "1", shelfId: "b" });
+    expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "1", method: "hold" });
+  });
+
+  it("removes a bookmark (E-16), one less in the header", async () => {
+    request.mockResolvedValue(ok(VIEW));
+    const { result } = renderHook(() => useLibrary());
+    await waitFor(() => expect(result.current.status).toBe("ready"));
+    request.mockResolvedValueOnce(ok()).mockResolvedValueOnce(ok(VIEW));
+    await act(async () => { await result.current.remove("1"); });
+    expect(request).toHaveBeenCalledWith("DELETE", "/api/library/saves", { isbn: "1" });
+    expect(track).toHaveBeenCalledWith("book_unsaved", { book_id: "1" });
+    expect(addSavedCount).toHaveBeenCalledWith(-1);
+  });
+
+  it("adds a rod (E-29 with the new number of rods — never its name), renames and removes rods without events", async () => {
+    request.mockResolvedValue(ok(VIEW));
+    const { result } = renderHook(() => useLibrary());
+    await waitFor(() => expect(result.current.status).toBe("ready"));
+    request.mockResolvedValueOnce(ok({ ok: true, shelf: { id: "c", name: "밤", position: 2 } })).mockResolvedValueOnce(ok(VIEW));
+    await act(async () => { await result.current.addShelf("밤"); });
+    expect(request).toHaveBeenCalledWith("POST", "/api/library/shelves", { name: "밤" });
+    expect(track).toHaveBeenCalledWith("shelf_created", { shelf_count: 3 });
+    expect(JSON.stringify(track.mock.calls)).not.toContain("밤");
+    track.mockClear();
+    request.mockResolvedValueOnce(ok()).mockResolvedValueOnce(ok(VIEW));
+    await act(async () => { await result.current.renameShelf("b", "새 이름"); });
+    request.mockResolvedValueOnce(ok()).mockResolvedValueOnce(ok(VIEW));
+    await act(async () => { await result.current.removeShelf("b"); });
+    expect(request).toHaveBeenCalledWith("PATCH", "/api/library/shelves", { id: "b", name: "새 이름" });
+    expect(request).toHaveBeenCalledWith("DELETE", "/api/library/shelves", { id: "b" });
+    expect(track).not.toHaveBeenCalled();
+  });
+
+  it("reports a refused change without an event", async () => {
+    request.mockResolvedValue(ok(VIEW));
+    const { result } = renderHook(() => useLibrary());
+    await waitFor(() => expect(result.current.status).toBe("ready"));
+    request.mockResolvedValueOnce({ ok: false, status: 409, body: { error: "full" } });
+    let done = true;
+    await act(async () => { done = await result.current.addShelf("x"); });
+    expect(done).toBe(false);
+    expect(track).not.toHaveBeenCalledWith("shelf_created", expect.anything());
+  });
+});
