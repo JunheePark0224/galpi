@@ -4,7 +4,7 @@ import { named, reactToBookmarks, recordEvents, specMismatches, test } from "./h
 // Motion and CSS shorten to fades under reduced motion — same flow, faster run. Books: BOOKS_SOURCE=sample.
 test.use({ reducedMotion: "reduce" });
 
-test("🎯 chips → book → first page → five bookmarks → curious list", async ({ page }, testInfo) => {
+test("🎯 chips → book → first page → five bookmarks → 궁금해요 books one by one", async ({ page }, testInfo) => {
   const { events, statuses } = await recordEvents(page);
   await page.goto("/");
   await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
@@ -32,9 +32,16 @@ test("🎯 chips → book → first page → five bookmarks → curious list", a
   }
   await reactToBookmarks(page, ["궁금해요", "패스", "궁금해요", "패스", "궁금해요"]);
 
-  await expect(page.getByRole("heading", { name: "궁금해요 책" })).toBeVisible();
-  await expect(page.getByRole("listitem")).toHaveCount(3);
+  // S-06 with no book keys (E2E): the empty detail — our own cover, the reason, a note, and still a YES24 link
+  await expect(page.getByText("궁금해요 1 / 3")).toBeVisible();
+  await expect(page.getByText("책 소개를 불러오지 못했어요")).toBeVisible();
+  await expect(page.getByText(/^(나온 이유|이 책은)$/)).toBeVisible();          // the random pick may be from another topic
   if (testInfo.project.name === "laptop") expect((await page.locator(".column").boundingBox())?.width).toBe(430);  // back in the column
+  await page.getByRole("button", { name: "다음 책" }).click();
+  await page.getByRole("button", { name: "다음 책" }).click();
+  await expect(page.getByText("궁금해요 3 / 3")).toBeVisible();
+  await page.getByRole("button", { name: "다 봤어요" }).click();
+  await expect(page.getByRole("heading", { name: "궁금해요 책" })).toBeVisible();
   await page.getByRole("button", { name: "처음으로" }).click();
   await page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ }).click();   // a new round in the same tab
   await expect(page.getByRole("heading", { name: "책을 덮은 뒤, 남았으면 하는 건?" })).toBeVisible();
@@ -58,6 +65,9 @@ test("🎯 chips → book → first page → five bookmarks → curious list", a
   const reacted = named(events, "bookmark_reacted");
   expect(reacted.map((e) => e.props.reaction)).toEqual(["curious", "pass", "curious", "pass", "curious"]);
   expect(reacted.every((e) => e.props.one_liner_style === "summary")).toBe(true);
+  expect(named(events, "result_viewed").map((e) => e.props)).toEqual([{ curious_count: 3 }]);
+  const curiousIds = reacted.filter((e) => e.props.reaction === "curious").map((e) => e.props.book_id);
+  expect(named(events, "result_book_viewed").map((e) => [e.props.book_id, e.props.position])).toEqual(curiousIds.map((id, i) => [id, i + 1]));
   expect(named(events, "home_clicked")[0]).toMatchObject({ props: { curious_count: 3, source: "end" }, common: { entry: "target" } });
   await expect.poll(() => statuses.length).toBe(events.length);
   expect(statuses.every((s) => s === 202)).toBe(true);

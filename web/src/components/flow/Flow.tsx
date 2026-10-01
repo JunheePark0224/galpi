@@ -4,9 +4,10 @@ import { MotionConfig } from "motion/react";
 import vocab from "@/data/vocab.json";
 import type { BalanceChoice, Entry } from "@/lib/recommend";
 import { newArtSeed } from "@/lib/art/combine";
+import { loadDetail } from "@/lib/books/detailClient";
 import type { Vocab } from "@/lib/books/types";
 import { drawBody, requestDraw, toDrawView } from "@/lib/flow/api";
-import { flowReducer, type FlowAction, type FlowState, type Reaction } from "@/lib/flow/state";
+import { curiousPicks, flowReducer, type FlowAction, type FlowState, type Reaction } from "@/lib/flow/state";
 import { loadFlow, saveFlow } from "@/lib/flow/storage";
 import { coverageBucket, editedQuestions, editedTargetFields } from "@/lib/flow/summary";
 import { goalSubmittedProps, type TargetForm } from "@/lib/flow/target";
@@ -17,16 +18,17 @@ import { BalanceGame } from "./BalanceGame";
 import { BookScene } from "./BookScene";
 import { EndList } from "./EndList";
 import { Home } from "./Home";
+import { ResultBook } from "./ResultBook";
 import { TargetInput } from "./TargetInput";
 
 const VOCAB = vocab as Vocab;
 
-/** S-01 → S-05 + the curious list. Cross-screen events are sent here, in the handlers (never from effects). */
+/** S-01 → S-05 → S-06 → the end. Cross-screen events are sent here, in the handlers (never from effects). */
 export function Flow() {
   const [state, dispatch] = useReducer(flowReducer, undefined, loadFlow);
 
   useEffect(() => { saveFlow(state); }, [state]);
-  useEffect(() => { window.scrollTo(0, 0); }, [state.step]);
+  useEffect(() => { window.scrollTo(0, 0); }, [state.step, state.result]);
 
   const runDraw = async (s: FlowState) => {
     try {
@@ -55,6 +57,20 @@ export function Flow() {
     track("bookmark_shown", {
       book_id: pick.card.id, position: s.index + 1, one_liner_style: pick.card.oneLinerStyle, pick_type: pick.kind, art: pick.art,
     });
+  };
+
+  /** E-10: the 궁금해요 book now on S-06 (position counts within the 궁금해요 books, from 1). */
+  const trackResultBook = (s: FlowState) => {
+    const pick = curiousPicks(s)[s.result];
+    if (pick) track("result_book_viewed", { book_id: pick.card.id, position: s.result + 1, pick_type: pick.kind });
+  };
+
+  /** Into S-06: E-09 once, then E-10 for the first book; every 궁금해요 book's detail is asked for ahead. */
+  const enterResult = (s: FlowState) => {
+    const curious = curiousPicks(s);
+    track("result_viewed", { curious_count: curious.length });
+    trackResultBook(s);
+    for (const p of curious) void loadDetail(p.card.id);
   };
 
   const start = (entry: Entry) => {
@@ -100,6 +116,12 @@ export function Flow() {
     });
     const next = act({ type: "react", reaction });
     if (next.step === "bookmarks") trackShown(next);
+    if (next.step === "result") enterResult(next);
+  };
+
+  const nextResult = () => {
+    const next = act({ type: "nextResult" });
+    if (next.step === "result") trackResultBook(next);
   };
 
   /** [처음으로] — source: first_page = S-04 dead end (draw failed / no books), end = after the bookmarks (taxonomy E-20). */
@@ -110,6 +132,8 @@ export function Flow() {
   };
 
   const inBook = state.step === "book" || state.step === "first" || state.step === "bookmarks";
+  const curious = curiousPicks(state);
+  const resultPick = state.step === "result" ? curious[state.result] : undefined;
 
   return (
     <MotionConfig reducedMotion="user">
@@ -126,6 +150,9 @@ export function Flow() {
           onReact={react}
           onHome={() => home("first_page")}
         />
+      )}
+      {resultPick && (
+        <ResultBook key={resultPick.card.id} pick={resultPick} position={state.result + 1} total={curious.length} onNext={nextResult} />
       )}
       {state.step === "end" && <EndList picks={state.draw?.picks ?? []} reactions={state.reactions} onHome={() => home("end")} />}
     </MotionConfig>

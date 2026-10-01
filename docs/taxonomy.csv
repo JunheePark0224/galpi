@@ -46,15 +46,15 @@ click,책갈피,SDK,bookmark_reacted,S-05 [패스] 또는 [궁금해요]를 누�
 click,책갈피,SDK,bookmark_reacted,S-05 [패스] 또는 [궁금해요]를 누를 때 (둘 중 하나를 눌러야 다음 장),reaction,반응,FALSE,String,"""pass"", ""curious""",,E-08,live
 click,책갈피,SDK,bookmark_reacted,S-05 [패스] 또는 [궁금해요]를 누를 때 (둘 중 하나를 눌러야 다음 장),pick_type,"추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음)",FALSE,String,"""recommended"", ""random""",v0.3 반영 · 이전 속성 이름: kind,E-08,live
 click,책갈피,SDK,bookmark_reacted,S-05 [패스] 또는 [궁금해요]를 누를 때 (둘 중 하나를 눌러야 다음 장),one_liner_style,첫인상 한 줄 말투 (E-07과 같은 값),FALSE,String,"""summary"", ""question""",v0.3 반영 · 추가,E-08,live
-view,결과,SDK,result_viewed,S-06 궁금해요 책 보기 화면에 들어올 때 (궁금해요가 1개 이상일 때만 — 0개면 S-08로 바로 가서 남지 않음),curious_count,이번 회차 궁금해요 수,FALSE,Number,"1, 2, 5",,E-09,planned-P4
-view,결과,SDK,result_book_viewed,"S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩)",book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-10,planned-P4
-view,결과,SDK,result_book_viewed,"S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩)",position,궁금해요 책 중 몇 번째인지 (1부터),FALSE,Number,"1, 2",,E-10,planned-P4
-view,결과,SDK,result_book_viewed,"S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩)",pick_type,"추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음)",FALSE,String,"""recommended"", ""random""",v0.3 명세 반영(EVENT_SPEC) · 심는 것은 P4 · 추가,E-10,planned-P4
-click,결과,SDK,description_expanded,S-06 책 설명 [더 보기]를 누를 때,book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-23,planned-P4
-click,결과,SDK,description_expanded,S-06 책 설명 [더 보기]를 누를 때,pick_type,"추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음)",FALSE,String,"""recommended"", ""random""",,E-23,planned-P4
-click,결과,SDK,yes24_link_clicked,S-06 또는 S-09에서 [예스24에서 보기]를 누를 때 (새 탭),book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",v0.3 반영 · 이전 이름: yes24_clicked,E-18,planned-P4
-click,결과,SDK,yes24_link_clicked,S-06 또는 S-09에서 [예스24에서 보기]를 누를 때 (새 탭),source,누른 화면,FALSE,String,"""result"", ""library""","v0.3 반영 · 이전 이름: yes24_clicked / result=S-06, library=S-09",E-18,planned-P4
-click,결과,SDK,yes24_link_clicked,S-06 또는 S-09에서 [예스24에서 보기]를 누를 때 (새 탭),pick_type,"추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음). source=library면 null",FALSE,String,"null, ""recommended"", ""random""",v0.3 명세 반영(EVENT_SPEC) · 심는 것은 P4 · 이전 이름: yes24_clicked / 추가,E-18,planned-P4
+view,결과,SDK,result_viewed,S-06 궁금해요 책 보기 화면에 들어올 때 (궁금해요가 1개 이상일 때만 — 0개면 S-08로 바로 가서 남지 않음),curious_count,이번 회차 궁금해요 수,FALSE,Number,"1, 2, 5",,E-09,live
+view,결과,SDK,result_book_viewed,"S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩)",book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-10,live
+view,결과,SDK,result_book_viewed,"S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩)",position,궁금해요 책 중 몇 번째인지 (1부터),FALSE,Number,"1, 2",,E-10,live
+view,결과,SDK,result_book_viewed,"S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩)",pick_type,"추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음)",FALSE,String,"""recommended"", ""random""",v0.3 명세 반영(EVENT_SPEC) · 심는 것은 P4 · 추가,E-10,live
+click,결과,SDK,description_expanded,S-06 책 설명 [더 보기]를 누를 때,book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-23,live
+click,결과,SDK,description_expanded,S-06 책 설명 [더 보기]를 누를 때,pick_type,"추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음)",FALSE,String,"""recommended"", ""random""",,E-23,live
+click,결과,SDK,yes24_link_clicked,S-06 또는 S-09에서 [예스24에서 보기]를 누를 때 (새 탭),book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",v0.3 반영 · 이전 이름: yes24_clicked,E-18,live
+click,결과,SDK,yes24_link_clicked,S-06 또는 S-09에서 [예스24에서 보기]를 누를 때 (새 탭),source,누른 화면,FALSE,String,"""result"", ""library""","v0.3 반영 · 이전 이름: yes24_clicked / result=S-06, library=S-09",E-18,live
+click,결과,SDK,yes24_link_clicked,S-06 또는 S-09에서 [예스24에서 보기]를 누를 때 (새 탭),pick_type,"추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음). source=library면 null",FALSE,String,"null, ""recommended"", ""random""",v0.3 명세 반영(EVENT_SPEC) · 심는 것은 P4 · 이전 이름: yes24_clicked / 추가,E-18,live
 click,보관,SDK,save_clicked,S-06 [보관]을 누를 때 (로그인 전이면 이어서 E-12),book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-11,planned-P5
 click,보관,SDK,save_clicked,S-06 [보관]을 누를 때 (로그인 전이면 이어서 E-12),is_logged_in,누를 때 로그인 상태였는지,FALSE,Boolean,"TRUE, FALSE",,E-11,planned-P5
 system,보관,SDK,book_saved,"보관이 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 보관",book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-15,planned-P5

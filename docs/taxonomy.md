@@ -5,6 +5,7 @@
 | taxonomy v0.2 | 2026-09-30 | 사용자 결정 5건(9절) · `PRD.md` v0.2 4절 · `proposal.md` 4-4 · `PHASES.md` P8·P9 · `balance-game.md` 4절 · `target-chips.md` 5·6절 · `plans/2026-09-30-amplitude.md` · 현재 코드(`web/src/lib/track/*`, `track()` 호출 14곳) | 사용자 결정 반영 |
 | taxonomy v0.3 | 2026-10-01 | 개발 라운드 `plans/2026-10-01-taxonomy-dev.md` | **구현 완료 — 코드가 이 문서를 따른다** (8절) |
 | taxonomy v0.3.1 | 2026-10-01 | v0.3 최종 검토 | 입력 칸 가림·허용 목록·검사 #11·표현 정리 (8절) |
+| taxonomy v0.4 | 2026-10-01 | P4 결과·서버 `plans/2026-10-01-p4-results-server.md` | S-06·S-08 이벤트 live (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -236,7 +237,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 ### 4-1. 한눈에 보기
 
-상태 (v0.3): live 13 · planned-P4 5 · planned-P5 7 · planned-taxonomy 0. 4-4의 이름·속성 변경과 속성 추가 4건은 v0.3에서 코드에 반영 (P4 이벤트 E-10·E-18의 `pick_type`은 `EVENT_SPEC`에만 — 심는 것은 P4)
+상태 (v0.4): live 17 · planned-P4 1 · planned-P5 7 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned는 P5(보관·로그인·서재)
 
 | ID | 제안 이름 | 이전 이름 | 분류 | 트리거 | 상태 |
 |---|---|---|---|---|---|
@@ -252,10 +253,10 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-06 | `first_page_edited` | 같음 | 책펼치기 | submit | live |
 | E-07 | `bookmark_shown` | 같음 | 책갈피 | view | live |
 | E-08 | `bookmark_reacted` | 같음 | 책갈피 | click | live |
-| E-09 | `result_viewed` | 같음 | 결과 | view | planned-P4 |
-| E-10 | `result_book_viewed` | 같음 | 결과 | view | planned-P4 |
-| E-23 | `description_expanded` | 같음 | 결과 | click | planned-P4 |
-| E-18 | `yes24_link_clicked` | `yes24_clicked` (PRD) | 결과 | click | planned-P4 |
+| E-09 | `result_viewed` | 같음 | 결과 | view | live |
+| E-10 | `result_book_viewed` | 같음 | 결과 | view | live |
+| E-23 | `description_expanded` | 같음 | 결과 | click | live |
+| E-18 | `yes24_link_clicked` | `yes24_clicked` (PRD) | 결과 | click | live |
 | E-11 | `save_clicked` | 같음 | 보관 | click | planned-P5 |
 | E-15 | `book_saved` | 같음 | 보관 | system | planned-P5 |
 | E-16 | `book_unsaved` | 같음 | 보관 | click | planned-P5 |
@@ -453,7 +454,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 결과 | view | planned-P4 | 같음 |
+| 결과 | view | live | 같음 |
 
 **언제**: S-06 궁금해요 책 보기 화면에 들어올 때 (궁금해요가 1개 이상일 때만 — 0개면 S-08로 바로 가서 남지 않음)  
 **분석 질문**: Q-01, Q-11
@@ -466,7 +467,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 결과 | view | planned-P4 | 같음 |
+| 결과 | view | live | 같음 |
 
 **언제**: S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩)  
 **분석 질문**: Q-11
@@ -481,7 +482,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 결과 | click | planned-P4 | 같음 |
+| 결과 | click | live | 같음 |
 
 **언제**: S-06 책 설명 [더 보기]를 누를 때  
 **분석 질문**: Q-11
@@ -495,7 +496,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 결과 | click | planned-P4 | `yes24_clicked` → `yes24_link_clicked` |
+| 결과 | click | live | `yes24_clicked` → `yes24_link_clicked` |
 
 **언제**: S-06 또는 S-09에서 [예스24에서 보기]를 누를 때 (새 탭)  
 **분석 질문**: Q-01, Q-11
@@ -922,6 +923,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.2 | 2026-09-30 | Claude (사용자 결정 반영) | 사용자 결정 5건(9절). ① E-26 `goal_submitted` 추가 확정 → Status `planned-taxonomy`(새 상태), PRD 4절에도 추가. ② `round` +1 = [다시 뽑기] + 같은 탭 [처음으로](3-1a·5-1). ③ `goal_text`는 **Supabase only** — Amplitude 사본에서 뺌(2-7 속성 단위 예외·6-2), `/privacy` 고칠 문장 2개 기록(6-3). ④ 이름 변경 4건·속성·값 변경 19건·속성 추가 4건 모두 `accepted — dev round` — **한 번의 개발 라운드로, P7 전·Vercel Amplitude 키 설정 전**(4-4 표는 마이그레이션 명세로 유지). ⑤ Amplitude `setUserId`·`login_provider`는 **P5에서 결정**(3-2). Amplitude 검토의 개발 라운드 항목 2건 추가: 시작 전 이벤트도 큐에 받기, 큐 이벤트는 원래 `time` 유지(2-7). 상태 집계 `proposed` 1 → 0, `planned-taxonomy` 1 |
 | v0.3 | 2026-10-01 | Claude (개발 라운드) | **구현 완료** (`plans/2026-10-01-taxonomy-dev.md`). 4-4 마이그레이션 전부 코드에 반영 — 이벤트 이름 4건(E-18은 명세만), 속성·값 19건, 중복 `entry` 삭제 2건, 속성 추가 4건(E-08 `one_liner_style`·E-20 `source` 구현, E-10·E-18 `pick_type`은 명세만 — P4), E-26 `goal_submitted` 구현. `round` +1은 `track()`이 E-20·E-19를 보낸 직후(3-1a). `goal_text`는 Amplitude 사본과 Session Replay에서 빠지고 `/privacy`에 6-3 문장 2개(갱신일 10-01). `schema.ts`의 `EVENT_SPEC`·`PropsOf`로 `track()` 호출을 tsc가 검사, `/api/track`도 같은 명세로 props 검사. 자동 검사: `taxonomy.test.ts`(7-3 #1~#10), E2E `specMismatches`. Amplitude 대기열: 시작 전 이벤트도 받기(키 있을 때만)·원래 `time`. csv: 구현된 줄 `live`, E-10·E-18 `pick_type`은 `planned-P4`, E-01 Note에 `Amplitude only`, Note의 "현재 이름" → "이전 이름". Supabase의 테스트 기록은 옛 이름 그대로(P7에서 지움 — 옮기지 않음) |
 | v0.3.1 | 2026-10-01 | Claude (최종 검토 반영) | 직접 쓰기 입력 칸에 `data-amp-mask`(Session Replay 가림이 대시보드 수준과 무관하게 코드로 보장 — 6-2). `forAmplitude`는 허용 목록 방식(명세에 있고 `Supabase only`가 아닌 속성만). 자동 검사 #11 추가 — 이벤트별 속성 표 ↔ csv (7-3). 옛 표현을 구현된 상태로 고침(2-7 a·b, 2-8, 4-1, 4-4, 7-3 ①). 배포 체크리스트(`deploy.md`)에 Production 키 설정 뒤 개인정보 확인 추가. 이벤트·속성 변경 없음 |
+| v0.4 | 2026-10-01 | Claude (P4 구현) | S-06에서 E-09 `result_viewed`·E-10 `result_book_viewed`(`pick_type` 포함)·E-23 `description_expanded`·E-18 `yes24_link_clicked`(`source`=result, `pick_type`)를 심어 `live`로. 이벤트 이름·속성 변경 없음 |
 
 ---
 

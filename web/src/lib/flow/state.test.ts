@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { BalanceChoice } from "@/lib/recommend";
-import { INITIAL, flowReducer, type DrawView, type FlowAction, type FlowState } from "./state";
+import { INITIAL, curiousPicks, flowReducer, type DrawView, type FlowAction, type FlowState } from "./state";
 
 const art = { animal: "cat", bg: "peach", sky: "moon", ground: "none", rare: false } as const;
 const view = (n: number): DrawView => ({
@@ -56,7 +56,7 @@ describe("flowReducer", () => {
     expect(first).toMatchObject({ step: "bookmarks", index: 0, seen: ["b0"] });
     const end = run([{ type: "react", reaction: "curious" }, { type: "react", reaction: "pass" }, { type: "react", reaction: "pass" },
       { type: "react", reaction: "curious" }, { type: "react", reaction: "pass" }], first);
-    expect(end).toMatchObject({ step: "end", reactions: ["curious", "pass", "pass", "curious", "pass"], seen: ["b0", "b1", "b2", "b3", "b4"] });
+    expect(end).toMatchObject({ step: "result", result: 0, reactions: ["curious", "pass", "pass", "curious", "pass"], seen: ["b0", "b1", "b2", "b3", "b4"] });
   });
 
   it("has only as many pages as picks when a draw is short", () => {
@@ -86,6 +86,21 @@ describe("flowReducer", () => {
     const editing = flowReducer(first, { type: "edit" });
     expect(editing).toMatchObject({ step: "target", edited: true, prevForm: form });
     expect(flowReducer(editing, { type: "submitTarget", form: { ...form, len: "thin" }, goal: null })).toMatchObject({ step: "first", drawId: 2 });
+  });
+
+  it("shows the 궁금해요 books one by one (S-06), then the end (S-08)", () => {
+    const bookmarks = run([{ type: "start", entry: "leaf" }, ...answers(), { type: "drawn", id: 1, draw: view(5) }, { type: "open" }, { type: "next" }]);
+    const result = run(["pass", "curious", "pass", "curious", "pass"].map((r) => ({ type: "react", reaction: r }) as FlowAction), bookmarks);
+    expect(curiousPicks(result).map((p) => p.card.id)).toEqual(["b1", "b3"]);
+    const second = flowReducer(result, { type: "nextResult" });
+    expect(second).toMatchObject({ step: "result", result: 1 });
+    expect(flowReducer(second, { type: "nextResult" })).toMatchObject({ step: "end", result: 1 });
+    expect(flowReducer(bookmarks, { type: "nextResult" })).toBe(bookmarks);
+  });
+
+  it("goes straight to the end when nothing was 궁금해요", () => {
+    const first = run([{ type: "start", entry: "leaf" }, ...answers(), { type: "drawn", id: 1, draw: view(2) }, { type: "open" }, { type: "next" }]);
+    expect(run([{ type: "react", reaction: "pass" }, { type: "react", reaction: "pass" }], first)).toMatchObject({ step: "end" });
   });
 
   it("goes home keeping only the seen books", () => {

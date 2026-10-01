@@ -39,7 +39,7 @@ test("🍃 nine answers (one held 못 잡겠어요) → book → five bookmarks"
   await expect(page.getByText("문장 · 몰입 둘 다 좋아요")).toBeVisible();
   await page.getByRole("button", { name: "다음 장" }).click();
   await reactToBookmarks(page, ["궁금해요", "패스", "패스", "궁금해요", "패스"]);
-  await expect(page.getByRole("listitem")).toHaveCount(2);
+  await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
 
   await expect.poll(() => named(events, "bookmark_reacted").length).toBe(5);
   const answers = named(events, "balance_answered");

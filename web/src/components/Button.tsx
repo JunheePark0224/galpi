@@ -1,7 +1,8 @@
-import type { ButtonHTMLAttributes } from "react";
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
 import styles from "./Button.module.css";
 
-type Props = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "secondary" };
+type Variant = "primary" | "secondary";
+type Props = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant };
 
 export function Button({ variant = "primary", className, type = "button", ...rest }: Props) {
   return (
@@ -10,6 +11,19 @@ export function Button({ variant = "primary", className, type = "button", ...res
       type={type}
       data-variant={variant}
       className={[styles.btn, styles[variant], className].filter(Boolean).join(" ")}
+    />
+  );
+}
+
+/** C-05 look for a link that leaves the site (S-06 [예스24에서 보기]): opens a new tab, never passes our page as opener. */
+export function LinkButton({ variant = "primary", className, ...rest }: AnchorHTMLAttributes<HTMLAnchorElement> & { variant?: Variant }) {
+  return (
+    <a
+      {...rest}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-variant={variant}
+      className={[styles.btn, styles.link, styles[variant], className].filter(Boolean).join(" ")}
     />
   );
 }
