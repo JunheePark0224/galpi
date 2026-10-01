@@ -1,5 +1,6 @@
 """Pipeline: instructions, schemas, the API call and answer parsing (src/pipeline/prompt.py · tagger.py) — fake client."""
 import json
+import re
 import sys
 from pathlib import Path
 from types import SimpleNamespace
@@ -11,23 +12,12 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from pipeline import ROOT, VOCAB  # noqa: E402
-from pipeline.prompt import aliases, schema, system_prompt, table_after, user_message  # noqa: E402
+from pipeline.prompt import PromptError, aliases, schema, system_prompt, table_after, user_message  # noqa: E402
 from pipeline.tagger import TaggerStop, Usage, call, parse, request  # noqa: E402
 from pipeline_fakes import FakeClient, check_answer, message, tag_answer  # noqa: E402
 
 VOC = json.loads(VOCAB.read_text(encoding="utf-8"))
 DOCS = ROOT / "docs"
-READING_WAY_RULE = """
-**읽는 방식 태그 기준 (fixture)**: 책을 덮었을 때 독자 손에 남는 것으로 정한다.
-
-| 방식 | 남는 것 | 목차 모양 | 예 |
-|---|---|---|---|
-| 실습 | **바로 해 볼 방법**(무엇을·어떻게) — 연습 문제가 없는 방법서도 실습 | "~하는 법" | 가계부 쓰는 법 |
-| 개념 | **이해** | "~란 무엇인가" | 금리가 오르면 생기는 일 |
-| 사례 | **이야기** | 경험담이 뼈대 | 직업 에세이 |
-
-헷갈리면: "이 책을 읽고 내일 바로 해 볼 게 생기나?"
-"""
 
 
 def test_the_reference_is_read_from_the_docs():
@@ -36,17 +26,36 @@ def test_the_reference_is_read_from_the_docs():
     assert "호러·괴담 ↔ 추리·스릴러" in p                          # book-pool.md 1-3
     assert "돈 관리·투자 ↔ 경제 상식" in p                          # target-chips.md 경계
     assert "  - ETF·펀드 — ETF·인덱스·펀드처럼 묶음으로 사는 투자" in p  # keyword definition
+    assert "| 실습 | **바로 해 볼 방법**" in p and "헷갈리면:" in p      # reading way (target-chips, pilot 10-01)
     assert "one_liner" in p and "one_liner" not in system_prompt(VOC, "check")
 
 
-def test_the_reading_way_rule_is_read_from_target_chips(tmp_path):
-    # The "읽는 방식 태그 기준" table (pilot, 10-01) may not be in this checkout yet: use a docs fixture, not the real file.
+def _docs_copy(tmp_path, cut: str = "") -> Path:
     for name in ("balance-game.md", "book-pool.md", "target-chips.md"):
-        (tmp_path / name).write_text((DOCS / name).read_text(encoding="utf-8"), encoding="utf-8")
-    with (tmp_path / "target-chips.md").open("a", encoding="utf-8", newline="") as f:
-        f.write(READING_WAY_RULE)
-    p = system_prompt(VOC, "tag", tmp_path)
-    assert "| 실습 | **바로 해 볼 방법**" in p and "헷갈리면:" in p
+        text = (DOCS / name).read_text(encoding="utf-8")
+        (tmp_path / name).write_text(text.replace(cut, "") if cut else text, encoding="utf-8")
+    return tmp_path
+
+
+@pytest.mark.parametrize("cut, missing", [
+    ("**읽는 방식 태그 기준", "읽는 방식 태그 기준"), ("헷갈리면:", "헷갈리면:"), ("### 태그 기준", "### 태그 기준"),
+    ("### 1-3.", "### 1-3."), ("경계 (한 책·한 글이 두 주제에 걸릴 때", "경계 (한 책")])
+def test_a_missing_rule_table_stops_the_prompt_instead_of_going_out_empty(tmp_path, cut, missing):
+    with pytest.raises(PromptError, match=re.escape(missing)):
+        system_prompt(VOC, "tag", _docs_copy(tmp_path, cut))
+    assert "| 실습 | **바로 해 볼 방법**" in system_prompt(VOC, "tag", _docs_copy(tmp_path))  # the copy itself is fine
+
+
+def test_a_marker_with_no_table_rows_is_an_error_too():
+    assert table_after("## A\n| a |", "## A") == ["| a |"]
+    for text in ("## A\ntext only\n", "nothing here"):
+        with pytest.raises(PromptError):
+            table_after(text, "## A")
+
+
+def test_an_empty_vocab_is_an_error():
+    with pytest.raises(PromptError, match="keyword"):
+        system_prompt({}, "tag")
 
 
 def test_table_after_and_aliases():

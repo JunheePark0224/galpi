@@ -22,8 +22,13 @@ MAX_KEYWORDS = 3
 EVIDENCE_MAX = 30
 
 
+class PromptError(ValueError):
+    """A rule the instructions are built from is missing from the docs: stop, never send a prompt with a hole in it."""
+
+
 def table_after(text: str, marker: str) -> list[str]:
-    """The markdown table rows that follow the first line starting with `marker`."""
+    """The markdown table rows that follow the first line starting with `marker`. Raises PromptError if the marker or
+    its table is missing (an empty section would silently drop a rule from the instructions)."""
     rows, seen = [], False
     for line in text.splitlines():
         if not seen:
@@ -33,7 +38,17 @@ def table_after(text: str, marker: str) -> list[str]:
             rows.append(line)
         elif rows:
             break
+    if not rows:
+        raise PromptError(f"rule table not found in the docs: {marker!r} " + ("(no rows after it)" if seen else "(no such line)"))
     return rows
+
+
+def line_starting(text: str, prefix: str) -> str:
+    """The first line that starts with `prefix`; PromptError if there is none."""
+    for line in text.splitlines():
+        if line.startswith(prefix):
+            return line
+    raise PromptError(f"rule line not found in the docs: {prefix!r}")
 
 
 def aliases(pattern: str, name: str) -> list[str]:
@@ -53,6 +68,8 @@ def aliases(pattern: str, name: str) -> list[str]:
 
 def keyword_lines(vocab: dict) -> list[str]:
     defs = keyword_definitions()
+    if not defs:
+        raise PromptError("rule table not found in the docs: '새 키워드 정의' (keyword definitions)")
     out = []
     for topic, t in vocab.items():
         out.append(f"- {topic}:")
@@ -60,6 +77,8 @@ def keyword_lines(vocab: dict) -> list[str]:
             meaning = defs.get(topic, {}).get(name)
             also = aliases(k.get("pattern", ""), name)
             out.append(f"  - {name}" + (f" — {meaning}" if meaning else "") + (f" (같은 말: {', '.join(also)})" if also else ""))
+    if not any(line.startswith("  - ") for line in out):
+        raise PromptError("keyword list is empty (keyword_vocab.json has no kept keywords)")
     return out
 
 
@@ -72,7 +91,7 @@ def reference(vocab: dict, docs: Path = DOCS) -> str:
         *table_after(balance, "### 태그 기준"),
         "", "## 🍃 장르 경계", *table_after(pool, "### 1-3."),
         "", "## 🎯 읽는 방식 하나 — 책을 덮었을 때 독자 손에 남는 것", *table_after(chips, "**읽는 방식 태그 기준"),
-        *[line for line in chips.splitlines() if line.startswith("헷갈리면:")][:1],
+        line_starting(chips, "헷갈리면:"),
         "", "## 🎯 주제별 키워드 (닫힌 목록 — 이 이름만, 책의 중심일 때만)", *keyword_lines(vocab),
         "", "## 🎯 주제 경계", *table_after(chips, "경계 (한 책·한 글이 두 주제에 걸릴 때"),
     ])
