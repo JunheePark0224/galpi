@@ -34,7 +34,7 @@
 | Q-10 | **🎯 입력 검증** — 보기 vs 직접 쓰기 비율과 각각의 궁금해요, 찾은 책 0 / 1~3 / 4+ 별 궁금해요·이탈, 못 찾은 요청 목록, 요청 적중률(키워드에 연결된 비율) | target-chips 2·6절, PHASES P8 |
 | Q-11 | **결과 화면** — 궁금해요 → 예스24 클릭 비율, [더 보기] 비율(추천/무작위) | proposal 4-4, PRD F-09, PHASES P8 |
 | Q-12 | **보관 → 로그인** — 보관 → 로그인 창 → 로그인 완료 → 자동 보관 비율, 카카오·구글 비율 | PRD 4절 "새로 볼 수 있는 것", PHASES P8 |
-| Q-13 | **재방문·서재** — 재방문 후 내 서재를 여는 비율 | PRD 4절 |
+| Q-13 | **재방문·내 책갈피** — 재방문 후 내 책갈피를 여는 비율 | PRD 4절 |
 | Q-14 | **기기** — 휴대폰/데스크톱, 앱 안 브라우저 비율, 앱 안 브라우저에서 구글 로그인 실패 | context 09-29(모바일 우선), PRD F-20 |
 | Q-15 | **2단계 전후 비교** — 고친 것 하나의 전후 차이(효과 크기 + 신뢰구간), 유입 경로별로 나눠 보기 | proposal 4-4, PHASES P9 |
 
@@ -48,7 +48,7 @@
 | 이벤트 카테고리 = 최종 전환까지 이어지는 퍼널 한 묶음. 이벤트 = 행동, 속성 = 그 순간의 추가 정보 | 네이버 시리즈 1편 | 분류(2-5)를 이용 흐름의 단계로 둔다. 전환은 두 개 — 궁금해요(관심)와 예스24 클릭·보관(행동) |
 | 네이밍 컨벤션은 선택이 아니라 필수. 누가 봐도 유추할 수 있게, 소문자 + 밑줄(snake_case) | [네이버 시리즈 2편](https://blog.martinee.io/post/designing-perfect-event-taxonomy-naver-series-2) | 2절 규칙. 이 문서의 테스트(7절)가 규칙을 기계로 검사한다 |
 | 전환까지 꼭 필요한 경로(critical path)만 이벤트로. 경로의 갈래는 이벤트를 늘리지 말고 속성으로 | 네이버 시리즈 2편 | 같은 버튼이 여러 화면에 있으면 이벤트 하나 + `source` 속성 (예스24·로그인 창·처음으로) |
-| view와 click은 둘 다 필요할 때만 함께 둔다. view는 여러 경로로 같은 화면에 오거나 화면 정보가 전환에 영향을 줄 때 쓸모 있고, 새로고침 중복·의도 불명확이라는 위험이 있다 | 네이버 시리즈 2편, [꿀팁 2편](https://blog.martinee.io/post/designing-taxonomy-honeytip-2) | view는 5개뿐(방문·책갈피 노출·결과·로그인 창·서재). `bookmark_shown`은 새로고침 복원 때 다시 보내지 않는다 |
+| view와 click은 둘 다 필요할 때만 함께 둔다. view는 여러 경로로 같은 화면에 오거나 화면 정보가 전환에 영향을 줄 때 쓸모 있고, 새로고침 중복·의도 불명확이라는 위험이 있다 | 네이버 시리즈 2편, [꿀팁 2편](https://blog.martinee.io/post/designing-taxonomy-honeytip-2) | view는 5개뿐(방문·책갈피 노출·결과·로그인 창·내 책갈피). `bookmark_shown`은 새로고침 복원 때 다시 보내지 않는다 |
 | 모든 행동을 잡지 않는다. 분석에 쓸 곳이 없는 이벤트는 비용(Amplitude는 이벤트 수 과금)과 혼란만 늘린다. `1 − 전환율`로 계산되는 것은 따로 잡지 않는다 | 꿀팁 2편 | 4-3절 "이벤트로 만들지 않는 것". 패스율은 `bookmark_reacted` 한 이벤트의 `reaction` 값으로 |
 | 이벤트로 나눌지 속성으로 나눌지는 분석 편의로 정한다. 늘 따로 봐야 하는 두 퍼널이면 이벤트를 나누는 게 낫고, 합쳐 보기는 나중에 쉽다 | 꿀팁 2편 | 🍃·🎯는 입력 화면만 다르고(→ `balance_answered` vs `chip_selected`) 그 뒤 화면은 같다 → 공통 이벤트 + 공통 속성 `entry`. Amplitude에서 `entry`로 나눠 본다 |
 | 이벤트 흐름도(패스)와 택소노미 시트는 따로 끝내지 말고 함께 고친다 | [꿀팁 1편](https://blog.martinee.io/post/designing-taxonomy-honeytip-1) | 흐름·퍼널은 이 문서(4·5절), 시트는 `taxonomy.csv` — 같은 커밋에서 함께 고친다 |
@@ -64,7 +64,7 @@
 ### 2-1. 이벤트 이름
 
 - **snake_case, 영어 소문자, `대상_동작(과거형)`** — 예: `bookmark_reacted`, `login_prompt_shown`
-- 대상은 화면에 보이는 사물(책갈피·책·로그인 창·서재)이나 입력(칩·목표)으로 쓴다. 화면 ID(S-05)나 컴포넌트 이름은 쓰지 않는다
+- 대상은 화면에 보이는 사물(책갈피·책·로그인 창·내 책갈피)이나 입력(칩·목표)으로 쓴다. 화면 ID(S-05)나 컴포넌트 이름은 쓰지 않는다
 - 동작은 2-2 목록의 동사만. 새 동사가 필요하면 목록부터 고친다
 - 🍃/🎯 접두어를 붙이지 않는다 — 입구는 공통 속성 `entry`로 나눈다 (1-2)
 - 한 이벤트 = 한 순간. 같은 순간에 두 이벤트가 나는 것은 서로 다른 질문에 답할 때만 허용 (`goal_submitted` + `free_goal_written`)
@@ -125,7 +125,7 @@
 | 결과 | S-06 | E-09, E-10, E-23, E-18 |
 | 보관 | S-06, S-09 | E-11, E-15, E-16 |
 | 로그인 | S-07 | E-12, E-13, E-14 |
-| 서재 | S-09 | E-17 |
+| 내 책갈피 | S-09 | E-17 |
 | 마무리 | S-08 (E-20은 S-04의 막다른 길에서도) | E-19, E-20 |
 | 공통 | — | 공통 속성 (csv의 `*` 줄) |
 
@@ -237,7 +237,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 ### 4-1. 한눈에 보기
 
-상태 (v0.4): live 18 · planned-P4 0 · planned-P5 7 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned는 P5(보관·로그인·서재)
+상태 (v0.4): live 18 · planned-P4 0 · planned-P5 7 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned는 P5(보관·로그인·내 책갈피)
 
 | ID | 제안 이름 | 이전 이름 | 분류 | 트리거 | 상태 |
 |---|---|---|---|---|---|
@@ -263,7 +263,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-12 | `login_prompt_shown` | 같음 | 로그인 | view | planned-P5 |
 | E-13 | `login_started` | 같음 | 로그인 | click | planned-P5 |
 | E-14 | `login_completed` | 같음 | 로그인 | system | planned-P5 |
-| E-17 | `library_viewed` | 같음 | 서재 | view | planned-P5 |
+| E-17 | `library_viewed` | 같음 | 내 책갈피 | view | planned-P5 |
 | E-19 | `redraw_clicked` | 같음 | 마무리 | click | live |
 | E-20 | `home_clicked` | 같음 | 마무리 | click | live |
 
@@ -541,7 +541,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 보관 | click | planned-P5 | 같음 |
 
-**언제**: S-09 내 서재에서 [빼기]를 누를 때  
+**언제**: S-09 내 책갈피에서 [빼기]를 누를 때  
 **분석 질문**: Q-13
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -592,9 +592,9 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 서재 | view | planned-P5 | 같음 |
+| 내 책갈피 | view | planned-P5 | 같음 |
 
-**언제**: S-09 내 서재를 열 때  
+**언제**: S-09 내 책갈피를 열 때  
 **분석 질문**: Q-13
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -685,7 +685,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 | E-26 `goal_submitted` (새 이벤트, 🎯 입력 완료 — [책 펼치기]로 제출될 때) | `topic`, `is_free_text`, `len`, `way`, `is_edit` | Q-01 🎯 입력 완료 단계가 지금은 없다(칩 누름·직접 쓰기만 있음). Q-10 보기 vs 직접 쓰기 비율 |
 | E-08 `bookmark_reacted` | `one_liner_style` | Q-07 — Amplitude에서 조인 없이 말투별 궁금해요율 |
 | E-10 `result_book_viewed` | `pick_type` | Q-08·Q-11 — 무작위 책이 결과 화면 이후에도 살아남나 |
-| E-18 `yes24_link_clicked` | `pick_type` (서재에서는 null) | Q-08·Q-11 — 무작위 책도 예스24까지 가나 |
+| E-18 `yes24_link_clicked` | `pick_type` (내 책갈피에서는 null) | Q-08·Q-11 — 무작위 책도 예스24까지 가나 |
 | E-20 `home_clicked` | `source` (`first_page` / `end`) | Q-01·Q-03 — 막다른 길(S-04)에서 나간 것과 다 보고 나간 것을 구분 |
 
 **이 라운드에서 함께 하는 동작 변경** (이름 변경이 아니라 동작 — 모두 승인됨)
@@ -726,7 +726,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 | FN-3 | 책갈피 잔존 | `bookmark_shown` position 1 → 2 → 3 → 4 → 5 → `bookmark_reacted`(5) | 판 | Q-02 |
 | FN-4 | 결과 → 예스24 | `result_viewed` → `result_book_viewed` → `description_expanded` → `yes24_link_clicked`(result) | 판 | Q-11 |
 | FN-5 | 보관 → 로그인 | `save_clicked`(is_logged_in=false) → `login_prompt_shown`(source=save) → `login_started` → `login_completed` → `book_saved`(is_auto_save=true) | 사람 | Q-12 |
-| FN-6 | 재방문 → 서재 | `site_visited`(is_returning=true, 로그인한 사람) → `library_viewed` | 세션 | Q-13 |
+| FN-6 | 재방문 → 내 책갈피 | `site_visited`(is_returning=true, 로그인한 사람) → `library_viewed` | 세션 | Q-13 |
 
 FN-2의 셋째 단계(`goal_submitted`)는 v0.3(2026-10-01)부터 쌓인다. 그 전 데이터에는 🎯 입력 완료를 잴 수 없다(칩 누름 `chip_selected`는 완료가 아니다).
 

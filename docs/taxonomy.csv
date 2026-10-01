@@ -59,12 +59,12 @@ click,보관,SDK,save_clicked,S-06 [보관]을 누를 때 (로그인 전이면 �
 click,보관,SDK,save_clicked,S-06 [보관]을 누를 때 (로그인 전이면 이어서 E-12),is_logged_in,누를 때 로그인 상태였는지,FALSE,Boolean,"TRUE, FALSE",,E-11,planned-P5
 system,보관,SDK,book_saved,"보관이 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 보관",book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-15,planned-P5
 system,보관,SDK,book_saved,"보관이 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 보관",is_auto_save,로그인 직후 자동 보관인지,FALSE,Boolean,"TRUE, FALSE",,E-15,planned-P5
-click,보관,SDK,book_unsaved,S-09 내 서재에서 [빼기]를 누를 때,book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-16,planned-P5
+click,보관,SDK,book_unsaved,S-09 내 책갈피에서 [빼기]를 누를 때,book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-16,planned-P5
 view,로그인,SDK,login_prompt_shown,S-07 로그인 창이 뜰 때,source,어디서 열렸는지,FALSE,String,"""save"", ""header""","save=[보관], header=우측 위 [로그인]",E-12,planned-P5
 click,로그인,SDK,login_started,S-07 카카오/구글 버튼을 누를 때 (외부 로그인으로 떠나기 직전),provider,로그인 방식,FALSE,String,"""kakao"", ""google""",,E-13,planned-P5
 system,로그인,SDK,login_completed,로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트),provider,로그인 방식,FALSE,String,"""kakao"", ""google""",,E-14,planned-P5
 system,로그인,SDK,login_completed,로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트),is_first_login,처음 로그인(이용자가 새로 생김)인지,FALSE,Boolean,"TRUE, FALSE",,E-14,planned-P5
-view,서재,SDK,library_viewed,S-09 내 서재를 열 때,saved_count,보관한 책 수,FALSE,Number,"0, 3, 12",,E-17,planned-P5
+view,내 책갈피,SDK,library_viewed,S-09 내 책갈피를 열 때,saved_count,보관한 책 수,FALSE,Number,"0, 3, 12",,E-17,planned-P5
 click,마무리,SDK,redraw_clicked,"S-08 [다시 뽑기]를 누를 때. 이 이벤트는 끝나는 판의 round를 싣고, 보낸 직후 round +1 (3-1a)",curious_count,이번 회차 궁금해요 수,FALSE,Number,"0, 2",,E-19,live
 click,마무리,SDK,home_clicked,"[처음으로]를 누를 때 — S-04(뽑기 실패·책 없음)와 S-08 마무리. 이벤트는 끝나는 판의 round를 싣고, 보낸 직후 round +1 — 같은 탭에서 다시 시작하면 새 판 (3-1a)",curious_count,이번 회차 궁금해요 수,FALSE,Number,"0, 2",v0.3 반영 · 이전 속성 이름: curious,E-20,live
 click,마무리,SDK,home_clicked,"[처음으로]를 누를 때 — S-04(뽑기 실패·책 없음)와 S-08 마무리. 이벤트는 끝나는 판의 round를 싣고, 보낸 직후 round +1 — 같은 탭에서 다시 시작하면 새 판 (3-1a)",source,누른 화면,FALSE,String,"""first_page"", ""end""","v0.3 반영 · 추가 / first_page=S-04(막다른 길), end=마무리",E-20,live
