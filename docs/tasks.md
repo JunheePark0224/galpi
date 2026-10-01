@@ -50,7 +50,7 @@ Last Updated: 2026-10-01
 - [x] 디자인 반영 — Stitch 시안 적용, 로고 SVG, 저자 줄, 로고 머리글, 화면 가득 책·가운데 책갈피·데스크톱 넓게 (`docs/plans/2026-09-30-design-pass.md`) (9/30)
 - [x] 이벤트 택소노미 v0.2(문서) + 개발 라운드 v0.3 — 이름 변경, E-26, 회차 규칙, 직접 쓴 글은 Supabase만, `EVENT_SPEC` 타입 검사·서버 검사, CSV ↔ 코드 자동 검사, Amplitude 대기열 (`docs/taxonomy.md`, `docs/plans/2026-10-01-taxonomy-dev.md`) (10/1)
 - [ ] `feat/amplitude` main 병합·배포 → Vercel Production에 Amplitude 키(사용자) → 카탈로그·대시보드
-- [ ] P7 휴대폰·카톡 브라우저 점검, 5명 반응, 테스트 기록 지우기
+- [ ] P7 휴대폰·카톡 브라우저 점검, 5명 반응, 테스트 기록 지우기 → Amplitude 대시보드 차트 17개 시작점을 그날 00:00 KST로 (프로젝트 시간대는 10-01에 Asia/Seoul로 바꿈)
 
 ### 📚 데이터
 - [x] 책 구성·뽑기 규칙 설계 + 시뮬레이션 (`book-pool.md`, `src/simulate_draws.py`) (9/29)
