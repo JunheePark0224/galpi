@@ -1,0 +1,45 @@
+/* F-24 "이렇게 이해했어요" (DESIGN C-17, mockup C′). Tokens only; text ≥ 12px; the YES24 link is a 44px tap. No slip, no warning look. */
+.block {
+  display: flex; flex-direction: column; gap: var(--space-1);
+  padding: var(--space-1) 0 var(--space-2); border-bottom: 1px dashed var(--paper-line);
+}
+.label { margin: 0; font-size: 12px; color: var(--ink-muted); }
+
+/* the path: segments stay whole (nowrap + no-break spaces); breaks fall only on the plain spaces between segments */
+.path { margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink-soft); word-break: keep-all; }
+.seg { white-space: nowrap; }
+.name { font-weight: 400; }
+.seg[data-last] { color: var(--ink); }
+.seg[data-last] .name { font-weight: 600; }
+.sep, .suffix { color: var(--ink-muted); }
+/* ② the thing we do not have yet: one dashed box, never emphasised. On a narrow page the box wraps inside, after the name. */
+.gone {
+  display: inline-block; max-width: 100%; white-space: normal; padding: 0 var(--space-2); vertical-align: top;
+  border: 1px dashed var(--ink-muted); border-radius: var(--radius-card); color: var(--ink-muted);
+}
+.goneNote { font-size: 12px; white-space: nowrap; }
+
+.none { margin: 0; font-size: 14px; line-height: 1.5; color: var(--ink); word-break: keep-all; }
+.more { margin: 0; font-size: 12px; line-height: 1.5; color: var(--ink-soft); word-break: keep-all; }
+/* an untouched example chip: one short line */
+.short { margin: 0; padding: var(--space-1) 0 var(--space-2); border-bottom: 1px dashed var(--paper-line); font-size: 12px; line-height: 1.5; color: var(--ink-muted); word-break: keep-all; }
+
+/* ② a link on its own line, 44px tall so it is a real tap target */
+.yes24 {
+  display: inline-flex; align-items: center; align-self: flex-start; min-height: var(--touch);
+  color: var(--ink); font-size: 13px; line-height: 1.4; text-decoration: underline; text-underline-offset: 3px; word-break: keep-all;
+}
+.yes24:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+
+@media (min-height: 780px) {
+  .path { font-size: 14px; }
+}
+/* T-04b desktop: the words grow with the pages (same :has() test as FirstPage.module.css) */
+@supports selector(:has(*)) {
+  @media (min-width: 768px) {
+    .path, .yes24 { font-size: 15px; }
+    .none { font-size: 16px; }
+    .more, .short { font-size: 14px; }
+    .label, .goneNote { font-size: 13px; }
+  }
+}

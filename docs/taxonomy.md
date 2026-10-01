@@ -8,6 +8,7 @@
 | taxonomy v0.4 | 2026-10-01 | P4 결과·서버 `plans/2026-10-01-p4-results-server.md` | S-06·S-08 이벤트 live (8절) |
 | taxonomy v0.5 | 2026-10-01 | D-D 입력 B안 (PRD F-02, context 10-01) | E-03 `chip_type` "example", E-26 `is_free_text` = 예시 칩 글 그대로면 FALSE (8절) |
 | taxonomy v0.5.1 | 2026-10-01 | 최종 검토 (integrate/pilot) | home-nav `round` 변경 기록·3-1a 함수 이름 (8절) |
+| taxonomy v0.6 | 2026-10-01 | PRD F-24 "이렇게 이해했어요" (시안 C′) | E-22 `understood`, E-21 `has_missing`·`missing_text`(Supabase only), E-18 `source` "first_page"(book_id null), E-02 `source`, ③ [🍃 그냥 한 권] round +1 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -153,6 +154,7 @@
 
 | 속성 | 표시 | 뜻 |
 |---|---|---|
+| E-21 `missing_text` (v0.6) | **`Supabase only`** | 분류가 적은 글에서 뽑은 "우리 키워드에 없는 구체적인 것"(≤20자, F-24). 적은 글에서 나온 말이라 `goal_text`와 같이 Amplitude 사본에서 뺀다 — Amplitude에는 `has_missing`(예/아니오)만 간다. 처리방침 6-3c |
 | E-21 `goal_text` | **`Supabase only`** | 직접 쓴 글(≤30자)은 Supabase `events.props`에만 저장한다. **같은 이벤트의 Amplitude 사본에는 이 속성이 없다** — `topic`·`keywords`·`is_matched`·`method`는 그대로 간다. 이유·처리방침 변경은 6-2·6-3 |
 | E-01 `prompt_version` | `Amplitude only` | 강사 안내문 6단계 설치 확인값 (기존) |
 
@@ -208,6 +210,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | **[다시 뽑기]**(E-19)를 누를 때 | **+1** |
 | 같은 탭에서 **[처음으로]**(E-20)를 눌러 다시 시작할 때 (새 판) | **+1** |
 | 첫 장 [한 번 고치기] → 재뽑기, 새로고침·뒤로 가기·버려진 탭 복원으로 같은 장 복원 | 그대로 (같은 판. 고친 판은 `is_edit`·E-06으로 구분) |
+| **F-24 ③**(맞는 주제 없음 — 뽑기 없음)에서 **[🍃 그냥 한 권]** (v0.6) | **+1** — E-02(`source`=first_page)를 보내기 **직전**. 끝 이벤트는 없다(그 🎯 판은 E-22 `understood`=none으로 끝난 것이 보인다). 한 판 = 한 입구로 두어 🎯 판과 🍃 판이 섞이지 않게. 구현: `Flow.tsx`의 `switchToLeaf`가 `nextRound()` → `setEntry("leaf")` → E-02 (`settleOpen`처럼 이벤트 없는 +1) |
 | 주소 다시 입력·링크·헤더 로고·/privacy [처음으로]로 **새로 열어** S-01에서 시작할 때, 저장돼 있던 흐름이 판 도중(step이 home이 아님)이었다 | **+1** (이벤트는 보내지 않는다 — 끝 이벤트 없이 끊긴 판이 곧 이탈 신호). 이미 처음 화면이었다면 그대로 |
 
 - **+1은 E-19·E-20을 보낸 직후**에 한다. 그 이벤트 자체는 **끝나는 판의 round**를 싣고(그 판의 `curious_count`와 같은 판), 그다음 이벤트(`entry_selected` 등)부터 새 값을 싣는다.
@@ -296,8 +299,12 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 진입 | click | live | 같음 |
 
-**언제**: S-01에서 🎯/🍃 입구 버튼을 누를 때. 누르기 직전에 공통 entry가 정해지므로 입구 값은 공통 entry로 읽는다  
-**분석 질문**: Q-01, Q-05
+**언제**: S-01에서 🎯/🍃 입구 버튼을 누를 때(source=home), 또는 S-04 F-24 ③에서 [🍃 그냥 한 권]을 누를 때(source=first_page — 보내기 직전에 round +1, 3-1a). 누르기 직전에 공통 entry가 정해지므로 입구 값은 공통 entry로 읽는다  
+**분석 질문**: Q-01, Q-05, Q-10
+
+| 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
+|---|---|---|---|---|
+| `source` | 추가 (v0.6, F-24) | String | "home", "first_page" | 누른 화면 — home=S-01 입구 버튼, first_page=S-04 ③(맞는 주제 없음)의 [🍃 그냥 한 권]. 퍼널 FN-1·FN-2는 source=home으로 센다 |
 
 속성 없음 (공통 속성만).
 
@@ -371,7 +378,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 목표입력 | submit | live | `goal_free_written` → `free_goal_written` |
 
-**언제**: S-02 🎯에서 무엇을 칸에 자기 말을 써서 제출할 때 (E-26과 같은 순간, is_free_text=TRUE일 때만 — 예시 칩 글 그대로면 남지 않음). 분류가 끝난 뒤(보통 1초, 최대 5초)에 남음. **Amplitude 사본**은 `goal_text` 없이 `topic`·`keywords`·`is_matched`·`method`만 간다  
+**언제**: S-02 🎯에서 무엇을 칸에 자기 말을 써서 제출할 때 (E-26과 같은 순간, is_free_text=TRUE일 때만 — 예시 칩 글 그대로면 남지 않음). 분류가 끝난 뒤(보통 1초, 최대 5초)에 남음. **Amplitude 사본**은 `goal_text`·`missing_text` 없이 `topic`·`keywords`·`is_matched`·`method`·`has_missing`만 간다  
 **분석 질문**: Q-10
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -381,6 +388,8 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 | `keywords` | 같음 | String[] | ["SQL"], [] | 연결된 세부 키워드 (닫힌 목록 이름만, 0~5개) |
 | `is_matched` | `matched` → `is_matched` | Boolean | TRUE, FALSE | 우리 목록에서 하나라도 찾았는지 |
 | `method` | 같음 | String | "word", "llm" | 연결 방법. llm은 P4(Claude Haiku), 실패·3초 초과면 word |
+| `has_missing` | 추가 (v0.6, F-24) | Boolean | TRUE, FALSE | 분류가 "우리 키워드에 없는 구체적인 것"을 찾았는지 (F-24 ②·③ — llm만, word는 늘 FALSE) |
+| `missing_text` | 추가 (v0.6, F-24) | String | null, "단타 매매" | 그 구체적인 것을 가리키는 짧은 말 (분류가 적은 글에서 뽑음, 최대 20자). 없으면 null. **`Supabase only`** (2-7·6-2). 화면에서는 예스24 검색어로만 쓰인다(6-3c) |
 
 #### E-22 `goal_coverage_checked`
 
@@ -388,13 +397,14 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 목표입력 | system | live | `goal_coverage` → `goal_coverage_checked` |
 
-**언제**: 🎯 자기 말로 제출한 뒤(is_free_text=TRUE — 예시 칩 글 그대로면 남지 않음) /api/books/draw 응답을 받았을 때 (고치기 재뽑기 포함). 첫 장 안내 문구를 정하는 순간  
+**언제**: 🎯 자기 말로 제출한 뒤(is_free_text=TRUE — 예시 칩 글 그대로면 남지 않음) /api/books/draw 응답을 받았을 때 (고치기 재뽑기 포함). F-24 ③(맞는 주제 없음)은 뽑지 않으므로 분류가 끝나 제출하는 순간 found_count 0으로. 첫 장 안내 문구를 정하는 순간  
 **분석 질문**: Q-10
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `coverage_bucket` | `bucket` → `coverage_bucket` | String | "0", "1-3", "4+" | 찾은 책 수 구간 (target-chips.md 3절) — 구간 표기는 PRD 그대로 |
 | `found_count` | `found` → `found_count` | Number | 0, 2, 7 | 키워드에 맞는 책 수. is_matched=false면 0 |
+| `understood` | 추가 (v0.6, F-24) | String | "keyword", "topic", "missing", "none" | 첫 장 "이렇게 이해했어요"가 보인 판단 — keyword=① 주제·키워드, topic=①b 주제만, missing=② 주제는 맞고 구체적인 것이 키워드에 없음, none=③ 맞는 주제 없음 |
 
 #### E-05 `book_opened`
 
@@ -502,14 +512,14 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 결과 | click | live | `yes24_clicked` → `yes24_link_clicked` |
 
-**언제**: S-06 또는 S-09에서 [예스24에서 보기]를 누를 때 (새 탭)  
-**분석 질문**: Q-01, Q-11
+**언제**: S-06 또는 S-09에서 [예스24에서 보기]를 누를 때, 또는 S-04 F-24 ②·③에서 [예스24에서 … 찾기]를 누를 때 (새 탭)  
+**분석 질문**: Q-01, Q-10, Q-11
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `book_id` | 같음 | String | "9788998441012" | 책 ISBN-13 (books.isbn) |
-| `source` | 같음 | String | "result", "library" | 누른 화면 — result=S-06, library=S-09 |
-| `pick_type` | 추가 — v0.3 명세 반영, 심는 것은 P4 | String | null, "recommended", "random" | 추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음). source=library면 null |
+| `book_id` | 같음 (v0.6: null 허용) | String | null, "9788998441012" | 책 ISBN-13 (books.isbn). source=first_page면 null (책 없이 검색) |
+| `source` | 같음 (v0.6: "first_page" 추가) | String | "result", "library", "first_page" | 누른 화면 — result=S-06, library=S-09, first_page=S-04 F-24 ②·③ (어느 쪽인지는 같은 판의 E-22 `understood`) |
+| `pick_type` | 추가 — v0.3 명세 반영, 심는 것은 P4 | String | null, "recommended", "random" | 추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음). source=library·first_page면 null |
 
 #### E-11 `save_clicked`
 
@@ -749,7 +759,8 @@ FN-2의 셋째 단계(`goal_submitted`)는 v0.3(2026-10-01)부터 쌓인다. 그
 | 질문별 효과 | 🍃 판에서 그 축 답 방향 = 책 축 태그 방향일 때 vs 아닐 때 궁금해요율 (`book_id`로 `books.axes` 조인) | 축 | Q-09 ② |
 | 보기 vs 직접 쓰기 | `goal_submitted`의 is_free_text 비율, 각 판의 궁금해요율. v0.5(입력 B안)부터 FALSE = 예시 칩 글을 그대로 낸 것. **"예시 칩에서 시작해 고친" 판** = 같은 `session_id`·`round` 안에 `chip_selected`(chip_type=example)가 있고 `goal_submitted`가 is_free_text=TRUE인 판 (손으로 예시 칩 글과 똑같이 쓰면 칩 이벤트 없이 FALSE) | — | Q-10 ② |
 | 찾은 책 구간별 반응 | 판의 마지막 `goal_coverage_checked.coverage_bucket`별 궁금해요율·5장 완주율 | coverage_bucket | Q-10 ③ |
-| 못 찾은 요청 | `free_goal_written`에서 is_matched=false 또는 found_count<4의 goal_text 목록 | method | Q-10 ④ |
+| 못 찾은 요청 | `free_goal_written`에서 is_matched=false 또는 found_count<4의 goal_text 목록. v0.6부터 `missing_text`(has_missing=TRUE)를 모아 세면 "새 키워드 후보" 목록 (PRD F-24 — 많이 쌓이면 새 주제·키워드) | method | Q-10 ④ |
+| 이해 판단별 반응 (v0.6) | 판의 마지막 `goal_coverage_checked.understood`별 비율, 각각의 5장 완주율·궁금해요율, ②·③에서 `yes24_link_clicked`(first_page) 비율, ③에서 E-02(source=first_page)·E-06 비율 | understood | Q-10 |
 | 요청 적중률 | `free_goal_written` 중 keywords가 1개 이상인 비율 | method | Q-10 |
 | 더 보기율 | `description_expanded` / `result_book_viewed` (책 단위, 중복 제거) | pick_type | Q-11 |
 | 예스24 클릭률 | `yes24_link_clicked`(result) / `result_book_viewed` | pick_type | Q-11 |
@@ -794,7 +805,7 @@ Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나
 
 - 이름, 이메일, 전화번호, 주소, 생년월일
 - 카카오·구글 계정 고유번호, 로그인 토큰 — 이벤트의 `user_id`는 Supabase 내부 UUID뿐
-- 직접 쓰기(E-21 `goal_text`, 30자) 말고는 **이용자가 쓴 자유 글** — 새 입력칸이 생기면 이 문서와 처리방침부터. `goal_text`도 **Supabase에만** 둔다(Amplitude로 보내지 않음, 6-2)
+- 직접 쓰기(E-21 `goal_text`, 30자 — 그리고 v0.6부터 그 글에서 뽑은 `missing_text`, 20자) 말고는 **이용자가 쓴 자유 글** — 새 입력칸이 생기면 이 문서와 처리방침부터. `goal_text`도 **Supabase에만** 둔다(Amplitude로 보내지 않음, 6-2)
 - 책소개·가격·표지 등 YES24 원문 (이벤트에는 `book_id`=ISBN만)
 - 키·비밀값, 서버 오류 원문
 
@@ -803,6 +814,7 @@ Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나
 | 항목 | 규칙 |
 |---|---|
 | `goal_text` | 최대 30자, 앞뒤 공백 제거. 입력칸 아래 "이름·연락처는 적지 마세요". **Supabase에만 저장한다 — Amplitude 사본에는 이 속성을 넣지 않는다**(결정 2026-09-30, 9절 Q3). 못 찾은 요청 분석(5-3)은 SQL로 하므로 잃는 것이 없다. Amplitude에는 `topic`·`keywords`·`is_matched`·`method`가 간다. 처리방침에 저장 명시, **Amplitude로는 안 간다는 문장은 v0.3에서 추가(6-3)**. **P4**: 주제를 찾으려고 이 글만 Anthropic(Claude Haiku)에 보낸다 — 익명 번호·공통 속성·다른 기록은 보내지 않고, 서버 로그에도 글을 남기지 않는다. 처리방침에 먼저 적었다(6-3b). 첫 장(S-04)이 이 글을 화면에 보이면 Session Replay(20%)가 화면 글자를 담을 수 있다 — v0.3: 직접 쓴 글이 있는 첫 장(`FirstPage.tsx`)과 글을 쓰는 입력 칸(`TargetInput.tsx`)에 `data-amp-mask`를 달아 리플레이에서 가린다 (v0.3.1: 입력 칸도 — 대시보드의 가림 수준이 `light`로 바뀌어도 가려진다) |
+| `missing_text` (v0.6) | 분류(Claude Haiku)가 `goal_text`에서 뽑은 짧은 말, 최대 20자(서버 `max`), `<` `>` 제거. `goal_text`와 같이 **Supabase에만** — Amplitude에는 `has_missing`만. 화면에서는 F-24 ②·③의 [예스24에서 찾기] 검색어로 쓰여, 누르면 **그 짧은 말만** 예스24 검색 주소에 실려 간다(적은 글 전체·익명 번호는 가지 않음). 첫 장은 이미 `data-amp-mask`로 리플레이에서 가려진다 |
 | `referrer` | 500자에서 자름. Supabase에만. 검색 주소 등 쿼리 문자열에 개인 정보가 섞일 수 있어, 필요하면 호스트만 남기는 것을 검토 |
 | `anon_id` | 처리방침 "지우고 싶다면"에서 이 번호로 삭제 요청을 받는다 — 값의 형식·위치를 바꾸면 처리방침 화면도 함께 |
 | Autocapture·Session Replay | IP·대략적 지역·누른 요소가 Amplitude로 간다(처리방침에 명시). 리플레이는 입력칸을 가린다 — 새 입력칸도 가림 대상인지 확인 |
@@ -822,6 +834,10 @@ Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나
 ### 6-3b. 처리방침 변경 — P4 (Anthropic)
 
 P4의 `/api/goal/classify`가 직접 쓴 글(≤30자)을 Anthropic API로 보낸다(target-chips 3절). 7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고쳤다 — 표의 직접 쓰기 행에 "주제를 찾을 때 Anthropic에 보내요", "기록을 전달하는 곳"에 받는 곳(Anthropic, 미국)·보내는 것(그 글뿐)·Anthropic이 밝힌 처리(API 입력을 학습에 쓰지 않음 — Commercial Terms B, 30일 안에 삭제 — Privacy Center, 예외 있음). 이벤트 속성은 그대로(`method`가 `llm`이 될 뿐).
+
+### 6-3c. 처리방침 변경 — F-24 (예스24 검색어)
+
+7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고쳤다(갱신일 그대로 2026-10-01). ① 표의 직접 쓰기 행 끝에 "갈피에 아직 없는 걸 찾았다면 그걸 가리키는 짧은 말도 데이터베이스에만 저장해요" ② "기록을 전달하는 곳"에 새 문단 — "첫 장에서 [예스24에서 찾기]를 누르면, 그 글에서 찾은 짧은 말(예: '캠핑 장비')을 검색어로 예스24에 보내요. 적은 글 전체나 익명 번호는 보내지 않아요." 그 뒤에 "이 밖의 곳에는 주지 않아요"를 옮겼다.
 
 ### 6-4. 보관
 
@@ -934,6 +950,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.4 | 2026-10-01 | Claude (P4 구현) | S-06에서 E-09 `result_viewed`·E-10 `result_book_viewed`(`pick_type` 포함)·E-23 `description_expanded`·E-18 `yes24_link_clicked`(`source`=result, `pick_type`), S-08에서 E-19 `redraw_clicked`를 심어 `live`로(E-19 뒤 round +1은 v0.3의 `track()` 그대로). E-20 설명에서 P3 임시 화면 문구를 뺌. 이벤트 이름·속성 변경 없음 |
 | v0.5 | 2026-10-01 | Claude (D-D 입력 B안) | S-02 🎯가 큰 무엇을 칸 + 예시 칩 6개로(PRD F-02, context 10-01). E-03 `chip_type` 값 "topic" → "example"(예시 칩을 누를 때, `chip_value` = 칩 글). E-26 `is_free_text`는 이름·뜻 그대로 "보기 vs 직접 쓰기"(Q-10 ②) — FALSE = 예시 칩 글을 고치지 않고 제출. 그 글은 칩마다 정해 둔 주제·키워드로 바로 연결(Claude 호출 없음)되고 E-21·E-22는 남지 않는다(주제 칩 때와 같음). 고친 글은 직접 쓴 말 — 분류, E-21·E-22. 새 이벤트·속성 없음 |
 | v0.5.1 | 2026-10-01 | Claude (최종 검토 반영) | 로고·주소로 새로 열기 규칙(home-nav)의 `round` 변경을 기록: 판 도중이던 흐름을 `navigate`로 새로 열면 round +1(이벤트 없음)·`entry` null이 `site_visited`보다 먼저 정해진다(3-1a·E-01, `storage.ts`의 `settleOpen`). 3-1a의 구현 함수 이름을 고침. 저장 흐름 `VERSION` 2 → 3(마음·회복이 키워드에서 빠졌으므로 배포 전 저장 흐름은 처음부터). 이벤트·속성 이름·값 변경 없음 |
+| v0.6 | 2026-10-01 | Claude (F-24 구현) | PRD F-24 "이렇게 이해했어요"(시안 C′). E-22 `understood`("keyword"/"topic"/"missing"/"none") 추가 — ③(맞는 주제 없음)은 뽑지 않으므로 제출 때 found_count 0으로 보낸다. E-21 `has_missing`(Boolean, Amplitude에도)·`missing_text`(String 또는 null, ≤20자, **Supabase only**) 추가. E-18 `source`에 "first_page"(②의 링크·③의 버튼, `book_id`·`pick_type` null — `book_id`가 null 허용으로). E-02 `source`("home"/"first_page") 추가 — ③ [🍃 그냥 한 권]은 E-02 직전에 round +1(3-1a, 이벤트 없는 +1). ③ [다른 말로 쓰기]는 기존 E-06 그대로. `/privacy` 6-3c 먼저. 저장 흐름 `VERSION` 3 → 4. `screen_version`은 그대로 `v1`(F-18 2단계 전후 비교용 — 실이용자 전이라 올리지 않음). 이벤트 이름 변경 없음 |
 
 ---
 

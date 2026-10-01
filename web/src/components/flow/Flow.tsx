@@ -12,7 +12,8 @@ import { loadFlow, saveFlow } from "@/lib/flow/storage";
 import { coverageBucket, editedQuestions, editedTargetFields } from "@/lib/flow/summary";
 import { goalSubmittedProps, type TargetForm } from "@/lib/flow/target";
 import type { GoalMatch } from "@/lib/goal/match";
-import { setEntry } from "@/lib/track/common";
+import { understoodOf } from "@/lib/goal/understood";
+import { nextRound, setEntry } from "@/lib/track/common";
 import { track } from "@/lib/track/client";
 import { BalanceGame } from "./BalanceGame";
 import { BookScene } from "./BookScene";
@@ -36,8 +37,8 @@ export function Flow({ vocab }: { vocab: Vocab }) {
     try {
       const res = await requestDraw(drawBody(s));
       if (s.entry === "target" && s.goal && s.goal.method !== "example") {   // E-22: own words only, like E-21
-        const found = s.goal.matched ? (res.found ?? 0) : 0;
-        track("goal_coverage_checked", { coverage_bucket: coverageBucket(found), found_count: found });
+        const found = res.found ?? 0;
+        track("goal_coverage_checked", { coverage_bucket: coverageBucket(found), found_count: found, understood: understoodOf(s.goal) });
       }
       dispatch({ type: "drawn", id: s.drawId, draw: toDrawView(res, newArtSeed()) });
     } catch {
@@ -77,9 +78,23 @@ export function Flow({ vocab }: { vocab: Vocab }) {
 
   const start = (entry: Entry) => {
     setEntry(entry);
-    track("entry_selected", {});    // the entry itself is the common `entry`, set just above
+    track("entry_selected", { source: "home" });    // the entry itself is the common `entry`, set just above
     act({ type: "start", entry });
   };
+
+  /**
+   * F-24 ③ [🍃 그냥 한 권]: the 🎯 round drew nothing, so the balance game is a new round (taxonomy 3-1a: one round, one
+   * entry) — round + 1 with no end event, then E-02 from the first page.
+   */
+  const switchToLeaf = () => {
+    nextRound();
+    setEntry("leaf");
+    track("entry_selected", { source: "first_page" });
+    act({ type: "start", entry: "leaf" });
+  };
+
+  /** F-24 ② link / ③ button: a YES24 search from the first page — no book (E-18). */
+  const yes24FromFirstPage = () => track("yes24_link_clicked", { book_id: null, source: "first_page", pick_type: null });
 
   const answer = (choice: BalanceChoice) => {
     const next = act({ type: "answer", choice });
@@ -104,10 +119,15 @@ export function Flow({ vocab }: { vocab: Vocab }) {
     if (goal && goal.method !== "example") {
       track("free_goal_written", {
         goal_text: goal.text, topic: goal.topic, keywords: goal.keywords, is_matched: goal.matched, method: goal.method,
+        has_missing: goal.missing !== null, missing_text: goal.missing,
       });
     }
     if (state.prevForm) track("first_page_edited", { changed_items: editedTargetFields(state.prevForm, form) });
     act({ type: "submitTarget", form, goal });
+    // F-24 ③: no topic, so no draw answers — E-22 is decided right here (nothing found)
+    if (goal && goal.method !== "example" && understoodOf(goal) === "none") {
+      track("goal_coverage_checked", { coverage_bucket: "0", found_count: 0, understood: "none" });
+    }
   };
 
   const open = () => {
@@ -167,6 +187,8 @@ export function Flow({ vocab }: { vocab: Vocab }) {
           onRetry={() => act({ type: "retry" })}
           onReact={react}
           onHome={() => home("first_page")}
+          onYes24={yes24FromFirstPage}
+          onLeaf={switchToLeaf}
         />
       )}
       {resultPick && (

@@ -20,7 +20,7 @@ describe("site_visited on a fresh open vs a reload (hydrated TrackVisit + FlowRo
   });
 
   async function openWith(navType: string) {
-    sessionStorage.setItem("galpi.flow", JSON.stringify({ v: 3, state: { ...midRound, status: "idle", draw: null } }));
+    sessionStorage.setItem("galpi.flow", JSON.stringify({ v: 4, state: { ...midRound, status: "idle", draw: null } }));
     sessionStorage.setItem("galpi.round", "1");
     sessionStorage.setItem("galpi.entry", "leaf");
     vi.spyOn(performance, "getEntriesByType").mockReturnValue([{ type: navType }] as unknown as PerformanceEntryList);

@@ -2,9 +2,10 @@
 import { useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
 import { Bookmark } from "@/components/Bookmark";
-import { Button } from "@/components/Button";
+import { Button, LinkButton } from "@/components/Button";
 import type { FlowState, Reaction } from "@/lib/flow/state";
-import { firstPageNotices } from "@/lib/flow/summary";
+import { coverageNote, firstPageNotices } from "@/lib/flow/summary";
+import { JUST_ONE, REWRITE, YES24_FIND, understoodOf, yes24FindUrl } from "@/lib/goal/understood";
 import { BOOKMARK_AWAY, BOOKMARK_DOWN, BOOKMARK_RISE } from "@/lib/motion";
 import { Book, RuledPage } from "./Book";
 import { FirstPage, FirstPageTitle } from "./FirstPage";
@@ -30,20 +31,25 @@ interface Props {
   onRetry: () => void;
   onReact: (reaction: Reaction) => void;
   onHome: () => void;
+  /** F-24 ② link / ③ button to a YES24 search (E-18, source first_page) */
+  onYes24: () => void;
+  /** F-24 ③ [🍃 그냥 한 권]: switch to the balance game */
+  onLeaf: () => void;
 }
 
 /**
  * S-03 · S-04 · S-05 share one book so the cover keeps its place between steps. The book fills the column; the bookmark
  * rises out of the gutter, centred between the two pages. Buttons sit below the book; the page count is the folio.
  */
-export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onHome }: Props) {
+export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onHome, onYes24, onLeaf }: Props) {
   const [busy, setBusy] = useState(true);            // a bookmark is still moving: reactions wait (and frost stays off)
   const [last, setLast] = useState<Reaction>("pass");
   const { step, status, draw } = state;
   const picks = draw?.picks ?? [];
   const pick = step === "bookmarks" ? picks[state.index] : undefined;
   const noBooks = status === "ready" && picks.length === 0;
-  const editLabel = state.goal && !state.goal.matched ? "다시 쓰기" : "한 번 고치기";
+  // F-24 ③: no topic of ours — no draw, no bookmarks; the honest ways out instead of [한 번 고치기][다음 장]
+  const uncovered = state.entry === "target" && state.goal !== null && understoodOf(state.goal) === "none";
 
   const react = (reaction: Reaction) => {
     if (busy) return;
@@ -61,12 +67,14 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
         choices={state.choices}
         form={state.form}
         goal={state.goal}
+        coverage={coverageNote(state.entry, state.goal, draw)}
         notices={firstPageNotices(state.entry, state.goal, draw)}
+        onYes24={onYes24}
       />
     );
 
   return (
-    <div className={styles.scene} data-wide-scene="">
+    <div className={styles.scene} data-wide-scene="" data-exits={uncovered ? "" : undefined}>
       <div className={styles.stage}>
         <Book open={state.opened} onPress={step === "book" ? onOpen : undefined} left={left} right={right} />
         {pick && <p className={styles.folio}>{`${state.index + 1} / ${picks.length}`}</p>}
@@ -91,7 +99,15 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
 
       {step === "book" && <p className={styles.hint}>눌러서 펼치기</p>}
 
-      {step === "first" && (
+      {step === "first" && uncovered && (
+        <div className={`${styles.actions} ${styles.exits}`}>
+          <LinkButton href={yes24FindUrl(state.goal?.missing ?? null)} className={styles.full} onClick={onYes24}>{YES24_FIND}</LinkButton>
+          {!state.edited && <Button variant="secondary" onClick={onEdit}>{REWRITE}</Button>}
+          <Button variant="secondary" onClick={onLeaf}>{JUST_ONE}</Button>
+        </div>
+      )}
+
+      {step === "first" && !uncovered && (
         <div className={styles.actions}>
           {status === "error" && <p className={styles.error} role="alert">{DRAW_FAILED}</p>}
           {status === "error" ? (
@@ -101,7 +117,7 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
             </>
           ) : (
             <>
-              {!state.edited && <Button variant="secondary" onClick={onEdit}>{editLabel}</Button>}
+              {!state.edited && <Button variant="secondary" onClick={onEdit}>한 번 고치기</Button>}
               {noBooks
                 ? <Button onClick={onHome}>처음으로</Button>
                 : <Button onClick={onNext} disabled={status !== "ready"}>다음 장</Button>}

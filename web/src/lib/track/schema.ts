@@ -30,7 +30,7 @@ const PROVIDER = { type: ["kakao", "google"] } as const;
 /** Every live and planned event (taxonomy 4-1), in PRD order. Props are the event's own; common props are separate. */
 export const EVENT_SPEC = {
   site_visited: { prompt_version: { type: "string", only: "amplitude" } },
-  entry_selected: {},
+  entry_selected: { source: { type: ["home", "first_page"] } },
   chip_selected: {
     chip_type: { type: ["example", "len", "way"] },
     chip_value: { type: "string", nullable: true },
@@ -51,7 +51,11 @@ export const EVENT_SPEC = {
   book_saved: { book_id: BOOK_ID, is_auto_save: { type: "boolean" } },
   book_unsaved: { book_id: BOOK_ID },
   library_viewed: { saved_count: { type: "number" } },
-  yes24_link_clicked: { book_id: BOOK_ID, source: { type: ["result", "library"] }, pick_type: { type: [null, "recommended", "random"] } },
+  yes24_link_clicked: {
+    book_id: { type: "string", nullable: true },
+    source: { type: ["result", "library", "first_page"] },
+    pick_type: { type: [null, "recommended", "random"] },
+  },
   redraw_clicked: { curious_count: CURIOUS_COUNT },
   home_clicked: { curious_count: CURIOUS_COUNT, source: { type: ["first_page", "end"] } },
   free_goal_written: {
@@ -60,8 +64,14 @@ export const EVENT_SPEC = {
     keywords: { type: "string", array: true },
     is_matched: { type: "boolean" },
     method: { type: ["word", "llm"] },
+    has_missing: { type: "boolean" },
+    missing_text: { type: "string", nullable: true, only: "supabase", max: 20 },
   },
-  goal_coverage_checked: { coverage_bucket: { type: ["0", "1-3", "4+"] }, found_count: { type: "number" } },
+  goal_coverage_checked: {
+    coverage_bucket: { type: ["0", "1-3", "4+"] },
+    found_count: { type: "number" },
+    understood: { type: ["keyword", "topic", "missing", "none"] },
+  },
   description_expanded: { book_id: BOOK_ID, pick_type: PICK_TYPE },
   balance_answered: {
     question_no: QUESTION_NO,

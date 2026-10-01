@@ -3,7 +3,7 @@ import { EXHAUSTED_NOTICE, type BalanceChoice } from "@/lib/recommend";
 import type { GoalMatch } from "@/lib/goal/match";
 import type { DrawView } from "./state";
 import {
-  coverageBucket, editedQuestions, editedTargetFields, firstPageNotices, lengthWord, targetSummary, tasteLines,
+  coverageBucket, coverageNote, editedQuestions, editedTargetFields, firstPageNotices, lengthWord, targetSummary, tasteLines,
 } from "./summary";
 import { EMPTY_FORM } from "./target";
 
@@ -52,25 +52,41 @@ describe("targetSummary", () => {
   });
 });
 
-describe("firstPageNotices", () => {
-  it("is honest when nothing in our list matched the written goal — and never adds the exhausted notice then", () => {
-    const g = goal({ keywords: [], matched: false, text: "발표 준비" });
-    expect(firstPageNotices("target", g, draw({ exhausted: true, picks: onePick }))).toEqual(["아직 이 주제 책이 없어요. 가장 가까운 '데이터 분석' 책을 펼칠게요"]);
+describe("coverageNote (F-24 ①+: the line under the path)", () => {
+  it("tells how many keyword books there are", () => {
+    expect(coverageNote("target", goal(), draw({ found: 2, keywords: ["SQL"], exhausted: true, picks: onePick })))
+      .toBe("SQL 책은 아직 2권이에요. 나머지는 가까운 '데이터 분석' 책이에요");
   });
 
-  it("tells how many keyword books there are, and drops the exhausted notice in the same round", () => {
-    expect(firstPageNotices("target", goal(), draw({ found: 2, keywords: ["SQL"], exhausted: true, picks: onePick })))
-      .toEqual(["SQL 책은 아직 2권이에요. 나머지는 가까운 '데이터 분석' 책이에요"]);
+  it("says so when the keyword has no books yet", () => {
+    expect(coverageNote("target", goal({ keywords: ["제미나이"], topic: "AI 활용" }), draw({ found: 0, keywords: [], picks: onePick })))
+      .toBe("아직 이 주제 책이 없어요. 가장 가까운 'AI 활용' 책을 펼칠게요");
   });
 
-  it("uses the 0-book wording when the server dropped every requested keyword", () => {
-    expect(firstPageNotices("target", goal({ keywords: ["제미나이"], topic: "AI 활용" }), draw({ found: 0, keywords: [], picks: onePick })))
-      .toEqual(["아직 이 주제 책이 없어요. 가장 가까운 'AI 활용' 책을 펼칠게요"]);
+  it.each([
+    ["enough keyword books", goal(), draw({ found: 6, keywords: ["SQL"], picks: onePick })],
+    ["no keyword (①b)", goal({ keywords: [] }), draw({ found: null, picks: onePick })],
+    ["② (the missing line says it instead)", goal({ method: "llm", missing: "윈도우 함수" }), draw({ found: 1, keywords: ["SQL"], picks: onePick })],
+    ["③ (no topic, no draw)", goal({ keywords: [], matched: false }), null],
+    ["the draw not back yet", goal(), null],
+    ["🍃", null, draw({ found: 1, keywords: ["SQL"], picks: onePick })],
+  ])("is null for %s", (_, g, d) => {
+    expect(coverageNote(g ? "target" : "leaf", g, d)).toBeNull();
+  });
+});
+
+describe("firstPageNotices (C-14 slips)", () => {
+  it("drops the exhausted notice in a round with a coverage line", () => {
+    expect(firstPageNotices("target", goal(), draw({ found: 2, keywords: ["SQL"], exhausted: true, picks: onePick }))).toEqual([]);
   });
 
-  it("shows the exhausted notice for 🎯 when there is no coverage notice", () => {
+  it("shows the exhausted notice for 🎯 when there is no coverage line", () => {
     expect(firstPageNotices("target", goal(), draw({ found: 6, keywords: ["SQL"], exhausted: true, picks: onePick }))).toEqual([EXHAUSTED_NOTICE]);
     expect(firstPageNotices("target", null, draw({ exhausted: true, picks: onePick }))).toEqual([EXHAUSTED_NOTICE]);
+  });
+
+  it("no longer shows the old 'no books for this topic' slip — ③ says it in the 이렇게 이해했어요 block", () => {
+    expect(firstPageNotices("target", goal({ keywords: [], matched: false, text: "발표 준비" }), null)).toEqual([]);
   });
 
   it("does not show the 🎯 exhausted notice to 🍃 unless the draw is empty", () => {
@@ -78,7 +94,7 @@ describe("firstPageNotices", () => {
     expect(firstPageNotices("leaf", null, draw({ exhausted: true, picks: [] }))).toEqual([EXHAUSTED_NOTICE]);
   });
 
-  it("waits for the draw before counting books", () => {
+  it("waits for the draw", () => {
     expect(firstPageNotices("target", goal(), null)).toEqual([]);
   });
 });

@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { EXHAUSTED_NOTICE } from "@/lib/recommend";
 import { INITIAL, type DrawView, type FlowState } from "@/lib/flow/state";
+import type { GoalMatch } from "@/lib/goal/match";
 import { BookScene, DRAW_FAILED } from "./BookScene";
 
 const art = { animal: "owl", bg: "sky", sky: "cloud", ground: "grass", rare: false } as const;
@@ -18,7 +19,13 @@ const first: FlowState = {
   ...INITIAL, step: "first", entry: "target", opened: true, status: "ready", drawId: 1, draw: view(5),
   form: { topic: "통계", free: null, len: "thin", way: null },
 };
-const handlers = () => ({ onOpen: vi.fn(), onEdit: vi.fn(), onNext: vi.fn(), onRetry: vi.fn(), onReact: vi.fn(), onHome: vi.fn() });
+const handlers = () => ({
+  onOpen: vi.fn(), onEdit: vi.fn(), onNext: vi.fn(), onRetry: vi.fn(), onReact: vi.fn(), onHome: vi.fn(), onYes24: vi.fn(), onLeaf: vi.fn(),
+});
+const written = (goal: GoalMatch, over: Partial<FlowState> = {}): FlowState =>
+  ({ ...first, form: { topic: null, free: goal.text, len: "thin", way: null }, goal, ...over });
+const g = (over: Partial<GoalMatch>): GoalMatch =>
+  ({ text: "주식 처음", topic: "돈 관리·투자", keywords: ["주식"], matched: true, missing: null, method: "llm", ...over });
 
 describe("BookScene", () => {
   it("S-03: the closed book is the thing to press", () => {
@@ -55,11 +62,75 @@ describe("BookScene", () => {
     expect(screen.queryByRole("button", { name: "한 번 고치기" })).toBeNull();
   });
 
-  it("S-04: offers 다시 쓰기 with the honest note when the written goal matched nothing", () => {
-    const goal = { text: "발표 준비", topic: "데이터 분석" as const, keywords: [], matched: false, missing: null, method: "word" as const };
-    render(<BookScene state={{ ...first, form: { topic: null, free: "발표 준비", len: null, way: null }, goal }} {...handlers()} />);
-    expect(screen.getByRole("button", { name: "다시 쓰기" })).toBeInTheDocument();
-    expect(screen.getByText("아직 이 주제 책이 없어요. 가장 가까운 '데이터 분석' 책을 펼칠게요")).toBeInTheDocument();
+  it("F-24 ①: the path reaches the keyword under the 무엇을 row; the usual edit and next page stay", () => {
+    render(<BookScene state={written(g({}))} {...handlers()} />);
+    const block = screen.getByRole("region", { name: "이렇게 이해했어요" });
+    expect(block).toHaveTextContent("이렇게 이해했어요돈·경제 › 돈 관리·투자 › 주식으로 찾았어요");
+    expect(screen.getByRole("button", { name: "한 번 고치기" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "다음 장" })).toBeInTheDocument();
+    expect(screen.queryByRole("link")).toBeNull();
+  });
+
+  it("F-24 ①+: the count of keyword books is a line under the path, not a slip", () => {
+    const draw = { ...view(5), found: 2, keywords: ["주식"], exhausted: true };
+    render(<BookScene state={written(g({}), { draw })} {...handlers()} />);
+    const block = screen.getByRole("region", { name: "이렇게 이해했어요" });
+    expect(block).toHaveTextContent("주식 책은 아직 2권이에요. 나머지는 가까운 '돈 관리·투자' 책이에요");
+    expect(screen.queryByRole("status")).toBeNull();     // no C-14 slip, and no exhausted notice in the same round
+  });
+
+  it("F-24 ②: the missing thing in a dashed segment, similar books, and a YES24 search for that phrase only", () => {
+    const h = handlers();
+    render(<BookScene state={written(g({ text: "주식 단타 매매법", keywords: [], missing: "단타 매매" }))} {...h} />);
+    const block = screen.getByRole("region", { name: "이렇게 이해했어요" });
+    expect(block).toHaveTextContent("돈·경제 › 돈 관리·투자 › 단타 매매 · 아직 없어요");
+    expect(block).not.toHaveTextContent("찾았어요");
+    expect(block).toHaveTextContent("비슷한 '돈 관리·투자' 책을 펼칠게요");
+    // the phrase keeps its no-break space (it never wraps inside); names compare with spaces folded
+    const link = screen.getByRole("link", { name: (name) => name.replace(/\s+/g, " ") === "예스24에서 '단타 매매' 찾기 ↗" });
+    const url = new URL(link.getAttribute("href") ?? "");
+    expect(url.searchParams.get("query")).toBe("단타 매매");
+    expect(link).toHaveAttribute("target", "_blank");
+    fireEvent.click(link);
+    expect(h.onYes24).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("button", { name: "다음 장" })).toBeInTheDocument();
+  });
+
+  it("F-24 ③: no path, no draw, no 다음 장 — YES24 first (primary), then 다른 말로 쓰기 and 🍃 그냥 한 권", () => {
+    const h = handlers();
+    const none = g({ text: "캠핑 장비 고르기", topic: "취업·커리어", keywords: [], matched: false, missing: "캠핑 장비" });
+    const { container } = render(<BookScene state={written(none, { draw: null })} {...h} />);
+    expect(screen.getByRole("region", { name: "이렇게 이해했어요" })).toHaveTextContent("아직 갈피가 다루지 않는 주제예요");
+    expect(screen.queryByText(/›/)).toBeNull();
+    expect(screen.queryByText("아직 이 주제 책이 없어요. 가장 가까운 '취업·커리어' 책을 펼칠게요")).toBeNull();
+    expect(screen.queryByRole("button", { name: "다음 장" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "한 번 고치기" })).toBeNull();
+    const buttons = screen.getAllByRole("button").concat(screen.getAllByRole("link"));
+    expect(buttons.map((b) => b.textContent)).toEqual(expect.arrayContaining(["예스24에서 찾기 ↗", "다른 말로 쓰기", "🍃 그냥 한 권"]));
+    const yes24 = screen.getByRole("link", { name: "예스24에서 찾기 ↗" });
+    expect(yes24).toHaveAttribute("data-variant", "primary");
+    expect(new URL(yes24.getAttribute("href") ?? "").searchParams.get("query")).toBe("캠핑 장비");
+    expect(container.querySelector("[data-exits]")).not.toBeNull();
+    fireEvent.click(yes24);
+    fireEvent.click(screen.getByRole("button", { name: "다른 말로 쓰기" }));
+    fireEvent.click(screen.getByRole("button", { name: "🍃 그냥 한 권" }));
+    expect(h.onYes24).toHaveBeenCalledTimes(1);
+    expect(h.onEdit).toHaveBeenCalledTimes(1);
+    expect(h.onLeaf).toHaveBeenCalledTimes(1);
+  });
+
+  it("F-24 ③: YES24's front page without a phrase, and no 다른 말로 쓰기 once the one edit is used", () => {
+    const none = g({ text: "아무거나", keywords: [], matched: false, missing: null, method: "word" });
+    render(<BookScene state={written(none, { draw: null, edited: true })} {...handlers()} />);
+    expect(screen.getByRole("link", { name: "예스24에서 찾기 ↗" })).toHaveAttribute("href", "https://www.yes24.com/");
+    expect(screen.queryByRole("button", { name: "다른 말로 쓰기" })).toBeNull();
+    expect(screen.getByRole("button", { name: "🍃 그냥 한 권" })).toBeInTheDocument();
+  });
+
+  it("F-24: an untouched example chip gets one short line", () => {
+    render(<BookScene state={written(g({ text: "돈 관리", keywords: [], method: "example" }))} {...handlers()} />);
+    expect(screen.getByText("→ 돈 관리·투자로 찾았어요")).toBeInTheDocument();
+    expect(screen.queryByText("이렇게 이해했어요")).toBeNull();
   });
 
   it("S-04: a failed draw offers a primary retry and a way home, and no dead 다음 장", () => {

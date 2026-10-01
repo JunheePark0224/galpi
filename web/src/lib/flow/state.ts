@@ -74,7 +74,12 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
       return next.choices.length === QUESTIONS.length ? requestDraw(next) : next;
     }
     case "submitTarget":
-      return s.step === "target" ? requestDraw({ ...s, form: a.form, goal: a.goal }) : s;
+      if (s.step !== "target") return s;
+      // F-24 ③: no topic of ours — no draw and no bookmarks; the open book says so and offers the ways out
+      if (a.goal && !a.goal.matched) {
+        return { ...s, form: a.form, goal: a.goal, status: "ready", draw: null, step: s.opened ? "first" : "book" };
+      }
+      return requestDraw({ ...s, form: a.form, goal: a.goal });
     case "drawn":
       return s.status === "loading" && a.id === s.drawId ? { ...s, status: "ready", draw: a.draw } : s;
     case "drawFailed":

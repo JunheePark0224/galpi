@@ -22,16 +22,27 @@ describe("event schema", () => {
     expect(EVENT_SPEC.site_visited.prompt_version).toMatchObject({ only: "amplitude" });
   });
 
+  it("F-24: the missing phrase is Supabase only (≤20), its yes/no goes to both; E-18 from the first page has no book", () => {
+    expect(EVENT_SPEC.free_goal_written.missing_text).toMatchObject({ only: "supabase", max: 20, nullable: true });
+    expect(EVENT_SPEC.free_goal_written.has_missing).toEqual({ type: "boolean" });
+    expect(EVENT_SPEC.goal_coverage_checked.understood.type).toEqual(["keyword", "topic", "missing", "none"]);
+    expect(EVENT_SPEC.yes24_link_clicked.source.type).toContain("first_page");
+    expect(EVENT_SPEC.yes24_link_clicked.book_id).toMatchObject({ nullable: true });
+    expect(EVENT_SPEC.entry_selected.source.type).toEqual(["home", "first_page"]);
+  });
+
   it("types the props of each event from the spec (checked by tsc)", () => {
     const shown: PropsOf<"bookmark_shown"> = {
       book_id: "9788998441012", position: 1, one_liner_style: "summary", pick_type: "random", art: { animal: "fox" },
     };
-    const goal: PropsOf<"free_goal_written"> = { goal_text: "SQL", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" };
+    const goal: PropsOf<"free_goal_written"> = {
+      goal_text: "SQL", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word", has_missing: false, missing_text: null,
+    };
     const visit: PropsOf<"site_visited"> = {};
     // @ts-expect-error — `kind` is the old name of pick_type (taxonomy 4-4)
     const old: PropsOf<"bookmark_reacted"> = { book_id: "1", position: 1, reaction: "pass", pick_type: "random", one_liner_style: "summary", kind: "random" };
-    // @ts-expect-error — entry_selected has no props of its own (props.entry was removed)
-    const entry: PropsOf<"entry_selected"> = { entry: "leaf" };
+    // @ts-expect-error — entry_selected has no `entry` of its own (props.entry was removed; the entry is common)
+    const entry: PropsOf<"entry_selected"> = { source: "home", entry: "leaf" };
     // @ts-expect-error — side is an enum: left, right or null
     const side: PropsOf<"balance_answered"> = { question_no: 1, choice: "A", side: "middle", elapsed_ms: 1, is_edit: false };
     expect([shown, goal, visit, old, entry, side]).toHaveLength(6);
