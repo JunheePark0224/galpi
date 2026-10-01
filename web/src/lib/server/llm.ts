@@ -32,6 +32,7 @@ export async function classifyWithClaude(
       {
         model: CLASSIFY_MODEL,
         max_tokens: 256,
+        temperature: 0, // a sorter: the same note should land in the same place every time (10-01 grading reruns flipped at the default 1.0)
         system: classifySystemPrompt(vocab),
         messages: [{ role: "user", content: `<note>${text.replace(/[<>]/g, "")}</note>` }],
         output_config: { format: { type: "json_schema", schema: classifySchema(vocab) } },

@@ -24,6 +24,7 @@ describe("classifyWithClaude", () => {
     expect(body).toMatchObject({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 256,
+      temperature: 0,
       messages: [{ role: "user", content: "<note>SQL 처음</note>" }],
       output_config: { format: { type: "json_schema" } },
     });
