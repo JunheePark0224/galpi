@@ -2,7 +2,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import vocab from "@/data/vocab.json";
 import type { DrawResponse, Vocab } from "@/lib/books/types";
-import { classifyGoal, drawBody, requestDraw, toDrawView } from "./api";
+import { activeVocab } from "@/lib/books/active";
+import { classifyGoal, drawBody, goalFor, requestDraw, toDrawView } from "./api";
 import { INITIAL } from "./state";
 
 const card = (id: string) => ({ id, entry: "leaf" as const, title: id, author: "시인", genre: "시", field: null, oneLiner: "?", oneLinerStyle: "question" as const });
@@ -67,5 +68,33 @@ describe("classifyGoal", () => {
   ])("falls back to word matching in the browser on %s", async (_, answer) => {
     vi.stubGlobal("fetch", vi.fn(answer));
     expect(await classifyGoal("SQL 공부", VOCAB)).toEqual({ text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], matched: true, method: "word" });
+  });
+});
+
+describe("goalFor (S-02 🎯 B: example chip or written goal)", () => {
+  afterEach(() => vi.unstubAllGlobals());
+  const VOCAB = vocab as Vocab;
+
+  it("answers an untouched example chip from the fixed table without asking the server", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    expect(await goalFor(" 데이터 분석 ", VOCAB)).toEqual({ text: "데이터 분석", topic: "데이터 분석", keywords: [], matched: true, method: "example" });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("sorts an edited example like any written goal", async () => {
+    const answer = { text: "데이터 분석 입문", topic: "데이터 분석", keywords: [], matched: true, method: "llm" };
+    const fetchMock = vi.fn().mockResolvedValue(Response.json(answer));
+    vi.stubGlobal("fetch", fetchMock);
+    expect(await goalFor("데이터 분석 입문", VOCAB)).toEqual(answer);
+    expect(fetchMock).toHaveBeenCalledOnce();
+  });
+
+  it("sorts an example whose topic is not active (not in the vocab it was given)", async () => {
+    const fetchMock = vi.fn().mockRejectedValue(new TypeError("offline"));
+    vi.stubGlobal("fetch", fetchMock);
+    const goal = await goalFor("돈 관리", activeVocab(VOCAB, ["데이터 분석", "AI 활용"]));
+    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(goal.method).toBe("word");
   });
 });

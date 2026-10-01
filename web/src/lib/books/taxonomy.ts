@@ -23,8 +23,8 @@ export type Field = (typeof FIELD_OF_TOPIC)[Topic];
 export const TOPICS = Object.keys(FIELD_OF_TOPIC) as readonly Topic[];
 
 /**
- * docs/target-chips.md 1절 — S-02 chip order and labels. Only "AI 활용" is shown with another label. Still the first six
- * topics until the D-D input (example chips) replaces this row.
+ * docs/target-chips.md 1절 — the first six topics' chip labels. Only "AI 활용" has another label. Since 입력 B (10-01) S-02
+ * shows example chips instead (lib/flow/examples.ts); these labels remain words for matching and for summaries of old forms.
  */
 export const TOPIC_CHIPS: readonly { topic: Topic; label: string }[] = [
   { topic: "데이터 분석", label: "데이터 분석" },

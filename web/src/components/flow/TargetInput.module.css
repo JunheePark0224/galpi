@@ -20,11 +20,15 @@
 }
 .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .chip:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+/* 입력 B (10-01): the 무엇을 field comes first and big — two lines tall, a one-line answer (Enter sends). */
 .input {
-  min-height: var(--touch); padding: 0 var(--space-4);
+  display: block; width: 100%; box-sizing: border-box; min-height: calc(var(--touch) * 1.75);
+  padding: var(--space-3) var(--space-4); resize: none;
   border: 1px solid var(--ink); border-radius: var(--radius-card);
-  background: var(--field-bg); color: var(--ink); font: inherit; font-size: 15px;
+  background: var(--field-bg); color: var(--ink); font: inherit; font-size: 17px; line-height: 1.5;
 }
+.input::placeholder { color: var(--ink-muted); }
+.input:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
 .hint { margin: 0; font-size: 12px; line-height: 1.6; color: var(--ink-muted); }
 .hint a { color: var(--ink-muted); }
 /* inline body link: ink underline; the 44px rule does not apply to text links */
