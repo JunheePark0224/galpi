@@ -20,6 +20,7 @@ WAYS = ("개념", "실습", "사례")
 AXES = ("temp", "pull", "gain", "world")
 MAX_KEYWORDS = 3
 EVIDENCE_MAX = 30
+WHY_MAX = 30
 
 
 class PromptError(ValueError):
@@ -112,7 +113,7 @@ TAG_RULES = [
 ]
 CHECK_RULES = [
     "다른 사람이 이미 태그를 붙였지만 너는 그것을 보지 않고, 같은 기준표로 혼자 판단한다. 질문 하나: 이 칸으로 찾아온 사람에게 이 책을 줘도 되나?",
-    "why: fits 판단의 이유, 우리 말 30자 이내.",
+    f"why: fits 판단의 이유, 우리 말 {WHY_MAX}자 이내.",
     "🎯: keywords(0~3개, 책의 중심만)와 way. 🍃: temp·pull·gain·world.",
 ]
 

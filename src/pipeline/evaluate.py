@@ -19,12 +19,14 @@ Usage (from the checkout; real API calls — costs money):
   PYTHONIOENCODING=utf-8 python -m src.pipeline.evaluate --dry-run --limit 80          # estimate only, no key, no calls
   PYTHONIOENCODING=utf-8 python -m src.pipeline.evaluate --limit 4                      # smoke run
   PYTHONIOENCODING=utf-8 python -m src.pipeline.evaluate --models claude-haiku-4-5,claude-sonnet-5-5 --limit 80
+  PYTHONIOENCODING=utf-8 python -m src.pipeline.evaluate --rescore data/pipeline/eval/<date>-<model>.json   # offline re-scoring
   (--limit 0 = every gold book; --detail-dir ../Galpi/data/raw/yes24/detail from a worktree without the cache)
 Output: data/pipeline/eval/<date>-<model>.json — scores, flags, token use and our tags only (no YES24 text).
 """
 import argparse
 import csv
 import json
+import math
 import os
 import random
 import sys
@@ -37,15 +39,18 @@ from pick_pilot import clean
 
 from . import ADDITIONS, KST, PIPELINE, ROOT, VOCAB
 from .candidates import INTRO_MAX, TOC_MAX, Candidate
-from .checks import disagreements, rule_issues, scrub
+from .checks import disagreements, rule_issues, scrub, split_issues
 from .config import MODELS
 from .merge import keyword_hints
-from .prompt import AXES, schema, system_prompt, user_message
+from .prompt import AXES, MAX_KEYWORDS, schema, system_prompt, user_message
 from .tagger import CACHE_READ, CACHE_WRITE, PRICES, Breaker, TaggerStop, Usage, call, parse
 
 PROCESSED = ROOT / "data" / "processed"
 OUT = PIPELINE / "eval"
 TOKENS_PER_CHAR = (0.8, 1.6)                 # guess for Korean text on the Claude tokenizer: (low, high)
+NOTES = ["figures are in-sample (the instructions are tuned on these books); the one-liner itself is not scored",
+         "D4 `way` labels were reviewed before the 10-01 reading-way rule, so way agreement partly measures that rule change",
+         "agree/agreed_but_wrong count only books both passes answered; failed books are listed under `failed`"]
 OUT_TOKENS = {"tag": (150, 600), "check": (80, 400)}  # the JSON answer (high allows some low-effort thinking)
 
 
@@ -83,19 +88,78 @@ def wrong_fields(g: dict, a: dict, kept: list[str] | None = None) -> list[str]:
     return [f for f, ok in (("fits", a["fits"]), *((x, a["axes"][x] == g["axes"][x]) for x in AXES)) if not ok]
 
 
+def wilson(k: int, n: int, z: float = 1.96) -> list[float] | None:
+    """95% Wilson interval of k out of n, in percent (principle 5: a size and an interval, not a bare percentage)."""
+    if not n:
+        return None
+    p, d = k / n, 1 + z * z / n
+    centre, half = (p + z * z / (2 * n)) / d, z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+    return [round(100 * max(0.0, centre - half), 1), round(100 * min(1.0, centre + half), 1)]
+
+
+def fig(k: int, n: int) -> dict:
+    """One figure with its size: k of n, the percentage and its 95% interval. n = 0 gives pct None."""
+    return {"pct": round(100 * k / n, 1) if n else None, "k": k, "n": n, "ci95": wilson(k, n)}
+
+
+def gold_keyword_count(g: dict, kept: list[str] | None) -> int | None:
+    """How many of the person's keywords the tagger could name (the kept list); None for 🍃."""
+    return len(set(g["keywords"]) & set(kept or [])) if g["entry"] == "target" else None
+
+
 def score(rows: list[dict]) -> dict:
-    """Per-field agreement with the person, flag share and the error left in agreed (auto-accepted) books."""
+    """Per-entry figures, each as {pct, k, n, ci95}:
+    flagged            sent to a person because the two AIs differ (fit / keywords / way / an axis) or pass A is unsure
+    line_rules_ok      the one-liner passes its rules (length, hype, title repeat, grounded, style, not copied)
+    evidence_ok        the evidence and pass B's reason are present, short enough and in the model's own words
+    not_auto_accepted  held or flagged for either reason (the complement of what the pipeline accepts without a person)
+    agree              share equal to the person per field; for 🎯 `keywords` is the exact set (the tagger names at most
+                       MAX_KEYWORDS), `keywords_within_cap` leaves out books whose person-keywords (after the vocabulary
+                       cut) exceed that cap, which can never match
+    agreed_but_wrong   among auto-accepted books, the share still different from the person, per field"""
     out: dict = {"books": len(rows)}
     for entry, fields in (("target", ("fits", "keywords", "way")), ("leaf", ("fits", *AXES))):
         mine = [r for r in rows if r["entry"] == entry]
         agreed = [r for r in mine if not r["flags"] and not r["issues"]]
-        out[entry] = {"n": len(mine), "flagged_pct": round(100 * (len(mine) - len(agreed)) / len(mine), 1) if mine else None,
-                      "line_rules_ok_pct": round(100 * sum(not r["issues"] for r in mine) / len(mine), 1) if mine else None,
-                      "agree_pct": {f: round(100 * sum(f not in r["wrong"] for r in mine) / len(mine), 1) if mine else None for f in fields},
-                      "agreed_n": len(agreed),
-                      "agreed_but_wrong_pct": {f: round(100 * sum(f in r["wrong"] for r in agreed) / len(agreed), 1) if agreed else None
-                                               for f in fields}}
+        split = [split_issues(r["issues"]) for r in mine]
+        n = len(mine)
+        agree = {f: fig(sum(f not in r["wrong"] for r in mine), n) for f in fields}
+        figures = {"n": n, "flagged": fig(sum(bool(r["flags"]) for r in mine), n),
+                   "line_rules_ok": fig(sum(not line for line, _ in split), n),
+                   "evidence_ok": fig(sum(not ev for _, ev in split), n),
+                   "not_auto_accepted": fig(n - len(agreed), n), "agree": agree, "agreed_n": len(agreed),
+                   "agreed_but_wrong": {f: fig(sum(f in r["wrong"] for r in agreed), len(agreed)) for f in fields}}
+        if entry == "target":
+            within = [r for r in mine if (r.get("gold_kw_n") or 0) <= MAX_KEYWORDS]
+            figures["keywords_over_cap_n"] = n - len(within)
+            agree["keywords_within_cap"] = fig(sum("keywords" not in r["wrong"] for r in within), len(within))
+        out[entry] = figures
     return out
+
+
+def rescore_rows(rows: list[dict], golds: list[dict], vocab: dict) -> list[dict]:
+    """Rows of a saved eval file with `wrong` and `gold_kw_n` recomputed from the gold set and today's vocabulary, with
+    no API call. Rows whose ISBN is not in the gold set any more are left out."""
+    by_isbn, out = {g["isbn"]: g for g in golds}, []
+    for r in rows:
+        g = by_isbn.get(r["isbn"])
+        if g is None:
+            continue
+        kept = list(vocab[g["slot"]]["kept"]) if g["entry"] == "target" else None
+        out.append({**r, "wrong": wrong_fields(g, r["tag"], kept), "gold_kw_n": gold_keyword_count(g, kept)})
+    return out
+
+
+def rescore(paths: list[Path]) -> int:
+    """Print the figures of saved eval files again with the current scoring code (offline: no key, no API call, no rows)."""
+    vocab, golds = json.loads(VOCAB.read_text(encoding="utf-8")), gold_books()
+    for path in paths:
+        saved = json.loads(path.read_text(encoding="utf-8"))
+        rows = rescore_rows(saved["rows"], golds, vocab)
+        print(json.dumps({"file": path.name, "model": saved.get("model"), "second_model": saved.get("second_model"),
+                          "rows_in_file": len(saved["rows"]), "rows_scored": len(rows), "rescored": score(rows),
+                          "notes": NOTES}, ensure_ascii=False, indent=1))
+    return 0
 
 
 def run_model(client, model: str, second: str, golds: list[dict], vocab: dict, detail_dir: Path) -> dict:
@@ -116,18 +180,19 @@ def run_model(client, model: str, second: str, golds: list[dict], vocab: dict, d
         a = parse(raw_a, cand.entry, "tag", names) if raw_a else None
         b = parse(raw_b, cand.entry, "check", names) if raw_b else None
         if a is None or b is None:
-            failed[why_a if a is None else why_b] += 1
+            # a call that answered but whose answer could not be used is "unusable", not "ok"
+            failed[(why_a if raw_a is None else "unusable") if a is None else (why_b if raw_b is None else "unusable")] += 1
             continue
         issues = rule_issues(cand.entry, a, cand.title, f"{cand.intro} {cand.toc}", b)
         safe_a, safe_b = scrub(a, b, issues)  # a field that copied the YES24 text is not kept in the row, only its issue
         rows.append({"isbn": g["isbn"], "entry": g["entry"], "source": g["source"], "tag": safe_a, "second": safe_b,
                      "wrong": wrong_fields(g, a, names if cand.entry == "target" else None),
-                     "flags": disagreements(cand.entry, a, b), "issues": issues})
+                     "gold_kw_n": gold_keyword_count(g, names), "flags": disagreements(cand.entry, a, b), "issues": issues})
     tagged = len(rows) or 1
     cost = sum(u.cost(m) for m, u in usage.items())
     return {"model": model, "second_model": second, "skipped_no_text": skipped, "failed": dict(failed),
             "usage": {m: u.__dict__ for m, u in usage.items()}, "cost_usd": round(cost, 4),
-            "cost_per_book_usd": round(cost / tagged, 5), "score": score(rows), "rows": rows}
+            "cost_per_book_usd": round(cost / tagged, 5), "score": score(rows), "notes": NOTES, "rows": rows}
 
 
 def estimate(golds: list[dict], models: list[str], second: str, vocab: dict, detail_dir: Path) -> dict:
@@ -194,7 +259,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--limit", type=int, default=80, help="books to evaluate (0 = all)")
     ap.add_argument("--detail-dir", type=Path, default=DETAIL)
     ap.add_argument("--dry-run", action="store_true", help="print the cost estimate and stop (no key, no calls)")
+    ap.add_argument("--rescore", type=Path, nargs="+", metavar="FILE",
+                    help="print the figures of saved eval files again with the current scoring (offline: no key, no calls)")
     args = ap.parse_args(argv)
+    if args.rescore:
+        return rescore(args.rescore)
     models = args.models.split(",")
     if any(m not in MODELS for m in models):
         ap.error(f"models must be in {MODELS}")

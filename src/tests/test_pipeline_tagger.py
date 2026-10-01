@@ -147,8 +147,8 @@ def _failing(exc):
     return FakeClient(f)
 
 
-def _call_with(client, breaker):
-    return call(client, "claude-haiku-4-5", "s", "u", {}, breaker)
+def _call_with(client, breaker, model="claude-haiku-4-5"):
+    return call(client, model, "s", "u", {}, breaker)
 
 
 def test_five_api_failures_in_a_row_stop_the_run_but_a_success_resets_the_count():
@@ -192,3 +192,36 @@ def test_an_ordinary_400_is_one_failed_book():
     req = httpx.Request("POST", "https://api.anthropic.com/v1/messages")
     err = anthropic.BadRequestError("messages: roles must alternate", response=httpx.Response(400, request=req), body=None)
     assert _call_with(_failing(err), Breaker())[2] == "http_400"
+
+
+def test_each_model_has_its_own_failure_streak_so_a_dead_primary_stops_even_while_pass_b_answers():
+    def by_model(kwargs):
+        if kwargs["model"] == "claude-sonnet-5-5":
+            raise _status(anthropic.InternalServerError, 500)
+        return message(tag_answer("target"))
+    client, breaker = FakeClient(by_model), Breaker()
+    with pytest.raises(TaggerStop, match="claude-sonnet-5-5: 5 API failures in a row"):
+        for _ in range(5):                                                     # one book = pass A (dead) + pass B (ok)
+            assert _call_with(client, breaker, "claude-sonnet-5-5")[2] == "http_500"
+            assert _call_with(client, breaker, "claude-haiku-4-5")[2] == "ok"
+    assert breaker.streaks == {"claude-sonnet-5-5": 5, "claude-haiku-4-5": 0}
+    assert len(client.messages.calls) == 9                                    # stopped within 5 books, not after the whole set
+
+
+def test_a_404_unknown_model_stops_at_once_and_carries_no_sdk_context():
+    err = _status(anthropic.NotFoundError, 404)
+    with pytest.raises(TaggerStop, match="claude-haiku-4-5: http_404") as stop:
+        _call_with(_failing(err), Breaker())
+    assert stop.value.__cause__ is None and stop.value.__suppress_context__
+
+
+def test_a_breaker_stop_carries_no_chained_sdk_exception_either():
+    breaker = Breaker(limit=1)
+    with pytest.raises(TaggerStop) as stop:
+        _call_with(_failing(_status(anthropic.InternalServerError, 500)), breaker)
+    assert stop.value.__context__ is None
+
+
+def test_a_successful_call_with_an_unusable_answer_is_still_ok_at_the_call_level():
+    # call() reports "ok" (the API worked); labelling the book "unusable" is the caller's job (evaluate.run_model)
+    assert _call_with(FakeClient(lambda kw: message(tag_answer("target", way="기타"))), Breaker())[2] == "ok"

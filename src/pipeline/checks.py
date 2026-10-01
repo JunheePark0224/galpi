@@ -33,7 +33,8 @@ def copied_run(text: str, material: str) -> int:
     return SequenceMatcher(None, a, b, autojunk=False).find_longest_match(0, len(a), 0, len(b)).size
 
 
-def rule_issues(entry: str, tag: dict, title: str, material: str, second: dict | None = None) -> list[str]:
+def rule_issues(entry: str, tag: dict, title: str, material: str, second: dict) -> list[str]:
+    """`second` (pass B's answer) is required: its `why` gets the same copy check as the evidence, so no caller can skip it."""
     line, evidence = tag["one_liner"], tag["evidence"]
     issues = list(check_line(line, title, material)["issues"])
     if entry == "leaf" and not line.endswith("?"):
@@ -48,9 +49,19 @@ def rule_issues(entry: str, tag: dict, title: str, material: str, second: dict |
         issues.append(COPY_ISSUES["evidence"])
     if copied_run(line, material) >= COPY_RUN:
         issues.append(COPY_ISSUES["one_liner"])
-    if second is not None and copied_run(second.get("why", ""), material) >= COPY_RUN:  # pass B's reason: same check
+    if copied_run(second.get("why", ""), material) >= COPY_RUN:
         issues.append(COPY_ISSUES["why"])
     return issues
+
+
+EVIDENCE_ISSUE_STARTS = ("근거 없음", "근거 김", "근거가 ", "판단 이유")  # evidence / pass B reason: missing, long, copied ("근거 약함" is a one-liner rule)
+
+
+def split_issues(issues: list[str]) -> tuple[list[str], list[str]]:
+    """(one-liner issues, evidence/why issues). The one-liner rules and the evidence rules answer different questions:
+    is the line usable, and did the model explain itself in its own words and within the length."""
+    evidence = [i for i in issues if i.startswith(EVIDENCE_ISSUE_STARTS)]
+    return [i for i in issues if i not in evidence], evidence
 
 
 def scrub(tag: dict, second: dict, issues: list[str]) -> tuple[dict, dict]:

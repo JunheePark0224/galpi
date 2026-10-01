@@ -17,7 +17,7 @@ from dataclasses import dataclass
 
 import anthropic
 
-from .prompt import AXES, EVIDENCE_MAX, MAX_KEYWORDS, WAYS
+from .prompt import AXES, MAX_KEYWORDS, WAYS, WHY_MAX
 
 MAX_TOKENS = 2048
 MODEL_OPTIONS = {"claude-haiku-4-5": {"extra_body": {"temperature": 0}},
@@ -29,24 +29,26 @@ CACHE_READ, CACHE_WRITE = 0.1, 1.25
 
 
 class TaggerStop(RuntimeError):
-    """No point calling again today: the key is refused (401/403), the model or account is the problem (400), or the API
-    failed STOP_LIMIT times in a row. The message holds a class name / status only."""
+    """No point calling again today: the key is refused (401/403), the model is unknown (404) or the account/model is the
+    problem (400), or one model's calls failed STOP_LIMIT times in a row. The message holds a class name / status only."""
 
 
 class Breaker:
-    """Counts API failures in a row (`http_*`, `connection`). A success or a book-level failure (refusal, truncation,
-    invalid JSON — the API worked) resets it; the STOP_LIMIT-th in a row raises TaggerStop."""
+    """Counts API failures in a row (`http_*`, `connection`), ONE STREAK PER MODEL: pass A and pass B alternate, so a shared
+    streak would be reset by a healthy pass B and never stop a dead primary model. A success or a book-level failure
+    (refusal, truncation, invalid JSON — the API worked) resets that model's streak; the STOP_LIMIT-th in a row raises
+    TaggerStop."""
 
     def __init__(self, limit: int = STOP_LIMIT):
-        self.limit, self.streak = limit, 0
+        self.limit, self.streaks = limit, {}
 
-    def note(self, reason: str) -> None:
+    def note(self, model: str, reason: str) -> None:
         if not (reason.startswith("http_") or reason == "connection"):
-            self.streak = 0
+            self.streaks[model] = 0
             return
-        self.streak += 1
-        if self.streak >= self.limit:
-            raise TaggerStop(f"{self.streak} API failures in a row ({reason})")
+        self.streaks[model] = self.streaks.get(model, 0) + 1
+        if self.streaks[model] >= self.limit:
+            raise TaggerStop(f"{model}: {self.streaks[model]} API failures in a row ({reason})")
 
 
 @dataclass(frozen=True)
@@ -89,20 +91,26 @@ def request(model: str, system: str, user: str, schema: dict) -> dict:
 
 def call(client, model: str, system: str, user: str, schema: dict,
          breaker: Breaker | None = None) -> tuple[dict | None, Usage, str]:
-    """(answer JSON or None, usage, reason). Raises TaggerStop on 401/403, on a 400 about the model / billing / limits,
-    and — when a `breaker` is given — after STOP_LIMIT API failures in a row."""
+    """(answer JSON or None, usage, reason). Raises TaggerStop on 401/403, on a 404 (unknown model), on a 400 about the
+    model / billing / limits, and — when a `breaker` is given — after STOP_LIMIT API failures in a row for one model.
+    Reasons: ok, http_<status>, connection, a stop_reason (refusal, max_tokens…), invalid_json."""
+    failure = None
     try:
         msg = client.messages.create(**request(model, system, user, schema))
     except (anthropic.AuthenticationError, anthropic.PermissionDeniedError) as err:
         raise TaggerStop(type(err).__name__) from None
     except anthropic.APIStatusError as err:
+        if err.status_code == 404:
+            raise TaggerStop(f"{model}: http_404 (unknown model)") from None
         if err.status_code == 400 and (found := FATAL_400.search(str(err.message))):
             raise TaggerStop(f"http_400 about {found.group(0).lower()}") from None
-        return _failed(breaker, f"http_{err.status_code}")
+        failure = f"http_{err.status_code}"
     except anthropic.APIConnectionError:
-        return _failed(breaker, "connection")
+        failure = "connection"
+    if failure:  # outside the except block, so a TaggerStop from the breaker carries no chained SDK exception
+        return _failed(breaker, model, failure)
     if breaker:
-        breaker.note("ok")
+        breaker.note(model, "ok")
     usage = _usage(msg)
     if msg.stop_reason != "end_turn":
         return None, usage.plus(Usage(0, 1)), str(msg.stop_reason)
@@ -114,9 +122,9 @@ def call(client, model: str, system: str, user: str, schema: dict,
     return (answer, usage, "ok") if isinstance(answer, dict) else (None, usage.plus(Usage(0, 1)), "invalid_json")
 
 
-def _failed(breaker: Breaker | None, reason: str) -> tuple[None, Usage, str]:
+def _failed(breaker: Breaker | None, model: str, reason: str) -> tuple[None, Usage, str]:
     if breaker:
-        breaker.note(reason)
+        breaker.note(model, reason)
     return None, Usage(1, 1), reason
 
 
@@ -126,7 +134,7 @@ def _text(v: object) -> str:
 
 def parse(raw: dict, entry: str, kind: str, keywords: list[str]) -> dict | None:
     """The answer cut to our lists: keywords outside the topic are dropped (at most MAX_KEYWORDS); a bad way / axis /
-    missing one-liner makes the whole answer unusable (None). Pass B's free-text `why` is cut to EVIDENCE_MAX characters."""
+    missing one-liner makes the whole answer unusable (None). Pass B's free-text `why` is cut to WHY_MAX characters."""
     if not isinstance(raw.get("fits"), bool):
         return None
     out: dict = {"fits": raw["fits"]}
@@ -141,7 +149,7 @@ def parse(raw: dict, entry: str, kind: str, keywords: list[str]) -> dict | None:
             return None
         out |= {"axes": axes}
     if kind == "check":
-        return out | {"why": _text(raw.get("why"))[:EVIDENCE_MAX]}
+        return out | {"why": _text(raw.get("why"))[:WHY_MAX]}
     line, conf = _text(raw.get("one_liner")), raw.get("confidence")
     if not line or isinstance(conf, bool) or not isinstance(conf, (int, float)):
         return None

@@ -8,7 +8,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from pipeline.candidates import Candidate  # noqa: E402
-from pipeline.checks import AUTO, copied_run, decide, disagreements, rule_issues, scrub  # noqa: E402
+from pipeline.checks import AUTO, copied_run, decide, disagreements, rule_issues, scrub, split_issues  # noqa: E402
 from pipeline.merge import additions_doc, keyword_hints, record, write_doc  # noqa: E402
 from pipeline.tagger import parse  # noqa: E402
 from pipeline_fakes import INTRO, TOC, check_answer, tag_answer  # noqa: E402
@@ -23,8 +23,8 @@ def test_copied_run_ignores_spaces():
 
 
 def test_a_clean_tag_has_no_issues():
-    assert rule_issues("target", tag_answer("target"), CAND.title, MATERIAL) == []
-    assert rule_issues("leaf", tag_answer("leaf"), "투자 이야기", MATERIAL) == []
+    assert rule_issues("target", tag_answer("target"), CAND.title, MATERIAL, check_answer("target")) == []
+    assert rule_issues("leaf", tag_answer("leaf"), "투자 이야기", MATERIAL, check_answer("leaf")) == []
 
 
 @pytest.mark.parametrize("entry, over, issue", [
@@ -37,7 +37,12 @@ def test_a_clean_tag_has_no_issues():
     ("target", {"one_liner": "최고의 주식 배당 입문서예요"}, "과장 표현"),
 ])
 def test_rule_issues(entry, over, issue):
-    assert any(issue in i for i in rule_issues(entry, tag_answer(entry, **over), "제목", MATERIAL))
+    assert any(issue in i for i in rule_issues(entry, tag_answer(entry, **over), "제목", MATERIAL, check_answer(entry)))
+
+
+def test_the_second_opinion_cannot_be_left_out_of_the_copy_check():
+    with pytest.raises(TypeError):
+        rule_issues("target", tag_answer("target"), CAND.title, MATERIAL)  # type: ignore[call-arg]
 
 
 def test_disagreements_name_each_field():
@@ -90,3 +95,11 @@ def test_record_never_stores_words_that_failed_the_copy_check():
     rec = record(CAND, a, b, [], issues, "reserve", None, [])
     assert rec["evidence"] == "" and rec["second"]["why"] == "" and "근거가 책소개를 베낌" in rec["issues"]
     assert "계좌 만들기" not in json.dumps(rec, ensure_ascii=False)
+
+
+def test_split_issues_separates_the_one_liner_rules_from_the_evidence_rules():
+    line, evidence = split_issues(["짧음(5자)", "근거 약함(겹치는 단어 1개)", "근거 김(41자)", "근거 없음",
+                                   "근거가 책소개를 베낌", "판단 이유가 책소개를 베낌", "한 줄이 책소개를 베낌", "과장 표현: 최고"])
+    assert line == ["짧음(5자)", "근거 약함(겹치는 단어 1개)", "한 줄이 책소개를 베낌", "과장 표현: 최고"]   # 근거 약함 = the line is not grounded
+    assert evidence == ["근거 김(41자)", "근거 없음", "근거가 책소개를 베낌", "판단 이유가 책소개를 베낌"]
+    assert split_issues([]) == ([], [])
