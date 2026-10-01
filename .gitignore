@@ -29,3 +29,5 @@ data/raw/d4l_keywords/
 
 # daily pipeline run summaries (counts only; the PR body carries what matters)
 data/pipeline/runs/
+# tagger evaluation rows can carry model-written evidence that echoes YES24 text — local only
+data/pipeline/eval/
