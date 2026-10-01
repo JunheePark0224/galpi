@@ -70,7 +70,7 @@ export const EVENT_SPEC = {
   goal_coverage_checked: {
     coverage_bucket: { type: ["0", "1-3", "4+"] },
     found_count: { type: "number" },
-    understood: { type: ["keyword", "topic", "missing", "none"] },
+    understood: { type: ["keyword", "topic", "missing", "none", "nearest"] },
   },
   description_expanded: { book_id: BOOK_ID, pick_type: PICK_TYPE },
   balance_answered: {

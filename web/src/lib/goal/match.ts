@@ -17,17 +17,20 @@ export interface GoalMatch {
 
 const squash = (s: string) => s.toLowerCase().replace(/\s+/g, "");
 
+/** Words a model may write instead of null — never a thing to search for. Compared squashed (lower case, no spaces). */
+const NO_MISSING = new Set(["null", "none", "n/a", "na", "nil", "undefined", "-", "--", "—", "없음", "없다", "없어요", "해당없음", "모름"]);
+
 /** F-24: the longest missing phrase kept (the prompt asks for 12 characters; this is the hard cap). */
 export const MISSING_MAX = 20;
 
 /**
- * F-24: a usable missing phrase, or null — trimmed, `<` `>` dropped, cut at MISSING_MAX, null when empty or when it is one of
- * `names` (a topic or keyword name is never "missing"). Used on the server (parseClassification) and in the browser.
+ * F-24: a usable missing phrase, or null — trimmed, `<` `>` dropped, cut at MISSING_MAX, null when empty, a stand-in for
+ * null ("null", "없음", "-" …) or one of `names` (a topic or keyword name is never "missing"). Used on the server (parseClassification) and in the browser.
  */
 export function clipMissing(value: unknown, names: readonly string[] = []): string | null {
   if (typeof value !== "string") return null;
   const clipped = value.replace(/[<>]/g, "").trim().slice(0, MISSING_MAX).trim();
-  if (!clipped) return null;
+  if (!clipped || NO_MISSING.has(squash(clipped))) return null;
   const flat = squash(clipped);
   return names.some((n) => squash(n) === flat) ? null : clipped;
 }

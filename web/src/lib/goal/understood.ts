@@ -5,12 +5,13 @@ import type { GoalMatch } from "./match";
 /**
  * PRD F-24 "이렇게 이해했어요" (mockup C′, 10-01): how a 🎯 goal was understood, said honestly on the first page.
  * keyword ① — topic and keyword(s) · topic ①b — topic only · missing ② — topic, but the specific thing asked for is not on
- * our list · none ③ — no topic of ours. Also E-22 `understood` (taxonomy).
+ * our list · none ③ — the LLM said no topic of ours · nearest — word matching (any fallback) found nothing: it cannot tell,
+ * so the nearest topic's books open with the old honest line. Also E-22 `understood` (taxonomy).
  */
-export type Understood = "keyword" | "topic" | "missing" | "none";
+export type Understood = "keyword" | "topic" | "missing" | "none" | "nearest";
 
 export function understoodOf(goal: GoalMatch): Understood {
-  if (!goal.matched) return "none";
+  if (!goal.matched) return goal.method === "llm" ? "none" : "nearest";   // only the LLM may say "not our topic"
   if (goal.method === "llm" && goal.missing) return "missing";   // word matching never yields ② (it cannot tell)
   return goal.keywords.length ? "keyword" : "topic";
 }
@@ -19,11 +20,12 @@ export const UNDERSTOOD_LABEL = "이렇게 이해했어요";
 export const FOUND_SUFFIX = "찾았어요";
 export const NOT_YET = "아직 없어요";
 export const NOT_COVERED = "아직 갈피가 다루지 않는 주제예요";
-export const YES24_FIND = "예스24에서 찾기 ↗";
+/** Visible labels end with " ↗" — an aria-hidden span, so screen readers read the words only. */
+export const YES24_FIND = "예스24에서 찾기";
 export const REWRITE = "다른 말로 쓰기";
 export const JUST_ONE = "🍃 그냥 한 권";
 export const similarBooks = (topic: string) => `비슷한 '${topic}' 책을 펼칠게요`;
-export const yes24FindMissing = (missing: string) => `예스24에서 '${missing}' 찾기 ↗`;
+export const yes24FindMissing = (missing: string) => `예스24에서 '${missing}' 찾기`;
 
 export const YES24_HOME = "https://www.yes24.com/";
 
@@ -54,14 +56,22 @@ export interface PathSeg { name: string; kind: "reached" | "missing" }
 
 /**
  * 분야 › 주제 › 키워드 — as deep as the goal reached; several keywords share the last segment (" · "). ② appends the
- * missing thing as an unreached segment. ③ has no path.
+ * missing thing as an unreached segment. ③ and a word-match miss (nearest) have no path.
  */
 export function understoodPath(goal: GoalMatch): PathSeg[] {
   const understood = understoodOf(goal);
-  if (understood === "none") return [];
+  if (understood === "none" || understood === "nearest") return [];
   const reached = [FIELD_OF_TOPIC[goal.topic], goal.topic, ...(goal.keywords.length ? [goal.keywords.join(" · ")] : [])]
     .map((name): PathSeg => ({ name, kind: "reached" }));
   return understood === "missing" && goal.missing ? [...reached, { name: goal.missing, kind: "missing" }] : reached;
+}
+
+/**
+ * ② / ③: open the YES24 search in a new tab, built only at the click. The phrase comes from the visitor's words, so it never
+ * sits in a DOM attribute (an href) — Amplitude autocapture sends link hrefs unmasked and Session Replay records attributes.
+ */
+export function openYes24Search(missing: string | null): void {
+  window.open(yes24FindUrl(missing), "_blank", "noopener,noreferrer");
 }
 
 /** A name never breaks inside: its spaces become no-break spaces ("돈 관리·투자" stays on one line). */

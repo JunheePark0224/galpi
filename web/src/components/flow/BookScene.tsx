@@ -2,10 +2,10 @@
 import { useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
 import { Bookmark } from "@/components/Bookmark";
-import { Button, LinkButton } from "@/components/Button";
+import { Button } from "@/components/Button";
 import type { FlowState, Reaction } from "@/lib/flow/state";
 import { coverageNote, firstPageNotices } from "@/lib/flow/summary";
-import { JUST_ONE, REWRITE, YES24_FIND, understoodOf, yes24FindUrl } from "@/lib/goal/understood";
+import { JUST_ONE, REWRITE, YES24_FIND, openYes24Search, understoodOf } from "@/lib/goal/understood";
 import { BOOKMARK_AWAY, BOOKMARK_DOWN, BOOKMARK_RISE } from "@/lib/motion";
 import { Book, RuledPage } from "./Book";
 import { FirstPage, FirstPageTitle } from "./FirstPage";
@@ -49,7 +49,13 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
   const pick = step === "bookmarks" ? picks[state.index] : undefined;
   const noBooks = status === "ready" && picks.length === 0;
   // F-24 ③: no topic of ours — no draw, no bookmarks; the honest ways out instead of [한 번 고치기][다음 장]
-  const uncovered = state.entry === "target" && state.goal !== null && understoodOf(state.goal) === "none";
+  const understood = state.entry === "target" && state.goal ? understoodOf(state.goal) : null;
+  const uncovered = understood === "none";
+  const editLabel = understood === "nearest" ? "다시 쓰기" : "한 번 고치기";   // a word-match miss: the old honest offer
+  const findOnYes24 = () => {
+    onYes24();
+    openYes24Search(state.goal?.missing ?? null);   // built at the click: the phrase never sits in an href (autocapture, replay)
+  };
 
   const react = (reaction: Reaction) => {
     if (busy) return;
@@ -101,7 +107,7 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
 
       {step === "first" && uncovered && (
         <div className={`${styles.actions} ${styles.exits}`}>
-          <LinkButton href={yes24FindUrl(state.goal?.missing ?? null)} className={styles.full} onClick={onYes24}>{YES24_FIND}</LinkButton>
+          <Button className={styles.full} onClick={findOnYes24}>{YES24_FIND} <span aria-hidden="true">↗</span></Button>
           {!state.edited && <Button variant="secondary" onClick={onEdit}>{REWRITE}</Button>}
           <Button variant="secondary" onClick={onLeaf}>{JUST_ONE}</Button>
         </div>
@@ -117,7 +123,7 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
             </>
           ) : (
             <>
-              {!state.edited && <Button variant="secondary" onClick={onEdit}>한 번 고치기</Button>}
+              {!state.edited && <Button variant="secondary" onClick={onEdit}>{editLabel}</Button>}
               {noBooks
                 ? <Button onClick={onHome}>처음으로</Button>
                 : <Button onClick={onNext} disabled={status !== "ready"}>다음 장</Button>}

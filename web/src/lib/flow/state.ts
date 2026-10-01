@@ -3,6 +3,7 @@ import type { ArtCombo } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
 import type { Reason } from "@/lib/recommend";
 import type { GoalMatch } from "@/lib/goal/match";
+import { understoodOf } from "@/lib/goal/understood";
 import { QUESTIONS } from "./questions";
 import { EMPTY_FORM, type TargetForm } from "./target";
 
@@ -75,8 +76,9 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
     }
     case "submitTarget":
       if (s.step !== "target") return s;
-      // F-24 ③: no topic of ours — no draw and no bookmarks; the open book says so and offers the ways out
-      if (a.goal && !a.goal.matched) {
+      // F-24 ③: the LLM found no topic of ours — no draw and no bookmarks; the open book says so and offers the ways out.
+      // A word-match miss (nearest) still draws the nearest topic's books.
+      if (a.goal && understoodOf(a.goal) === "none") {
         return { ...s, form: a.form, goal: a.goal, status: "ready", draw: null, step: s.opened ? "first" : "book" };
       }
       return requestDraw({ ...s, form: a.form, goal: a.goal });

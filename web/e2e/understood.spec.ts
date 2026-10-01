@@ -10,13 +10,38 @@ const SHOTS = process.env.F24_SHOTS;
 
 interface Fake { topic: string; keywords: string[]; matched: boolean; missing: string | null }
 
+/** window.open is stubbed in the page: the test reads what would have opened (and nothing leaves for the real YES24). */
+async function stubOpen(page: Page) {
+  await page.addInitScript(() => {
+    const w = window as Window & { __opened?: unknown[][] };
+    w.__opened = [];
+    w.open = (...args: unknown[]) => { w.__opened?.push(args); return null; };
+  });
+}
+const opened = (page: Page) => page.evaluate(() => (window as Window & { __opened?: unknown[][] }).__opened ?? []);
+
+/**
+ * C1 (review): the visitor's phrase must never sit in a DOM attribute (Amplitude autocapture sends hrefs unmasked, Session
+ * Replay records attributes), and its visible text must be inside a data-amp-mask. Returns what breaks either rule.
+ */
+const leaks = (page: Page, phrase: string) => page.evaluate((p) => {
+  const out: string[] = [];
+  for (const el of document.querySelectorAll("*")) {
+    for (const a of el.attributes) if (a.value.includes(p)) out.push(`${el.tagName}[${a.name}]`);
+  }
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+    if (n.textContent?.includes(p) && !n.parentElement?.closest("[data-amp-mask]")) out.push(`text outside mask: ${n.textContent}`);
+  }
+  return out;
+}, phrase);
+
 /** S-01 → 🎯 → write `text` → the classifier answers `fake` → open the book. Counts draw requests. */
-async function openWith(page: Page, text: string, fake: Fake): Promise<{ draws: () => number }> {
+async function openWith(page: Page, text: string, fake: Fake, method: "llm" | "word" = "llm"): Promise<{ draws: () => number }> {
   let draws = 0;
-  await page.route("**/api/goal/classify", (route) => route.fulfill({ json: { text, ...fake, method: "llm" } }));
+  await stubOpen(page);
+  await page.route("**/api/goal/classify", (route) => route.fulfill({ json: { text, ...fake, method } }));
   await page.route("**/api/books/draw", (route) => { draws += 1; return route.continue(); });
-  // never leave for the real YES24 in a test: the new tab gets an empty page
-  await page.context().route("https://www.yes24.com/**", (route) => route.fulfill({ contentType: "text/html", body: "<title>YES24</title>" }));
   await page.goto("/");
   await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
   await page.getByRole("textbox", FIELD).fill(text);
@@ -56,18 +81,23 @@ test("F-24 ②: the missing thing, similar books, and a YES24 search for that ph
   await expect(block).toContainText("데이터·통계 › 데이터 분석 › 윈도우 함수 · 아직 없어요");
   await expect(block).not.toContainText("찾았어요");
   await expect(block).toContainText("비슷한 '데이터 분석' 책을 펼칠게요");
-  const link = page.getByRole("link", { name: "예스24에서 '윈도우 함수' 찾기 ↗" });
-  await expect(link).toBeVisible();
-  const href = new URL((await link.getAttribute("href")) ?? "");
-  expect(href.host).toBe("www.yes24.com");
-  expect(href.searchParams.get("query")).toBe("윈도우 함수");
-  expect(href.href).not.toContain(encodeURIComponent(note));                  // never the whole note
-  expect((await link.boundingBox())?.height).toBeGreaterThanOrEqual(44);     // a real tap target
+  await expect(block.getByRole("link")).toHaveCount(0);                        // a button: no href carries the phrase
+  const find = page.getByRole("button", { name: "예스24에서 '윈도우 함수' 찾기" });   // the ↗ is aria-hidden
+  await expect(find).toBeVisible();
+  await expect(find).toHaveText("예스24에서 '윈도우 함수' 찾기 ↗");
+  expect((await find.boundingBox())?.height).toBeGreaterThanOrEqual(44);     // a real tap target
+  expect(await leaks(page, "윈도우")).toEqual([]);
   await shot(page, "f24-2-missing", testInfo.project.name);
 
-  const popup = page.waitForEvent("popup");
-  await link.click();
-  await (await popup).close();
+  await find.click();
+  const calls = await opened(page);
+  expect(calls).toHaveLength(1);
+  const url = new URL(String(calls[0][0]));
+  expect(url.host).toBe("www.yes24.com");
+  expect(url.searchParams.get("query")).toBe("윈도우 함수");
+  expect(url.href).not.toContain(encodeURIComponent(note));                   // never the whole note
+  expect(calls[0].slice(1)).toEqual(["_blank", "noopener,noreferrer"]);
+  expect(await leaks(page, "윈도우")).toEqual([]);
   await page.getByRole("button", { name: "다음 장" }).click();                 // similar books still follow
   await expect(page.getByRole("article")).toBeVisible();
 
@@ -86,9 +116,10 @@ test("F-24 ③: no topic — no draw and no bookmarks; YES24, 다른 말로 쓰�
   await expect(page.getByText(/아직 이 주제 책이 없어요/)).toHaveCount(0);
   await expect(page.getByRole("button", { name: "다음 장" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "한 번 고치기" })).toHaveCount(0);
-  const yes24 = page.getByRole("link", { name: "예스24에서 찾기 ↗" });
+  const yes24 = page.getByRole("button", { name: "예스24에서 찾기" });
   await expect(yes24).toHaveAttribute("data-variant", "primary");
-  expect(new URL((await yes24.getAttribute("href")) ?? "").searchParams.get("query")).toBe("캠핑 장비");
+  await expect(yes24).toHaveText("예스24에서 찾기 ↗");
+  expect(await leaks(page, "캠핑")).toEqual([]);
   await expect(page.getByRole("button", { name: "다른 말로 쓰기" })).toBeVisible();
   await expect(page.getByRole("button", { name: "🍃 그냥 한 권" })).toBeVisible();
   // the buttons stay on screen and side by side under the full-width YES24 button
@@ -100,9 +131,10 @@ test("F-24 ③: no topic — no draw and no bookmarks; YES24, 다른 말로 쓰�
   expect(leaf.y + leaf.height).toBeLessThanOrEqual(page.viewportSize()?.height ?? 0);
   await shot(page, "f24-3-none", testInfo.project.name);
 
-  const popup = page.waitForEvent("popup");
   await yes24.click();
-  await (await popup).close();
+  const calls = await opened(page);
+  expect(calls.map((c) => new URL(String(c[0])).searchParams.get("query"))).toEqual(["캠핑 장비"]);
+  expect(calls[0].slice(1)).toEqual(["_blank", "noopener,noreferrer"]);
   await expect(page.getByRole("article")).toHaveCount(0);                       // no bookmark ever
   expect(draws()).toBe(0);
 
@@ -147,6 +179,25 @@ test("F-24 ③ on a short phone (375 × 548): the three exits stay on screen", a
     const box = await page.getByRole("button", { name }).boundingBox();
     expect(box && box.y + box.height, name).toBeLessThanOrEqual(548);
   }
-  const yes24 = await page.getByRole("link", { name: "예스24에서 찾기 ↗" }).boundingBox();
+  const yes24 = await page.getByRole("button", { name: "예스24에서 찾기" }).boundingBox();
   expect(yes24?.height).toBeGreaterThanOrEqual(44);
+});
+
+test("F-24: a word-match miss is not ③ — the nearest topic's books, the old honest line, E-22 nearest", async ({ page }) => {
+  const { events } = await recordEvents(page);
+  // e.g. the LLM timed out and the server's word matching found nothing: it cannot tell, so it never says "not our topic"
+  const { draws } = await openWith(page, "발표 준비", { topic: "데이터 분석", keywords: [], matched: false, missing: null }, "word");
+  const block = page.getByRole("region", { name: "이렇게 이해했어요" });
+  await expect(block).toContainText("아직 이 주제 책이 없어요. 가장 가까운 '데이터 분석' 책을 펼칠게요");
+  await expect(page.getByText("아직 갈피가 다루지 않는 주제예요")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "예스24에서 찾기" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "다시 쓰기" })).toBeVisible();
+  await page.getByRole("button", { name: "다음 장" }).click();
+  await expect(page.getByRole("article")).toBeVisible();
+  expect(draws()).toBe(1);
+
+  await expect.poll(() => named(events, "goal_coverage_checked").length).toBe(1);
+  expect(named(events, "goal_coverage_checked")[0].props).toEqual({ coverage_bucket: "0", found_count: 0, understood: "nearest" });
+  expect(named(events, "free_goal_written")[0].props).toMatchObject({ is_matched: false, method: "word", has_missing: false, missing_text: null });
+  expect(specMismatches(events)).toEqual([]);
 });

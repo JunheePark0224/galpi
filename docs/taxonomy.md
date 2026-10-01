@@ -306,8 +306,6 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|---|
 | `source` | 추가 (v0.6, F-24) | String | "home", "first_page" | 누른 화면 — home=S-01 입구 버튼, first_page=S-04 ③(맞는 주제 없음)의 [🍃 그냥 한 권]. 퍼널 FN-1·FN-2는 source=home으로 센다 |
 
-속성 없음 (공통 속성만).
-
 #### E-24 `balance_answered`
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
@@ -404,7 +402,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|---|
 | `coverage_bucket` | `bucket` → `coverage_bucket` | String | "0", "1-3", "4+" | 찾은 책 수 구간 (target-chips.md 3절) — 구간 표기는 PRD 그대로 |
 | `found_count` | `found` → `found_count` | Number | 0, 2, 7 | 키워드에 맞는 책 수. is_matched=false면 0 |
-| `understood` | 추가 (v0.6, F-24) | String | "keyword", "topic", "missing", "none" | 첫 장 "이렇게 이해했어요"가 보인 판단 — keyword=① 주제·키워드, topic=①b 주제만, missing=② 주제는 맞고 구체적인 것이 키워드에 없음, none=③ 맞는 주제 없음 |
+| `understood` | 추가 (v0.6, F-24) | String | "keyword", "topic", "missing", "none", "nearest" | 첫 장 "이렇게 이해했어요"가 보인 판단 — keyword=① 주제·키워드, topic=①b 주제만, missing=② 주제는 맞고 구체적인 것이 키워드에 없음, none=③ Claude가 맞는 주제 없다고 함(뽑지 않음), nearest=단어 매칭(키 없음·오류·시간 초과·한도·오프라인 등 모든 대체)이 아무것도 못 찾음 — 판단할 수 없어서 가장 가까운 주제 책을 펼침 |
 
 #### E-05 `book_opened`
 
@@ -814,7 +812,7 @@ Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나
 | 항목 | 규칙 |
 |---|---|
 | `goal_text` | 최대 30자, 앞뒤 공백 제거. 입력칸 아래 "이름·연락처는 적지 마세요". **Supabase에만 저장한다 — Amplitude 사본에는 이 속성을 넣지 않는다**(결정 2026-09-30, 9절 Q3). 못 찾은 요청 분석(5-3)은 SQL로 하므로 잃는 것이 없다. Amplitude에는 `topic`·`keywords`·`is_matched`·`method`가 간다. 처리방침에 저장 명시, **Amplitude로는 안 간다는 문장은 v0.3에서 추가(6-3)**. **P4**: 주제를 찾으려고 이 글만 Anthropic(Claude Haiku)에 보낸다 — 익명 번호·공통 속성·다른 기록은 보내지 않고, 서버 로그에도 글을 남기지 않는다. 처리방침에 먼저 적었다(6-3b). 첫 장(S-04)이 이 글을 화면에 보이면 Session Replay(20%)가 화면 글자를 담을 수 있다 — v0.3: 직접 쓴 글이 있는 첫 장(`FirstPage.tsx`)과 글을 쓰는 입력 칸(`TargetInput.tsx`)에 `data-amp-mask`를 달아 리플레이에서 가린다 (v0.3.1: 입력 칸도 — 대시보드의 가림 수준이 `light`로 바뀌어도 가려진다) |
-| `missing_text` (v0.6) | 분류(Claude Haiku)가 `goal_text`에서 뽑은 짧은 말, 최대 20자(서버 `max`), `<` `>` 제거. `goal_text`와 같이 **Supabase에만** — Amplitude에는 `has_missing`만. 화면에서는 F-24 ②·③의 [예스24에서 찾기] 검색어로 쓰여, 누르면 **그 짧은 말만** 예스24 검색 주소에 실려 간다(적은 글 전체·익명 번호는 가지 않음). 첫 장은 이미 `data-amp-mask`로 리플레이에서 가려진다 |
+| `missing_text` (v0.6) | 분류(Claude Haiku)가 `goal_text`에서 뽑은 짧은 말, 최대 20자(서버 `max`), `<` `>` 제거. `goal_text`와 같이 **Supabase에만** — Amplitude에는 `has_missing`만. 화면에서는 F-24 ②·③의 [예스24에서 찾기] 검색어로 쓰여, 누르면 **그 짧은 말만** 예스24 검색 주소에 실려 간다(익명 번호는 가지 않음. 짧은 글이면 그 말이 글과 같을 수 있다). **DOM 속성에는 절대 넣지 않는다** — Amplitude 자동 수집은 링크 `href`를 가리지 않고 보내고 Session Replay는 속성을 기록하므로, ②·③은 `<a href>`가 아니라 버튼이고 누를 때만 주소를 만들어 `window.open`으로 연다. 그 말이 보이는 글자는 `data-amp-mask`가 달린 첫 장 안에만 있어 리플레이·자동 수집 글자에서 가려진다 (단위·E2E 테스트가 속성·가림을 확인) |
 | `referrer` | 500자에서 자름. Supabase에만. 검색 주소 등 쿼리 문자열에 개인 정보가 섞일 수 있어, 필요하면 호스트만 남기는 것을 검토 |
 | `anon_id` | 처리방침 "지우고 싶다면"에서 이 번호로 삭제 요청을 받는다 — 값의 형식·위치를 바꾸면 처리방침 화면도 함께 |
 | Autocapture·Session Replay | IP·대략적 지역·누른 요소가 Amplitude로 간다(처리방침에 명시). 리플레이는 입력칸을 가린다 — 새 입력칸도 가림 대상인지 확인 |
@@ -837,7 +835,7 @@ P4의 `/api/goal/classify`가 직접 쓴 글(≤30자)을 Anthropic API로 보�
 
 ### 6-3c. 처리방침 변경 — F-24 (예스24 검색어)
 
-7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고쳤다(갱신일 그대로 2026-10-01). ① 표의 직접 쓰기 행 끝에 "갈피에 아직 없는 걸 찾았다면 그걸 가리키는 짧은 말도 데이터베이스에만 저장해요" ② "기록을 전달하는 곳"에 새 문단 — "첫 장에서 [예스24에서 찾기]를 누르면, 그 글에서 찾은 짧은 말(예: '캠핑 장비')을 검색어로 예스24에 보내요. 적은 글 전체나 익명 번호는 보내지 않아요." 그 뒤에 "이 밖의 곳에는 주지 않아요"를 옮겼다.
+7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고쳤다(갱신일 그대로 2026-10-01). ① 표의 직접 쓰기 행 끝에 "갈피에 아직 없는 걸 찾았다면 그걸 가리키는 짧은 말도 데이터베이스에만 저장해요" ② "기록을 전달하는 곳"에 새 문단 — "첫 장에서 [예스24에서 찾기]를 누르면, 그 글에서 찾은 짧은 말(예: '캠핑 장비')만 검색어로 예스24에 보내요. 글이 짧으면 그 말이 글과 같을 수 있어요. 익명 번호는 보내지 않아요." 그 뒤에 "이 밖의 곳에는 주지 않아요"를 옮겼다. (처음 안의 "적은 글 전체는 보내지 않아요"는 짧은 글에서 보장되지 않아 리뷰 뒤 고침)
 
 ### 6-4. 보관
 
@@ -950,7 +948,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.4 | 2026-10-01 | Claude (P4 구현) | S-06에서 E-09 `result_viewed`·E-10 `result_book_viewed`(`pick_type` 포함)·E-23 `description_expanded`·E-18 `yes24_link_clicked`(`source`=result, `pick_type`), S-08에서 E-19 `redraw_clicked`를 심어 `live`로(E-19 뒤 round +1은 v0.3의 `track()` 그대로). E-20 설명에서 P3 임시 화면 문구를 뺌. 이벤트 이름·속성 변경 없음 |
 | v0.5 | 2026-10-01 | Claude (D-D 입력 B안) | S-02 🎯가 큰 무엇을 칸 + 예시 칩 6개로(PRD F-02, context 10-01). E-03 `chip_type` 값 "topic" → "example"(예시 칩을 누를 때, `chip_value` = 칩 글). E-26 `is_free_text`는 이름·뜻 그대로 "보기 vs 직접 쓰기"(Q-10 ②) — FALSE = 예시 칩 글을 고치지 않고 제출. 그 글은 칩마다 정해 둔 주제·키워드로 바로 연결(Claude 호출 없음)되고 E-21·E-22는 남지 않는다(주제 칩 때와 같음). 고친 글은 직접 쓴 말 — 분류, E-21·E-22. 새 이벤트·속성 없음 |
 | v0.5.1 | 2026-10-01 | Claude (최종 검토 반영) | 로고·주소로 새로 열기 규칙(home-nav)의 `round` 변경을 기록: 판 도중이던 흐름을 `navigate`로 새로 열면 round +1(이벤트 없음)·`entry` null이 `site_visited`보다 먼저 정해진다(3-1a·E-01, `storage.ts`의 `settleOpen`). 3-1a의 구현 함수 이름을 고침. 저장 흐름 `VERSION` 2 → 3(마음·회복이 키워드에서 빠졌으므로 배포 전 저장 흐름은 처음부터). 이벤트·속성 이름·값 변경 없음 |
-| v0.6 | 2026-10-01 | Claude (F-24 구현) | PRD F-24 "이렇게 이해했어요"(시안 C′). E-22 `understood`("keyword"/"topic"/"missing"/"none") 추가 — ③(맞는 주제 없음)은 뽑지 않으므로 제출 때 found_count 0으로 보낸다. E-21 `has_missing`(Boolean, Amplitude에도)·`missing_text`(String 또는 null, ≤20자, **Supabase only**) 추가. E-18 `source`에 "first_page"(②의 링크·③의 버튼, `book_id`·`pick_type` null — `book_id`가 null 허용으로). E-02 `source`("home"/"first_page") 추가 — ③ [🍃 그냥 한 권]은 E-02 직전에 round +1(3-1a, 이벤트 없는 +1). ③ [다른 말로 쓰기]는 기존 E-06 그대로. `/privacy` 6-3c 먼저. 저장 흐름 `VERSION` 3 → 4. `screen_version`은 그대로 `v1`(F-18 2단계 전후 비교용 — 실이용자 전이라 올리지 않음). 이벤트 이름 변경 없음 |
+| v0.6 | 2026-10-01 | Claude (F-24 구현) | PRD F-24 "이렇게 이해했어요"(시안 C′). E-22 `understood`("keyword"/"topic"/"missing"/"none"/"nearest") 추가 — ③(Claude가 맞는 주제 없다고 함)은 뽑지 않으므로 제출 때 found_count 0으로 보낸다. 단어 매칭이 못 찾은 판(nearest)은 ③이 아니다 — 예전처럼 가장 가까운 주제 책 + "아직 이 주제 책이 없어요…" 한 줄. ②·③의 예스24 검색은 버튼(누를 때만 주소를 만듦) — 그 말이 `href` 같은 속성으로 Amplitude 자동 수집·리플레이에 가지 않게(6-2). E-21 `has_missing`(Boolean, Amplitude에도)·`missing_text`(String 또는 null, ≤20자, **Supabase only**) 추가. E-18 `source`에 "first_page"(②의 링크·③의 버튼, `book_id`·`pick_type` null — `book_id`가 null 허용으로). E-02 `source`("home"/"first_page") 추가 — ③ [🍃 그냥 한 권]은 E-02 직전에 round +1(3-1a, 이벤트 없는 +1). ③ [다른 말로 쓰기]는 기존 E-06 그대로. `/privacy` 6-3c 먼저. 저장 흐름 `VERSION` 3 → 4. `screen_version`은 그대로 `v1`(F-18 2단계 전후 비교용 — 실이용자 전이라 올리지 않음). 이벤트 이름 변경 없음 |
 
 ---
 

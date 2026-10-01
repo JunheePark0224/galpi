@@ -126,6 +126,12 @@ describe("parseClassification", () => {
     ["the topic's name", "돈 관리·투자"],
     ["one of our keyword names", "주식"],
     ["another topic's keyword, spaced differently", "번아웃· 스트레스"],
+    ["the word null", "null"],
+    ["None", " None "],
+    ["N/A", "N/A"],
+    ["없음", "없음"],
+    ["해당 없음", "해당 없음"],
+    ["a dash", "-"],
   ])("is null for a missing phrase that is %s — the answer still counts", (_, missing) => {
     const goal = parseClassification(answer({ topic: "돈 관리·투자", keywords: ["주식"], matched: true, missing }), "주식 처음", VOCAB);
     expect(goal).toMatchObject({ topic: "돈 관리·투자", keywords: ["주식"], missing: null });

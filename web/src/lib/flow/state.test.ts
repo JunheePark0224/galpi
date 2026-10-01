@@ -49,6 +49,12 @@ describe("flowReducer", () => {
     expect(flowReducer(editing, { type: "submitTarget", form, goal: sql })).toMatchObject({ step: "first", status: "loading", drawId: 1 });
   });
 
+  it("F-24: a word-match miss (any fallback) still draws the nearest topic's books", () => {
+    const miss = { text: "발표 준비", topic: "데이터 분석" as const, keywords: [], matched: false, missing: null, method: "word" as const };
+    const s = run([{ type: "start", entry: "target" }, { type: "submitTarget", form: { ...form, topic: null, free: miss.text }, goal: miss }]);
+    expect(s).toMatchObject({ step: "book", status: "loading", drawId: 1 });
+  });
+
   it("takes only the answer to the latest request", () => {
     const loading = run([{ type: "start", entry: "leaf" }, ...answers()]);
     expect(flowReducer(loading, { type: "drawn", id: 0, draw: view(5) })).toBe(loading);

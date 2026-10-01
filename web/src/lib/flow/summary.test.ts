@@ -58,6 +58,12 @@ describe("coverageNote (F-24 ①+: the line under the path)", () => {
       .toBe("SQL 책은 아직 2권이에요. 나머지는 가까운 '데이터 분석' 책이에요");
   });
 
+  it("gives a word-match miss (nearest) the old honest line", () => {
+    expect(coverageNote("target", goal({ keywords: [], matched: false, text: "발표 준비" }), draw({ found: null, picks: onePick })))
+      .toBe("아직 이 주제 책이 없어요. 가장 가까운 '데이터 분석' 책을 펼칠게요");
+    expect(firstPageNotices("target", goal({ keywords: [], matched: false }), draw({ exhausted: true, picks: onePick }))).toEqual([]);
+  });
+
   it("says so when the keyword has no books yet", () => {
     expect(coverageNote("target", goal({ keywords: ["제미나이"], topic: "AI 활용" }), draw({ found: 0, keywords: [], picks: onePick })))
       .toBe("아직 이 주제 책이 없어요. 가장 가까운 'AI 활용' 책을 펼칠게요");
@@ -67,7 +73,7 @@ describe("coverageNote (F-24 ①+: the line under the path)", () => {
     ["enough keyword books", goal(), draw({ found: 6, keywords: ["SQL"], picks: onePick })],
     ["no keyword (①b)", goal({ keywords: [] }), draw({ found: null, picks: onePick })],
     ["② (the missing line says it instead)", goal({ method: "llm", missing: "윈도우 함수" }), draw({ found: 1, keywords: ["SQL"], picks: onePick })],
-    ["③ (no topic, no draw)", goal({ keywords: [], matched: false }), null],
+    ["③ (no topic, no draw)", goal({ keywords: [], matched: false, method: "llm" }), null],
     ["the draw not back yet", goal(), null],
     ["🍃", null, draw({ found: 1, keywords: ["SQL"], picks: onePick })],
   ])("is null for %s", (_, g, d) => {

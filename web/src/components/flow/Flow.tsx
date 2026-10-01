@@ -37,7 +37,7 @@ export function Flow({ vocab }: { vocab: Vocab }) {
     try {
       const res = await requestDraw(drawBody(s));
       if (s.entry === "target" && s.goal && s.goal.method !== "example") {   // E-22: own words only, like E-21
-        const found = res.found ?? 0;
+        const found = s.goal.matched ? (res.found ?? 0) : 0;   // a word-match miss (nearest) found nothing of its own
         track("goal_coverage_checked", { coverage_bucket: coverageBucket(found), found_count: found, understood: understoodOf(s.goal) });
       }
       dispatch({ type: "drawn", id: s.drawId, draw: toDrawView(res, newArtSeed()) });

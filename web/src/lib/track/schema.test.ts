@@ -25,7 +25,7 @@ describe("event schema", () => {
   it("F-24: the missing phrase is Supabase only (≤20), its yes/no goes to both; E-18 from the first page has no book", () => {
     expect(EVENT_SPEC.free_goal_written.missing_text).toMatchObject({ only: "supabase", max: 20, nullable: true });
     expect(EVENT_SPEC.free_goal_written.has_missing).toEqual({ type: "boolean" });
-    expect(EVENT_SPEC.goal_coverage_checked.understood.type).toEqual(["keyword", "topic", "missing", "none"]);
+    expect(EVENT_SPEC.goal_coverage_checked.understood.type).toEqual(["keyword", "topic", "missing", "none", "nearest"]);
     expect(EVENT_SPEC.yes24_link_clicked.source.type).toContain("first_page");
     expect(EVENT_SPEC.yes24_link_clicked.book_id).toMatchObject({ nullable: true });
     expect(EVENT_SPEC.entry_selected.source.type).toEqual(["home", "first_page"]);
