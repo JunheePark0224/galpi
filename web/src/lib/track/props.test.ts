@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
-import { parseProps } from "./props";
+import { forAmplitude, parseProps } from "./props";
 
 const reacted = { book_id: "9788998441012", position: 2, reaction: "curious", pick_type: "random", one_liner_style: "question" };
 
@@ -57,5 +57,18 @@ describe("parseProps (server check against EVENT_SPEC)", () => {
   it("keeps an object prop as sent (art is a fixed small shape, the body is already size-capped)", () => {
     const art = { animal: "fox", bg: "peach", sky: "moon", ground: "grass", rare: false };
     expect(parseProps("bookmark_shown", { art }).props).toEqual({ art });
+  });
+});
+
+describe("forAmplitude (taxonomy 2-7: Supabase-only props stay out of the Amplitude copy)", () => {
+  it("leaves out goal_text and keeps topic, keywords, is_matched and method", () => {
+    const written = { goal_text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" };
+    expect(forAmplitude("free_goal_written", written)).toEqual({ topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" });
+    expect(written.goal_text).toBe("SQL 공부");   // the Supabase copy is a different object, untouched
+  });
+
+  it("passes every other event's props through", () => {
+    expect(forAmplitude("bookmark_reacted", reacted)).toEqual(reacted);
+    expect(forAmplitude("site_visited", {})).toEqual({});
   });
 });

@@ -1,4 +1,5 @@
 import { ensureAnonId } from "./common";
+import { forAmplitude } from "./props";
 import type { CommonProps, EventName } from "./schema";
 
 type Sdk = typeof import("@amplitude/unified");
@@ -76,7 +77,7 @@ export function startAmplitude(): void {
   whenIdle(() => void load(key));
 }
 
-/** Same event name and props as the Supabase path, plus the common props the analysis needs. Never throws. */
+/** Same event name and props as the Supabase path minus Supabase-only ones, plus the common props the analysis needs. Never throws. */
 export function sendToAmplitude(name: EventName, props: Record<string, unknown>, common: CommonProps | null): void {
   if (!started || failed) return;
   try {
@@ -88,7 +89,7 @@ export function sendToAmplitude(name: EventName, props: Record<string, unknown>,
       is_in_app_browser: common.is_in_app_browser,
       is_returning: common.is_returning,
     };
-    const event: Waiting = [name, { ...shared, ...props, ...(name === "site_visited" ? { prompt_version: PROMPT_VERSION } : {}) }];
+    const event: Waiting = [name, { ...shared, ...forAmplitude(name, props), ...(name === "site_visited" ? { prompt_version: PROMPT_VERSION } : {}) }];
     if (sdk) give(sdk, event);
     else if (waiting.length < MAX_WAITING) waiting.push(event);
   } catch {

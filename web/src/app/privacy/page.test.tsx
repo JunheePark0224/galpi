@@ -10,7 +10,7 @@ describe("/privacy (S-10)", () => {
   it("shows the title, the date and the six collected items", () => {
     render(<PrivacyPage />);
     expect(screen.getByRole("heading", { level: 1, name: "개인정보 처리방침" })).toBeInTheDocument();
-    expect(screen.getByText(/2026-09-30/)).toBeInTheDocument();
+    expect(screen.getByText(/2026-10-01/)).toBeInTheDocument();
     expect(screen.getByText("갈피는 이름·이메일·전화번호를 받지 않아요.")).toBeInTheDocument();
     const rows = within(screen.getByRole("table")).getAllByRole("row");
     expect(rows).toHaveLength(7); // header + 6
@@ -18,7 +18,8 @@ describe("/privacy (S-10)", () => {
     expect(screen.getByRole("columnheader", { name: "왜" })).toBeInTheDocument();
     expect(screen.getByText("누른 버튼과 누른 시각, 고른 입구(🎯/🍃), 본 책갈피, 궁금해요/패스, 밸런스 게임 답과 답하는 데 걸린 시간, 고친 답, 몇 번째 뽑기인지")).toBeInTheDocument();
     expect(screen.getByText("기기 종류(휴대폰/컴퓨터), 앱 안 브라우저 여부, 들어온 곳(이전 페이지 주소), 화면 버전")).toBeInTheDocument();
-    expect(screen.getByText(/\(최대 30자\) — 그 글에서 찾은 주제·키워드도 함께/)).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: /직접 쓰기/ }))
+      .toHaveTextContent("🎯 \"직접 쓰기\"에 적은 글 (최대 30자, 갈피의 데이터베이스에만 저장) — 그 글에서 찾은 주제·키워드는 Amplitude에도 함께 보내요");
     expect(screen.getByText("같은 사람이 다시 왔는지 세기 위해")).toBeInTheDocument();
     expect(screen.getByText("추천이 잘 맞는지 분석하기 위해")).toBeInTheDocument();
     expect(screen.getByText("화면이 잘 동작하는지 확인하기 위해")).toBeInTheDocument();
@@ -48,6 +49,14 @@ describe("/privacy (S-10)", () => {
     expect(screen.getByText(/분석 서비스 Amplitude\(서버는 미국에 있어요\)에도 보내요/)).toBeInTheDocument();
     expect(screen.getByText(/Amplitude는 브라우저의 쿠키와 저장 공간에 식별 값을 남겨요/)).toBeInTheDocument();
     expect(screen.getByText(/새로 전달하는 곳이 생기면 이 페이지에 먼저 적어요/)).toBeInTheDocument();
+  });
+
+  it("says the written goal stays in Galpi's database and is not sent to Amplitude (taxonomy 6-3)", () => {
+    render(<PrivacyPage />);
+    const onlyHere = screen.getByText("다만 🎯 \"직접 쓰기\"에 적은 글은 Amplitude에 보내지 않고, 갈피의 데이터베이스(Supabase)에만 저장해요.");
+    expect(onlyHere.tagName).toBe("STRONG");
+    expect(onlyHere.closest("section")).toHaveTextContent(/위 기록은 분석 서비스 Amplitude\(서버는 미국에 있어요\)에도 보내요\. 다만/);
+    expect(screen.getByText("갈피의 데이터베이스에만 저장").tagName).toBe("STRONG");
   });
 
   it("says Amplitude records are deleted together with the rest on request", () => {

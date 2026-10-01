@@ -44,7 +44,7 @@ export default function PrivacyPage() {
             <td>화면이 잘 동작하는지 확인하기 위해</td>
           </tr>
           <tr>
-            <td>🎯 {"\"직접 쓰기\""}에 적은 글 (최대 30자) — 그 글에서 찾은 주제·키워드도 함께</td>
+            <td>🎯 {"\"직접 쓰기\""}에 적은 글 (최대 30자, <strong>갈피의 데이터베이스에만 저장</strong>) — 그 글에서 찾은 주제·키워드는 Amplitude에도 함께 보내요</td>
             <td>사람들이 찾는 주제를 알고 책을 늘리기 위해 — <strong>이름·연락처는 적지 마세요</strong></td>
           </tr>
           <tr>
@@ -72,7 +72,9 @@ export default function PrivacyPage() {
       <section className={styles.section}>
         <h2 className={styles.h2}>기록을 전달하는 곳</h2>
         <p>
-          위 기록은 분석 서비스 Amplitude(서버는 미국에 있어요)에도 보내요. Amplitude는 브라우저의 쿠키와 저장 공간에 식별 값을 남겨요.
+          위 기록은 분석 서비스 Amplitude(서버는 미국에 있어요)에도 보내요.{" "}
+          <strong>다만 🎯 {"\"직접 쓰기\""}에 적은 글은 Amplitude에 보내지 않고, 갈피의 데이터베이스(Supabase)에만 저장해요.</strong>{" "}
+          Amplitude는 브라우저의 쿠키와 저장 공간에 식별 값을 남겨요.
           이 밖의 곳에는 주지 않아요. 새로 전달하는 곳이 생기면 이 페이지에 먼저 적어요.
         </p>
       </section>

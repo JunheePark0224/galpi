@@ -26,10 +26,13 @@ export function FirstPageTitle({ entry }: { entry: Entry }) {
   );
 }
 
-/** S-04 right page (C-10) + honest notes (C-14). 🍃 shows the taste from the raw answers — never a type name. */
+/**
+ * S-04 right page (C-10) + honest notes (C-14). 🍃 shows the taste from the raw answers — never a type name.
+ * A written goal (and a notice quoting it) is masked in Session Replay: the words stay in Supabase only (taxonomy 6-2).
+ */
 export function FirstPage({ entry, choices, form, goal, notices }: Props) {
   return (
-    <div className={styles.page}>
+    <div className={styles.page} data-amp-mask={goal ? true : undefined}>
       {entry === "leaf" ? (
         <ul className={styles.rows}>
           {tasteLines(choices).map((line) => (

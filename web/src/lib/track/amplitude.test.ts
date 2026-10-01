@@ -224,6 +224,15 @@ describe("sendToAmplitude", () => {
     });
   });
 
+  it("sends free_goal_written without goal_text — the written words stay in Supabase (taxonomy 2-7, 6-2)", async () => {
+    const send = await started();
+    const written = { goal_text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" };
+    send("free_goal_written", written, common);
+    expect(sdk.track.mock.calls[0][1]).not.toHaveProperty("goal_text");
+    expect(sdk.track.mock.calls[0][1]).toMatchObject({ topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" });
+    expect(JSON.stringify(sdk.track.mock.calls)).not.toContain("SQL 공부");
+  });
+
   it("keeps the event's own props when a name collides with a common prop", async () => {
     const send = await started();
     send("entry_selected", { entry: "target" }, { ...common, entry: null });
