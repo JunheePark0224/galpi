@@ -10,6 +10,7 @@ data/processed/check/
 data/processed/d1_candidates.json
 data/raw/crema_probe/
 data/raw/api_compare/
+data/raw/expansion/
 **/yes24_*.json
 # python
 __pycache__/
