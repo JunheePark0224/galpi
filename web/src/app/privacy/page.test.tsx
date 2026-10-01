@@ -73,9 +73,10 @@ describe("/privacy (S-10)", () => {
 
   it("says the YES24 search link sends only the short missing phrase, as a search word (F-24)", () => {
     render(<PrivacyPage />);
-    const yes24 = screen.getByText("첫 장에서 [예스24에서 찾기]를 누르면, 그 글에서 찾은 짧은 말(예: '캠핑 장비')을 검색어로 예스24에 보내요.");
+    const yes24 = screen.getByText("첫 장에서 [예스24에서 찾기]를 누르면, 그 글에서 찾은 짧은 말(예: '캠핑 장비')만 검색어로 예스24에 보내요.");
     expect(yes24.tagName).toBe("STRONG");
-    expect(yes24.closest("p")).toHaveTextContent("적은 글 전체나 익명 번호는 보내지 않아요.");
+    expect(yes24.closest("p")).toHaveTextContent("글이 짧으면 그 말이 글과 같을 수 있어요. 익명 번호는 보내지 않아요.");
+    expect(yes24.closest("p")).not.toHaveTextContent("적은 글 전체");   // not guaranteed: a short note can be the phrase itself
     expect(screen.getByRole("cell", { name: /무엇을 알고 싶어요/ }))
       .toHaveTextContent("갈피에 아직 없는 걸 찾았다면 그걸 가리키는 짧은 말도 데이터베이스에만 저장해요");
   });
