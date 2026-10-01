@@ -8,7 +8,7 @@ Exit 0: done (also "nothing to fill", "no usable candidates" and "no usable book
 nothing, or the run stopped before any book was finished. Failure rules (design 2-1):
   YES24 gives no candidate at all  → `yes24_failed`, no file (so no PR); only the failed API paths are named
   a key is refused (401/403), the model is unknown (404) or the account is the problem (400), or one model's calls fail
-  STOP_LIMIT times in a row (tagger.Breaker, one streak per model) → the run stops there; the books finished before it are
+  STOP_LIMIT times in a row (tagger.Breaker, one streak per pass) → the run stops there; the books finished before it are
   written as `partial`, and if there are none it is `anthropic_failed` with no file
   nothing to fill → `full`, zero API calls
 YES24 text (intro, TOC) lives on the Candidate in memory and goes to the tagger only; the additions file, the summary and
@@ -65,12 +65,12 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     kept = vocab[cand.slot]["kept"] if cand.entry == "target" else {}
     names, hints = list(kept), keyword_hints(cand, kept) if kept else []
     user = user_message(cand.entry, cand.slot, cand.title, cand.intro, cand.toc, hints)
-    raw_a, used, why = call(client, cfg.model, prompts["tag"], user, schema(cand.entry, "tag", names), breaker)
+    raw_a, used, why = call(client, cfg.model, prompts["tag"], user, schema(cand.entry, "tag", names), breaker, "A")
     _spend(ledger, cfg.model, used)
     a = parse(raw_a, cand.entry, "tag", names) if raw_a else None
     if a is None:
         return None, why if raw_a is None else "invalid_answer"
-    raw_b, used, why = call(client, cfg.second_model, prompts["check"], user, schema(cand.entry, "check", names), breaker)
+    raw_b, used, why = call(client, cfg.second_model, prompts["check"], user, schema(cand.entry, "check", names), breaker, "B")
     _spend(ledger, cfg.second_model, used)
     b = parse(raw_b, cand.entry, "check", names) if raw_b else None
     if b is None:

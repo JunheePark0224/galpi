@@ -147,8 +147,8 @@ def _failing(exc):
     return FakeClient(f)
 
 
-def _call_with(client, breaker, model="claude-haiku-4-5"):
-    return call(client, model, "s", "u", {}, breaker)
+def _call_with(client, breaker, model="claude-haiku-4-5", pass_="A"):
+    return call(client, model, "s", "u", {}, breaker, pass_)
 
 
 def test_five_api_failures_in_a_row_stop_the_run_but_a_success_resets_the_count():
@@ -194,17 +194,17 @@ def test_an_ordinary_400_is_one_failed_book():
     assert _call_with(_failing(err), Breaker())[2] == "http_400"
 
 
-def test_each_model_has_its_own_failure_streak_so_a_dead_primary_stops_even_while_pass_b_answers():
-    def by_model(kwargs):
-        if kwargs["model"] == "claude-sonnet-5-5":
+def test_each_pass_has_its_own_failure_streak_even_with_one_model_on_both_passes():
+    def pass_a_down(kwargs):
+        if kwargs["messages"][0]["content"] == "A":
             raise _status(anthropic.InternalServerError, 500)
         return message(tag_answer("target"))
-    client, breaker = FakeClient(by_model), Breaker()
-    with pytest.raises(TaggerStop, match="claude-sonnet-5-5: 5 API failures in a row"):
+    client, breaker, model = FakeClient(pass_a_down), Breaker(), "claude-sonnet-5-5"  # model == second_model
+    with pytest.raises(TaggerStop, match=r"pass A \(claude-sonnet-5-5\): 5 API failures in a row"):
         for _ in range(5):                                                     # one book = pass A (dead) + pass B (ok)
-            assert _call_with(client, breaker, "claude-sonnet-5-5")[2] == "http_500"
-            assert _call_with(client, breaker, "claude-haiku-4-5")[2] == "ok"
-    assert breaker.streaks == {"claude-sonnet-5-5": 5, "claude-haiku-4-5": 0}
+            assert call(client, model, "s", "A", {}, breaker, "A")[2] == "http_500"
+            assert call(client, model, "s", "B", {}, breaker, "B")[2] == "ok"
+    assert breaker.streaks == {"A": 5, "B": 0}
     assert len(client.messages.calls) == 9                                    # stopped within 5 books, not after the whole set
 
 

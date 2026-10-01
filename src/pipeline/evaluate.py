@@ -173,8 +173,8 @@ def run_model(client, model: str, second: str, golds: list[dict], vocab: dict, d
         kept = vocab[cand.slot]["kept"] if cand.entry == "target" else {}
         names = list(kept)
         user = user_message(cand.entry, cand.slot, cand.title, cand.intro, cand.toc, keyword_hints(cand, kept) if kept else [])
-        raw_a, ua, why_a = call(client, model, prompts["tag"], user, schema(cand.entry, "tag", names), breaker)
-        raw_b, ub, why_b = call(client, second, prompts["check"], user, schema(cand.entry, "check", names), breaker)
+        raw_a, ua, why_a = call(client, model, prompts["tag"], user, schema(cand.entry, "tag", names), breaker, "A")
+        raw_b, ub, why_b = call(client, second, prompts["check"], user, schema(cand.entry, "check", names), breaker, "B")
         for m, u in ((model, ua), (second, ub)):
             usage[m] = usage.get(m, Usage()).plus(u)
         a = parse(raw_a, cand.entry, "tag", names) if raw_a else None

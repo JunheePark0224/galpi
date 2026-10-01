@@ -34,21 +34,22 @@ class TaggerStop(RuntimeError):
 
 
 class Breaker:
-    """Counts API failures in a row (`http_*`, `connection`), ONE STREAK PER MODEL: pass A and pass B alternate, so a shared
-    streak would be reset by a healthy pass B and never stop a dead primary model. A success or a book-level failure
-    (refusal, truncation, invalid JSON — the API worked) resets that model's streak; the STOP_LIMIT-th in a row raises
-    TaggerStop."""
+    """Counts API failures in a row (`http_*`, `connection`), ONE STREAK PER PASS ("A" tags, "B" checks): the two passes
+    alternate, so a shared streak would be reset by a healthy pass and never stop a dead one. The streak is keyed by pass,
+    not by model name, so model == second_model (the shipped config) still has two independent streaks. A success or a
+    book-level failure (refusal, truncation, invalid JSON — the API worked) resets that pass's streak; the STOP_LIMIT-th
+    failure in a row raises TaggerStop."""
 
     def __init__(self, limit: int = STOP_LIMIT):
         self.limit, self.streaks = limit, {}
 
-    def note(self, model: str, reason: str) -> None:
+    def note(self, pass_: str, model: str, reason: str) -> None:
         if not (reason.startswith("http_") or reason == "connection"):
-            self.streaks[model] = 0
+            self.streaks[pass_] = 0
             return
-        self.streaks[model] = self.streaks.get(model, 0) + 1
-        if self.streaks[model] >= self.limit:
-            raise TaggerStop(f"{model}: {self.streaks[model]} API failures in a row ({reason})")
+        self.streaks[pass_] = self.streaks.get(pass_, 0) + 1
+        if self.streaks[pass_] >= self.limit:
+            raise TaggerStop(f"pass {pass_} ({model}): {self.streaks[pass_]} API failures in a row ({reason})")
 
 
 @dataclass(frozen=True)
@@ -89,10 +90,10 @@ def request(model: str, system: str, user: str, schema: dict) -> dict:
     return kwargs
 
 
-def call(client, model: str, system: str, user: str, schema: dict,
-         breaker: Breaker | None = None) -> tuple[dict | None, Usage, str]:
+def call(client, model: str, system: str, user: str, schema: dict, breaker: Breaker | None = None,
+         pass_: str = "A") -> tuple[dict | None, Usage, str]:
     """(answer JSON or None, usage, reason). Raises TaggerStop on 401/403, on a 404 (unknown model), on a 400 about the
-    model / billing / limits, and — when a `breaker` is given — after STOP_LIMIT API failures in a row for one model.
+    model / billing / limits, and — when a `breaker` is given — after STOP_LIMIT API failures in a row in one `pass_` (A / B).
     Reasons: ok, http_<status>, connection, a stop_reason (refusal, max_tokens…), invalid_json."""
     failure = None
     try:
@@ -108,9 +109,9 @@ def call(client, model: str, system: str, user: str, schema: dict,
     except anthropic.APIConnectionError:
         failure = "connection"
     if failure:  # outside the except block, so a TaggerStop from the breaker carries no chained SDK exception
-        return _failed(breaker, model, failure)
+        return _failed(breaker, pass_, model, failure)
     if breaker:
-        breaker.note(model, "ok")
+        breaker.note(pass_, model, "ok")
     usage = _usage(msg)
     if msg.stop_reason != "end_turn":
         return None, usage.plus(Usage(0, 1)), str(msg.stop_reason)
@@ -122,9 +123,9 @@ def call(client, model: str, system: str, user: str, schema: dict,
     return (answer, usage, "ok") if isinstance(answer, dict) else (None, usage.plus(Usage(0, 1)), "invalid_json")
 
 
-def _failed(breaker: Breaker | None, model: str, reason: str) -> tuple[None, Usage, str]:
+def _failed(breaker: Breaker | None, pass_: str, model: str, reason: str) -> tuple[None, Usage, str]:
     if breaker:
-        breaker.note(model, reason)
+        breaker.note(pass_, model, reason)
     return None, Usage(1, 1), reason
 
 

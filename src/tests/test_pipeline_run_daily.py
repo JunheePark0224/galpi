@@ -106,23 +106,36 @@ def test_a_refused_key_stops_the_day_without_a_file(day):
     assert len(client.messages.calls) == 1 and not (day / "2026-10-05.json").exists()
 
 
-def test_a_dead_second_model_stops_the_day_and_keeps_the_finished_books(day, monkeypatch):
-    """Pass A keeps answering, so one shared failure streak would never fill; the breaker counts per model."""
+@pytest.mark.parametrize("dead, kind", [("B", "check"), ("A", "tag")])
+def test_a_dead_pass_stops_the_day_and_keeps_the_finished_books(day, monkeypatch, dead, kind):
+    """The shipped config runs ONE model on both passes. The other pass keeps answering between the failures, so the streak
+    has to be counted per pass or it would be reset every time."""
+    monkeypatch.setattr(run_daily, "Breaker", lambda: Breaker(2))
+
+    def one_pass_down(kwargs):
+        text = kwargs["messages"][0]["content"]
+        if kind_of(kwargs)[1] == kind and ("주식 투자 수업" in text or "주식 마음 공부" in text):
+            raise status_error(529)
+        return agreeing(kwargs)
+    s = run_daily.run("2026-10-05", CFG, ENV, FakeClient(one_pass_down))
+    assert s["status"] == "partial" and s["stopped"] == f"pass {dead} (claude-haiku-4-5): 2 API failures in a row (http_529)"
+    assert s["tagged"] == 2 and s["reasons"] == {"ok": 2, "http_529": 1}
+    # 2 finished books x 2 passes + the dead pass's first failure + (pass B dead: the interrupted books' pass A, 2 calls)
+    assert s["usage"]["claude-haiku-4-5"]["calls"] == (7 if dead == "B" else 5)
+    doc = json.loads((day / "2026-10-05.json").read_text(encoding="utf-8"))
+    assert [b["title"] for b in doc["books"]] == ["처음 주식 공부", "주식 배당 입문"]
+
+
+def test_the_two_models_of_a_mixed_config_are_billed_apart_when_a_pass_dies(day, monkeypatch):
     monkeypatch.setattr(run_daily, "Breaker", lambda: Breaker(2))
 
     def second_down(kwargs):
-        _, kind = kind_of(kwargs)
-        text = kwargs["messages"][0]["content"]
-        if kind == "check" and ("주식 투자 수업" in text or "주식 마음 공부" in text):
+        if kind_of(kwargs)[1] == "check" and ("주식 투자 수업" in kwargs["messages"][0]["content"] or "주식 마음 공부" in kwargs["messages"][0]["content"]):
             raise status_error(529)
         return agreeing(kwargs)
     s = run_daily.run("2026-10-05", MIXED_CFG, ENV, FakeClient(second_down))
-    assert s["status"] == "partial" and s["stopped"] == "claude-haiku-4-5: 2 API failures in a row (http_529)"
-    assert s["tagged"] == 2 and s["reasons"] == {"ok": 2, "http_529": 1}
+    assert s["stopped"] == "pass B (claude-haiku-4-5): 2 API failures in a row (http_529)"
     assert {m: u["calls"] for m, u in s["usage"].items()} == {"claude-sonnet-5-5": 4, "claude-haiku-4-5": 3}
-    # pass A of the interrupted books is counted; the call that tripped the breaker raised before returning (no tokens)
-    doc = json.loads((day / "2026-10-05.json").read_text(encoding="utf-8"))
-    assert [b["title"] for b in doc["books"]] == ["처음 주식 공부", "주식 배당 입문"]
 
 
 def test_a_dead_model_before_any_book_is_a_failed_day(day, monkeypatch):
