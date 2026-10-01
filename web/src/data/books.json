@@ -5277,5 +5277,728 @@
   "way": "개념",
   "axes": null,
   "keywords": []
+ },
+ {
+  "isbn": "9791194353706",
+  "title": "나의 첫 번째 재테크 교과서",
+  "author": "프롬어스아카데미",
+  "pages": 350,
+  "one_liner": "경제지표 읽기부터 공모주, ISA, 연금 준비까지 차근차근 짚어 줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "재테크 기초",
+   "ETF·펀드",
+   "연금·노후"
+  ]
+ },
+ {
+  "isbn": "9788919205013",
+  "title": "보도 섀퍼의 돈",
+  "author": "보도 섀퍼",
+  "pages": 388,
+  "one_liner": "돈에 대한 신념과 책임을 점검하며 부자의 사고방식을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "돈의 심리"
+  ]
+ },
+ {
+  "isbn": "9791194634737",
+  "title": "캔들차트 하나로 끝내는 추세추종 투자 (리커버 개정판)",
+  "author": "성승현",
+  "pages": 404,
+  "one_liner": "사고파는 타이밍을 차트로 스스로 읽는 투자 기준을 세워요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "주식"
+  ]
+ },
+ {
+  "isbn": "9791165795788",
+  "title": "라오어의 미국주식 무한매수법",
+  "author": "라오어",
+  "pages": 216,
+  "one_liner": "원금을 쪼개 사고 파는 분할매수 투자법을 단계별로 따라 해 볼 수 있어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "주식"
+  ]
+ },
+ {
+  "isbn": "9791199302198",
+  "title": "보글헤드 쓰리펀드 포트폴리오",
+  "author": "테일러 래리모어",
+  "pages": 204,
+  "one_liner": "인덱스 펀드 세 개로 포트폴리오를 짜고 사두고 기다리는 투자법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "ETF·펀드"
+  ]
+ },
+ {
+  "isbn": "9791197862670",
+  "title": "해외투자, 이 책 한 권으로 끝",
+  "author": "이정석",
+  "pages": 232,
+  "one_liner": "해외 주식·펀드·ETF를 계좌 개설부터 환전, 고르는 기준까지 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "주식",
+   "ETF·펀드"
+  ]
+ },
+ {
+  "isbn": "9791157848034",
+  "title": "주택청약의 모든 것",
+  "author": "한국부동산원",
+  "pages": 288,
+  "one_liner": "청약통장 준비부터 특별공급·일반공급 신청, 당첨 뒤 계약까지 순서대로 짚어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "부동산·청약"
+  ]
+ },
+ {
+  "isbn": "9791193712269",
+  "title": "모르면 호구 되는 부동산상식",
+  "author": "박성환",
+  "pages": 564,
+  "one_liner": "전월세 계약부터 매매, 청약까지 부동산 거래에서 손해 보지 않는 기본기를 잡아요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "부동산·청약"
+  ]
+ },
+ {
+  "isbn": "9791140700493",
+  "title": "무조건 오르는 아파텔 투자 공식",
+  "author": "고라파덕90",
+  "pages": 300,
+  "one_liner": "주거용 오피스텔을 고르고 사는 기준과 임장 요령을 배워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "부동산·청약"
+  ]
+ },
+ {
+  "isbn": "9788947502122",
+  "title": "일확연금 노후부자",
+  "author": "최만수 외",
+  "pages": 320,
+  "one_liner": "퇴직 뒤에도 월급처럼 돈이 들어오게 연금 계좌를 굴리는 길을 알려 줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "연금·노후"
+  ]
+ },
+ {
+  "isbn": "9791130682822",
+  "title": "연금 투자 불패의 법칙",
+  "author": "영주 닐슨",
+  "pages": 316,
+  "one_liner": "퇴직연금 계좌에 자산배분과 리밸런싱 규칙을 세워 현금흐름을 만들어 가요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "연금·노후",
+   "ETF·펀드"
+  ]
+ },
+ {
+  "isbn": "9791194508816",
+  "title": "딱 50부터 노후 준비합시다",
+  "author": "김경필",
+  "pages": 272,
+  "one_liner": "은퇴 전 10년 동안 노후생활비와 투자, 반퇴 준비를 어떻게 챙길지 짚어 줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "연금·노후"
+  ]
+ },
+ {
+  "isbn": "9791192533100",
+  "title": "돈의 심리 완전 정복",
+  "author": "멘탈리스트 다이고",
+  "pages": 256,
+  "one_liner": "돈에 대한 내 생각 습관을 진단하고 부자 방향으로 고쳐 가요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "돈의 심리"
+  ]
+ },
+ {
+  "isbn": "9788950907549",
+  "title": "돈의 심리 부자의 심리",
+  "author": "서기수",
+  "pages": 181,
+  "one_liner": "부자들이 돈을 대하는 속성과 사고방식, 습관을 알게 돼요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "돈의 심리"
+  ]
+ },
+ {
+  "isbn": "9788955336443",
+  "title": "금리, 주가, 환율을 움직이는 경제 원칙",
+  "author": "홍성수",
+  "pages": 368,
+  "one_liner": "기준금리와 물가지수, 환율이 정해지는 원리를 시장 흐름과 함께 이해해요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "경제 상식",
+  "field": "돈·경제",
+  "topic": "경제 상식",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "금리·환율"
+  ]
+ },
+ {
+  "isbn": "9791192218618",
+  "title": "대한민국 금리와 환율의 미래",
+  "author": "김효신",
+  "pages": 460,
+  "one_liner": "기준금리가 경제와 내 자산에 어떤 영향을 주는지 이해하고 앞날의 시나리오를 살펴봐요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "경제 상식",
+  "field": "돈·경제",
+  "topic": "경제 상식",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "금리·환율",
+   "시사·경제 이슈"
+  ]
+ },
+ {
+  "isbn": "9788901260679",
+  "title": "넛지: 파이널 에디션",
+  "author": "리처드 탈러 외",
+  "pages": 488,
+  "one_liner": "편향과 기본 설정이 선택을 어떻게 좌우하는지 알게 돼요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "경제 상식",
+  "field": "돈·경제",
+  "topic": "경제 상식",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "행동경제학"
+  ]
+ },
+ {
+  "isbn": "9791192999739",
+  "title": "결핍은 우리를 어떻게 변화시키는가",
+  "author": "센딜 멀레이너선 외",
+  "pages": 440,
+  "one_liner": "결핍이 판단을 좁히고 빚과 가난의 악순환을 만드는 원리를 알게 돼요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "경제 상식",
+  "field": "돈·경제",
+  "topic": "경제 상식",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "행동경제학"
+  ]
+ },
+ {
+  "isbn": "9791191842791",
+  "title": "작은 브랜드는 행동경제학이 답이다",
+  "author": "곽준식",
+  "pages": 284,
+  "one_liner": "작은 브랜드가 소비자 심리를 활용해 성장한 전략을 사례로 배워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "경제 상식",
+  "field": "돈·경제",
+  "topic": "경제 상식",
+  "way": "사례",
+  "axes": null,
+  "keywords": [
+   "행동경제학"
+  ]
+ },
+ {
+  "isbn": "9788993985856",
+  "title": "자본주의에 불만 있는 이들을 위한 경제사 강의",
+  "author": "E. K. 헌트",
+  "pages": 376,
+  "one_liner": "자본주의를 옹호하고 비판해 온 경제 사상의 흐름을 차근차근 이해해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "경제 상식",
+  "field": "돈·경제",
+  "topic": "경제 상식",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "경제사·자본주의"
+  ]
+ },
+ {
+  "isbn": "9791191975116",
+  "title": "어나더 경제사 1",
+  "author": "홍기빈",
+  "pages": 392,
+  "one_liner": "구석기부터 근대까지 돈과 은행이 자본주의로 이어진 과정을 이해해요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "경제 상식",
+  "field": "돈·경제",
+  "topic": "경제 상식",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "경제사·자본주의"
+  ]
+ },
+ {
+  "isbn": "9788959405701",
+  "title": "E. K. 헌트의 경제사상사",
+  "author": "E.K. 헌트 외",
+  "pages": 1112,
+  "one_liner": "스미스부터 마르크스까지 경제 이론이 어떻게 이어졌는지 한 흐름으로 이해해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "경제 상식",
+  "field": "돈·경제",
+  "topic": "경제 상식",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "경제사·자본주의"
+  ]
+ },
+ {
+  "isbn": "9791169852296",
+  "title": "코트라 월드 트렌드 2027",
+  "author": "KOTRA",
+  "pages": 420,
+  "one_liner": "세계 각 도시에서 포착한 유망 트렌드로 2027년 시장 흐름을 미리 가늠해요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "경제 상식",
+  "field": "돈·경제",
+  "topic": "경제 상식",
+  "way": "사례",
+  "axes": null,
+  "keywords": [
+   "트렌드"
+  ]
+ },
+ {
+  "isbn": "9791193937686",
+  "title": "머니 트렌드 2026",
+  "author": "김도윤 외",
+  "pages": 436,
+  "one_liner": "2026년 돈의 흐름을 주식·부동산·코인까지 폭넓게 짚어 볼 수 있어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "경제 상식",
+  "field": "돈·경제",
+  "topic": "경제 상식",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "트렌드",
+   "시사·경제 이슈"
+  ]
+ },
+ {
+  "isbn": "9791168622159",
+  "title": "불안하고 걱정 많은 아이, 어떻게 도와줄까?",
+  "author": "로널드 라피 외",
+  "pages": 376,
+  "one_liner": "아이의 두려움을 낮추도록 부모가 따라 할 단계별 기법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "불안·걱정"
+  ]
+ },
+ {
+  "isbn": "9791139715989",
+  "title": "불안할 땐 뇌과학",
+  "author": "캐서린 피트먼 외",
+  "pages": 304,
+  "one_liner": "불안이 뇌에서 왜 생기는지 알고 곧바로 쓸 완화 훈련법까지 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "불안·걱정"
+  ]
+ },
+ {
+  "isbn": "9788901284927",
+  "title": "쓸데없는 걱정으로 준비된 체력이 소진되었습니다",
+  "author": "이광민",
+  "pages": 316,
+  "one_liner": "사소한 일에도 쉽게 지치는 마음을 다독이고, 걱정을 끊는 훈련을 해 볼 수 있어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "불안·걱정"
+  ]
+ },
+ {
+  "isbn": "9788901294087",
+  "title": "가짜 불안",
+  "author": "닉 트렌턴",
+  "pages": 224,
+  "one_liner": "막연한 걱정이 왜 생기는지 알고 생각에 휘둘리지 않는 법을 배워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "불안·걱정"
+  ]
+ },
+ {
+  "isbn": "9788965134855",
+  "title": "자존감, 효능감을 만드는 버츄프로젝트 수업",
+  "author": "권영애",
+  "pages": 484,
+  "one_liner": "미덕의 언어와 5대 전략으로 아이의 자존감을 키우는 교실·가정 수업법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "자존감"
+  ]
+ },
+ {
+  "isbn": "9791186245606",
+  "title": "나를 사랑하게 하는 자존감",
+  "author": "이무석",
+  "pages": 288,
+  "one_liner": "열등감이 어디서 생기는지 짚어 보고 당당해지는 길을 찾아가요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "자존감"
+  ]
+ },
+ {
+  "isbn": "9791166815782",
+  "title": "하버드 회복탄력성 수업",
+  "author": "게일 가젤",
+  "pages": 224,
+  "one_liner": "무너진 뒤에도 다시 일어서도록 마음 근육을 키우는 훈련을 단계별로 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "번아웃·스트레스",
+   "감정 다루기"
+  ]
+ },
+ {
+  "isbn": "9788970417752",
+  "title": "딱 하나만 선택하라면, 운동",
+  "author": "세라 커책",
+  "pages": 344,
+  "one_liner": "무기력하고 지칠 때 이불을 걷고 몸을 움직이게 하는 작은 방법을 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "번아웃·스트레스"
+  ]
+ },
+ {
+  "isbn": "9791124002155",
+  "title": "우울은 초록의 마음",
+  "author": "반혜린",
+  "pages": 220,
+  "one_liner": "우울과 불안을 겪은 경험담을 따라가며 마음과 잘 지내는 법을 배워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "사례",
+  "axes": null,
+  "keywords": [
+   "우울"
+  ]
+ },
+ {
+  "isbn": "9788937417573",
+  "title": "한낮의 우울",
+  "author": "앤드류 솔로몬",
+  "pages": 1028,
+  "one_liner": "우울이 무엇이고 왜 생기는지 심리·역사·치료까지 넓게 이해하게 돼요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "우울"
+  ]
+ },
+ {
+  "isbn": "9791172611446",
+  "title": "받아들임",
+  "author": "타라 브랙",
+  "pages": 510,
+  "one_liner": "자책을 내려놓고 지금 모습 그대로 나를 품는 명상 연습을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "명상·마음챙김",
+   "자존감"
+  ]
+ },
+ {
+  "isbn": "9791191587418",
+  "title": "알아차림에 대한 알아차림",
+  "author": "루퍼트 스파이라",
+  "pages": 204,
+  "one_liner": "애쓰지 않고 마음의 본질을 또렷이 바라보는 명상의 원리를 이해하게 돼요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "명상·마음챙김"
+  ]
+ },
+ {
+  "isbn": "9788974792176",
+  "title": "처음 만나는 마음챙김 명상",
+  "author": "존 카밧진",
+  "pages": 240,
+  "one_liner": "생각을 바꾸려 하지 않고 있는 그대로 바라보는 마음챙김의 원리와 연습을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "명상·마음챙김",
+   "번아웃·스트레스"
+  ]
+ },
+ {
+  "isbn": "9791162244388",
+  "title": "보고서 발표 실무 강의",
+  "author": "채종서",
+  "pages": 232,
+  "one_liner": "업무 보고를 5단계로 짜서 1분 안에 핵심을 전하는 법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "대화·관계",
+  "field": "마음·관계",
+  "topic": "대화·관계",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "발표"
+  ]
+ },
+ {
+  "isbn": "9791168369320",
+  "title": "발표불안은 어떻게 명품 스피치가 되는가",
+  "author": "강은영 외",
+  "pages": 278,
+  "one_liner": "떨리는 목소리 때문에 고민인 사람이 열 명의 극복 경험과 노하우를 얻어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "대화·관계",
+  "field": "마음·관계",
+  "topic": "대화·관계",
+  "way": "사례",
+  "axes": null,
+  "keywords": [
+   "발표"
+  ]
+ },
+ {
+  "isbn": "9791194793359",
+  "title": "하버드 로스쿨 협상 수업",
+  "author": "조슈아 와이스",
+  "pages": 242,
+  "one_liner": "협상에 실패한 뒤 다시 테이블에 앉는 5단계 방법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "대화·관계",
+  "field": "마음·관계",
+  "topic": "대화·관계",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "설득·협상"
+  ]
+ },
+ {
+  "isbn": "9791190826860",
+  "title": "어떻게 설득해야 마음을 움직이는가",
+  "author": "빅토리아 메드벡",
+  "pages": 420,
+  "one_liner": "상대의 필요를 파악해 원하는 조건을 이끌어내는 협상 기술",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "대화·관계",
+  "field": "마음·관계",
+  "topic": "대화·관계",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "설득·협상"
+  ]
+ },
+ {
+  "isbn": "9791195333851",
+  "title": "딜; DEAL",
+  "author": "이인수",
+  "pages": 288,
+  "one_liner": "역사와 고전 속 거래 장면으로 사람을 움직이는 지혜를 배워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "대화·관계",
+  "field": "마음·관계",
+  "topic": "대화·관계",
+  "way": "사례",
+  "axes": null,
+  "keywords": [
+   "설득·협상"
+  ]
  }
 ]
