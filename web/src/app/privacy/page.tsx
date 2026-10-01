@@ -12,7 +12,10 @@ function Contact() {
   return <a href={`mailto:${email}`}>{email}</a>;
 }
 
-/** S-10 (F-16): what is collected before login and where it goes — Amplitude, and (P4) the written goal to Anthropic for sorting, (F-24) a short phrase to YES24 as a search word. Login and saves join in P5. */
+/**
+ * S-10 (F-16): what is collected and where it goes — Amplitude, (P4) the written goal to Anthropic for sorting, (F-24) a
+ * short phrase to YES24 as a search word, (P5, taxonomy 6-3d) login, the Google email kept by the login service only, 내 책갈피.
+ */
 export default function PrivacyPage() {
   return (
     <article className={styles.page}>
@@ -22,7 +25,8 @@ export default function PrivacyPage() {
       </header>
 
       <p className={styles.lead}>
-        <strong>갈피는 이름·이메일·전화번호를 받지 않아요.</strong> 더 나은 책 추천을 연구하려고 아래 정보만 모아요.
+        <strong>갈피는 이름·전화번호를 받지 않아요.</strong> 이메일은 구글로 로그인할 때만, 로그인 확인용으로 로그인 서비스에 남아요.
+        더 나은 책 추천을 연구하려고 아래 정보만 모아요.
       </p>
 
       <table className={styles.table}>
@@ -47,6 +51,18 @@ export default function PrivacyPage() {
             <td>사람들이 찾는 주제를 알고 책을 늘리기 위해 — <strong>이름·연락처는 적지 마세요</strong></td>
           </tr>
           <tr>
+            <td>로그인했다면: 사용자 번호(로그인 서비스가 만든 무작위 번호), 로그인 방법(카카오/구글), 처음 로그인한 때. 로그인한 뒤의 기록에는 이 사용자 번호가 붙어요</td>
+            <td>다른 기기에서도 내 책갈피를 보여 주고, 로그인 전·후 기록을 한 사람으로 이어 분석하기 위해</td>
+          </tr>
+          <tr>
+            <td>구글로 로그인하면 구글이 주는 이메일 주소가 로그인 서비스(Supabase Auth) 저장소에 남아요 — 기록·분석에는 쓰지 않고, Amplitude에도 보내지 않아요. 카카오로 로그인하면 이메일을 받지 않아요</td>
+            <td>로그인을 확인하기 위해 (구글이 늘 함께 보내는 값이에요)</td>
+          </tr>
+          <tr>
+            <td>내 책갈피: 꽂은 책, 그때 책갈피 그림, 만난 날, 나온 이유, 막대와 막대 이름 (<strong>막대 이름은 직접 쓴 글이라 갈피의 데이터베이스에만 저장</strong>)</td>
+            <td>내 책갈피를 다시 보여 주기 위해 — <strong>막대 이름에 이름·연락처는 적지 마세요</strong></td>
+          </tr>
+          <tr>
             <td>Amplitude가 자동으로 모으는 것: 페이지 주소(광고 태그 포함)와 페이지 이동, 누른 버튼·링크, 입력값을 뺀 입력 양식 사용 기록, 페이지 속도 측정, 같은 곳을 되풀이해 누르는 행동, 실패한 네트워크 요청 기록, 기기·브라우저 종류, 언어, IP 주소와 그걸로 짐작한 대략적인 지역</td>
             <td>어디서 그만두는지 살펴보기 위해</td>
           </tr>
@@ -66,6 +82,9 @@ export default function PrivacyPage() {
         <p>
           Amplitude에 전달된 기록은 Amplitude가 따로 보관해요.
         </p>
+        <p>
+          내 책갈피와 로그인 정보는 탈퇴를 요청할 때까지 보관해요.
+        </p>
       </section>
 
       <section className={styles.section}>
@@ -84,6 +103,11 @@ export default function PrivacyPage() {
         <p>
           <strong>첫 장에서 [예스24에서 찾기]를 누르면, 그 글에서 찾은 짧은 말(예: &apos;캠핑 장비&apos;)만 검색어로 예스24에 보내요.</strong>{" "}
           글이 짧으면 그 말이 글과 같을 수 있어요. 익명 번호는 보내지 않아요.
+        </p>
+        <p>
+          <strong>로그인 버튼을 누르면 카카오나 구글의 로그인 화면으로 이동해요.</strong>{" "}
+          그 회사가 받는 정보는 그 회사의 처리방침을 따르고, 갈피가 돌려받는 것은 로그인했다는 확인과 사용자 번호(구글은 이메일 포함)뿐이에요.
+          로그인한 뒤의 기록은 사용자 번호와 함께 Amplitude에도 보내요. 막대 이름은 보내지 않아요.
           이 밖의 곳에는 주지 않아요. 새로 전달하는 곳이 생기면 이 페이지에 먼저 적어요.
         </p>
       </section>
@@ -91,6 +115,10 @@ export default function PrivacyPage() {
       <section className={styles.section}>
         <h2 className={styles.h2}>지우고 싶다면</h2>
         <p>아래 익명 번호를 적어 문의 이메일로 보내 주세요. 그 번호의 기록을 모두 지워요. Amplitude에 전달된 기록도 함께 지워요.</p>
+        <p>
+          로그아웃은 내 책갈피 화면 맨 아래에서 할 수 있어요 — 이 기기에서 연결만 끊고, 내 책갈피는 그대로 남아요.{" "}
+          탈퇴하려면 로그인한 방법과 아래 익명 번호를 적어 문의 이메일로 보내 주세요. 계정과 내 책갈피, 기록을 함께 지워요.
+        </p>
         <AnonIdView />
       </section>
 

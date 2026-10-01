@@ -44,11 +44,10 @@
 |---|---|---|
 | E-11~E-17 | 기존 planned-P5 | live로. E-15에 `shelf_count` 없음 — 그대로 |
 | E-29 (새) | `shelf_created` | 속성 `shelf_count`(만든 뒤 막대 수). 이름은 넣지 않음 |
-| E-30 (새) | `bookmark_moved` | `book_id`, `method`(`hold`/`menu`). 막대 이름·번호 넣지 않음(`to_position`만 Number) |
-| E-31 (새) | `logout_clicked` | 속성 없음 |
+| E-30 (새) | `bookmark_moved` | `book_id`, `method`(`hold`/`menu`). 막대 이름·번호 넣지 않음 |
 | E-18 | `yes24_link_clicked` | `source:"library"` 이미 있음 |
 
-막대 이름 바꾸기·막대 지우기는 이벤트 없음(분석 질문이 없음 — taxonomy 원칙 "질문 없는 이벤트는 만들지 않는다"). 처리방침: 로그인 고유번호·로그인 방법·가입 시각·보관 목록(책·책갈피 그림·만난 날·막대와 이름)·구글 이메일은 로그인 저장소에만·카카오/구글이 받는 것·로그아웃·탈퇴 메일.
+로그아웃·막대 이름 바꾸기·막대 지우기는 이벤트 없음(분석 질문이 없음 — taxonomy 원칙 "질문 없는 이벤트는 만들지 않는다"). 처리방침: 로그인 고유번호·로그인 방법·가입 시각·보관 목록(책·책갈피 그림·만난 날·막대와 이름)·구글 이메일은 로그인 저장소에만·카카오/구글이 받는 것·로그아웃·탈퇴 메일.
 
 ## 5. Tasks
 
@@ -59,7 +58,7 @@
 - [ ] **Task 4 — 서버 라우트**: `/api/me`·`/api/saves`·`/api/shelves` + 입력 검사(ISBN은 우리 목록, art는 `ArtCombo` 값 목록, 이름 1~12자·앞뒤 공백·제어 문자 제거) + `/api/track`의 `user_id` 서버 채움. 테스트는 Supabase 클라이언트 가짜로
 - [ ] **Task 5 — 머리글·S-07**: `SiteHeader` 오른쪽 [로그인]/[내 책갈피 N](44px), `LoginSheet`(C-12, 처리방침 링크, 포커스 가둠·Esc·닫기), E-12·E-13. `Home.test`의 account-slot 검사 갱신
 - [ ] **Task 6 — S-06 꽂기 + 자동 꽂기 + 복귀**: `BookmarkInBook` 꺼낸 상태에서 [내 책갈피에 꽂기](주)·안내 문구, 꽂은 뒤 "꽂았어요 ✓ · 내 책갈피 보기", pending 저장·복원·자동 꽂기, `shouldResume` 로그인 복귀, E-11·E-14·E-15, Amplitude `setUserId`·`login_provider`
-- [ ] **Task 7 — S-09 막대**: `/library` 페이지, `Shelf`·`ShelfBookmark`(C-17), 가로 스크롤, 꾹 눌러 집기 → 막대 누르기, 뒷면 메뉴·막대 고르기 시트, 막대 추가·이름(인라인 입력, 12자)·빈 막대 지우기, 빼기(되돌리기 토스트 없음 — 확인 한 번), 로그아웃, E-16·E-17·E-18(library)·E-29·E-30·E-31. 낙관적 갱신 + 실패하면 되돌리고 안내
+- [ ] **Task 7 — S-09 막대**: `/library` 페이지, `Shelf`·`ShelfBookmark`(C-17), 가로 스크롤, 꾹 눌러 집기 → 막대 누르기, 뒷면 메뉴·막대 고르기 시트, 막대 추가·이름(인라인 입력, 12자)·빈 막대 지우기, 빼기(되돌리기 토스트 없음 — 확인 한 번), 로그아웃, E-16·E-17·E-18(library)·E-29·E-30. 낙관적 갱신 + 실패하면 되돌리고 안내
 - [ ] **Task 8 — E2E**: OAuth는 가짜 — Supabase authorize 주소로 가는 이동을 `page.route`로 가로채 `/auth/callback` 대신 `?login=kakao&first=1`로 돌려보내고 `/api/me`·`/api/saves`·`/api/shelves`를 가짜 응답으로. 시나리오: ① 로그인 전 꽂기 → 시트 → 로그인 → **같은 책·꺼낸 책갈피·자동 꽂힘** ② 막대 추가·이름 → 꾹 눌러 옮기기 → 뒷면 메뉴로 옮기기 → 빼기 ③ 로그아웃. 이벤트 명세 검사(`specMismatches`) 통과. 휴대폰·데스크톱
 - [ ] **Task 9 — 실제 연결 확인**(사용자 2절 끝난 뒤): Preview 배포에서 카카오·구글 실제 로그인 한 번씩, RLS 확인 SQL, `events`에 `user_id` 채워짐, Amplitude User Look-up — 그 뒤 main 병합·배포는 허락 후
 - [ ] **Task 10 — 마무리**: code-reviewer·security-reviewer, HANDOFF·tasks·process 갱신
