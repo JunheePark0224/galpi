@@ -2,7 +2,7 @@
  "date": "2026-10-01",
  "batch": "pilot",
  "tagger": "AI-2",
- "note": "Blind second tagging pass: written keyword definitions (docs/target-chips.md) + YES24 intro/TOC, made before reading AI-1's tags. Only the 90 picked books.",
+ "note": "Blind second tagging pass: written keyword definitions (docs/target-chips.md) + YES24 intro/TOC, made before reading AI-1's tags. Only the 90 picked books. | 10-01 읽는 방식 기준을 고친 뒤(target-chips '읽는 방식 태그 기준') 두 AI가 갈렸던 21권의 way를 각자 블라인드로 다시 판단해 바꿈",
  "books": [
   {
    "isbn": "9791168342941",
@@ -161,7 +161,7 @@
    "keywords": [
     "트렌드"
    ],
-   "way": "사례",
+   "way": "개념",
    "topic_fit": "fits",
    "note": "내년 소비 트렌드 키워드 전망"
   },
@@ -223,7 +223,7 @@
    "keywords": [
     "경제 뉴스 읽기"
    ],
-   "way": "사례",
+   "way": "개념",
    "topic_fit": "fits",
    "note": "생활 속 경제 질문을 쉽게 풀이"
   },
@@ -239,7 +239,7 @@
    "keywords": [
     "경제 뉴스 읽기"
    ],
-   "way": "사례",
+   "way": "개념",
    "topic_fit": "fits",
    "note": "관세·환율 전쟁 등 세계경제 읽기"
   },
@@ -273,7 +273,7 @@
    "keywords": [
     "자존감"
    ],
-   "way": "개념",
+   "way": "실습",
    "topic_fit": "fits",
    "note": "자존감 원리와 키우는 방법"
   },
@@ -301,7 +301,7 @@
     "우울",
     "감정 다루기"
    ],
-   "way": "개념",
+   "way": "실습",
    "topic_fit": "fits",
    "note": "부정감정을 알아차려 우울 다룸"
   },
@@ -365,7 +365,7 @@
    "keywords": [
     "감정 다루기"
    ],
-   "way": "사례",
+   "way": "개념",
    "topic_fit": "fits",
    "note": "가짜감정 뒤 진짜감정을 상담 사례로"
   },
@@ -452,7 +452,7 @@
    "keywords": [
     "호감·사회생활"
    ],
-   "way": "개념",
+   "way": "실습",
    "topic_fit": "fits",
    "note": "호감 주는 태도와 비언어 습관"
   },
@@ -489,7 +489,7 @@
    "keywords": [
     "갈등·무례 대처"
    ],
-   "way": "개념",
+   "way": "실습",
    "topic_fit": "fits",
    "note": "호구 벗고 선 긋는 무례력"
   },
@@ -498,7 +498,7 @@
    "keywords": [
     "말투·대화법"
    ],
-   "way": "개념",
+   "way": "실습",
    "topic_fit": "fits",
    "note": "부정하지 않는 대화법"
   },
@@ -507,7 +507,7 @@
    "keywords": [
     "말투·대화법"
    ],
-   "way": "개념",
+   "way": "실습",
    "topic_fit": "fits",
    "note": "호감 주는 말하기 전략"
   },
@@ -543,7 +543,7 @@
    "keywords": [
     "자소서·면접"
    ],
-   "way": "개념",
+   "way": "실습",
    "topic_fit": "fits",
    "note": "스펙보다 태도로 푸는 면접"
   },
@@ -616,7 +616,7 @@
     "커리어 설계",
     "자소서·면접"
    ],
-   "way": "사례",
+   "way": "실습",
    "topic_fit": "fits",
    "note": "직무별 합격 사례 모음"
   },
@@ -664,7 +664,7 @@
     "이직·퇴사",
     "커리어 설계"
    ],
-   "way": "개념",
+   "way": "실습",
    "topic_fit": "fits",
    "note": "이직 이유와 커리어 성장 전략"
   },
@@ -703,7 +703,7 @@
   {
    "isbn": "9791173324901",
    "keywords": [],
-   "way": "개념",
+   "way": "실습",
    "topic_fit": "fits",
    "note": "작가가 말하는 창작의 연장통"
   },
