@@ -1,0 +1,18 @@
+/* C-13 back (DESIGN 3절), the same 160 × 344 frame as C-02 (Bookmark.module.css). Ink only on the film (DESIGN 7);
+   nothing under 12px (T-04). Up to five reason items fit (recommend/reason.ts MAX_ITEMS). */
+.back { width: 160px; }
+.card { gap: 4px; height: 344px; padding: 24px 12px 25px; text-align: center; color: var(--ink); }
+.title {
+  flex-shrink: 0; margin: 0; font-family: var(--font-batang), serif; font-weight: 700; font-size: 15px; line-height: 1.3;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+}
+.rule { flex-shrink: 0; width: 48px; margin: var(--space-1) 0; border-top: 2px solid var(--tone); }
+.label { flex-shrink: 0; margin: 0; font-size: 12px; line-height: 1.3; }
+.items {
+  display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 0; padding: 0; list-style: none;
+  font-size: 14px; line-height: 1.4;
+}
+.items li { display: flex; align-items: center; gap: 6px; }
+.items li span { flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--tone); }
+.met { flex-shrink: 0; margin: 0; font-family: var(--font-batang), serif; font-weight: 700; font-size: 14px; }
+.mark { align-self: center; line-height: 1; font-family: var(--font-batang), serif; font-size: 12px; font-weight: 700; }
