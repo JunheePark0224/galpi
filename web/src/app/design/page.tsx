@@ -10,7 +10,10 @@ const DEMO: BookCard[] = [
 ];
 
 const COLORS = ["paper", "paper-deep", "paper-line", "cloth", "ink", "ink-soft", "ink-muted"];
-const GENRES = ["korean-fiction", "world-fiction", "sf-fantasy", "mystery", "essay", "poetry", "humanities", "science", "art-travel"];
+const GENRES = [
+  "korean-fiction", "world-fiction", "sf-fantasy", "mystery", "essay", "poetry", "humanities", "science", "art-travel",
+  "history", "society", "horror",
+];
 
 /** Token/component sheet for development. Not part of the product: a 404 on the public production site. */
 export default function DesignPage() {

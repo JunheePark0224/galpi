@@ -23,8 +23,11 @@ export const TOPIC_CHIPS: readonly { topic: Topic; label: string }[] = [
 ];
 export const TOPICS: readonly Topic[] = TOPIC_CHIPS.map((c) => c.topic);
 
-/** docs/book-pool.md 1절 */
-export const LEAF_GENRES = ["한국 소설", "외국 소설", "SF·판타지", "추리·스릴러", "에세이", "시", "인문", "과학 교양", "예술·여행"] as const;
+/** docs/book-pool.md 1절. The last three came with D-A (10-01) and have no books until the pipeline adds them — a genre with
+ * no books is simply never drawn (draws score every 🍃 book; nothing loops over this list). */
+export const LEAF_GENRES = [
+  "한국 소설", "외국 소설", "SF·판타지", "추리·스릴러", "에세이", "시", "인문", "과학 교양", "예술·여행", "역사", "사회·시사", "호러·괴담",
+] as const;
 export type LeafGenre = (typeof LEAF_GENRES)[number];
 
 /** Most keywords one 🎯 draw carries — the server rejects more, so the matcher must never produce more. */
@@ -35,7 +38,8 @@ export const WAYS: readonly Way[] = ["개념", "실습", "사례"];
 const GENRE_TONE: Record<LeafGenre, string> = {
   "한국 소설": "--genre-korean-fiction", "외국 소설": "--genre-world-fiction", "SF·판타지": "--genre-sf-fantasy",
   "추리·스릴러": "--genre-mystery", 에세이: "--genre-essay", 시: "--genre-poetry", 인문: "--genre-humanities",
-  "과학 교양": "--genre-science", "예술·여행": "--genre-art-travel",
+  "과학 교양": "--genre-science", "예술·여행": "--genre-art-travel", 역사: "--genre-history", "사회·시사": "--genre-society",
+  "호러·괴담": "--genre-horror",
 };
 const FIELD_TONE: Record<Field, string> = { "데이터·통계": "--field-data", "AI·IT 활용": "--field-ai", "습관·자기계발": "--field-habit" };
 

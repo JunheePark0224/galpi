@@ -30,6 +30,10 @@ describe("normalizeBook", () => {
     });
   });
 
+  it("accepts the D-A genres (no books yet — the pipeline adds them)", () => {
+    expect(normalizeBook({ ...leafRow, slot: "호러·괴담" }, BIB)).toMatchObject({ entry: "leaf", genre: "호러·괴담" });
+  });
+
   it("accepts Korean one-liner style names", () => {
     expect(normalizeBook({ ...targetRow, one_liner_style: "요약형" }, BIB).one_liner_style).toBe("summary");
   });

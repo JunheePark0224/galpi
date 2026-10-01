@@ -25,6 +25,9 @@ colors:
   genre-humanities: "#7D6337"
   genre-science: "#2B7178"
   genre-art-travel: "#B8912F"
+  genre-history: "#8E3A3A"
+  genre-society: "#5E6A2B"
+  genre-horror: "#6B2F5B"
   field-data: "#3A6684"
   field-ai: "#5E55A0"
   field-habit: "#9E6232"
@@ -179,6 +182,15 @@ components:
   chip-genre-art-travel:
     backgroundColor: "{colors.genre-art-travel}"
     textColor: "{colors.primary}"
+  chip-genre-history:
+    backgroundColor: "{colors.genre-history}"
+    textColor: "{colors.white}"
+  chip-genre-society:
+    backgroundColor: "{colors.genre-society}"
+    textColor: "{colors.white}"
+  chip-genre-horror:
+    backgroundColor: "{colors.genre-horror}"
+    textColor: "{colors.white}"
   chip-field-data:
     backgroundColor: "{colors.field-data}"
     textColor: "{colors.white}"
@@ -208,7 +220,7 @@ Audience: Korean readers in their 20s on mobile phones, often opening the link f
 - **Cloth brown (#7A4A2E)** — the cloth cover of the old book. Used only for the book itself.
 - **Cream paper (#FAF5EA)** — every background. Pages have faint ruled lines in outline beige (#DDD0B4).
 - **Frost (#F4F1EA, or 60% white with a 3px backdrop blur)** — the translucent film of every bookmark. Text on frost is always ink.
-- **Genre colors** — twelve muted colors (nine reading genres, three study fields) used only for the small genre name tag, the bookmark string and the dashed stitch line on a bookmark. Never as large fills.
+- **Genre colors** — fifteen muted colors (twelve reading genres, three study fields) used only for the small genre name tag, the bookmark string and the dashed stitch line on a bookmark. Never as large fills.
 - No dark mode. No gradients except the animal window sky.
 
 ## Typography
