@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import { loadAccount } from "@/lib/account/store";
-import { LOGIN_PARAMS, readLoginMark } from "@/lib/auth/next";
+import { loadAccount, takeJustLoggedIn } from "@/lib/account/store";
+import { LOGIN_PARAMS, loginMarkAtLoad } from "@/lib/auth/next";
 import { keepWaiting } from "@/lib/library/keep";
+import { clearPending } from "@/lib/library/pending";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
 import { setUserId } from "@/lib/track/common";
@@ -19,26 +20,30 @@ function clearMark(params: URLSearchParams): void {
 
 /**
  * On every page (layout, after the page itself so flow restore has read the mark — storage.settleOpen): asks who is
- * here, names a logged-in person for Amplitude (taxonomy 3-2), and after /auth/callback sends E-14 once and keeps the
- * bookmark that waited for the login (F-12 자동 꽂기 — the page came back to that same book). A failed login gets a note.
+ * here and names the person for Amplitude (taxonomy 3-2 — or forgets them when nobody is logged in). After a real return
+ * from /auth/callback — proven by the cookie /api/me hands over, not by the ?login= on the address — it sends E-14 once
+ * and keeps the bookmark that waited for the login (F-12 자동 꽂기 — the page came back to that same book). A failed
+ * login gets a note, and the bookmark that waited is dropped (it must not be kept by a later, unrelated login).
  */
 export function LoginReturn() {
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const mark = readLoginMark(params);
-    if (mark) clearMark(params);
+    const mark = loginMarkAtLoad();
+    if (mark && new URLSearchParams(window.location.search).has("login")) clearMark(new URLSearchParams(window.location.search));
     void loadAccount(mark !== null).then((account) => {
+      const login = takeJustLoggedIn();
       if (account.status === "in" && account.id) {
         setUserId(account.id);
-        setAmplitudeUser(account.id, mark?.provider ?? undefined);
-      }
-      if (!mark) return;
-      if (mark.provider && account.status === "in") {
-        track("login_completed", { provider: mark.provider, is_first_login: mark.first });
-        void keepWaiting();
+        setAmplitudeUser(account.id, login?.provider);
       } else {
+        setAmplitudeUser(null);
+      }
+      if (login && account.status === "in") {
+        track("login_completed", { provider: login.provider, is_first_login: login.first });
+        void keepWaiting();
+      } else if (mark && account.status !== "in") {
+        clearPending();
         setFailed(true);
       }
     });

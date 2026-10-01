@@ -4,6 +4,7 @@ import { Sheet } from "@/components/Sheet";
 import { closeLoginSheet, useLoginSheet, type LoginSource } from "@/lib/account/store";
 import { startLogin } from "@/lib/auth/browser";
 import type { Provider } from "@/lib/auth/next";
+import { clearPending } from "@/lib/library/pending";
 import { track } from "@/lib/track/client";
 import styles from "./LoginSheet.module.css";
 
@@ -49,6 +50,13 @@ function LoginChoices({ source }: { source: LoginSource }) {
 
   useEffect(() => { track("login_prompt_shown", { source }); }, [source]);
 
+  // Closed without logging in: the bookmark that waited for this login is let go, so a later login from the header
+  // does not keep a book the person walked away from.
+  const close = () => {
+    if (source === "save") clearPending();
+    closeLoginSheet();
+  };
+
   const login = async (provider: Provider) => {
     setFailed(false);
     setLeaving(provider);
@@ -61,7 +69,7 @@ function LoginChoices({ source }: { source: LoginSource }) {
   };
 
   return (
-    <Sheet title={TITLE[source]} onClose={closeLoginSheet}>
+    <Sheet title={TITLE[source]} onClose={close}>
       <p className={styles.lead}>
         이름·연락처는 받지 않아요. 구글은 로그인 확인용 이메일만 로그인 서비스에 남아요. 처음 로그인한 방법으로 다시 들어와 주세요.
       </p>
@@ -75,7 +83,7 @@ function LoginChoices({ source }: { source: LoginSource }) {
       <div className={styles.foot}>
         <a href="/privacy" target="_blank" rel="noopener" className={styles.link}>개인정보 처리방침</a>
         <span aria-hidden="true"> · </span>
-        <button type="button" className={styles.close} onClick={closeLoginSheet}>닫기</button>
+        <button type="button" className={styles.close} onClick={close}>닫기</button>
       </div>
     </Sheet>
   );

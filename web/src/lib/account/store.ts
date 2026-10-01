@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import type { Provider } from "@/lib/auth/next";
 
 /**
  * Who is here, for the browser (P5): the header's [로그인] / [내 책갈피 N], S-06 [내 책갈피에 꽂기], S-09.
@@ -12,6 +13,8 @@ const UNKNOWN: Account = { status: "unknown", id: null, count: 0 };
 let account: Account = UNKNOWN;
 let sheet: { source: LoginSource } | null = null;
 let asking: Promise<Account> | null = null;
+/** /auth/callback's proof, from whichever /api/me answer carried it, until LoginReturn takes it (E-14 once). */
+let justLoggedIn: { provider: Provider; first: boolean } | null = null;
 /** S-06 꽂기 per book in this page: saving → saved / failed (lib/library/keep). */
 export type KeepState = "saving" | "saved" | "failed";
 let keeps: Readonly<Record<string, KeepState>> = {};
@@ -37,7 +40,11 @@ export function loadAccount(force = false): Promise<Account> {
     try {
       const res = await fetch("/api/me", { cache: "no-store", credentials: "same-origin" });
       if (!res.ok) throw new Error(String(res.status));
-      const me = (await res.json()) as { enabled?: unknown; loggedIn?: unknown; id?: unknown; count?: unknown };
+      const me = (await res.json()) as { enabled?: unknown; loggedIn?: unknown; id?: unknown; count?: unknown; login?: unknown };
+      const login = me.login as { provider?: unknown; first?: unknown } | null | undefined;
+      if (login && (login.provider === "kakao" || login.provider === "google") && typeof login.first === "boolean") {
+        justLoggedIn = { provider: login.provider, first: login.first };
+      }
       if (me.enabled !== true) set({ status: "off", id: null, count: 0 });
       else if (me.loggedIn === true && typeof me.id === "string") {
         set({ status: "in", id: me.id, count: typeof me.count === "number" ? me.count : 0 });
@@ -48,6 +55,13 @@ export function loadAccount(force = false): Promise<Account> {
     return account;
   })();
   return asking;
+}
+
+/** The login that just finished, once: later calls get null. */
+export function takeJustLoggedIn(): { provider: Provider; first: boolean } | null {
+  const login = justLoggedIn;
+  justLoggedIn = null;
+  return login;
 }
 
 export function setSavedCount(count: number): void {

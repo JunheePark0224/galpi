@@ -4,14 +4,15 @@ import styles from "./Sheet.module.css";
 
 const FOCUSABLE = "button:not([disabled]), a[href], input:not([disabled])";
 
-interface Props { title: string; onClose: () => void; children: ReactNode }
+/** stepKey: change it when the sheet shows a new step (S-09 back → pick a rod) — focus moves to that step's first control. */
+interface Props { title: string; onClose: () => void; children: ReactNode; stepKey?: string }
 
 /**
  * A sheet from the bottom over a dimmed page (S-07 C-12, S-09 back face / rod picker). A modal dialog: focus goes to its
  * first control and stays inside (Tab wraps), Escape and a tap outside close it, focus returns to what opened it.
  * Rendered only while open — the parent decides.
  */
-export function Sheet({ title, onClose, children }: Props) {
+export function Sheet({ title, onClose, children, stepKey }: Props) {
   const titleId = useId();
   const box = useRef<HTMLDivElement>(null);
   const close = useRef(onClose);
@@ -22,6 +23,14 @@ export function Sheet({ title, onClose, children }: Props) {
     box.current?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
     return () => { if (opener instanceof HTMLElement && opener.isConnected) opener.focus(); };
   }, []);
+  const firstStep = useRef(true);
+  useEffect(() => {
+    if (firstStep.current) {
+      firstStep.current = false;
+      return;
+    }
+    box.current?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
+  }, [stepKey]);
 
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Escape") {

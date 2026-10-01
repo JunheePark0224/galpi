@@ -1,8 +1,9 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { addSavedCount, setSavedCount } from "@/lib/account/store";
+import { addSavedCount, setSavedCount, signedOut } from "@/lib/account/store";
 import { libraryRequest } from "@/lib/library/client";
 import type { LibraryView } from "@/lib/library/types";
+import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
 
 export type LibraryStatus = "loading" | "ready" | "error" | "login";
@@ -20,8 +21,10 @@ export function useLibrary() {
 
   const reload = useCallback(async () => {
     const answer = await libraryRequest("GET", "/api/library");
-    if (answer.status === 401) {
+    if (answer.status === 401) {          // the session ran out: the header and Amplitude follow
       setStatus("login");
+      signedOut();
+      setAmplitudeUser(null);
       return;
     }
     if (!answer.ok || !answer.body) {

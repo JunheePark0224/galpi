@@ -9,9 +9,12 @@ vi.mock("@/lib/track/amplitude", () => ({ setAmplitudeUser: (...a: unknown[]) =>
 vi.mock("@/lib/track/common", () => ({ setUserId: (...a: unknown[]) => setUserId(...a) }));
 const keepWaiting = vi.fn().mockResolvedValue(undefined);
 vi.mock("@/lib/library/keep", () => ({ keepWaiting: () => keepWaiting() }));
+const clearPending = vi.fn();
+vi.mock("@/lib/library/pending", () => ({ clearPending: () => clearPending() }));
 
 const me = (body: unknown) => vi.fn().mockResolvedValue({ ok: true, json: async () => body });
-const IN = { enabled: true, loggedIn: true, id: "u1", count: 0 };
+const IN = { enabled: true, loggedIn: true, id: "u1", count: 0, login: null };
+const BACK = { ...IN, login: { provider: "kakao", first: true } };
 
 async function mount(url: string, body: unknown) {
   vi.resetModules();
@@ -29,7 +32,7 @@ describe("LoginReturn (E-14 once, then the address is clean)", () => {
   afterEach(() => { vi.unstubAllGlobals(); vi.clearAllMocks(); });
 
   it("sends E-14 with the provider and first-login flag, names the person in Amplitude, then keeps the waiting bookmark", async () => {
-    const { fetchMe } = await mount("/?y=2&login=kakao&first=1#top", IN);
+    const { fetchMe } = await mount("/?y=2&login=kakao&first=1#top", BACK);
     expect(track).toHaveBeenCalledWith("login_completed", { provider: "kakao", is_first_login: true });
     expect(setUserId).toHaveBeenCalledWith("u1");
     expect(setAmplitudeUser).toHaveBeenCalledWith("u1", "kakao");
@@ -37,6 +40,18 @@ describe("LoginReturn (E-14 once, then the address is clean)", () => {
     expect(window.location.pathname + window.location.search + window.location.hash).toBe("/?y=2#top");
     expect(window.history.state).toEqual({ keep: 1 });
     expect(fetchMe).toHaveBeenCalledTimes(1);
+  });
+
+  it("a made-up ?login= link (no proof from /auth/callback) sends no E-14 and keeps nothing", async () => {
+    await mount("/?login=google&first=1", IN);
+    expect(track).not.toHaveBeenCalled();
+    expect(keepWaiting).not.toHaveBeenCalled();
+    expect(window.location.search).toBe("");
+  });
+
+  it("forgets the person in Amplitude when nobody is logged in", async () => {
+    await mount("/", { enabled: true, loggedIn: false, id: null, count: 0, login: null });
+    expect(setAmplitudeUser).toHaveBeenCalledWith(null);
   });
 
   it("on an ordinary visit only names an already logged-in person, without E-14", async () => {
@@ -55,5 +70,6 @@ describe("LoginReturn (E-14 once, then the address is clean)", () => {
     expect(track).not.toHaveBeenCalled();
     expect(screen.getAllByRole("status").at(-1)).toHaveTextContent("로그인하지 못했어요");
     expect(keepWaiting).not.toHaveBeenCalled();
+    expect(clearPending).toHaveBeenCalled();                     // the waiting bookmark is not kept by a later login
   });
 });

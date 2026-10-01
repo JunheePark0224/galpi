@@ -54,3 +54,32 @@ export function readLoginMark(params: URLSearchParams): LoginMark | null {
   if (!isProvider(login)) return null;
   return { provider: login, first: params.get("first") === "1" };
 }
+
+/**
+ * Server-side proof of a login that just finished (security review L1): /auth/callback sets this short-lived HttpOnly
+ * cookie and /api/me hands it over once and deletes it, so E-14 is sent only for a real return from Kakao / Google —
+ * never for a link someone made up with ?login=.
+ */
+export const LOGIN_COOKIE = "galpi_login";
+export const LOGIN_COOKIE_SECONDS = 300;
+export const encodeLoginCookie = (provider: Provider, first: boolean): string => `${provider}:${first ? 1 : 0}`;
+export function parseLoginCookie(value: string | undefined): { provider: Provider; first: boolean } | null {
+  const [provider, first] = (value ?? "").split(":");
+  return isProvider(provider) && (first === "0" || first === "1") ? { provider, first: first === "1" } : null;
+}
+
+let markAtLoad: LoginMark | null | undefined;
+
+/**
+ * The login mark of the address this document was loaded with, read once (code review): flow restore (settleOpen)
+ * and LoginReturn both ask, and LoginReturn takes the mark off the address — whichever asks first, both get the same.
+ */
+export function loginMarkAtLoad(): LoginMark | null {
+  if (markAtLoad === undefined) markAtLoad = typeof window === "undefined" ? null : readLoginMark(new URLSearchParams(window.location.search));
+  return markAtLoad;
+}
+
+/** Test seam: module state survives between tests. */
+export function forgetLoginMarkForTests(): void {
+  markAtLoad = undefined;
+}

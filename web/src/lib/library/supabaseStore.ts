@@ -82,9 +82,9 @@ export function supabaseStore(db: SupabaseClient, userId: string): LibraryStore 
   };
 }
 
-/** Bookmarks saved — for the header's [내 책갈피 N] without loading the whole library. */
-export async function countSaves(db: SupabaseClient, userId: string): Promise<number> {
-  const { count, error } = await db.from("saves").select("isbn", { count: "exact", head: true }).eq("user_id", userId);
+/** The ISBNs the person kept — /api/me counts the ones still in the catalogue, the same count S-09 shows. */
+export async function savedIsbns(db: SupabaseClient, userId: string): Promise<string[]> {
+  const { data, error } = await db.from("saves").select("isbn").eq("user_id", userId);
   if (error) fail("count", error.code);
-  return count ?? 0;
+  return ((data ?? []) as { isbn: string }[]).map((r) => r.isbn);
 }

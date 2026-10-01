@@ -10,7 +10,7 @@ const SUPABASE = "http://supabase.e2e.invalid";
 const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false };
 
 interface Saved { isbn: string; shelfId: string; title: string }
-interface FakeLibrary { loggedIn: boolean; shelves: { id: string; name: string; position: number }[]; saved: Saved[]; posts: unknown[] }
+interface FakeLibrary { loggedIn: boolean; justLoggedIn?: string; shelves: { id: string; name: string; position: number }[]; saved: Saved[]; posts: unknown[] }
 
 const ROD_A = "11111111-1111-4111-8111-111111111111";
 const ROD_B = "22222222-2222-4222-8222-222222222222";
@@ -20,8 +20,11 @@ const card = (s: Saved) => ({ id: s.isbn, entry: "leaf", title: s.title, author:
 
 /** The person, their rods and bookmarks, and every route that reads or changes them. */
 async function fakeAccount(page: Page, lib: FakeLibrary) {
-  await page.route("**/api/me", (route) =>
-    route.fulfill({ json: { enabled: true, loggedIn: lib.loggedIn, id: lib.loggedIn ? "e2e-user" : null, count: lib.saved.length } }));
+  await page.route("**/api/me", (route) => {
+    const login = lib.justLoggedIn ? { provider: lib.justLoggedIn, first: true } : null;   // /auth/callback's proof, once
+    lib.justLoggedIn = undefined;
+    return route.fulfill({ json: { enabled: true, loggedIn: lib.loggedIn, id: lib.loggedIn ? "e2e-user" : null, count: lib.saved.length, login } });
+  });
   await page.route("**/api/library", (route) => {
     if (!lib.loggedIn) return route.fulfill({ status: 401, json: { error: "login needed" } });
     const shelves = [...lib.shelves].sort((a, b) => a.position - b.position).map((s) => ({
@@ -59,6 +62,7 @@ async function fakeAccount(page: Page, lib: FakeLibrary) {
     const back = new URL(url.searchParams.get("redirect_to") ?? "/", "http://x");
     const next = back.searchParams.get("next") ?? "/";
     lib.loggedIn = true;
+    lib.justLoggedIn = url.searchParams.get("provider") ?? undefined;
     const sep = next.includes("?") ? "&" : "?";
     return route.fulfill({ status: 302, headers: { location: `${back.origin}${next}${sep}login=${url.searchParams.get("provider")}&first=1` } });
   });

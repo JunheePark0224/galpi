@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 vi.mock("server-only", () => ({}));
-import { countSaves, supabaseStore } from "./supabaseStore";
+import { savedIsbns, supabaseStore } from "./supabaseStore";
 
 type Result = { data?: unknown; error?: { code: string } | null; count?: number };
 
@@ -68,9 +68,9 @@ describe("supabaseStore — every statement filtered to the person (RLS says the
     expect(calls).toContain('update({"shelf_id":"t","position":-1})');
   });
 
-  it("counts bookmarks without loading them", async () => {
-    const { db, calls } = fakeDb([{ count: 3 }]);
-    expect(await countSaves(db, "u1")).toBe(3);
-    expect(calls).toContain('select("isbn",{"count":"exact","head":true})');
+  it("lists the kept ISBNs for the header count", async () => {
+    const { db, calls } = fakeDb([{ data: [{ isbn: "1" }, { isbn: "2" }] }]);
+    expect(await savedIsbns(db, "u1")).toEqual(["1", "2"]);
+    expect(calls).toEqual(["from(saves)", 'select("isbn")', 'eq("user_id","u1")']);
   });
 });

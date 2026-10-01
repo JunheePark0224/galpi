@@ -251,7 +251,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 ### 4-1. 한눈에 보기
 
-상태 (v0.8): live 29 · planned-P4 0 · planned-P5 0 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned는 P5(보관·로그인·내 책갈피). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로
+상태 (v0.8): live 29 · planned-P4 0 · planned-P5 0 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned 없음(v0.8 — P5 이벤트 모두 live). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로
 
 | ID | 제안 이름 | 이전 이름 | 분류 | 트리거 | 상태 |
 |---|---|---|---|---|---|
@@ -285,7 +285,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-19 | `redraw_clicked` | 같음 | 마무리 | click | live |
 | E-20 | `home_clicked` | 같음 | 마무리 | click | live |
 
-E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아직 심지 않은 planned 이벤트도 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(29개 — `EVENT_NAMES`는 그 키).
+E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(29개 — `EVENT_NAMES`는 그 키). v0.8부터 planned 없음.
 
 ### 4-2. 이벤트별 상세
 
@@ -611,7 +611,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `source` | 같음 | String | "save", "header" | 어디서 열렸는지 — save=[내 책갈피에 꽂기], header=우측 위 [로그인] |
+| `source` | 같음 | String | "save", "header" | 어디서 열렸는지 — save=[내 책갈피에 꽂기], header=우측 위 [로그인] (로그인 안 된 채 연 S-09의 [로그인]도 header) |
 
 #### E-13 `login_started`
 
@@ -632,7 +632,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 로그인 | system | live | 같음 |
 
-**언제**: 로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트). `/auth/callback`이 붙인 표시를 보고 돌아온 화면이 한 번 보낸다  
+**언제**: 로그인에서 돌아와 세션이 확인된 뒤 1번 — Amplitude `user_id`가 붙는 첫 이벤트(Supabase `common.user_id`는 서버가 세션 쿠키로 채우므로 돌아온 화면의 `site_visited`부터 채워짐). `/auth/callback`이 남긴 짧은 HttpOnly 쿠키를 `/api/me`가 한 번 넘겨줄 때만 보낸다 — 주소의 `?login=`만으로는 보내지 않는다(조작한 링크 방지, 보안 리뷰)  
 **분석 질문**: Q-12, Q-14
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -1025,7 +1025,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.6 | 2026-10-01 | Claude (F-24 구현) | PRD F-24 "이렇게 이해했어요"(시안 C′). E-22 `understood`("keyword"/"topic"/"missing"/"none"/"nearest") 추가 — ③(Claude가 맞는 주제 없다고 함)은 뽑지 않으므로 제출 때 found_count 0으로 보낸다. 단어 매칭이 못 찾은 판(nearest)은 ③이 아니다 — 예전처럼 가장 가까운 주제 책 + "아직 이 주제 책이 없어요…" 한 줄. ②·③의 예스24 검색은 버튼(누를 때만 주소를 만듦) — 그 말이 `href` 같은 속성으로 Amplitude 자동 수집·리플레이에 가지 않게(6-2). E-21 `has_missing`(Boolean, Amplitude에도)·`missing_text`(String 또는 null, ≤20자, **Supabase only**) 추가. E-18 `source`에 "first_page"(②의 링크·③의 버튼, `book_id`·`pick_type` null — `book_id`가 null 허용으로). E-02 `source`("home"/"first_page") 추가 — ③ [🍃 그냥 한 권]은 E-02 직전에 round +1(3-1a, 이벤트 없는 +1). ③ [다른 말로 쓰기]는 기존 E-06 그대로. `/privacy` 6-3c 먼저. 저장 흐름 `VERSION` 3 → 4. `screen_version`은 그대로 `v1`(F-18 2단계 전후 비교용 — 실이용자 전이라 올리지 않음). 이벤트 이름 변경 없음 |
 | v0.7 | 2026-10-01 | Claude (C-16 구현) | S-06 책 속 책갈피(DESIGN C-16, PRD F-12의 보이는 부분)와 함께 E-27 `bookmark_pulled`(`book_id`·`position`·`pick_type`)·E-28 `bookmark_flipped`(`book_id`·`pick_type`)를 추가해 바로 `live`. 2-2 동사 `pulled`·`flipped` 추가, Q-11·5-3 지표(꺼냄율·뒷면율). 모으는 정보는 그대로(책 ID·위치·추천/무작위뿐) — `/privacy` 변경 없음. v0.6은 F-24 브랜치의 변경 |
 
-| v0.8 | 2026-10-01 | Claude (P5 계획, 사용자 결정 반영) | 3-2 결정(Q5 — 후보안 채택 + `user_id`는 `/api/track`이 세션으로 채움, 로그아웃 때 `setUserId(undefined)`). E-29 `shelf_created`(`shelf_count`)·E-30 `bookmark_moved`(`book_id`·`method`) 추가 `planned-P5`, 동사 `created`·`moved`, Q-13·꾸미기율. 막대 이름은 이벤트·Amplitude·DOM 속성 금지(6-1). 로그아웃·막대 이름 바꾸기·막대 지우기는 이벤트 없음(답할 질문이 없음, 1-1). E-11·E-12·E-14·E-15·E-16·E-17 설명을 [내 책갈피에 꽂기]·뒷면 [빼기]로. 처리방침 변경 6-3d. 기존 이벤트의 이름·속성 변경 없음 |
+| v0.8 | 2026-10-01 | Claude (P5 계획, 사용자 결정 반영) | 3-2 결정(Q5 — 후보안 채택 + `user_id`는 `/api/track`이 세션으로 채움, 로그아웃 때 `setUserId(undefined)`). E-29 `shelf_created`(`shelf_count`)·E-30 `bookmark_moved`(`book_id`·`method`) 추가 `planned-P5`, 동사 `created`·`moved`, Q-13·꾸미기율. 막대 이름은 이벤트·Amplitude·DOM 속성 금지(6-1). 로그아웃·막대 이름 바꾸기·막대 지우기는 이벤트 없음(답할 질문이 없음, 1-1). E-11·E-12·E-14·E-15·E-16·E-17 설명을 [내 책갈피에 꽂기]·뒷면 [빼기]로. 처리방침 변경 6-3d. 기존 이벤트의 이름·속성 변경 없음. 구현 뒤 리뷰: E-14는 서버 쿠키로 확인된 로그인에만, E-12 header에 S-09 [로그인] 포함 |
 
 ---
 

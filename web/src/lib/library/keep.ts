@@ -1,4 +1,5 @@
 import { addSavedCount, openLoginSheet, setKeepState, signedOut } from "@/lib/account/store";
+import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
 import { libraryRequest } from "./client";
 import { clearPending, readPending, writePending } from "./pending";
@@ -14,6 +15,7 @@ export async function keepBookmark(item: SaveInput, auto: boolean): Promise<void
   const answer = await libraryRequest("POST", "/api/library/saves", item);
   if (answer.status === 401) {
     signedOut();
+    setAmplitudeUser(null);
     writePending(item);
     setKeepState(item.isbn, null);
     openLoginSheet("save");

@@ -69,7 +69,7 @@
   border-radius: var(--radius-card); background: var(--ink); color: var(--paper); font-size: 13px; text-align: center;
 }
 .toastOk { background: var(--genre-essay); }
-.toastButton { min-height: 36px; border: 0; background: none; color: inherit; font: inherit; text-decoration: underline; cursor: pointer; }
+.toastButton { min-height: var(--touch); min-width: var(--touch); border: 0; background: none; color: inherit; font: inherit; text-decoration: underline; cursor: pointer; }
 
 /* The back face sheet. */
 .backFace { display: flex; justify-content: center; margin: var(--space-3) 0; }

@@ -37,21 +37,26 @@ interface Props {
 export function BookmarkSheet({ bookmark, shelfId, shelves, onMove, onRemove, onClose }: Props) {
   const [mode, setMode] = useState<Mode>("back");
   const [failed, setFailed] = useState(false);
+  const [busy, setBusy] = useState(false);
   const { card } = bookmark;
 
   const run = async (change: () => Promise<boolean>) => {
+    if (busy) return;                   // one change at a time — a quick double press does not move or remove twice
+    setBusy(true);
     setFailed(false);
-    if (await change()) onClose();
+    const ok = await change();
+    setBusy(false);
+    if (ok) onClose();
     else setFailed(true);
   };
 
   if (mode === "pick") {
     return (
-      <Sheet title={PICK_SHELF} onClose={onClose}>
+      <Sheet title={PICK_SHELF} onClose={onClose} stepKey="pick">
         <ul className={styles.pickList}>
           {shelves.map((s) => (
             <li key={s.id}>
-              <button type="button" className={styles.pick} disabled={s.id === shelfId} onClick={() => void run(() => onMove(s.id))}>
+              <button type="button" className={styles.pick} disabled={s.id === shelfId || busy} onClick={() => void run(() => onMove(s.id))}>
                 <span data-amp-mask="">{s.name}</span>{s.id === shelfId ? " (지금)" : ""}
               </button>
             </li>
@@ -64,14 +69,14 @@ export function BookmarkSheet({ bookmark, shelfId, shelves, onMove, onRemove, on
   }
 
   return (
-    <Sheet title={card.title} onClose={onClose}>
+    <Sheet title={card.title} onClose={onClose} stepKey={mode}>
       <div className={styles.backFace}>
         <BookmarkBack card={card} reason={bookmark.reason} met={metLabel(bookmark.metOn)} moving />
       </div>
       {mode === "remove" ? (
         <div className={styles.sheetActions}>
           <p className={styles.confirm}>이 책갈피를 뺄까요? 빼면 다시 만나야 꽂을 수 있어요.</p>
-          <Button onClick={() => void run(onRemove)}>{UNSAVE}</Button>
+          <Button onClick={() => void run(onRemove)} disabled={busy}>{UNSAVE}</Button>
           <Button variant="secondary" onClick={() => setMode("back")}>그대로 두기</Button>
         </div>
       ) : (

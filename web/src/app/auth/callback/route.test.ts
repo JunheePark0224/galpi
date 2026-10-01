@@ -28,6 +28,20 @@ describe("GET /auth/callback", () => {
     expect(upsert).toHaveBeenCalledWith({ user_id: "u1", provider: "kakao" }, { onConflict: "user_id", ignoreDuplicates: true });
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toBe("https://galpi.example/?y=2&login=kakao&first=1");
+    expect(res.headers.get("cache-control")).toBe("no-store");
+    const proof = res.headers.get("set-cookie") ?? "";
+    expect(proof).toContain("galpi_login=kakao%3A1");
+    expect(proof).toMatch(/HttpOnly/i);
+    expect(proof).toMatch(/Max-Age=300/i);
+    expect(proof).toMatch(/SameSite=lax/i);
+  });
+
+  it("leaves no login proof behind a failed login, and slows down a flood of codes", async () => {
+    const res = await call("next=%2F");
+    expect(res.headers.get("set-cookie") ?? "").not.toContain("galpi_login=");
+    let last: Response = res;
+    for (let i = 0; i < 40; i++) last = await GET(new Request("https://galpi.example/auth/callback?code=x", { headers: { "x-forwarded-for": "7.7.7.7" } }));
+    expect(last.status).toBe(429);
   });
 
   it("is not a first login when the profile already existed", async () => {

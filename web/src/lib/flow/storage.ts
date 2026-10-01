@@ -1,4 +1,4 @@
-import { readLoginMark } from "@/lib/auth/next";
+import { loginMarkAtLoad } from "@/lib/auth/next";
 import { nextRound, setEntry } from "@/lib/track/common";
 import { INITIAL, STEPS, type FlowState } from "./state";
 
@@ -62,7 +62,7 @@ export function settleOpen(): void {
   try {
     const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
     const discarded = (document as Document & { wasDiscarded?: boolean }).wasDiscarded === true;
-    const fromLogin = readLoginMark(new URLSearchParams(window.location.search)) !== null;
+    const fromLogin = loginMarkAtLoad() !== null;
     restoreFlow(shouldResume(nav?.type, discarded, fromLogin));
   } catch {
     // no navigation timing or storage: resuming (nothing to change) is the safe old behaviour

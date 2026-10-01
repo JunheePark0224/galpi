@@ -46,6 +46,7 @@ function Rods() {
   const [open, setOpen] = useState<Open | null>(null);
   const [adding, setAdding] = useState(false);
   const [newName, setNewName] = useState("");
+  const [addBusy, setAddBusy] = useState(false);
   const [note, setNote] = useState<{ text: string; name?: string } | null>(null);
 
   useEffect(() => {
@@ -85,7 +86,10 @@ function Rods() {
   };
 
   const add = async () => {
+    if (addBusy) return;
+    setAddBusy(true);
     const ok = await lib.addShelf(newName);
+    setAddBusy(false);
     if (ok) {
       setAdding(false);
       setNewName("");
@@ -123,7 +127,10 @@ function Rods() {
             if (held?.isbn === bookmark.isbn) setHeld(null);          // tapping the lifted one puts it back
             else if (!held) setOpen({ bookmark, shelfId: shelf.id });
           }}
-          onHold={(bookmark) => setHeld({ isbn: bookmark.isbn, from: shelf.id })}
+          onHold={(bookmark) => {
+            if (shelves.length < 2) setNote({ text: "막대를 하나 더 만들면 책갈피를 옮길 수 있어요." });   // nowhere to put it yet
+            else setHeld({ isbn: bookmark.isbn, from: shelf.id });
+          }}
           onDrop={() => void drop(shelf.id)}
           onRename={(name) => lib.renameShelf(shelf.id, name)}
           onRemove={() => void lib.removeShelf(shelf.id)}
@@ -136,7 +143,7 @@ function Rods() {
             className={styles.nameInput} value={newName} maxLength={SHELF_NAME_MAX} autoFocus data-amp-mask=""
             aria-label="새 막대 이름" placeholder="막대 이름 (12자)" onChange={(e) => setNewName(e.target.value)}
           />
-          <button type="submit" className={styles.textButton}>만들기</button>
+          <button type="submit" className={styles.textButton} disabled={addBusy}>만들기</button>
           <button type="button" className={styles.textButton} onClick={() => { setAdding(false); setNewName(""); }}>취소</button>
         </form>
       ) : (

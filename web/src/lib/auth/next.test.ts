@@ -39,3 +39,25 @@ describe("login mark — /auth/callback tells the page it came back from logging
     expect(LOGIN_PARAMS).toEqual(["login", "first"]);
   });
 });
+
+describe("login cookie (proof that /auth/callback really ran)", () => {
+  it("round-trips the provider and first-login flag, and refuses anything else", async () => {
+    const { encodeLoginCookie, parseLoginCookie } = await import("./next");
+    expect(parseLoginCookie(encodeLoginCookie("kakao", true))).toEqual({ provider: "kakao", first: true });
+    expect(parseLoginCookie(encodeLoginCookie("google", false))).toEqual({ provider: "google", first: false });
+    for (const bad of [undefined, "", "naver:1", "kakao:2", "kakao"]) expect(parseLoginCookie(bad), String(bad)).toBeNull();
+  });
+});
+
+describe("loginMarkAtLoad", () => {
+  it("reads the address once, so taking the mark off later does not change the answer", async () => {
+    const { forgetLoginMarkForTests, loginMarkAtLoad } = await import("./next");
+    forgetLoginMarkForTests();
+    window.history.replaceState(null, "", "/?login=google&first=0");
+    expect(loginMarkAtLoad()).toEqual({ provider: "google", first: false });
+    window.history.replaceState(null, "", "/");
+    expect(loginMarkAtLoad()).toEqual({ provider: "google", first: false });
+    forgetLoginMarkForTests();
+    expect(loginMarkAtLoad()).toBeNull();
+  });
+});

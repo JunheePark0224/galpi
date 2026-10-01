@@ -13,7 +13,15 @@ vi.mock("@/lib/auth/server", () => ({
 }));
 vi.mock("@/lib/library/supabaseStore", () => ({
   supabaseStore: () => store as LibraryStore,
-  countSaves: async () => store.data.saves.length,
+  savedIsbns: async () => store.data.saves.map((s) => s.isbn),
+}));
+const jar = new Map<string, string>();
+vi.mock("next/headers", () => ({
+  cookies: async () => ({
+    get: (name: string) => (jar.has(name) ? { name, value: jar.get(name) } : undefined),
+    has: (name: string) => jar.has(name),
+    delete: (name: string) => jar.delete(name),
+  }),
 }));
 vi.mock("@/lib/books/catalog", () => ({
   catalog: () => [{ isbn: "9788998441012", entry: "leaf", title: "모순", author: "양귀자", genre: "한국 소설", field: null, one_liner: "한 줄", one_liner_style: "question" }],
@@ -43,11 +51,22 @@ describe("내 책갈피 routes", () => {
   afterEach(() => { configured = true; userId = "u1"; vi.clearAllMocks(); });
 
   it("/api/me says whether someone is logged in and how many bookmarks — and that login is off without config", async () => {
-    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: true, loggedIn: true, id: "u1", count: 0 });
+    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: true, loggedIn: true, id: "u1", count: 0, login: null });
     userId = null;
-    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: true, loggedIn: false, id: null, count: 0 });
+    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: true, loggedIn: false, id: null, count: 0, login: null });
     configured = false;
-    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: false, loggedIn: false, id: null, count: 0 });
+    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: false, loggedIn: false, id: null, count: 0, login: null });
+  });
+
+  it("/api/me hands over the login proof once (E-14), and counts only books still in the catalogue", async () => {
+    jar.set("galpi_login", "google:1");
+    store = memoryStore({ shelves: [{ id: A, name: "첫", position: 0 }], saves: [
+      { isbn: "9788998441012", art: ART as never, reason: { label: "이 책은", items: [] }, metOn: "2026-10-01", shelfId: A, position: 0 },
+      { isbn: "9780000000099", art: ART as never, reason: { label: "이 책은", items: [] }, metOn: "2026-10-01", shelfId: A, position: 1 },
+    ] });
+    expect(await (await me(get("/api/me"))).json()).toMatchObject({ loggedIn: true, count: 1, login: { provider: "google", first: true } });
+    expect(jar.has("galpi_login")).toBe(false);
+    expect(await (await me(get("/api/me"))).json()).toMatchObject({ login: null });
   });
 
   it("needs a login (401) and the Supabase config (503); other sites are refused", async () => {
