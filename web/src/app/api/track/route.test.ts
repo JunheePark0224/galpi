@@ -2,6 +2,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/lib/track/store", () => ({ saveEvent: vi.fn().mockResolvedValue(false) }));
+let sessionUser: string | null = null;
+vi.mock("@/lib/auth/server", () => ({
+  authClient: async () => ({}),
+  sessionUserId: async () => { if (sessionUser === "throw") throw new Error("auth down"); return sessionUser; },
+}));
 import { saveEvent } from "@/lib/track/store";
 import { POST } from "./route";
 
@@ -201,5 +206,36 @@ describe("POST /api/track", () => {
   it("rejects invalid JSON", async () => {
     const res = await POST(new Request("http://x/api/track", { method: "POST", body: "{", headers: from("9.9.9.9") }));
     expect(res.status).toBe(400);
+  });
+
+  describe("user_id comes from the login session, never from the browser (taxonomy 3-2, v0.8)", () => {
+    afterEach(() => { sessionUser = null; });
+    const withCookie = (body: unknown) => new Request("http://x/api/track", {
+      method: "POST", body: JSON.stringify(body), headers: { ...from("9.9.9.8"), cookie: "sb-proj-auth-token=abc" },
+    });
+
+    it("drops a user_id the browser made up when nobody is logged in", async () => {
+      await POST(req({ name: "site_visited", props: {}, common: { ...common, user_id: "someone-else" } }));
+      expect(saveEvent).toHaveBeenCalledWith(expect.objectContaining({ common: expect.objectContaining({ user_id: null }) }));
+    });
+
+    it("writes the session's user id, whatever the browser sent", async () => {
+      sessionUser = "u-real";
+      await POST(withCookie({ name: "site_visited", props: {}, common: { ...common, user_id: "someone-else" } }));
+      expect(saveEvent).toHaveBeenCalledWith(expect.objectContaining({ common: expect.objectContaining({ user_id: "u-real" }) }));
+    });
+
+    it("keeps the event, as not logged in, when the session cannot be checked", async () => {
+      sessionUser = "throw";
+      const res = await POST(withCookie({ name: "site_visited", props: {}, common }));
+      expect(res.status).toBe(202);
+      expect(saveEvent).toHaveBeenCalledWith(expect.objectContaining({ common: expect.objectContaining({ user_id: null }) }));
+    });
+
+    it("does not look for a session without a Supabase auth cookie", async () => {
+      sessionUser = "u-real";
+      await POST(req({ name: "site_visited", props: {}, common }));
+      expect(saveEvent).toHaveBeenCalledWith(expect.objectContaining({ common: expect.objectContaining({ user_id: null }) }));
+    });
   });
 });

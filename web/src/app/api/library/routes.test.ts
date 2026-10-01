@@ -1,0 +1,117 @@
+// @vitest-environment node
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { memoryStore } from "@/lib/library/__fixtures__/memoryStore";
+import type { LibraryStore } from "@/lib/library/types";
+
+vi.mock("server-only", () => ({}));
+let configured = true;
+let userId: string | null = "u1";
+let store: ReturnType<typeof memoryStore>;
+vi.mock("@/lib/auth/server", () => ({
+  authClient: async () => (configured ? {} : null),
+  sessionUserId: async () => userId,
+}));
+vi.mock("@/lib/library/supabaseStore", () => ({
+  supabaseStore: () => store as LibraryStore,
+  countSaves: async () => store.data.saves.length,
+}));
+vi.mock("@/lib/books/catalog", () => ({
+  catalog: () => [{ isbn: "9788998441012", entry: "leaf", title: "모순", author: "양귀자", genre: "한국 소설", field: null, one_liner: "한 줄", one_liner_style: "question" }],
+  toCard: (b: { isbn: string; title: string }) => ({ id: b.isbn, title: b.title }),
+}));
+const error = vi.spyOn(console, "error").mockImplementation(() => {});
+
+import { GET as me } from "../me/route";
+import { GET as library } from "./route";
+import { DELETE as unsave, PATCH as move, POST as save } from "./saves/route";
+import { DELETE as removeShelf, PATCH as renameShelf, POST as addShelf } from "./shelves/route";
+
+const ORIGIN = "http://x";
+let ip = 0;
+const headers = () => ({ origin: ORIGIN, "x-forwarded-for": `10.0.0.${ip++ % 250}` });
+const get = (path: string) => new Request(`${ORIGIN}${path}`, { headers: headers() });
+const send = (method: string, path: string, body: unknown) =>
+  new Request(`${ORIGIN}${path}`, { method, headers: { ...headers(), "content-type": "application/json" }, body: JSON.stringify(body) });
+
+const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false };
+const BODY = { isbn: "9788998441012", art: ART, reason: { label: "이 책은", items: ["한국 소설"] }, metOn: "2026-09-30" };
+const A = "11111111-1111-4111-8111-111111111111";
+const B = "22222222-2222-4222-8222-222222222222";
+
+describe("내 책갈피 routes", () => {
+  beforeEach(() => { store = memoryStore(); });
+  afterEach(() => { configured = true; userId = "u1"; vi.clearAllMocks(); });
+
+  it("/api/me says whether someone is logged in and how many bookmarks — and that login is off without config", async () => {
+    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: true, loggedIn: true, count: 0 });
+    userId = null;
+    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: true, loggedIn: false, count: 0 });
+    configured = false;
+    expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: false, loggedIn: false, count: 0 });
+  });
+
+  it("needs a login (401) and the Supabase config (503); other sites are refused", async () => {
+    userId = null;
+    expect((await save(send("POST", "/api/library/saves", BODY))).status).toBe(401);
+    expect((await library(get("/api/library"))).status).toBe(401);
+    configured = false;
+    expect((await save(send("POST", "/api/library/saves", BODY))).status).toBe(503);
+    const cross = new Request(`${ORIGIN}/api/library/saves`, { method: "POST", headers: { origin: "https://evil.example" }, body: JSON.stringify(BODY) });
+    expect((await save(cross)).status).toBe(403);
+  });
+
+  it("saves a bookmark of our catalogue and shows it in the library with its card", async () => {
+    const res = await save(send("POST", "/api/library/saves", BODY));
+    expect(res.status).toBe(200);
+    expect(await res.json()).toMatchObject({ ok: true, saved: true });
+    const view = await (await library(get("/api/library"))).json();
+    expect(view.count).toBe(1);
+    expect(view.shelves[0].bookmarks[0]).toMatchObject({ isbn: "9788998441012", art: ART, metOn: "2026-09-30", card: { title: "모순" } });
+    expect((await me(get("/api/me"))).status).toBe(200);
+  });
+
+  it("refuses books outside the catalogue, made-up pictures, future dates and broken bodies", async () => {
+    for (const body of [{ ...BODY, isbn: "9780000000000" }, { ...BODY, art: { ...ART, animal: "dragon" } }, { ...BODY, metOn: "2999-01-01" }, { ...BODY, reason: null }, [1]]) {
+      expect((await save(send("POST", "/api/library/saves", body))).status, JSON.stringify(body)).toBe(400);
+    }
+    expect(store.data.saves).toHaveLength(0);
+  });
+
+  it("moves, removes, and maps service errors to statuses", async () => {
+    store = memoryStore({ shelves: [{ id: A, name: "첫", position: 0 }, { id: B, name: "둘", position: 1 }] });
+    await save(send("POST", "/api/library/saves", BODY));
+    expect((await move(send("PATCH", "/api/library/saves", { isbn: BODY.isbn, shelfId: B }))).status).toBe(200);
+    expect(store.data.saves[0].shelfId).toBe(B);
+    expect((await move(send("PATCH", "/api/library/saves", { isbn: BODY.isbn, shelfId: "not-a-uuid" }))).status).toBe(400);
+    expect((await removeShelf(send("DELETE", "/api/library/shelves", { id: B }))).status).toBe(409);   // not empty
+    expect((await unsave(send("DELETE", "/api/library/saves", { isbn: BODY.isbn }))).status).toBe(200);
+    expect((await unsave(send("DELETE", "/api/library/saves", { isbn: BODY.isbn }))).status).toBe(404);
+    expect((await unsave(send("DELETE", "/api/library/saves", { isbn: "x" }))).status).toBe(400);
+  });
+
+  it("adds, renames and removes rods", async () => {
+    const added = await addShelf(send("POST", "/api/library/shelves", { name: " 밤에 읽기 " }));
+    expect(added.status).toBe(201);
+    expect(await added.json()).toMatchObject({ ok: true, shelf: { name: "밤에 읽기", position: 1 } });
+    store = memoryStore({ shelves: [{ id: A, name: "첫", position: 0 }, { id: B, name: "둘", position: 1 }] });
+    expect((await renameShelf(send("PATCH", "/api/library/shelves", { id: B, name: "읽을 책" }))).status).toBe(200);
+    expect((await renameShelf(send("PATCH", "/api/library/shelves", { id: B, name: "" }))).status).toBe(400);
+    expect((await renameShelf(send("PATCH", "/api/library/shelves", { id: 3, name: "x" }))).status).toBe(400);
+    expect((await removeShelf(send("DELETE", "/api/library/shelves", { id: A }))).status).toBe(409);   // the first rod
+    expect((await removeShelf(send("DELETE", "/api/library/shelves", { id: B }))).status).toBe(200);
+    expect((await removeShelf(send("DELETE", "/api/library/shelves", { id: "x" }))).status).toBe(400);
+  });
+
+  it("answers a database failure with a plain 500 and logs no values", async () => {
+    store.saves = async () => { throw new Error("library saves failed: 08006"); };
+    const res = await library(get("/api/library"));
+    expect(res.status).toBe(500);
+    expect(await res.json()).toEqual({ error: "something went wrong" });
+    expect(error).toHaveBeenCalledWith("library:", "library saves failed: 08006");
+  });
+
+  it("never caches personal answers", async () => {
+    expect((await me(get("/api/me"))).headers.get("cache-control")).toBe("no-store");
+    expect((await library(get("/api/library"))).headers.get("cache-control")).toBe("no-store");
+  });
+});
