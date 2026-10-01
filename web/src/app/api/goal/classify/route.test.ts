@@ -12,7 +12,7 @@ vi.mock("@/lib/server/llm", () => ({ classifyWithClaude: vi.fn() }));
 const ORIGIN = "http://x";
 const post = (body: unknown, headers: Record<string, string> = { origin: ORIGIN, "x-forwarded-for": "8.8.8.8" }) =>
   POST(new Request(`${ORIGIN}/api/goal/classify`, { method: "POST", body: typeof body === "string" ? body : JSON.stringify(body), headers }));
-const LLM_GOAL: GoalMatch = { text: "번아웃", topic: "습관·집중", keywords: ["마음·회복"], matched: true, method: "llm" };
+const LLM_GOAL: GoalMatch = { text: "번아웃", topic: "습관·집중", keywords: ["마음·회복"], matched: true, missing: null, method: "llm" };
 
 describe("POST /api/goal/classify", () => {
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe("POST /api/goal/classify", () => {
     vi.stubEnv("ANTHROPIC_API_KEY", "");
     const res = await post({ text: "  SQL 공부  " });
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], matched: true, method: "word" });
+    expect(await res.json()).toEqual({ text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], matched: true, missing: null, method: "word" });
     expect(classifyWithClaude).not.toHaveBeenCalled();
   });
 
@@ -46,7 +46,7 @@ describe("POST /api/goal/classify", () => {
   it("sorts into a new topic once it has 10+ books (주식 → 돈 관리·투자 after the 10-01 pilot)", async () => {
     vi.stubEnv("ANTHROPIC_API_KEY", "");
     const goal = (await (await post({ text: "주식 투자 입문" }, { origin: ORIGIN, "x-forwarded-for": "8.8.4.5" })).json()) as GoalMatch;
-    expect(goal).toMatchObject({ topic: "돈 관리·투자", keywords: ["주식"], matched: true, method: "word" });
+    expect(goal).toMatchObject({ topic: "돈 관리·투자", keywords: ["주식"], matched: true, missing: null, method: "word" });
     expect(Object.keys(ACTIVE_VOCAB)).toContain("돈 관리·투자");
   });
 

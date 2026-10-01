@@ -9,7 +9,7 @@ import { EMPTY_FORM } from "./target";
 
 const nine = (...c: BalanceChoice[]) => c;
 const goal = (over: Partial<GoalMatch> = {}): GoalMatch =>
-  ({ text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], matched: true, method: "word", ...over });
+  ({ text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], matched: true, missing: null, method: "word", ...over });
 const draw = (over: Partial<DrawView> = {}): DrawView =>
   ({ picks: [], exhausted: false, found: null, keywords: [], ...over });
 const onePick: DrawView["picks"] = [{

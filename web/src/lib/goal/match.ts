@@ -10,11 +10,28 @@ export interface GoalMatch {
   topic: Topic;
   keywords: string[];    // only names from our closed keyword list
   matched: boolean;      // false: nothing in our list matched — topic is only the nearest guess
+  missing: string | null; // F-24: the specific thing the note asks for that none of our keywords cover (llm only, ≤20 chars)
   method: "word" | "llm" | "example"; // llm: Claude Haiku sorted it (P4, /api/goal/classify); word: this file; example: an
                                        // untouched S-02 example chip (lib/flow/examples.ts) — not the visitor's own words
 }
 
 const squash = (s: string) => s.toLowerCase().replace(/\s+/g, "");
+
+/** F-24: the longest missing phrase kept (the prompt asks for 12 characters; this is the hard cap). */
+export const MISSING_MAX = 20;
+
+/**
+ * F-24: a usable missing phrase, or null — trimmed, `<` `>` dropped, cut at MISSING_MAX, null when empty or when it is one of
+ * `names` (a topic or keyword name is never "missing"). Used on the server (parseClassification) and in the browser.
+ */
+export function clipMissing(value: unknown, names: readonly string[] = []): string | null {
+  if (typeof value !== "string") return null;
+  const clipped = value.replace(/[<>]/g, "").trim().slice(0, MISSING_MAX).trim();
+  if (!clipped) return null;
+  const flat = squash(clipped);
+  return names.some((n) => squash(n) === flat) ? null : clipped;
+}
+
 
 function bigrams(s: string): Set<string> {
   const out = new Set<string>();
@@ -45,7 +62,7 @@ export function matchGoal(input: string, vocab: Vocab): GoalMatch {
   const text = input.trim().slice(0, GOAL_MAX);
   const flat = squash(text);
   const topics = topicsIn(vocab);
-  const base = { text, keywords: [] as string[], method: "word" as const };
+  const base = { text, keywords: [] as string[], missing: null, method: "word" as const };
   if (!flat) return { ...base, topic: topics[0] ?? TOPICS[0], matched: false };
 
   let top: { topic: Topic; keywords: string[] } | null = null;

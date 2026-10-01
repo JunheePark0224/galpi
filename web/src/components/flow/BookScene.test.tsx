@@ -56,7 +56,7 @@ describe("BookScene", () => {
   });
 
   it("S-04: offers 다시 쓰기 with the honest note when the written goal matched nothing", () => {
-    const goal = { text: "발표 준비", topic: "데이터 분석" as const, keywords: [], matched: false, method: "word" as const };
+    const goal = { text: "발표 준비", topic: "데이터 분석" as const, keywords: [], matched: false, missing: null, method: "word" as const };
     render(<BookScene state={{ ...first, form: { topic: null, free: "발표 준비", len: null, way: null }, goal }} {...handlers()} />);
     expect(screen.getByRole("button", { name: "다시 쓰기" })).toBeInTheDocument();
     expect(screen.getByText("아직 이 주제 책이 없어요. 가장 가까운 '데이터 분석' 책을 펼칠게요")).toBeInTheDocument();
