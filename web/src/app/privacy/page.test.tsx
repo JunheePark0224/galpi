@@ -71,6 +71,15 @@ describe("/privacy (S-10)", () => {
     expect(screen.getByRole("cell", { name: /주제를 찾을 때 Anthropic에 보내요/ })).toBeInTheDocument();
   });
 
+  it("says the YES24 search link sends only the short missing phrase, as a search word (F-24)", () => {
+    render(<PrivacyPage />);
+    const yes24 = screen.getByText("첫 장에서 [예스24에서 찾기]를 누르면, 그 글에서 찾은 짧은 말(예: '캠핑 장비')을 검색어로 예스24에 보내요.");
+    expect(yes24.tagName).toBe("STRONG");
+    expect(yes24.closest("p")).toHaveTextContent("적은 글 전체나 익명 번호는 보내지 않아요.");
+    expect(screen.getByRole("cell", { name: /무엇을 알고 싶어요/ }))
+      .toHaveTextContent("갈피에 아직 없는 걸 찾았다면 그걸 가리키는 짧은 말도 데이터베이스에만 저장해요");
+  });
+
   it("says Amplitude records are deleted together with the rest on request", () => {
     render(<PrivacyPage />);
     expect(screen.getByText(/그 번호의 기록을 모두 지워요. Amplitude에 전달된 기록도 함께 지워요/)).toBeInTheDocument();
