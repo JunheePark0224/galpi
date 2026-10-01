@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Gowun_Batang, Gowun_Dodum } from "next/font/google";
 import { AmplitudeInit } from "@/components/AmplitudeInit";
 import { Footer } from "@/components/Footer";
@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "갈피",
   description: "읽을 책, 갈피가 안 잡힐 때",
 };
+
+// No dark mode (DESIGN): opt out of browsers' automatic dark theme so the art keeps its colours.
+export const viewport: Viewport = { colorScheme: "only light" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
