@@ -8,6 +8,8 @@ import { POST } from "./route";
 const common = { anon_id: "a", user_id: null, session_id: "s", round: 1, entry: null, screen_version: "v1",
   referrer: "", is_returning: false, device: "phone", is_in_app_browser: false };
 const ORIGIN = "http://x";
+/** The route flags dropped props on the server log; keep the test output quiet and read the calls instead. */
+const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
 const from = (ip: string) => ({ origin: ORIGIN, "x-forwarded-for": ip });
 const req = (body: unknown, headers: Record<string, string> = from("9.9.9.9")) =>
   new Request("http://x/api/track", { method: "POST", body: JSON.stringify(body), headers });
@@ -112,13 +114,43 @@ describe("POST /api/track", () => {
 
   it("keeps the event and strips NUL and lone surrogates that Postgres jsonb would refuse", async () => {
     const dirty = { ...common, referrer: "a\u0000b\ud800c" };
-    const res = await POST(req({ name: "site_visited", props: { goal: "책\u0000 \udc00읽기", "\u0000k": 1, nested: [{ t: "x\ud83d" }], ok: "😀" }, common: dirty }));
+    const props = { goal_text: "책\u0000 \udc00읽기", topic: "😀", keywords: ["x\ud83d"], is_matched: true, method: "word", "\u0000k": 1 };
+    const res = await POST(req({ name: "free_goal_written", props, common: dirty }));
     expect(res.status).toBe(202);
     expect(saveEvent).toHaveBeenCalledWith({
-      name: "site_visited",
-      props: { goal: "책 \ufffd읽기", k: 1, nested: [{ t: "x\ufffd" }], ok: "😀" },
+      name: "free_goal_written",
+      props: { goal_text: "책 \ufffd읽기", topic: "😀", keywords: ["x\ufffd"], is_matched: true, method: "word" },
       common: { ...common, referrer: "ab\ufffdc" },
     });
+  });
+
+  it("stores only the props EVENT_SPEC defines and flags the dropped ones by name, never by value", async () => {
+    const props = { book_id: "9788998441012", index: 2, position: "2", reaction: "curious", kind: "random", pick_type: "random",
+      one_liner_style: "question", secret: "개인 정보" };
+    expect((await POST(req({ name: "bookmark_reacted", props, common }))).status).toBe(202);
+    expect(saveEvent).toHaveBeenCalledWith({
+      name: "bookmark_reacted",
+      props: { book_id: "9788998441012", reaction: "curious", pick_type: "random", one_liner_style: "question" },
+      common,
+    });
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0]).toEqual(["track: dropped props", JSON.stringify({ name: "bookmark_reacted", keys: ["index", "position", "kind", "secret"] })]);
+    expect(JSON.stringify(warn.mock.calls)).not.toContain("개인 정보");
+  });
+
+  it("keeps the goal text to 30 characters and logs nothing when every prop matches", async () => {
+    const props = { goal_text: "가".repeat(45), topic: "데이터 분석", keywords: [], is_matched: false, method: "word" };
+    expect((await POST(req({ name: "free_goal_written", props, common }))).status).toBe(202);
+    expect(vi.mocked(saveEvent).mock.calls[0][0].props.goal_text).toBe("가".repeat(30));
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it("flags at most 10 dropped keys, each cut to 40 characters", async () => {
+    const props = Object.fromEntries(Array.from({ length: 15 }, (_, i) => [`${i}`.padEnd(60, "k"), 1]));
+    expect((await POST(req({ name: "book_opened", props, common }))).status).toBe(202);
+    const logged = JSON.parse(warn.mock.calls[0][1] as string) as { keys: string[] };
+    expect(logged.keys).toHaveLength(10);
+    expect(logged.keys.every((k) => k.length === 40)).toBe(true);
   });
 
   it("does not let a __proto__ key in props change the stored object's prototype", async () => {
@@ -127,7 +159,7 @@ describe("POST /api/track", () => {
     expect(res.status).toBe(202);
     const props = vi.mocked(saveEvent).mock.calls[0][0].props;
     expect(Object.getPrototypeOf(props)).toBe(Object.prototype);
-    expect(Object.keys(props)).toEqual(["__proto__"]);
+    expect(Object.keys(props)).toEqual([]);              // not in the spec: dropped
   });
 
   it("answers 400, not 500, when the client aborts mid-body", async () => {

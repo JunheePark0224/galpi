@@ -1,10 +1,14 @@
 import { guardJson } from "@/lib/server/guard";
 import { cleanJson, TooDeepError } from "@/lib/server/sanitize";
-import { isEventName, parseCommon } from "@/lib/track/schema";
+import { parseProps } from "@/lib/track/props";
+import { cutText, isEventName, parseCommon } from "@/lib/track/schema";
 import { saveEvent } from "@/lib/track/store";
 
 const MAX_BYTES = 8_000;
 const PER_MINUTE = 120;
+/** A flagged event names at most this many dropped keys, each cut short: the log line stays small whatever the body held. */
+const MAX_LOGGED_KEYS = 10;
+const MAX_LOGGED_KEY = 40;
 
 export async function POST(request: Request): Promise<Response> {
   const guarded = await guardJson(request, { route: "track", limit: PER_MINUTE, maxBytes: MAX_BYTES });
@@ -25,7 +29,12 @@ export async function POST(request: Request): Promise<Response> {
   if (b.props !== undefined && (typeof b.props !== "object" || b.props === null || Array.isArray(b.props))) {
     return Response.json({ error: "invalid event" }, { status: 400 });
   }
-  const props = (b.props ?? {}) as Record<string, unknown>;
+  // taxonomy 7-3 ①: keep the event, store only the props EVENT_SPEC defines, flag the rest by name (never by value).
+  const { props, dropped } = parseProps(b.name, (b.props ?? {}) as Record<string, unknown>);
+  if (dropped.length > 0) {
+    const keys = dropped.slice(0, MAX_LOGGED_KEYS).map((k) => cutText(k, MAX_LOGGED_KEY));
+    console.warn("track: dropped props", JSON.stringify({ name: b.name, keys }));
+  }
   try {
     const stored = await saveEvent({ name: b.name, props, common: { ...common } });
     return Response.json({ stored }, { status: 202 });
