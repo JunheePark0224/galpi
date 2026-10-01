@@ -43,16 +43,20 @@ Last Updated: 2026-10-01
   - [x] 키 3개 Vercel·`.env.local`, Anthropic `galpi` 워크스페이스 월 $5 한도(10-01 뒤 $15로 올림, D-B와 함께 씀) + 그 워크스페이스 키, 배포 뒤 실제 사이트에서 🎯 직접 쓰기 완주 확인(표지·나온 이유·E-21 `method: llm`·다시 뽑기 회차) (10/1)
   - [ ] 사용자: `docs/goal-grading.md` 30행 "채점" 칸에 O/△/X
 - [ ] 📚 D 단계 먼저(10-01 사용자 결정): 책 자동 추가 파이프라인(D-07) — 시험 운행 3~5일 검수 → 일치율 기준 넘으면 자동
-  - [ ] D-A 분류 넓히기 — 🎯 12·🍃 12·키워드 초안·켜는 규칙 (`docs/plans/2026-10-01-d-a-taxonomy-widen.md`)
-  - [ ] D-B 파이프라인 (`docs/plans/2026-10-01-d-b-daily-pipeline.md`) — 코드·워크플로·문서 끝. 사용자: 병합 → Secrets 2개 → Actions 권한 → 예산 한도 → `dry_run` `count 5` 한 바퀴 (`docs/deploy.md` 7절)
-  - [ ] D-C 처음 채우기 · D-D 🎯 입력 B안 · D-E 서재 숫자
+  - [x] D-A 분류 넓히기 — 🎯 12·🍃 12·키워드 초안·켜는 규칙 (`docs/plans/2026-10-01-d-a-taxonomy-widen.md`)
+  - [x] D-B 파이프라인 (`docs/plans/2026-10-01-d-b-daily-pipeline.md`) — main 병합·배포, Secrets·Actions 권한·한도 $15 사용자 설정 완료 (10/1)
+  - [x] 처음 채우기 1일차 — 파일럿 88권 + 10-01 42권 → 330권 (10/1)
+  - [ ] D-C 매일 검수 루프 → 졸업(① 연속 3회 95%+ — 1/3 ② 일치 책 표본 10권+·바뀜 5% 이하 — 3권) → 사용자 승인 후 `auto_merge` (`HANDOFF.md` 3절)
+  - [x] D-D 🎯 입력 B안 · F-24 이렇게 이해했어요 · C-16 표지 위 책갈피(당기기·뒤집기) · 홈 이동 (10/1, 배포)
+  - [ ] D-E F-23 홈 "갈피의 서재 N권 · 오늘 +M권" — 시안 비교부터 (P5와 순서는 사용자가)
+  - [ ] 사용자 확인: 카톡 브라우저 앱 전환 후 이어하기 · iOS 책갈피 뒷면 깜빡임
 - [ ] P5 로그인·보관·내 책갈피·처리방침
 - [ ] P6 Amplitude 전달, 이벤트 전수 점검, 대시보드
 - [x] 배포 전 준비(P7에서 당김) — 처리방침 v0 `/privacy`·1년 자동 삭제, 같은 출처·요청 한도·크기 상한·보안 헤더, `/design` 숨김, `deploy.md` (9/30)
 - [x] **첫 배포** — https://galpi-omega.vercel.app (GitHub `JunheePark0224/galpi` 공개, 기록에서 앱 리뷰·Reference.pdf·정보나루 원본 제거) (9/30)
 - [x] 디자인 반영 — Stitch 시안 적용, 로고 SVG, 저자 줄, 로고 머리글, 화면 가득 책·가운데 책갈피·데스크톱 넓게 (`docs/plans/2026-09-30-design-pass.md`) (9/30)
 - [x] 이벤트 택소노미 v0.2(문서) + 개발 라운드 v0.3 — 이름 변경, E-26, 회차 규칙, 직접 쓴 글은 Supabase만, `EVENT_SPEC` 타입 검사·서버 검사, CSV ↔ 코드 자동 검사, Amplitude 대기열 (`docs/taxonomy.md`, `docs/plans/2026-10-01-taxonomy-dev.md`) (10/1)
-- [ ] `feat/amplitude` main 병합·배포 → Vercel Production에 Amplitude 키(사용자) → 카탈로그·대시보드
+- [x] `feat/amplitude` main 병합·배포 → Vercel Production에 Amplitude 키(사용자) → 카탈로그·대시보드 (10/1)
 - [ ] P7 휴대폰·카톡 브라우저 점검, 5명 반응, 테스트 기록 지우기 → Amplitude 대시보드 차트 17개 시작점을 그날 00:00 KST로 (프로젝트 시간대는 10-01에 Asia/Seoul로 바꿈)
 
 ### 📚 데이터
@@ -66,7 +70,7 @@ Last Updated: 2026-10-01
 - [x] D3 AI 태그 + 첫인상 한 줄 200권 → 규칙 검사(한 줄 200/200 통과), 실제 태그 시뮬레이션 통과 (9/30)
 - [x] D4 걸린 45권 검수 (AI 일치: 축 83%·방식 81%·한 줄 93%) → 세계 축 규칙 변경·재태그 → `books_v1.json` (9/30)
 - [ ] D4 나머지 156권 검수 (배포 후 천천히)
-- [ ] D-07 책 추가 파이프라인
+- [x] D-07 책 추가 파이프라인 (= D-B, 검수 단계)
 
 ### 🎨 디자인
 - [~] DESIGN.md v0.1 + docs/README.md (추적표) — 사용자 검토 중

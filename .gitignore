@@ -12,6 +12,8 @@ data/raw/crema_probe/
 data/raw/api_compare/
 data/raw/expansion/
 **/yes24_*.json
+# local git worktrees for parallel work
+.worktrees/
 # python
 __pycache__/
 .ipynb_checkpoints/

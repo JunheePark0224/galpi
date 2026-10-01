@@ -142,3 +142,9 @@ Last Updated: 2026-10-01
 ### 10-01 — D-B 매일 책 파이프라인 (`docs/plans/2026-10-01-d-b-daily-pipeline.md`, 브랜치 `feat/d-b-pipeline`)
 - 코드·워크플로(`daily-books`·`weekly-sample`)·문서 끝, 가짜 하루 한 바퀴 통과. 태거 평가·모델(둘 다 Sonnet 5.5)·예산($15)·졸업 기준 둘은 `context.md` 10-01 행. 컨트롤러가 실제 하루(2026-10-01)를 돌려 사용자가 검수 중
 - **사용자 할 일**: 병합 → Secrets 2개 → Actions 권한 → Anthropic 한도 $15 → `dry_run` `count 5` 한 바퀴 (`docs/deploy.md` 7절). 첫 번째 졸업 기준은 오래 걸릴 수 있다
+
+### 10-01 밤 — D 단계 배포·폴더 정리
+- 배포(main `5a64922`·`42b52ef`·`b54264c`): D-A 🎯 12·🍃 12 + 켜는 규칙, D-B 파이프라인, 입력 B안, F-24, C-16, 홈 이동, 처음 채우기 1일차(330권). 사용자: GitHub Secrets·Actions 권한·Anthropic 한도 $15
+- 폴더 정리: Portfolio에 있던 임시 worktree 7개(`galpi-*`) 삭제, 로컬 전용 자료(예스24 캐시·실행 기록)는 Galpi로 옮김, 병합된 로컬 브랜치 10개 삭제. 앞으로 worktree는 `Galpi/.worktrees/`
+- 인수인계: `docs/HANDOFF.md`
+- **다음**: 10-02 06:00 첫 자동 PR 검수(D-C) → 사용자가 F-23 또는 P5 선택 → P7

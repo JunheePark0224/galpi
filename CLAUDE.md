@@ -5,7 +5,8 @@
 
 ## 세션을 이어갈 때
 
-`docs/process.md`(지금 몇 단계인지) → `docs/context.md`(결정 기록) → `docs/tasks.md` 순으로 읽는다.
+`docs/HANDOFF.md`(지금 상태·남은 일·로컬 전용 파일 위치) → `docs/process.md`(지금 몇 단계인지) → `docs/context.md`(결정 기록) → `docs/tasks.md` 순으로 읽는다.
+동시 작업용 git worktree는 `.worktrees/<이름>`에만 만든다 (Portfolio에 형제 폴더 금지).
 문서 관계와 추적표는 `docs/README.md`.
 
 ## 문서와 ID
