@@ -10,6 +10,7 @@
 | taxonomy v0.5.1 | 2026-10-01 | 최종 검토 (integrate/pilot) | home-nav `round` 변경 기록·3-1a 함수 이름 (8절) |
 | taxonomy v0.6 | 2026-10-01 | PRD F-24 "이렇게 이해했어요" (시안 C′) | E-22 `understood`, E-21 `has_missing`·`missing_text`(Supabase only), E-18 `source` "first_page"(book_id null), E-02 `source`, ③ [🍃 그냥 한 권] round +1 (8절) |
 | taxonomy v0.7 | 2026-10-01 | DESIGN C-16 책 속 책갈피 (PRD F-12 보이는 부분) | E-27 `bookmark_pulled`·E-28 `bookmark_flipped` live, 동사 `pulled`·`flipped` (8절) |
+| taxonomy v0.8 | 2026-10-01 | P5 로그인·내 책갈피 `plans/2026-10-01-p5-login-library.md` | 3-2 결정(Q5), E-29 `shelf_created`·E-30 `bookmark_moved` 추가, 막대 이름은 이벤트에 넣지 않음, E-11~17 설명을 [내 책갈피에 꽂기]로 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -38,7 +39,7 @@
 | Q-10 | **🎯 입력 검증** — 보기 vs 직접 쓰기 비율과 각각의 궁금해요, 찾은 책 0 / 1~3 / 4+ 별 궁금해요·이탈, 못 찾은 요청 목록, 요청 적중률(키워드에 연결된 비율) | target-chips 2·6절, PHASES P8 |
 | Q-11 | **결과 화면** — 궁금해요 → 예스24 클릭 비율, [더 보기] 비율(추천/무작위), 책 속 책갈피를 꺼내 보는 비율과 뒷면(나온 이유)까지 보는 비율(추천/무작위, v0.7) | proposal 4-4, PRD F-09·F-12, PHASES P8 |
 | Q-12 | **보관 → 로그인** — 보관 → 로그인 창 → 로그인 완료 → 자동 보관 비율, 카카오·구글 비율 | PRD 4절 "새로 볼 수 있는 것", PHASES P8 |
-| Q-13 | **재방문·내 책갈피** — 재방문 후 내 책갈피를 여는 비율 | PRD 4절 |
+| Q-13 | **재방문·내 책갈피** — 재방문 후 내 책갈피를 여는 비율. 막대를 만들고 책갈피를 옮기는(꾸미는) 사람이 내 책갈피를 더 자주 여나, 옮기기를 꾹 누르기와 뒷면 메뉴 중 어느 쪽으로 하나 (v0.8) | PRD 4절, F-13 |
 | Q-14 | **기기** — 휴대폰/데스크톱, 앱 안 브라우저 비율, 앱 안 브라우저에서 구글 로그인 실패 | context 09-29(모바일 우선), PRD F-20 |
 | Q-15 | **2단계 전후 비교** — 고친 것 하나의 전후 차이(효과 크기 + 신뢰구간), 유입 경로별로 나눠 보기 | proposal 4-4, PHASES P9 |
 
@@ -96,6 +97,8 @@
 | `checked` | 시스템이 결과를 확인했다 | system |
 | `completed` | 과정이 성공으로 끝났다 | system |
 | `saved` / `unsaved` | 보관했다 / 보관에서 뺐다 | system / click |
+| `created` | 이용자가 새것을 만들었다 (내 책갈피 막대, v0.8) | click |
+| `moved` | 이용자가 자리를 옮겼다 (책갈피를 다른 막대로, v0.8) | click |
 
 ### 2-3. 속성 이름
 
@@ -131,7 +134,7 @@
 | 결과 | S-06 | E-09, E-10, E-23, E-27, E-28, E-18 |
 | 보관 | S-06, S-09 | E-11, E-15, E-16 |
 | 로그인 | S-07 | E-12, E-13, E-14 |
-| 내 책갈피 | S-09 | E-17 |
+| 내 책갈피 | S-09 | E-17, E-29, E-30 |
 | 마무리 | S-08 (E-20은 S-04의 막다른 길에서도) | E-19, E-20 |
 | 공통 | — | 공통 속성 (csv의 `*` 줄) |
 
@@ -193,7 +196,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | 속성 | 현재 → 제안 | 타입 | 뜻 | Supabase | Amplitude |
 |---|---|---|---|---|---|
 | `anon_id` | 같음 | String | 브라우저 익명 번호 (localStorage UUID) | common | **device_id** (식별자, 속성 아님) |
-| `user_id` | 같음 | String \| null | 로그인 후 Supabase Auth UUID (P5) | common | **user_id** — P5에서 결정 (9절 Q5) |
+| `user_id` | 같음 | String \| null | 로그인 후 Supabase Auth UUID (P5) | common | **user_id** — `/api/track`이 로그인 세션으로 채움, 브라우저 값은 버림 (3-2, v0.8) |
 | `session_id` | 같음 | String | 탭 단위 세션 (sessionStorage) | common | 보내지 않음 — Amplitude는 자체 세션(30분 규칙)을 쓴다. 두 세션 수는 다를 수 있다 |
 | `round` | 같음 | Number | 회차 = 판 번호 (1부터, 탭마다). **+1 규칙은 3-1a** | common | 이벤트 속성 |
 | `entry` | 같음 | String \| null | `leaf`(🍃) / `target`(🎯), 고르기 전 null | common | 이벤트 속성 (null이면 생략) |
@@ -224,13 +227,14 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 **유저 속성으로 올리지 않는 이유**: 꿀팁 3편의 기준(오래 유지되는가)으로 보면 입구·회차·화면 버전·기기·재방문 여부는 한 사람 안에서도 바뀐다 → 모두 이벤트 속성. 지금 코드(`amplitude.ts`)도 그렇게 보낸다.
 
-### 3-2. Amplitude 식별자와 유저 속성 (**P5에서 결정** — 아래는 후보안)
+### 3-2. Amplitude 식별자와 유저 속성 (**P5 결정, 2026-10-01**)
 
-> **결정 보류**: `setUserId`와 유저 속성 `login_provider`만 쓸지는 P5(로그인 구현) 때 정한다 (9절 Q5). 아래는 그때의 출발점이다.
+> 9절 Q5: 후보안 그대로 채택. 더해서 `user_id`는 **서버가 로그인 세션에서 채운다**.
 
 - 로그인 전: device_id = `anon_id` 하나로 이어진다 (Supabase `common.anon_id`와 같은 값)
-- 로그인(E-14) 순간: `amplitude.setUserId(user_id)` — 로그인 전·후 기록이 한 사람으로 이어진다 (PRD F-17). Supabase는 같은 `anon_id`로 잇는다
-- 유저 속성은 **`login_provider`(`kakao`/`google`) 하나만** — 처음 로그인한 방법으로 계속 들어오도록 안내하므로(PRD 3-3) 오래 유지되는 값이다. 가입 시각은 Supabase `users`(D-04)에 있다
+- 로그인(E-14) 순간: 브라우저가 `amplitude.setUserId(user_id)` — 로그인 전·후 기록이 한 사람으로 이어진다 (PRD F-17). Supabase는 같은 `anon_id`로 잇는다. 로그아웃하면 `setUserId(undefined)`(같은 기기의 다음 기록이 앞 사람에게 붙지 않게), `anon_id`는 그대로
+- **`common.user_id`는 `/api/track`이 로그인 세션 쿠키로 확인한 Supabase 사용자 UUID로 덮어쓴다** — 브라우저가 보낸 값은 쓰지 않는다(남의 UUID를 적어 보내도 기록되지 않게). 세션이 없으면 null
+- 유저 속성은 **`login_provider`(`kakao`/`google`) 하나만** — 처음 로그인한 방법으로 계속 들어오도록 안내하므로(PRD 3-3) 오래 유지되는 값이다. 가입 시각은 Supabase `profiles`(D-04)에 있다
 - 이름·이메일·카카오/구글 고유번호는 유저 속성에도 넣지 않는다 (6절)
 
 ### 3-3. Autocapture (Amplitude만)
@@ -247,7 +251,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 ### 4-1. 한눈에 보기
 
-상태 (v0.7): live 20 · planned-P4 0 · planned-P5 7 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned는 P5(보관·로그인·내 책갈피). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음
+상태 (v0.8): live 20 · planned-P4 0 · planned-P5 9 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned는 P5(보관·로그인·내 책갈피). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로
 
 | ID | 제안 이름 | 이전 이름 | 분류 | 트리거 | 상태 |
 |---|---|---|---|---|---|
@@ -276,10 +280,12 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-13 | `login_started` | 같음 | 로그인 | click | planned-P5 |
 | E-14 | `login_completed` | 같음 | 로그인 | system | planned-P5 |
 | E-17 | `library_viewed` | 같음 | 내 책갈피 | view | planned-P5 |
+| E-29 | `shelf_created` | (없음, v0.8) | 내 책갈피 | click | planned-P5 |
+| E-30 | `bookmark_moved` | (없음, v0.8) | 내 책갈피 | click | planned-P5 |
 | E-19 | `redraw_clicked` | 같음 | 마무리 | click | live |
 | E-20 | `home_clicked` | 같음 | 마무리 | click | live |
 
-E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아직 심지 않은 planned 이벤트도 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(27개 — `EVENT_NAMES`는 그 키).
+E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아직 심지 않은 planned 이벤트도 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(29개 — `EVENT_NAMES`는 그 키).
 
 ### 4-2. 이벤트별 상세
 
@@ -559,7 +565,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 보관 | click | planned-P5 | 같음 |
 
-**언제**: S-06 [보관]을 누를 때 (로그인 전이면 이어서 E-12)  
+**언제**: S-06 꺼낸 책갈피 아래 [내 책갈피에 꽂기]를 누를 때 (로그인 전이면 이어서 E-12). 이름의 "save"는 그대로  
 **분석 질문**: Q-12
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -573,7 +579,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 보관 | system | planned-P5 | 같음 |
 
-**언제**: 보관이 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 보관  
+**언제**: 꽂기가 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 꽂기(같은 책 화면으로 돌아온 뒤). 새 책갈피는 첫 막대 맨 앞  
 **분석 질문**: Q-12
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -587,7 +593,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 보관 | click | planned-P5 | 같음 |
 
-**언제**: S-09 내 책갈피에서 [빼기]를 누를 때  
+**언제**: S-09 내 책갈피에서 책갈피 뒷면의 [빼기]를 확인까지 누를 때  
 **분석 질문**: Q-13
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -605,7 +611,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `source` | 같음 | String | "save", "header" | 어디서 열렸는지 — save=[보관], header=우측 위 [로그인] |
+| `source` | 같음 | String | "save", "header" | 어디서 열렸는지 — save=[내 책갈피에 꽂기], header=우측 위 [로그인] |
 
 #### E-13 `login_started`
 
@@ -626,7 +632,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 로그인 | system | planned-P5 | 같음 |
 
-**언제**: 로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트)  
+**언제**: 로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트). `/auth/callback`이 붙인 표시를 보고 돌아온 화면이 한 번 보낸다  
 **분석 질문**: Q-12, Q-14
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -640,12 +646,39 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 내 책갈피 | view | planned-P5 | 같음 |
 
-**언제**: S-09 내 책갈피를 열 때  
+**언제**: S-09 내 책갈피를 열 때 (목록을 불러온 뒤)  
 **분석 질문**: Q-13
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `saved_count` | 같음 | Number | 0, 3, 12 | 보관한 책 수 |
+
+#### E-29 `shelf_created`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 내 책갈피 | click | planned-P5 | 신규 (v0.8) |
+
+**언제**: S-09 [＋ 막대 추가]로 막대가 생겼을 때 (저장 성공 뒤). 첫 꽂기 때 서버가 저절로 만드는 첫 막대는 남지 않음. 막대 이름은 **넣지 않는다**(이용자가 쓴 글, 6-1)  
+**분석 질문**: Q-13
+
+| 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
+|---|---|---|---|---|
+| `shelf_count` | 추가 | Number | 2, 5 | 만든 뒤 이 사람의 막대 수 (최대 5) |
+
+#### E-30 `bookmark_moved`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 내 책갈피 | click | planned-P5 | 신규 (v0.8) |
+
+**언제**: S-09에서 책갈피를 다른 막대로 옮겼을 때 (저장 성공 뒤). 같은 막대에 다시 놓으면(취소) 남지 않음. 막대 이름·번호는 넣지 않는다  
+**분석 질문**: Q-13
+
+| 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
+|---|---|---|---|---|
+| `book_id` | 추가 | String | "9788998441012" | 책 ISBN-13 (books.isbn) |
+| `method` | 추가 | String | "hold", "menu" | 옮긴 방법 — hold=꾹 눌러 집고 막대 누르기, menu=뒷면 [다른 막대로 옮기기] |
 
 #### E-19 `redraw_clicked`
 
@@ -799,6 +832,7 @@ FN-2의 셋째 단계(`goal_submitted`)는 v0.3(2026-10-01)부터 쌓인다. 그
 | 책갈피 꺼냄율 | `bookmark_pulled` / `result_book_viewed` (책 단위, 중복 제거, v0.7부터) | pick_type, position | Q-11 |
 | 뒷면율 | `bookmark_flipped` / `bookmark_pulled` (책 단위, 중복 제거) | pick_type | Q-11 |
 | 보관 → 로그인율 | FN-5 단계별 전환 | provider, is_in_app_browser | Q-12, Q-14 |
+| 꾸미기율 (v0.8) | 내 책갈피를 연 사람 중 `shelf_created` 또는 `bookmark_moved`가 있는 사람 비율, 그 사람들과 아닌 사람들의 재방문 `library_viewed` 수 | method | Q-13 |
 
 **보고 방식**: 비율은 차이의 크기 + 95% 신뢰구간(판 단위 비율은 Wilson 구간, 같은 사람의 여러 판은 사람 단위 부트스트랩)으로. "유의하다/아니다"로 단정하지 않는다 (CLAUDE.md 원칙 5).
 
@@ -839,7 +873,7 @@ Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나
 
 - 이름, 이메일, 전화번호, 주소, 생년월일
 - 카카오·구글 계정 고유번호, 로그인 토큰 — 이벤트의 `user_id`는 Supabase 내부 UUID뿐
-- 직접 쓰기(E-21 `goal_text`, 30자 — 그리고 v0.6부터 그 글에서 뽑은 `missing_text`, 20자) 말고는 **이용자가 쓴 자유 글** — 새 입력칸이 생기면 이 문서와 처리방침부터. `goal_text`도 **Supabase에만** 둔다(Amplitude로 보내지 않음, 6-2)
+- 직접 쓰기(E-21 `goal_text`, 30자 — 그리고 v0.6부터 그 글에서 뽑은 `missing_text`, 20자) 말고는 **이용자가 쓴 자유 글** — **내 책갈피 막대 이름(v0.8, 12자)도 이벤트에 넣지 않는다**: Supabase `shelves`에만, 화면 글자로만 보이고 DOM 속성(`aria-label`·`title`·`value` 밖의 속성)에 넣지 않으며 막대 이름 칸과 S-09 막대 머리글에 `data-amp-mask`(리플레이 가림) — 새 입력칸이 생기면 이 문서와 처리방침부터. `goal_text`도 **Supabase에만** 둔다(Amplitude로 보내지 않음, 6-2)
 - 책소개·가격·표지 등 YES24 원문 (이벤트에는 `book_id`=ISBN만)
 - 키·비밀값, 서버 오류 원문
 
@@ -872,6 +906,10 @@ P4의 `/api/goal/classify`가 직접 쓴 글(≤30자)을 Anthropic API로 보�
 ### 6-3c. 처리방침 변경 — F-24 (예스24 검색어)
 
 7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고쳤다(갱신일 그대로 2026-10-01). ① 표의 직접 쓰기 행 끝에 "갈피에 아직 없는 걸 찾았다면 그걸 가리키는 짧은 말도 데이터베이스에만 저장해요" ② "기록을 전달하는 곳"에 새 문단 — "첫 장에서 [예스24에서 찾기]를 누르면, 그 글에서 찾은 짧은 말(예: '캠핑 장비')만 검색어로 예스24에 보내요. 글이 짧으면 그 말이 글과 같을 수 있어요. 익명 번호는 보내지 않아요." 그 뒤에 "이 밖의 곳에는 주지 않아요"를 옮겼다. (처음 안의 "적은 글 전체는 보내지 않아요"는 짧은 글에서 보장되지 않아 리뷰 뒤 고침)
+
+### 6-3d. 처리방침 변경 — P5 (로그인·내 책갈피, v0.8)
+
+7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고친다(갱신일 바꿈). 표에 ① 로그인: Supabase 사용자 번호·로그인 방법(카카오/구글)·처음 로그인한 때 — 이름·이메일은 갈피 표에 두지 않음, **구글 로그인은 이메일을 로그인 서비스(Supabase Auth) 저장소에만 남김**(로그인 확인용, 기록·분석에 쓰지 않음), 카카오는 이메일을 받지 않음 ② 내 책갈피: 꽂은 책·그때 책갈피 그림·만난 날·막대와 막대 이름(직접 쓴 글 — 갈피 데이터베이스에만). "기록을 전달하는 곳"에 카카오·구글(로그인할 때 그 회사 화면으로 이동 — 그쪽이 받는 것은 그 회사 방침), 로그인한 뒤의 기록에 사용자 번호가 붙어 Amplitude에도 간다는 문장. "지우고 싶다면"에 로그아웃(이 기기에서 연결만 끊음)과 탈퇴 = 문의 메일 → 계정·내 책갈피·기록을 함께 지움.
 
 ### 6-4. 보관
 
@@ -987,6 +1025,8 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.6 | 2026-10-01 | Claude (F-24 구현) | PRD F-24 "이렇게 이해했어요"(시안 C′). E-22 `understood`("keyword"/"topic"/"missing"/"none"/"nearest") 추가 — ③(Claude가 맞는 주제 없다고 함)은 뽑지 않으므로 제출 때 found_count 0으로 보낸다. 단어 매칭이 못 찾은 판(nearest)은 ③이 아니다 — 예전처럼 가장 가까운 주제 책 + "아직 이 주제 책이 없어요…" 한 줄. ②·③의 예스24 검색은 버튼(누를 때만 주소를 만듦) — 그 말이 `href` 같은 속성으로 Amplitude 자동 수집·리플레이에 가지 않게(6-2). E-21 `has_missing`(Boolean, Amplitude에도)·`missing_text`(String 또는 null, ≤20자, **Supabase only**) 추가. E-18 `source`에 "first_page"(②의 링크·③의 버튼, `book_id`·`pick_type` null — `book_id`가 null 허용으로). E-02 `source`("home"/"first_page") 추가 — ③ [🍃 그냥 한 권]은 E-02 직전에 round +1(3-1a, 이벤트 없는 +1). ③ [다른 말로 쓰기]는 기존 E-06 그대로. `/privacy` 6-3c 먼저. 저장 흐름 `VERSION` 3 → 4. `screen_version`은 그대로 `v1`(F-18 2단계 전후 비교용 — 실이용자 전이라 올리지 않음). 이벤트 이름 변경 없음 |
 | v0.7 | 2026-10-01 | Claude (C-16 구현) | S-06 책 속 책갈피(DESIGN C-16, PRD F-12의 보이는 부분)와 함께 E-27 `bookmark_pulled`(`book_id`·`position`·`pick_type`)·E-28 `bookmark_flipped`(`book_id`·`pick_type`)를 추가해 바로 `live`. 2-2 동사 `pulled`·`flipped` 추가, Q-11·5-3 지표(꺼냄율·뒷면율). 모으는 정보는 그대로(책 ID·위치·추천/무작위뿐) — `/privacy` 변경 없음. v0.6은 F-24 브랜치의 변경 |
 
+| v0.8 | 2026-10-01 | Claude (P5 계획, 사용자 결정 반영) | 3-2 결정(Q5 — 후보안 채택 + `user_id`는 `/api/track`이 세션으로 채움, 로그아웃 때 `setUserId(undefined)`). E-29 `shelf_created`(`shelf_count`)·E-30 `bookmark_moved`(`book_id`·`method`) 추가 `planned-P5`, 동사 `created`·`moved`, Q-13·꾸미기율. 막대 이름은 이벤트·Amplitude·DOM 속성 금지(6-1). 로그아웃·막대 이름 바꾸기·막대 지우기는 이벤트 없음(답할 질문이 없음, 1-1). E-11·E-12·E-14·E-15·E-16·E-17 설명을 [내 책갈피에 꽂기]·뒷면 [빼기]로. 처리방침 변경 6-3d. 기존 이벤트의 이름·속성 변경 없음 |
+
 ---
 
 ## 9. 결정 기록 (v0.2, 2026-09-30)
@@ -999,4 +1039,4 @@ v0.1 보고의 열린 질문 5개에 대한 사용자 결정. 모두 구속력�
 | Q2 | [처음으로] 뒤 같은 탭 재시작도 `round`를 올리나 | **올린다.** [다시 뽑기]와 [처음으로](새 판) 모두 +1, 이벤트를 보낸 직후에 | 3-1·3-1a, 4-2 E-19·E-20, 5-1, csv `round` |
 | Q3 | 직접 쓴 글(`goal_text`)을 Amplitude로도 보낼까 | **아니다 — Supabase에만.** Amplitude 사본은 나머지 속성(topic·keywords·is_matched·method)을 유지. `/privacy` 문장은 개발 라운드에서 고친다 | 2-7, 4-2 E-21, 6-1·6-2·6-3, csv Note, PRD E-21·D-04 |
 | Q4 | 제안한 이름 변경·속성 추가를 받아들이나 | **전부 받아들인다 — 한 번의 개발 라운드로, P7 실데이터 시작 전(Amplitude 키를 Vercel에 넣기 전)** | 4-4, csv Note(`accepted—dev round`), PRD 4절 속성 |
-| Q5 | P5에서 Amplitude `setUserId` + 유저 속성 `login_provider`만 쓸까 | **P5에서 결정** | 3-1, 3-2 |
+| Q5 | P5에서 Amplitude `setUserId` + 유저 속성 `login_provider`만 쓸까 | **쓴다 (2026-10-01 사용자 결정)** — 더해서 `user_id`는 서버가 세션에서 채운다 | 3-1, 3-2 |

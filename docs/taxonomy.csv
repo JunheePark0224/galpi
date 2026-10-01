@@ -1,6 +1,6 @@
 ﻿Trigger,Event Category,Integration,Event Name,Event Description,Event Properties,Value Description,Array,Data Type,Value Example,Note,Event ID,Status
 -,공통,SDK,*,모든 이벤트에 붙는 공통 속성 (lib/track/common.ts),anon_id,"브라우저 익명 번호 (localStorage, UUID). Amplitude device_id로 쓰고 속성으로는 보내지 않음",FALSE,String,"""3f2c9a1e-…""",Supabase common만. Amplitude는 device_id,COMMON,live
--,공통,SDK,*,모든 이벤트에 붙는 공통 속성 (lib/track/common.ts),user_id,로그인 후 Supabase Auth 사용자 UUID. 로그인 전 null. 카카오·구글 고유번호·이메일은 넣지 않음,FALSE,String,"null, ""a1b2c3d4-…""","P5부터 값. Amplitude 연결(setUserId, 유저 속성 login_provider)은 P5에서 결정",COMMON,live
+-,공통,SDK,*,모든 이벤트에 붙는 공통 속성 (lib/track/common.ts),user_id,로그인 후 Supabase Auth 사용자 UUID. 로그인 전 null. 카카오·구글 고유번호·이메일은 넣지 않음,FALSE,String,"null, ""a1b2c3d4-…""","P5부터 값 — /api/track이 로그인 세션으로 채우고 브라우저가 보낸 값은 버림. Amplitude: E-14에 setUserId, 유저 속성 login_provider 하나 (v0.8, 3-2)",COMMON,live
 -,공통,SDK,*,모든 이벤트에 붙는 공통 속성 (lib/track/common.ts),session_id,"탭 단위 세션 번호 (sessionStorage, UUID). Amplitude 세션(30분 규칙)과 다름",FALSE,String,"""9d0e…""",Supabase common만,COMMON,live
 -,공통,SDK,*,모든 이벤트에 붙는 공통 속성 (lib/track/common.ts),round,"회차 = 판 번호 (1부터, 탭마다). +1: [다시 뽑기](E-19)를 누를 때, 같은 탭에서 [처음으로](E-20)를 눌러 다시 시작할 때(새 판) — 두 이벤트를 보낸 직후에. 첫 장 고치기·새로고침 복원은 그대로",FALSE,Number,"1, 2, 3",Amplitude 이벤트 속성으로도 보냄. 규칙은 taxonomy.md 3-1a. v0.3: track()이 E-20·E-19를 보낸 직후 +1 — [처음으로]는 지금 · [다시 뽑기]는 P4에서 E-19만 보내면 같은 규칙,COMMON,live
 -,공통,SDK,*,모든 이벤트에 붙는 공통 속성 (lib/track/common.ts),entry,입구. 입구를 고르기 전(처음 화면·처음으로 뒤)은 null,FALSE,String,"null, ""leaf"", ""target""","leaf=🍃, target=🎯. Amplitude 이벤트 속성(null이면 생략)",COMMON,live
@@ -63,16 +63,19 @@ click,결과,SDK,bookmark_flipped,S-06에서 꺼낸 책갈피를 [뒷면 보기]
 click,결과,SDK,yes24_link_clicked,"S-06 또는 S-09에서 [예스24에서 보기]를 누를 때, 또는 S-04 F-24 ②·③에서 [예스24에서 … 찾기]를 누를 때 (새 탭)",book_id,책 ISBN-13 (books.isbn). source=first_page면 null (책 없이 검색),FALSE,String,"null, ""9788998441012""",v0.3 반영 · 이전 이름: yes24_clicked / v0.6: source=first_page면 null,E-18,live
 click,결과,SDK,yes24_link_clicked,"S-06 또는 S-09에서 [예스24에서 보기]를 누를 때, 또는 S-04 F-24 ②·③에서 [예스24에서 … 찾기]를 누를 때 (새 탭)",source,누른 화면,FALSE,String,"""result"", ""library"", ""first_page""","v0.3 반영 · 이전 이름: yes24_clicked / result=S-06, library=S-09, first_page=S-04 F-24 ②·③ (v0.6 추가)",E-18,live
 click,결과,SDK,yes24_link_clicked,"S-06 또는 S-09에서 [예스24에서 보기]를 누를 때, 또는 S-04 F-24 ②·③에서 [예스24에서 … 찾기]를 누를 때 (새 탭)",pick_type,"추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음). source=library·first_page면 null",FALSE,String,"null, ""recommended"", ""random""",v0.3 명세 반영(EVENT_SPEC) · 심는 것은 P4 · 이전 이름: yes24_clicked / 추가,E-18,live
-click,보관,SDK,save_clicked,S-06 [보관]을 누를 때 (로그인 전이면 이어서 E-12),book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-11,planned-P5
-click,보관,SDK,save_clicked,S-06 [보관]을 누를 때 (로그인 전이면 이어서 E-12),is_logged_in,누를 때 로그인 상태였는지,FALSE,Boolean,"TRUE, FALSE",,E-11,planned-P5
-system,보관,SDK,book_saved,"보관이 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 보관",book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-15,planned-P5
-system,보관,SDK,book_saved,"보관이 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 보관",is_auto_save,로그인 직후 자동 보관인지,FALSE,Boolean,"TRUE, FALSE",,E-15,planned-P5
-click,보관,SDK,book_unsaved,S-09 내 책갈피에서 [빼기]를 누를 때,book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-16,planned-P5
-view,로그인,SDK,login_prompt_shown,S-07 로그인 창이 뜰 때,source,어디서 열렸는지,FALSE,String,"""save"", ""header""","save=[보관], header=우측 위 [로그인]",E-12,planned-P5
+click,보관,SDK,save_clicked,S-06 꺼낸 책갈피 아래 [내 책갈피에 꽂기]를 누를 때 (로그인 전이면 이어서 E-12),book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-11,planned-P5
+click,보관,SDK,save_clicked,S-06 꺼낸 책갈피 아래 [내 책갈피에 꽂기]를 누를 때 (로그인 전이면 이어서 E-12),is_logged_in,누를 때 로그인 상태였는지,FALSE,Boolean,"TRUE, FALSE",,E-11,planned-P5
+system,보관,SDK,book_saved,"꽂기가 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 꽂기(같은 책 화면으로 돌아온 뒤). 새 책갈피는 첫 막대 맨 앞",book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-15,planned-P5
+system,보관,SDK,book_saved,"꽂기가 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 꽂기(같은 책 화면으로 돌아온 뒤). 새 책갈피는 첫 막대 맨 앞",is_auto_save,로그인 직후 자동 보관인지,FALSE,Boolean,"TRUE, FALSE",,E-15,planned-P5
+click,보관,SDK,book_unsaved,S-09 내 책갈피에서 책갈피 뒷면의 [빼기]를 확인까지 누를 때,book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-16,planned-P5
+view,로그인,SDK,login_prompt_shown,S-07 로그인 창이 뜰 때,source,어디서 열렸는지,FALSE,String,"""save"", ""header""","save=[내 책갈피에 꽂기], header=우측 위 [로그인]",E-12,planned-P5
 click,로그인,SDK,login_started,S-07 카카오/구글 버튼을 누를 때 (외부 로그인으로 떠나기 직전),provider,로그인 방식,FALSE,String,"""kakao"", ""google""",,E-13,planned-P5
-system,로그인,SDK,login_completed,로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트),provider,로그인 방식,FALSE,String,"""kakao"", ""google""",,E-14,planned-P5
-system,로그인,SDK,login_completed,로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트),is_first_login,처음 로그인(이용자가 새로 생김)인지,FALSE,Boolean,"TRUE, FALSE",,E-14,planned-P5
-view,내 책갈피,SDK,library_viewed,S-09 내 책갈피를 열 때,saved_count,보관한 책 수,FALSE,Number,"0, 3, 12",,E-17,planned-P5
+system,로그인,SDK,login_completed,"로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트). /auth/callback이 붙인 표시를 보고 돌아온 화면이 한 번 보냄",provider,로그인 방식,FALSE,String,"""kakao"", ""google""",,E-14,planned-P5
+system,로그인,SDK,login_completed,"로그인에서 돌아와 세션이 확인된 뒤 1번 (공통 user_id가 채워진 첫 이벤트). /auth/callback이 붙인 표시를 보고 돌아온 화면이 한 번 보냄",is_first_login,처음 로그인(이용자가 새로 생김)인지,FALSE,Boolean,"TRUE, FALSE",,E-14,planned-P5
+view,내 책갈피,SDK,library_viewed,S-09 내 책갈피를 열 때 (목록을 불러온 뒤),saved_count,보관한 책 수,FALSE,Number,"0, 3, 12",,E-17,planned-P5
+click,내 책갈피,SDK,shelf_created,"S-09 [＋ 막대 추가]로 막대가 생겼을 때 (저장 성공 뒤). 첫 꽂기 때 저절로 만드는 첫 막대는 남지 않음. 막대 이름은 넣지 않음",shelf_count,만든 뒤 이 사람의 막대 수 (최대 5),FALSE,Number,"2, 5",v0.8 · 신규 이벤트,E-29,planned-P5
+click,내 책갈피,SDK,bookmark_moved,"S-09에서 책갈피를 다른 막대로 옮겼을 때 (저장 성공 뒤). 같은 막대에 다시 놓으면(취소) 남지 않음. 막대 이름·번호는 넣지 않음",book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",v0.8 · 신규 이벤트,E-30,planned-P5
+click,내 책갈피,SDK,bookmark_moved,"S-09에서 책갈피를 다른 막대로 옮겼을 때 (저장 성공 뒤). 같은 막대에 다시 놓으면(취소) 남지 않음. 막대 이름·번호는 넣지 않음",method,"옮긴 방법 — hold=꾹 눌러 집고 막대 누르기, menu=뒷면 [다른 막대로 옮기기]",FALSE,String,"""hold"", ""menu""",v0.8 · 신규 이벤트,E-30,planned-P5
 click,마무리,SDK,redraw_clicked,"S-08 [다시 뽑기]를 누를 때. 이 이벤트는 끝나는 판의 round를 싣고, 보낸 직후 round +1 (3-1a)",curious_count,이번 회차 궁금해요 수,FALSE,Number,"0, 2",,E-19,live
 click,마무리,SDK,home_clicked,"[처음으로]를 누를 때 — S-04(뽑기 실패·책 없음)와 S-08 마무리. 이벤트는 끝나는 판의 round를 싣고, 보낸 직후 round +1 — 같은 탭에서 다시 시작하면 새 판 (3-1a)",curious_count,이번 회차 궁금해요 수,FALSE,Number,"0, 2",v0.3 반영 · 이전 속성 이름: curious,E-20,live
 click,마무리,SDK,home_clicked,"[처음으로]를 누를 때 — S-04(뽑기 실패·책 없음)와 S-08 마무리. 이벤트는 끝나는 판의 round를 싣고, 보낸 직후 round +1 — 같은 탭에서 다시 시작하면 새 판 (3-1a)",source,누른 화면,FALSE,String,"""first_page"", ""end""","v0.3 반영 · 추가 / first_page=S-04(막다른 길), end=마무리",E-20,live

@@ -90,6 +90,8 @@ export const EVENT_SPEC = {
   },
   bookmark_pulled: { book_id: BOOK_ID, position: POSITION, pick_type: PICK_TYPE },
   bookmark_flipped: { book_id: BOOK_ID, pick_type: PICK_TYPE },
+  shelf_created: { shelf_count: { type: "number" } },
+  bookmark_moved: { book_id: BOOK_ID, method: { type: ["hold", "menu"] } },
 } as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
 
 type Spec = typeof EVENT_SPEC;
