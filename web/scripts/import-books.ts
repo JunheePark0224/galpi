@@ -24,7 +24,7 @@ if (!source) {
   process.exit(2);
 }
 const addDir = path.join(processed, "additions");
-const addFiles = existsSync(addDir) ? readdirSync(addDir).filter((f) => f.endsWith(".json")).sort() : [];
+const addFiles = existsSync(addDir) ? readdirSync(addDir).filter((f) => f.endsWith(".json") && !f.endsWith("-ai2.json")).sort() : [];
 const base = readJson(source) as Record<string, unknown>[];
 const merged = mergeAdditions(base, bibFromCsv(readFileSync(path.join(processed, "d1_selected.csv"), "utf8")),
   addFiles.map((f) => readJson(path.join(addDir, f))), vocab);

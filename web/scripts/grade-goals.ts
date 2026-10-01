@@ -13,16 +13,19 @@ const BASE = process.env.GRADE_BASE ?? "http://localhost:3000";
 const PAUSE_MS = 6500;          // 60 000 / 6 500 ≈ 9.2 a minute, under the route's 10
 const OUT = new URL("../../docs/goal-grading.md", import.meta.url);
 
-/** [note, the topic a person would expect ("—" = none of ours: the answer should say matched=false)] */
+/**
+ * [note, the topic a person would expect ("—" = none of ours: the answer should say matched=false)].
+ * 10-01 pilot: the six new topics are on, so 번아웃·불안 → 마음 돌보기, 발표 → 대화·관계, 주식 → 돈 관리·투자.
+ */
 export const EXAMPLES: readonly [string, string][] = [
   ["SQL", "데이터 분석"], ["엑셀 함수", "업무 자동화"], ["데이터 분석 입문", "데이터 분석"], ["파이썬으로 데이터 정리", "데이터 분석"],
   ["그래프 잘 그리는 법", "데이터 분석"], ["통계 기초", "통계"], ["회귀분석이 뭔지", "통계"], ["확률이 어려워요", "통계"],
   ["A/B 테스트 결과 읽기", "통계"], ["p값이 헷갈려요", "통계"], ["챗GPT 잘 쓰는 법", "AI 활용"], ["프롬프트 쓰는 요령", "AI 활용"],
   ["클로드로 코딩", "AI 활용"], ["AI 에이전트 만들기", "AI 활용"], ["업무 자동화", "업무 자동화"], ["파이썬으로 반복 업무 줄이기", "업무 자동화"],
   ["코파일럿 쓰는 법", "업무 자동화"], ["보고서를 AI로 빨리", "업무 자동화"], ["아침 루틴 만들기", "습관·집중"], ["집중이 안 돼요", "습관·집중"],
-  ["번아웃", "습관·집중"], ["스마트폰 그만 보기", "습관·집중"], ["불안할 때 읽을 책", "습관·집중"], ["시간 관리", "시간·생산성"],
-  ["일 잘하는 법", "시간·생산성"], ["발표 준비", "시간·생산성"], ["메모하는 습관", "시간·생산성"], ["요리 레시피", "—"],
-  ["해리포터", "—"], ["주식 투자 입문", "—"],
+  ["번아웃", "마음 돌보기"], ["스마트폰 그만 보기", "습관·집중"], ["불안할 때 읽을 책", "마음 돌보기"], ["시간 관리", "시간·생산성"],
+  ["일 잘하는 법", "시간·생산성"], ["발표 준비", "대화·관계"], ["메모하는 습관", "시간·생산성"], ["요리 레시피", "—"],
+  ["해리포터", "—"], ["주식 투자 입문", "돈 관리·투자"],
 ];
 
 interface Goal { topic: string; keywords: string[]; matched: boolean; method: string }
