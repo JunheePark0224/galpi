@@ -36,6 +36,25 @@ describe("flowReducer", () => {
     expect(s).toMatchObject({ step: "book", status: "loading", drawId: 1, form });
   });
 
+  it("F-24 ③: a goal with no topic of ours asks for no draw — the book opens on the honest page, with no bookmarks", () => {
+    const none = { text: "캠핑 장비 고르기", topic: "취업·커리어" as const, keywords: [], matched: false, missing: "캠핑 장비", method: "llm" as const };
+    const s = run([{ type: "start", entry: "target" }, { type: "submitTarget", form: { ...form, topic: null, free: none.text }, goal: none }]);
+    expect(s).toMatchObject({ step: "book", status: "ready", drawId: 0, draw: null, goal: none });
+    const open = flowReducer(s, { type: "open" });
+    expect(open).toMatchObject({ step: "first" });
+    expect(flowReducer(open, { type: "next" })).toBe(open);
+    const editing = flowReducer(open, { type: "edit" });
+    expect(editing).toMatchObject({ step: "target", edited: true });
+    const sql = { ...none, text: "SQL", topic: "데이터 분석" as const, keywords: ["SQL"], matched: true, missing: null };
+    expect(flowReducer(editing, { type: "submitTarget", form, goal: sql })).toMatchObject({ step: "first", status: "loading", drawId: 1 });
+  });
+
+  it("F-24: a word-match miss (any fallback) still draws the nearest topic's books", () => {
+    const miss = { text: "발표 준비", topic: "데이터 분석" as const, keywords: [], matched: false, missing: null, method: "word" as const };
+    const s = run([{ type: "start", entry: "target" }, { type: "submitTarget", form: { ...form, topic: null, free: miss.text }, goal: miss }]);
+    expect(s).toMatchObject({ step: "book", status: "loading", drawId: 1 });
+  });
+
   it("takes only the answer to the latest request", () => {
     const loading = run([{ type: "start", entry: "leaf" }, ...answers()]);
     expect(flowReducer(loading, { type: "drawn", id: 0, draw: view(5) })).toBe(loading);

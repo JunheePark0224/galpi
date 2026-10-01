@@ -22,7 +22,7 @@ describe("flow api", () => {
   });
 
   it("sends scoring answers built from the form and the matched goal (🎯)", () => {
-    const goal = { text: "SQL", topic: "데이터 분석" as const, keywords: ["SQL"], matched: true, method: "word" as const };
+    const goal = { text: "SQL", topic: "데이터 분석" as const, keywords: ["SQL"], matched: true, missing: null, method: "word" as const };
     expect(drawBody({ ...INITIAL, entry: "target", form: { topic: null, free: "SQL", len: "thin", way: "실습" }, goal }))
       .toEqual({ entry: "target", answers: { topic: "데이터 분석", way: "실습", len: 1, keywords: ["SQL"] }, seen: [] });
   });
@@ -53,7 +53,7 @@ describe("classifyGoal", () => {
   const VOCAB = vocab as Vocab;
 
   it("posts the trimmed note and takes the server's sorting (method llm)", async () => {
-    const answer = { text: "번아웃", topic: "습관·집중", keywords: ["마음·회복"], matched: true, method: "llm" };
+    const answer = { text: "번아웃", topic: "습관·집중", keywords: ["마음·회복"], matched: true, missing: null, method: "llm" };
     const fetchMock = vi.fn().mockResolvedValue(Response.json(answer));
     vi.stubGlobal("fetch", fetchMock);
     expect(await classifyGoal("  번아웃  ", VOCAB)).toEqual(answer);
@@ -61,13 +61,29 @@ describe("classifyGoal", () => {
     expect(fetchMock.mock.calls[0][1].signal).toBeInstanceOf(AbortSignal);
   });
 
+  it("keeps the server's missing phrase (F-24), clipped again in the browser", async () => {
+    const answer = { text: "주식 단타", topic: "돈 관리·투자", keywords: [], matched: true, missing: " 단타 매매 ", method: "llm" };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json(answer)));
+    expect((await classifyGoal("주식 단타", VOCAB)).missing).toBe("단타 매매");
+  });
+
+  it.each([
+    ["an older server that leaves it out", { method: "llm" }],
+    ["a name of the matched topic", { method: "llm", missing: "돈 관리·투자" }],
+    ["word matching (it never names a missing thing)", { method: "word", missing: "단타 매매" }],
+  ])("reads missing as null for %s", async (_, extra) => {
+    const answer = { text: "주식 단타", topic: "돈 관리·투자", keywords: [], matched: true, ...extra };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json(answer)));
+    expect((await classifyGoal("주식 단타", VOCAB)).missing).toBeNull();
+  });
+
   it.each([
     ["a refused request", () => Promise.resolve(new Response("{}", { status: 429 }))],
     ["a failed request", () => Promise.reject(new TypeError("offline"))],
-    ["an answer outside our list", () => Promise.resolve(Response.json({ topic: "요리", keywords: [], matched: true, method: "llm" }))],
+    ["an answer outside our list", () => Promise.resolve(Response.json({ topic: "요리", keywords: [], matched: true, missing: null, method: "llm" }))],
   ])("falls back to word matching in the browser on %s", async (_, answer) => {
     vi.stubGlobal("fetch", vi.fn(answer));
-    expect(await classifyGoal("SQL 공부", VOCAB)).toEqual({ text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], matched: true, method: "word" });
+    expect(await classifyGoal("SQL 공부", VOCAB)).toEqual({ text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], matched: true, missing: null, method: "word" });
   });
 });
 
@@ -78,12 +94,12 @@ describe("goalFor (S-02 🎯 B: example chip or written goal)", () => {
   it("answers an untouched example chip from the fixed table without asking the server", async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
-    expect(await goalFor(" 데이터 분석 ", VOCAB)).toEqual({ text: "데이터 분석", topic: "데이터 분석", keywords: [], matched: true, method: "example" });
+    expect(await goalFor(" 데이터 분석 ", VOCAB)).toEqual({ text: "데이터 분석", topic: "데이터 분석", keywords: [], matched: true, missing: null, method: "example" });
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("sorts an edited example like any written goal", async () => {
-    const answer = { text: "데이터 분석 입문", topic: "데이터 분석", keywords: [], matched: true, method: "llm" };
+    const answer = { text: "데이터 분석 입문", topic: "데이터 분석", keywords: [], matched: true, missing: null, method: "llm" };
     const fetchMock = vi.fn().mockResolvedValue(Response.json(answer));
     vi.stubGlobal("fetch", fetchMock);
     expect(await goalFor("데이터 분석 입문", VOCAB)).toEqual(answer);

@@ -46,6 +46,9 @@ describe("parseProps (server check against EVENT_SPEC)", () => {
   it("accepts null where the spec allows it: enum with null, nullable string", () => {
     expect(parseProps("balance_answered", { side: null }).props).toEqual({ side: null });
     expect(parseProps("chip_selected", { chip_value: null }).props).toEqual({ chip_value: null });
+    expect(parseProps("yes24_link_clicked", { book_id: null, source: "first_page", pick_type: null }))
+      .toEqual({ props: { book_id: null, source: "first_page", pick_type: null }, dropped: [] });   // F-24: no book
+    expect(parseProps("free_goal_written", { missing_text: "가".repeat(30) }).props).toEqual({ missing_text: "가".repeat(20) });
     expect(parseProps("yes24_link_clicked", { pick_type: null }).props).toEqual({ pick_type: null });
   });
 
@@ -70,6 +73,11 @@ describe("forAmplitude (taxonomy 2-7: Supabase-only props stay out of the Amplit
   it("passes every other event's props through", () => {
     expect(forAmplitude("bookmark_reacted", reacted)).toEqual(reacted);
     expect(forAmplitude("site_visited", {})).toEqual({});
+  });
+
+  it("F-24: leaves out missing_text and keeps has_missing", () => {
+    const written = { goal_text: "주식 단타", topic: "돈 관리·투자", keywords: [], is_matched: true, method: "llm", has_missing: true, missing_text: "단타 매매" };
+    expect(forAmplitude("free_goal_written", written)).toEqual({ topic: "돈 관리·투자", keywords: [], is_matched: true, method: "llm", has_missing: true });
   });
 
   it("keeps only the keys the event's spec defines (allowlist): unknown keys never reach Amplitude", () => {

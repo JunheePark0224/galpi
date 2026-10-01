@@ -12,7 +12,7 @@ function Contact() {
   return <a href={`mailto:${email}`}>{email}</a>;
 }
 
-/** S-10 (F-16): what is collected before login and where it goes — Amplitude, and (P4) the written goal to Anthropic for sorting. Login and saves join in P5. */
+/** S-10 (F-16): what is collected before login and where it goes — Amplitude, and (P4) the written goal to Anthropic for sorting, (F-24) a short phrase to YES24 as a search word. Login and saves join in P5. */
 export default function PrivacyPage() {
   return (
     <article className={styles.page}>
@@ -43,7 +43,7 @@ export default function PrivacyPage() {
             <td>화면이 잘 동작하는지 확인하기 위해</td>
           </tr>
           <tr>
-            <td>🎯 {"\"무엇을 알고 싶어요\""} 칸에 적은 글 (최대 30자, <strong>갈피의 데이터베이스에만 저장</strong>, 주제를 찾을 때 Anthropic에 보내요) — 그 글에서 찾은 주제·키워드는 Amplitude에도 함께 보내요</td>
+            <td>🎯 {"\"무엇을 알고 싶어요\""} 칸에 적은 글 (최대 30자, <strong>갈피의 데이터베이스에만 저장</strong>, 주제를 찾을 때 Anthropic에 보내요) — 그 글에서 찾은 주제·키워드는 Amplitude에도 함께 보내요. 갈피에 아직 없는 걸 찾았다면 그걸 가리키는 짧은 말도 데이터베이스에만 저장해요</td>
             <td>사람들이 찾는 주제를 알고 책을 늘리기 위해 — <strong>이름·연락처는 적지 마세요</strong></td>
           </tr>
           <tr>
@@ -80,6 +80,10 @@ export default function PrivacyPage() {
           보내는 것은 그 글(최대 30자)뿐이고, 익명 번호나 다른 기록은 함께 보내지 않아요.
           예시 칩의 말을 그대로 내면 Anthropic에 보내지 않아요.
           Anthropic은 API로 받은 글을 AI 학습에 쓰지 않고, 30일 안에 지운다고 밝히고 있어요(약관 위반 확인처럼 정해진 경우는 예외예요).
+        </p>
+        <p>
+          <strong>첫 장에서 [예스24에서 찾기]를 누르면, 그 글에서 찾은 짧은 말(예: &apos;캠핑 장비&apos;)만 검색어로 예스24에 보내요.</strong>{" "}
+          글이 짧으면 그 말이 글과 같을 수 있어요. 익명 번호는 보내지 않아요.
           이 밖의 곳에는 주지 않아요. 새로 전달하는 곳이 생기면 이 페이지에 먼저 적어요.
         </p>
       </section>

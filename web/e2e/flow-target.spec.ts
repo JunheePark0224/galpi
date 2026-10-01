@@ -22,6 +22,8 @@ test("🎯 example chip → book → first page → five bookmarks → 궁금해
   await page.getByRole("button", { name: "책 펼치기" }).click();          // S-03: the closed book
   await expect(page.getByRole("heading", { name: "당신이 찾는 책" })).toBeVisible();
   await expect(page.getByText("조건에 딱 맞는 책은 여기까지예요")).toBeVisible();  // sample: 데이터 분석 has 5 books
+  await expect(page.getByText("→ 데이터 분석으로 찾았어요")).toBeVisible();        // F-24: an untouched example — one short line
+  await expect(page.getByText("이렇게 이해했어요")).toHaveCount(0);
   await page.getByRole("button", { name: "다음 장" }).click();
 
   await expect(page.getByText("1 / 5")).toBeVisible();
@@ -54,7 +56,8 @@ test("🎯 example chip → book → first page → five bookmarks → 궁금해
   await expect.poll(() => named(events, "entry_selected").length).toBe(2);
   expect(named(events, "site_visited")).toHaveLength(1);
   // taxonomy 3-1a: home_clicked carries the round it ends, the restart is round 2
-  expect(named(events, "entry_selected").map((e) => [e.props, e.common.entry, e.common.round])).toEqual([[{}, "target", 1], [{}, "leaf", 2]]);
+  expect(named(events, "entry_selected").map((e) => [e.props, e.common.entry, e.common.round]))
+    .toEqual([[{ source: "home" }, "target", 1], [{ source: "home" }, "leaf", 2]]);
   expect(named(events, "home_clicked")[0].common.round).toBe(1);
   expect(named(events, "chip_selected").map((e) => [e.props.chip_type, e.props.chip_value])).toEqual([["example", "데이터 분석"], ["len", "thin"], ["way", "실습"]]);
   expect(named(events, "goal_submitted").map((e) => e.props)).toEqual([
@@ -96,6 +99,8 @@ test("🎯 written goal → honest count → one edit → five bookmarks", async
 
   const notice = "SQL 책은 아직 2권이에요. 나머지는 가까운 '데이터 분석' 책이에요";
   await expect(page.getByText(notice)).toBeVisible();
+  // F-24 ①+ (word matching): the path to the keyword, the count right under it
+  await expect(page.getByRole("region", { name: "이렇게 이해했어요" })).toContainText("데이터·통계 › 데이터 분석 › SQL로 찾았어요");
   await expect(page.getByText("조건에 딱 맞는 책은 여기까지예요")).toHaveCount(0);
 
   await page.getByRole("button", { name: "한 번 고치기" }).click();
@@ -111,14 +116,14 @@ test("🎯 written goal → honest count → one edit → five bookmarks", async
 
   await expect.poll(() => named(events, "bookmark_reacted").length).toBe(5);
   expect(named(events, "free_goal_written").map((e) => e.props)).toEqual([
-    { goal_text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" },
-    { goal_text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" },
+    { goal_text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word", has_missing: false, missing_text: null },
+    { goal_text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word", has_missing: false, missing_text: null },
   ]);
   expect(named(events, "goal_submitted").map((e) => e.props)).toEqual([
     { topic: "데이터 분석", is_free_text: true, len: null, way: null, is_edit: false },
     { topic: "데이터 분석", is_free_text: true, len: "thin", way: null, is_edit: true },
   ]);
-  expect(named(events, "goal_coverage_checked")[0].props).toEqual({ coverage_bucket: "1-3", found_count: 2 });
+  expect(named(events, "goal_coverage_checked")[0].props).toEqual({ coverage_bucket: "1-3", found_count: 2, understood: "keyword" });
   expect(named(events, "first_page_edited").map((e) => e.props)).toEqual([{ changed_items: ["len"] }]);
   expect(named(events, "chip_selected").map((e) => [e.props.chip_value, e.props.is_edit])).toEqual([["thin", true]]);
   expect(specMismatches(events)).toEqual([]);
@@ -163,7 +168,7 @@ test("🎯 a written goal sorted by the LLM: the button waits, the topic comes f
 
   await expect.poll(() => named(events, "free_goal_written").length).toBe(1);
   expect(named(events, "free_goal_written")[0].props).toEqual({
-    goal_text: "번아웃이 와요", topic: "습관·집중", keywords: [], is_matched: true, method: "llm",
+    goal_text: "번아웃이 와요", topic: "습관·집중", keywords: [], is_matched: true, method: "llm", has_missing: false, missing_text: null,
   });
   expect(named(events, "goal_submitted")[0].props).toMatchObject({ topic: "습관·집중", is_free_text: true });
   expect(specMismatches(events)).toEqual([]);

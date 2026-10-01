@@ -2,7 +2,8 @@ import { nextRound, setEntry } from "@/lib/track/common";
 import { INITIAL, STEPS, type FlowState } from "./state";
 
 export const FLOW_KEY = "galpi.flow";
-const VERSION = 3;   // 2 (P4): picks carry their reason, S-06 keeps its place; 3: 마음·회복 left the keyword list — an older saved flow starts over
+const VERSION = 4;   // 2 (P4): picks carry their reason, S-06 keeps its place; 3: 마음·회복 left the keyword list; 4 (F-24): goals carry
+                     // `missing` and a goal with no topic draws nothing — an older saved flow starts over
 
 /**
  * Resume only when the load is a reload or a history traversal, or the tab was discarded and restored (KakaoTalk's in-app

@@ -261,6 +261,14 @@ describe("sendToAmplitude", () => {
     expect(JSON.stringify(sdk.track.mock.calls)).not.toContain("SQL 공부");
   });
 
+  it("sends free_goal_written without missing_text — the missing phrase stays in Supabase too (F-24)", async () => {
+    const send = await started();
+    const written = { goal_text: "주식 단타", topic: "돈 관리·투자", keywords: [], is_matched: true, method: "llm", has_missing: true, missing_text: "단타 매매" };
+    send("free_goal_written", written, common);
+    expect(sdk.track.mock.calls[0][1]).toMatchObject({ has_missing: true });
+    expect(JSON.stringify(sdk.track.mock.calls)).not.toContain("단타");
+  });
+
   it("drops a prop the spec does not define, so it can neither leak nor shadow a common prop", async () => {
     const send = await started();
     send("entry_selected", { entry: "target", note: "free text" }, { ...common, entry: "leaf" });

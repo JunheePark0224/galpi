@@ -8,7 +8,8 @@
      header 52 + main padding 8 + room above 112 + gap 16 + buttons 44 = 232, plus 20px of air below the buttons = 252.
      On a taller screen the footer (52) fits too: its share fades in from 560px to 612px so the book never jumps. The 270px
      floor still holds the bookmark card (it reaches 264px into the book at scale 1). --screen-h is svh (tokens.css). */
-  --book-h: clamp(270px, calc(var(--screen-h) - 252px - clamp(0px, calc(var(--screen-h) - 560px), 52px)), 420px);
+  --exits-row: 0px;   /* F-24 ③: a second button row (44 + gap 12) comes out of the book (floor too: ③ has no bookmark to hold) */
+  --book-h: clamp(calc(270px - var(--exits-row)), calc(var(--screen-h) - 252px - var(--exits-row) - clamp(0px, calc(var(--screen-h) - 560px), 52px)), 420px);
   --bm-scale: 1;
   --bm-room: calc(106px * var(--bm-scale));   /* the bookmark's part above the book (plus 6px of air, see padding-top) */
   --cover-zoom: 1.6;   /* S-03 phone: a 1 : 1.45 cover about 270–320px wide (lift and hint pull: the phone block below) */
@@ -22,10 +23,10 @@
 /* Taller phones: height left for the book = viewport − header 52 − main padding 8 + 16 − room above (106 × scale + 6)
    − gap 16 − buttons 44 − footer 52, less 4px of slack. */
 @media (min-height: 780px) {
-  .scene { --book-h: clamp(420px, calc(var(--screen-h) - 332px), 520px); --bm-scale: 1.25; }
+  .scene { --book-h: clamp(calc(420px - var(--exits-row)), calc(var(--screen-h) - 332px - var(--exits-row)), 520px); --bm-scale: 1.25; }
 }
 @media (min-height: 880px) {
-  .scene { --book-h: clamp(500px, calc(var(--screen-h) - 348px), 600px); --bm-scale: 1.4; }
+  .scene { --book-h: clamp(calc(500px - var(--exits-row)), calc(var(--screen-h) - 348px - var(--exits-row)), 600px); --bm-scale: 1.4; }
 }
 /* S-03 (the phone layout, and the layout of any browser that keeps the 430px column): the cover and the hint under it are
    one group, centred between the header and where the hint would sit (the hint stays in layout, so nothing below it moves —
@@ -54,7 +55,7 @@
       --cover-zoom: 1.2; --cover-lift: -10%; --hint-pull: 0px;   /* the cover is already a 1 : 1.4 page: grow it upward into the room above */
       --bm-scale: 1;
       /* Floor 340px: on a very short window the page scrolls rather than the bookmark overlapping the buttons. */
-      --book-h: max(340px, min(calc(var(--screen-h) - 198px - var(--bm-room)), calc((min(92vw, 1000px) - 10px) / 1.43)));
+      --book-h: max(340px, min(calc(var(--screen-h) - 198px - var(--bm-room) - var(--exits-row)), calc((min(92vw, 1000px) - 10px) / 1.43)));
     }
     .stage { width: calc(var(--book-h) * 1.43); margin: 0 auto; }
     .actions { width: 100%; max-width: 480px; margin: 0 auto; }
@@ -86,4 +87,7 @@
 .hint { margin: 0; text-align: center; font-size: 13px; line-height: var(--hint-h, 20px); color: var(--ink-muted); translate: 0 var(--hint-pull); }
 .actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--space-3); }
 .actions > button { flex: 1 1 0; min-width: 120px; }
+/* F-24 ③: [예스24에서 찾기] (the one primary) full width on top, the two secondaries share the row below */
+.scene[data-exits] { --exits-row: 56px; }
+.exits > .full { flex: 1 1 100%; }
 .error { flex-basis: 100%; margin: 0; text-align: center; font-size: 13px; }

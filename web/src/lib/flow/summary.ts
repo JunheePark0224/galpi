@@ -3,6 +3,7 @@ import {
 } from "@/lib/recommend";
 import { TOPIC_CHIPS } from "@/lib/books/taxonomy";
 import type { GoalMatch } from "@/lib/goal/match";
+import { understoodOf } from "@/lib/goal/understood";
 import type { DrawView } from "./state";
 import { LEN_CHIPS, type TargetForm } from "./target";
 
@@ -44,18 +45,24 @@ export function targetSummary(f: TargetForm, goal: GoalMatch | null): { label: s
 }
 
 /**
- * C-14 notes on the first page. Coverage (target-chips.md 3절) comes first; the exhausted note (book-pool.md ⑧, 🎯 only,
- * or any empty draw) is never shown in the same round as a coverage note.
+ * F-24 ①+: target-chips.md 3절's honest count, as a line under the 이렇게 이해했어요 path — only when a keyword was
+ * understood (①) and the draw is back. A word-match miss (nearest) gets the old "아직 이 주제 책이 없어요 … 가장 가까운
+ * '…' 책을 펼칠게요" line. ② and ③ say what is missing in the block itself.
+ */
+export function coverageNote(entry: Entry | null, goal: GoalMatch | null, draw: DrawView | null): string | null {
+  if (entry !== "target" || !goal || !draw) return null;
+  const understood = understoodOf(goal);
+  if (understood === "nearest") return coverageNotice(0, goal.text, goal.topic);
+  if (understood !== "keyword" || draw.found === null) return null;
+  return coverageNotice(draw.found, draw.keywords[0] ?? goal.keywords[0], goal.topic);
+}
+
+/**
+ * C-14 slips on the first page: the exhausted note (book-pool.md ⑧, 🎯 only, or any empty draw) — never in the same round
+ * as a coverage line.
  */
 export function firstPageNotices(entry: Entry | null, goal: GoalMatch | null, draw: DrawView | null): string[] {
-  let coverage: string | null = null;
-  if (entry === "target" && goal) {
-    if (!goal.matched) coverage = coverageNotice(0, goal.text, goal.topic);
-    else if (goal.keywords.length && draw && draw.found !== null) {
-      coverage = coverageNotice(draw.found, draw.keywords[0] ?? goal.keywords[0], goal.topic);
-    }
-  }
-  if (coverage) return [coverage];
+  if (coverageNote(entry, goal, draw)) return [];
   if (draw && (draw.picks.length === 0 || (entry === "target" && draw.exhausted))) return [EXHAUSTED_NOTICE];
   return [];
 }
