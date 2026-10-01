@@ -207,11 +207,39 @@ describe("sendToAmplitude", () => {
     return m.sendToAmplitude;
   }
 
-  it("drops events while Amplitude has not been started (for example on /privacy)", async () => {
-    const { sendToAmplitude } = await load();
-    sendToAmplitude("entry_selected", { entry: "leaf" }, common);
+  it("queues events sent before startAmplitude (AmplitudeInit mounted late) and delivers them once it starts (taxonomy 2-7 a)", async () => {
+    const { startAmplitude, sendToAmplitude } = await load();
+    sendToAmplitude("site_visited", {}, common);
+    sendToAmplitude("entry_selected", {}, common);
+    await pause();
+    expect(sdk.loaded).toBe(0);
+    startAmplitude();
+    await vi.waitFor(() => expect(sdk.track).toHaveBeenCalledTimes(2));
+    expect(sdk.track.mock.calls.map((c) => c[0])).toEqual(["site_visited", "entry_selected"]);
+  });
+
+  it("keeps nothing waiting without a key: those events are never delivered", async () => {
+    vi.stubEnv(KEY_NAME, "");
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { startAmplitude, sendToAmplitude } = await load();
+    sendToAmplitude("site_visited", {}, common);
+    vi.stubEnv(KEY_NAME, FAKE_KEY);   // only to look inside the queue — a real page never gains a key after its build
+    startAmplitude();
+    await ready();
     await pause();
     expect(sdk.track).not.toHaveBeenCalled();
+  });
+
+  it("gives a queued event the time it happened, not the time it left the queue (taxonomy 2-7 b)", async () => {
+    const now = vi.spyOn(Date, "now").mockReturnValue(1_000);
+    const { startAmplitude, sendToAmplitude } = await load();
+    sendToAmplitude("site_visited", {}, common);
+    now.mockReturnValue(5_000);
+    startAmplitude();
+    await vi.waitFor(() => expect(sdk.track).toHaveBeenCalledTimes(1));
+    expect(sdk.track.mock.calls[0][2]).toEqual({ time: 1_000 });
+    sendToAmplitude("book_opened", {}, common);
+    expect(sdk.track.mock.calls[1][2]).toEqual({ time: 5_000 });
   });
 
   it("sends the same event name and props plus the analysis-relevant common props", async () => {
@@ -221,7 +249,7 @@ describe("sendToAmplitude", () => {
     expect(sdk.track).toHaveBeenCalledWith("chip_selected", {
       entry: "leaf", round: 2, screen_version: "v1", device: "phone", is_in_app_browser: false, is_returning: true,
       chip_type: "topic", chip_value: "데이터 분석", is_edit: false,
-    });
+    }, { time: expect.any(Number) });
   });
 
   it("sends free_goal_written without goal_text — the written words stay in Supabase (taxonomy 2-7, 6-2)", async () => {
@@ -256,7 +284,7 @@ describe("sendToAmplitude", () => {
   it("sends props alone when common props are unavailable", async () => {
     const send = await started();
     send("book_opened", { a: 1 }, null);
-    expect(sdk.track).toHaveBeenCalledWith("book_opened", { a: 1 });
+    expect(sdk.track).toHaveBeenCalledWith("book_opened", { a: 1 }, { time: expect.any(Number) });
   });
 
   it("never throws when Amplitude's track throws", async () => {

@@ -3,7 +3,8 @@ import { forAmplitude } from "./props";
 import type { CommonProps, EventName } from "./schema";
 
 type Sdk = typeof import("@amplitude/unified");
-type Waiting = readonly [EventName, Record<string, unknown>];
+/** Name, props, and when it happened (ms) — a queued event keeps its own time (taxonomy 2-7 b). */
+type Waiting = readonly [EventName, Record<string, unknown>, { time: number }];
 
 const KEY_MISSING = "Amplitude API key missing — analytics disabled";
 /** Instructor's install check (wizard step 6): `site_visited` carries this (EVENT_SPEC: prompt_version, Amplitude only). */
@@ -12,7 +13,10 @@ const REPLAY_SAMPLE_RATE = 0.2;
 /** The SDK is ~120 KB gzip: load it when the browser is idle, and no later than this after the page asked for it. */
 const IDLE_TIMEOUT_MS = 2000;
 const NO_IDLE_API_DELAY_MS = 2000; // Safari has no requestIdleCallback
-/** Events that happen before the SDK has arrived wait here (bounded; the Supabase copy is never affected). */
+/**
+ * Events that happen before the SDK has arrived — even before startAmplitude ran (taxonomy 2-7 a) — wait here.
+ * Bounded; only when a key exists; the Supabase copy is never affected.
+ */
 const MAX_WAITING = 50;
 
 let started = false;   // the load was scheduled: happens once per page load, never undone (no second initAll after a failure)
@@ -26,9 +30,11 @@ function whenIdle(run: () => void): void {
   else setTimeout(run, NO_IDLE_API_DELAY_MS);
 }
 
-function give(loaded: Sdk, [name, props]: Waiting): void {
+const apiKey = (): string => (process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY ?? "").trim();
+
+function give(loaded: Sdk, [name, props, options]: Waiting): void {
   try {
-    loaded.track(name, props);
+    loaded.track(name, props, options);
   } catch {
     // Amplitude failing must not touch the Supabase path or the screen
   }
@@ -65,7 +71,7 @@ async function load(key: string): Promise<void> {
  */
 export function startAmplitude(): void {
   if (started) return;
-  const key = (process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY ?? "").trim();
+  const key = apiKey();
   if (!key) {
     if (!warned) {
       warned = true;
@@ -79,7 +85,7 @@ export function startAmplitude(): void {
 
 /** Same event name and props as the Supabase path minus Supabase-only ones, plus the common props the analysis needs. Never throws. */
 export function sendToAmplitude(name: EventName, props: Record<string, unknown>, common: CommonProps | null): void {
-  if (!started || failed) return;
+  if (failed || !apiKey()) return;   // no key: Amplitude is off and nothing is kept
   try {
     const shared = common === null ? {} : {
       ...(common.entry === null ? {} : { entry: common.entry }),
@@ -89,7 +95,8 @@ export function sendToAmplitude(name: EventName, props: Record<string, unknown>,
       is_in_app_browser: common.is_in_app_browser,
       is_returning: common.is_returning,
     };
-    const event: Waiting = [name, { ...shared, ...forAmplitude(name, props), ...(name === "site_visited" ? { prompt_version: PROMPT_VERSION } : {}) }];
+    const own = { ...forAmplitude(name, props), ...(name === "site_visited" ? { prompt_version: PROMPT_VERSION } : {}) };
+    const event: Waiting = [name, { ...shared, ...own }, { time: Date.now() }];
     if (sdk) give(sdk, event);
     else if (waiting.length < MAX_WAITING) waiting.push(event);
   } catch {
