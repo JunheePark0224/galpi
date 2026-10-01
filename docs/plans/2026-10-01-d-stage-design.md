@@ -37,7 +37,7 @@
 
 `web/src/lib/books/taxonomy.ts`(FIELD_OF_TOPIC·TOPIC_CHIPS·TOPICS·LEAF_GENRES), `web/src/data/vocab.json`(키워드 → 단어 패턴), `normalize.ts`·`request.ts`·`draw.ts`(목록 검사), `lib/goal/classify.ts`(Claude 목록·enum), `lib/goal/match.ts`, `lib/flow/*`, `TargetInput.tsx`(지금 칩 6개 — D-D 전까지는 **기존 6개 칩을 그대로** 두고 새 주제는 직접 쓰기로만 닿는다), `lib/track/props.ts`·`schema.ts`(이벤트의 topic·genre 값 목록이 있으면 taxonomy 먼저).
 
-- **책이 0권인 주제**: 직접 쓰기가 새 주제로 분류되면 지금 규칙(`target-chips.md` 4절)대로 같은 분야 → 가까운 주제로 넓히고 첫 장에 솔직히 안내한다. 새 분야는 주제 둘 다 0권일 수 있으므로 **"아직 이 주제 책을 모으는 중이에요"** 안내 + 가까운 기존 주제로 넘기는 규칙이 필요하다(문구는 사용자 승인). D-C가 채우면 사라진다
+- **책이 적은 주제는 아직 켜지 않는다(10-01 결정)**: 🎯 주제는 books.json에 **10권 이상**일 때만 "활성" — 직접 쓰기 분류(Claude 목록·enum, 단어 매칭)와 보기 칩의 대상이 된다. 활성 전에 "주식"이라고 쓰면 지금처럼 가장 가까운 활성 주제 + `matched=false`(못 찾은 요청으로 기록). 파이프라인이 10권을 넘기면 다음 배포부터 자동으로 켜진다. 새 안내 문구도, 엉뚱한 주제로 넘기는 규칙도 필요 없다. 🍃 장르는 점수로 전체에서 뽑으므로 0권이어도 그냥 안 나올 뿐 — 활성 규칙 없음
 - 분류 정확도: 새 주제가 들어간 지시문으로 `goal:grade`(30개)와 처음 보는 글 세트를 **새 주제 예시를 더해** 다시 잰다. temperature 0
 - taxonomy: topic 값 목록이 이벤트 속성 정의에 있으면 md → csv → schema → 테스트를 한 커밋에서
 
