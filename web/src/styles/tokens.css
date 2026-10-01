@@ -19,6 +19,7 @@
   --screen-h: 100vh;
   --dur-open-cover: 1000ms; --dur-flip-page: 550ms; --dur-bookmark-rise: 600ms;
   --dur-bookmark-away: 450ms; --dur-bookmark-down: 400ms; --dur-hold: 800ms; --dur-card-flip: 500ms;
+  --dur-bookmark-pull: 750ms;
   --ease-open: cubic-bezier(.6, .05, .25, 1); --ease-flip: cubic-bezier(.5, 0, .3, 1);
   --ease-rise: cubic-bezier(.34, 1.56, .64, 1);
 
