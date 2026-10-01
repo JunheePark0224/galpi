@@ -55,7 +55,13 @@ export function parseProps(name: EventName, raw: Record<string, unknown>): Parse
   return { props: Object.fromEntries(kept), dropped };
 }
 
-/** The Amplitude copy of an event's own props: without the Supabase-only ones (taxonomy 2-7 — goal_text). A new object. */
+/**
+ * The Amplitude copy of an event's own props (a new object): an allowlist — only keys EVENT_SPEC defines for this event
+ * and that are not Supabase-only (taxonomy 2-7 — goal_text). Unknown keys are dropped even if the types are bypassed.
+ */
 export function forAmplitude(name: EventName, props: Record<string, unknown>): Record<string, unknown> {
-  return Object.fromEntries(Object.entries(props).filter(([key]) => specOf(name, key)?.only !== "supabase"));
+  return Object.fromEntries(Object.entries(props).filter(([key]) => {
+    const spec = specOf(name, key);
+    return spec !== null && spec.only !== "supabase";
+  }));
 }

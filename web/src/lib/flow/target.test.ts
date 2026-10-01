@@ -28,6 +28,12 @@ describe("🎯 form", () => {
       .toEqual({ topic: "데이터 분석", is_free_text: true, len: null, way: null, is_edit: true });
   });
 
+  it("builds E-26 props for an unmatched written goal: topic = the nearest topic, is_free_text still true", () => {
+    const goal = { text: "아무말", topic: "데이터 분석" as const, keywords: [], matched: false, method: "word" as const };
+    expect(goalSubmittedProps({ ...EMPTY_FORM, free: "아무말", len: "thick" }, goal, false))
+      .toEqual({ topic: "데이터 분석", is_free_text: true, len: "thick", way: null, is_edit: false });
+  });
+
   it("labels 읽는 방식 chips as target-chips.md does", () => {
     expect(WAY_CHIPS.map((c) => c.label)).toEqual(["개념부터 쉽게", "따라 하며 실습 (바로 써먹기)", "사례로 술술"]);
   });

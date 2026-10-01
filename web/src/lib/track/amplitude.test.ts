@@ -132,7 +132,7 @@ describe("with a key", () => {
     const { startAmplitude, sendToAmplitude } = await load();
     startAmplitude();
     sendToAmplitude("site_visited", {}, common);
-    sendToAmplitude("entry_selected", { entry: "target" }, common);
+    sendToAmplitude("entry_selected", {}, common);
     expect(sdk.track).not.toHaveBeenCalled();
     idle.mock.calls[0][0]();
     await vi.waitFor(() => expect(sdk.track).toHaveBeenCalledTimes(2));
@@ -148,11 +148,11 @@ describe("with a key", () => {
     vi.stubGlobal("requestIdleCallback", idle);
     const { startAmplitude, sendToAmplitude } = await load();
     startAmplitude();
-    for (let i = 0; i < 80; i++) sendToAmplitude("chip_selected", { i }, common);
+    for (let i = 0; i < 80; i++) sendToAmplitude("chip_selected", { chip_type: "len", chip_value: String(i), is_edit: false }, common);
     idle.mock.calls[0][0]();
     await vi.waitFor(() => expect(sdk.track).toHaveBeenCalled());
     expect(sdk.track).toHaveBeenCalledTimes(50);
-    expect(sdk.track.mock.calls[0][1].i).toBe(0);
+    expect(sdk.track.mock.calls[0][1].chip_value).toBe("0");
   });
 
   it("never throws when initAll throws, stops sending and does not retry", async () => {
@@ -261,10 +261,11 @@ describe("sendToAmplitude", () => {
     expect(JSON.stringify(sdk.track.mock.calls)).not.toContain("SQL 공부");
   });
 
-  it("keeps the event's own props when a name collides with a common prop", async () => {
+  it("drops a prop the spec does not define, so it can neither leak nor shadow a common prop", async () => {
     const send = await started();
-    send("entry_selected", { entry: "target" }, { ...common, entry: null });
-    expect(sdk.track.mock.calls[0][1].entry).toBe("target");
+    send("entry_selected", { entry: "target", note: "free text" }, { ...common, entry: "leaf" });
+    expect(sdk.track.mock.calls[0][1].entry).toBe("leaf");
+    expect(sdk.track.mock.calls[0][1]).not.toHaveProperty("note");
   });
 
   it("leaves out entry when the visitor has not chosen one yet", async () => {
@@ -283,8 +284,9 @@ describe("sendToAmplitude", () => {
 
   it("sends props alone when common props are unavailable", async () => {
     const send = await started();
-    send("book_opened", { a: 1 }, null);
-    expect(sdk.track).toHaveBeenCalledWith("book_opened", { a: 1 }, { time: expect.any(Number) });
+    const own = { chip_type: "len", chip_value: "thin", is_edit: false };
+    send("chip_selected", own, null);
+    expect(sdk.track).toHaveBeenCalledWith("chip_selected", own, { time: expect.any(Number) });
   });
 
   it("never throws when Amplitude's track throws", async () => {

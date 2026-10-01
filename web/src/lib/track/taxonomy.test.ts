@@ -136,4 +136,21 @@ describe("taxonomy.csv ↔ EVENT_SPEC ↔ code (taxonomy 7-3)", () => {
     const live = [...byEvent].filter(([, list]) => list[0].Status === "live").map(([name]) => name);
     expect([...trackedNames()].sort()).toEqual(live.sort());
   });
+
+  it("#11 each event's property table in taxonomy.md has the csv's property names, types, arrays and values", () => {
+    const sections = md.split(/^(?=#### E-\d+ )/m).filter((part) => part.startsWith("#### E-"));
+    expect(sections).toHaveLength(byEvent.size);
+    let compared = 0;
+    for (const section of sections) {
+      const [, id, name] = section.match(/^#### (E-\d+) `([a-z0-9_]+)`/)!;
+      // Row shape: | `prop` | 현재 → 제안 | Type (String[] = array) | Value | 설명 |
+      const fromMd = [...section.matchAll(/^\| `([a-z0-9_]+)` \|[^|]*\|\s*(\w+)(\[\])?\s*\|([^|]*)\|/gm)]
+        .map((m) => `${m[1]}: ${m[2]} ${m[3] ? "TRUE" : "FALSE"} ${m[4].trim()}`);
+      const fromCsv = (byEvent.get(name) ?? []).filter((r) => r["Event Properties"] !== "")
+        .map((r) => `${r["Event Properties"]}: ${r["Data Type"]} ${r.Array} ${r["Value Example"].trim()}`);
+      expect(fromMd.sort(), `${id} ${name}`).toEqual(fromCsv.sort());
+      compared += fromMd.length;
+    }
+    expect(compared, "the md row regex found the property tables").toBe(eventRows.filter((r) => r["Event Properties"] !== "").length);
+  });
 });

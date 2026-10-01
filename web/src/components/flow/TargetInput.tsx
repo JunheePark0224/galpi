@@ -81,6 +81,7 @@ export function TargetInput({ initial, edit, onSubmit }: Props) {
               ref={freeInput}
               className={styles.input}
               aria-label="직접 쓰기"
+              data-amp-mask
               maxLength={GOAL_MAX}
               placeholder={FREE_PLACEHOLDER}
               value={form.free}

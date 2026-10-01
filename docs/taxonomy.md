@@ -4,6 +4,7 @@
 |---|---|---|---|
 | taxonomy v0.2 | 2026-09-30 | 사용자 결정 5건(9절) · `PRD.md` v0.2 4절 · `proposal.md` 4-4 · `PHASES.md` P8·P9 · `balance-game.md` 4절 · `target-chips.md` 5·6절 · `plans/2026-09-30-amplitude.md` · 현재 코드(`web/src/lib/track/*`, `track()` 호출 14곳) | 사용자 결정 반영 |
 | taxonomy v0.3 | 2026-10-01 | 개발 라운드 `plans/2026-10-01-taxonomy-dev.md` | **구현 완료 — 코드가 이 문서를 따른다** (8절) |
+| taxonomy v0.3.1 | 2026-10-01 | v0.3 최종 검토 | 입력 칸 가림·허용 목록·검사 #11·표현 정리 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -156,7 +157,7 @@
 
 **Amplitude 경로 — 개발 라운드 항목** (Amplitude 검토, 2026-09-30 — **v0.3에서 구현**: `amplitude.ts`의 대기열·`time`)
 
-| # | 항목 | 지금 코드 | 바뀌어야 할 것 |
+| # | 항목 | v0.3 전 코드 | v0.3에서 바꾼 것 |
 |---|---|---|---|
 | a | **Amplitude가 시작되기 전 이벤트도 큐에 받는다** | `sendToAmplitude`가 `started`가 아니면 바로 버린다(`if (!started \|\| failed) return`). 시작(`startAmplitude`)은 루트 레이아웃의 `AmplitudeInit`이 마운트될 때라, 그보다 먼저 나는 이벤트(예: 홈 `site_visited`)가 사라질 수 있다 | 시작 여부와 관계없이 큐(상한 있음)에 쌓고, SDK가 올라오면 순서대로 넘긴다. 키가 없으면 큐도 쌓지 않는다(꺼진 환경에서 메모리만 쓰지 않게). 테스트: "init 컴포넌트가 늦게 마운트돼도 그 전 이벤트가 전달된다" |
 | b | **큐에 있던 이벤트는 원래 시각(`time`)을 유지한다** | 큐를 넘길 때 `track(name, props)`만 호출해 Amplitude가 **넘긴 시각**을 이벤트 시각으로 잡는다 — 퍼널 순서·소요 시간이 틀어진다 | 이벤트를 큐에 넣는 순간 `time`(ms)을 기록하고, `amplitude.track(name, props, { time })`으로 넘긴다. 테스트: "큐에서 나온 이벤트의 time이 넣은 시각과 같다" |
@@ -167,7 +168,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 | 값 | 뜻 |
 |---|---|
-| `live` | 지금 코드가 보냄 (이름이 바뀔 예정이면 Note에 "현재 이름") |
+| `live` | 지금 코드가 보냄 (이름이 바뀐 것은 Note에 "이전 이름") |
 | `planned-P4` / `planned-P5` | PRD에 있고 해당 Phase에서 심음 |
 | `planned-taxonomy` | PRD에 있고(또는 PRD에 반영되는 승인 완료 변경) **택소노미 개발 라운드**(4-4, P7 전)에서 심음 — 새 이벤트, 기존 이벤트의 속성 추가. **v0.3에서 모두 처리 — 지금 이 상태의 줄은 없다** |
 | `proposed` | 이 문서가 새로 제안 — PRD·사용자 승인 전. 승인되면 `planned-*`로. **v0.2에서 남은 `proposed`는 없다** (전부 승인됨, 9절) |
@@ -237,7 +238,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 상태 (v0.3): live 13 · planned-P4 5 · planned-P5 7 · planned-taxonomy 0. 4-4의 이름·속성 변경과 속성 추가 4건은 v0.3에서 코드에 반영 (P4 이벤트 E-10·E-18의 `pick_type`은 `EVENT_SPEC`에만 — 심는 것은 P4)
 
-| ID | 제안 이름 | 현재 이름 | 분류 | 트리거 | 상태 |
+| ID | 제안 이름 | 이전 이름 | 분류 | 트리거 | 상태 |
 |---|---|---|---|---|---|
 | E-01 | `site_visited` | `visit` | 진입 | view | live |
 | E-02 | `entry_selected` | 같음 | 진입 | click | live |
@@ -695,13 +696,13 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 | 3 | `/privacy` 문장 고침 (모으는 정보가 바뀜) | 6-3 |
 | 4 | Amplitude 큐: 시작 전 이벤트 받기 + 원래 `time` 유지 | 2-7 a·b |
 
-**코드에서 함께 바꿀 곳** (다음 개발 라운드): `lib/track/schema.ts`(`EVENT_NAMES`, `CommonProps`, `parseCommon`), `lib/track/common.ts`, `lib/track/amplitude.ts`(공통 속성 전달·`visit` 조건·**`goal_text` 제외**·**큐·`time`**, 2-7), `lib/track/client.ts`, `lib/track/common.ts`의 `nextRound()` 호출을 [다시 뽑기]·[처음으로]에 연결(3-1a — v0.3에서는 `Flow.tsx`가 아니라 `track()`이 부른다), `components/TrackVisit.tsx`, `components/flow/Flow.tsx`·`TargetInput.tsx`·`BalanceGame.tsx`, `lib/flow/summary.ts`(`"what"` → `"topic"`), 각 테스트와 `e2e/*`, `PRD.md` 4절 이름, `README.md` 추적표(ID라 변경 없음). 처리방침(`app/privacy/page.tsx`)은 **이름 변경만으로는 고칠 것 없다.** 그러나 `goal_text`를 Amplitude로 보내지 않게 되므로 **문장 하나를 고쳐야 한다** (6-3).
+**코드에서 함께 바꿀 곳** (v0.3 개발 라운드에서 바꾼 곳 — 기록): `lib/track/schema.ts`(`EVENT_NAMES`, `CommonProps`, `parseCommon`), `lib/track/common.ts`, `lib/track/amplitude.ts`(공통 속성 전달·`visit` 조건·**`goal_text` 제외**·**큐·`time`**, 2-7), `lib/track/client.ts`, `lib/track/common.ts`의 `nextRound()` 호출을 [다시 뽑기]·[처음으로]에 연결(3-1a — v0.3에서는 `Flow.tsx`가 아니라 `track()`이 부른다), `components/TrackVisit.tsx`, `components/flow/Flow.tsx`·`TargetInput.tsx`·`BalanceGame.tsx`, `lib/flow/summary.ts`(`"what"` → `"topic"`), 각 테스트와 `e2e/*`, `PRD.md` 4절 이름, `README.md` 추적표(ID라 변경 없음). 처리방침(`app/privacy/page.tsx`)은 **이름 변경만으로는 고칠 것 없다.** 그러나 `goal_text`를 Amplitude로 보내지 않게 되므로 **문장 하나를 고쳐야 한다** (6-3).
 
 ---
 
 ## 5. 퍼널·분석 정의
 
-대시보드(Amplitude)와 노트북(SQL)이 같은 숫자를 내도록 여기서 정의한다. 이름은 제안 이름 — 마이그레이션 전 데이터에는 4-4의 현재 이름을 쓴다.
+대시보드(Amplitude)와 노트북(SQL)이 같은 숫자를 내도록 여기서 정의한다. 이름은 제안 이름 — 마이그레이션 전 데이터에는 4-4 표 "현재" 열의 옛 이름을 쓴다.
 
 ### 5-1. 단위
 
@@ -796,7 +797,7 @@ Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나
 
 | 항목 | 규칙 |
 |---|---|
-| `goal_text` | 최대 30자, 앞뒤 공백 제거. 입력칸 아래 "이름·연락처는 적지 마세요". **Supabase에만 저장한다 — Amplitude 사본에는 이 속성을 넣지 않는다**(결정 2026-09-30, 9절 Q3). 못 찾은 요청 분석(5-3)은 SQL로 하므로 잃는 것이 없다. Amplitude에는 `topic`·`keywords`·`is_matched`·`method`가 간다. 처리방침에 저장 명시, **Amplitude로는 안 간다는 문장은 v0.3에서 추가(6-3)**. P4에서 Anthropic(분류) 전달이 생기면 처리방침에 먼저 추가. 첫 장(S-04)이 이 글을 화면에 보이면 Session Replay(20%)가 화면 글자를 담을 수 있다 — v0.3: 직접 쓴 글이 있는 첫 장에 `data-amp-mask`(`FirstPage.tsx`)를 달아 리플레이에서 가린다 |
+| `goal_text` | 최대 30자, 앞뒤 공백 제거. 입력칸 아래 "이름·연락처는 적지 마세요". **Supabase에만 저장한다 — Amplitude 사본에는 이 속성을 넣지 않는다**(결정 2026-09-30, 9절 Q3). 못 찾은 요청 분석(5-3)은 SQL로 하므로 잃는 것이 없다. Amplitude에는 `topic`·`keywords`·`is_matched`·`method`가 간다. 처리방침에 저장 명시, **Amplitude로는 안 간다는 문장은 v0.3에서 추가(6-3)**. P4에서 Anthropic(분류) 전달이 생기면 처리방침에 먼저 추가. 첫 장(S-04)이 이 글을 화면에 보이면 Session Replay(20%)가 화면 글자를 담을 수 있다 — v0.3: 직접 쓴 글이 있는 첫 장(`FirstPage.tsx`)과 글을 쓰는 입력 칸(`TargetInput.tsx`)에 `data-amp-mask`를 달아 리플레이에서 가린다 (v0.3.1: 입력 칸도 — 대시보드의 가림 수준이 `light`로 바뀌어도 가려진다) |
 | `referrer` | 500자에서 자름. Supabase에만. 검색 주소 등 쿼리 문자열에 개인 정보가 섞일 수 있어, 필요하면 호스트만 남기는 것을 검토 |
 | `anon_id` | 처리방침 "지우고 싶다면"에서 이 번호로 삭제 요청을 받는다 — 값의 형식·위치를 바꾸면 처리방침 화면도 함께 |
 | Autocapture·Session Replay | IP·대략적 지역·누른 요소가 Amplitude로 간다(처리방침에 명시). 리플레이는 입력칸을 가린다 — 새 입력칸도 가림 대상인지 확인 |
@@ -861,25 +862,29 @@ Supabase 기록은 1년 뒤 자동 삭제(`0002_retention.sql`). Amplitude에 �
 **① 코드에 속성 명세 두기** — `lib/track/schema.ts`
 
 ```ts
-// 예시 모양 (이름은 제안 이름)
+// 실제 모양 (v0.3 — 일부만 옮김)
 export const EVENT_SPEC = {
-  site_visited: {},
+  site_visited: { prompt_version: { type: "string", only: "amplitude" } },
   entry_selected: {},
-  balance_answered: { question_no: "number", choice: ["A", "B", "unsure"], side: ["left", "right", null],
-                      elapsed_ms: "number", is_edit: "boolean" },
-  bookmark_reacted: { book_id: "string", position: "number", reaction: ["pass", "curious"],
-                      pick_type: ["recommended", "random"] },
-  // … 24개 전부
-} as const;
+  balance_answered: {
+    question_no: { type: "number" }, choice: { type: ["A", "B", "unsure"] }, side: { type: [null, "left", "right"] },
+    elapsed_ms: { type: "number" }, is_edit: { type: "boolean" },
+  },
+  free_goal_written: {
+    goal_text: { type: "string", only: "supabase", max: 30 }, topic: { type: "string" },
+    keywords: { type: "string", array: true }, is_matched: { type: "boolean" }, method: { type: ["word", "llm"] },
+  },
+  // … 25개 전부
+} as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
 export type EventName = keyof typeof EVENT_SPEC;         // EVENT_NAMES는 여기서 만든다
-export type EventProps<N extends EventName> = /* EVENT_SPEC[N]에서 타입을 뽑는 매핑 타입 */;
-export function track<N extends EventName>(name: N, props: EventProps<N>): void;
+export type PropsOf<N extends EventName> = /* EVENT_SPEC[N]에서 보내는 속성의 타입을 뽑는 매핑 타입 (only: "amplitude" 제외) */;
+export function track<N extends EventName>(name: N, props: PropsOf<N>): void;
 export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry", "screen_version",
                             "referrer", "is_returning", "device", "is_in_app_browser"] as const;
 ```
 
-- `track()`이 이 타입을 받으면 **호출하는 곳의 속성 이름·타입·값은 `tsc`가 검사**한다 (호출 14곳을 grep할 필요가 없다)
-- 명세 값: `"string" | "number" | "boolean" | "object"`, 배열은 `["string"]` 같은 한 칸 배열, 열거형은 값 목록(null 허용이면 `null` 포함)
+- `track()`이 이 타입(`PropsOf`)을 받으면 **호출하는 곳의 속성 이름·타입·값은 `tsc`가 검사**한다 (호출을 grep할 필요가 없다)
+- 명세 값 (`PropSpec`): `type`은 `"string" | "number" | "boolean" | "object"` 또는 열거형 값 목록(null 허용이면 `null` 포함). 배열은 `array: true`, null 허용 문자열은 `nullable: true`, 한쪽에만 보내는 속성은 `only: "supabase" | "amplitude"`, 글 길이 상한은 `max`
 - v0.3: `/api/track`이 같은 명세로 `props`를 검사한다(`props.ts`의 `parseProps`) — 모르는 속성·Amplitude 전용 속성·타입이 틀린 값은 버리고 이벤트는 저장, 버린 키 이름만 서버 로그에 남긴다(값은 남기지 않음)
 
 **② taxonomy 테스트** — `web/src/lib/track/taxonomy.test.ts` (Vitest)
@@ -899,6 +904,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | 8 | `*` 줄의 속성 = `COMMON_KEYS` (그리고 `parseCommon`이 돌려주는 키) | 공통 속성이 어긋남 |
 | 9 | `docs/taxonomy.md`의 `#### E-xx \`name\`` 제목에서 뽑은 (ID, 이름) 쌍 = csv의 쌍 (`*` 제외) | md와 csv가 어긋남 |
 | 10 | Status가 `live`인 이벤트 이름 집합 = 앱 소스(`web/src`, 테스트 제외)의 `track("…"` 호출 이름 집합. 한 이벤트의 줄은 모두 같은 Status(#4) | 심었는데 문서가 planned, 또는 문서는 live인데 호출이 없음 |
+| 11 | `docs/taxonomy.md`의 이벤트별 속성 표(4-2, `#### E-xx` 아래)의 속성 이름·타입(`String[]` = 배열)·값 = csv의 그 이벤트 줄의 Event Properties·Data Type·Array·Value Example | 속성 표를 md에서만 또는 csv에서만 고침 (#9는 이벤트 이름만 본다) |
 
 - 규칙: 열거형 속성은 csv Value Example에 **가능한 값을 모두** 적는다(지금 csv가 그렇게 되어 있다. `chip_value`·`topic`처럼 키 목록이 긴 값은 명세를 `"string"`으로 둔다)
 
@@ -915,6 +921,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.1 | 2026-09-30 | Claude (검토 전) | 첫 작성. PRD E-01~E-25(E-04 삭제) 24개 + 제안 E-26 `goal_submitted`. 명명 규칙·공통 속성·퍼널·개인정보·동기화 규칙. 현재 코드 대비 이벤트 이름 변경 3건(+PRD만 있는 E-18 1건)·속성·값 변경 19건·기존 이벤트 속성 추가 제안 4건(4-4) |
 | v0.2 | 2026-09-30 | Claude (사용자 결정 반영) | 사용자 결정 5건(9절). ① E-26 `goal_submitted` 추가 확정 → Status `planned-taxonomy`(새 상태), PRD 4절에도 추가. ② `round` +1 = [다시 뽑기] + 같은 탭 [처음으로](3-1a·5-1). ③ `goal_text`는 **Supabase only** — Amplitude 사본에서 뺌(2-7 속성 단위 예외·6-2), `/privacy` 고칠 문장 2개 기록(6-3). ④ 이름 변경 4건·속성·값 변경 19건·속성 추가 4건 모두 `accepted — dev round` — **한 번의 개발 라운드로, P7 전·Vercel Amplitude 키 설정 전**(4-4 표는 마이그레이션 명세로 유지). ⑤ Amplitude `setUserId`·`login_provider`는 **P5에서 결정**(3-2). Amplitude 검토의 개발 라운드 항목 2건 추가: 시작 전 이벤트도 큐에 받기, 큐 이벤트는 원래 `time` 유지(2-7). 상태 집계 `proposed` 1 → 0, `planned-taxonomy` 1 |
 | v0.3 | 2026-10-01 | Claude (개발 라운드) | **구현 완료** (`plans/2026-10-01-taxonomy-dev.md`). 4-4 마이그레이션 전부 코드에 반영 — 이벤트 이름 4건(E-18은 명세만), 속성·값 19건, 중복 `entry` 삭제 2건, 속성 추가 4건(E-08 `one_liner_style`·E-20 `source` 구현, E-10·E-18 `pick_type`은 명세만 — P4), E-26 `goal_submitted` 구현. `round` +1은 `track()`이 E-20·E-19를 보낸 직후(3-1a). `goal_text`는 Amplitude 사본과 Session Replay에서 빠지고 `/privacy`에 6-3 문장 2개(갱신일 10-01). `schema.ts`의 `EVENT_SPEC`·`PropsOf`로 `track()` 호출을 tsc가 검사, `/api/track`도 같은 명세로 props 검사. 자동 검사: `taxonomy.test.ts`(7-3 #1~#10), E2E `specMismatches`. Amplitude 대기열: 시작 전 이벤트도 받기(키 있을 때만)·원래 `time`. csv: 구현된 줄 `live`, E-10·E-18 `pick_type`은 `planned-P4`, E-01 Note에 `Amplitude only`, Note의 "현재 이름" → "이전 이름". Supabase의 테스트 기록은 옛 이름 그대로(P7에서 지움 — 옮기지 않음) |
+| v0.3.1 | 2026-10-01 | Claude (최종 검토 반영) | 직접 쓰기 입력 칸에 `data-amp-mask`(Session Replay 가림이 대시보드 수준과 무관하게 코드로 보장 — 6-2). `forAmplitude`는 허용 목록 방식(명세에 있고 `Supabase only`가 아닌 속성만). 자동 검사 #11 추가 — 이벤트별 속성 표 ↔ csv (7-3). 옛 표현을 구현된 상태로 고침(2-7 a·b, 2-8, 4-1, 4-4, 7-3 ①). 배포 체크리스트(`deploy.md`)에 Production 키 설정 뒤 개인정보 확인 추가. 이벤트·속성 변경 없음 |
 
 ---
 

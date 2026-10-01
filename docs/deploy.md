@@ -59,6 +59,12 @@ Last Updated: 2026-09-30
 - [ ] `/privacy`에 문의 이메일이 보인다 (없다는 문구가 아니라)
 - [ ] Production에서 첫 화면을 열면 Amplitude Live/User Lookup에 `site_visited`(`prompt_version` = `BA400.4`)가 뜨고, 그 device_id가 Supabase `events.common->>'anon_id'`와 같다
 - [ ] Amplitude 프로젝트의 Session Replay 설정이 샘플링 20%·입력 가림이다 (대시보드 값이 코드의 값보다 우선한다)
+- [ ] **개인정보 확인 (키를 Production에 넣은 직후, 직접 쓴 글이 Amplitude에 없는지)** — 🎯 직접 쓰기로 한 바퀴를 돌리고 (리플레이는 20% 샘플이라 안 남을 수 있다 — 안 보이면 새 탭으로 몇 번 더 돌린다):
+  - [ ] Amplitude Live/User Lookup의 `free_goal_written`에 `goal_text`가 **없다** (`topic`·`keywords`·`is_matched`·`method`만). Supabase `events.props`에는 `goal_text`가 있다
+  - [ ] Session Replay에서 그 세션을 열면 직접 쓰기 입력 칸의 글자가 가려져 있다
+  - [ ] 같은 리플레이에서 S-04 첫 장(직접 쓴 글이 보이는 화면)의 글자가 가려져 있다
+  - [ ] 첫 장에서 누른 요소의 `[Amplitude] Element Clicked` 이벤트에 직접 쓴 글이 `*****`로만 보이고 원문이 없다
+  - [ ] 하나라도 보이면 키를 바로 Production에서 빼고 원인을 찾는다 (코드의 `data-amp-mask`와 대시보드 설정 둘 다 확인)
 - [ ] Preview 배포에서는 Amplitude로 나가는 요청이 없다 (키를 Preview에 넣지 않았으니)
 - [ ] 다른 사이트에서 `/api/track`을 부르면 403이다 (선택):
   ```

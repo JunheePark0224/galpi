@@ -71,4 +71,10 @@ describe("forAmplitude (taxonomy 2-7: Supabase-only props stay out of the Amplit
     expect(forAmplitude("bookmark_reacted", reacted)).toEqual(reacted);
     expect(forAmplitude("site_visited", {})).toEqual({});
   });
+
+  it("keeps only the keys the event's spec defines (allowlist): unknown keys never reach Amplitude", () => {
+    const sent = { topic: "데이터 분석", keywords: [], is_matched: false, method: "word", goal_text: "x", note: "free text", constructor: "c" };
+    expect(forAmplitude("free_goal_written", sent)).toEqual({ topic: "데이터 분석", keywords: [], is_matched: false, method: "word" });
+    expect(forAmplitude("entry_selected", { entry: "target", anything: 1 })).toEqual({});
+  });
 });

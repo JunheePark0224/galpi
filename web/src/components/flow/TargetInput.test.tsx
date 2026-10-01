@@ -88,4 +88,9 @@ describe("TargetInput (S-02 🎯)", () => {
     fireEvent.click(screen.getByRole("button", { name: "보통" }));
     expect(track).toHaveBeenCalledWith("chip_selected", { chip_type: "len", chip_value: "normal", is_edit: true });
   });
+
+  it("masks the written goal in Session Replay whatever the dashboard's mask level is (taxonomy 6-2)", () => {
+    render(<TargetInput initial={{ ...EMPTY_FORM, free: "" }} edit={false} onSubmit={vi.fn()} />);
+    expect(screen.getByRole("textbox", { name: "직접 쓰기" })).toHaveAttribute("data-amp-mask");
+  });
 });
