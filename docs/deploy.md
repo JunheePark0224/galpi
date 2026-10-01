@@ -48,7 +48,7 @@ Last Updated: 2026-09-30
   ```sql
   select created_at, name, common->>'device' as device
   from events
-  where name = 'visit'
+  where name = 'site_visited'
   order by created_at desc
   limit 5;
   ```
