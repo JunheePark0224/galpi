@@ -36,11 +36,14 @@ test("🎯 chips → book → first page → five bookmarks → curious list", a
   await expect(page.getByRole("listitem")).toHaveCount(3);
   if (testInfo.project.name === "laptop") expect((await page.locator(".column").boundingBox())?.width).toBe(430);  // back in the column
   await page.getByRole("button", { name: "처음으로" }).click();
-  await expect(page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ })).toBeVisible();
+  await page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ }).click();   // a new round in the same tab
+  await expect(page.getByRole("heading", { name: "책을 덮은 뒤, 남았으면 하는 건?" })).toBeVisible();
 
-  await expect.poll(() => named(events, "home_clicked").length).toBe(1);
+  await expect.poll(() => named(events, "entry_selected").length).toBe(2);
   expect(named(events, "site_visited")).toHaveLength(1);
-  expect(named(events, "entry_selected").map((e) => [e.props, e.common.entry])).toEqual([[{}, "target"]]);
+  // taxonomy 3-1a: home_clicked carries the round it ends, the restart is round 2
+  expect(named(events, "entry_selected").map((e) => [e.props, e.common.entry, e.common.round])).toEqual([[{}, "target", 1], [{}, "leaf", 2]]);
+  expect(named(events, "home_clicked")[0].common.round).toBe(1);
   expect(named(events, "chip_selected").map((e) => [e.props.chip_type, e.props.chip_value])).toEqual([["topic", "데이터 분석"], ["len", "thin"], ["way", "실습"]]);
   expect(named(events, "goal_submitted").map((e) => e.props)).toEqual([
     { topic: "데이터 분석", is_free_text: false, len: "thin", way: "실습", is_edit: false },

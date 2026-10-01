@@ -98,6 +98,12 @@ type Sent<N extends EventName> = { [K in keyof Spec[N] as Spec[N][K] extends { o
 /** What a screen passes to track(name, props). Amplitude-only props are added by the Amplitude path, never by callers. */
 export type PropsOf<N extends EventName> = keyof Sent<N> extends never ? Record<string, never> : Sent<N>;
 
+/**
+ * taxonomy 3-1a: sending one of these ends the round (판) — the event itself carries the old round, the next event round + 1.
+ * home_clicked is live; redraw_clicked gets its [다시 뽑기] button in P4 and needs nothing more than its track() call.
+ */
+export const ROUND_ENDING_EVENTS = ["redraw_clicked", "home_clicked"] as const satisfies readonly EventName[];
+
 /** Own keys only: "constructor" or "__proto__" are not event names. */
 export function isEventName(x: unknown): x is EventName {
   return typeof x === "string" && Object.prototype.hasOwnProperty.call(EVENT_SPEC, x);

@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { sendToAmplitude } from "./amplitude";
 import { track } from "./client";
+import { ROUND_ENDING_EVENTS } from "./schema";
 
 vi.mock("./amplitude", () => ({ sendToAmplitude: vi.fn(), startAmplitude: vi.fn() }));
 
@@ -70,6 +71,41 @@ describe("track", () => {
     Object.defineProperty(navigator, "sendBeacon", { value: () => { throw new Error("offline"); }, configurable: true });
     track("site_visited", {});
     expect(sendToAmplitude).toHaveBeenCalledTimes(1);
+  });
+
+  /** Rounds of the events posted so far, read back from the beacon bodies. */
+  async function postedRounds(send: ReturnType<typeof vi.fn>): Promise<number[]> {
+    return Promise.all(send.mock.calls.map(async ([, blob]) => JSON.parse(await (blob as Blob).text()).common.round as number));
+  }
+
+  it("ends the round after home_clicked: it carries the old round, the next event the new one (taxonomy 3-1a)", async () => {
+    const send = vi.fn().mockReturnValue(true);
+    Object.defineProperty(navigator, "sendBeacon", { value: send, configurable: true });
+    track("book_opened", {});
+    track("home_clicked", { curious_count: 2, source: "end" });
+    track("entry_selected", {});
+    const [before, ending, after] = await postedRounds(send);
+    expect(ending).toBe(before);
+    expect(after).toBe(before + 1);
+  });
+
+  it("ends the round after redraw_clicked too — P4 only has to send E-19", async () => {
+    expect(ROUND_ENDING_EVENTS).toEqual(["redraw_clicked", "home_clicked"]);
+    const send = vi.fn().mockReturnValue(true);
+    Object.defineProperty(navigator, "sendBeacon", { value: send, configurable: true });
+    track("redraw_clicked", { curious_count: 0 });
+    track("bookmark_shown", { book_id: "9788998441012", position: 1, one_liner_style: "question", pick_type: "recommended", art: {} });
+    const [ending, next] = await postedRounds(send);
+    expect(next).toBe(ending + 1);
+  });
+
+  it("keeps the round for every other event — an edit and its new draw stay in the same round", async () => {
+    const send = vi.fn().mockReturnValue(true);
+    Object.defineProperty(navigator, "sendBeacon", { value: send, configurable: true });
+    track("goal_submitted", { topic: "통계", is_free_text: false, len: null, way: null, is_edit: true });
+    track("first_page_edited", { changed_items: ["len"] });
+    track("bookmark_reacted", { book_id: "1", position: 1, reaction: "pass", pick_type: "random", one_liner_style: "summary" });
+    expect(new Set(await postedRounds(send)).size).toBe(1);
   });
 
   it("only compiles with the props the spec defines (taxonomy 7-3 ①)", () => {
