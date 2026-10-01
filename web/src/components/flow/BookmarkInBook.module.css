@@ -1,0 +1,78 @@
+/* C-16 책 속 책갈피 (DESIGN 3절, 4절 "S-06 표지 위"): the 160 × 344 bookmark (+ 26px string) behind the big cover, its top
+   112px (string + the top of the arch window, about 25%) above the cover's top edge. Out, it lies in front of the book,
+   the whole bookmark showing, and the cover still reaches past its swallowtail. */
+.stage {
+  --peek: 112px;
+  position: relative; display: flex; justify-content: center; align-self: stretch; padding-top: var(--peek);
+}
+/* At least 178px wide so the cover (× 1.45) still reaches past the pulled-out bookmark's swallowtail on 320px phones:
+   112 + 178 × 1.45 ≥ 370. From 318px of column up it is the C-11 size, min(56%, 200px). */
+.book { position: relative; z-index: 2; width: clamp(178px, 56%, 200px); }
+
+/* Tucked a little right of centre, like a real bookmark; out, it comes to the middle. */
+.pull { position: absolute; top: 0; left: calc(50% - 72px); z-index: 1; width: 160px; }
+.stage[data-pose="out"] .pull { z-index: 3; transform: translateX(-8px); }
+/* T-06 bookmark-pull: up out of the pages, then down in front of the book (and the reverse). transform only; the
+   stacking flips at the top of the lift. 100px keeps the bookmark on screen at the top of the page (fix round 1). */
+.pull[data-anim][data-pull="out"] { animation: pull-out var(--dur-bookmark-pull) var(--ease-flip); }
+.pull[data-anim][data-pull="in"] { animation: put-in var(--dur-bookmark-pull) var(--ease-flip); }
+@keyframes pull-out {
+  0% { z-index: 1; transform: none; }
+  45% { z-index: 1; transform: translate(-4px, -100px); }
+  46% { z-index: 3; }
+  100% { z-index: 3; transform: translateX(-8px); }
+}
+@keyframes put-in {
+  0% { z-index: 3; transform: translateX(-8px); }
+  54% { z-index: 3; transform: translate(-4px, -100px); }
+  55% { z-index: 1; }
+  100% { z-index: 1; transform: none; }
+}
+
+/* T-06 card-flip to the back (C-13). The 3D context only while the film is opaque — never under a blurred film. */
+.flipper { position: relative; transition: transform var(--dur-card-flip) var(--ease-flip); }
+.flipper[data-3d] { transform-style: preserve-3d; }
+.flipper[data-3d] .face { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.backFace { position: absolute; inset: 0; transform: rotateY(180deg); }
+.stage[data-flipped] .flipper { transform: rotateY(180deg); }
+
+/* The tap area is the part that shows: 160 × 112 in the book (DESIGN C-16), the whole bookmark once out. Touch is tap
+   only (manipulation): a finger swipe on the peek scrolls the page; the drag up is for a mouse or pen. */
+.hit {
+  position: absolute; top: 0; left: 0; z-index: 2; width: 100%; height: var(--peek); padding: 0;
+  border: 0; border-radius: var(--radius-bookmark); background: transparent; cursor: pointer;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.stage[data-pose="out"] .hit { height: 100%; }
+.hit:focus-visible { outline: 3px solid var(--field-data); outline-offset: -3px; }
+
+/* C-14 paper slip, once per browser, beside the peeking bookmark. Narrow side padding so "책갈피를" stays on one line
+   down to a 320px phone (64px of text room). */
+.hint {
+  position: absolute; top: 34px; left: 0; z-index: 4; width: calc(50% - 72px - var(--space-1)); margin: 0;
+  padding: var(--space-3) var(--space-1) var(--space-2); border-radius: var(--radius-card); background: var(--paper-deep);
+  font-size: 13px; line-height: 1.45; color: var(--ink); word-break: keep-all; pointer-events: none;
+}
+.hint::before {
+  content: ""; position: absolute; top: -5px; left: 50%; width: 40px; height: 10px; margin-left: -20px;
+  border-radius: 2px; background: var(--tape); box-shadow: 0 0 0 1px var(--paper-line);
+}
+
+/* Under the book (CLAUDE.md: never a button on the bookmark itself). */
+.tools { display: flex; justify-content: center; margin-top: calc(-1 * var(--space-2)); }
+.flip {
+  min-height: var(--touch); padding: 0 var(--space-3); border: 0; background: none;
+  font: inherit; font-size: 13px; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+.flip:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.said {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+/* T-06: reduced motion fades instead of moving; the flip is a swap. */
+@media (prefers-reduced-motion: reduce) {
+  .pull[data-anim][data-pull] { animation-name: fade; }
+  .flipper { transition: none; }
+}
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }

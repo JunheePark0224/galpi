@@ -18,7 +18,7 @@ describe("classifyWithClaude", () => {
   it("asks Haiku with our list as a JSON schema and returns the sorted goal", async () => {
     const client = fake(reply(JSON.stringify({ topic: "데이터 분석", keywords: ["SQL"], matched: true })));
     expect(await classifyWithClaude("SQL 처음", VOCAB, opts(client))).toEqual({
-      ok: true, goal: { text: "SQL 처음", topic: "데이터 분석", keywords: ["SQL"], matched: true, method: "llm" },
+      ok: true, goal: { text: "SQL 처음", topic: "데이터 분석", keywords: ["SQL"], matched: true, missing: null, method: "llm" },
     });
     const [body, request] = client.messages.create.mock.calls[0];
     expect(body).toMatchObject({
@@ -30,6 +30,14 @@ describe("classifyWithClaude", () => {
     });
     expect(JSON.stringify(body)).not.toMatch(/anon_id|session_id|round/);      // the note and our list only
     expect(request.signal).toBeInstanceOf(AbortSignal);
+  });
+
+  it("asks for the missing phrase in the schema and passes it through (F-24 ②)", async () => {
+    const client = fake(reply(JSON.stringify({ topic: "돈 관리·투자", keywords: [], matched: true, missing: "단타 매매" })));
+    const result = await classifyWithClaude("주식 단타 매매법", VOCAB, opts(client));
+    expect(result).toEqual({ ok: true, goal: expect.objectContaining({ topic: "돈 관리·투자", missing: "단타 매매", method: "llm" }) });
+    const [body] = client.messages.create.mock.calls[0];
+    expect(body).toMatchObject({ temperature: 0, output_config: { format: { schema: { required: ["topic", "keywords", "matched", "missing"] } } } });
   });
 
   it("strips < and > from the note it sends so the note cannot close its own frame, but keeps the typed text in the answer", async () => {

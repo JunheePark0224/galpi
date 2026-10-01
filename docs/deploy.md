@@ -34,7 +34,7 @@ Last Updated: 2026-09-30
 | `KAKAO_REST_KEY` | 설정 (**Sensitive**) | 설정 안 함 | 예스24가 실패할 때 표지·가격만 대신(PRD F-14) |
 | `ANTHROPIC_API_KEY` | 설정 (**Sensitive**) | 설정 안 함 | 🎯 직접 쓰기 분류(Claude Haiku). 없으면 단어 매칭만. `/privacy`에 Anthropic 전달이 적혀 있어야 넣는다 |
 
-- [ ] Anthropic Console에서 이 키 전용 workspace를 만들고 월 사용 한도(예: $5)를 걸었다 — 사용자가 직접
+- [ ] Anthropic Console에서 이 키 전용 workspace를 만들고 월 사용 한도를 걸었다 — 지금 **$15**(10-01에 $5에서 올림: 라이브 분류기와 매일 책 파이프라인이 같은 워크스페이스를 쓴다. 7절) — 사용자가 직접
 - [ ] Production 값과 Preview 값을 위 표대로 각 환경 칸에 따로 넣었다
 - [ ] `SUPABASE_SERVICE_ROLE_KEY`는 Sensitive로 표시했다 (저장 후 다시 볼 수 없게)
 - [ ] Preview에 `SUPABASE_*`를 넣지 않아도 `TRACK_STORE=off`가 있으면 저장되지 않는다 (둘 다 막는 편이 안전)
@@ -89,6 +89,19 @@ select count(*) from events where created_at < '<배포 시각, 예: 2026-10-01 
 ```sql
 delete from events where created_at < '<배포 시각>';
 ```
+
+## 7. 매일 책 파이프라인 (GitHub Actions, D-B)
+
+- [ ] Anthropic Console → `galpi` 워크스페이스 → 월 사용 한도 **$15** (10-01에 정함 — 라이브 `/api/goal/classify`와 **같은 워크스페이스·같은 한도**라서, 파이프라인이 한도를 다 쓰면 그 달 남은 동안 사이트의 직접 쓰기 분류도 단어 매칭으로 떨어진다. 파이프라인은 하루 50권에 약 $0.57(권당 약 $0.0115, Sonnet 5.5 두 번), 처음 채우기 전체에 약 $5)
+- [ ] Settings → Secrets and variables → Actions → New repository secret: **`YES24_API_KEY`**, **`ANTHROPIC_API_KEY`**(`galpi` 워크스페이스 키) — 이름만 여기 적고 값은 어디에도 적지 않는다 (키는 `Tag today's books` 한 단계에만 들어가고 출력되지 않는다. `ANTHROPIC_LOG`는 설정하지 않는다 — 켜면 요청 본문의 예스24 글이 로그에 찍힌다)
+- [ ] Settings → Actions → General → Workflow permissions: **Read and write permissions** + **Allow GitHub Actions to create and approve pull requests**
+- [ ] 워크플로는 main에 있어야 돈다: `daily-books`(매일 06:00 KST, 손으로 실행하면 `dry_run` 기본), `weekly-sample`(월 09:00 KST, `auto_merge`가 true일 때만 이슈)
+- [ ] 열린 `books/` PR이 있으면 그날은 쉰다 — 검수·병합하면 다음 날 이어서 (`dry_run`은 돈다)
+- [ ] 첫 한 바퀴: Actions → daily-books → Run workflow → `dry_run` 켜 둔 채 `count` 5 → 끝나면 실행 화면의 Summary(PR 본문 미리보기)와 Artifacts의 `dry-run-<날짜>`(우리 태그 파일·요약, 7일)를 본다
+- 검수 없이 PR을 병합해도 **두 AI가 엇갈린 책은 앱에 들어가지 않는다**(파일에 `status: "review"`로 남고, 검수 `--apply`가 넣기·빼기를 정한다). 두 AI가 같게 본 책만 병합과 함께 앱에 들어간다
+- 설정: `data/pipeline/config.json`(`daily_count`·`auto_merge`·`sample_rate`·`model`·`second_model`). `auto_merge`는 졸업 기준을 **둘 다** 넘고 **사용자가 승인했을 때만** true — ① 연속 3회, 사람이 본 책(엇갈린 책 + 일치 책 표본)의 모든 항목 95%+ ② 그 3회에 본 일치 책이 10권 이상이고 바뀐 책이 5% 이하. 검수 때 두 숫자가 함께 출력되고 PR 본문 맨 아래에도 보인다. 일치한 책 중 표본 밖은 사람이 보지 않는다. 첫 번째 기준(엇갈린 책이 섞인 행의 모든 항목 95%+)은 키워드가 특히 어려워 잘 안 넘을 수 있다 — 자동 병합 전환은 3~5일보다 오래 걸리기 쉽고, 두 번째 기준(일치 책 표본)만으로 판단할지는 사용자가 정한다
+- 검수: 그날 PR 브랜치에서 `PYTHONIOENCODING=utf-8 python -m src.pipeline.review <날짜>` → 로컬 페이지(예스24 글이 보이므로 `data/processed/check/`에만 저장, 커밋 안 함) → 내려받기 → `--apply <파일>` → `cd web && npm run books:import` → PR 브랜치에 커밋. 엇갈린 책과 함께 두 AI가 같게 본 책의 10% 표본도 기본으로 보인다(끄려면 `--no-sample`)
+- 실패하면 그날은 PR이 없고 Actions 기록에 이유(예스24 경로 이름·오류 종류)만 남는다. 도중에 멈추면(`partial`) 된 만큼만 PR에 들어가고 본문 맨 위에 이유가 보인다. 예스24 책소개·목차는 어디에도 남지 않는다
 
 ## 알아 둘 것
 

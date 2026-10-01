@@ -3,6 +3,7 @@ import type { BalanceChoice, Entry } from "@/lib/recommend";
 import { lengthWord, targetSummary, tasteLines } from "@/lib/flow/summary";
 import type { TargetForm } from "@/lib/flow/target";
 import type { GoalMatch } from "@/lib/goal/match";
+import { Understood } from "./Understood";
 import styles from "./FirstPage.module.css";
 
 interface Props {
@@ -10,7 +11,11 @@ interface Props {
   choices: readonly BalanceChoice[];
   form: TargetForm;
   goal: GoalMatch | null;
+  /** F-24 ①+: the honest count of keyword books, shown under the 이렇게 이해했어요 path */
+  coverage?: string | null;
   notices: readonly string[];
+  /** F-24 ② [예스24에서 '…' 찾기] */
+  onYes24?: () => void;
 }
 
 const DOTS = { 2: "●●", 1: "●○", 0: "○○" } as const;
@@ -27,10 +32,12 @@ export function FirstPageTitle({ entry }: { entry: Entry }) {
 }
 
 /**
- * S-04 right page (C-10) + honest notes (C-14). 🍃 shows the taste from the raw answers — never a type name.
+ * S-04 right page (C-10) + 🎯 "이렇게 이해했어요" (F-24, C-17) + honest notes (C-14). 🍃 shows the taste from the raw answers — never a type name.
  * A written goal (and a notice quoting it) is masked in Session Replay: the words stay in Supabase only (taxonomy 6-2).
  */
-export function FirstPage({ entry, choices, form, goal, notices }: Props) {
+export function FirstPage({ entry, choices, form, goal, coverage = null, notices, onYes24 }: Props) {
+  const [what, ...rest] = targetSummary(form, goal);
+  const row = (r: { label: string; value: string }) => <div key={r.label} className={styles.row}><dt>{r.label}</dt><dd>{r.value}</dd></div>;
   return (
     <div className={styles.page} data-amp-mask={goal ? true : undefined}>
       {entry === "leaf" ? (
@@ -44,11 +51,12 @@ export function FirstPage({ entry, choices, form, goal, notices }: Props) {
           <li className={styles.row}><span>분량</span><span>{lengthWord(choices[8])}</span></li>
         </ul>
       ) : (
-        <dl className={styles.rows}>
-          {targetSummary(form, goal).map((r) => (
-            <div key={r.label} className={styles.row}><dt>{r.label}</dt><dd>{r.value}</dd></div>
-          ))}
-        </dl>
+        <>
+          {/* F-24: the written goal shows once, in the 무엇을 row; the block right under it answers it */}
+          <dl className={styles.rows}>{row(what)}</dl>
+          {goal && <Understood goal={goal} coverage={coverage} onYes24={onYes24} />}
+          <dl className={styles.rows}>{rest.map(row)}</dl>
+        </>
       )}
       {notices.map((n) => <p key={n} className={styles.note} role="status">{n}</p>)}
     </div>

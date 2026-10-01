@@ -97,9 +97,9 @@ def test_upsert_replaces_the_row_of_the_same_batch():
     assert rows[-1]["keywords"] == "" and rows[-1]["n"] == "3" and rows[-1]["auto_agreed"] == "50"
 
 
-def test_csv_keeps_the_old_columns_and_adds_auto_agreed_last():
-    assert CSV_HEAD[:8] == ["date", "batch", "n", "topic", "keywords", "way", "one_liner", "dropped"]
-    assert CSV_HEAD[-1] == "auto_agreed"
+def test_csv_keeps_the_old_columns_then_auto_agreed_then_the_daily_pipeline_columns():
+    assert CSV_HEAD[:9] == ["date", "batch", "n", "topic", "keywords", "way", "one_liner", "dropped", "auto_agreed"]
+    assert CSV_HEAD[9:] == ["n_target", "n_leaf", "genre", "temp", "pull", "gain", "world", "sample_n", "sample_changed"]  # D-B (pipeline/agreement_log.py)
     old_stats = {"date": "d", "batch": "b", "n": 1, "topic": 1.0, "keywords": 1.0, "way": 1.0, "one_liner": 1.0, "dropped": 0}
     assert upsert_row([], old_stats)[0]["auto_agreed"] == ""  # stats from before the column existed still fit
 

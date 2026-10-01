@@ -40,11 +40,12 @@ Last Updated: 2026-10-01
 - [x] P3 흐름 화면 — S-01~05 + 궁금해요 목록, `/api/books/draw`, 이벤트 E-01·02·03·05·06·07·08·20·21·22·24·25, 🎯·🍃 완주 E2E(휴대폰·노트북) (`docs/plans/2026-09-30-p3-flow-screens.md`)
 - [x] P4 결과·서버 — 실제 200권, YES24, S-06·08, 직접 쓰기 분류 (`docs/plans/2026-10-01-p4-results-server.md`) (10/1, main 병합·배포)
   - [x] 코드: `/api/books/[isbn]`(YES24 → 카카오 → 빈 정보), S-06·S-08, 나온 이유, 다시 뽑기, `/api/goal/classify`, 처리방침 Anthropic, 이벤트 E-09·10·18·19·23 live
-  - [x] 키 3개 Vercel·`.env.local`, Anthropic `galpi` 워크스페이스 월 $5 한도 + 그 워크스페이스 키, 배포 뒤 실제 사이트에서 🎯 직접 쓰기 완주 확인(표지·나온 이유·E-21 `method: llm`·다시 뽑기 회차) (10/1)
+  - [x] 키 3개 Vercel·`.env.local`, Anthropic `galpi` 워크스페이스 월 $5 한도(10-01 뒤 $15로 올림, D-B와 함께 씀) + 그 워크스페이스 키, 배포 뒤 실제 사이트에서 🎯 직접 쓰기 완주 확인(표지·나온 이유·E-21 `method: llm`·다시 뽑기 회차) (10/1)
   - [ ] 사용자: `docs/goal-grading.md` 30행 "채점" 칸에 O/△/X
 - [ ] 📚 D 단계 먼저(10-01 사용자 결정): 책 자동 추가 파이프라인(D-07) — 시험 운행 3~5일 검수 → 일치율 기준 넘으면 자동
   - [ ] D-A 분류 넓히기 — 🎯 12·🍃 12·키워드 초안·켜는 규칙 (`docs/plans/2026-10-01-d-a-taxonomy-widen.md`)
-  - [ ] D-B 파이프라인 · D-C 처음 채우기 · D-D 🎯 입력 B안 · D-E 서재 숫자
+  - [ ] D-B 파이프라인 (`docs/plans/2026-10-01-d-b-daily-pipeline.md`) — 코드·워크플로·문서 끝. 사용자: 병합 → Secrets 2개 → Actions 권한 → 예산 한도 → `dry_run` `count 5` 한 바퀴 (`docs/deploy.md` 7절)
+  - [ ] D-C 처음 채우기 · D-D 🎯 입력 B안 · D-E 서재 숫자
 - [ ] P5 로그인·보관·내 책갈피·처리방침
 - [ ] P6 Amplitude 전달, 이벤트 전수 점검, 대시보드
 - [x] 배포 전 준비(P7에서 당김) — 처리방침 v0 `/privacy`·1년 자동 삭제, 같은 출처·요청 한도·크기 상한·보안 헤더, `/design` 숨김, `deploy.md` (9/30)

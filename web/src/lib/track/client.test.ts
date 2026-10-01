@@ -83,7 +83,7 @@ describe("track", () => {
     Object.defineProperty(navigator, "sendBeacon", { value: send, configurable: true });
     track("book_opened", {});
     track("home_clicked", { curious_count: 2, source: "end" });
-    track("entry_selected", {});
+    track("entry_selected", { source: "home" });
     const [before, ending, after] = await postedRounds(send);
     expect(ending).toBe(before);
     expect(after).toBe(before + 1);

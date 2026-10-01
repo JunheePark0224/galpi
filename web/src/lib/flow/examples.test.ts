@@ -28,8 +28,8 @@ describe("example chips (S-02 🎯 B, context 10-01)", () => {
   });
 
   it("turns an untouched example into its fixed match, no sorting needed", () => {
-    expect(exampleGoal("불안할 때", ALL)).toEqual({ text: "불안할 때", topic: "마음 돌보기", keywords: [], matched: true, method: "example" });
-    expect(exampleGoal("  취업 준비 ", ALL)).toEqual({ text: "취업 준비", topic: "취업·커리어", keywords: ["자소서·면접"], matched: true, method: "example" });
+    expect(exampleGoal("불안할 때", ALL)).toEqual({ text: "불안할 때", topic: "마음 돌보기", keywords: [], matched: true, missing: null, method: "example" });
+    expect(exampleGoal("  취업 준비 ", ALL)).toEqual({ text: "취업 준비", topic: "취업·커리어", keywords: ["자소서·면접"], matched: true, missing: null, method: "example" });
     expect(exampleGoal("AI 잘 쓰기", ALL)).toMatchObject({ topic: "AI 활용", keywords: [] });
   });
 

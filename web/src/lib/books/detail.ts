@@ -19,9 +19,9 @@ const COVER_HOSTS = ["image.yes24.com"];
 const KAKAO_COVER_SUFFIX = ".kakaocdn.net";
 const LINK_HOSTS = ["www.yes24.com"];
 
-/** Always a working [예스24에서 보기]: YES24's own search for the ISBN (no personal data in the URL). */
-export function yes24SearchUrl(isbn: string): string {
-  return `https://www.yes24.com/Product/Search?domain=BOOK&query=${encodeURIComponent(isbn)}`;
+/** YES24's own book search for `query`: an ISBN for [예스24에서 보기] (no personal data), or F-24's short missing phrase. */
+export function yes24SearchUrl(query: string): string {
+  return `https://www.yes24.com/Product/Search?domain=BOOK&query=${encodeURIComponent(query)}`;
 }
 
 export function emptyDetail(isbn: string): BookDetail {

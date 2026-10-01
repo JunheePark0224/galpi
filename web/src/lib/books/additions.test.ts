@@ -29,6 +29,13 @@ describe("mergeAdditions", () => {
     expect(BASE_BIB.has("9791111111111")).toBe(false);
   });
 
+  it("leaves a book waiting for review (daily pipeline, flagged) out of the catalogue until a person picks it", () => {
+    const waiting = book({ isbn: "9794444444444", status: "review", flags: ["way"] });
+    const { rows, bib } = mergeAdditions(BASE_ROWS, BASE_BIB, [file([waiting, book()])], VOCAB);
+    expect(rows.map((r) => r.isbn)).toEqual(["9790000000001", "9791111111111"]);
+    expect(bib.has("9794444444444")).toBe(false);
+  });
+
   it("keeps the base rows exactly as they were (same objects, same order)", () => {
     const { rows } = mergeAdditions(BASE_ROWS, BASE_BIB, [], VOCAB);
     expect(rows).toEqual(BASE_ROWS);
@@ -49,10 +56,27 @@ describe("mergeAdditions", () => {
       .toThrow("9790000000001: already in books");
   });
 
-  it("rejects an unknown status, a missing title and a non-target entry", () => {
+  it("adds a 🍃 book of the daily pipeline with its genre and axes", () => {
+    const leaf = book({ isbn: "9793333333333", entry: "leaf", genre: "호러·괴담", topic: undefined, keywords: undefined,
+      way: undefined, axes: { temp: -1, pull: -1, gain: 0, world: -1 }, one_liner: "그 집에서는 왜 밤마다 문이 열릴까요?",
+      one_liner_style: "question" });
+    const { rows, bib } = mergeAdditions(BASE_ROWS, BASE_BIB, [file([leaf])], VOCAB);
+    expect(rows[1]).toEqual({ isbn: "9793333333333", entry: "leaf", slot: "호러·괴담", pages: 415,
+      axes: { temp: -1, pull: -1, gain: 0, world: -1 }, keywords: [], one_liner: "그 집에서는 왜 밤마다 문이 열릴까요?",
+      one_liner_style: "question" });
+    expect(normalizeCatalog(rows, bib).at(-1)).toMatchObject({ genre: "호러·괴담", topic: null, axes: { world: -1 } });
+    const odd = mergeAdditions([], new Map(), [file([{ ...leaf, genre: "요리" }])], VOCAB);
+    expect(() => normalizeCatalog(odd.rows, odd.bib)).toThrow("unknown leaf genre 요리");
+    for (const axes of [{ temp: 2, pull: -1, gain: 0, world: -1 }, { temp: "1", pull: -1, gain: 0, world: -1 }, { temp: 1, pull: -1, gain: 0 }]) {
+      const badAxis = mergeAdditions([], new Map(), [file([{ ...leaf, axes }])], VOCAB);
+      expect(() => normalizeCatalog(badAxis.rows, badAxis.bib)).toThrow("9793333333333");
+    }
+  });
+
+  it("rejects an unknown status, a missing title and an unknown entry", () => {
     expect(() => mergeAdditions([], new Map(), [file([book({ status: "maybe" })])], VOCAB)).toThrow("unknown status maybe");
     expect(() => mergeAdditions([], new Map(), [file([book({ title: "" })])], VOCAB)).toThrow("needs title and author");
-    expect(() => mergeAdditions([], new Map(), [file([book({ entry: "leaf" })])], VOCAB)).toThrow("only 🎯");
+    expect(() => mergeAdditions([], new Map(), [file([book({ entry: "both" })])], VOCAB)).toThrow("unknown entry both");
   });
 
   it("rejects a file without a books list", () => {

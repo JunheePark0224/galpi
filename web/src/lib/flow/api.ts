@@ -2,7 +2,7 @@ import { artsForDraw } from "@/lib/art/combine";
 import { topicsIn } from "@/lib/books/active";
 import { TOPICS } from "@/lib/books/taxonomy";
 import type { DrawResponse, Vocab } from "@/lib/books/types";
-import { GOAL_MAX, matchGoal, type GoalMatch } from "@/lib/goal/match";
+import { GOAL_MAX, clipMissing, matchGoal, type GoalMatch } from "@/lib/goal/match";
 import { exampleGoal } from "./examples";
 import type { DrawView, FlowState } from "./state";
 import { targetAnswersFrom } from "./target";
@@ -37,7 +37,8 @@ export function toDrawView(res: DrawResponse, artSeed: number): DrawView {
 /** The server stops waiting for Claude at 3 s (target-chips 3절); the browser allows a little more for the trip. */
 export const CLASSIFY_WAIT_MS = 5000;
 
-function isGoalMatch(x: unknown): x is GoalMatch {
+/** The server's answer, before `missing` is checked (an older server may leave it out). */
+function isGoalMatch(x: unknown): x is Omit<GoalMatch, "missing"> & { missing?: unknown } {
   if (typeof x !== "object" || x === null) return false;
   const g = x as Record<string, unknown>;
   return typeof g.topic === "string" && (TOPICS as readonly string[]).includes(g.topic)
@@ -60,7 +61,10 @@ export async function classifyGoal(text: string, vocab: Vocab): Promise<GoalMatc
     });
     if (res.ok) {
       const goal: unknown = await res.json();
-      if (isGoalMatch(goal)) return { ...goal, text: trimmed };
+      // F-24: only the LLM names a missing thing — word matching never does (it cannot tell)
+      if (isGoalMatch(goal)) {
+        return { ...goal, text: trimmed, missing: goal.method === "llm" ? clipMissing(goal.missing, [goal.topic, ...goal.keywords]) : null };
+      }
     }
   } catch {
     // offline or timed out: fall through

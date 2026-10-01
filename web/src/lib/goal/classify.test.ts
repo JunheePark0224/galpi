@@ -37,7 +37,15 @@ describe("classify prompt and schema", () => {
     expect(names).toEqual(expect.arrayContaining(["SQL", "번아웃·스트레스", "일하는 법"]));
     expect(names).not.toContain("마음·회복"); // moved out of 습관·집중 when 마음 돌보기 turned on (10-01 pilot)
     expect(new Set(names).size).toBe(names.length);
-    expect(schema).toMatchObject({ required: ["topic", "keywords", "matched"], additionalProperties: false });
+    expect(schema).toMatchObject({ required: ["topic", "keywords", "matched", "missing"], additionalProperties: false });
+    expect(schema.properties.missing).toEqual({ anyOf: [{ type: "string" }, { type: "null" }] });
+  });
+
+  it("asks for the specific thing none of our keywords cover (F-24 missing), and null otherwise", () => {
+    const prompt = classifySystemPrompt(VOCAB);
+    expect(prompt).toContain("- missing: when the note asks for one specific thing that none of the keywords above cover");
+    expect(prompt).toContain("at most 12 characters");
+    expect(prompt).toContain("Never a topic or keyword name, never the whole note.");
   });
 });
 
@@ -76,7 +84,7 @@ describe("parseClassification", () => {
 
   it("turns a good answer into a GoalMatch (method llm)", () => {
     expect(parseClassification(answer({ topic: "마음 돌보기", keywords: ["번아웃·스트레스"], matched: true }), "  번아웃 극복  ", VOCAB))
-      .toEqual({ text: "번아웃 극복", topic: "마음 돌보기", keywords: ["번아웃·스트레스"], matched: true, method: "llm" });
+      .toEqual({ text: "번아웃 극복", topic: "마음 돌보기", keywords: ["번아웃·스트레스"], matched: true, missing: null, method: "llm" });
   });
 
   it("drops keywords of another topic, unknown names and repeats, keeping at most five", () => {
@@ -87,7 +95,46 @@ describe("parseClassification", () => {
 
   it("keeps the nearest topic but no keywords when the note did not match", () => {
     expect(parseClassification(answer({ topic: "통계", keywords: ["확률"], matched: false }), "요리", VOCAB))
-      .toMatchObject({ topic: "통계", keywords: [], matched: false, method: "llm" });
+      .toMatchObject({ topic: "통계", keywords: [], matched: false, missing: null, method: "llm" });
+  });
+
+  it("keeps a short missing phrase (F-24 ②), trimmed and without < >", () => {
+    const raw = answer({ topic: "돈 관리·투자", keywords: [], matched: true, missing: "  <단타 매매>  " });
+    expect(parseClassification(raw, "주식 단타 매매법", VOCAB)).toEqual({
+      text: "주식 단타 매매법", topic: "돈 관리·투자", keywords: [], matched: true, missing: "단타 매매", method: "llm",
+    });
+  });
+
+  it("keeps the missing phrase when no topic matched (F-24 ③: the YES24 search word)", () => {
+    expect(parseClassification(answer({ topic: "취업·커리어", keywords: [], matched: false, missing: "캠핑 장비" }), "캠핑 장비 고르기", VOCAB))
+      .toMatchObject({ matched: false, missing: "캠핑 장비" });
+  });
+
+  it("cuts a long missing phrase at 20 characters", () => {
+    const long = "아주 긴 이름의 구체적인 무언가를 찾는 말입니다";
+    const got = parseClassification(answer({ topic: "글쓰기", keywords: [], matched: true, missing: long }), "글", VOCAB)?.missing;
+    expect(got).toBe(long.slice(0, 20).trim());
+    expect(got?.length).toBeLessThanOrEqual(20);
+  });
+
+  it.each([
+    ["null", null],
+    ["left out", undefined],
+    ["not a string", 3],
+    ["empty", "   "],
+    ["only < >", "<>"],
+    ["the topic's name", "돈 관리·투자"],
+    ["one of our keyword names", "주식"],
+    ["another topic's keyword, spaced differently", "번아웃· 스트레스"],
+    ["the word null", "null"],
+    ["None", " None "],
+    ["N/A", "N/A"],
+    ["없음", "없음"],
+    ["해당 없음", "해당 없음"],
+    ["a dash", "-"],
+  ])("is null for a missing phrase that is %s — the answer still counts", (_, missing) => {
+    const goal = parseClassification(answer({ topic: "돈 관리·투자", keywords: ["주식"], matched: true, missing }), "주식 처음", VOCAB);
+    expect(goal).toMatchObject({ topic: "돈 관리·투자", keywords: ["주식"], missing: null });
   });
 
   it.each([

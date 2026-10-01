@@ -8,7 +8,8 @@ status, ok}}}. Only ok=true answers apply. The first time a book is reviewed its
 Agreement (design 2-3): per field, the share of reviewed books the person did not change — topic, keywords
 (same set), way, one_liner (same text). Books the person dropped are counted apart (`dropped`), not in the
 field shares; reserves the person moved in are counted like the others. One row per (date, batch) in
-data/pipeline/agreement.csv: date, batch, n, topic, keywords, way, one_liner (percent), dropped, auto_agreed.
+data/pipeline/agreement.csv: date, batch, n, topic, keywords, way, one_liner (percent), dropped, auto_agreed, then the
+daily pipeline's 🍃 columns (pipeline/agreement_log.py owns the header and the file I/O).
 
 Second tagging pass (build_pilot_review.py --flagged): books where our draft (AI-1) and a blind second tagger (AI-2)
 agreed are sent as ok answers with `auto: "ai-agree"` — accepted WITHOUT human review. They are kept apart:
@@ -20,12 +21,13 @@ about the books nobody looked at.
 Usage:  PYTHONIOENCODING=utf-8 python src/apply_review.py data/processed/additions/2026-10-01-pilot.json <review.json>
 Then:   cd web && npm run books:import
 """
-import csv
 import json
 import sys
 from pathlib import Path
 
 from check_one_liners import check_line
+from pipeline.agreement_log import HEAD as CSV_HEAD  # one header for pilot and daily rows (D-B)
+from pipeline.agreement_log import read_rows, upsert, write_rows
 
 ROOT = Path(__file__).resolve().parents[1]
 VOCAB = ROOT / "data" / "processed" / "keyword_vocab.json"
@@ -34,7 +36,6 @@ FIELDS = ("topic", "keywords", "way", "one_liner")
 WAYS = ("개념", "실습", "사례")
 STATUSES = ("picked", "reserve", "dropped")
 AUTO = "ai-agree"
-CSV_HEAD = ["date", "batch", "n", *FIELDS, "dropped", "auto_agreed"]
 FIELD_OF_TOPIC = {
     "데이터 분석": "데이터·통계", "통계": "데이터·통계", "AI 활용": "AI·IT 활용", "업무 자동화": "AI·IT 활용",
     "습관·집중": "습관·자기계발", "시간·생산성": "습관·자기계발", "돈 관리·투자": "돈·경제", "경제 상식": "돈·경제",
@@ -52,9 +53,12 @@ def unwrap(raw: dict) -> dict[str, dict]:
 
 
 def draft_of(book: dict) -> dict:
-    """Our tags before any review (kept under "draft" once a book has been reviewed)."""
+    """Our tags before any review (kept under "draft" once a book has been reviewed). 🍃 books (the daily pipeline) carry
+    genre + axes instead of topic · keywords · way."""
     if isinstance(book.get("draft"), dict):
         return book["draft"]
+    if book.get("entry") == "leaf":
+        return {"genre": book["genre"], "axes": dict(book["axes"]), "one_liner": book["one_liner"], "status": book["status"]}
     return {"topic": book["topic"], "keywords": list(book.get("keywords") or []), "way": book["way"],
             "one_liner": book["one_liner"], "status": book["status"]}
 
@@ -122,10 +126,8 @@ def apply_answers(doc: dict, answers: dict[str, dict], kept: dict[str, dict]) ->
 
 def upsert_row(rows: list[dict], stats: dict) -> list[dict]:
     """Rows with the (date, batch) row replaced or appended — applying again does not add a second row."""
-    key = (str(stats["date"]), str(stats["batch"]))
     row = {k: "" if stats.get(k) is None else str(stats[k]) for k in CSV_HEAD}
-    out = [r for r in rows if (r.get("date"), r.get("batch")) != key]
-    return [*out, row]
+    return upsert(rows, row)
 
 
 def line_warnings(doc: dict) -> list[str]:
@@ -173,11 +175,7 @@ def main() -> int:
         return 1
     path.write_text(json.dumps(new_doc, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     AGREEMENT.parent.mkdir(parents=True, exist_ok=True)
-    rows = list(csv.DictReader(AGREEMENT.open(encoding="utf-8"))) if AGREEMENT.exists() else []
-    with AGREEMENT.open("w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=CSV_HEAD)
-        w.writeheader()
-        w.writerows(upsert_row(rows, stats))
+    write_rows(AGREEMENT, upsert_row(read_rows(AGREEMENT), stats))
     picked = sum(b["status"] == "picked" for b in new_doc["books"])
     print(f"applied {len(answers)} answers · picked {picked} · reviewed file: {new_doc['reviewed']}")
     print("agreement (human-reviewed books only) " + " · ".join(f"{f} {stats[f]}%" for f in FIELDS)

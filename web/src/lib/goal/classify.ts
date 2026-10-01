@@ -1,7 +1,7 @@
 import { topicsIn } from "@/lib/books/active";
 import { MAX_KEYWORDS, TOPIC_CHIPS, type Topic } from "@/lib/books/taxonomy";
 import type { Vocab } from "@/lib/books/types";
-import { GOAL_MAX, type GoalMatch } from "./match";
+import { GOAL_MAX, clipMissing, type GoalMatch } from "./match";
 
 /**
  * target-chips.md 3절: the LLM only SORTS a written goal into our own topics and keywords — the books still come from the
@@ -65,6 +65,7 @@ export function classifySystemPrompt(vocab: Vocab): string {
     "- topic: the one topic the note is closest to. A note that names one of a topic's keywords or \"also covers\" words (or a close synonym, e.g. 차트 → 시각화, 다이어리 → 메모·기록, 꾸준히 운동하기 → 습관) belongs to that topic.",
     `- keywords: keywords of that topic that the note clearly asks about (0 to ${MAX_KEYWORDS}); words in brackets after a keyword mean the same keyword. Leave it empty when none clearly fits — never pick a keyword only because it is the topic's only one.`,
     "- matched: true when the note belongs to that topic, even if no keyword fits. false only when the note is about something none of the topics cover (e.g. travel, dating, a sports team); then topic is only the nearest guess.",
+    "- missing: when the note asks for one specific thing that none of the keywords above cover (e.g. 단타 매매, 캠핑 장비), that thing as a short noun phrase of at most 12 characters, in the note's own words. null when the note is broad, when a listed keyword covers it, or when it only names a topic. Never a topic or keyword name, never the whole note.",
   ].join("\n");
 }
 
@@ -78,15 +79,17 @@ export function classifySchema(vocab: Vocab): Record<string, unknown> {
       topic: { type: "string", enum: topics },
       keywords: { type: "array", items: { type: "string", enum: all } },
       matched: { type: "boolean" },
+      missing: { anyOf: [{ type: "string" }, { type: "null" }] },   // F-24; no maxLength in structured outputs — parse clips it
     },
-    required: ["topic", "keywords", "matched"],
+    required: ["topic", "keywords", "matched", "missing"],
     additionalProperties: false,
   };
 }
 
 /**
  * The model's JSON → GoalMatch (method "llm"), or null when it is not usable. Anything outside `vocab` is dropped:
- * an unknown (or inactive) topic voids the answer, keywords of another topic are discarded, at most MAX_KEYWORDS remain.
+ * an unknown (or inactive) topic voids the answer, keywords of another topic are discarded, at most MAX_KEYWORDS remain,
+ * `missing` is clipped (clipMissing) and null when it names a topic or keyword of ours.
  */
 export function parseClassification(raw: string, input: string, vocab: Vocab): GoalMatch | null {
   let answer: unknown;
@@ -96,7 +99,7 @@ export function parseClassification(raw: string, input: string, vocab: Vocab): G
     return null;
   }
   if (typeof answer !== "object" || answer === null) return null;
-  const { topic, keywords, matched } = answer as Record<string, unknown>;
+  const { topic, keywords, matched, missing } = answer as Record<string, unknown>;
   if (typeof topic !== "string" || !(topicsIn(vocab) as string[]).includes(topic) || typeof matched !== "boolean") return null;
   if (!Array.isArray(keywords)) return null;
   const known = keywordNames(vocab, topic as Topic);
@@ -104,5 +107,10 @@ export function parseClassification(raw: string, input: string, vocab: Vocab): G
   // Measured 10-01: Haiku tags nearly every 데이터 분석 note with its only keyword (태블로·판다스·피벗 → SQL), so a lone
   // keyword needs the note's own words (the vocab pattern). Topics with several keywords keep the model's picks.
   const kept = known.length === 1 ? picked.filter((k) => new RegExp(vocab[topic as Topic].keywords[k], "i").test(input)) : picked;
-  return { text: input.trim().slice(0, GOAL_MAX), topic: topic as Topic, keywords: kept.slice(0, MAX_KEYWORDS), matched, method: "llm" };
+  // F-24: an absent or unusable missing phrase is null — it never voids the answer. Names on our list are never "missing".
+  const names = topicsIn(vocab).flatMap((t) => [t, ...keywordNames(vocab, t)]);
+  return {
+    text: input.trim().slice(0, GOAL_MAX), topic: topic as Topic, keywords: kept.slice(0, MAX_KEYWORDS), matched,
+    missing: clipMissing(missing, names), method: "llm",
+  };
 }

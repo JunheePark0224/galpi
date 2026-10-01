@@ -116,7 +116,8 @@ def render(doc: dict, entries: list[dict], vocab: dict, file_name: str, flagged:
     kws = {t: list(vocab[t]["kept"]) for t in vocab}
     slots = {"__BOOKS__": js_json(entries), "__TOPICS__": js_json(topics), "__KW__": js_json(kws),
              "__WAYS__": js_json(WAY_LABELS), "__DEFS__": js_json(keyword_definitions()), "__FILE__": js_json(file_name),
-             "__KEY__": js_json(f"galpi-review-{file_name}"), "__FLAGGED__": js_json(flagged)}
+             "__KEY__": js_json(f"galpi-review-{file_name}"), "__FLAGGED__": js_json(flagged),
+             "__STYLE__": STYLE, "__COMMON__": COMMON}
     return re.sub("|".join(slots), lambda m: slots[m.group(0)], TEMPLATE)
 
 
@@ -149,12 +150,9 @@ def print_flag_summary(picked: list[dict]) -> None:
         print(f"  by {label}: " + ", ".join(f"{k} {v}" for k, v in counter.most_common()))
 
 
-TEMPLATE = """<!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>갈피 새 책 검수</title>
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
-<style>
-:root{--paper:#FAF5EA;--deep:#F0E6D0;--line:#DDD0B4;--ink:#2B2724;--soft:#4A433D;--muted:#7A6048;--warn:#A94C60;--ok:#3D7350}
+# Shared with the daily pipeline's review page (src/pipeline/review_page.py): the look (STYLE) and the state / escaping /
+# one-liner-rule helpers of the script (COMMON). Plain strings spliced into the page by render().
+STYLE = """:root{--paper:#FAF5EA;--deep:#F0E6D0;--line:#DDD0B4;--ink:#2B2724;--soft:#4A433D;--muted:#7A6048;--warn:#A94C60;--ok:#3D7350}
 *{box-sizing:border-box}body{margin:0;background:var(--deep);color:var(--ink);font-family:'Gowun Dodum',sans-serif}
 main{max-width:760px;margin:0 auto;background:var(--paper);min-height:100vh;padding:20px 16px 120px}
 h1{font-family:'Gowun Batang',serif;font-size:20px;margin:0 0 4px}.sub{color:var(--muted);font-size:13px;margin:0 0 8px;line-height:1.6}
@@ -185,7 +183,25 @@ input[type=text]{flex:1;min-width:240px}
 .ai .diff{background:#F6DCE2;border-radius:4px;padding:0 3px}.ai .nt{color:var(--muted);font-size:12px;margin-top:4px}
 .picks{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.picks button{border:2px solid var(--ink);border-radius:999px;padding:8px 16px;font:inherit;background:var(--paper);cursor:pointer;min-height:40px}
 .picks button.chosen{background:var(--ok);border-color:var(--ok);color:#fff}
-@media(max-width:520px){.cmp{grid-template-columns:1fr}}
+@media(max-width:520px){.cmp{grid-template-columns:1fr}}"""
+
+COMMON = """const MIN=12, MAX=36, HYPE=["최고","필독","반드시","완벽","인생책","미친","역대급","무조건","1위","베스트셀러","강력 추천","꼭 읽어야"];
+let st={}; try{st=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){st={}}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const len=s=>s.replace(/\\s/g,"").length;
+function baseIssues(s,title){const n=len(s),out=[];if(n<MIN)out.push("짧음");if(n>MAX)out.push("김");
+ const h=HYPE.filter(w=>s.includes(w));if(h.length)out.push("과장: "+h.join(","));
+ const core=title.split(/[:=(]/)[0].trim().replace(/\\s/g,"");if(core&&s.replace(/\\s/g,"").includes(core))out.push("제목 반복");
+return out}"""
+
+
+TEMPLATE = """<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>갈피 새 책 검수</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+__STYLE__
 </style></head><body><main>
 <h1 id="h1">갈피 새 책 검수 — 새 🎯 주제 6개</h1>
 <p class="top" id="top" hidden></p><p class="note" id="flagnote" hidden></p>
@@ -197,11 +213,7 @@ input[type=text]{flex:1;min-width:240px}
 <div class="bar"><span id="prog"></span><button id="dl">검수 결과 내려받기</button></div>
 <script>
 const BOOKS=__BOOKS__, TOPICS=__TOPICS__, KW=__KW__, DEFS=__DEFS__, WAYS=__WAYS__, FILE=__FILE__, KEY=__KEY__, FLAGGED=__FLAGGED__;
-const MIN=12, MAX=36, HYPE=["최고","필독","반드시","완벽","인생책","미친","역대급","무조건","1위","베스트셀러","강력 추천","꼭 읽어야"];
-let st={}; try{st=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){st={}}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const len=s=>s.replace(/\\s/g,"").length;
+__COMMON__
 const cur=b=>st[b.isbn]||{topic:b.topic,keywords:[...(b.keywords||[])],way:b.way,one_liner:b.one_liner,status:b.status,ok:false};
 const set=(b,patch)=>{st[b.isbn]={...cur(b),...patch,ok:false,pick:null};save();};
 const FLAG_TEXT={keywords:"키워드가 달라요",way:"읽는 방식이 달라요",topic:"AI-2는 이 주제에 안 맞을 수 있다고 봐요",confidence:"AI-1 확신이 낮아요"};
@@ -215,10 +227,7 @@ function second(b){
   <div class="ai"><b>AI-2</b>키워드 <span class="${kd?"diff":""}">${kw(a2.keywords)}</span><br>방식 <span class="${wd?"diff":""}">${esc(a2.way)}</span><br>주제 ${a2.topic_fit==="fits"?"맞음":"의심"}<div class="nt">${esc(a2.note)}</div></div></div>
   <div class="picks"><button data-act="pick1" class="${c.ok&&c.pick==="ai1"?"chosen":""}">AI-1이 맞아요</button>
    <button data-act="pick2" class="${c.ok&&c.pick==="ai2"?"chosen":""}" title="${drop?"AI-2가 주제를 의심해요: 누르면 이 책을 주제에서 빼요":"키워드·방식을 AI-2 대로 바꾸고 확인"}">AI-2가 맞아요${drop?" (주제에서 빼기)":""}</button></div>`}
-function lineIssues(s,title){const n=len(s),out=[];if(n<MIN)out.push("짧음");if(n>MAX)out.push("김");
- const h=HYPE.filter(w=>s.includes(w));if(h.length)out.push("과장: "+h.join(","));
- const core=title.split(/[:=(]/)[0].trim().replace(/\\s/g,"");if(core&&s.replace(/\\s/g,"").includes(core))out.push("제목 반복");
- if(s.trim().endsWith("?"))out.push("물음표");return out}
+function lineIssues(s,title){const out=baseIssues(s,title);if(s.trim().endsWith("?"))out.push("물음표");return out}
 function card(b){
  const c=cur(b), dropped=c.status==="dropped", reserve=c.status==="reserve";
  const kws=(KW[c.topic]||[]).map(k=>`<button class="chip ${c.keywords.includes(k)?"on":""}" data-k="${esc(k)}" title="${esc((DEFS[c.topic]||{})[k]||"")}">${esc(k)}</button>`).join("");

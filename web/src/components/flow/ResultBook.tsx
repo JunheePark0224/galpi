@@ -7,6 +7,7 @@ import { loadDetail } from "@/lib/books/detailClient";
 import type { PickView } from "@/lib/flow/state";
 import { truncateIntro } from "@/lib/recommend";
 import { track } from "@/lib/track/client";
+import { BookmarkInBook } from "./BookmarkInBook";
 import styles from "./ResultBook.module.css";
 
 /** New copy (logged in context.md): the docs name the buttons of S-06 but not the way on, nor the missing-intro case. */
@@ -29,11 +30,11 @@ function facts(d: BookDetail | null): string[] {
 }
 
 /**
- * S-06 (C-11), one 궁금해요 book: big cover → title → rating · price · pages → intro (folded) → buttons → credit.
- * No 나온 이유 line (10-01, user): 🎯 mostly repeats the chosen topic. The draw still carries `pick.reason` for the
- * bookmark back in P5.
- * The parent keys it by book, so every book starts folded and loading. [보관] joins in P5 (a button that does nothing would
- * mislead — the same call as the empty login slot, context 09-30).
+ * S-06 (C-11), one 궁금해요 book: big cover with its S-05 bookmark in it (C-16) → title → rating · price · pages → intro
+ * (folded) → buttons → credit.
+ * No 나온 이유 line (10-01, user): 🎯 mostly repeats the chosen topic. `pick.reason` is on the bookmark's back instead.
+ * The parent keys it by book, so every book starts folded, loading and with its bookmark in. [내 책갈피에 꽂기] joins in P5
+ * (a button that does nothing would mislead — the same call as the empty login slot, context 09-30).
  */
 export function ResultBook({ pick, position, total, onNext }: Props) {
   const { card, kind } = pick;
@@ -62,19 +63,21 @@ export function ResultBook({ pick, position, total, onNext }: Props) {
     <section className={styles.result} aria-labelledby="result-title" aria-busy={detail === null}>
       <p className={styles.progress}>{`궁금해요 ${position} / ${total}`}</p>
 
-      <div className={styles.coverBox}>
-        {cover ? (
-          // A third-party cover shown as YES24 serves it — not copied through our image optimiser. No Referer is sent (hotlink
-          // filters); if it still fails, our own cloth cover takes its place.
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            className={styles.cover} src={cover} alt={`${card.title} 표지`}
-            referrerPolicy="no-referrer" decoding="async" onError={() => setFailedCover(cover)}
-          />
-        ) : (
-          <div className={styles.plainCover} aria-hidden="true"><span>{card.title}</span></div>
-        )}
-      </div>
+      <BookmarkInBook pick={pick} position={position}>
+        <div className={styles.coverBox}>
+          {cover ? (
+            // A third-party cover shown as YES24 serves it — not copied through our image optimiser. No Referer is sent (hotlink
+            // filters); if it still fails, our own cloth cover takes its place.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              className={styles.cover} src={cover} alt={`${card.title} 표지`}
+              referrerPolicy="no-referrer" decoding="async" onError={() => setFailedCover(cover)}
+            />
+          ) : (
+            <div className={styles.plainCover} aria-hidden="true"><span>{card.title}</span></div>
+          )}
+        </div>
+      </BookmarkInBook>
 
       <div className={styles.head}>
         <GenreTag card={card} />

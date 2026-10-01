@@ -29,7 +29,7 @@ describe("matchGoal", () => {
   });
 
   it("finds a keyword from our closed list", () => {
-    expect(matchGoal("SQL 공부", VOCAB)).toEqual({ text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], matched: true, method: "word" });
+    expect(matchGoal("SQL 공부", VOCAB)).toEqual({ text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], matched: true, missing: null, method: "word" });
   });
 
   it("matches keyword patterns without caring about case", () => {
@@ -61,7 +61,7 @@ describe("matchGoal", () => {
   });
 
   it("says honestly when nothing in our list matched", () => {
-    expect(matchGoal("발표 준비", VOCAB)).toEqual({ text: "발표 준비", topic: "데이터 분석", keywords: [], matched: false, method: "word" });
+    expect(matchGoal("발표 준비", VOCAB)).toEqual({ text: "발표 준비", topic: "데이터 분석", keywords: [], matched: false, missing: null, method: "word" });
     expect(matchGoal("   ", VOCAB)).toMatchObject({ matched: false, text: "" });
   });
 

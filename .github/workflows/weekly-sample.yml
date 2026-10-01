@@ -1,0 +1,37 @@
+# After graduation (auto_merge true): every Monday, sample_rate of last week's daily additions as an issue to review
+# (design 2-3). While auto_merge is false every day is reviewed, so the script writes nothing and no issue is opened.
+name: weekly-sample
+
+on:
+  schedule:
+    - cron: "0 0 * * 1" # Monday 00:00 UTC = 09:00 KST
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Pick last week's sample
+        run: python -m src.pipeline.sample --out "$RUNNER_TEMP/issue.md"
+      - name: Open the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -f "$RUNNER_TEMP/issue.md" ]; then
+            gh issue create --title "주간 표본 검수 $(TZ=Asia/Seoul date -d '7 days ago' +%G-W%V)" --body-file "$RUNNER_TEMP/issue.md"
+          fi

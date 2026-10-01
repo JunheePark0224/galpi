@@ -3,12 +3,22 @@ import type { Vocab } from "./types";
 
 type Row = Record<string, unknown>;
 
-const STATUSES = ["picked", "reserve", "dropped"];
+// "review": a daily-pipeline book the two AI passes disagreed on, waiting for a person (src/pipeline/review.py --apply) — not imported
+const STATUSES = ["picked", "review", "reserve", "dropped"];
 const bad = (isbn: unknown, why: string) => new Error(`${String(isbn || "(no isbn)")}: ${why}`);
 
-/** One picked book of data/processed/additions/*.json → a books_v1-shaped row (slot = topic). */
+/**
+ * One picked book of data/processed/additions/*.json → a books_v1-shaped row (slot = topic / genre). 🍃 books come from the
+ * daily pipeline (D-B) with their four axes; normalizeBook checks the genre list and the axis values.
+ */
 function toRow(b: Row, vocab: Vocab): Row {
-  if (b.entry !== "target") throw bad(b.isbn, "only 🎯 books can be added for now");
+  if (b.entry === "leaf") {
+    return {
+      isbn: b.isbn, entry: "leaf", slot: b.genre, pages: b.pages, axes: b.axes, keywords: [],
+      one_liner: b.one_liner, one_liner_style: b.one_liner_style,
+    };
+  }
+  if (b.entry !== "target") throw bad(b.isbn, `unknown entry ${String(b.entry)}`);
   const topic = String(b.topic ?? "");
   const allowed = vocab[topic]?.keywords ?? {};
   const keywords = Array.isArray(b.keywords) ? b.keywords : [];
@@ -20,8 +30,8 @@ function toRow(b: Row, vocab: Vocab): Row {
 }
 
 /**
- * books_v1 rows + the picked books of every additions file (D-B/D-C; the 10-01 pilot is the first) → rows and bib
- * for normalizeCatalog. Base rows keep their order and content; additions come after, file by file. Reserve and
+ * books_v1 rows + the picked books of every additions file (the 10-01 pilot, then the daily pipeline) → rows and bib
+ * for normalizeCatalog. Base rows keep their order and content; additions come after, file by file. Review, reserve and
  * dropped books stay out. Only our tags, titles and authors are in these files — no YES24 text.
  */
 export function mergeAdditions(baseRows: readonly Row[], baseBib: ReadonlyMap<string, Bib>, files: readonly unknown[], vocab: Vocab) {

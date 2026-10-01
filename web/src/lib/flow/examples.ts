@@ -26,5 +26,5 @@ export function shownExamples(active: readonly Topic[]): ExampleChip[] {
 export function exampleGoal(text: string, active: readonly Topic[]): GoalMatch | null {
   const trimmed = text.trim().slice(0, GOAL_MAX);
   const chip = shownExamples(active).find((c) => c.text === trimmed);
-  return chip ? { text: chip.text, topic: chip.topic, keywords: [...chip.keywords], matched: true, method: "example" } : null;
+  return chip ? { text: chip.text, topic: chip.topic, keywords: [...chip.keywords], matched: true, missing: null, method: "example" } : null;
 }

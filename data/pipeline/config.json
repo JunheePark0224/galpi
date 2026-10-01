@@ -1,0 +1,7 @@
+{
+  "daily_count": 50,
+  "auto_merge": false,
+  "sample_rate": 0.1,
+  "model": "claude-sonnet-5-5",
+  "second_model": "claude-sonnet-5-5"
+}
