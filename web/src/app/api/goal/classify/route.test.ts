@@ -41,6 +41,14 @@ describe("POST /api/goal/classify", () => {
     expect(vi.mocked(classifyWithClaude).mock.calls[0][2]).toEqual({ apiKey: "test-key-not-real" });
   });
 
+  it("does not sort into a topic that has too few books yet (주식 → nearest active topic, matched false)", async () => {
+    vi.stubEnv("ANTHROPIC_API_KEY", "");
+    const goal = (await (await post({ text: "주식 투자 입문" }, { origin: ORIGIN, "x-forwarded-for": "8.8.4.5" })).json()) as GoalMatch;
+    expect(goal).toMatchObject({ matched: false, keywords: [], method: "word" });
+    expect(Object.keys(ACTIVE_VOCAB)).toContain(goal.topic);
+    expect(Object.keys(ACTIVE_VOCAB)).not.toContain("돈 관리·투자");
+  });
+
   it("gives Claude the active topics only (D-A: 10 books or more)", async () => {
     vi.stubEnv("ANTHROPIC_API_KEY", "test-key-not-real");
     vi.mocked(classifyWithClaude).mockResolvedValue({ ok: true, goal: LLM_GOAL });

@@ -1,6 +1,9 @@
 import type { Entry, Way } from "../recommend/types";
 
-/** docs/plans/2026-09-30-d3-tags.md — topic → field. For 🎯 books genre === topic. */
+/**
+ * docs/plans/2026-09-30-d3-tags.md — topic → field, in topic order. For 🎯 books genre === topic. The last six came with D-A
+ * (10-01, docs/target-chips.md 2절); a topic is offered to readers only once it has enough books (lib/books/active.ts).
+ */
 export const FIELD_OF_TOPIC = {
   "데이터 분석": "데이터·통계",
   통계: "데이터·통계",
@@ -8,11 +11,21 @@ export const FIELD_OF_TOPIC = {
   "업무 자동화": "AI·IT 활용",
   "습관·집중": "습관·자기계발",
   "시간·생산성": "습관·자기계발",
+  "돈 관리·투자": "돈·경제",
+  "경제 상식": "돈·경제",
+  "마음 돌보기": "마음·관계",
+  "대화·관계": "마음·관계",
+  "취업·커리어": "일·커리어",
+  글쓰기: "일·커리어",
 } as const;
 export type Topic = keyof typeof FIELD_OF_TOPIC;
 export type Field = (typeof FIELD_OF_TOPIC)[Topic];
+export const TOPICS = Object.keys(FIELD_OF_TOPIC) as readonly Topic[];
 
-/** docs/target-chips.md 1절 — chip order and labels. Only "AI 활용" is shown with another label. */
+/**
+ * docs/target-chips.md 1절 — S-02 chip order and labels. Only "AI 활용" is shown with another label. Still the first six
+ * topics until the D-D input (example chips) replaces this row.
+ */
 export const TOPIC_CHIPS: readonly { topic: Topic; label: string }[] = [
   { topic: "데이터 분석", label: "데이터 분석" },
   { topic: "통계", label: "통계" },
@@ -21,7 +34,6 @@ export const TOPIC_CHIPS: readonly { topic: Topic; label: string }[] = [
   { topic: "습관·집중", label: "습관·집중" },
   { topic: "시간·생산성", label: "시간·생산성" },
 ];
-export const TOPICS: readonly Topic[] = TOPIC_CHIPS.map((c) => c.topic);
 
 /** docs/book-pool.md 1절. The last three came with D-A (10-01) and have no books until the pipeline adds them — a genre with
  * no books is simply never drawn (draws score every 🍃 book; nothing loops over this list). */
@@ -41,7 +53,10 @@ const GENRE_TONE: Record<LeafGenre, string> = {
   "과학 교양": "--genre-science", "예술·여행": "--genre-art-travel", 역사: "--genre-history", "사회·시사": "--genre-society",
   "호러·괴담": "--genre-horror",
 };
-const FIELD_TONE: Record<Field, string> = { "데이터·통계": "--field-data", "AI·IT 활용": "--field-ai", "습관·자기계발": "--field-habit" };
+const FIELD_TONE: Record<Field, string> = {
+  "데이터·통계": "--field-data", "AI·IT 활용": "--field-ai", "습관·자기계발": "--field-habit",
+  "돈·경제": "--field-money", "마음·관계": "--field-mind", "일·커리어": "--field-career",
+};
 
 /** DESIGN T-02 — name-tag colours. White text everywhere except 예술·여행 (ink, 5.0 : 1). */
 export function toneOf(card: { entry: Entry; genre: string; field: string | null }): { bg: string; fg: string } {

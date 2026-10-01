@@ -31,6 +31,9 @@ colors:
   field-data: "#3A6684"
   field-ai: "#5E55A0"
   field-habit: "#9E6232"
+  field-money: "#3D7350"
+  field-mind: "#A04F6E"
+  field-career: "#2D6F73"
 typography:
   headline-display:
     fontFamily: Gowun Batang
@@ -200,6 +203,15 @@ components:
   chip-field-habit:
     backgroundColor: "{colors.field-habit}"
     textColor: "{colors.white}"
+  chip-field-money:
+    backgroundColor: "{colors.field-money}"
+    textColor: "{colors.white}"
+  chip-field-mind:
+    backgroundColor: "{colors.field-mind}"
+    textColor: "{colors.white}"
+  chip-field-career:
+    backgroundColor: "{colors.field-career}"
+    textColor: "{colors.white}"
 ---
 
 # Galpi (갈피)
@@ -220,7 +232,7 @@ Audience: Korean readers in their 20s on mobile phones, often opening the link f
 - **Cloth brown (#7A4A2E)** — the cloth cover of the old book. Used only for the book itself.
 - **Cream paper (#FAF5EA)** — every background. Pages have faint ruled lines in outline beige (#DDD0B4).
 - **Frost (#F4F1EA, or 60% white with a 3px backdrop blur)** — the translucent film of every bookmark. Text on frost is always ink.
-- **Genre colors** — fifteen muted colors (twelve reading genres, three study fields) used only for the small genre name tag, the bookmark string and the dashed stitch line on a bookmark. Never as large fills.
+- **Genre colors** — eighteen muted colors (twelve reading genres, six study fields) used only for the small genre name tag, the bookmark string and the dashed stitch line on a bookmark. Never as large fills.
 - No dark mode. No gradients except the animal window sky.
 
 ## Typography

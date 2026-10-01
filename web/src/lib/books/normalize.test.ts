@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { bibFromCsv, cleanAuthor, normalizeBook, normalizeCatalog, normalizeVocab, parseCsv } from "./normalize";
+import { TOPICS } from "./taxonomy";
 
 const BIB = new Map([
   ["9791111111111", { title: "모순", author: "양귀자" }],
@@ -32,6 +33,12 @@ describe("normalizeBook", () => {
 
   it("accepts the D-A genres (no books yet — the pipeline adds them)", () => {
     expect(normalizeBook({ ...leafRow, slot: "호러·괴담" }, BIB)).toMatchObject({ entry: "leaf", genre: "호러·괴담" });
+  });
+
+  it("derives the new fields of the D-A topics", () => {
+    expect(normalizeBook({ ...targetRow, slot: "돈 관리·투자", keywords: ["주식"] }, BIB)).toMatchObject({
+      topic: "돈 관리·투자", genre: "돈 관리·투자", field: "돈·경제", keywords: ["주식"],
+    });
   });
 
   it("accepts Korean one-liner style names", () => {
@@ -108,8 +115,7 @@ describe("cleanAuthor", () => {
 describe("normalizeVocab", () => {
   const topic = (kept: Record<string, { pattern: string }>) => ({ kept, folded: { 파이썬: 4 }, too_common: { 시각화: 11 } });
   const raw: Record<string, ReturnType<typeof topic>> = {
-    "데이터 분석": topic({ SQL: { pattern: "SQL|쿼리" } }), 통계: topic({}), "AI 활용": topic({}),
-    "업무 자동화": topic({}), "습관·집중": topic({}), "시간·생산성": topic({}),
+    ...Object.fromEntries(TOPICS.map((t) => [t, topic({})])), "데이터 분석": topic({ SQL: { pattern: "SQL|쿼리" } }),
   };
 
   it("keeps kept patterns as keywords and folded / too-common names as topic words", () => {
