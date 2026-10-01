@@ -10,7 +10,8 @@ export interface GoalMatch {
   topic: Topic;
   keywords: string[];    // only names from our closed keyword list
   matched: boolean;      // false: nothing in our list matched — topic is only the nearest guess
-  method: "word" | "llm"; // llm: Claude Haiku sorted it (P4, /api/goal/classify); word: this file
+  method: "word" | "llm" | "example"; // llm: Claude Haiku sorted it (P4, /api/goal/classify); word: this file; example: an
+                                       // untouched S-02 example chip (lib/flow/examples.ts) — not the visitor's own words
 }
 
 const squash = (s: string) => s.toLowerCase().replace(/\s+/g, "");

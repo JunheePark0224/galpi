@@ -6,7 +6,6 @@ test.use({ reducedMotion: "reduce" });
 test("🎯 input → 처리방침 link → /privacy → 처음으로", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
-  await page.getByRole("button", { name: "직접 쓰기", exact: true }).click();
   await page.getByRole("link", { name: "처리방침" }).first().click();
 
   await expect(page).toHaveURL(/\/privacy$/);

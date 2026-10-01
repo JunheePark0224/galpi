@@ -6,6 +6,7 @@
 | taxonomy v0.3 | 2026-10-01 | 개발 라운드 `plans/2026-10-01-taxonomy-dev.md` | **구현 완료 — 코드가 이 문서를 따른다** (8절) |
 | taxonomy v0.3.1 | 2026-10-01 | v0.3 최종 검토 | 입력 칸 가림·허용 목록·검사 #11·표현 정리 (8절) |
 | taxonomy v0.4 | 2026-10-01 | P4 결과·서버 `plans/2026-10-01-p4-results-server.md` | S-06·S-08 이벤트 live (8절) |
+| taxonomy v0.5 | 2026-10-01 | D-D 입력 B안 (PRD F-02, context 10-01) | E-03 `chip_type` "example", E-26 `is_free_text` = 예시 칩 글 그대로면 FALSE (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -337,13 +338,13 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 목표입력 | click | live | 같음 |
 
-**언제**: S-02 🎯에서 칩을 누를 때 — 주제 보기 6개·[직접 쓰기]·분량·읽는 방식. 켜진 칩을 다시 눌러 끌 때도 남음(값 null). 🍃 답은 E-24  
+**언제**: S-02 🎯에서 칩을 누를 때 — 예시 칩(입력 B안 10-01: 누르면 무엇을 칸에 그 말이 채워짐)·분량·읽는 방식. 켜진 분량·읽는 방식 칩을 다시 눌러 끌 때도 남음(값 null). 🍃 답은 E-24  
 **분석 질문**: Q-10
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `chip_type` | `question` → `chip_type` | String | "topic", "len", "way" | 어느 칸의 칩인지 |
-| `chip_value` | `value` → `chip_value` | String | null, "데이터 분석", "free", "thin", "실습" | 고른 값. topic=주제 키 6개 또는 free(직접 쓰기), len=thin/normal/thick, way=개념/실습/사례, 끄면 null — 주제·방식 값은 books 표의 키 그대로(한국어). 현재 직접 쓰기 값은 "direct" → "free" |
+| `chip_type` | `question` → `chip_type` | String | "example", "len", "way" | 어느 칸의 칩인지 — v0.5 (10-01 입력 B안): "topic"(주제 보기·[직접 쓰기]) → "example"(예시 칩) |
+| `chip_value` | `value` → `chip_value` | String | null, "불안할 때", "thin", "실습" | 고른 값. example=예시 칩 글 그대로(칸에 채워진 말), len=thin/normal/thick, way=개념/실습/사례, 끄면 null — 방식 값은 books 표의 키 그대로(한국어). v0.5: 주제 키·"free" 값 없어짐 → 예시 칩 글 |
 | `is_edit` | `edit` → `is_edit` | Boolean | TRUE, FALSE | 고치기 중인지 |
 
 #### E-26 `goal_submitted`
@@ -352,13 +353,13 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 목표입력 | submit | live | (없음) → 신규 (accepted 2026-09-30, v0.3 구현) |
 
-**언제**: 🎯 입력 완료 — S-02 🎯 폼이 [책 펼치기]로 제출되어 입력이 통과될 때 (무엇을 칸이 비어 멈추면 남지 않음). 고치기 뒤 다시 제출할 때도 남음. 🍃의 "입력 완료"는 9번 문항 `balance_answered`. 직접 쓰기면 분류가 끝난 뒤(보통 1초, 최대 5초)에 남음  
+**언제**: 🎯 입력 완료 — S-02 🎯 폼이 [책 펼치기]로 제출되어 입력이 통과될 때 (무엇을 칸이 비어 멈추면 남지 않음). 고치기 뒤 다시 제출할 때도 남음. 🍃의 "입력 완료"는 9번 문항 `balance_answered`. 무엇을 칸의 글은 분류가 끝난 뒤(보통 1초, 최대 5초)에 남음 — 예시 칩 글 그대로면 분류 없이 바로  
 **분석 질문**: Q-01, Q-10
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `topic` | 같음 | String | "데이터 분석", "습관·집중" | 주제 키 (보기에서 고른 것, 직접 쓰기면 연결된 주제) |
-| `is_free_text` | 같음 | Boolean | TRUE, FALSE | 직접 쓰기로 제출했는지 |
+| `topic` | 같음 | String | "데이터 분석", "습관·집중" | 주제 키 (예시 칩 글 그대로면 그 칩에 정해 둔 주제, 자기 말이면 연결된 주제. 10-01 전에는 고른 주제 보기) |
+| `is_free_text` | 같음 | Boolean | TRUE, FALSE | 자기 말로 제출했는지. FALSE = 보기를 그대로 (10-01 입력 B안부터: 예시 칩 글을 고치지 않고 제출, 그 전: 주제 보기) — v0.5: 뜻은 그대로(보기 vs 직접 쓰기), 보기가 주제 칩에서 예시 칩으로 |
 | `len` | 같음 | String | null, "thin", "normal", "thick" | 분량. 비우면 null(상관없음) |
 | `way` | 같음 | String | null, "개념", "실습", "사례" | 읽는 방식. 비우면 null |
 | `is_edit` | 같음 | Boolean | TRUE, FALSE | 고치기 뒤 다시 제출인지 |
@@ -369,7 +370,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 목표입력 | submit | live | `goal_free_written` → `free_goal_written` |
 
-**언제**: S-02 🎯에서 직접 쓰기 칸을 채워 제출할 때 (E-26과 같은 순간, 직접 쓰기일 때만). 직접 쓰기면 분류가 끝난 뒤(보통 1초, 최대 5초)에 남음. **Amplitude 사본**은 `goal_text` 없이 `topic`·`keywords`·`is_matched`·`method`만 간다  
+**언제**: S-02 🎯에서 무엇을 칸에 자기 말을 써서 제출할 때 (E-26과 같은 순간, is_free_text=TRUE일 때만 — 예시 칩 글 그대로면 남지 않음). 분류가 끝난 뒤(보통 1초, 최대 5초)에 남음. **Amplitude 사본**은 `goal_text` 없이 `topic`·`keywords`·`is_matched`·`method`만 간다  
 **분석 질문**: Q-10
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -386,7 +387,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 목표입력 | system | live | `goal_coverage` → `goal_coverage_checked` |
 
-**언제**: 🎯 직접 쓰기로 제출한 뒤 /api/books/draw 응답을 받았을 때 (고치기 재뽑기 포함). 첫 장 안내 문구를 정하는 순간  
+**언제**: 🎯 자기 말로 제출한 뒤(is_free_text=TRUE — 예시 칩 글 그대로면 남지 않음) /api/books/draw 응답을 받았을 때 (고치기 재뽑기 포함). 첫 장 안내 문구를 정하는 순간  
 **분석 질문**: Q-10
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -416,7 +417,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `changed_items` | `items` → `changed_items` | String[] | ["q2", "q6"], ["topic", "len"], [] | 바뀐 항목. 🍃 q1~q9(답이 바뀐 문항), 🎯 topic·len·way. 바뀐 것이 없으면 빈 배열 — 현재 🎯 "what" → "topic"(E-03 chip_type과 통일). 현재 보내는 props.entry는 삭제(공통 entry와 중복) |
+| `changed_items` | `items` → `changed_items` | String[] | ["q2", "q6"], ["topic", "len"], [] | 바뀐 항목. 🍃 q1~q9(답이 바뀐 문항), 🎯 topic·len·way. 바뀐 것이 없으면 빈 배열 — 현재 🎯 "what" → "topic"(무엇을 칸. v0.3에서 E-03 chip_type과 통일했으나 v0.5부터 E-03은 "example" — 이 값은 그대로). 현재 보내는 props.entry는 삭제(공통 entry와 중복) |
 
 #### E-07 `bookmark_shown`
 
@@ -675,7 +676,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 | E-22 | `found` | `found_count` | 개수는 `_count` |
 | E-06 | `entry` | (삭제) | 공통 `entry`와 중복 |
 | E-06 | `items` | `changed_items` | 무엇의 항목인지 |
-| E-06 | 🎯 값 `"what"` | 값 `"topic"` | E-03 `chip_type`과 같은 말 |
+| E-06 | 🎯 값 `"what"` | 값 `"topic"` | E-03 `chip_type`과 같은 말 (v0.3 당시. v0.5부터 E-03은 "example", E-06 값은 "topic" 그대로) |
 | E-07 · E-08 | `index` | `position` | 1부터 세는 자리 (`index`는 0부터로 읽힌다) |
 | E-07 · E-08 | `kind` | `pick_type` | 무엇의 종류인지 |
 | E-20 | `curious` | `curious_count` | 개수는 `_count` |
@@ -745,7 +746,7 @@ FN-2의 셋째 단계(`goal_submitted`)는 v0.3(2026-10-01)부터 쌓인다. 그
 | 망설임 | question_no별 `unsure_hold_cancelled` 수 / 답한 수 | question_no | Q-09 ⓪-2 |
 | 같은 축 일치율 | 한 판에서 (1,5)(2,6)(3,7)(4,8) 두 답이 모두 A/B일 때 같은 답인 비율 (is_edit=false) | 축 | Q-09 ⓪ |
 | 질문별 효과 | 🍃 판에서 그 축 답 방향 = 책 축 태그 방향일 때 vs 아닐 때 궁금해요율 (`book_id`로 `books.axes` 조인) | 축 | Q-09 ② |
-| 보기 vs 직접 쓰기 | `goal_submitted`의 is_free_text 비율, 각 판의 궁금해요율 | — | Q-10 ② |
+| 보기 vs 직접 쓰기 | `goal_submitted`의 is_free_text 비율, 각 판의 궁금해요율. v0.5(입력 B안)부터 FALSE = 예시 칩 글을 그대로 낸 것. **"예시 칩에서 시작해 고친" 판** = 같은 `session_id`·`round` 안에 `chip_selected`(chip_type=example)가 있고 `goal_submitted`가 is_free_text=TRUE인 판 (손으로 예시 칩 글과 똑같이 쓰면 칩 이벤트 없이 FALSE) | — | Q-10 ② |
 | 찾은 책 구간별 반응 | 판의 마지막 `goal_coverage_checked.coverage_bucket`별 궁금해요율·5장 완주율 | coverage_bucket | Q-10 ③ |
 | 못 찾은 요청 | `free_goal_written`에서 is_matched=false 또는 found_count<4의 goal_text 목록 | method | Q-10 ④ |
 | 요청 적중률 | `free_goal_written` 중 keywords가 1개 이상인 비율 | method | Q-10 |
@@ -930,6 +931,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.3 | 2026-10-01 | Claude (개발 라운드) | **구현 완료** (`plans/2026-10-01-taxonomy-dev.md`). 4-4 마이그레이션 전부 코드에 반영 — 이벤트 이름 4건(E-18은 명세만), 속성·값 19건, 중복 `entry` 삭제 2건, 속성 추가 4건(E-08 `one_liner_style`·E-20 `source` 구현, E-10·E-18 `pick_type`은 명세만 — P4), E-26 `goal_submitted` 구현. `round` +1은 `track()`이 E-20·E-19를 보낸 직후(3-1a). `goal_text`는 Amplitude 사본과 Session Replay에서 빠지고 `/privacy`에 6-3 문장 2개(갱신일 10-01). `schema.ts`의 `EVENT_SPEC`·`PropsOf`로 `track()` 호출을 tsc가 검사, `/api/track`도 같은 명세로 props 검사. 자동 검사: `taxonomy.test.ts`(7-3 #1~#10), E2E `specMismatches`. Amplitude 대기열: 시작 전 이벤트도 받기(키 있을 때만)·원래 `time`. csv: 구현된 줄 `live`, E-10·E-18 `pick_type`은 `planned-P4`, E-01 Note에 `Amplitude only`, Note의 "현재 이름" → "이전 이름". Supabase의 테스트 기록은 옛 이름 그대로(P7에서 지움 — 옮기지 않음) |
 | v0.3.1 | 2026-10-01 | Claude (최종 검토 반영) | 직접 쓰기 입력 칸에 `data-amp-mask`(Session Replay 가림이 대시보드 수준과 무관하게 코드로 보장 — 6-2). `forAmplitude`는 허용 목록 방식(명세에 있고 `Supabase only`가 아닌 속성만). 자동 검사 #11 추가 — 이벤트별 속성 표 ↔ csv (7-3). 옛 표현을 구현된 상태로 고침(2-7 a·b, 2-8, 4-1, 4-4, 7-3 ①). 배포 체크리스트(`deploy.md`)에 Production 키 설정 뒤 개인정보 확인 추가. 이벤트·속성 변경 없음 |
 | v0.4 | 2026-10-01 | Claude (P4 구현) | S-06에서 E-09 `result_viewed`·E-10 `result_book_viewed`(`pick_type` 포함)·E-23 `description_expanded`·E-18 `yes24_link_clicked`(`source`=result, `pick_type`), S-08에서 E-19 `redraw_clicked`를 심어 `live`로(E-19 뒤 round +1은 v0.3의 `track()` 그대로). E-20 설명에서 P3 임시 화면 문구를 뺌. 이벤트 이름·속성 변경 없음 |
+| v0.5 | 2026-10-01 | Claude (D-D 입력 B안) | S-02 🎯가 큰 무엇을 칸 + 예시 칩 6개로(PRD F-02, context 10-01). E-03 `chip_type` 값 "topic" → "example"(예시 칩을 누를 때, `chip_value` = 칩 글). E-26 `is_free_text`는 이름·뜻 그대로 "보기 vs 직접 쓰기"(Q-10 ②) — FALSE = 예시 칩 글을 고치지 않고 제출. 그 글은 칩마다 정해 둔 주제·키워드로 바로 연결(Claude 호출 없음)되고 E-21·E-22는 남지 않는다(주제 칩 때와 같음). 고친 글은 직접 쓴 말 — 분류, E-21·E-22. 새 이벤트·속성 없음 |
 
 ---
 
