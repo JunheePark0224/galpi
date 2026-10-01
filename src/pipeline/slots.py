@@ -1,0 +1,49 @@
+"""Where a slot's books are found on YES24, in the one shape collect_candidates.matches()/candidates_for() read.
+
+The rules stay where they were measured — nothing is copied: the 9 old 🍃 genres and 6 old 🎯 topics are D1's
+collect_candidates.SLOTS, the 6 new topics and 3 new genres are the expansion research rules
+(research_expansion.TOPICS / GENRES, docs/expansion-candidates.md). A 🎯 keyword slot narrows its topic to one keyword.
+"""
+import re
+
+from collect_candidates import SLOTS
+from research_expansion import EXAM, GENRES, TOPICS
+
+NEW_TOPICS = ("돈 관리·투자", "경제 상식", "마음 돌보기", "대화·관계", "취업·커리어", "글쓰기")
+NEW_GENRES = ("역사", "사회·시사", "호러·괴담")
+
+
+def _old(name: str) -> dict:
+    s = SLOTS[name]
+    return {"entry": s["entry"], "cats": list(s["cats"]), "q": list(s["q"]), "sort": s.get("sort"), "inc": s["inc"],
+            "exc": s["exc"], "exc_title": s.get("exc_title"), "title_only": bool(s.get("title_only"))}
+
+
+def _new_topic(name: str) -> dict:
+    t = TOPICS[name]
+    return {"entry": "target", "cats": list(t["cats"]), "q": list(t["q"]), "sort": None, "inc": t["title"],
+            "exc": f"{t['exc']}|{EXAM.pattern}", "exc_title": None, "title_only": True}
+
+
+def _new_genre(name: str) -> dict:
+    g = GENRES[name]
+    return {"entry": "leaf", "cats": list(g["cats"]), "q": list(g.get("q", [])), "sort": g["sort"],
+            "inc": g.get("inc", "."), "exc": g["exc"], "exc_title": None, "title_only": False}
+
+
+def slot_rule(name: str) -> dict:
+    """The YES24 rule of a 🎯 topic or 🍃 genre."""
+    if name in SLOTS:
+        return _old(name)
+    if name in NEW_TOPICS:
+        return _new_topic(name)
+    if name in NEW_GENRES:
+        return _new_genre(name)
+    raise KeyError(f"no YES24 rule for slot {name}")
+
+
+def keyword_rule(topic: str, keyword: str, pattern: str) -> dict:
+    """A topic's rule narrowed to one keyword: search the keyword's name, keep books whose title + intro opening match
+    the keyword's vocab pattern (case-insensitive, like the app's word matching). The topic's exclusions still apply."""
+    base = slot_rule(topic)
+    return {**base, "cats": [], "q": [re.sub(r"·", " ", keyword)], "inc": f"(?i){pattern}", "title_only": False}

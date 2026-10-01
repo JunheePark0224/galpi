@@ -26,3 +26,6 @@ web/test-results/
 Reference.pdf
 data/raw/app_reviews/
 data/raw/d4l_keywords/
+
+# daily pipeline run summaries (counts only; the PR body carries what matters)
+data/pipeline/runs/

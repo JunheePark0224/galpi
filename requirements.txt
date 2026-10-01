@@ -1,0 +1,3 @@
+# Python for src/ (the D-B daily pipeline in GitHub Actions; the other scripts use the standard library only)
+anthropic==1.4.0
+pytest==9.1.1
