@@ -34,7 +34,8 @@ describe("classify prompt and schema", () => {
     const schema = classifySchema(VOCAB) as { properties: Record<string, { enum?: string[]; items?: { enum: string[] } }> };
     const names = schema.properties.keywords.items?.enum ?? [];
     expect(schema.properties.topic.enum).toEqual([...TOPICS]);
-    expect(names).toEqual(expect.arrayContaining(["SQL", "마음·회복", "일하는 법"]));
+    expect(names).toEqual(expect.arrayContaining(["SQL", "번아웃·스트레스", "일하는 법"]));
+    expect(names).not.toContain("마음·회복"); // moved out of 습관·집중 when 마음 돌보기 turned on (10-01 pilot)
     expect(new Set(names).size).toBe(names.length);
     expect(schema).toMatchObject({ required: ["topic", "keywords", "matched"], additionalProperties: false });
   });
@@ -74,8 +75,8 @@ describe("parseClassification", () => {
 
 
   it("turns a good answer into a GoalMatch (method llm)", () => {
-    expect(parseClassification(answer({ topic: "습관·집중", keywords: ["마음·회복"], matched: true }), "  번아웃 극복  ", VOCAB))
-      .toEqual({ text: "번아웃 극복", topic: "습관·집중", keywords: ["마음·회복"], matched: true, method: "llm" });
+    expect(parseClassification(answer({ topic: "마음 돌보기", keywords: ["번아웃·스트레스"], matched: true }), "  번아웃 극복  ", VOCAB))
+      .toEqual({ text: "번아웃 극복", topic: "마음 돌보기", keywords: ["번아웃·스트레스"], matched: true, method: "llm" });
   });
 
   it("drops keywords of another topic, unknown names and repeats, keeping at most five", () => {

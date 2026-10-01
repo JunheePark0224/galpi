@@ -41,12 +41,13 @@ describe("POST /api/goal/classify", () => {
     expect(vi.mocked(classifyWithClaude).mock.calls[0][2]).toEqual({ apiKey: "test-key-not-real" });
   });
 
-  it("does not sort into a topic that has too few books yet (주식 → nearest active topic, matched false)", async () => {
+  // Until the 10-01 pilot this asserted 주식 → nearest active topic (matched false): 돈 관리·투자 had 0 books. The pilot
+  // added 15 books to each new topic, so all 12 are on; the off-topic case is covered with fixtures in active.test.ts.
+  it("sorts into a new topic once it has 10+ books (주식 → 돈 관리·투자 after the 10-01 pilot)", async () => {
     vi.stubEnv("ANTHROPIC_API_KEY", "");
     const goal = (await (await post({ text: "주식 투자 입문" }, { origin: ORIGIN, "x-forwarded-for": "8.8.4.5" })).json()) as GoalMatch;
-    expect(goal).toMatchObject({ matched: false, keywords: [], method: "word" });
-    expect(Object.keys(ACTIVE_VOCAB)).toContain(goal.topic);
-    expect(Object.keys(ACTIVE_VOCAB)).not.toContain("돈 관리·투자");
+    expect(goal).toMatchObject({ topic: "돈 관리·투자", keywords: ["주식"], matched: true, method: "word" });
+    expect(Object.keys(ACTIVE_VOCAB)).toContain("돈 관리·투자");
   });
 
   it("gives Claude the active topics only (D-A: 10 books or more)", async () => {
