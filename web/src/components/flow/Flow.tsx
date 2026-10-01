@@ -5,6 +5,7 @@ import type { BalanceChoice, Entry } from "@/lib/recommend";
 import { newArtSeed } from "@/lib/art/combine";
 import { topicsIn } from "@/lib/books/active";
 import { loadDetail } from "@/lib/books/detailClient";
+import type { LibraryCount } from "@/lib/books/library";
 import type { Vocab } from "@/lib/books/types";
 import { drawBody, goalFor, requestDraw, toDrawView } from "@/lib/flow/api";
 import { curiousPicks, flowReducer, type FlowAction, type FlowState, type Reaction } from "@/lib/flow/state";
@@ -25,8 +26,9 @@ import { TargetInput } from "./TargetInput";
 /**
  * S-01 → S-05 → S-06 → S-08. Cross-screen events are sent here, in the handlers (never from effects).
  * vocab: the active 🎯 topics only (FlowRoot) — the word matching used when /api/goal/classify cannot answer.
+ * library: the F-23 count for S-01 (FlowRoot).
  */
-export function Flow({ vocab }: { vocab: Vocab }) {
+export function Flow({ vocab, library = null }: { vocab: Vocab; library?: LibraryCount | null }) {
   const [state, dispatch] = useReducer(flowReducer, undefined, loadFlow);
   const [classifying, setClassifying] = useState(false);
 
@@ -175,7 +177,7 @@ export function Flow({ vocab }: { vocab: Vocab }) {
 
   return (
     <MotionConfig reducedMotion="user">
-      {state.step === "home" && <Home onStart={start} />}
+      {state.step === "home" && <Home onStart={start} library={library} />}
       {state.step === "leaf" && <BalanceGame choices={state.choices} edit={state.edited} onAnswer={answer} />}
       {state.step === "target" && <TargetInput initial={state.form} edit={state.edited} busy={classifying} topics={topicsIn(vocab)} onSubmit={submitTarget} />}
       {inBook && (

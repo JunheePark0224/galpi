@@ -19,4 +19,29 @@ describe("Home (S-01)", () => {
     expect(screen.getByRole("heading", { name: "갈피" })).toBeInTheDocument();
     expect(screen.getByText("읽을 책, 갈피가 안 잡힐 때")).toBeInTheDocument();
   });
+
+  it("shows no library count below the first fill (F-23 hidden) — the cover keeps the logo", () => {
+    render(<Home onStart={vi.fn()} library={null} />);
+    expect(screen.queryByText(/갈피의 서재/)).toBeNull();
+    expect(screen.queryByText(/새로 꽂혔어요/)).toBeNull();
+  });
+
+  it("puts the library count on the cover and today's books on a bookmark (F-23, 시안 B)", () => {
+    const { container } = render(<Home onStart={vi.fn()} library={{ total: 1234, today: 12 }} />);
+    expect(screen.getByText("갈피의 서재 1,234권 · 오늘 12권이 새로 꽂혔어요")).toBeInTheDocument();
+    expect(screen.getByText("오늘 12권이 새로 꽂혔어요", { selector: "[aria-hidden='true']" })).toBeInTheDocument();
+    const art = container.querySelector("[data-testid='shelf-book']");
+    expect(art).toHaveAttribute("aria-hidden", "true");
+    expect(art).toHaveTextContent("갈피의 서재");
+    expect(art).toHaveTextContent("1,234권");
+    expect(art).toHaveTextContent("+12");
+    expect(screen.getAllByRole("button")).toHaveLength(2);
+  });
+
+  it("leaves out today's bookmark and sentence on a day with no new books", () => {
+    const { container } = render(<Home onStart={vi.fn()} library={{ total: 640, today: 0 }} />);
+    expect(screen.getByText("갈피의 서재 640권")).toBeInTheDocument();
+    expect(screen.queryByText(/새로 꽂혔어요/)).toBeNull();
+    expect(container.querySelector("[data-testid='shelf-book']")).not.toHaveTextContent("+");
+  });
 });

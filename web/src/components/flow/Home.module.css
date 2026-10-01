@@ -54,3 +54,22 @@
   width: 36px; height: 36px; border-radius: 50%; background: var(--paper-deep); color: var(--ink-soft);
 }
 .arrow { display: block; }
+
+/* F-23 (시안 B, 10-01): the library count in gold foil on the cover; today's books on a frosted bookmark with "+M". */
+.count { display: flex; flex-direction: column; align-items: center; margin-left: 18px; color: var(--foil); }
+.countLabel { font-size: 11px; letter-spacing: 1px; line-height: 1.4; }
+.countNum { font-family: var(--font-batang), serif; font-weight: 700; font-size: 32px; line-height: 1.15; }
+.countUnit { margin-left: 2px; font-size: 15px; }
+.newTag {
+  position: absolute; top: -12px; right: 46px; width: 46px; height: 60px; padding-top: 12px; transform: rotate(4deg);
+  border-radius: 23px 23px 2px 2px; background: var(--frost-fallback); border: var(--frost-edge); box-shadow: 0 1px 0 var(--paper-line);
+  font-family: var(--font-batang), serif; font-weight: 700; font-size: 14px; line-height: 1; text-align: center; color: var(--genre-essay);
+}
+.newTag::before { /* the string */
+  content: ""; position: absolute; top: -14px; left: 50%; width: 1.5px; height: 18px; margin-left: -0.75px; background: var(--genre-essay);
+}
+.news { margin: var(--space-1) 0 0; font-size: 13px; color: var(--ink-soft); }
+.srOnly {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}

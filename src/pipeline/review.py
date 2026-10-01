@@ -161,7 +161,7 @@ def main(argv: list[str] | None = None) -> int:
           f"(need <= {MAX_SAMPLE_CHANGED:.0f}%)")
     if grad["graduated"] and not load_config().auto_merge:
         print("GRADUATED on both counts: ask the user before auto_merge true")
-    print("next: cd web && npm run books:import, then commit the additions file, books.json and agreement.csv")
+    print("next: cd web && npm run books:import, then commit the additions file, agreement.csv and web/src/data/ (books.json, vocab.json, library.json)")
     return 0
 
 
