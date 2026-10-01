@@ -18,6 +18,7 @@ from pathlib import Path
 from build_check_page import DETAIL, OUT_DIR, clean, js_json, short_intro
 
 ROOT = Path(__file__).resolve().parents[1]
+CHIPS_DOC = ROOT / "docs" / "target-chips.md"
 DEFAULT = ROOT / "data" / "processed" / "additions" / "2026-10-01-pilot.json"
 VOCAB = ROOT / "data" / "processed" / "keyword_vocab.json"
 OUT = OUT_DIR / "pilot" / "review.html"
@@ -46,11 +47,30 @@ def build_entries(doc: dict) -> list[dict]:
     return out
 
 
+def keyword_definitions() -> dict:
+    """{topic: {keyword: definition}} from the "새 키워드 정의" table in docs/target-chips.md (shown on hover and under the chips)."""
+    defs: dict = {}
+    topic = ""
+    in_table = False
+    for line in CHIPS_DOC.read_text(encoding="utf-8").splitlines():
+        if line.startswith("새 키워드 정의"):
+            in_table = True
+            continue
+        if in_table and line.startswith("|") and not line.startswith("|---") and not line.startswith("| 주제 |"):
+            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+            if len(cells) >= 3:
+                topic = cells[0] or topic
+                defs.setdefault(topic, {})[cells[1]] = cells[2]
+        elif in_table and defs and not line.startswith("|"):
+            break
+    return defs
+
+
 def render(doc: dict, entries: list[dict], vocab: dict, file_name: str) -> str:
     topics = list(dict.fromkeys(e["draft_topic"] for e in entries))
     kws = {t: list(vocab[t]["kept"]) for t in vocab}
     slots = {"__BOOKS__": js_json(entries), "__TOPICS__": js_json(topics), "__KW__": js_json(kws),
-             "__WAYS__": js_json(WAY_LABELS), "__FILE__": js_json(file_name),
+             "__WAYS__": js_json(WAY_LABELS), "__DEFS__": js_json(keyword_definitions()), "__FILE__": js_json(file_name),
              "__KEY__": js_json(f"galpi-review-{file_name}")}
     return re.sub("|".join(slots), lambda m: slots[m.group(0)], TEMPLATE)
 
@@ -96,6 +116,7 @@ input[type=text]{flex:1;min-width:240px}
 .changed{font-size:11px;color:var(--warn)}.res{margin-top:6px;padding-left:10px;border-left:3px solid var(--line)}
 .bar{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:var(--paper);padding:10px 16px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
 .bar button{border:1px solid var(--paper);border-radius:999px;padding:8px 16px;font:inherit;background:var(--paper);color:var(--ink);cursor:pointer}
+.defs{margin:2px 0 8px 64px;font-size:13px;color:#6b625a}.defs ul{margin:6px 0 0;padding-left:18px;line-height:1.7}
 </style></head><body><main>
 <h1>갈피 새 책 검수 — 새 🎯 주제 6개</h1>
 <p class="sub">책마다 주제·키워드·읽는 방식·한 줄을 보고 고칠 곳만 고친 뒤 <b>맞아요</b>. 다 맞으면 주제 옆 <b>이 주제 모두 맞아요</b>.
@@ -105,7 +126,7 @@ input[type=text]{flex:1;min-width:240px}
 <div id="app"></div></main>
 <div class="bar"><span id="prog"></span><button id="dl">검수 결과 내려받기</button></div>
 <script>
-const BOOKS=__BOOKS__, TOPICS=__TOPICS__, KW=__KW__, WAYS=__WAYS__, FILE=__FILE__, KEY=__KEY__;
+const BOOKS=__BOOKS__, TOPICS=__TOPICS__, KW=__KW__, DEFS=__DEFS__, WAYS=__WAYS__, FILE=__FILE__, KEY=__KEY__;
 const MIN=12, MAX=36, HYPE=["최고","필독","반드시","완벽","인생책","미친","역대급","무조건","1위","베스트셀러","강력 추천","꼭 읽어야"];
 let st={}; try{st=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){st={}}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
@@ -119,7 +140,8 @@ function lineIssues(s,title){const n=len(s),out=[];if(n<MIN)out.push("짧음");i
  if(s.trim().endsWith("?"))out.push("물음표");return out}
 function card(b){
  const c=cur(b), dropped=c.status==="dropped", reserve=c.status==="reserve";
- const kws=(KW[c.topic]||[]).map(k=>`<button class="chip ${c.keywords.includes(k)?"on":""}" data-k="${esc(k)}">${esc(k)}</button>`).join("");
+ const kws=(KW[c.topic]||[]).map(k=>`<button class="chip ${c.keywords.includes(k)?"on":""}" data-k="${esc(k)}" title="${esc((DEFS[c.topic]||{})[k]||"")}">${esc(k)}</button>`).join("");
+ const defs=Object.entries(DEFS[c.topic]||{}).map(([k,d])=>`<li><b>${esc(k)}</b> — ${esc(d)}</li>`).join("");
  const ways=WAYS.map(([w,l])=>`<label><input type="radio" name="w${b.isbn}" value="${w}" ${c.way===w?"checked":""}>${w} <span class="cnt">${l}</span></label>`).join("");
  const opts=[...TOPICS.map(t=>`<option ${t===c.topic&&!dropped?"selected":""}>${esc(t)}</option>`),`<option value="__drop" ${dropped?"selected":""}>빼기 (이 주제들에 안 맞음)</option>`].join("");
  const iss=lineIssues(c.one_liner,b.title);
@@ -132,6 +154,7 @@ function card(b){
   ${reserve?`<button class="ghost" data-act="in">넣기 (예비 → 이 주제에)</button>`:`
   <div class="row"><span class="lab">주제</span><select data-act="topic">${opts}</select></div>
   ${dropped?"":`<div class="row"><span class="lab">키워드</span>${kws||'<span class="cnt">(키워드 없음)</span>'}</div>
+  ${defs?`<details class="defs"><summary>키워드 뜻 보기 (책의 중심일 때만 붙여요)</summary><ul>${defs}</ul></details>`:""}
   <div class="row way"><span class="lab">방식</span>${ways}</div>
   <div class="row"><span class="lab">한 줄</span><input type="text" data-act="line" value="${esc(c.one_liner)}">
    <span class="cnt ${iss.length?"bad":""}">${len(c.one_liner)}자${iss.length?" · "+iss.join(", "):""}</span></div>`}
