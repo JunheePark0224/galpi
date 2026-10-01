@@ -12,9 +12,9 @@
 }
 
 /* The big cover: a printed cover sits like a book on the desk (shadow-book); without one, our own cloth cover with the title. */
-.coverBox { width: min(56%, 200px); }
+.coverBox { width: min(56%, 200px); aspect-ratio: 1 / 1.45; }  /* the swap to the cloth cover must not move the page */
 .cover {
-  display: block; width: 100%; height: auto; border-radius: var(--radius-book);
+  display: block; width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-book);
   box-shadow: var(--shadow-book); background: var(--paper-deep);
 }
 .plainCover {

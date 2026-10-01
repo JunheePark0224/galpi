@@ -87,6 +87,22 @@ describe("ResultBook (S-06, C-11)", () => {
     expect(screen.getByText("나온 이유")).toBeInTheDocument();
   });
 
+  it("swaps the cover for our cloth cover when the image fails to load, and tries again for the next book", async () => {
+    vi.mocked(loadDetail).mockResolvedValue(DETAIL);
+    const { rerender } = render(<ResultBook pick={pick} position={1} total={2} onNext={vi.fn()} />);
+    const img = await screen.findByRole("img", { name: "여름의 우편함 표지" });
+    expect(img).toHaveAttribute("referrerpolicy", "no-referrer");
+    expect(img).toHaveAttribute("decoding", "async");
+    fireEvent.error(img);
+    expect(screen.queryByRole("img")).toBeNull();
+    expect(screen.getAllByText("여름의 우편함").length).toBeGreaterThan(1);       // the cloth cover carries the title next to the heading
+
+    const next: PickView = { ...pick, card: { ...pick.card, id: "9790000000002", title: "겨울의 우체국" } };
+    vi.mocked(loadDetail).mockResolvedValue({ ...DETAIL, cover: "https://image.yes24.com/goods/2/L" });
+    rerender(<ResultBook pick={next} position={2} total={2} onNext={vi.fn()} />);
+    expect(await screen.findByRole("img", { name: "겨울의 우체국 표지" })).toBeInTheDocument();
+  });
+
   it("credits Kakao when only Kakao answered", async () => {
     show({ ...emptyDetail(ISBN), source: "kakao", price: 14400, cover: "https://search1.kakaocdn.net/thumb/x" });
     expect(await screen.findByText("정보 제공: 카카오")).toBeInTheDocument();

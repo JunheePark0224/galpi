@@ -37,6 +37,8 @@ export function ResultBook({ pick, position, total, onNext }: Props) {
   const { card, kind, reason } = pick;
   const [detail, setDetail] = useState<BookDetail | null>(null);
   const [expanded, setExpanded] = useState(false);
+  // The cover URL that failed to load (not a boolean): another book brings another URL, so the failure resets by itself.
+  const [failedCover, setFailedCover] = useState<string | null>(null);
 
   useEffect(() => {
     let live = true;
@@ -47,6 +49,7 @@ export function ResultBook({ pick, position, total, onNext }: Props) {
   const intro = detail?.intro ?? "";
   const short = truncateIntro(intro);
   const line = facts(detail);
+  const cover = detail?.cover && detail.cover !== failedCover ? detail.cover : null;
 
   const expand = () => {
     setExpanded(true);
@@ -58,10 +61,14 @@ export function ResultBook({ pick, position, total, onNext }: Props) {
       <p className={styles.progress}>{`궁금해요 ${position} / ${total}`}</p>
 
       <div className={styles.coverBox}>
-        {detail?.cover ? (
-          // A third-party cover shown as YES24 serves it — not copied through our image optimiser.
+        {cover ? (
+          // A third-party cover shown as YES24 serves it — not copied through our image optimiser. No Referer is sent (hotlink
+          // filters); if it still fails, our own cloth cover takes its place.
           // eslint-disable-next-line @next/next/no-img-element
-          <img className={styles.cover} src={detail.cover} alt={`${card.title} 표지`} />
+          <img
+            className={styles.cover} src={cover} alt={`${card.title} 표지`}
+            referrerPolicy="no-referrer" decoding="async" onError={() => setFailedCover(cover)}
+          />
         ) : (
           <div className={styles.plainCover} aria-hidden="true"><span>{card.title}</span></div>
         )}
