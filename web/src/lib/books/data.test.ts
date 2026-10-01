@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import real from "@/data/books.json";
 import sample from "@/data/books.sample.json";
 import vocab from "@/data/vocab.json";
+import { shownExamples } from "@/lib/flow/examples";
 import { classifySchema, classifySystemPrompt } from "@/lib/goal/classify";
 import { matchGoal } from "@/lib/goal/match";
 import { MIN_ACTIVE_TOPIC_BOOKS, activeTopics } from "./active";
@@ -65,6 +66,28 @@ describe("app book data", () => {
     ["문해력 키우기", "글쓰기", ["문해력·어휘"]], ["카피라이팅", "글쓰기", ["카피라이팅"]],
   ])("a D-A draft pattern catches %s → %s %j (once its topic is on)", (note, topic, keywords) => {
     expect(matchGoal(note, vocab as Vocab)).toMatchObject({ topic, keywords, matched: true });
+  });
+
+  it("never sends an example chip to a keyword with fewer than 4 books (the coverage note starts below 4)", () => {
+    const books = real as unknown as CatalogBook[];
+    const active = activeTopics(books);
+    for (const chip of shownExamples(active)) {
+      for (const k of chip.keywords) {
+        const n = books.filter((b) => b.entry === "target" && b.topic === chip.topic && b.keywords.includes(k)).length;
+        expect(n, `${chip.text} → ${chip.topic}/${k}`).toBeGreaterThanOrEqual(4);
+      }
+    }
+  });
+
+  it.each([
+    ["글 잘 쓰기 연습", "글쓰기"], ["소설 쓰기", "글쓰기"], ["문장 쓰기", "글쓰기"], ["AI 잘 쓰기", "AI 활용"],
+  ])("word matching sends %s to %s, not to the topic that shares 쓰기", (note, topic) => {
+    expect(matchGoal(note, ACTIVE_VOCAB)).toMatchObject({ topic, matched: true });
+  });
+
+  it("word matching reads 회사 그만두고 싶어요 as 이직·퇴사", () => {
+    expect(matchGoal("회사 그만두고 싶어요", ACTIVE_VOCAB)).toMatchObject({ topic: "취업·커리어", keywords: ["이직·퇴사"], matched: true });
+    expect(matchGoal("회사를 그만두고 싶어요", ACTIVE_VOCAB)).toMatchObject({ topic: "취업·커리어", keywords: ["이직·퇴사"] });
   });
 
   it("keeps 마음·회복 in 습관·집중 only until 마음 돌보기 turns on (its 5 books are re-tagged in D-C)", () => {

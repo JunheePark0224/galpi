@@ -58,7 +58,12 @@ export function matchGoal(input: string, vocab: Vocab): GoalMatch {
   // The server takes at most MAX_KEYWORDS: keep the first ones in vocab order.
   if (top) return { ...base, topic: top.topic, keywords: top.keywords.slice(0, MAX_KEYWORDS), matched: true };
 
-  const byWords = rank(topics, (topic) => topicWords(topic, vocab).filter((w) => flat.includes(w)).length);
+  // A word that is part of the topic's own name counts double: "소설 쓰기" shares 쓰기 with AI 활용's label ("AI 똑똑하게 쓰기")
+  // and 글쓰기's keyword name, and the topic name is what settles it. Other ties stay with topic order.
+  const byWords = rank(topics, (topic) => {
+    const name = squash(topic);
+    return topicWords(topic, vocab).filter((w) => flat.includes(w)).reduce((n, w) => n + (name.includes(w) ? 2 : 1), 0);
+  });
   if (byWords.score > 0) return { ...base, topic: byWords.topic, matched: true };
 
   const grams = bigrams(flat);

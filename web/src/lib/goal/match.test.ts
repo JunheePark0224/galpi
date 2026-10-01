@@ -14,6 +14,7 @@ const VOCAB: Vocab = {
     },
     terms: [],
   },
+  글쓰기: { keywords: { "에세이·책 쓰기": "에세이 ?쓰기|책 ?쓰기" }, terms: [] },
   "업무 자동화": { keywords: { "파이썬 자동화": "파이썬|Python", "AI 업무 활용": "챗GPT|ChatGPT|생성형 ?AI" }, terms: ["노션"] },
   "습관·집중": { keywords: { "마음·회복": "회복 ?탄력성|스트레스|번아웃|불안" }, terms: ["도파민"] },
   "시간·생산성": { keywords: { "일하는 법": "일 ?잘하는|업무 ?효율|생산성" }, terms: ["시간 관리"] },
@@ -42,6 +43,11 @@ describe("matchGoal", () => {
 
   it("prefers keywords over topic words", () => {
     expect(matchGoal("파이썬으로 엑셀 정리", VOCAB)).toMatchObject({ topic: "업무 자동화", keywords: ["파이썬 자동화"] });
+  });
+
+  it("lets the topic's own name settle a word tie: 쓰기 is in AI 활용's label and in 글쓰기", () => {
+    expect(matchGoal("소설 쓰기", VOCAB)).toMatchObject({ topic: "글쓰기", keywords: [], matched: true });
+    expect(matchGoal("AI 잘 쓰기", VOCAB)).toMatchObject({ topic: "AI 활용", matched: true });
   });
 
   it("finds worries, not only subjects", () => {

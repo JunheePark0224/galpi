@@ -11,7 +11,7 @@ export interface ExampleChip { readonly text: string; readonly topic: Topic; rea
 export const EXAMPLE_CHIPS: readonly ExampleChip[] = [
   { text: "돈 관리", topic: "돈 관리·투자", keywords: [] },
   { text: "취업 준비", topic: "취업·커리어", keywords: ["자소서·면접"] },
-  { text: "불안할 때", topic: "마음 돌보기", keywords: ["불안·걱정"] },
+  { text: "불안할 때", topic: "마음 돌보기", keywords: [] },
   { text: "데이터 분석", topic: "데이터 분석", keywords: [] },
   { text: "AI 잘 쓰기", topic: "AI 활용", keywords: [] },
   { text: "글 잘 쓰기", topic: "글쓰기", keywords: [] },

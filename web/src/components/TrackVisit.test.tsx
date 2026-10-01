@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { ACTIVE_VOCAB } from "@/lib/books/catalog";
 import type { FlowState } from "@/lib/flow/state";
 
 /**
@@ -19,7 +20,7 @@ describe("site_visited on a fresh open vs a reload (hydrated TrackVisit + FlowRo
   });
 
   async function openWith(navType: string) {
-    sessionStorage.setItem("galpi.flow", JSON.stringify({ v: 2, state: { ...midRound, status: "idle", draw: null } }));
+    sessionStorage.setItem("galpi.flow", JSON.stringify({ v: 3, state: { ...midRound, status: "idle", draw: null } }));
     sessionStorage.setItem("galpi.round", "1");
     sessionStorage.setItem("galpi.entry", "leaf");
     vi.spyOn(performance, "getEntriesByType").mockReturnValue([{ type: navType }] as unknown as PerformanceEntryList);
@@ -37,7 +38,7 @@ describe("site_visited on a fresh open vs a reload (hydrated TrackVisit + FlowRo
       import("react"), import("react"), import("react-dom/server"), import("react-dom/client"),
       import("./TrackVisit"), import("./flow/FlowRoot"),
     ]);
-    const tree = createElement("div", null, createElement(TrackVisit), createElement(FlowRoot));
+    const tree = createElement("div", null, createElement(TrackVisit), createElement(FlowRoot, { vocab: ACTIVE_VOCAB }));
     const host = document.createElement("div");
     host.innerHTML = renderToString(tree);
     document.body.append(host);
