@@ -136,3 +136,42 @@ test("🎯 a 30-character goal with no spaces wraps inside the first page", asyn
   expect(overflow).not.toBeNull();
   expect(overflow?.scroll).toBeLessThanOrEqual(overflow?.client ?? 0);
 });
+
+test("🎯 a written goal sorted by the LLM: the button waits, the topic comes from the answer, E-21 says llm", async ({ page }) => {
+  const { events } = await recordEvents(page);
+  let release: () => void = () => {};
+  const answered = new Promise<void>((resolve) => { release = resolve; });
+  await page.route("**/api/goal/classify", async (route) => {
+    expect(route.request().postDataJSON()).toEqual({ text: "번아웃이 와요" });
+    await answered;
+    await route.fulfill({ json: { text: "번아웃이 와요", topic: "습관·집중", keywords: [], matched: true, method: "llm" } });
+  });
+  await page.goto("/");
+  await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
+  await page.getByRole("button", { name: "직접 쓰기" }).click();
+  await page.getByRole("textbox", { name: "직접 쓰기" }).fill("번아웃이 와요");
+  await page.getByRole("button", { name: "책 펼치기" }).click();
+  await expect(page.getByRole("button", { name: "책 펼치기" })).toBeDisabled();      // sorting: no second submit
+  release();
+  await expect(page.getByText("눌러서 펼치기")).toBeVisible();
+
+  await expect.poll(() => named(events, "free_goal_written").length).toBe(1);
+  expect(named(events, "free_goal_written")[0].props).toEqual({
+    goal_text: "번아웃이 와요", topic: "습관·집중", keywords: [], is_matched: true, method: "llm",
+  });
+  expect(named(events, "goal_submitted")[0].props).toMatchObject({ topic: "습관·집중", is_free_text: true });
+  expect(specMismatches(events)).toEqual([]);
+});
+
+test("🎯 the classifier failing never blocks the flow: the browser matches words itself", async ({ page }) => {
+  const { events } = await recordEvents(page);
+  await page.route("**/api/goal/classify", (route) => route.fulfill({ status: 500, json: { error: "boom" } }));
+  await page.goto("/");
+  await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
+  await page.getByRole("button", { name: "직접 쓰기" }).click();
+  await page.getByRole("textbox", { name: "직접 쓰기" }).fill("SQL 공부");
+  await page.getByRole("button", { name: "책 펼치기" }).click();
+  await expect(page.getByText("눌러서 펼치기")).toBeVisible();
+  await expect.poll(() => named(events, "free_goal_written").length).toBe(1);
+  expect(named(events, "free_goal_written")[0].props).toMatchObject({ topic: "데이터 분석", keywords: ["SQL"], method: "word" });
+});

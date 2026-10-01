@@ -14,7 +14,8 @@ export const MISSING_WHAT = "보기 하나를 고르거나 직접 써 주세요"
 // Plain text link, new tab, no logo; a search page would need the typed text in the URL — the home page has search.
 const YES24_HOME = "https://www.yes24.com/";
 
-interface Props { initial: TargetForm; edit: boolean; onSubmit: (form: TargetForm) => void }
+/** busy: a written goal is being sorted (/api/goal/classify, up to ~3 s) — the form waits instead of sending twice. */
+interface Props { initial: TargetForm; edit: boolean; busy?: boolean; onSubmit: (form: TargetForm) => void }
 /** P-03: an open-book mark before the label (decorative — the button still reads "책 펼치기"). */
 function BookIcon() {
   return (
@@ -25,7 +26,7 @@ function BookIcon() {
 }
 
 /** S-02 🎯 (C-09): one screen — 무엇을 (required: 6 chips or 직접 쓰기) · 분량 · 읽는 방식. */
-export function TargetInput({ initial, edit, onSubmit }: Props) {
+export function TargetInput({ initial, edit, busy = false, onSubmit }: Props) {
   const [form, setForm] = useState<TargetForm>(initial);
   const [missing, setMissing] = useState(false);
   const freeInput = useRef<HTMLInputElement>(null);
@@ -51,6 +52,7 @@ export function TargetInput({ initial, edit, onSubmit }: Props) {
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
+    if (busy) return;
     if (!formReady(form)) {
       setMissing(true);
       return;
@@ -125,7 +127,7 @@ export function TargetInput({ initial, edit, onSubmit }: Props) {
         </div>
       </div>
 
-      <Button type="submit" className={styles.submit}><BookIcon />책 펼치기</Button>
+      <Button type="submit" className={styles.submit} disabled={busy} aria-busy={busy}><BookIcon />책 펼치기</Button>
     </form>
   );
 }

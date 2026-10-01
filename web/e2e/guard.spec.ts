@@ -27,3 +27,10 @@ test("book detail answers our own pages only, and only for our books", async ({ 
   expect((await ok.json()).source).toBeNull();                           // no keys in E2E: the empty detail
   expect((await request.get("/api/books/9788998441012", { headers: { referer: `${baseURL}/` } })).status()).toBe(404);
 });
+
+test("goal classify refuses another origin and answers our own page with word matching (no key in E2E)", async ({ request, baseURL }) => {
+  expect((await request.post("/api/goal/classify", { data: { text: "SQL" }, headers: { origin: "https://evil.example" } })).status()).toBe(403);
+  const ok = await request.post("/api/goal/classify", { data: { text: "SQL 공부" }, headers: { origin: baseURL! } });
+  expect(ok.status()).toBe(200);
+  expect(await ok.json()).toMatchObject({ topic: "데이터 분석", keywords: ["SQL"], method: "word" });
+});
