@@ -1,5 +1,4 @@
 import { useSyncExternalStore } from "react";
-import type { Provider } from "@/lib/auth/next";
 
 /**
  * Who is here, for the browser (P5): the header's [로그인] / [내 책갈피 N], S-06 [내 책갈피에 꽂기], S-09.
@@ -13,14 +12,14 @@ const UNKNOWN: Account = { status: "unknown", id: null, count: 0 };
 let account: Account = UNKNOWN;
 let sheet: { source: LoginSource } | null = null;
 let asking: Promise<Account> | null = null;
-let returned: Provider | null = null;
+/** S-06 꽂기 per book in this page: saving → saved / failed (lib/library/keep). */
+export type KeepState = "saving" | "saved" | "failed";
+let keeps: Readonly<Record<string, KeepState>> = {};
 const listeners = new Set<() => void>();
 const emit = () => listeners.forEach((l) => l());
 
 export const accountSnapshot = (): Account => account;
 export const loginSheetSnapshot = (): { source: LoginSource } | null => sheet;
-/** Set once when this page came back from a successful login (LoginReturn) — S-06 then keeps the waiting bookmark. */
-export const loginReturnSnapshot = (): Provider | null => returned;
 export function subscribeAccount(listener: () => void): () => void {
   listeners.add(listener);
   return () => listeners.delete(listener);
@@ -55,6 +54,11 @@ export function setSavedCount(count: number): void {
   if (account.status === "in") set({ ...account, count });
 }
 
+/** One more (or fewer) bookmark, counted on the latest state — not on a value a component read earlier. */
+export function addSavedCount(delta: number): void {
+  if (account.status === "in") set({ ...account, count: Math.max(0, account.count + delta) });
+}
+
 export function signedOut(): void {
   set({ status: "out", id: null, count: 0 });
 }
@@ -75,16 +79,15 @@ const closed = () => null;
 export const useAccount = (): Account => useSyncExternalStore(subscribeAccount, accountSnapshot, unknown);
 export const useLoginSheet = () => useSyncExternalStore(subscribeAccount, loginSheetSnapshot, closed);
 
-export function markLoginReturned(provider: Provider): void {
-  returned = provider;
+
+export const keepSnapshot = (isbn: string): KeepState | undefined => keeps[isbn];
+
+export function setKeepState(isbn: string, state: KeepState | null): void {
+  const rest = Object.fromEntries(Object.entries(keeps).filter(([key]) => key !== isbn));
+  keeps = state ? { ...rest, [isbn]: state } : rest;
   emit();
 }
 
-/** The waiting 꽂기 was handled: the next render no longer sees a fresh login. */
-export function consumeLoginReturn(): void {
-  returned = null;
-  emit();
-}
-
-export const useLoginReturn = (): Provider | null => useSyncExternalStore(subscribeAccount, loginReturnSnapshot, closed);
+export const useKeepState = (isbn: string): KeepState | undefined =>
+  useSyncExternalStore(subscribeAccount, () => keeps[isbn], () => undefined);
 

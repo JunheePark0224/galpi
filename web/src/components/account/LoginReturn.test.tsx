@@ -7,6 +7,8 @@ const setUserId = vi.fn();
 vi.mock("@/lib/track/client", () => ({ track: (...a: unknown[]) => track(...a) }));
 vi.mock("@/lib/track/amplitude", () => ({ setAmplitudeUser: (...a: unknown[]) => setAmplitudeUser(...a) }));
 vi.mock("@/lib/track/common", () => ({ setUserId: (...a: unknown[]) => setUserId(...a) }));
+const keepWaiting = vi.fn().mockResolvedValue(undefined);
+vi.mock("@/lib/library/keep", () => ({ keepWaiting: () => keepWaiting() }));
 
 const me = (body: unknown) => vi.fn().mockResolvedValue({ ok: true, json: async () => body });
 const IN = { enabled: true, loggedIn: true, id: "u1", count: 0 };
@@ -26,12 +28,12 @@ describe("LoginReturn (E-14 once, then the address is clean)", () => {
   beforeEach(() => vi.useRealTimers());
   afterEach(() => { vi.unstubAllGlobals(); vi.clearAllMocks(); });
 
-  it("sends E-14 with the provider and first-login flag, names the person in Amplitude, and hands the return to S-06", async () => {
-    const { store, fetchMe } = await mount("/?y=2&login=kakao&first=1#top", IN);
+  it("sends E-14 with the provider and first-login flag, names the person in Amplitude, then keeps the waiting bookmark", async () => {
+    const { fetchMe } = await mount("/?y=2&login=kakao&first=1#top", IN);
     expect(track).toHaveBeenCalledWith("login_completed", { provider: "kakao", is_first_login: true });
     expect(setUserId).toHaveBeenCalledWith("u1");
     expect(setAmplitudeUser).toHaveBeenCalledWith("u1", "kakao");
-    expect(store.loginReturnSnapshot()).toBe("kakao");
+    expect(keepWaiting).toHaveBeenCalledTimes(1);
     expect(window.location.pathname + window.location.search + window.location.hash).toBe("/?y=2#top");
     expect(window.history.state).toEqual({ keep: 1 });
     expect(fetchMe).toHaveBeenCalledTimes(1);
@@ -41,6 +43,7 @@ describe("LoginReturn (E-14 once, then the address is clean)", () => {
     await mount("/library", IN);
     expect(track).not.toHaveBeenCalled();
     expect(setAmplitudeUser).toHaveBeenCalledWith("u1", undefined);
+    expect(keepWaiting).not.toHaveBeenCalled();
     expect(window.location.search).toBe("");
   });
 
@@ -51,5 +54,6 @@ describe("LoginReturn (E-14 once, then the address is clean)", () => {
     await mount("/?login=google&first=0", { enabled: true, loggedIn: false, id: null, count: 0 });
     expect(track).not.toHaveBeenCalled();
     expect(screen.getAllByRole("status").at(-1)).toHaveTextContent("로그인하지 못했어요");
+    expect(keepWaiting).not.toHaveBeenCalled();
   });
 });

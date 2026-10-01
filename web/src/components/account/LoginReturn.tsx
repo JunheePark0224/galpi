@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { loadAccount, markLoginReturned } from "@/lib/account/store";
+import { loadAccount } from "@/lib/account/store";
 import { LOGIN_PARAMS, readLoginMark } from "@/lib/auth/next";
+import { keepWaiting } from "@/lib/library/keep";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
 import { setUserId } from "@/lib/track/common";
@@ -18,8 +19,8 @@ function clearMark(params: URLSearchParams): void {
 
 /**
  * On every page (layout, after the page itself so flow restore has read the mark — storage.settleOpen): asks who is
- * here, names a logged-in person for Amplitude (taxonomy 3-2), and after /auth/callback sends E-14 once and tells S-06
- * that a waiting 꽂기 can go ahead. A failed login gets a short note.
+ * here, names a logged-in person for Amplitude (taxonomy 3-2), and after /auth/callback sends E-14 once and keeps the
+ * bookmark that waited for the login (F-12 자동 꽂기 — the page came back to that same book). A failed login gets a note.
  */
 export function LoginReturn() {
   const [failed, setFailed] = useState(false);
@@ -36,7 +37,7 @@ export function LoginReturn() {
       if (!mark) return;
       if (mark.provider && account.status === "in") {
         track("login_completed", { provider: mark.provider, is_first_login: mark.first });
-        markLoginReturned(mark.provider);
+        void keepWaiting();
       } else {
         setFailed(true);
       }

@@ -63,10 +63,10 @@ click,결과,SDK,bookmark_flipped,S-06에서 꺼낸 책갈피를 [뒷면 보기]
 click,결과,SDK,yes24_link_clicked,"S-06 또는 S-09에서 [예스24에서 보기]를 누를 때, 또는 S-04 F-24 ②·③에서 [예스24에서 … 찾기]를 누를 때 (새 탭)",book_id,책 ISBN-13 (books.isbn). source=first_page면 null (책 없이 검색),FALSE,String,"null, ""9788998441012""",v0.3 반영 · 이전 이름: yes24_clicked / v0.6: source=first_page면 null,E-18,live
 click,결과,SDK,yes24_link_clicked,"S-06 또는 S-09에서 [예스24에서 보기]를 누를 때, 또는 S-04 F-24 ②·③에서 [예스24에서 … 찾기]를 누를 때 (새 탭)",source,누른 화면,FALSE,String,"""result"", ""library"", ""first_page""","v0.3 반영 · 이전 이름: yes24_clicked / result=S-06, library=S-09, first_page=S-04 F-24 ②·③ (v0.6 추가)",E-18,live
 click,결과,SDK,yes24_link_clicked,"S-06 또는 S-09에서 [예스24에서 보기]를 누를 때, 또는 S-04 F-24 ②·③에서 [예스24에서 … 찾기]를 누를 때 (새 탭)",pick_type,"추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음). source=library·first_page면 null",FALSE,String,"null, ""recommended"", ""random""",v0.3 명세 반영(EVENT_SPEC) · 심는 것은 P4 · 이전 이름: yes24_clicked / 추가,E-18,live
-click,보관,SDK,save_clicked,S-06 꺼낸 책갈피 아래 [내 책갈피에 꽂기]를 누를 때 (로그인 전이면 이어서 E-12),book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-11,planned-P5
-click,보관,SDK,save_clicked,S-06 꺼낸 책갈피 아래 [내 책갈피에 꽂기]를 누를 때 (로그인 전이면 이어서 E-12),is_logged_in,누를 때 로그인 상태였는지,FALSE,Boolean,"TRUE, FALSE",,E-11,planned-P5
-system,보관,SDK,book_saved,"꽂기가 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 꽂기(같은 책 화면으로 돌아온 뒤). 새 책갈피는 첫 막대 맨 앞",book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-15,planned-P5
-system,보관,SDK,book_saved,"꽂기가 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 꽂기(같은 책 화면으로 돌아온 뒤). 새 책갈피는 첫 막대 맨 앞",is_auto_save,로그인 직후 자동 보관인지,FALSE,Boolean,"TRUE, FALSE",,E-15,planned-P5
+click,보관,SDK,save_clicked,S-06 꺼낸 책갈피 아래 [내 책갈피에 꽂기]를 누를 때 (로그인 전이면 이어서 E-12),book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-11,live
+click,보관,SDK,save_clicked,S-06 꺼낸 책갈피 아래 [내 책갈피에 꽂기]를 누를 때 (로그인 전이면 이어서 E-12),is_logged_in,누를 때 로그인 상태였는지,FALSE,Boolean,"TRUE, FALSE",,E-11,live
+system,보관,SDK,book_saved,"꽂기가 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 꽂기(같은 책 화면으로 돌아온 뒤). 새 책갈피는 첫 막대 맨 앞",book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-15,live
+system,보관,SDK,book_saved,"꽂기가 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 꽂기(같은 책 화면으로 돌아온 뒤). 새 책갈피는 첫 막대 맨 앞",is_auto_save,로그인 직후 자동 보관인지,FALSE,Boolean,"TRUE, FALSE",,E-15,live
 click,보관,SDK,book_unsaved,S-09 내 책갈피에서 책갈피 뒷면의 [빼기]를 확인까지 누를 때,book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-16,planned-P5
 view,로그인,SDK,login_prompt_shown,S-07 로그인 창이 뜰 때,source,어디서 열렸는지,FALSE,String,"""save"", ""header""","save=[내 책갈피에 꽂기], header=우측 위 [로그인]",E-12,live
 click,로그인,SDK,login_started,S-07 카카오/구글 버튼을 누를 때 (외부 로그인으로 떠나기 직전),provider,로그인 방식,FALSE,String,"""kakao"", ""google""",,E-13,live

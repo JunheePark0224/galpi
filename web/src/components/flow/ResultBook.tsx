@@ -7,7 +7,10 @@ import { loadDetail } from "@/lib/books/detailClient";
 import type { PickView } from "@/lib/flow/state";
 import { truncateIntro } from "@/lib/recommend";
 import { track } from "@/lib/track/client";
+import { keepSnapshot, useAccount } from "@/lib/account/store";
+import { readPending } from "@/lib/library/pending";
 import { BookmarkInBook } from "./BookmarkInBook";
+import { KeepButton } from "./KeepButton";
 import styles from "./ResultBook.module.css";
 
 /** New copy (logged in context.md): the docs name the buttons of S-06 but not the way on, nor the missing-intro case. */
@@ -33,8 +36,9 @@ function facts(d: BookDetail | null): string[] {
  * S-06 (C-11), one 궁금해요 book: big cover with its S-05 bookmark in it (C-16) → title → rating · price · pages → intro
  * (folded) → buttons → credit.
  * No 나온 이유 line (10-01, user): 🎯 mostly repeats the chosen topic. `pick.reason` is on the bookmark's back instead.
- * The parent keys it by book, so every book starts folded, loading and with its bookmark in. [내 책갈피에 꽂기] joins in P5
- * (a button that does nothing would mislead — the same call as the empty login slot, context 09-30).
+ * The parent keys it by book, so every book starts folded, loading and with its bookmark in — or out, when the page came
+ * back from logging in to keep this book (F-12). While the bookmark is out and login is on, [내 책갈피에 꽂기] (under the
+ * book) is the main button and [예스24에서 보기] steps down to secondary (one main button per screen, C-16).
  */
 export function ResultBook({ pick, position, total, onNext }: Props) {
   const { card, kind } = pick;
@@ -42,6 +46,10 @@ export function ResultBook({ pick, position, total, onNext }: Props) {
   const [expanded, setExpanded] = useState(false);
   // The cover URL that failed to load (not a boolean): another book brings another URL, so the failure resets by itself.
   const [failedCover, setFailedCover] = useState<string | null>(null);
+  const [startOut] = useState(() => readPending()?.isbn === card.id || keepSnapshot(card.id) !== undefined);
+  const [out, setOut] = useState(startOut);
+  const account = useAccount();
+  const keepLeads = out && (account.status === "in" || account.status === "out");
 
   useEffect(() => {
     let live = true;
@@ -63,7 +71,7 @@ export function ResultBook({ pick, position, total, onNext }: Props) {
     <section className={styles.result} aria-labelledby="result-title" aria-busy={detail === null}>
       <p className={styles.progress}>{`궁금해요 ${position} / ${total}`}</p>
 
-      <BookmarkInBook pick={pick} position={position}>
+      <BookmarkInBook pick={pick} position={position} startOut={startOut} onOutChange={setOut} keep={<KeepButton pick={pick} />}>
         <div className={styles.coverBox}>
           {cover ? (
             // A third-party cover shown as YES24 serves it — not copied through our image optimiser. No Referer is sent (hotlink
@@ -103,6 +111,7 @@ export function ResultBook({ pick, position, total, onNext }: Props) {
       <div className={styles.actions}>
         <Button variant="secondary" onClick={onNext}>{position < total ? NEXT_BOOK : LAST_BOOK}</Button>
         <LinkButton
+          variant={keepLeads ? "secondary" : "primary"}
           href={detail?.link ?? yes24SearchUrl(card.id)}
           onClick={() => track("yes24_link_clicked", { book_id: card.id, source: "result", pick_type: kind })}
         >

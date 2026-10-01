@@ -22,18 +22,25 @@ export const saidBack = (label: string, items: readonly string[], met: string) =
 const DRAG_PX = 24;
 
 type Pose = "in" | "out";
-interface Props { pick: PickView; position: number; children: ReactNode }
+/**
+ * keep: the [내 책갈피에 꽂기] block (P5), shown under the book while the bookmark is out. startOut: open with the bookmark
+ * already out — the page came back from a login for this book (F-12). onOutChange: tells S-06 which button leads.
+ */
+interface Props {
+  pick: PickView; position: number; children: ReactNode;
+  keep?: ReactNode; startOut?: boolean; onOutChange?: (out: boolean) => void;
+}
 
 /**
  * C-16 on S-06: the bookmark this book was met with on S-05 (`pick.art`) sticks out of the cover by its top quarter (string
  * + the top of the arch window). Tap it (or drag it up with a mouse or pen) → `bookmark-pull` lifts it out and lays it in
  * front of the book; while it lies over the cover its film is opaque (T-03 exception). Tap again → back in. Out, it can be
- * turned over to its back (C-13: 나온 이유 + 만난 날). The keep button joins in P5 — nothing here does what it cannot do yet.
+ * turned over to its back (C-13: 나온 이유 + 만난 날), and kept with [내 책갈피에 꽂기] (P5, `keep`).
  * Touch is tap only: a finger swipe on the peek scrolls the page like anywhere else.
  */
-export function BookmarkInBook({ pick, position, children }: Props) {
+export function BookmarkInBook({ pick, position, children, keep, startOut = false, onOutChange }: Props) {
   const { card, kind, art, reason } = pick;
-  const [pose, setPose] = useState<Pose>("in");
+  const [pose, setPose] = useState<Pose>(startOut ? "out" : "in");
   const [moving, setMoving] = useState(false);
   const [flipped, setFlipped] = useState(false);
   const [said, setSaid] = useState("");
@@ -52,6 +59,7 @@ export function BookmarkInBook({ pick, position, children }: Props) {
     setFlipped(false);
     setSaid("");
     setHint(false);
+    onOutChange?.(next === "out");
     if (next === "out") track("bookmark_pulled", { book_id: card.id, position, pick_type: kind });
   };
 
@@ -127,6 +135,7 @@ export function BookmarkInBook({ pick, position, children }: Props) {
       </div>
       {out && (
         <div className={styles.tools}>
+          {keep}
           <button type="button" className={styles.flip} onClick={flip}>{flipped ? FLIP_FRONT : FLIP_BACK}</button>
           <span className={styles.said} role="status">{said}</span>
         </div>

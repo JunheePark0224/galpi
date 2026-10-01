@@ -1,0 +1,8 @@
+/* C-16 (P5): the main button right under the book while its bookmark is out. */
+.keep { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-1); }
+.button { width: 100%; }
+.note { margin: 0; text-align: center; font-size: 12px; color: var(--ink-muted); }
+.error { margin: 0; text-align: center; font-size: 13px; color: var(--genre-korean-fiction); }
+.kept { display: flex; align-items: center; justify-content: center; gap: 4px; min-height: 48px; margin: 0; font-size: 14px; color: var(--genre-essay); }
+.link { display: inline-flex; align-items: center; min-height: var(--touch); color: var(--ink); text-underline-offset: 3px; }
+.link:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
