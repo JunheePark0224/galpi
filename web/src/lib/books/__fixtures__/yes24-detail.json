@@ -1,0 +1,62 @@
+{
+  "success": true,
+  "message": "성공",
+  "data": {
+    "meta": {
+      "apiTitle": "상품 상세 조회",
+      "apiLink": "https://apis.yes24.com/v1/goods/itemDetail",
+      "logoUrl": "https://image.yes24.com/logo.png",
+      "pubDate": "2026-10-01T10:00:00+09:00",
+      "query": "?searchType=ISBN13&query=9790000000001&detail=Y",
+      "version": "v1"
+    },
+    "items": [
+      {
+        "sortOrder": 1,
+        "itemId": 10000001,
+        "title": "여름의 우편함",
+        "subTitle": "가짜 책 — 테스트용",
+        "author": "한여름 저",
+        "goodsType": "도서",
+        "goodsSortNm": "국내도서 > 소설",
+        "adultYn": "N",
+        "publisher": "테스트출판",
+        "isbn10": "0000000001",
+        "isbn13": "9790000000001",
+        "shopPrice": 16000,
+        "salePrice": 14400,
+        "publishDate": "20250101",
+        "itemStatus": "판매중",
+        "yesPoint": 800,
+        "salePoint": 1200,
+        "fixedBookPriceYn": "Y",
+        "originalTitle": null,
+        "originalTranslation": null,
+        "pages": 280,
+        "weight": 400,
+        "width": 128,
+        "length": 188,
+        "height": 18,
+        "itemFormat": null,
+        "starScore": 9.4,
+        "cover": "http://image.yes24.com/goods/10000001/L",
+        "link": "https://www.yes24.com/product/goods/10000001",
+        "addOnLink": "",
+        "mobileLink": "https://m.yes24.com/goods/detail/10000001",
+        "upDown": null,
+        "ebookId": null,
+        "eBookLink": "",
+        "contentDetail": {
+          "bookIntroduction": "<b>보내지 못한 편지는 어디로 갈까?</b>\r\n여름마다 열리는 작은 우편함\r\n\r\n__이 소개는 테스트를 위해 지어낸 글이다. 바닷가 마을의 우편함에는 주인을 잃은 편지가 쌓인다. 열두 살 여름이는 편지를 하나씩 읽으며 마을 사람들의 지난 여름을 알게 된다. 편지마다 다른 계절이 들어 있고, 여름이는 그 계절을 하나씩 건너간다. 마지막 편지에는 여름이 자신의 이름이 적혀 있다.\r\n\r\n&quot;편지는 늦게 와도 도착한다&quot; &amp; 그 밖의 이야기.",
+          "bookSummary": null,
+          "tableOfContents": "1장 우편함\r\n2장 늦은 편지"
+        },
+        "series": []
+      }
+    ],
+    "currentPage": 1,
+    "pageSize": 1,
+    "totalCount": 1
+  },
+  "errorCode": null
+}

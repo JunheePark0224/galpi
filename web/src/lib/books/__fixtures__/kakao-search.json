@@ -1,0 +1,19 @@
+{
+  "documents": [
+    {
+      "authors": ["한여름"],
+      "contents": "테스트를 위해 지어낸 짧은 소개",
+      "datetime": "2025-01-01T00:00:00.000+09:00",
+      "isbn": "0000000001 9790000000001",
+      "price": 16000,
+      "publisher": "테스트출판",
+      "sale_price": 14400,
+      "status": "정상판매",
+      "thumbnail": "https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=test",
+      "title": "여름의 우편함",
+      "translators": [],
+      "url": "https://search.daum.net/search?q=test"
+    }
+  ],
+  "meta": { "is_end": true, "pageable_count": 1, "total_count": 1 }
+}
