@@ -1,6 +1,6 @@
 # 개발 순서 — 갈피 (Galpi)
 
-Last Updated: 2026-09-30
+Last Updated: 2026-10-01
 
 `../Reference.pdf`(몽글이 키우기 개발 기록)의 순서를 따르되 갈피에 맞게 바꾼 것.
 단계를 끝낼 때마다 상태와 결과물을 여기에 적는다.
@@ -117,3 +117,11 @@ Last Updated: 2026-09-30
 - 브랜치 `feat/amplitude`(아직 main 아님): Amplitude 브라우저 SDK(`d2bb548`·`839f9a5`·`148cf4b`, 리뷰·재검토 통과 — 지연 로딩, engagement 끔, 녹화 20%·입력 가림, 처리방침 공개) + 택소노미 문서 v0.2(`0cef9d8`, `docs/taxonomy.md`·`taxonomy.csv`, 사용자 결정 반영)
 - **다음에 이어서 할 일 (A 단계)**: ① 택소노미 개발 계획서 `docs/plans/2026-09-30-taxonomy-dev.md` 작성(중단됨 — 처음부터 다시) → ② SDD로 구현(이름 바꾸기, goal_submitted, 회차 규칙, goal_text는 Supabase만, EVENT_SPEC 타입 검사, CSV↔코드 자동 검사, Amplitude 대기열 보완, CLAUDE.md 규칙) → ③ main 병합·배포(사용자 허락) → ④ 사용자가 Vercel Production에 `NEXT_PUBLIC_AMPLITUDE_API_KEY` + Amplitude 대시보드 Session Replay 20%·입력 가림 → ⑤ Amplitude 커넥터로 카탈로그 등록·대시보드
 - 그 뒤: P4 → P5 → P7(5명 반응) → P8·P9 (전체 목록은 대화 09-30 "남은 단계")
+
+### 10-01 — 택소노미 개발 라운드 v0.3 (`docs/plans/2026-10-01-taxonomy-dev.md`, 브랜치 `feat/amplitude`)
+- 이름 변경(이벤트 3 + 공통 속성 2 + 속성·값 19), E-26 `goal_submitted`, E-08 `one_liner_style`·E-20 `source` → `taxonomy.md`·`taxonomy.csv`와 코드가 같아짐(csv 상태 live 13)
+- `EVENT_SPEC` 하나에서: `track()` 타입 검사(tsc가 호출 15곳 검사), `/api/track` props 검사(명세 밖은 버리고 키 이름만 로그), Amplitude 사본에서 `goal_text` 뺌
+- 회차: [처음으로] 뒤 같은 탭 재시작 = round 2 (E2E로 확인). 직접 쓴 글은 Supabase에만 + 첫 장 리플레이 가림, `/privacy` 6-3 문장 2개(갱신일 10-01)
+- Amplitude 대기열: init 전 이벤트도 받고(키 있을 때만, 50개) 원래 시각으로 넘김
+- 자동 검사: `taxonomy.test.ts`(csv 13열·명명·csv ↔ `EVENT_SPEC` ↔ md 제목 ↔ `track()` 호출), E2E가 보낸 이벤트마다 props·common 키를 명세와 대조
+- **다음에 이어서 할 일**: ③ main 병합·배포(사용자 허락) → ④ 사용자가 Vercel Production에 `NEXT_PUBLIC_AMPLITUDE_API_KEY` + Amplitude 대시보드 Session Replay 20%·입력 가림 → ⑤ Amplitude 커넥터로 카탈로그 등록(csv Description·Category)·대시보드 → P7 전 Supabase 테스트 기록 지우기

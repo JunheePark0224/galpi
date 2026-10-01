@@ -1,6 +1,6 @@
 # Tasks — 갈피 (Galpi)
 
-Last Updated: 2026-09-30
+Last Updated: 2026-10-01
 
 ## 0. 기획 (9/28 ~ 10/4)
 - [x] 아이디어 검토 · 경쟁 조사 · 알라딘 추천마법사 분석
@@ -44,6 +44,8 @@ Last Updated: 2026-09-30
 - [x] 배포 전 준비(P7에서 당김) — 처리방침 v0 `/privacy`·1년 자동 삭제, 같은 출처·요청 한도·크기 상한·보안 헤더, `/design` 숨김, `deploy.md` (9/30)
 - [x] **첫 배포** — https://galpi-omega.vercel.app (GitHub `JunheePark0224/galpi` 공개, 기록에서 앱 리뷰·Reference.pdf·정보나루 원본 제거) (9/30)
 - [x] 디자인 반영 — Stitch 시안 적용, 로고 SVG, 저자 줄, 로고 머리글, 화면 가득 책·가운데 책갈피·데스크톱 넓게 (`docs/plans/2026-09-30-design-pass.md`) (9/30)
+- [x] 이벤트 택소노미 v0.2(문서) + 개발 라운드 v0.3 — 이름 변경, E-26, 회차 규칙, 직접 쓴 글은 Supabase만, `EVENT_SPEC` 타입 검사·서버 검사, CSV ↔ 코드 자동 검사, Amplitude 대기열 (`docs/taxonomy.md`, `docs/plans/2026-10-01-taxonomy-dev.md`) (10/1)
+- [ ] `feat/amplitude` main 병합·배포 → Vercel Production에 Amplitude 키(사용자) → 카탈로그·대시보드
 - [ ] P7 휴대폰·카톡 브라우저 점검, 5명 반응, 테스트 기록 지우기
 
 ### 📚 데이터

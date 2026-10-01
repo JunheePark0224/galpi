@@ -57,7 +57,7 @@ Last Updated: 2026-09-30
 - [ ] `/design`이 **404**다
 - [ ] `/robots.txt`에 `Disallow: /design`, `Disallow: /api/`가 있다
 - [ ] `/privacy`에 문의 이메일이 보인다 (없다는 문구가 아니라)
-- [ ] Production에서 첫 화면을 열면 Amplitude Live/User Lookup에 `visit`(`prompt_version` = `BA400.4`)이 뜨고, 그 device_id가 Supabase `events.common->>'anon_id'`와 같다
+- [ ] Production에서 첫 화면을 열면 Amplitude Live/User Lookup에 `site_visited`(`prompt_version` = `BA400.4`)가 뜨고, 그 device_id가 Supabase `events.common->>'anon_id'`와 같다
 - [ ] Amplitude 프로젝트의 Session Replay 설정이 샘플링 20%·입력 가림이다 (대시보드 값이 코드의 값보다 우선한다)
 - [ ] Preview 배포에서는 Amplitude로 나가는 요청이 없다 (키를 Preview에 넣지 않았으니)
 - [ ] 다른 사이트에서 `/api/track`을 부르면 403이다 (선택):
