@@ -10,6 +10,7 @@ interface Props { card: BookCard; reason: Reason; met: string; moving?: boolean 
 /**
  * The back of a C-02 bookmark (DESIGN C-13, first used by C-16 on S-06): the same 160 × 344 frame — title → a short
  * line in the genre colour → 나온 이유 (or 이 책은) and its items → 만난 날 → "갈피". All ink on the film (DESIGN 7).
+ * A reason with no items (a 🍃 book with every axis 0) leaves its block out rather than a label over an empty list.
  */
 export function BookmarkBack({ card, reason, met, moving = false }: Props) {
   const tone = toneOf(card);
@@ -24,11 +25,15 @@ export function BookmarkBack({ card, reason, met, moving = false }: Props) {
       <div className={`${frame.film} ${styles.card}`}>
         <span className={frame.hole} aria-hidden="true" />
         <p className={styles.title}>{card.title}</p>
-        <span className={styles.rule} aria-hidden="true" />
-        <p className={styles.label}>{reason.label}</p>
-        <ul className={styles.items}>
-          {reason.items.map((item) => <li key={item}><span aria-hidden="true" />{item}</li>)}
-        </ul>
+        {reason.items.length > 0 && (
+          <>
+            <span className={styles.rule} aria-hidden="true" />
+            <p className={styles.label}>{reason.label}</p>
+            <ul className={styles.items}>
+              {reason.items.map((item, i) => <li key={`${i}-${item}`}><span aria-hidden="true" />{item}</li>)}
+            </ul>
+          </>
+        )}
         <span className={styles.rule} aria-hidden="true" />
         <p className={styles.label}>만난 날</p>
         <p className={styles.met}>{met}</p>

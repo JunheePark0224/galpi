@@ -522,7 +522,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 결과 | click | live | 추가 (v0.7) |
 
-**언제**: S-06에서 꺼낸 책갈피를 [뒷면 보기]로 뒤집어 뒷면(나온 이유·만난 날)을 볼 때. 앞면으로 돌아갈 때는 남지 않는다  
+**언제**: S-06에서 꺼낸 책갈피를 [뒷면 보기]로 뒤집어 뒷면(나온 이유·만난 날)을 볼 때. 앞면으로 돌아갈 때는 남지 않는다. 다시 뒷면으로 뒤집거나 넣었다 꺼내 또 뒤집으면 **그때마다 또 남는다**(뒷면율은 책 단위로 중복 제거)  
 **분석 질문**: Q-11 (나온 이유를 찾아 보는가 — CLAUDE.md 원칙 2의 기준 공개가 읽히는지)
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -919,7 +919,7 @@ export const EVENT_SPEC = {
     goal_text: { type: "string", only: "supabase", max: 30 }, topic: { type: "string" },
     keywords: { type: "string", array: true }, is_matched: { type: "boolean" }, method: { type: ["word", "llm"] },
   },
-  // … 25개 전부
+  // … 27개 전부
 } as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
 export type EventName = keyof typeof EVENT_SPEC;         // EVENT_NAMES는 여기서 만든다
 export type PropsOf<N extends EventName> = /* EVENT_SPEC[N]에서 보내는 속성의 타입을 뽑는 매핑 타입 (only: "amplitude" 제외) */;
@@ -970,7 +970,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.4 | 2026-10-01 | Claude (P4 구현) | S-06에서 E-09 `result_viewed`·E-10 `result_book_viewed`(`pick_type` 포함)·E-23 `description_expanded`·E-18 `yes24_link_clicked`(`source`=result, `pick_type`), S-08에서 E-19 `redraw_clicked`를 심어 `live`로(E-19 뒤 round +1은 v0.3의 `track()` 그대로). E-20 설명에서 P3 임시 화면 문구를 뺌. 이벤트 이름·속성 변경 없음 |
 | v0.5 | 2026-10-01 | Claude (D-D 입력 B안) | S-02 🎯가 큰 무엇을 칸 + 예시 칩 6개로(PRD F-02, context 10-01). E-03 `chip_type` 값 "topic" → "example"(예시 칩을 누를 때, `chip_value` = 칩 글). E-26 `is_free_text`는 이름·뜻 그대로 "보기 vs 직접 쓰기"(Q-10 ②) — FALSE = 예시 칩 글을 고치지 않고 제출. 그 글은 칩마다 정해 둔 주제·키워드로 바로 연결(Claude 호출 없음)되고 E-21·E-22는 남지 않는다(주제 칩 때와 같음). 고친 글은 직접 쓴 말 — 분류, E-21·E-22. 새 이벤트·속성 없음 |
 | v0.5.1 | 2026-10-01 | Claude (최종 검토 반영) | 로고·주소로 새로 열기 규칙(home-nav)의 `round` 변경을 기록: 판 도중이던 흐름을 `navigate`로 새로 열면 round +1(이벤트 없음)·`entry` null이 `site_visited`보다 먼저 정해진다(3-1a·E-01, `storage.ts`의 `settleOpen`). 3-1a의 구현 함수 이름을 고침. 저장 흐름 `VERSION` 2 → 3(마음·회복이 키워드에서 빠졌으므로 배포 전 저장 흐름은 처음부터). 이벤트·속성 이름·값 변경 없음 |
-| v0.7 | 2026-10-01 | Claude (C-16 구현) | S-06 책 속 책갈피(DESIGN C-16, PRD F-12의 보이는 부분)와 함께 E-27 `bookmark_pulled`(`book_id`·`position`·`pick_type`)·E-28 `bookmark_flipped`(`book_id`·`pick_type`)를 추가해 바로 `live`. 2-2 동사 `pulled`·`flipped` 추가, Q-11·5-3 지표(꺼냄율·뒷면율). 모으는 정보는 그대로(책 ID·위치·추천/무작위뿐) — `/privacy` 변경 없음. v0.6은 다른 브랜치(F-24)가 쓰므로 건너뜀 |
+| v0.7 | 2026-10-01 | Claude (C-16 구현) | S-06 책 속 책갈피(DESIGN C-16, PRD F-12의 보이는 부분)와 함께 E-27 `bookmark_pulled`(`book_id`·`position`·`pick_type`)·E-28 `bookmark_flipped`(`book_id`·`pick_type`)를 추가해 바로 `live`. 2-2 동사 `pulled`·`flipped` 추가, Q-11·5-3 지표(꺼냄율·뒷면율). 모으는 정보는 그대로(책 ID·위치·추천/무작위뿐) — `/privacy` 변경 없음. v0.6은 F-24 브랜치의 변경 |
 
 ---
 

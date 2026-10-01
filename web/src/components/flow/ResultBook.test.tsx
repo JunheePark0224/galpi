@@ -5,7 +5,7 @@ import { loadDetail } from "@/lib/books/detailClient";
 import { forgetPullHintForTests, metDate, PULL_HINT_KEY } from "@/lib/flow/bookmarkPull";
 import type { PickView } from "@/lib/flow/state";
 import { track } from "@/lib/track/client";
-import { FLIP_BACK, FLIP_FRONT, PULL_HINT, PULL_IN, PULL_OUT } from "./BookmarkInBook";
+import { FLIP_BACK, FLIP_FRONT, PULL_HINT, PULL_OUT, SAID_FRONT } from "./BookmarkInBook";
 import { INTRO_HEADING, LAST_BOOK, NEXT_BOOK, NO_INTRO, ResultBook } from "./ResultBook";
 
 vi.mock("@/lib/track/client", () => ({ track: vi.fn() }));
@@ -147,7 +147,7 @@ describe("ResultBook — the bookmark in the book (C-16)", () => {
   it("pulls it out on a tap (E-27 with book, position, pick type), then puts it back on a second tap", async () => {
     show(DETAIL, 2, 3);
     fireEvent.click(pullButton());
-    const out = screen.getByRole("button", { name: PULL_IN });
+    const out = screen.getByRole("button", { name: PULL_OUT });                      // one name; aria-expanded tells in from out
     expect(out).toHaveAttribute("aria-expanded", "true");
     expect(stage()).toHaveAttribute("data-pose", "out");
     expect(track).toHaveBeenCalledWith("bookmark_pulled", { book_id: ISBN, position: 2, pick_type: "random" });
@@ -166,7 +166,7 @@ describe("ResultBook — the bookmark in the book (C-16)", () => {
     expect(film()).not.toHaveAttribute("data-moving");
     fireEvent.click(pullButton());
     expect(film()).toHaveAttribute("data-moving");
-    fireEvent.click(screen.getByRole("button", { name: PULL_IN }));
+    fireEvent.click(pullButton());
     fireEvent.animationEnd(stage().querySelector("[data-pull]")!);
     expect(film()).not.toHaveAttribute("data-moving");
   });
@@ -186,33 +186,90 @@ describe("ResultBook — the bookmark in the book (C-16)", () => {
     expect(stage()).toHaveAttribute("data-flipped");
     expect(track).toHaveBeenCalledWith("bookmark_flipped", { book_id: ISBN, pick_type: "random" });
 
+    expect(screen.getByRole("status")).toHaveTextContent(`책갈피 뒷면. 나온 이유: 따뜻함, 현실. 만난 날 ${metDate(new Date(2026, 9, 1))}`);
+
     fireEvent.click(screen.getByRole("button", { name: FLIP_FRONT }));
     expect(stage()).not.toHaveAttribute("data-flipped");
+    expect(screen.getByRole("status")).toHaveTextContent(SAID_FRONT);
     expect(vi.mocked(track).mock.calls.filter(([name]) => name === "bookmark_flipped")).toHaveLength(1);
+  });
+
+  it("leaves the reason block off the back when the reason has no items", () => {
+    vi.mocked(loadDetail).mockResolvedValue(DETAIL);
+    render(<ResultBook pick={{ ...pick, reason: { label: "이 책은", items: [] } }} position={1} total={1} onNext={vi.fn()} />);
+    fireEvent.click(pullButton());
+    fireEvent.click(screen.getByRole("button", { name: FLIP_BACK }));
+    const back = screen.getByRole("article", { name: "여름의 우편함 책갈피 뒷면" });
+    expect(within(back).queryByText("이 책은")).toBeNull();
+    expect(within(back).queryByRole("list")).toBeNull();
+    expect(within(back).getByText("만난 날")).toBeInTheDocument();
+    expect(screen.getByRole("status")).not.toHaveTextContent("이 책은");
   });
 
   it("puts a flipped bookmark back front side first", () => {
     show(DETAIL);
     fireEvent.click(pullButton());
     fireEvent.click(screen.getByRole("button", { name: FLIP_BACK }));
-    fireEvent.click(screen.getByRole("button", { name: PULL_IN }));
+    fireEvent.click(pullButton());
     expect(stage()).not.toHaveAttribute("data-flipped");
   });
 
-  it("pulls it out when dragged up, without the tap that follows putting it straight back", () => {
+  const mouse = { pointerId: 1, pointerType: "mouse", buttons: 1 } as const;
+
+  it("pulls it out when dragged up with a mouse, without the click that follows putting it straight back", () => {
+    vi.useFakeTimers();
     show(DETAIL);
     const button = pullButton();
-    fireEvent.pointerDown(button, { clientY: 300, pointerId: 1 });
-    fireEvent.pointerMove(button, { clientY: 290, pointerId: 1 });
+    fireEvent.pointerDown(button, { ...mouse, clientY: 300 });
+    fireEvent.pointerMove(button, { ...mouse, clientY: 290 });
     expect(stage()).toHaveAttribute("data-pose", "in");                           // 10px is not a drag yet
-    fireEvent.pointerMove(button, { clientY: 260, pointerId: 1 });
+    fireEvent.pointerMove(button, { ...mouse, clientY: 260 });
     expect(stage()).toHaveAttribute("data-pose", "out");
-    fireEvent.pointerUp(button, { clientY: 260, pointerId: 1 });
-    fireEvent.click(button);
+    fireEvent.pointerUp(button, { ...mouse, buttons: 0, clientY: 260 });
+    fireEvent.click(button, { detail: 1 });                                         // the browser's trailing click
     expect(stage()).toHaveAttribute("data-pose", "out");
-    fireEvent.click(button);                                                         // the next real tap still works
+    vi.runAllTimers();
+    fireEvent.click(button, { detail: 1 });                                         // the next real click still works
     expect(stage()).toHaveAttribute("data-pose", "in");
     expect(vi.mocked(track).mock.calls.filter(([name]) => name === "bookmark_pulled")).toHaveLength(1);
+  });
+
+  it("never starts a drag from a finger: touch scrolls the page, only a tap pulls", () => {
+    show(DETAIL);
+    const button = pullButton();
+    const finger = { pointerId: 2, pointerType: "touch", buttons: 1 } as const;
+    fireEvent.pointerDown(button, { ...finger, clientY: 300 });
+    fireEvent.pointerMove(button, { ...finger, clientY: 200 });
+    expect(stage()).toHaveAttribute("data-pose", "in");
+    fireEvent.pointerCancel(button, finger);                                         // the browser took the swipe as a scroll
+    expect(track).not.toHaveBeenCalledWith("bookmark_pulled", expect.anything());
+    fireEvent.click(button, { detail: 1 });
+    expect(stage()).toHaveAttribute("data-pose", "out");
+  });
+
+  it("ignores pointer moves with no button pressed, even after a press released elsewhere", () => {
+    show(DETAIL);
+    const button = pullButton();
+    fireEvent.pointerDown(button, { ...mouse, clientY: 300 });                     // released outside: no pointerup here
+    fireEvent.pointerMove(button, { ...mouse, buttons: 0, clientY: 200 });          // later hover, moving up
+    expect(stage()).toHaveAttribute("data-pose", "in");
+    expect(track).not.toHaveBeenCalledWith("bookmark_pulled", expect.anything());
+  });
+
+  it("never swallows a keyboard or assistive-tech activation after a drag", () => {
+    show(DETAIL);
+    const button = pullButton();
+    fireEvent.pointerDown(button, { ...mouse, clientY: 300 });
+    fireEvent.pointerMove(button, { ...mouse, clientY: 250 });                      // dragged out, released off the button
+    expect(stage()).toHaveAttribute("data-pose", "out");
+    fireEvent.click(button);                                                         // detail 0: Enter, Space or a screen reader
+    expect(stage()).toHaveAttribute("data-pose", "in");
+
+    fireEvent.pointerDown(button, { ...mouse, clientY: 300 });
+    fireEvent.pointerMove(button, { ...mouse, clientY: 250 });
+    fireEvent.keyDown(button, { key: "Enter" });
+    fireEvent.click(button, { detail: 1 });
+    expect(stage()).toHaveAttribute("data-pose", "in");
   });
 
   it("shows the paper slip hint only the first time in this browser, and drops it once pulled", () => {
