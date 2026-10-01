@@ -103,6 +103,22 @@ describe("flowReducer", () => {
     expect(run([{ type: "react", reaction: "pass" }, { type: "react", reaction: "pass" }], first)).toMatchObject({ step: "end" });
   });
 
+  it("redraws with the same answers: a new closed book, a fresh edit, the seen books excluded", () => {
+    const first = run([{ type: "start", entry: "leaf" }, ...answers(), { type: "drawn", id: 1, draw: view(1) }, { type: "open" }, { type: "edit" },
+      ...answers("B"), { type: "drawn", id: 2, draw: view(1) }, { type: "next" }]);
+    const end = flowReducer(first, { type: "react", reaction: "pass" });
+    expect(end).toMatchObject({ step: "end", edited: true });
+    expect(flowReducer(end, { type: "redraw" })).toMatchObject({
+      step: "book", status: "loading", drawId: 3, draw: null, opened: false, edited: false, prevChoices: null,
+      index: 0, reactions: [], result: 0, entry: "leaf", choices: end.choices, seen: ["b0"],
+    });
+  });
+
+  it("redraws only from the end", () => {
+    const bookmarks = run([{ type: "start", entry: "leaf" }, ...answers(), { type: "drawn", id: 1, draw: view(5) }, { type: "open" }, { type: "next" }]);
+    expect(flowReducer(bookmarks, { type: "redraw" })).toBe(bookmarks);
+  });
+
   it("goes home keeping only the seen books", () => {
     const end = run([{ type: "start", entry: "leaf" }, ...answers(), { type: "drawn", id: 1, draw: view(1) }, { type: "open" }, { type: "next" }, { type: "react", reaction: "pass" }]);
     expect(flowReducer(end, { type: "home" })).toEqual({ ...INITIAL, seen: ["b0"] });

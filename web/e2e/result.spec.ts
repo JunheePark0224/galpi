@@ -82,3 +82,40 @@ test("S-06 survives a reload on the second book without sending its view again",
   await expect.poll(() => named(events, "site_visited").length).toBe(2);
   expect(named(events, "result_book_viewed")).toHaveLength(2);
 });
+
+test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, round + 1 (E-19)", async ({ page }) => {
+  const { events } = await recordEvents(page);
+  await mockBooks(page);
+  await page.goto("/");
+  await page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ }).click();
+  for (let q = 1; q <= 9; q++) {
+    await expect(page.getByText(`${q} / 9`)).toBeVisible();
+    await page.waitForTimeout(300);                                          // BalanceGame's 250 ms tap guard
+    await page.locator('[data-side="left"]').click();
+  }
+  await page.getByRole("button", { name: "책 펼치기" }).click();
+  await page.getByRole("button", { name: "다음 장" }).click();
+  await reactToBookmarks(page, ["패스", "패스", "패스", "패스", "패스"]);
+
+  await expect(page.getByRole("heading", { name: "다음 책갈피를 만나 볼까요?" })).toBeVisible();   // 0 궁금해요 → S-08
+  await page.getByRole("button", { name: "다시 뽑기" }).click();
+  await expect(page.getByText("눌러서 펼치기")).toBeVisible();                                   // S-03 again
+  await page.getByRole("button", { name: "책 펼치기" }).click();
+  await expect(page.getByRole("button", { name: "한 번 고치기" })).toBeVisible();                // a new round's one edit
+  await page.getByRole("button", { name: "다음 장" }).click();
+  await reactToBookmarks(page, ["궁금해요", "패스", "패스", "패스", "패스"]);
+  await expect(page.getByText("궁금해요 1 / 1")).toBeVisible();
+
+  await expect.poll(() => named(events, "result_viewed").length).toBe(1);
+  const shown = named(events, "bookmark_shown");
+  const first = shown.filter((e) => e.common.round === 1).map((e) => e.props.book_id);
+  const second = shown.filter((e) => e.common.round === 2).map((e) => e.props.book_id);
+  expect(first).toHaveLength(5);
+  expect(second).toHaveLength(5);
+  expect(second.some((id) => first.includes(id))).toBe(false);                  // seen books stay out
+  expect(named(events, "redraw_clicked").map((e) => [e.props, e.common.round, e.common.entry])).toEqual([[{ curious_count: 0 }, 1, "leaf"]]);
+  expect(named(events, "book_opened").map((e) => e.common.round)).toEqual([1, 2]);
+  expect(named(events, "balance_answered")).toHaveLength(9);                    // the answers were not asked again
+  expect(named(events, "result_viewed")[0]).toMatchObject({ props: { curious_count: 1 }, common: { round: 2 } });
+  expect(specMismatches(events)).toEqual([]);
+});

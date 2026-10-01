@@ -1,0 +1,22 @@
+/* S-08 in the 430px column: a closed cloth book (C-01 look, static), the question, the two buttons under it. */
+.end {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-4);
+  padding-top: var(--space-6); text-align: center; word-break: keep-all;
+  animation: arrive 300ms ease-out;
+}
+@keyframes arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.book {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  width: 132px; aspect-ratio: 1 / 1.45; margin-bottom: var(--space-2); border-radius: var(--radius-book);
+  background: var(--leather-grain), var(--leather-sheen), var(--cloth);
+  box-shadow: inset 0 0 0 2px var(--cloth-edge), var(--shadow-book);
+}
+.spine {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 14px; border-radius: 2px 0 0 2px;
+  background: var(--spine-shade), var(--cloth-edge);
+}
+.mark { margin-left: 14px; color: var(--foil); }
+.title { margin: 0; font-size: 20px; line-height: 1.4; }
+.note { margin: 0; font-size: 13px; color: var(--ink-muted); }
+.actions { display: flex; gap: var(--space-3); align-self: stretch; margin-top: var(--space-2); }
+.actions > * { flex: 1 1 0; }

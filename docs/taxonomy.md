@@ -126,7 +126,7 @@
 | 보관 | S-06, S-09 | E-11, E-15, E-16 |
 | 로그인 | S-07 | E-12, E-13, E-14 |
 | 서재 | S-09 | E-17 |
-| 마무리 | S-08 (지금은 S-04·궁금해요 목록) | E-19, E-20 |
+| 마무리 | S-08 (E-20은 S-04의 막다른 길에서도) | E-19, E-20 |
 | 공통 | — | 공통 속성 (csv의 `*` 줄) |
 
 ### 2-6. 트리거 (Trigger)
@@ -237,7 +237,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 ### 4-1. 한눈에 보기
 
-상태 (v0.4): live 17 · planned-P4 1 · planned-P5 7 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned는 P5(보관·로그인·서재)
+상태 (v0.4): live 18 · planned-P4 0 · planned-P5 7 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned는 P5(보관·로그인·서재)
 
 | ID | 제안 이름 | 이전 이름 | 분류 | 트리거 | 상태 |
 |---|---|---|---|---|---|
@@ -264,7 +264,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-13 | `login_started` | 같음 | 로그인 | click | planned-P5 |
 | E-14 | `login_completed` | 같음 | 로그인 | system | planned-P5 |
 | E-17 | `library_viewed` | 같음 | 서재 | view | planned-P5 |
-| E-19 | `redraw_clicked` | 같음 | 마무리 | click | planned-P4 |
+| E-19 | `redraw_clicked` | 같음 | 마무리 | click | live |
 | E-20 | `home_clicked` | 같음 | 마무리 | click | live |
 
 E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아직 심지 않은 planned 이벤트도 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(25개 — `EVENT_NAMES`는 그 키).
@@ -605,7 +605,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 마무리 | click | planned-P4 | 같음 |
+| 마무리 | click | live | 같음 |
 
 **언제**: S-08 [다시 뽑기]를 누를 때. 이 이벤트는 끝나는 판의 round를 싣고, **보낸 직후 round +1** (3-1a)  
 **분석 질문**: Q-03
@@ -620,7 +620,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 아�
 |---|---|---|---|
 | 마무리 | click | live | 같음 |
 
-**언제**: [처음으로]를 누를 때 — 지금은 S-04(뽑기 실패·책 없음)와 궁금해요 목록(P3 임시 S-06/S-08), P4부터 S-08. 이벤트는 끝나는 판의 round를 싣고, **보낸 직후 round +1 — 같은 탭에서 다시 시작하면 새 판** (3-1a)  
+**언제**: [처음으로]를 누를 때 — S-04(뽑기 실패·책 없음)와 S-08 마무리. 이벤트는 끝나는 판의 round를 싣고, **보낸 직후 round +1 — 같은 탭에서 다시 시작하면 새 판** (3-1a)  
 **분석 질문**: Q-01, Q-03
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -923,7 +923,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.2 | 2026-09-30 | Claude (사용자 결정 반영) | 사용자 결정 5건(9절). ① E-26 `goal_submitted` 추가 확정 → Status `planned-taxonomy`(새 상태), PRD 4절에도 추가. ② `round` +1 = [다시 뽑기] + 같은 탭 [처음으로](3-1a·5-1). ③ `goal_text`는 **Supabase only** — Amplitude 사본에서 뺌(2-7 속성 단위 예외·6-2), `/privacy` 고칠 문장 2개 기록(6-3). ④ 이름 변경 4건·속성·값 변경 19건·속성 추가 4건 모두 `accepted — dev round` — **한 번의 개발 라운드로, P7 전·Vercel Amplitude 키 설정 전**(4-4 표는 마이그레이션 명세로 유지). ⑤ Amplitude `setUserId`·`login_provider`는 **P5에서 결정**(3-2). Amplitude 검토의 개발 라운드 항목 2건 추가: 시작 전 이벤트도 큐에 받기, 큐 이벤트는 원래 `time` 유지(2-7). 상태 집계 `proposed` 1 → 0, `planned-taxonomy` 1 |
 | v0.3 | 2026-10-01 | Claude (개발 라운드) | **구현 완료** (`plans/2026-10-01-taxonomy-dev.md`). 4-4 마이그레이션 전부 코드에 반영 — 이벤트 이름 4건(E-18은 명세만), 속성·값 19건, 중복 `entry` 삭제 2건, 속성 추가 4건(E-08 `one_liner_style`·E-20 `source` 구현, E-10·E-18 `pick_type`은 명세만 — P4), E-26 `goal_submitted` 구현. `round` +1은 `track()`이 E-20·E-19를 보낸 직후(3-1a). `goal_text`는 Amplitude 사본과 Session Replay에서 빠지고 `/privacy`에 6-3 문장 2개(갱신일 10-01). `schema.ts`의 `EVENT_SPEC`·`PropsOf`로 `track()` 호출을 tsc가 검사, `/api/track`도 같은 명세로 props 검사. 자동 검사: `taxonomy.test.ts`(7-3 #1~#10), E2E `specMismatches`. Amplitude 대기열: 시작 전 이벤트도 받기(키 있을 때만)·원래 `time`. csv: 구현된 줄 `live`, E-10·E-18 `pick_type`은 `planned-P4`, E-01 Note에 `Amplitude only`, Note의 "현재 이름" → "이전 이름". Supabase의 테스트 기록은 옛 이름 그대로(P7에서 지움 — 옮기지 않음) |
 | v0.3.1 | 2026-10-01 | Claude (최종 검토 반영) | 직접 쓰기 입력 칸에 `data-amp-mask`(Session Replay 가림이 대시보드 수준과 무관하게 코드로 보장 — 6-2). `forAmplitude`는 허용 목록 방식(명세에 있고 `Supabase only`가 아닌 속성만). 자동 검사 #11 추가 — 이벤트별 속성 표 ↔ csv (7-3). 옛 표현을 구현된 상태로 고침(2-7 a·b, 2-8, 4-1, 4-4, 7-3 ①). 배포 체크리스트(`deploy.md`)에 Production 키 설정 뒤 개인정보 확인 추가. 이벤트·속성 변경 없음 |
-| v0.4 | 2026-10-01 | Claude (P4 구현) | S-06에서 E-09 `result_viewed`·E-10 `result_book_viewed`(`pick_type` 포함)·E-23 `description_expanded`·E-18 `yes24_link_clicked`(`source`=result, `pick_type`)를 심어 `live`로. 이벤트 이름·속성 변경 없음 |
+| v0.4 | 2026-10-01 | Claude (P4 구현) | S-06에서 E-09 `result_viewed`·E-10 `result_book_viewed`(`pick_type` 포함)·E-23 `description_expanded`·E-18 `yes24_link_clicked`(`source`=result, `pick_type`), S-08에서 E-19 `redraw_clicked`를 심어 `live`로(E-19 뒤 round +1은 v0.3의 `track()` 그대로). E-20 설명에서 P3 임시 화면 문구를 뺌. 이벤트 이름·속성 변경 없음 |
 
 ---
 

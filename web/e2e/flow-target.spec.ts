@@ -4,7 +4,7 @@ import { named, reactToBookmarks, recordEvents, specMismatches, test } from "./h
 // Motion and CSS shorten to fades under reduced motion — same flow, faster run. Books: BOOKS_SOURCE=sample.
 test.use({ reducedMotion: "reduce" });
 
-test("🎯 chips → book → first page → five bookmarks → 궁금해요 books one by one", async ({ page }, testInfo) => {
+test("🎯 chips → book → first page → five bookmarks → 궁금해요 books one by one → the end", async ({ page }, testInfo) => {
   const { events, statuses } = await recordEvents(page);
   await page.goto("/");
   await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
@@ -41,7 +41,7 @@ test("🎯 chips → book → first page → five bookmarks → 궁금해요 boo
   await page.getByRole("button", { name: "다음 책" }).click();
   await expect(page.getByText("궁금해요 3 / 3")).toBeVisible();
   await page.getByRole("button", { name: "다 봤어요" }).click();
-  await expect(page.getByRole("heading", { name: "궁금해요 책" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "다음 책갈피를 만나 볼까요?" })).toBeVisible();   // S-08
   await page.getByRole("button", { name: "처음으로" }).click();
   await page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ }).click();   // a new round in the same tab
   await expect(page.getByRole("heading", { name: "책을 덮은 뒤, 남았으면 하는 건?" })).toBeVisible();
@@ -98,7 +98,7 @@ test("🎯 written goal → honest count → one edit → five bookmarks", async
   await expect(page.getByRole("button", { name: "한 번 고치기" })).toHaveCount(0);
   await page.getByRole("button", { name: "다음 장" }).click();
   await reactToBookmarks(page, ["패스", "패스", "패스", "패스", "패스"]);
-  await expect(page.getByRole("heading", { name: "궁금해요 책" })).toHaveCount(0);
+  await expect(page.getByText(/궁금해요 \d \/ \d/)).toHaveCount(0);           // nothing 궁금해요: straight to S-08
   await expect(page.getByRole("button", { name: "처음으로" })).toBeVisible();
 
   await expect.poll(() => named(events, "bookmark_reacted").length).toBe(5);

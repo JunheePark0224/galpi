@@ -49,6 +49,7 @@ export type FlowAction =
   | { type: "next" }
   | { type: "react"; reaction: Reaction }
   | { type: "nextResult" }
+  | { type: "redraw" }
   | { type: "home" };
 
 /** Ask for a new draw: to S-03 the first time, straight back to the open book after an edit. */
@@ -105,6 +106,11 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
       const result = s.result + 1;
       return result < curiousPicks(s).length ? { ...s, result } : { ...s, step: "end" };
     }
+    case "redraw":
+      // F-10: same conditions, five new books (seen stay excluded), the earlier 궁금해요 do not carry over.
+      // A new round gets its own closed book (S-03) and its own one edit (F-07).
+      if (s.step !== "end") return s;
+      return requestDraw({ ...s, opened: false, edited: false, prevChoices: null, prevForm: null, index: 0, reactions: [], result: 0 });
     case "home":
       return { ...INITIAL, seen: s.seen };
   }

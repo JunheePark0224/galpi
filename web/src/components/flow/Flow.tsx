@@ -16,14 +16,14 @@ import { setEntry } from "@/lib/track/common";
 import { track } from "@/lib/track/client";
 import { BalanceGame } from "./BalanceGame";
 import { BookScene } from "./BookScene";
-import { EndList } from "./EndList";
+import { EndScreen } from "./EndScreen";
 import { Home } from "./Home";
 import { ResultBook } from "./ResultBook";
 import { TargetInput } from "./TargetInput";
 
 const VOCAB = vocab as Vocab;
 
-/** S-01 → S-05 → S-06 → the end. Cross-screen events are sent here, in the handlers (never from effects). */
+/** S-01 → S-05 → S-06 → S-08. Cross-screen events are sent here, in the handlers (never from effects). */
 export function Flow() {
   const [state, dispatch] = useReducer(flowReducer, undefined, loadFlow);
 
@@ -124,7 +124,13 @@ export function Flow() {
     if (next.step === "result") trackResultBook(next);
   };
 
-  /** [처음으로] — source: first_page = S-04 dead end (draw failed / no books), end = after the bookmarks (taxonomy E-20). */
+  /** S-08 [다시 뽑기] (E-19): track() moves the round on right after sending it (taxonomy 3-1a); the entry stays. */
+  const redraw = () => {
+    track("redraw_clicked", { curious_count: state.reactions.filter((r) => r === "curious").length });
+    act({ type: "redraw" });
+  };
+
+  /** [처음으로] — source: first_page = S-04 dead end (draw failed / no books), end = S-08 (taxonomy E-20). */
   const home = (source: "first_page" | "end") => {
     track("home_clicked", { curious_count: state.reactions.filter((r) => r === "curious").length, source });
     setEntry(null);
@@ -154,7 +160,7 @@ export function Flow() {
       {resultPick && (
         <ResultBook key={resultPick.card.id} pick={resultPick} position={state.result + 1} total={curious.length} onNext={nextResult} />
       )}
-      {state.step === "end" && <EndList picks={state.draw?.picks ?? []} reactions={state.reactions} onHome={() => home("end")} />}
+      {state.step === "end" && <EndScreen onRedraw={redraw} onHome={() => home("end")} />}
     </MotionConfig>
   );
 }
