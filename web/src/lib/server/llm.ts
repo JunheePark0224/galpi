@@ -11,7 +11,8 @@ const TIMED_OUT = Symbol("timeout");
 
 /**
  * One Claude Haiku call, no retries, cut at `timeoutMs` (target-chips 3절). Sends the note and our list only — no ids,
- * no other records (privacy 6-3b). Never throws: the caller falls back to word matching on any `ok: false`.
+ * no other records (privacy 6-3b). `<` and `>` are dropped from what is sent so the note cannot close its own <note> frame.
+ * Never throws: the caller falls back to word matching on any `ok: false`.
  */
 export async function classifyWithClaude(
   text: string, vocab: Vocab, opts: { apiKey: string; timeoutMs?: number; client?: Anthropic },
@@ -32,7 +33,7 @@ export async function classifyWithClaude(
         model: CLASSIFY_MODEL,
         max_tokens: 256,
         system: classifySystemPrompt(vocab),
-        messages: [{ role: "user", content: `<note>${text}</note>` }],
+        messages: [{ role: "user", content: `<note>${text.replace(/[<>]/g, "")}</note>` }],
         output_config: { format: { type: "json_schema", schema: classifySchema(vocab) } },
       },
       { signal: controller.signal },

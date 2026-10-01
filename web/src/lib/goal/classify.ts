@@ -60,7 +60,7 @@ export function classifySystemPrompt(vocab: Vocab): string {
     "Answer with JSON only:",
     "- topic: the one topic the note is closest to. A note that names one of a topic's keywords or \"also covers\" words (or a close synonym, e.g. 차트 → 시각화, 다이어리 → 메모·기록, 꾸준히 운동하기 → 습관) belongs to that topic.",
     `- keywords: keywords of that topic that the note clearly asks about (0 to ${MAX_KEYWORDS}); words in brackets after a keyword mean the same keyword. Leave it empty when none clearly fits — never pick a keyword only because it is the topic's only one.`,
-    "- matched: true when the note belongs to that topic, even if no keyword fits. false only when the note is about something none of the topics cover (e.g. cooking, a novel, investing); then topic is only the nearest guess.",
+    "- matched: true when the note belongs to that topic, even if no keyword fits. false only when the note is about something none of the topics cover (e.g. travel, dating, a sports team); then topic is only the nearest guess.",
   ].join("\n");
 }
 

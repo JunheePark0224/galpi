@@ -5,12 +5,12 @@
  *   1. web/.env.local has ANTHROPIC_API_KEY (otherwise every row says "word" and the table only grades word matching)
  *   2. terminal A: npm run dev        terminal B: npm run goal:grade      (GRADE_BASE=http://localhost:3000 by default)
  *
- * Paced under the route's limit (20 a minute). Only these example notes go to Anthropic — no visitor data.
+ * Paced under the route's limit (10 a minute → one note every 6.5 s, about 3 minutes for all 30). Only these example notes go to Anthropic — no visitor data.
  */
 import { writeFileSync } from "node:fs";
 
 const BASE = process.env.GRADE_BASE ?? "http://localhost:3000";
-const PAUSE_MS = 3200;
+const PAUSE_MS = 6500;          // 60 000 / 6 500 ≈ 9.2 a minute, under the route's 10
 const OUT = new URL("../../docs/goal-grading.md", import.meta.url);
 
 /** [note, the topic a person would expect ("—" = none of ours: the answer should say matched=false)] */
@@ -61,6 +61,8 @@ async function main() {
     "# 직접 쓰기 분류 채점표 (P4 완료 기준)",
     "",
     `${today} · \`npm run goal:grade\` (\`web/scripts/grade-goals.ts\`) · 연결 방법 llm ${llm}/${EXAMPLES.length} · 기대 주제와 같음 ${same}/${EXAMPLES.length} (기계 비교 — 판정은 사람이 "채점" 칸에)`,
+    "",
+    "> 이 30개는 지시문을 고칠 때 본 예시라 표본 안 수치 — 처음 보는 글에 대한 정확도는 아님(따로 확인).",
     "",
     "채점: O = 맞게 연결 · △ = 주제는 맞고 키워드가 아쉬움 · X = 틀림. \"기대\"가 —이면 우리 목록 밖이라 `찾음 아님`이 맞는 답. 괄호 주제 = 못 찾아서 가장 가까운 추정.",
     "",

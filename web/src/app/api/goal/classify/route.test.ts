@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { GoalMatch } from "@/lib/goal/match";
+import { resetDailyBudgets } from "@/lib/server/guard";
 import { classifyWithClaude } from "@/lib/server/llm";
 import { POST } from "./route";
 
@@ -13,8 +14,12 @@ const post = (body: unknown, headers: Record<string, string> = { origin: ORIGIN,
 const LLM_GOAL: GoalMatch = { text: "번아웃", topic: "습관·집중", keywords: ["마음·회복"], matched: true, method: "llm" };
 
 describe("POST /api/goal/classify", () => {
-  beforeEach(() => vi.mocked(classifyWithClaude).mockReset());
+  beforeEach(() => {
+    vi.mocked(classifyWithClaude).mockReset();
+    resetDailyBudgets();
+  });
   afterEach(() => {
+    vi.useRealTimers();
     vi.unstubAllEnvs();
     vi.restoreAllMocks();
   });
@@ -60,10 +65,58 @@ describe("POST /api/goal/classify", () => {
     expect((await post({ text: "SQL", pad: "x".repeat(1100) }, { origin: ORIGIN, "x-forwarded-for": "8.8.8.10" })).status).toBe(413);
   });
 
-  it("answers 429 after 20 a minute from one address", async () => {
+  it("answers 429 after 10 a minute from one address", async () => {
     vi.stubEnv("ANTHROPIC_API_KEY", "");
     const from = { origin: ORIGIN, "x-forwarded-for": "9.8.7.6" };
-    for (let i = 0; i < 20; i++) expect((await post({ text: "SQL" }, from)).status).toBe(200);
+    for (let i = 0; i < 10; i++) expect((await post({ text: "SQL" }, from)).status).toBe(200);
     expect((await post({ text: "SQL" }, from)).status).toBe(429);
+  });
+
+  describe("daily LLM budget (300 calls per instance per UTC day)", () => {
+    const callMany = async (n: number) => {
+      for (let i = 0; i < n; i++) {
+        // a fresh address each time so the per-minute limit never gets in the way
+        await post({ text: "번아웃" }, { origin: ORIGIN, "x-forwarded-for": `10.0.${Math.floor(i / 200)}.${i % 200}` });
+      }
+    };
+
+    it("stops calling Claude after 300 calls and answers with word matching, logging only the reason", async () => {
+      vi.stubEnv("ANTHROPIC_API_KEY", "test-key-not-real");
+      vi.useFakeTimers({ now: Date.parse("2026-10-01T10:00:00Z"), toFake: ["Date"] });
+      vi.mocked(classifyWithClaude).mockResolvedValue({ ok: true, goal: LLM_GOAL });
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      await callMany(300);
+      expect(classifyWithClaude).toHaveBeenCalledTimes(300);
+
+      const res = await post({ text: "SQL 공부" }, { origin: ORIGIN, "x-forwarded-for": "11.1.1.1" });
+      expect(res.status).toBe(200);
+      expect(await res.json()).toMatchObject({ topic: "데이터 분석", method: "word" });
+      expect(classifyWithClaude).toHaveBeenCalledTimes(300);
+      expect(warn).toHaveBeenCalledWith("classify: fell back to word matching", "budget");
+      expect(JSON.stringify(warn.mock.calls)).not.toContain("SQL");
+    });
+
+    it("starts a fresh budget when the UTC date changes", async () => {
+      vi.stubEnv("ANTHROPIC_API_KEY", "test-key-not-real");
+      vi.useFakeTimers({ now: Date.parse("2026-10-01T23:59:00Z"), toFake: ["Date"] });
+      vi.mocked(classifyWithClaude).mockResolvedValue({ ok: true, goal: LLM_GOAL });
+      vi.spyOn(console, "warn").mockImplementation(() => {});
+      await callMany(300);
+      await post({ text: "번아웃" }, { origin: ORIGIN, "x-forwarded-for": "11.1.1.2" });
+      expect(classifyWithClaude).toHaveBeenCalledTimes(300);
+
+      vi.setSystemTime(Date.parse("2026-10-02T00:00:01Z"));
+      expect(await (await post({ text: "번아웃" }, { origin: ORIGIN, "x-forwarded-for": "11.1.1.3" })).json()).toEqual(LLM_GOAL);
+      expect(classifyWithClaude).toHaveBeenCalledTimes(301);
+    });
+
+    it("does not spend budget when there is no key", async () => {
+      vi.stubEnv("ANTHROPIC_API_KEY", "");
+      await callMany(5);
+      vi.stubEnv("ANTHROPIC_API_KEY", "test-key-not-real");
+      vi.mocked(classifyWithClaude).mockResolvedValue({ ok: true, goal: LLM_GOAL });
+      await callMany(300);
+      expect(classifyWithClaude).toHaveBeenCalledTimes(300);
+    });
   });
 });
