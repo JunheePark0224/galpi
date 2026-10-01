@@ -148,3 +148,4 @@ Last Updated: 2026-10-01
 - 폴더 정리: Portfolio에 있던 임시 worktree 7개(`galpi-*`) 삭제, 로컬 전용 자료(예스24 캐시·실행 기록)는 Galpi로 옮김, 병합된 로컬 브랜치 10개 삭제. 앞으로 worktree는 `Galpi/.worktrees/`
 - 인수인계: `docs/HANDOFF.md`
 - **다음**: 10-02 06:00 첫 자동 PR 검수(D-C) → 사용자가 F-23 또는 P5 선택 → P7
+- **10-02**: F-23(배포) · P5 로그인·내 책갈피 완료(`feat/p5-login`, 병합 대기) → 다음은 P7 휴대폰·카톡 점검

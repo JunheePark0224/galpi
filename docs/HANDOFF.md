@@ -48,7 +48,8 @@ Last Updated: 2026-10-01 밤 (main `b54264c` 기준, 배포됨)
 1. **D-C 매일 검수 루프** (위 3절) — 10-02부터
 2. **사용자 확인 2개**: 카카오톡 브라우저에서 앱 전환 후 돌아왔을 때 이어지는지 · iOS에서 책갈피 뒷면 뒤집을 때 깜빡임
 3. ~~F-23 홈 "갈피의 서재 N권 · 오늘 +M권"~~ — 시안 B 구현(10-01, `feat/f23-library-count`). 600권 넘는 배포에서 저절로 보인다. 검수 뒤 `books:import`하면 **`web/src/data/` 세 파일(books·vocab·library.json)을 같이 커밋**
-   - 다음 개발: P5 로그인·보관·내 책갈피(이름 "내 책갈피")·[꽂기] — 카카오·구글 OAuth 앱은 사용자가 만든다
+   - ~~P5 로그인·내 책갈피~~ — `feat/p5-login`(`.worktrees/p5`) 완료(10-02): 카카오(개인 비즈 앱, 닉네임·사진·이메일 선택 동의)·구글(테스트 중, 테스트 사용자 2명) 실제 로그인, 꽂기 → 로그인 → 같은 책 복귀 + 자동 꽂기, S-09 막대(꾹 눌러 옮기기·뒷면 메뉴·막대 추가/이름/치우기·로그아웃), 처리방침, taxonomy v0.8(E-11~17·29·30 live). Supabase 0003 마이그레이션·RLS 확인 25/25, Redirect URL `http://localhost:3000/**`·`https://galpi-omega.vercel.app/**`, Vercel에 `NEXT_PUBLIC_SUPABASE_URL`·`_ANON_KEY`(Config). **병합·배포는 사용자 허락 후** → 배포 뒤 확인: 실제 `events.common.user_id`, Amplitude User Look-up, 사이트 코드에 Supabase 주소
+   - P5 뒤 정할 것: 구글 앱 '게시'(지금은 테스트 사용자만 로그인) — P7 공개 전 · Supabase JWT 비대칭 서명 키(지금은 `/api/track`이 로그인한 이벤트마다 Auth 확인 — 보안 리뷰 L2) · 카카오·구글 같은 이메일 계정 자동 연결 설정 확인(L4) · Google Cloud `galpi-510315`(만들다 만 중복 프로젝트) 지우기 · `Galpi/kakao-app-icon-512.png`(카카오 앱 아이콘 원본, 커밋 안 함)
 4. P7 휴대폰·카톡 점검 → 5명 반응 → 테스트 기록 지우기 → Amplitude 대시보드 시작점을 그날 00:00 KST로
 5. P8 이용자 모으기·1단계 분석 → P9 고치고 전후 비교·리포트
 6. 사용자 몫(급하지 않음): `docs/goal-grading.md` 30행 채점 · D4 나머지 156권 검수 · 원격 브랜치 `origin/feat/p3-flow` 지울지

@@ -50,7 +50,7 @@ Last Updated: 2026-10-01
   - [x] D-D 🎯 입력 B안 · F-24 이렇게 이해했어요 · C-16 표지 위 책갈피(당기기·뒤집기) · 홈 이동 (10/1, 배포)
   - [x] D-E F-23 홈 "갈피의 서재 N권 · 오늘 +M권" — 시안 B 구현 (10/1, `feat/f23-library-count`). 600권부터 저절로 보임
   - [ ] 사용자 확인: 카톡 브라우저 앱 전환 후 이어하기 · iOS 책갈피 뒷면 깜빡임
-- [ ] P5 로그인·보관·내 책갈피·처리방침
+- [x] P5 로그인·보관·내 책갈피·처리방침 (10/2, `feat/p5-login`) — 카카오·구글 실제 로그인, 같은 책 복귀 + 자동 꽂기, S-09 막대, RLS 25/25, E2E. 남은 것: main 병합·배포(사용자 허락), 배포 뒤 `events.common.user_id` 채워짐·Amplitude User Look-up 확인
 - [ ] P6 Amplitude 전달, 이벤트 전수 점검, 대시보드
 - [x] 배포 전 준비(P7에서 당김) — 처리방침 v0 `/privacy`·1년 자동 삭제, 같은 출처·요청 한도·크기 상한·보안 헤더, `/design` 숨김, `deploy.md` (9/30)
 - [x] **첫 배포** — https://galpi-omega.vercel.app (GitHub `JunheePark0224/galpi` 공개, 기록에서 앱 리뷰·Reference.pdf·정보나루 원본 제거) (9/30)
