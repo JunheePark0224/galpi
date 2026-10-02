@@ -104,8 +104,9 @@ export function parseClassification(raw: string, input: string, vocab: Vocab): G
   if (!Array.isArray(keywords)) return null;
   const known = keywordNames(vocab, topic as Topic);
   const picked = matched ? [...new Set(keywords.filter((k): k is string => typeof k === "string" && known.includes(k)))] : [];
-  // Measured 10-01: Haiku tags nearly every 데이터 분석 note with its only keyword (태블로·판다스·피벗 → SQL), so a lone
-  // keyword needs the note's own words (the vocab pattern). Topics with several keywords keep the model's picks.
+  // Measured 10-01: Haiku tagged nearly every 데이터 분석 note with its then only keyword (태블로·판다스·피벗 → SQL), so a lone
+  // keyword needs the note's own words (the vocab pattern). Topics with several keywords keep the model's picks — 데이터 분석
+  // has four since 10-02 (엑셀·파이썬·데이터 리터러시 back), so 판다스 / 피벗 now have their own keyword.
   const kept = known.length === 1 ? picked.filter((k) => new RegExp(vocab[topic as Topic].keywords[k], "i").test(input)) : picked;
   // F-24: an absent or unusable missing phrase is null — it never voids the answer. Names on our list are never "missing".
   const names = topicsIn(vocab).flatMap((t) => [t, ...keywordNames(vocab, t)]);

@@ -89,7 +89,7 @@ const bookOf=e=>{const el=e.target.closest(".card");return el&&BOOKS.find(x=>"b"
 const fromAi=(b,n)=>{const o=n===1?b:b.second||{};
  return {...(b.entry==="target"?{keywords:[...(o.keywords||[])],way:o.way}:{axes:{...o.axes}}),status:o.fits===false?"dropped":cur(b).status}};  // never promotes a held book: the decision stays as it is
 document.addEventListener("click",e=>{const b=bookOf(e); if(!b)return; const c=cur(b), k=e.target.dataset.kw, act=e.target.dataset.act;
- if(k!==undefined){put(b,{keywords:c.keywords.includes(k)?c.keywords.filter(x=>x!==k):[...c.keywords,k].slice(0,3)});return}
+ if(k!==undefined){put(b,{keywords:c.keywords.includes(k)?c.keywords.filter(x=>x!==k):[...c.keywords,k].slice(0,5)});return}
  if(act==="pick1"||act==="pick2"){st[b.isbn]={...c,...fromAi(b,act==="pick1"?1:2),ok:true,pick:act==="pick1"?"ai1":"ai2"};save();render();return}
  if(act==="ok"){st[b.isbn]={...c,ok:true};save();render()}});
 document.addEventListener("change",e=>{const b=bookOf(e); if(!b)return; const act=e.target.dataset.act, axis=e.target.dataset.axis, v=e.target.value;

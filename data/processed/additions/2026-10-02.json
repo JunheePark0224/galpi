@@ -1,0 +1,1432 @@
+{
+ "date": "2026-10-02",
+ "batch": "daily",
+ "reviewed": false,
+ "model": "claude-sonnet-5-5",
+ "second_model": "claude-sonnet-5-5",
+ "note": "Daily pipeline: pass A (model) tags, pass B (second_model) checks blind. Our tags only — no YES24 intro/TOC. auto=ai-agree: both passes agreed, accepted without human review (not in the agreement figures).",
+ "books": [
+  {
+   "isbn": "9791193904756",
+   "title": "한 권의 재테크 수업",
+   "author": "수미숨(상의민) 저",
+   "pages": 340,
+   "entry": "target",
+   "topic": "돈 관리·투자",
+   "field": "돈·경제",
+   "keywords": [
+    "재테크 기초",
+    "부동산·청약",
+    "연금·노후"
+   ],
+   "keywords_regex": [
+    "재테크 기초",
+    "주식",
+    "ETF·펀드",
+    "부동산·청약",
+    "연금·노후"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "사회 초년부터 노후까지 단계별로 돈을 쌓는 순서를 짚어 줘요",
+   "evidence": "생애 단계별 자산 마련 로드맵과 실행법 중심",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "재테크 기초",
+     "부동산·청약",
+     "연금·노후"
+    ],
+    "way": "실습",
+    "why": "내 돈을 모으고 굴리는 단계별 재테크 로드맵 책"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/186869546",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791124575420",
+   "title": "최재붕의 AI 트렌드 2027",
+   "author": "최재붕 저",
+   "pages": 280,
+   "entry": "target",
+   "topic": "경제 상식",
+   "field": "돈·경제",
+   "keywords": [
+    "트렌드"
+   ],
+   "keywords_regex": [
+    "트렌드"
+   ],
+   "way": "개념",
+   "one_liner_style": "summary",
+   "one_liner": "AI로 몰린 자본과 산업 변화의 흐름을 8개 분야로 짚어 봐요",
+   "evidence": "AI 산업 전망과 흐름 분석이라 트렌드 중심",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "트렌드",
+     "시사·경제 이슈"
+    ],
+    "way": "개념",
+    "why": "AI 산업·자본 흐름과 2027 전망을 다룬 경제 트렌"
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196901742",
+   "draft": {
+    "topic": "경제 상식",
+    "keywords": [
+     "트렌드"
+    ],
+    "way": "개념",
+    "one_liner": "AI로 몰린 자본과 산업 변화의 흐름을 8개 분야로 짚어 봐요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791175230576",
+   "title": "2027 트렌드 노트",
+   "author": "박현영,김종민,신수정,김정구,이원희 저",
+   "pages": 296,
+   "entry": "target",
+   "topic": "경제 상식",
+   "field": "돈·경제",
+   "keywords": [
+    "트렌드"
+   ],
+   "keywords_regex": [
+    "시사·경제 이슈",
+    "트렌드"
+   ],
+   "way": "개념",
+   "one_liner_style": "summary",
+   "one_liner": "AI 시대에 달라지는 소비와 일상의 흐름을 짚어 보고 다음 기회를 읽어요.",
+   "evidence": "앞으로의 소비·사회 변화를 전망하는 트렌드서",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "트렌드"
+    ],
+    "way": "개념",
+    "why": "2027 소비·사회 트렌드 전망서라 경제 상식에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196106687",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791189799915",
+   "title": "내 장은 왜 우울할까",
+   "author": "윌리엄 데이비스 저/김보은 역",
+   "pages": 416,
+   "entry": "target",
+   "topic": "마음 돌보기",
+   "field": "마음·관계",
+   "keywords": [],
+   "keywords_regex": [
+    "우울"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "장 속 미생물 불균형을 바로잡는 4주 식단 프로그램을 따라 해 볼 수 있어요",
+   "evidence": "마음이 아닌 장 건강과 식단이 중심이라 주제 밖",
+   "confidence": 0.88,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "장 건강·미생물 책으로, 마음 돌보기가 아닌 신체 건강"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/118569458"
+  },
+  {
+   "isbn": "9791193205860",
+   "title": "1등급 연구대회 실전가이드 (수업혁신사례연구대회│디지털교육연구대회│인성교육실천사례연구발표대회)",
+   "author": "김민주,박정미,김홍순,조용,김동은 공저",
+   "pages": 200,
+   "entry": "target",
+   "topic": "대화·관계",
+   "field": "마음·관계",
+   "keywords": [],
+   "keywords_regex": [
+    "발표"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "교실 경험을 연구 보고서로 정리해 대회에 도전하는 단계별 방법을 알려줘요",
+   "evidence": "교사 연구대회 보고서 작성법, 대화·관계 아님",
+   "confidence": 0.93,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "교사 연구대회 보고서 작성 안내서로 대화·관계와 무관"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/181006495"
+  },
+  {
+   "isbn": "9791175910188",
+   "title": "외동아이는 거리두기 육아가 필요합니다",
+   "author": "이보연 저",
+   "pages": 280,
+   "entry": "target",
+   "topic": "대화·관계",
+   "field": "마음·관계",
+   "keywords": [],
+   "keywords_regex": [
+    "거리 두기",
+    "갈등·무례 대처"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "",
+   "evidence": "육아서라 성인 대화·관계 주제와 어긋남",
+   "confidence": 0.88,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "외동아이 육아서로, 성인 간 대화·관계가 아님"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [
+    "한 줄이 책소개를 베낌"
+   ],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/173856406"
+  },
+  {
+   "isbn": "9788965703969",
+   "title": "거리 두기",
+   "author": "임춘성 저",
+   "pages": 292,
+   "entry": "target",
+   "topic": "대화·관계",
+   "field": "마음·관계",
+   "keywords": [
+    "거리 두기"
+   ],
+   "keywords_regex": [
+    "거리 두기"
+   ],
+   "way": "개념",
+   "one_liner_style": "summary",
+   "one_liner": "휘둘리거나 상처받지 않게 나와 세상 사이의 적당한 거리를 잡는 법을 알려줘요",
+   "evidence": "관계의 적정 거리 조절이 중심, 원리 설명 위주",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "거리 두기",
+     "호감·사회생활"
+    ],
+    "way": "개념",
+    "why": "관계에서 적당한 거리를 두는 법이 중심이라 맞음"
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/35300211",
+   "draft": {
+    "topic": "대화·관계",
+    "keywords": [
+     "거리 두기"
+    ],
+    "way": "개념",
+    "one_liner": "휘둘리거나 상처받지 않게 나와 세상 사이의 적당한 거리를 잡는 법을 알려줘요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791191636048",
+   "title": "내 마음과 거리 두기",
+   "author": "설기문 저",
+   "pages": 216,
+   "entry": "target",
+   "topic": "대화·관계",
+   "field": "마음·관계",
+   "keywords": [],
+   "keywords_regex": [
+    "거리 두기"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "감정에서 나를 떼어 놓고 평정심을 되찾는 방법을 열세 가지로 익혀요",
+   "evidence": "주제가 관계 아닌 내 감정·마음 다루기",
+   "confidence": 0.9,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "거리 두기"
+    ],
+    "way": "실습",
+    "why": "관계가 아닌 내 감정·마음을 다루는 책이라 마음 돌보기"
+   },
+   "flags": [
+    "fits",
+    "keywords"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/102607590"
+  },
+  {
+   "isbn": "9791176210072",
+   "title": "커리어 블루프린트",
+   "author": "이순수 저",
+   "pages": 356,
+   "entry": "target",
+   "topic": "취업·커리어",
+   "field": "일·커리어",
+   "keywords": [
+    "커리어 설계",
+    "퍼스널 브랜딩"
+   ],
+   "keywords_regex": [
+    "자소서·면접",
+    "커리어 설계",
+    "직장 생활"
+   ],
+   "way": "개념",
+   "one_liner_style": "summary",
+   "one_liner": "경력을 운에 맡기지 않고 강점과 사이드 프로젝트로 직접 짜는 전략을 얻어요",
+   "evidence": "경력 설계 원리와 브랜딩 전략이 중심",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "커리어 설계",
+     "퍼스널 브랜딩"
+    ],
+    "way": "실습",
+    "why": "경력 설계·브랜딩·취업 전략이 중심인 커리어서"
+   },
+   "flags": [
+    "way"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/176522439",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "커리어 설계",
+     "퍼스널 브랜딩"
+    ],
+    "way": "개념",
+    "one_liner": "경력을 운에 맡기지 않고 강점과 사이드 프로젝트로 직접 짜는 전략을 얻어요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791190006187",
+   "title": "신중년 꿈을 이루다",
+   "author": "권미경,우정화,전재경,류수정 등 공저",
+   "pages": 330,
+   "entry": "target",
+   "topic": "취업·커리어",
+   "field": "일·커리어",
+   "keywords": [
+    "커리어 설계",
+    "이직·퇴사"
+   ],
+   "keywords_regex": [
+    "이직·퇴사",
+    "커리어 설계"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "40대 이후 생애 경력을 설계하고 재취업과 자격증 준비까지 단계별로 챙겨요",
+   "evidence": "중장년 경력 설계와 전직·재취업 방법이 중심",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "커리어 설계",
+     "이직·퇴사"
+    ],
+    "way": "실습",
+    "why": "40대 이후 생애 경력설계와 전직·재취업 실천 가이드"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/147123265",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9788966074310",
+   "title": "오정근의 커리어 코칭",
+   "author": "오정근 저 ",
+   "pages": 320,
+   "entry": "target",
+   "topic": "취업·커리어",
+   "field": "일·커리어",
+   "keywords": [
+    "커리어 설계"
+   ],
+   "keywords_regex": [
+    "커리어 설계"
+   ],
+   "way": "개념",
+   "one_liner_style": "summary",
+   "one_liner": "자기분석으로 흥미와 강점을 찾고 직업 선택과 실행 계획까지 이어 가요",
+   "evidence": "자기탐색·직업탐색·비전 설정이 중심이라 진로 설계",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "커리어 설계"
+    ],
+    "way": "개념",
+    "why": "진로·직무·비전 설정 중심의 커리어 코칭서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/111378855",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791190865968",
+   "title": "SNS 퍼스널 브랜딩 비법",
+   "author": "최은희 저 ",
+   "pages": 284,
+   "entry": "target",
+   "topic": "취업·커리어",
+   "field": "일·커리어",
+   "keywords": [
+    "퍼스널 브랜딩"
+   ],
+   "keywords_regex": [
+    "이직·퇴사",
+    "퍼스널 브랜딩"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "SNS로 나만의 브랜드 콘셉트를 잡고 콘텐츠로 알리는 단계별 방법을 얻어요",
+   "evidence": "브랜드 콘셉트·SNS 운영을 단계별로 안내",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "퍼스널 브랜딩"
+    ],
+    "way": "실습",
+    "why": ""
+   },
+   "flags": [],
+   "issues": [
+    "판단 이유가 책소개를 베낌"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/118318953",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "퍼스널 브랜딩"
+    ],
+    "way": "실습",
+    "one_liner": "SNS로 나만의 브랜드 콘셉트를 잡고 콘텐츠로 알리는 단계별 방법을 얻어요",
+    "status": "reserve"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791173181887",
+   "title": "퍼스널 브랜딩 전자책 쓰기 바이블 with AI",
+   "author": "안세진 저",
+   "pages": 258,
+   "entry": "target",
+   "topic": "취업·커리어",
+   "field": "일·커리어",
+   "keywords": [
+    "퍼스널 브랜딩"
+   ],
+   "keywords_regex": [
+    "퍼스널 브랜딩"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "전자책을 써서 출간하고 홍보하는 단계를 차근차근 따라 해 볼 수 있어요",
+   "evidence": "중심은 전자책 출간 방법이라 글쓰기 주제에 가까움",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "퍼스널 브랜딩"
+    ],
+    "way": "실습",
+    "why": "전자책으로 나를 알리는 퍼스널 브랜딩 방법서"
+   },
+   "flags": [
+    "fits",
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/142069357",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [],
+    "way": "실습",
+    "one_liner": "전자책을 써서 출간하고 홍보하는 단계를 차근차근 따라 해 볼 수 있어요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791169213165",
+   "title": "N잡러를 위한 전자책 만들기 with 퍼스널 브랜딩",
+   "author": "흑상어쌤 저",
+   "pages": 272,
+   "entry": "target",
+   "topic": "취업·커리어",
+   "field": "일·커리어",
+   "keywords": [],
+   "keywords_regex": [
+    "퍼스널 브랜딩",
+    "직장 생활"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "전자책을 기획하고 써서 팔기까지, 나만의 부수입 길을 단계별로 익혀요",
+   "evidence": "전자책 제작·판매 실전서라 커리어 주제 중심은 아님",
+   "confidence": 0.72,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "퍼스널 브랜딩"
+    ],
+    "way": "실습",
+    "why": "전자책 제작·판매 실전서로 취업·커리어 전반과는 거리 "
+   },
+   "flags": [
+    "fits",
+    "keywords"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/139729263"
+  },
+  {
+   "isbn": "9788953119901",
+   "title": "팀 켈러의 일과 영성",
+   "author": "팀 켈러 저/최종훈 역",
+   "pages": 344,
+   "entry": "target",
+   "topic": "취업·커리어",
+   "field": "일·커리어",
+   "keywords": [],
+   "keywords_regex": [
+    "직장 생활"
+   ],
+   "way": "개념",
+   "one_liner_style": "summary",
+   "one_liner": "일의 의미와 소명을 신앙의 눈으로 되짚어 보게 해 줘요",
+   "evidence": "기독교 신앙 관점의 소명론이라 커리어 실무와 거리 있음",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "개념",
+    "why": "기독교 신앙 관점의 일·소명론이라 커리어 실무와 거리 "
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/11301835"
+  },
+  {
+   "isbn": "9791192522081",
+   "title": "한경커리어 직장 생활 센스와 매너",
+   "author": "한경커리어 특별취재팀 저",
+   "pages": 204,
+   "entry": "target",
+   "topic": "취업·커리어",
+   "field": "일·커리어",
+   "keywords": [
+    "직장 생활"
+   ],
+   "keywords_regex": [
+    "이직·퇴사",
+    "커리어 설계",
+    "직장 생활"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "출근 복장, 인사, 회식 같은 사회 초년생의 궁금증에 상황별 답을 얻어요",
+   "evidence": "신입의 직장 매너를 상황별로 안내하는 방법서",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "직장 생활"
+    ],
+    "way": "실습",
+    "why": "사회 초년생의 직장 매너·소통법이 중심이라 취업·커리어"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/110540775",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "직장 생활"
+    ],
+    "way": "실습",
+    "one_liner": "출근 복장, 인사, 회식 같은 사회 초년생의 궁금증에 상황별 답을 얻어요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
+  },
+  {
+   "isbn": "9788964362495",
+   "title": "부캐와 함께 나만의 에세이 쓰기",
+   "author": "조동범 저",
+   "pages": 211,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "에세이·책 쓰기"
+   ],
+   "keywords_regex": [
+    "에세이·책 쓰기"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "소재 찾기부터 문장 쓰기, 투고와 출간까지 에세이 쓰는 길을 안내해요",
+   "evidence": "에세이 기획·문장·출간 과정을 방법 중심으로 안내",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "에세이·책 쓰기"
+    ],
+    "way": "실습",
+    "why": "에세이 쓰는 법과 출간 과정을 안내하는 글쓰기 책"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/122093609",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791198347619",
+   "title": "브런치 하실래요",
+   "author": "복일경 저",
+   "pages": 208,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "에세이·책 쓰기"
+   ],
+   "keywords_regex": [
+    "에세이·책 쓰기",
+    "업무 글",
+    "문해력·어휘"
+   ],
+   "way": "사례",
+   "one_liner_style": "summary",
+   "one_liner": "집필부터 투고, 계약, 출간까지 단계별로 알려 줘서 책 쓰기에 도전하게 돕는 책이에요",
+   "evidence": "출간 과정과 투고 정보를 단계별로 안내함",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "에세이·책 쓰기"
+    ],
+    "way": "사례",
+    "why": "출간 경험을 풀며 책 쓰기 단계와 투고·계약을 안내함"
+   },
+   "flags": [
+    "way"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/124129451",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "에세이·책 쓰기"
+    ],
+    "way": "실습",
+    "one_liner": "집필부터 투고, 계약, 출간까지 단계별로 알려 줘서 책 쓰기에 도전하게 돕는 책이에요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9788993784794",
+   "title": "더 포맷",
+   "author": "이시쿠라 히데아키 저/이다인 역",
+   "pages": 208,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "업무 글"
+   ],
+   "keywords_regex": [
+    "업무 글"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "빈칸만 채워 이메일과 문서를 쓰는 포맷과 테크닉을 익혀요",
+   "evidence": "복사해 쓰는 업무 문서 포맷과 기법 중심",
+   "confidence": 0.93,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "업무 글"
+    ],
+    "way": "실습",
+    "why": "업무 이메일·문서를 포맷으로 쓰는 글쓰기 방법서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/123183257",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791191349764",
+   "title": "교육용 기초한자 1800자 쓰기노트",
+   "author": "이미선 편저",
+   "pages": 272,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "문해력·어휘"
+   ],
+   "keywords_regex": [
+    "문해력·어휘"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "하루 4개 단어를 따라 쓰며 기초 한자와 관련 어휘를 익혀요",
+   "evidence": "한자 단어를 따라 쓰며 어휘력을 키우는 쓰기 연습서",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "문해력·어휘"
+    ],
+    "way": "실습",
+    "why": "한자 단어를 따라 쓰며 어휘력·문해력을 키우는 책"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/118978851",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791155817629",
+   "title": "스토리 설계자",
+   "author": "짐 에드워즈 저/신솔잎 역",
+   "pages": 312,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "카피라이팅"
+   ],
+   "keywords_regex": [
+    "업무 글",
+    "카피라이팅"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "헤드라인과 세일즈레터를 쓰는 공식으로 상품이 팔리는 글을 써 볼 수 있어요.",
+   "evidence": "세일즈 카피 공식과 작성 단계 중심이라 카피라이팅·실습",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "카피라이팅"
+    ],
+    "way": "실습",
+    "why": "세일즈 카피 작성 공식과 방법을 알려 주는 글쓰기 책"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/130167416",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791196604899",
+   "title": "금단의 세일즈 카피라이팅",
+   "author": "간다 마사노리 저/김수연,이수미 공역",
+   "pages": 292,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "카피라이팅"
+   ],
+   "keywords_regex": [
+    "카피라이팅",
+    "일기·편지"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "고객 마음을 움직이는 PASONA 법칙으로 팔리는 문장 쓰는 법을 익혀요",
+   "evidence": "세일즈 카피 작성법과 사례가 중심",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "카피라이팅"
+    ],
+    "way": "실습",
+    "why": "팔리는 세일즈 카피 쓰는 법이 중심이라 글쓰기에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/123647611",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791186151006",
+   "title": "세일즈 레터 & 카피라이팅",
+   "author": "댄 케네디 저/안양동,서지현 공역",
+   "pages": 280,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "카피라이팅"
+   ],
+   "keywords_regex": [
+    "카피라이팅",
+    "일기·편지"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "고객 이해부터 헤드라인, 가격 설득까지 세일즈 레터 쓰는 순서를 단계별로 익혀요",
+   "evidence": "세일즈 레터 작성 단계와 카피 기법 중심",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "카피라이팅"
+    ],
+    "way": "실습",
+    "why": "세일즈 레터 쓰는 단계별 카피 기법서라 글쓰기에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/15447433",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "카피라이팅"
+    ],
+    "way": "실습",
+    "one_liner": "고객 이해부터 헤드라인, 가격 설득까지 세일즈 레터 쓰는 순서를 단계별로 익혀요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
+  },
+  {
+   "isbn": "9791190985215",
+   "title": "바람의 초상",
+   "author": "박도순 저",
+   "pages": 472,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [],
+   "keywords_regex": [
+    "에세이·책 쓰기",
+    "문해력·어휘",
+    "일기·편지"
+   ],
+   "way": "사례",
+   "one_liner_style": "summary",
+   "one_liner": "간호대학 시절부터 진료소장이 되기까지 오간 편지와 일기를 따라가 봐요",
+   "evidence": "글쓰기 방법서가 아닌 편지·일기 모음 산문집",
+   "confidence": 0.9,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "사례",
+    "why": "글쓰기 방법서가 아니라 편지·일기를 엮은 삶의 기록 산"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/167387494"
+  },
+  {
+   "isbn": "9791163036784",
+   "title": "Do it! 오라클로 배우는 SQL 입문",
+   "author": "이지훈 저",
+   "pages": 416,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [
+    "SQL"
+   ],
+   "keywords_regex": [
+    "SQL"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "오라클 환경에서 조회·조인·서브쿼리를 직접 따라 치며 쿼리 작성 감각을 익혀요",
+   "evidence": "SQL 문법을 실습 예제로 따라 하는 입문서",
+   "confidence": 0.95,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "SQL"
+    ],
+    "way": "실습",
+    "why": "SQL 문법을 실습 예제로 배우는 입문서라 데이터 분석"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/142874899",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791140712120",
+   "title": "엑셀 데이터 분석",
+   "author": "정성일 저",
+   "pages": 360,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [
+    "엑셀"
+   ],
+   "keywords_regex": [
+    "SQL"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "피벗 테이블과 차트로 데이터를 정리하고 숨은 패턴을 찾아내는 방법을 익혀요",
+   "evidence": "엑셀 중심 분석법이라 SQL은 중심 아님, 따라 하는 방법서",
+   "confidence": 0.82,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [],
+    "way": "실습",
+    "why": "엑셀로 데이터를 분석하는 실무 방법서라 데이터 분석에 "
+   },
+   "flags": [],
+   "issues": [
+    "근거 김(33자)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/140406762",
+   "draft": {
+    "topic": "데이터 분석",
+    "keywords": [],
+    "way": "실습",
+    "one_liner": "피벗 테이블과 차트로 데이터를 정리하고 숨은 패턴을 찾아내는 방법을 익혀요",
+    "status": "reserve"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791163033806",
+   "title": "Do it! SQL 입문",
+   "author": "강성욱 저",
+   "pages": 360,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [
+    "SQL"
+   ],
+   "keywords_regex": [
+    "SQL"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "나스닥 실제 데이터로 SELECT부터 따라 하며 쿼리를 직접 짜 볼 수 있어요.",
+   "evidence": "설치부터 쿼리 작성까지 따라 하는 SQL 입문 실습서",
+   "confidence": 0.95,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "SQL"
+    ],
+    "way": "실습",
+    "why": "SQL 쿼리를 직접 실습하며 배우는 데이터 분석 입문서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/110262600",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791175981430",
+   "title": "데이터분석가를 위한 알기 쉬운 확률과 통계",
+   "author": "권상호 저",
+   "pages": 264,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [],
+   "keywords_regex": [],
+   "way": "개념",
+   "one_liner_style": "summary",
+   "one_liner": "수식보다 개념을 먼저 짚어 확률과 통계의 이유를 이해해요",
+   "evidence": "확률·통계 입문서라 SQL 중심의 데이터 분석과 거리가 있음",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "개념",
+    "why": "확률·통계 입문서라 데이터 분석 칸의 SQL과는 맞지 "
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [
+    "근거 김(33자)"
+   ],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/178436575"
+  },
+  {
+   "isbn": "9791191905038",
+   "title": "Must Have 나성호의 R 데이터 분석 입문",
+   "author": "나성호 저",
+   "pages": 300,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [],
+   "keywords_regex": [],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "자료구조부터 차근차근 익혀 아파트 실거래 데이터를 직접 분석해 봐요",
+   "evidence": "R 데이터 분석 입문서, SQL은 다루지 않음",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [],
+    "way": "실습",
+    "why": "R로 데이터 분석 전 과정을 익히는 입문서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/104195468",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791157687947",
+   "title": "통계학대백과사전",
+   "author": "이시이 도시아키 저/ 안동현 역",
+   "pages": 336,
+   "entry": "target",
+   "topic": "통계",
+   "field": "데이터·통계",
+   "keywords": [
+    "기초 통계",
+    "확률",
+    "가설검정"
+   ],
+   "keywords_regex": [
+    "기초 통계",
+    "확률"
+   ],
+   "way": "개념",
+   "one_liner_style": "summary",
+   "one_liner": "생활 속 사례로 잊었던 통계 개념과 공식을 핵심만 다시 정리해요",
+   "evidence": "기술통계·확률·추정·검정 원리 위주 구성",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "기초 통계",
+     "확률",
+     "가설검정"
+    ],
+    "way": "개념",
+    "why": "기술통계·확률·추정·검정을 아우르는 통계 개념서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/108404213",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9788960779501",
+   "title": "통계 분석 너머 R의 무궁무진한 활용",
+   "author": "고석범 저",
+   "pages": 544,
+   "entry": "target",
+   "topic": "통계",
+   "field": "데이터·통계",
+   "keywords": [],
+   "keywords_regex": [],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "R 마크다운으로 코드와 글을 섞어 다양한 형식의 문서를 만드는 방법을 익혀요",
+   "evidence": "통계가 아닌 R 문서 제작 도구 사용법 중심",
+   "confidence": 0.93,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "R 문서 제작 도구서, 통계 개념 아님"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/35299288"
+  },
+  {
+   "isbn": "9791161757742",
+   "title": "컴퓨터 시대의 통계적 추론",
+   "author": "브래들리 에프론,트레버 해이스티 저/이병욱 역",
+   "pages": 626,
+   "entry": "target",
+   "topic": "통계",
+   "field": "데이터·통계",
+   "keywords": [
+    "회귀분석",
+    "가설검정"
+   ],
+   "keywords_regex": [
+    "회귀분석",
+    "가설검정"
+   ],
+   "way": "개념",
+   "one_liner_style": "summary",
+   "one_liner": "베이즈부터 부트스트랩까지 추론 방법이 어떻게 발전했는지 시대 순으로 이해해요.",
+   "evidence": "추론 이론과 회귀·검정 원리를 설명하는 통계서",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "회귀분석",
+     "가설검정"
+    ],
+    "way": "개념",
+    "why": "통계적 추론의 이론과 알고리듬을 다루는 통계 책"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/119993361",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791160077179",
+   "title": "수학은 어렵지만 확률·통계는 알고 싶어",
+   "author": "요비노리 다쿠미 저/이지호 역/이동흔 감수",
+   "pages": 188,
+   "entry": "target",
+   "topic": "통계",
+   "field": "데이터·통계",
+   "keywords": [
+    "확률",
+    "기초 통계"
+   ],
+   "keywords_regex": [
+    "기초 통계",
+    "확률"
+   ],
+   "way": "개념",
+   "one_liner_style": "summary",
+   "one_liner": "경우의 수부터 평균·표준편차까지 데이터를 보는 눈을 쉬운 대화로 익혀요.",
+   "evidence": "확률 원리와 대푯값·상관관계 이해가 중심",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "확률",
+     "기초 통계"
+    ],
+    "way": "개념",
+    "why": "확률과 기초 통계를 쉽게 풀어 주는 입문서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/103287562",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791188754564",
+   "title": "확률적 사고의 힘",
+   "author": "다부치 나오야 저/황선종 역 ",
+   "pages": 288,
+   "entry": "target",
+   "topic": "통계",
+   "field": "데이터·통계",
+   "keywords": [
+    "확률"
+   ],
+   "keywords_regex": [
+    "확률"
+   ],
+   "way": "개념",
+   "one_liner_style": "summary",
+   "one_liner": "불확실한 미래를 확률로 따져 보고 결과보다 판단을 돌아보게 돼요",
+   "evidence": "확률적 사고의 원리를 역사·시장 사례로 풀어 이해 중심",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "확률"
+    ],
+    "way": "개념",
+    "why": "확률적 사고로 불확실성을 이해하는 통계 주제 책"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/107514027",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791124205976",
+   "title": "일상에 바로 쓰는 일잘러의 바이브 코딩 활용법",
+   "author": "임재희,조효기,이정용 저",
+   "pages": 308,
+   "entry": "target",
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "바이브 코딩",
+    "클로드"
+   ],
+   "keywords_regex": [
+    "클로드",
+    "바이브 코딩"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "AI와 대화하며 26개 서비스를 직접 만들고 도구별 개발 방식도 경험해요",
+   "evidence": "프로젝트 따라 만들며 도구별 방식을 익히는 구성",
+   "confidence": 0.86,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "바이브 코딩",
+     "클로드",
+     "프롬프트 엔지니어링"
+    ],
+    "way": "실습",
+    "why": "AI와 대화해 서비스 26개를 만드는 바이브 코딩 실습"
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [
+    "김(37자)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/195959641",
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "바이브 코딩",
+     "클로드"
+    ],
+    "way": "실습",
+    "one_liner": "AI와 대화하며 26개 서비스를 직접 만들어 보고, 도구마다 다른 개발 방식도 경험해요",
+    "status": "reserve"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791169213516",
+   "title": "핸즈온 LLM",
+   "author": "제이 알아마르,마르턴 흐루턴도르스트 저/박해선 역",
+   "pages": 460,
+   "entry": "target",
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "LLM 원리"
+   ],
+   "keywords_regex": [
+    "프롬프트 엔지니어링",
+    "AI 에이전트"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "트랜스포머 구조를 이해하고 실전 코드로 언어 모델을 직접 만들어 봐요",
+   "evidence": "코드로 구현하는 LLM 전반 가이드, 프롬프트·에이전트 장 포함",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "프롬프트 엔지니어링",
+     "AI 에이전트"
+    ],
+    "way": "실습",
+    "why": "LLM 구조와 프롬프트·에이전트를 코드로 익히는 AI "
+   },
+   "flags": [
+    "confidence"
+   ],
+   "issues": [
+    "근거 김(35자)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/146828240",
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "프롬프트 엔지니어링",
+     "AI 에이전트"
+    ],
+    "way": "실습",
+    "one_liner": "트랜스포머 구조를 이해하고 실전 코드로 언어 모델을 직접 만들어 봐요",
+    "status": "reserve"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791193059777",
+   "title": "수업과 업무에 바로 적용하는 생성형 AI 활용 58제",
+   "author": "임세범 저 ",
+   "pages": 256,
+   "entry": "target",
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "프롬프트 엔지니어링",
+    "챗GPT",
+    "클로드",
+    "제미나이",
+    "바이브 코딩"
+   ],
+   "keywords_regex": [
+    "챗GPT",
+    "클로드",
+    "제미나이",
+    "프롬프트 엔지니어링",
+    "바이브 코딩"
+   ],
+   "way": "실습",
+   "one_liner_style": "summary",
+   "one_liner": "수업 준비와 행정 업무에 AI를 단계별로 적용해 시간을 아껴요",
+   "evidence": "AI 도구별 실습 예제와 프롬프트 장이 중심",
+   "confidence": 0.82,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "챗GPT",
+     "클로드",
+     "제미나이"
+    ],
+    "way": "실습",
+    "why": "교사 업무에 생성형 AI를 쓰는 실습서라 AI 활용에 "
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/184269953",
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "챗GPT",
+     "클로드",
+     "프롬프트 엔지니어링"
+    ],
+    "way": "실습",
+    "one_liner": "수업 준비와 행정 업무에 AI를 단계별로 적용해 시간을 아껴요",
+    "status": "review"
+   },
+   "reviewed": true
+  }
+ ]
+}
