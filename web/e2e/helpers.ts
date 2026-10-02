@@ -20,6 +20,7 @@ export const test = base.extend({
       try {
         window.localStorage.setItem("galpi.hint.firstGuide", "1");
         window.localStorage.setItem("galpi.hint.resultGuide", "1");
+        window.localStorage.setItem("galpi.hint.libraryGuide", "1");
       } catch { /* blocked */ }
     });
     await provide(page);

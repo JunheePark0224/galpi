@@ -1,6 +1,7 @@
 import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { LibraryView } from "@/lib/library/types";
+import { libraryGuide } from "@/lib/flow/firstGuide";
 
 const track = vi.fn();
 const request = vi.fn();
@@ -34,7 +35,8 @@ async function mount(me: unknown) {
 const IN = { enabled: true, loggedIn: true, id: "u1", count: 2 };
 
 describe("Library (S-09)", () => {
-  beforeEach(() => { request.mockReset(); request.mockResolvedValue(ok(VIEW)); });
+  // C-22 is covered by LibraryGuide.test and e2e/library.spec — here the guide counts as seen
+  beforeEach(() => { request.mockReset(); request.mockResolvedValue(ok(VIEW)); libraryGuide.markSeen(); });
   afterEach(() => { vi.unstubAllGlobals(); vi.clearAllMocks(); vi.useRealTimers(); });
 
   it("logged out: offers the login instead of the rods", async () => {

@@ -208,6 +208,20 @@ test("S-09: hold to move, move by the back face, add a rod, remove, log out (E-1
   await expect(page.getByRole("banner").getByRole("button", { name: "로그인" })).toBeVisible();
 });
 
+test("S-09 first visit: the example-shelf guide opens once, [시작하기] closes it (C-22)", async ({ page }) => {
+  const lib: FakeLibrary = { loggedIn: true, shelves: [{ id: ROD_A, name: "첫 막대", position: 0 }], saved: [], posts: [] };
+  await fakeAccount(page, lib);
+  await page.addInitScript(() => { try { window.localStorage.removeItem("galpi.hint.libraryGuide"); } catch { /* blocked */ } });
+  await page.goto("/library");
+  const guide = page.getByRole("dialog", { name: "내 책갈피, 이렇게 써 보세요" });
+  await expect(guide).toBeVisible();
+  await expect(guide.getByText("책갈피를 꾹 누르면 들려요 → 옮길 막대를 누르세요")).toBeVisible();
+  if (process.env.GUIDE_SHOTS) await page.screenshot({ path: `${process.env.GUIDE_SHOTS}/library-guide.png` });
+  await guide.getByRole("button", { name: "시작하기" }).click();
+  await expect(guide).toHaveCount(0);
+  expect(await page.evaluate(() => window.localStorage.getItem("galpi.hint.libraryGuide"))).toBe("1");
+});
+
 test("S-09 logged out offers the login", async ({ page }) => {
   await fakeAccount(page, { loggedIn: false, shelves: [], saved: [], posts: [] });
   await page.goto("/library");

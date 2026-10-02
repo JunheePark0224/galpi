@@ -8,7 +8,9 @@ import { MAX_SHELVES } from "@/lib/library/service";
 import { SHELF_NAME_MAX } from "@/lib/library/validate";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { setUserId } from "@/lib/track/common";
+import { libraryGuide } from "@/lib/flow/firstGuide";
 import { BookmarkSheet } from "./BookmarkSheet";
+import { LibraryGuide } from "./LibraryGuide";
 import styles from "./Library.module.css";
 import { Shelf } from "./Shelf";
 import { useLibrary } from "./useLibrary";
@@ -48,6 +50,12 @@ function Rods() {
   const [newName, setNewName] = useState("");
   const [addBusy, setAddBusy] = useState(false);
   const [note, setNote] = useState<{ text: string; name?: string } | null>(null);
+  // C-22: the first visit to 내 책갈피 shows a small example shelf once (per browser)
+  const [guide, setGuide] = useState(() => !libraryGuide.hasSeen());
+  const closeGuide = () => {
+    libraryGuide.markSeen();
+    setGuide(false);
+  };
 
   useEffect(() => {
     if (!note) return;
@@ -113,9 +121,10 @@ function Rods() {
 
   return (
     <div className={styles.page}>
+      {guide && !open && <LibraryGuide onClose={closeGuide} />}
       <h1 className={styles.title}>내 책갈피</h1>
       <p className={styles.stat}>{`${view.count}개 · 동물 ${view.animals}종`}</p>
-      {view.count === 0 && <p className={styles.quiet}>책을 만나 [내 책갈피에 꽂기]를 누르면 첫 막대에 걸려요.</p>}
+      {view.count === 0 && <p className={styles.quiet}>책을 만나 🔖 꽂기를 누르면 첫 막대에 걸려요.</p>}
 
       {shelves.map((shelf) => (
         <Shelf

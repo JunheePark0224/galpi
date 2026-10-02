@@ -5,6 +5,7 @@
 
 export const FIRST_GUIDE_KEY = "galpi.hint.firstGuide";
 export const RESULT_GUIDE_KEY = "galpi.hint.resultGuide";
+export const LIBRARY_GUIDE_KEY = "galpi.hint.libraryGuide";
 
 export interface GuideFlag {
   hasSeen: () => boolean;
@@ -52,14 +53,17 @@ function guideFlag(key: string): GuideFlag {
 export const firstGuide = guideFlag(FIRST_GUIDE_KEY);
 /** C-21, the first S-06 book. */
 export const resultGuide = guideFlag(RESULT_GUIDE_KEY);
+/** C-22, the first visit to S-09 내 책갈피. */
+export const libraryGuide = guideFlag(LIBRARY_GUIDE_KEY);
 
 export const hasSeenFirstGuide = firstGuide.hasSeen;
 export const markFirstGuideSeen = firstGuide.markSeen;
 export const resetFirstGuide = firstGuide.reset;
 export const forgetFirstGuideForTests = firstGuide.forgetForTests;
 
-/** S-10 "책갈피 보는 법 다시 보기": both guides show again. */
+/** S-10 "책갈피 보는 법 다시 보기": every guide shows again. */
 export function resetGuides(): void {
   firstGuide.reset();
   resultGuide.reset();
+  libraryGuide.reset();
 }
