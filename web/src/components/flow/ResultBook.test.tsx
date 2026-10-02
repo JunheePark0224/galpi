@@ -12,7 +12,7 @@ import { RESULT_GUIDE_KEEP, RESULT_GUIDE_PULL, RESULT_GUIDE_TURN } from "./First
 import { INTRO_HEADING, LAST_BOOK, NEXT_BOOK, NO_INTRO, ResultBook } from "./ResultBook";
 
 vi.mock("@/lib/track/client", () => ({ track: vi.fn() }));
-vi.mock("@/lib/books/detailClient", () => ({ loadDetail: vi.fn() }));
+vi.mock("@/lib/books/detailClient", () => ({ loadDetail: vi.fn(), peekDetail: () => undefined }));
 const pressKeep = vi.fn();
 vi.mock("@/lib/library/keep", () => ({ pressKeep: (...a: unknown[]) => pressKeep(...a) }));
 

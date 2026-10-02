@@ -4,7 +4,7 @@ import { MotionConfig } from "motion/react";
 import type { BalanceChoice, Entry } from "@/lib/recommend";
 import { newArtSeed } from "@/lib/art/combine";
 import { topicsIn } from "@/lib/books/active";
-import { loadDetail } from "@/lib/books/detailClient";
+import { readyCover, waitForCover } from "@/lib/books/detailClient";
 import type { LibraryCount } from "@/lib/books/library";
 import type { Vocab } from "@/lib/books/types";
 import { drawBody, goalFor, requestDraw, toDrawView } from "@/lib/flow/api";
@@ -22,6 +22,7 @@ import { BookScene } from "./BookScene";
 import { EndScreen } from "./EndScreen";
 import { Home } from "./Home";
 import { ResultBook } from "./ResultBook";
+import { ResultLoading } from "./ResultLoading";
 import { TargetInput } from "./TargetInput";
 
 /**
@@ -35,6 +36,7 @@ const newOrder = (): number[] => questionOrder(Math.random);
 export function Flow({ vocab, library = null }: { vocab: Vocab; library?: LibraryCount | null }) {
   const [state, dispatch] = useReducer(flowReducer, undefined, loadFlow);
   const [classifying, setClassifying] = useState(false);
+  const [shownResult, setShownResult] = useState<string | null>(null);   // the S-06 book whose cover is ready to show
 
   useEffect(() => { saveFlow(state); }, [state]);
   useEffect(() => { window.scrollTo(0, 0); }, [state.step, state.result]);
@@ -86,7 +88,7 @@ export function Flow({ vocab, library = null }: { vocab: Vocab; library?: Librar
     track("result_viewed", { curious_count: curious.length });
     viewedResults.current = new Set();
     trackResultBook(s);
-    for (const p of curious) void loadDetail(p.card.id);
+    for (const p of curious) void readyCover(p.card.id);
   };
 
   const start = (entry: Entry) => {
@@ -156,6 +158,7 @@ export function Flow({ vocab, library = null }: { vocab: Vocab; library?: Librar
   const react = (reaction: Reaction) => {
     const pick = state.draw?.picks[state.index];
     if (state.step !== "bookmarks" || !pick) return;
+    if (reaction === "curious") void readyCover(pick.card.id);       // its cover starts loading now (10-02)
     track("bookmark_reacted", {
       book_id: pick.card.id, position: state.index + 1, reaction, pick_type: pick.kind, one_liner_style: pick.card.oneLinerStyle,
     });
@@ -187,6 +190,14 @@ export function Flow({ vocab, library = null }: { vocab: Vocab; library?: Librar
   const inBook = state.step === "book" || state.step === "first" || state.step === "bookmarks";
   const curious = curiousPicks(state);
   const resultPick = state.step === "result" ? curious[state.result] : undefined;
+  // 10-02 (user): between screens, wait (≤ 3 s) for the book's cover so S-06 appears with its printed cover already there
+  const waitingFor = resultPick?.card.id ?? null;
+  useEffect(() => {
+    if (!waitingFor || waitingFor === shownResult) return;
+    let live = true;
+    void waitForCover(waitingFor).then(() => { if (live) setShownResult(waitingFor); });
+    return () => { live = false; };
+  }, [waitingFor, shownResult]);
 
   return (
     <MotionConfig reducedMotion="user">
@@ -206,9 +217,10 @@ export function Flow({ vocab, library = null }: { vocab: Vocab; library?: Librar
           onLeaf={switchToLeaf}
         />
       )}
-      {resultPick && (
+      {resultPick && shownResult === resultPick.card.id && (
         <ResultBook key={resultPick.card.id} pick={resultPick} position={state.result + 1} total={curious.length} onNext={nextResult} onPrev={prevResult} />
       )}
+      {resultPick && shownResult !== resultPick.card.id && <ResultLoading />}
       {state.step === "end" && <EndScreen onRedraw={redraw} onHome={() => home("end")} />}
     </MotionConfig>
   );

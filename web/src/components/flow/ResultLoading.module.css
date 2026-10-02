@@ -1,0 +1,13 @@
+/* A quiet wait in the S-06 column: a small closed book that breathes, and one line. Hidden for the first 250 ms. */
+.wait {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-3);
+  min-height: 60vh; opacity: 0; animation: appear 200ms ease-out 250ms forwards;
+}
+@keyframes appear { to { opacity: 1; } }
+.book {
+  width: 44px; height: 60px; border-radius: 3px 6px 6px 3px; background: var(--cloth);
+  box-shadow: inset 6px 0 0 var(--cloth-edge), var(--shadow-book); animation: breathe 1.2s ease-in-out infinite alternate;
+}
+@keyframes breathe { from { translate: 0 0; } to { translate: 0 -4px; } }
+.words { margin: 0; font-size: 14px; color: var(--ink-muted); }
+@media (prefers-reduced-motion: reduce) { .wait { animation: none; opacity: 1; } .book { animation: none; } }

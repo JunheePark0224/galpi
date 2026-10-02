@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, LinkButton } from "@/components/Button";
 import { GenreTag } from "@/components/GenreTag";
 import { yes24SearchUrl, type BookDetail } from "@/lib/books/detail";
-import { loadDetail } from "@/lib/books/detailClient";
+import { loadDetail, peekDetail } from "@/lib/books/detailClient";
 import type { PickView } from "@/lib/flow/state";
 import { truncateIntro } from "@/lib/recommend";
 import { track } from "@/lib/track/client";
@@ -46,7 +46,7 @@ function facts(d: BookDetail | null): string[] {
  */
 export function ResultBook({ pick, position, total, onNext, onPrev }: Props) {
   const { card, kind } = pick;
-  const [detail, setDetail] = useState<BookDetail | null>(null);
+  const [detail, setDetail] = useState<BookDetail | null>(() => peekDetail(card.id) ?? null);   // ready before the screen (10-02)
   const [expanded, setExpanded] = useState(false);
   // The cover URL that failed to load (not a boolean): another book brings another URL, so the failure resets by itself.
   const [failedCover, setFailedCover] = useState<string | null>(null);
