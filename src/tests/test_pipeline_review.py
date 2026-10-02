@@ -382,3 +382,55 @@ def test_the_weekly_issue_table_escapes_pipes_and_line_breaks():
     row = next(line for line in body.splitlines() if line.startswith("| 1 |"))
     escaped = chr(92) + "|"
     assert f"제목 {escaped} 둘 셋" in row and f"한 줄 {escaped} 또 한 줄" in row and row.count("|") - row.count(escaped) == 6
+
+
+@pytest.mark.parametrize("given, kept", [
+    ("  <투자  철학>  ", "투자 철학"), ("가" * 12, "가" * 12), ("가" * 13, None), ("", None), ("ETF ·펀드", None), ("돈 관리·투자", None)])
+def test_a_person_can_write_a_keyword_candidate_and_apply_cleans_it_like_the_tagger(given, kept):
+    t = target("1", keyword_candidate="배당")
+    doc = {"date": "d", "batch": "daily", "books": [t]}
+    new, _ = apply_answers(doc, {"1": ans(t, keyword_candidate=given)}, KEPT)
+    assert new["books"][0]["keyword_candidate"] == kept
+
+
+def test_an_answer_without_a_candidate_keeps_the_ai_one_cleaned_against_the_topic_the_person_chose():
+    t = target("1", keyword_candidate="금리·환율")
+    doc = {"date": "d", "batch": "daily", "books": [t]}
+    same, _ = apply_answers(doc, {"1": ans(t)}, KEPT)
+    assert same["books"][0]["keyword_candidate"] == "금리·환율"
+    moved, _ = apply_answers(doc, {"1": ans(t, topic="경제 상식", keywords=[])}, KEPT)   # now on that topic's list
+    assert moved["books"][0]["keyword_candidate"] is None
+    leaf_doc = {"date": "d", "batch": "daily", "books": [leaf("3")]}
+    assert "keyword_candidate" not in apply_answers(leaf_doc, {"3": ans(leaf("3"))}, KEPT)[0]["books"][0]
+
+
+def test_the_page_has_a_candidate_field_for_target_books(files):
+    tmp, path = files
+    d = doc_of()
+    d["books"][0] = {**d["books"][0], "keyword_candidate": "배당 투자"}
+    path.write_text(json.dumps(d, ensure_ascii=False), encoding="utf-8")
+    review.main(["2026-10-05"])
+    html = (tmp / "pages" / "2026-10-05.html").read_text(encoding="utf-8")
+    books = json.loads(re.search(r"const BOOKS=(.*?), KW=", html, re.S).group(1))
+    assert books[0]["keyword_candidate"] == "배당 투자"
+    assert 'data-act="cand"' in html and 'maxlength="12"' in html and "목록에 없는 키워드 후보" in html
+    assert "keyword_candidate:b.keyword_candidate||" in html                          # the AI's name fills the field
+
+
+def test_apply_treats_folded_and_too_common_names_as_taken():
+    t = target("1")
+    doc = {"date": "d", "batch": "daily", "books": [t]}
+    new, _ = apply_answers(doc, {"1": ans(t, keyword_candidate="코인")}, KEPT, excluded={"돈 관리·투자": ["코인"]})
+    assert new["books"][0]["keyword_candidate"] is None
+
+
+def test_review_apply_reads_the_excluded_names_from_the_vocab(files):
+    tmp, path = files
+    vocab = {t: {"kept": k} for t, k in KEPT.items()}
+    vocab["돈 관리·투자"]["folded"] = {"코인": 2}
+    (tmp / "vocab.json").write_text(json.dumps(vocab, ensure_ascii=False), encoding="utf-8")
+    d = doc_of()
+    (tmp / "dl.json").write_text(json.dumps({"answers": {"1": ans(d["books"][0], keyword_candidate="코인")}},
+                                            ensure_ascii=False), encoding="utf-8")
+    assert review.main(["2026-10-05", "--apply", str(tmp / "dl.json")]) == 0
+    assert json.loads(path.read_text(encoding="utf-8"))["books"][0]["keyword_candidate"] is None

@@ -21,6 +21,7 @@ from check_one_liners import check_line
 from .agreement_log import LEAF_FIELDS, TARGET_FIELDS
 from .checks import AUTO
 from .gaps import GENRE_TARGET
+from .keyword_candidates import clean as clean_candidate
 from .prompt import AXES
 
 STATUSES = ("picked", "reserve", "dropped")
@@ -72,10 +73,18 @@ def tally_of(doc: dict, only: set[str] | None = None) -> Counter:
     return tally
 
 
-def apply_answers(doc: dict, answers: dict[str, dict], kept: dict[str, dict],
-                  only: set[str] | None = None) -> tuple[dict, Counter]:
+def candidate_of(book: dict, ans: dict, topic: str, kept: dict[str, dict], excluded: dict[str, list[str]]) -> str | None:
+    """The person's keyword candidate (the page's field), or the stored one when the answer has none — cleaned like the
+    tagger's against the topic the person chose (keyword_candidates.clean)."""
+    value = ans["keyword_candidate"] if "keyword_candidate" in ans else book.get("keyword_candidate")
+    return clean_candidate(value, topic, kept.get(topic, {}), excluded.get(topic, []))
+
+
+def apply_answers(doc: dict, answers: dict[str, dict], kept: dict[str, dict], only: set[str] | None = None,
+                  excluded: dict[str, list[str]] | None = None) -> tuple[dict, Counter]:
     """New doc with the human answers applied (the input is not changed) + the tally of the whole file (`tally_of`;
-    `only` limits it to some books, for a weekly sample row that must count just what was looked at)."""
+    `only` limits it to some books, for a weekly sample row that must count just what was looked at). `excluded`: per
+    topic, the names the keyword list left out on purpose (keyword_candidates.excluded_names) — never a candidate."""
     books = []
     for book in doc["books"]:
         ans = answers.get(book["isbn"])
@@ -86,7 +95,7 @@ def apply_answers(doc: dict, answers: dict[str, dict], kept: dict[str, dict],
             raise ReviewError(f"{book['isbn']}: this page sends human answers only")
         if book["entry"] == "target":
             a = checked_target(book["isbn"], ans, kept)
-            a = {**a, "field": FIELD_OF_TOPIC[a["topic"]]}
+            a = {**a, "field": FIELD_OF_TOPIC[a["topic"]], "keyword_candidate": candidate_of(book, ans, a["topic"], kept, excluded or {})}
         else:
             a = checked_leaf(book["isbn"], ans)
         sampled = book.get("auto") == AUTO or bool(book.get("sampled"))

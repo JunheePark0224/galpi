@@ -1,7 +1,8 @@
 """Today's additions file (design 2-1 "merge"): data/processed/additions/YYYY-MM-DD.json.
 
 Our tags only — ISBN, title, author, pages, link, tags, one-liner, evidence, confidence, the second pass's opinion and why a
-book was flagged / held. No YES24 intro or TOC (YES24 terms). `npm run books:import` then appends the picked books to
+book was flagged / held, and for a 🎯 book the short name of a keyword missing from its topic's list (`keyword_candidate`,
+pipeline/keyword_candidates.py; null when none). No YES24 intro or TOC (YES24 terms). `npm run books:import` then appends the picked books to
 web/src/data/books.json (web/src/lib/books/additions.ts) — the same path the 10-01 pilot file takes.
 """
 import json
@@ -32,7 +33,8 @@ def record(cand: Candidate, a: dict, b: dict, flags: list[str], issues: list[str
     out = {"isbn": cand.isbn, "title": cand.title, "author": cand.author, "pages": cand.pages, "entry": cand.entry}
     if cand.entry == "target":
         out |= {"topic": cand.slot, "field": FIELD_OF_TOPIC[cand.slot], "keywords": a["keywords"],
-                "keywords_regex": hints, "way": a["way"], "one_liner_style": "summary"}
+                "keywords_regex": hints, "way": a["way"], "keyword_candidate": a.get("keyword_candidate"),
+                "one_liner_style": "summary"}
         second = {k: b[k] for k in ("fits", "keywords", "way", "why")}
     else:
         out |= {"genre": cand.slot, "axes": a["axes"], "one_liner_style": "question"}

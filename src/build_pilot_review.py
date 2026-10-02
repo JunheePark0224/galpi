@@ -104,7 +104,7 @@ def keyword_definitions() -> dict:
         if in_table and line.startswith("|") and not line.startswith("|---") and not line.startswith("| 주제 |"):
             cells = [c.strip() for c in line.strip().strip("|").split("|")]
             if len(cells) >= 3:
-                topic = cells[0] or topic
+                topic = re.sub(r"\s*\(.*\)$", "", cells[0]) or topic  # "데이터 분석 (10-02 다시 나눔)" → 데이터 분석
                 defs.setdefault(topic, {})[cells[1]] = cells[2]
         elif in_table and defs and not line.startswith("|"):
             break

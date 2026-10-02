@@ -5,7 +5,8 @@ simulate_real's criteria on the new books.json (🍃 first-draw fill >= 95%, gen
 >= 25% of 🍃 books (balance-game 4절) — a miss is a ⚠ line in the PR, not a failure. The body opens with the run's status
 (a run that stopped early is `partial` and says why and how many books made it), holds counts, titles and our tags only
 (no YES24 text) and says plainly which books a person will see and which they will not: books both passes agreed on were
-not reviewed by a person, except the trial sample (sample.trial_sample) that the review page shows by default.
+not reviewed by a person, except the trial sample (sample.trial_sample) that the review page shows by default. Keyword
+candidates (names missing from a topic's list, counted over every additions file) close the body; the user decides.
 """
 import argparse
 import json
@@ -20,6 +21,9 @@ from . import ADDITIONS, AGREEMENT, BOOKS, RUNS
 from .agreement_log import MAX_SAMPLE_CHANGED, MIN_SAMPLE, STREAK, graduation, read_rows
 from .config import load_config
 from .gaps import GENRE_TARGET, TOPIC_TARGET, tally
+from .keyword_candidates import count as count_candidates
+from .keyword_candidates import load_docs
+from .keyword_candidates import section as candidate_section
 from .prompt import AXES
 from .sample import agreed_isbns, cell, sample_size
 
@@ -81,7 +85,7 @@ def review_notes(doc: dict, auto_merge: bool, rate: float) -> list[str]:
 
 
 def pr_body(summary: dict, doc: dict, books: list[dict], sim: dict, auto_merge: bool, grad: dict,
-            sample_rate: float = 0.1) -> str:
+            sample_rate: float = 0.1, candidates: list[dict] | None = None) -> str:
     picked = [b for b in doc["books"] if b["status"] == "picked"]
     waiting = [b for b in doc["books"] if b["status"] == "review"]  # flagged: not in books.json until a person applies a review
     held = [b for b in doc["books"] if b["status"] == "reserve"]
@@ -105,6 +109,7 @@ def pr_body(summary: dict, doc: dict, books: list[dict], sim: dict, auto_merge: 
            "|---|---|---|---|", *map(book_line, waiting), ""] if waiting else []),
         *(["### 대기한 책 (규칙 검사에 걸렸거나, 자동 병합 중 두 AI가 엇갈림 — 검수 페이지에서 고쳐 넣을 수 있어요)", "| 제목 | 걸린 이유 |", "|---|---|",
            *map(held_line, held), ""] if held else []),
+        *candidate_section(candidates or []),
         "### 검수", f"`PYTHONIOENCODING=utf-8 python -m src.pipeline.review {doc['date']}` → 페이지 → 내려받기 → `--apply` → "
         "`cd web && npm run books:import` → 이 PR 브랜치에 커밋. 검수 없이 이 PR을 병합해도 **검수 대기 책은 앱에 들어가지 않아요**(나중에 검수해 넣을 수 있어요).",
         *review_notes(doc, auto_merge, sample_rate),
@@ -130,7 +135,8 @@ def main(argv: list[str] | None = None) -> int:
     books = json.loads(BOOKS.read_text(encoding="utf-8"))
     sim = evaluate(leaf_pool(books), leaf_users())
     cfg = load_config()
-    body = pr_body(summary, doc, books, sim, cfg.auto_merge, graduation(read_rows(AGREEMENT)), cfg.sample_rate)
+    body = pr_body(summary, doc, books, sim, cfg.auto_merge, graduation(read_rows(AGREEMENT)), cfg.sample_rate,
+                   count_candidates(load_docs(ADDITIONS)))
     args.out.write_text(body, encoding="utf-8")
     print(body)
     return 0

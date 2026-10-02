@@ -261,3 +261,29 @@ def test_main_runs_a_day_and_prints_no_key_or_book_text(day, monkeypatch, capsys
 def test_the_shipped_config_is_valid_and_both_passes_run_sonnet_5_5():
     cfg = load_config()
     assert cfg.model == cfg.second_model == "claude-sonnet-5-5"
+
+
+def test_a_target_book_keeps_pass_as_keyword_candidate_or_null(day):
+    def names(kwargs):
+        entry, kind = kind_of(kwargs)
+        text = kwargs["messages"][0]["content"]
+        if kind == "tag" and "처음 주식 공부" in text:
+            return message(tag_answer(entry, new_keyword=" <배당 투자> "))
+        if kind == "tag" and "주식 배당 입문" in text:
+            return message(tag_answer(entry, new_keyword="주식"))           # already on the list → no candidate
+        return agreeing(kwargs)
+    run_daily.run("2026-10-05", CFG, ENV, FakeClient(names))
+    by = {b["title"]: b for b in json.loads((day / "2026-10-05.json").read_text(encoding="utf-8"))["books"]}
+    assert by["처음 주식 공부"]["keyword_candidate"] == "배당 투자"
+    assert by["주식 배당 입문"]["keyword_candidate"] is None and by["주식 투자 수업"]["keyword_candidate"] is None
+
+
+def test_the_run_passes_the_topics_excluded_names_to_the_parser(day, tmp_path):
+    vocab = {"돈 관리·투자": {"kept": {"주식": {"pattern": "주식|배당"}}, "folded": {"코인": 1}}}
+    (tmp_path / "vocab.json").write_text(json.dumps(vocab, ensure_ascii=False), encoding="utf-8")
+    def coin(kwargs):
+        entry, kind = kind_of(kwargs)
+        return message(tag_answer(entry, new_keyword="코인")) if kind == "tag" else agreeing(kwargs)
+    run_daily.run("2026-10-05", CFG, ENV, FakeClient(coin))
+    books = json.loads((day / "2026-10-05.json").read_text(encoding="utf-8"))["books"]
+    assert books and all(b["keyword_candidate"] is None for b in books)

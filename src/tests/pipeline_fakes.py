@@ -18,7 +18,7 @@ def message(payload: dict, stop: str = "end_turn", tokens: tuple[int, int] = (10
 def tag_answer(entry: str, **over) -> dict:
     if entry == "target":
         base = {"fits": True, "keywords": ["주식"], "way": "개념", "one_liner": "배당과 분산 투자로 주식의 첫걸음을 알려줘요",
-                "evidence": "입문자용 주식 기초서", "confidence": 0.9}
+                "evidence": "입문자용 주식 기초서", "confidence": 0.9, "new_keyword": ""}
     else:
         base = {"fits": True, "temp": 1, "pull": -1, "gain": 0, "world": 1,
                 "one_liner": "투자 실수 앞에서 사람은 무엇을 배울까요?", "evidence": "경험담 중심의 이야기", "confidence": 0.9}
