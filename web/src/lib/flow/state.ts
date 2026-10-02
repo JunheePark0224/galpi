@@ -52,6 +52,7 @@ export type FlowAction =
   | { type: "next" }
   | { type: "react"; reaction: Reaction }
   | { type: "nextResult" }
+  | { type: "prevResult" }
   | { type: "redraw" }
   | { type: "home" };
 
@@ -116,6 +117,9 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
       const result = s.result + 1;
       return result < curiousPicks(s).length ? { ...s, result } : { ...s, step: "end" };
     }
+    case "prevResult":
+      // S-06 ‹ (10-02, 5-friend test: "I can't see the book I just saw"): back one 궁금해요 book, never before the first
+      return s.step === "result" && s.result > 0 ? { ...s, result: s.result - 1 } : s;
     case "redraw":
       // F-10: same conditions, five new books (seen stay excluded), the earlier 궁금해요 do not carry over.
       // A new round gets its own closed book (S-03) and its own one edit (F-07).

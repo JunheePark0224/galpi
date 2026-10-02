@@ -117,6 +117,15 @@ describe("flowReducer", () => {
     expect(flowReducer(bookmarks, { type: "nextResult" })).toBe(bookmarks);
   });
 
+  it("turns back one 궁금해요 book on S-06, never before the first (10-02)", () => {
+    const bookmarks = run([{ type: "start", entry: "leaf" }, ...answers(), { type: "drawn", id: 1, draw: view(5) }, { type: "open" }, { type: "next" }]);
+    const result = run(["curious", "curious", "pass", "pass", "pass"].map((r) => ({ type: "react", reaction: r }) as FlowAction), bookmarks);
+    const second = flowReducer(result, { type: "nextResult" });
+    expect(flowReducer(second, { type: "prevResult" })).toMatchObject({ step: "result", result: 0 });
+    expect(flowReducer(result, { type: "prevResult" })).toBe(result);
+    expect(flowReducer(bookmarks, { type: "prevResult" })).toBe(bookmarks);
+  });
+
   it("goes straight to the end when nothing was 궁금해요", () => {
     const first = run([{ type: "start", entry: "leaf" }, ...answers(), { type: "drawn", id: 1, draw: view(2) }, { type: "open" }, { type: "next" }]);
     expect(run([{ type: "react", reaction: "pass" }, { type: "react", reaction: "pass" }], first)).toMatchObject({ step: "end" });

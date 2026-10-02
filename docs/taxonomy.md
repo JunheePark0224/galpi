@@ -12,6 +12,7 @@
 | taxonomy v0.7 | 2026-10-01 | DESIGN C-16 책 속 책갈피 (PRD F-12 보이는 부분) | E-27 `bookmark_pulled`·E-28 `bookmark_flipped` live, 동사 `pulled`·`flipped` (8절) |
 | taxonomy v0.9 | 2026-10-02 | 밸런스 게임 순서 무작위 (PRD F-03, balance-game 2절) | E-24·E-25 `position` 추가 (8절) |
 | taxonomy v0.8 | 2026-10-01 | P5 로그인·내 책갈피 `plans/2026-10-01-p5-login-library.md` | 3-2 결정(Q5), E-29 `shelf_created`·E-30 `bookmark_moved` 추가, 막대 이름은 이벤트에 넣지 않음, E-11~17 설명을 [내 책갈피에 꽂기]로 (8절) |
+| taxonomy v0.11 | 2026-10-02 | S-06 ‹ › 앞뒤 넘기기 (PRD F-09, 친구 시험) | E-10 판마다 책당 한 번, 앞뒤 이동 이벤트 없음 (8절) |
 | taxonomy v0.10 | 2026-10-02 | 갈피 우체통 (PRD F-26) `plans/2026-10-02-feedback-mailbox.md` | E-31 `feedback_sent` live, 동사 `sent`, 분류 `홈`, `feedback_text` Supabase only, Supabase 사본은 `/api/feedback`이 저장 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
@@ -500,7 +501,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 결과 | view | live | 같음 |
 
-**언제**: S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩)  
+**언제**: S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩). **v0.11**: 판마다 책당 한 번 — ‹ ›로 돌아가 다시 봐도 또 남지 않는다(앞뒤 이동 자체는 이벤트 없음 — 답할 질문이 없음, 1-1)  
 **분석 질문**: Q-11
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -1057,6 +1058,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 
 | v0.9 | 2026-10-02 | Claude (사용자 요청) | 밸런스 게임 문항 순서를 판마다 무작위로(PRD F-03, balance-game 2절 — 같은 축 두 질문은 붙지 않게, 좌우는 문항마다 고정). E-24 `balance_answered`·E-25 `unsure_hold_cancelled`에 `position`(Number, 1~9 — 이 판에서 몇 번째로 나왔는지) 추가. `question_no`는 이제 순서가 아니라 문항 번호. 같은 축 일치율(5-3)은 문항 번호 쌍 그대로. 저장 흐름 `VERSION` 4 → 5. 모으는 정보 변화 없음(처리방침 그대로) |
 | v0.10 | 2026-10-02 | Claude (사용자 요청) | 갈피 우체통(PRD F-26, S-01만)과 함께 E-31 `feedback_sent`(`feedback_text` String ≤500 **Supabase only**·`text_length` Number)를 추가해 바로 `live`. 동사 `sent`, 분류 `홈`(퍼널 밖 — 분석 질문 없음, 운영용). 저장을 확인한 뒤에만 "잘 받았어요"를 보이므로 Supabase 사본은 `/api/feedback`이 `/api/track`과 같은 저장·`user_id` 확인 경로(`lib/track/record.ts`)로 쓰고, 화면은 2xx 뒤 `trackStored()`로 Amplitude 사본만 보낸다(2-7 예외) — 검사 #10이 `trackStored("…"` 호출도 센다. 저장되면 운영자에게 Resend 도착 알림(시각만, 글 없음). 처리방침 6-3e 먼저(갱신일 2026-10-02). 기존 이벤트 변경 없음 |
+| v0.11 | 2026-10-02 | Claude (사용자 요청) | 친구 5명 시험 의견("아까 본 책을 다시 못 본다")으로 S-06에 ‹ › 앞뒤 넘기기(PRD F-09, DESIGN C-11). E-10 `result_book_viewed`는 판마다 **책당 한 번**(돌아가 다시 봐도 또 남지 않음 — position 별 조회 수가 부풀지 않게). 앞뒤 이동 자체는 이벤트 없음(답할 질문이 없음, 1-1). 이벤트 이름·속성·`schema.ts` 변경 없음, 모으는 정보 변화 없음 |
 
 ---
 

@@ -78,6 +78,27 @@ describe("ResultBook (S-06, C-11)", () => {
     expect(onNext).toHaveBeenCalledTimes(1);
   });
 
+  it("turns back and on with ‹ › (10-02): ‹ is off on the first book, › on the last — [다 봤어요] ends", async () => {
+    vi.mocked(loadDetail).mockResolvedValue(DETAIL);
+    const onNext = vi.fn();
+    const onPrev = vi.fn();
+    const { rerender } = render(<ResultBook pick={pick} position={1} total={3} onNext={onNext} onPrev={onPrev} />);
+    expect(await screen.findByRole("button", { name: "앞 책 보기" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "뒤 책 보기" }));
+    expect(onNext).toHaveBeenCalledTimes(1);
+    rerender(<ResultBook pick={pick} position={3} total={3} onNext={onNext} onPrev={onPrev} />);
+    expect(screen.getByRole("button", { name: "뒤 책 보기" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "앞 책 보기" }));
+    expect(onPrev).toHaveBeenCalledTimes(1);
+  });
+
+  it("has no ‹ › with a single 궁금해요 book", async () => {
+    vi.mocked(loadDetail).mockResolvedValue(DETAIL);
+    render(<ResultBook pick={pick} position={1} total={1} onNext={vi.fn()} onPrev={vi.fn()} />);
+    await screen.findByRole("button", { name: LAST_BOOK });
+    expect(screen.queryByRole("button", { name: "앞 책 보기" })).toBeNull();
+  });
+
   it("says 다 봤어요 on the last book", async () => {
     show(DETAIL, 2, 2);
     expect(await screen.findByRole("button", { name: LAST_BOOK })).toBeInTheDocument();

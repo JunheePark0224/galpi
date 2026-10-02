@@ -6,6 +6,14 @@
 }
 @keyframes arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
+.pager { display: flex; align-items: center; justify-content: center; gap: var(--space-3); }
+.turn {
+  display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0 0 3px;
+  border: 1px solid var(--paper-line); border-radius: 50%; background: transparent; color: var(--ink);
+  font: inherit; font-size: 22px; line-height: 1; cursor: pointer;
+}
+.turn:disabled { opacity: 0.35; cursor: default; }
+.turn:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
 .progress {
   margin: 0; padding: 0 var(--space-3); border-radius: var(--radius-pill); background: var(--paper-deep);
   font-size: 12px; line-height: 24px; color: var(--ink-soft);

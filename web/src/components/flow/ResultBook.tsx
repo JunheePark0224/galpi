@@ -21,7 +21,7 @@ export const NO_INTRO = "책 소개를 불러오지 못했어요";
 export const INTRO_HEADING = "책 소개 · 예스24";
 const CREDIT = { yes24: "정보 제공: 예스24", kakao: "정보 제공: 카카오" } as const;
 
-interface Props { pick: PickView; position: number; total: number; onNext: () => void }
+interface Props { pick: PickView; position: number; total: number; onNext: () => void; onPrev?: () => void }
 
 function facts(d: BookDetail | null): string[] {
   if (!d) return [];
@@ -40,7 +40,7 @@ function facts(d: BookDetail | null): string[] {
  * back from logging in to keep this book (F-12). While the bookmark is out and login is on, [내 책갈피에 꽂기] (under the
  * book) is the main button and [예스24에서 보기] steps down to secondary (one main button per screen, C-16).
  */
-export function ResultBook({ pick, position, total, onNext }: Props) {
+export function ResultBook({ pick, position, total, onNext, onPrev }: Props) {
   const { card, kind } = pick;
   const [detail, setDetail] = useState<BookDetail | null>(null);
   const [expanded, setExpanded] = useState(false);
@@ -70,7 +70,17 @@ export function ResultBook({ pick, position, total, onNext }: Props) {
 
   return (
     <section className={styles.result} aria-labelledby="result-title" aria-busy={detail === null}>
-      <p className={styles.progress}>{`궁금해요 ${position} / ${total}`}</p>
+      {/* ‹ › (10-02, 5-friend test): turn back to a 궁금해요 book already seen, like a page. › stays inside the books —
+          the last book ends with [다 봤어요] below. Names avoid "다음 책", the button below. */}
+      <div className={styles.pager}>
+        {total > 1 && onPrev && (
+          <button type="button" className={styles.turn} onClick={onPrev} disabled={position <= 1} aria-label="앞 책 보기">‹</button>
+        )}
+        <p className={styles.progress}>{`궁금해요 ${position} / ${total}`}</p>
+        {total > 1 && onPrev && (
+          <button type="button" className={styles.turn} onClick={onNext} disabled={position >= total} aria-label="뒤 책 보기">›</button>
+        )}
+      </div>
 
       <BookmarkInBook handle={bookmark} pick={pick} position={position} startOut={startOut} onOutChange={setOut} keep={<KeepButton pick={pick} />}>
         <div className={styles.coverBox}>

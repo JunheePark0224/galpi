@@ -52,9 +52,9 @@ click,책갈피,SDK,bookmark_reacted,S-05 [패스] 또는 [궁금해요]를 누�
 click,책갈피,SDK,bookmark_reacted,S-05 [패스] 또는 [궁금해요]를 누를 때 (둘 중 하나를 눌러야 다음 장),pick_type,"추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음)",FALSE,String,"""recommended"", ""random""",v0.3 반영 · 이전 속성 이름: kind,E-08,live
 click,책갈피,SDK,bookmark_reacted,S-05 [패스] 또는 [궁금해요]를 누를 때 (둘 중 하나를 눌러야 다음 장),one_liner_style,첫인상 한 줄 말투 (E-07과 같은 값),FALSE,String,"""summary"", ""question""",v0.3 반영 · 추가,E-08,live
 view,결과,SDK,result_viewed,S-06 궁금해요 책 보기 화면에 들어올 때 (궁금해요가 1개 이상일 때만 — 0개면 S-08로 바로 가서 남지 않음),curious_count,이번 회차 궁금해요 수,FALSE,Number,"1, 2, 5",,E-09,live
-view,결과,SDK,result_book_viewed,"S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩)",book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-10,live
-view,결과,SDK,result_book_viewed,"S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩)",position,궁금해요 책 중 몇 번째인지 (1부터),FALSE,Number,"1, 2",,E-10,live
-view,결과,SDK,result_book_viewed,"S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩)",pick_type,"추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음)",FALSE,String,"""recommended"", ""random""",v0.3 명세 반영(EVENT_SPEC) · 심는 것은 P4 · 추가,E-10,live
+view,결과,SDK,result_book_viewed,"S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩). v0.11: 판마다 책당 한 번 — ‹로 돌아가 다시 봐도 또 남지 않음",book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-10,live
+view,결과,SDK,result_book_viewed,"S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩). v0.11: 판마다 책당 한 번 — ‹로 돌아가 다시 봐도 또 남지 않음",position,궁금해요 책 중 몇 번째인지 (1부터),FALSE,Number,"1, 2",,E-10,live
+view,결과,SDK,result_book_viewed,"S-06에서 궁금해요 책 한 권이 보일 때 (첫 권 포함, 한 권씩). v0.11: 판마다 책당 한 번 — ‹로 돌아가 다시 봐도 또 남지 않음",pick_type,"추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음)",FALSE,String,"""recommended"", ""random""",v0.3 명세 반영(EVENT_SPEC) · 심는 것은 P4 · 추가,E-10,live
 click,결과,SDK,description_expanded,S-06 책 설명 [더 보기]를 누를 때,book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",,E-23,live
 click,결과,SDK,description_expanded,S-06 책 설명 [더 보기]를 누를 때,pick_type,"추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음)",FALSE,String,"""recommended"", ""random""",,E-23,live
 click,결과,SDK,bookmark_pulled,S-06에서 표지 위로 빼꼼 꽂힌 책갈피(C-16)를 꺼낼 때 — 누르기·끌어올리기 모두. 다시 넣을 때는 남지 않음. 같은 책에서 다시 꺼내면 또 남음(비율은 책 단위로 중복 제거),book_id,책 ISBN-13 (books.isbn),FALSE,String,"""9788998441012""",v0.7 · 신규 이벤트 (C-16),E-27,live

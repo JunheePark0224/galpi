@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { MotionConfig } from "motion/react";
 import type { BalanceChoice, Entry } from "@/lib/recommend";
 import { newArtSeed } from "@/lib/art/combine";
@@ -68,16 +68,23 @@ export function Flow({ vocab, library = null }: { vocab: Vocab; library?: Librar
     });
   };
 
-  /** E-10: the 궁금해요 book now on S-06 (position counts within the 궁금해요 books, from 1). */
+  /**
+   * E-10: the 궁금해요 book now on S-06 (position counts within the 궁금해요 books, from 1) — once per book and round:
+   * going back with ‹ and on again does not count a book twice (taxonomy v0.11).
+   */
+  const viewedResults = useRef(new Set<string>());
   const trackResultBook = (s: FlowState) => {
     const pick = curiousPicks(s)[s.result];
-    if (pick) track("result_book_viewed", { book_id: pick.card.id, position: s.result + 1, pick_type: pick.kind });
+    if (!pick || viewedResults.current.has(pick.card.id)) return;
+    viewedResults.current.add(pick.card.id);
+    track("result_book_viewed", { book_id: pick.card.id, position: s.result + 1, pick_type: pick.kind });
   };
 
   /** Into S-06: E-09 once, then E-10 for the first book; every 궁금해요 book's detail is asked for ahead. */
   const enterResult = (s: FlowState) => {
     const curious = curiousPicks(s);
     track("result_viewed", { curious_count: curious.length });
+    viewedResults.current = new Set();
     trackResultBook(s);
     for (const p of curious) void loadDetail(p.card.id);
   };
@@ -161,6 +168,8 @@ export function Flow({ vocab, library = null }: { vocab: Vocab; library?: Librar
     const next = act({ type: "nextResult" });
     if (next.step === "result") trackResultBook(next);
   };
+  /** S-06 ‹: no event (taxonomy v0.11 — moving back and forth answers no question of ours). */
+  const prevResult = () => { act({ type: "prevResult" }); };
 
   /** S-08 [다시 뽑기] (E-19): track() moves the round on right after sending it (taxonomy 3-1a); the entry stays. */
   const redraw = () => {
@@ -198,7 +207,7 @@ export function Flow({ vocab, library = null }: { vocab: Vocab; library?: Librar
         />
       )}
       {resultPick && (
-        <ResultBook key={resultPick.card.id} pick={resultPick} position={state.result + 1} total={curious.length} onNext={nextResult} />
+        <ResultBook key={resultPick.card.id} pick={resultPick} position={state.result + 1} total={curious.length} onNext={nextResult} onPrev={prevResult} />
       )}
       {state.step === "end" && <EndScreen onRedraw={redraw} onHome={() => home("end")} />}
     </MotionConfig>

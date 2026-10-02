@@ -83,6 +83,26 @@ test("S-06 survives a reload on the second book without sending its view again",
   expect(named(events, "result_book_viewed")).toHaveLength(2);
 });
 
+test("S-06 ‹ › turn back to a book already seen and on again, each book's view sent once (10-02)", async ({ page }) => {
+  const { events } = await recordEvents(page);
+  await mockBooks(page);
+  await toBookmarks(page);
+  await reactToBookmarks(page, ["궁금해요", "궁금해요", "패스", "패스", "패스"]);
+  await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
+  await expect(page.getByRole("button", { name: "앞 책 보기" })).toBeDisabled();
+  await page.getByRole("button", { name: "뒤 책 보기" }).click();
+  await expect(page.getByText("궁금해요 2 / 2")).toBeVisible();
+  await page.getByRole("button", { name: "앞 책 보기" }).click();
+  await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
+  await page.getByRole("button", { name: "다음 책" }).click();
+  await expect(page.getByText("궁금해요 2 / 2")).toBeVisible();
+  await expect(page.getByRole("button", { name: "뒤 책 보기" })).toBeDisabled();
+  await expect.poll(() => named(events, "result_book_viewed").length).toBe(2);
+  await page.waitForTimeout(300);
+  expect(named(events, "result_book_viewed").map((e) => e.props.position)).toEqual([1, 2]);
+  expect(specMismatches(events)).toEqual([]);
+});
+
 test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, round + 1 (E-19)", async ({ page }) => {
   const { events } = await recordEvents(page);
   await mockBooks(page);
