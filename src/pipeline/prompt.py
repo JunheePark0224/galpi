@@ -106,6 +106,8 @@ COMMON = [
 ]
 TAG_RULES = [
     "🎯: keywords는 그 주제의 키워드 중 책의 중심인 것 0~3개(단어 규칙이 찾은 후보는 힌트일 뿐), way는 개념·실습·사례 중 하나.",
+    "🎯 new_keyword: 책의 중심을 나타내는 키워드가 그 주제의 키워드 목록에 없을 때만, 그 중심의 짧은 이름(우리 말 또는 영어 2~12자, 예: 엑셀). "
+    "목록에 있는 키워드나 주제 이름이면, 또는 중심이 목록으로 충분하면 \"\"(빈 문자열).",
     "🍃: temp·pull·gain·world를 표의 가르는 질문대로 +1/0/-1.",
     f"one_liner: 첫인상 한 줄. 🎯는 요약형(이 책으로 무엇을 얻는지 한 문장, 물음표 없음), 🍃는 질문형(반드시 ?로 끝남). 공백 빼고 {MIN_LEN}~{MAX_LEN}자, 해요체, "
     f"제목을 되풀이하지 않는다, 결말·반전을 말하지 않는다, 과장어 금지: {', '.join(HYPE_WORDS)}. 내용어 2개 이상은 책소개·목차에 실제로 나오는 말로 — 단 문장을 옮겨 쓰지 않는다.",
@@ -145,6 +147,8 @@ def schema(entry: str, kind: str, keywords: list[str]) -> dict:
         props |= {a: {"type": "integer", "enum": [-1, 0, 1]} for a in AXES}
     if kind == "tag":
         props |= {"one_liner": {"type": "string"}, "evidence": {"type": "string"}, "confidence": {"type": "number"}}
+        if entry == "target":
+            props |= {"new_keyword": {"type": "string"}}  # a name missing from the list (keyword_candidates.py), "" if none
     else:
         props |= {"why": {"type": "string"}}
     return {"type": "object", "properties": props, "required": list(props), "additionalProperties": False}

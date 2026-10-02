@@ -79,7 +79,7 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     user = user_message(cand.entry, cand.slot, cand.title, cand.intro, cand.toc, hints)
     raw_a, used, why = call(client, cfg.model, prompts["tag"], user, schema(cand.entry, "tag", names), breaker, "A")
     _spend(ledger, cfg.model, used)
-    a = parse(raw_a, cand.entry, "tag", names) if raw_a else None
+    a = parse(raw_a, cand.entry, "tag", names, cand.slot) if raw_a else None
     if a is None:
         return None, why if raw_a is None else "invalid_answer"
     raw_b, used, why = call(client, cfg.second_model, prompts["check"], user, schema(cand.entry, "check", names), breaker, "B")

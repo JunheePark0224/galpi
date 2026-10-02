@@ -233,3 +233,33 @@ def test_fits_is_judged_at_topic_level_not_keyword():
     text = " ".join(prompt.COMMON)
     assert "주제 수준으로만 판단한다" in text
     assert "어떤 키워드를 찾다가 나왔는지" in text
+
+
+def test_only_pass_a_on_a_target_book_is_asked_for_a_new_keyword():
+    """10-02 키워드 후보: pass A names the book's center when it is not on the topic's list (plans/2026-10-02-keyword-candidates.md)."""
+    assert schema("target", "tag", ["주식"])["properties"]["new_keyword"] == {"type": "string"}
+    assert "new_keyword" in schema("target", "tag", ["주식"])["required"]
+    for entry, kind in (("target", "check"), ("leaf", "tag"), ("leaf", "check")):
+        assert "new_keyword" not in schema(entry, kind, ["주식"])["properties"]
+    tag, check = system_prompt(VOC, "tag"), system_prompt(VOC, "check")
+    assert "new_keyword" in tag and "목록에 없을 때만" in tag and "2~12자" in tag
+    assert "new_keyword" not in check
+
+
+@pytest.mark.parametrize("given, kept", [
+    ("엑셀", "엑셀"), ("  <R>  ", "R"), ("투자  \n 철학", "투자 철학"), ("가" * 20, "가" * 12),
+    ("", None), ("   ", None), ("<>", None), (None, None), (3, None),
+    ("주식", None), (" 주 식 ", None), ("etf·펀드", None),       # already on the list (case / spaces ignored)
+    ("돈 관리·투자", None), ("돈관리·투자", None),                 # the topic itself
+])
+def test_parse_keeps_a_short_clean_candidate_name_or_none(given, kept):
+    raw = tag_answer("target", new_keyword=given)
+    got = parse(raw, "target", "tag", ["주식", "ETF·펀드"], topic="돈 관리·투자")
+    assert got["keyword_candidate"] == kept
+
+
+def test_a_missing_candidate_does_not_spoil_the_answer_and_other_passes_have_none():
+    raw = {k: v for k, v in tag_answer("target").items() if k != "new_keyword"}
+    assert parse(raw, "target", "tag", ["주식"], topic="돈 관리·투자")["keyword_candidate"] is None
+    assert "keyword_candidate" not in parse(check_answer("target", new_keyword="엑셀"), "target", "check", ["주식"])
+    assert "keyword_candidate" not in parse(tag_answer("leaf", new_keyword="엑셀"), "leaf", "tag", [])

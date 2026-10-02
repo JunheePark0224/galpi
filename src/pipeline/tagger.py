@@ -17,6 +17,7 @@ from dataclasses import dataclass
 
 import anthropic
 
+from .keyword_candidates import clean as clean_candidate
 from .prompt import AXES, MAX_KEYWORDS, WAYS, WHY_MAX
 
 MAX_TOKENS = 2048
@@ -133,9 +134,11 @@ def _text(v: object) -> str:
     return v.strip() if isinstance(v, str) else ""
 
 
-def parse(raw: dict, entry: str, kind: str, keywords: list[str]) -> dict | None:
+def parse(raw: dict, entry: str, kind: str, keywords: list[str], topic: str = "") -> dict | None:
     """The answer cut to our lists: keywords outside the topic are dropped (at most MAX_KEYWORDS); a bad way / axis /
-    missing one-liner makes the whole answer unusable (None). Pass B's free-text `why` is cut to WHY_MAX characters."""
+    missing one-liner makes the whole answer unusable (None). Pass B's free-text `why` is cut to WHY_MAX characters.
+    Pass A on a 🎯 book also gives `keyword_candidate`: its `new_keyword` cleaned (keyword_candidates.clean — a short name,
+    None when missing, empty, the topic `topic` or already on the list); a bad candidate never spoils the answer."""
     if not isinstance(raw.get("fits"), bool):
         return None
     out: dict = {"fits": raw["fits"]}
@@ -155,4 +158,7 @@ def parse(raw: dict, entry: str, kind: str, keywords: list[str]) -> dict | None:
     if not line or isinstance(conf, bool) or not isinstance(conf, (int, float)):
         return None
     conf = round(min(1.0, max(0.0, float(conf))), 2)
-    return out | {"one_liner": line, "evidence": _text(raw.get("evidence")), "confidence": conf}
+    out |= {"one_liner": line, "evidence": _text(raw.get("evidence")), "confidence": conf}
+    if entry == "target":
+        out |= {"keyword_candidate": clean_candidate(raw.get("new_keyword"), topic, keywords)}
+    return out
