@@ -55,12 +55,12 @@ async function walkTheBook(page: Page, mode: "fit" | "scrollOk" | "buttons" = "f
   // and big (not on a very short window). Short phone browsers (548–620 tall) give some of it to the C-19 bookmark tips.
   if (!scrollOk) expect(closed.width).toBeGreaterThanOrEqual(Math.min(viewport.width, 430) * (buttons ? 0.6 : 0.7));
   expect(closed.y).toBeGreaterThanOrEqual(52);                                     // below the logo header
-  // controller ruling: the hint sits right under the cover, the pair is centred — not pushed toward the bottom of the screen
+  // C-01 tap cue (10-02): the hint is on the cover itself, so it is on screen whenever the cover is
   const hint = await page.getByText("눌러서 펼치기").boundingBox();
   if (!hint) throw new Error("the hint has no box");
-  const gap = hint.y - (closed.y + closed.height);
-  expect(gap).toBeGreaterThanOrEqual(0);
-  expect(gap).toBeLessThanOrEqual(40);
+  expect(hint.y).toBeGreaterThanOrEqual(closed.y);
+  expect(hint.y + hint.height).toBeLessThanOrEqual(closed.y + closed.height);
+  expect(hint.y + hint.height).toBeLessThanOrEqual(viewport.height);
   expect(await fits()).toBe(true);
 
   await cover.click();                                                            // S-04

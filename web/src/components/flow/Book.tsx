@@ -43,7 +43,11 @@ export function Book({ open, onPress, left, right, tucked }: Props) {
                 <span className={styles.coverTitle}>갈피</span>
                 <span className={styles.coverLine}>읽을 책, 갈피가 안 잡힐 때</span>
               </span>
-              <LogoMark className={styles.coverMark} width={40} />
+              {/* C-01 tap cue (10-02, 5-friend test: "no sign to tap"): on the cover itself, in the foil mark's place, so a
+                  browser bar over the bottom of the screen cannot hide it. The button's name stays "책 펼치기". */}
+              {onPress && !open
+                ? <span className={styles.tap}><span className={styles.tapHand}>👆</span> 눌러서 펼치기</span>
+                : <LogoMark className={styles.coverMark} width={40} />}
             </span>
           </button>
           <div className={styles.back}><div className={styles.pageLeft}>{left}</div></div>

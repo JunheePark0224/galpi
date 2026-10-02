@@ -108,7 +108,8 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
         )}
       </div>
 
-      {step === "book" && <p className={styles.hint}>눌러서 펼치기</p>}
+      {/* the words moved onto the cover (C-01 tap cue, 10-02); this keeps the room the layout math counts on */}
+      {step === "book" && <p className={styles.hint} aria-hidden="true" />}
 
       {step === "first" && uncovered && (
         <div className={`${styles.actions} ${styles.exits}`}>
