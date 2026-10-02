@@ -13,9 +13,15 @@ export const test = base.extend({
   extraHTTPHeaders: async ({}, provide, testInfo) => {
     await provide({ "x-forwarded-for": clientIp(testInfo.testId) });
   },
-  // C-20: the first-bookmark guide is marked as seen, so specs reach the reactions; first-guide.spec removes the mark.
+  // C-20 · C-21: the S-05 and S-06 guides are marked as seen, so specs reach the reactions and the S-06 buttons;
+  // first-guide.spec and result-guide.spec remove their mark.
   page: async ({ page }, provide) => {
-    await page.addInitScript(() => { try { window.localStorage.setItem("galpi.hint.firstGuide", "1"); } catch { /* blocked */ } });
+    await page.addInitScript(() => {
+      try {
+        window.localStorage.setItem("galpi.hint.firstGuide", "1");
+        window.localStorage.setItem("galpi.hint.resultGuide", "1");
+      } catch { /* blocked */ }
+    });
     await provide(page);
   },
 });

@@ -22,7 +22,7 @@ async function mount(me: unknown) {
   return store;
 }
 
-describe("KeepButton (S-06 [내 책갈피에 꽂기], C-16)", () => {
+describe("KeepButton (S-06 [🔖 꽂기] next to the title, C-16b)", () => {
   afterEach(() => { vi.unstubAllGlobals(); vi.clearAllMocks(); });
 
   it("is not there when login is not set up", async () => {
@@ -30,17 +30,19 @@ describe("KeepButton (S-06 [내 책갈피에 꽂기], C-16)", () => {
     expect(screen.queryByRole("button")).toBeNull();
   });
 
-  it("logged in: no login note, and a press keeps this book with today's Korean date", async () => {
+  it("logged in: a small 🔖 꽂기 pill named for where it goes; a press keeps this book with today's Korean date", async () => {
     await mount({ enabled: true, loggedIn: true, id: "u1", count: 0 });
-    expect(screen.queryByText("로그인하면 내 책갈피에 모여요")).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: "내 책갈피에 꽂기" }));
+    const pill = screen.getByRole("button", { name: "내 책갈피에 꽂기" });
+    expect(pill).toHaveTextContent("🔖 꽂기");                                   // label-in-name: the visible 꽂기 is in the name
+    expect(pill).not.toHaveAttribute("data-variant");                             // never the screen's main button
+    fireEvent.click(pill);
     expect(pressKeep).toHaveBeenCalledWith(
       { isbn: ISBN, art: pick.art, reason: pick.reason, metOn: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/) }, true);
   });
 
-  it("logged out: says why to log in", async () => {
+  it("logged out: the same pill — the press goes on to the login sheet (pressKeep, not logged in)", async () => {
     await mount({ enabled: true, loggedIn: false, id: null, count: 0 });
-    expect(screen.getByText("로그인하면 내 책갈피에 모여요")).toBeInTheDocument();
+    expect(screen.queryByText("로그인하면 내 책갈피에 모여요")).toBeNull();          // the S-07 sheet says it (10-02)
     fireEvent.click(screen.getByRole("button", { name: "내 책갈피에 꽂기" }));
     expect(pressKeep).toHaveBeenCalledWith(expect.objectContaining({ isbn: ISBN }), false);
   });

@@ -6,14 +6,17 @@
 }
 @keyframes arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-.pager { display: flex; align-items: center; justify-content: center; gap: var(--space-3); }
+/* ‹ › (10-02) either side of the cover, centred on it, 6px outside its edges: on a 320px phone the cover is 178px of a
+   288px column, which leaves 55px a side for the 44px buttons. */
 .turn {
-  display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0 0 3px;
+  position: absolute; top: 50%; z-index: 1; translate: 0 -50%; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0 0 3px;
   border: 1px solid var(--paper-line); border-radius: 50%; background: transparent; color: var(--ink);
   font: inherit; font-size: 22px; line-height: 1; cursor: pointer;
 }
 .turn:disabled { opacity: 0.35; cursor: default; }
 .turn:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.prev { right: calc(100% + 6px); }
+.next { left: calc(100% + 6px); }
 .progress {
   margin: 0; padding: 0 var(--space-3); border-radius: var(--radius-pill); background: var(--paper-deep);
   font-size: 12px; line-height: 24px; color: var(--ink-soft);
@@ -21,7 +24,7 @@
 
 /* The big cover: a printed cover sits like a book on the desk (shadow-book); without one, our own cloth cover with the title. */
 /* Its width is set by the C-16 stage (BookmarkInBook.module.css .book): min(56%, 200px). */
-.coverBox { width: 100%; aspect-ratio: 1 / 1.45; }  /* the swap to the cloth cover must not move the page */
+.coverBox { position: relative; width: 100%; aspect-ratio: 1 / 1.45; }  /* the swap to the cloth cover must not move the page */
 .cover {
   display: block; width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-book);
   box-shadow: var(--shadow-book); background: var(--paper-deep);
@@ -38,18 +41,9 @@
 
 .head { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); }
 .title { margin: var(--space-1) 0 0; font-size: 20px; line-height: 1.4; }
-/* Title + [책갈피 꺼내기] (10-02): the title stays centred; the small pill sits right of it, 44px tall to touch. */
-.titleRow { display: flex; align-items: center; justify-content: center; gap: var(--space-2); flex-wrap: wrap; }
+/* Title + [🔖 꽂기] (C-16b, 10-02): the title stays centred; the small ink pill sits right of it, 44px tall to touch. */
+.titleRow { display: flex; align-items: center; justify-content: center; column-gap: var(--space-2); flex-wrap: wrap; }
 .titleRow .title { margin: 0; }
-.titlePull {
-  display: inline-flex; align-items: center; min-height: var(--touch); padding: 0; border: 0; background: none; cursor: pointer;
-  font: inherit; -webkit-tap-highlight-color: transparent;
-}
-.titlePullFace {
-  padding: 4px 10px; border: var(--card-edge); border-radius: var(--radius-pill); background: var(--card-bg);
-  font-size: 12px; line-height: 1.4; color: var(--ink-soft); white-space: nowrap;
-}
-.titlePull:hover .titlePullFace { background: var(--paper-deep); }
 .author { margin: 0; font-size: 13px; color: var(--ink-muted); }
 .facts { margin: 0; font-size: 13px; color: var(--ink-soft); }
 

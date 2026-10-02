@@ -1,39 +1,65 @@
-/** C-20 first-bookmark guide (10-02): shown once per browser, logged in or not. Same storage pattern as bookmarkPull.ts. */
+/**
+ * Once-per-browser guides: C-20 on the first S-05 bookmark, C-21 on the first S-06 book (10-02). Shown once per browser,
+ * logged in or not. Storage can be blocked (private mode, in-app browsers): then a guide shows once per page load instead.
+ */
 
 export const FIRST_GUIDE_KEY = "galpi.hint.firstGuide";
+export const RESULT_GUIDE_KEY = "galpi.hint.resultGuide";
 
-// Storage can be blocked (private mode, in-app browsers): then the guide is shown once per page load instead.
-let seenThisLoad = false;
-
-export function hasSeenFirstGuide(): boolean {
-  if (seenThisLoad) return true;
-  try {
-    return window.localStorage.getItem(FIRST_GUIDE_KEY) === "1";
-  } catch {
-    return false;
-  }
+export interface GuideFlag {
+  hasSeen: () => boolean;
+  markSeen: () => void;
+  /** S-10 "책갈피 보는 법 다시 보기": the guide shows again next time. */
+  reset: () => void;
+  /** Test seam: module state survives between tests. */
+  forgetForTests: () => void;
 }
 
-export function markFirstGuideSeen(): void {
-  seenThisLoad = true;
-  try {
-    window.localStorage.setItem(FIRST_GUIDE_KEY, "1");
-  } catch {
-    // remembered for this page load only
-  }
+function guideFlag(key: string): GuideFlag {
+  let seenThisLoad = false;
+  return {
+    hasSeen() {
+      if (seenThisLoad) return true;
+      try {
+        return window.localStorage.getItem(key) === "1";
+      } catch {
+        return false;
+      }
+    },
+    markSeen() {
+      seenThisLoad = true;
+      try {
+        window.localStorage.setItem(key, "1");
+      } catch {
+        // remembered for this page load only
+      }
+    },
+    reset() {
+      seenThisLoad = false;
+      try {
+        window.localStorage.removeItem(key);
+      } catch {
+        // nothing stored to remove
+      }
+    },
+    forgetForTests() {
+      seenThisLoad = false;
+    },
+  };
 }
 
-/** S-10 "안내 다시 보기": the next first bookmark shows the guide again. */
-export function resetFirstGuide(): void {
-  seenThisLoad = false;
-  try {
-    window.localStorage.removeItem(FIRST_GUIDE_KEY);
-  } catch {
-    // nothing stored to remove
-  }
-}
+/** C-20, the first S-05 bookmark. */
+export const firstGuide = guideFlag(FIRST_GUIDE_KEY);
+/** C-21, the first S-06 book. */
+export const resultGuide = guideFlag(RESULT_GUIDE_KEY);
 
-/** Test seam: module state survives between tests. */
-export function forgetFirstGuideForTests(): void {
-  seenThisLoad = false;
+export const hasSeenFirstGuide = firstGuide.hasSeen;
+export const markFirstGuideSeen = firstGuide.markSeen;
+export const resetFirstGuide = firstGuide.reset;
+export const forgetFirstGuideForTests = firstGuide.forgetForTests;
+
+/** S-10 "책갈피 보는 법 다시 보기": both guides show again. */
+export function resetGuides(): void {
+  firstGuide.reset();
+  resultGuide.reset();
 }

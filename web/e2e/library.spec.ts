@@ -84,7 +84,7 @@ async function toFirstResult(page: Page) {
   await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
 }
 
-test("logged out: 꽂기 → login sheet → Kakao → back on the same book, bookmark out, kept by itself (E-11·12·13·14·15)", async ({ page }) => {
+test("logged out: 🔖 꽂기 (no pull first) → login sheet → Kakao → back on the same book, kept by itself (E-11·12·13·14·15)", async ({ page }) => {
   const lib: FakeLibrary = { loggedIn: false, shelves: [], saved: [], posts: [] };
   await fakeAccount(page, lib);
   await mockBooks(page);
@@ -95,20 +95,21 @@ test("logged out: 꽂기 → login sheet → Kakao → back on the same book, bo
   await toFirstResult(page);
   const title = await page.locator("#result-title").innerText();
 
-  await page.getByRole("button", { name: "책갈피 꺼내기" }).click();
-  await expect(page.getByText("로그인하면 내 책갈피에 모여요")).toBeVisible();
-  await expect(page.getByRole("link", { name: /예스24에서 보기/ })).toHaveAttribute("data-variant", "secondary");  // one main button
+  // 10-02: the pill next to the title keeps straight away — the bookmark stays in, YES24 stays the one main button
+  await expect(page.getByRole("button", { name: "책갈피 꺼내기" })).toHaveAttribute("aria-expanded", "false");
+  await expect(page.getByRole("link", { name: /예스24에서 보기/ })).toHaveAttribute("data-variant", "primary");
   await page.getByRole("button", { name: "내 책갈피에 꽂기" }).click();
 
   const sheet = page.getByRole("dialog", { name: "내 책갈피에 꽂으려면 로그인해 주세요" });
   await expect(sheet.getByRole("link", { name: "개인정보 처리방침" })).toHaveAttribute("href", "/privacy");   // PHASES P5
   await sheet.getByRole("button", { name: "카카오로 계속하기" }).click();
 
-  // back from the login: the same S-06 book, its bookmark already out, kept without another press
+  // back from the login: the same S-06 book, kept without another press (its bookmark in, as it was left)
   await expect(page.getByRole("status").filter({ hasText: "꽂았어요 ✓" })).toBeVisible();
   await expect(page.locator("#result-title")).toHaveText(title);
   await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
-  await expect(page.getByRole("button", { name: "책갈피 꺼내기" })).toHaveAttribute("aria-expanded", "true");
+  await expect(page.getByRole("button", { name: "책갈피 꺼내기" })).toHaveAttribute("aria-expanded", "false");
+  await expect(page.getByRole("link", { name: /예스24에서 보기/ })).toHaveAttribute("data-variant", "primary");
   expect(new URL(page.url()).search).toBe("");                                                   // the login mark is gone
   await expect(page.getByRole("banner").getByRole("link", { name: "내 책갈피 1개" })).toBeVisible();
   expect(lib.posts).toHaveLength(1);
@@ -123,7 +124,7 @@ test("logged out: 꽂기 → login sheet → Kakao → back on the same book, bo
   expect(specMismatches(events)).toEqual([]);
 });
 
-test("logged in: 꽂기 keeps at once (E-11 → E-15)", async ({ page }) => {
+test("logged in: 🔖 꽂기 keeps at once, no pull first (E-11 → E-15, no E-27)", async ({ page }) => {
   const lib: FakeLibrary = { loggedIn: true, shelves: [], saved: [], posts: [] };
   await fakeAccount(page, lib);
   await mockBooks(page);
@@ -131,13 +132,13 @@ test("logged in: 꽂기 keeps at once (E-11 → E-15)", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("banner").getByRole("link", { name: "내 책갈피 0개" })).toBeVisible();
   await toFirstResult(page);
-  await page.getByRole("button", { name: "책갈피 꺼내기" }).click();
-  await expect(page.getByText("로그인하면 내 책갈피에 모여요")).toHaveCount(0);
   await page.getByRole("button", { name: "내 책갈피에 꽂기" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "꽂았어요 ✓" })).toBeVisible();
   await expect(page.getByRole("link", { name: "내 책갈피 보기" })).toHaveAttribute("href", "/library");
   await expect.poll(() => named(events, "book_saved").map((e) => e.props.is_auto_save)).toEqual([false]);
   expect(named(events, "save_clicked").map((e) => e.props.is_logged_in)).toEqual([true]);
   expect(named(events, "login_prompt_shown")).toEqual([]);
+  expect(named(events, "bookmark_pulled")).toEqual([]);                          // keeping no longer needs pulling out
   expect(specMismatches(events)).toEqual([]);
 });
 

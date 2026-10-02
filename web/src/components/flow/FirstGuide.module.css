@@ -1,18 +1,20 @@
-/* C-20 first-bookmark guide: a dimmed page with three lit parts and short words in paper pills. */
+/* C-20 · C-21 guides (S-05 first bookmark, S-06 first book): a dimmed page with lit parts and short words in paper pills. */
 .guide { position: fixed; inset: 0; z-index: 1000; cursor: pointer; animation: show 200ms ease-out; }
 @keyframes show { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .guide { animation: none; } }
 .dim { position: absolute; inset: 0; display: block; }
 .shade { fill: rgba(43, 39, 36, 0.62); }
 .ring { fill: none; stroke: var(--paper); stroke-width: 1.5; stroke-dasharray: 4 3; }
-.note {
-  position: absolute; margin: 0; translate: -50% 0; max-width: calc(100vw - 32px); width: max-content;
-  padding: 6px 12px; border-radius: var(--radius-pill); background: var(--paper); color: var(--ink);
-  font-size: 13px; line-height: 1.4; text-align: center; word-break: keep-all; box-shadow: var(--shadow-soft);
+/* A step: its words (and on one step [알겠어요]) centred under or over its lit part. */
+.step {
+  position: absolute; translate: -50% 0; display: flex; flex-direction: column; align-items: center; gap: var(--space-3);
+  width: max-content; max-width: calc(100vw - 32px);
 }
 .above { translate: -50% -100%; }
-.middle { position: absolute; translate: -50% 0; display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
-.middle .note { position: static; translate: none; }
+.note {
+  margin: 0; max-width: 100%; padding: 6px 12px; border-radius: var(--radius-pill); background: var(--paper); color: var(--ink);
+  font-size: 13px; line-height: 1.4; text-align: center; word-break: keep-all; box-shadow: var(--shadow-soft);
+}
 .ok {
   min-width: 120px; min-height: 44px; padding: 0 var(--space-4); border: 0; border-radius: var(--radius-pill);
   background: var(--ink); color: var(--paper); font: inherit; font-size: 15px; cursor: pointer;

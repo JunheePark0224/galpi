@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, LinkButton } from "@/components/Button";
 import { GenreTag } from "@/components/GenreTag";
 import { yes24SearchUrl, type BookDetail } from "@/lib/books/detail";
@@ -7,9 +7,10 @@ import { loadDetail } from "@/lib/books/detailClient";
 import type { PickView } from "@/lib/flow/state";
 import { truncateIntro } from "@/lib/recommend";
 import { track } from "@/lib/track/client";
-import { keepSnapshot, useAccount } from "@/lib/account/store";
-import { readPending } from "@/lib/library/pending";
-import { BookmarkInBook, type BookmarkHandle } from "./BookmarkInBook";
+import { useAccount } from "@/lib/account/store";
+import { resultGuide } from "@/lib/flow/firstGuide";
+import { BookmarkInBook } from "./BookmarkInBook";
+import { ResultGuide } from "./FirstGuide";
 import { KeepButton } from "./KeepButton";
 import styles from "./ResultBook.module.css";
 
@@ -20,6 +21,8 @@ export const NO_INTRO = "책 소개를 불러오지 못했어요";
 /** Stitch README "따르지 않을 부분": the intro is YES24's, so it is labelled as such — never as our own commentary. */
 export const INTRO_HEADING = "책 소개 · 예스24";
 const CREDIT = { yes24: "정보 제공: 예스24", kakao: "정보 제공: 카카오" } as const;
+/** C-21 waits for the page to settle (the 300ms `arrive`) before measuring what it lights. */
+const GUIDE_DELAY_MS = 400;
 
 interface Props { pick: PickView; position: number; total: number; onNext: () => void; onPrev?: () => void }
 
@@ -36,9 +39,10 @@ function facts(d: BookDetail | null): string[] {
  * S-06 (C-11), one 궁금해요 book: big cover with its S-05 bookmark in it (C-16) → title → rating · price · pages → intro
  * (folded) → buttons → credit.
  * No 나온 이유 line (10-01, user): 🎯 mostly repeats the chosen topic. `pick.reason` is on the bookmark's back instead.
- * The parent keys it by book, so every book starts folded, loading and with its bookmark in — or out, when the page came
- * back from logging in to keep this book (F-12). While the bookmark is out and login is on, [내 책갈피에 꽂기] (under the
- * book) is the main button and [예스24에서 보기] steps down to secondary (one main button per screen, C-16).
+ * The parent keys it by book, so every book starts folded, loading and with its bookmark in.
+ * 10-02 (5-friend test — nobody found how to keep): [🔖 꽂기] sits next to the title at all times and keeps in one tap
+ * (C-16b); pulling the bookmark out only shows its back. [예스24에서 보기] is always the one main button (C-11). ‹ › sit
+ * either side of the cover. The first S-06 book of a browser explains itself once (C-21).
  */
 export function ResultBook({ pick, position, total, onNext, onPrev }: Props) {
   const { card, kind } = pick;
@@ -46,11 +50,21 @@ export function ResultBook({ pick, position, total, onNext, onPrev }: Props) {
   const [expanded, setExpanded] = useState(false);
   // The cover URL that failed to load (not a boolean): another book brings another URL, so the failure resets by itself.
   const [failedCover, setFailedCover] = useState<string | null>(null);
-  const [startOut] = useState(() => readPending()?.isbn === card.id || keepSnapshot(card.id) !== undefined);
-  const [out, setOut] = useState(startOut);
   const account = useAccount();
-  const keepLeads = out && (account.status === "in" || account.status === "out");
-  const bookmark = useRef<BookmarkHandle>(null);
+  const canKeep = account.status === "in" || account.status === "out";
+  const turns = total > 1 && onPrev !== undefined;
+  const page = useRef<HTMLElement>(null);
+  const [guide, setGuide] = useState(() => !resultGuide.hasSeen());
+  const [settled, setSettled] = useState(false);
+  const closeGuide = useCallback(() => {
+    resultGuide.markSeen();
+    setGuide(false);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setSettled(true), GUIDE_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     let live = true;
@@ -69,21 +83,20 @@ export function ResultBook({ pick, position, total, onNext, onPrev }: Props) {
   };
 
   return (
-    <section className={styles.result} aria-labelledby="result-title" aria-busy={detail === null}>
-      {/* ‹ › (10-02, 5-friend test): turn back to a 궁금해요 book already seen, like a page. › stays inside the books —
-          the last book ends with [다 봤어요] below. Names avoid "다음 책", the button below. */}
-      <div className={styles.pager}>
-        {total > 1 && onPrev && (
-          <button type="button" className={styles.turn} onClick={onPrev} disabled={position <= 1} aria-label="앞 책 보기">‹</button>
-        )}
-        <p className={styles.progress}>{`궁금해요 ${position} / ${total}`}</p>
-        {total > 1 && onPrev && (
-          <button type="button" className={styles.turn} onClick={onNext} disabled={position >= total} aria-label="뒤 책 보기">›</button>
-        )}
-      </div>
+    <section ref={page} className={styles.result} aria-labelledby="result-title" aria-busy={detail === null}>
+      <p className={styles.progress}>{`궁금해요 ${position} / ${total}`}</p>
 
-      <BookmarkInBook handle={bookmark} pick={pick} position={position} startOut={startOut} onOutChange={setOut} keep={<KeepButton pick={pick} />}>
+      <BookmarkInBook pick={pick} position={position}>
         <div className={styles.coverBox}>
+          {/* ‹ › (10-02, 5-friend test): turn back to a 궁금해요 book already seen, like a page — either side of the cover,
+              outside its edges. › stays inside the books — the last book ends with [다 봤어요] below. Names avoid
+              "다음 책", the button below. */}
+          {turns && (
+            <button
+              type="button" className={`${styles.turn} ${styles.prev}`} onClick={onPrev} disabled={position <= 1}
+              aria-label="앞 책 보기" data-part="turn-prev"
+            >‹</button>
+          )}
           {cover ? (
             // A third-party cover shown as YES24 serves it — not copied through our image optimiser. No Referer is sent (hotlink
             // filters); if it still fails, our own cloth cover takes its place.
@@ -95,6 +108,12 @@ export function ResultBook({ pick, position, total, onNext, onPrev }: Props) {
           ) : (
             <div className={styles.plainCover} aria-hidden="true"><span>{card.title}</span></div>
           )}
+          {turns && (
+            <button
+              type="button" className={`${styles.turn} ${styles.next}`} onClick={onNext} disabled={position >= total}
+              aria-label="뒤 책 보기" data-part="turn-next"
+            >›</button>
+          )}
         </div>
       </BookmarkInBook>
 
@@ -102,14 +121,7 @@ export function ResultBook({ pick, position, total, onNext, onPrev }: Props) {
         <GenreTag card={card} />
         <div className={styles.titleRow}>
           <h1 id="result-title" className={styles.title}>{card.title}</h1>
-          {/* A seen shortcut for the peeking bookmark (10-02, user): pointer only — assistive tech and the keyboard use the
-              bookmark's own "책갈피 꺼내기" button (aria-expanded), so the control is not announced twice. */}
-          <button
-            type="button" className={styles.titlePull} data-testid="title-pull" aria-hidden="true" tabIndex={-1}
-            onClick={() => bookmark.current?.toggle()}
-          >
-            <span className={styles.titlePullFace}>{out ? "책갈피 넣기" : "책갈피 꺼내기"}</span>
-          </button>
+          <KeepButton pick={pick} />
         </div>
         <p className={styles.author}>{card.author}</p>
         {line.length > 0 && <p className={styles.facts}>{line.join(" · ")}</p>}
@@ -132,7 +144,7 @@ export function ResultBook({ pick, position, total, onNext, onPrev }: Props) {
       <div className={styles.actions}>
         <Button variant="secondary" onClick={onNext}>{position < total ? NEXT_BOOK : LAST_BOOK}</Button>
         <LinkButton
-          variant={keepLeads ? "secondary" : "primary"}
+          variant="primary"
           href={detail?.link ?? yes24SearchUrl(card.id)}
           onClick={() => track("yes24_link_clicked", { book_id: card.id, source: "result", pick_type: kind })}
         >
@@ -140,6 +152,9 @@ export function ResultBook({ pick, position, total, onNext, onPrev }: Props) {
         </LinkButton>
       </div>
       {detail?.source && <p className={styles.credit}>{CREDIT[detail.source]}</p>}
+      {guide && settled && account.status !== "unknown" && (
+        <ResultGuide scope={page} turns={turns} keep={canKeep} onDone={closeGuide} />
+      )}
     </section>
   );
 }

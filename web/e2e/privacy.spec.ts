@@ -28,8 +28,9 @@ test("a first visit straight to /privacy records nothing and creates no id", asy
   await page.goto("/privacy");
   await expect(page.getByText("아직 기록이 없어요")).toBeVisible();
   expect(await page.evaluate(() => localStorage.getItem("galpi.anon"))).toBeNull();
-  // nothing stored by the site — the only key is the one the shared fixture sets (C-20 guide marked as seen)
-  expect(await page.evaluate(() => Object.keys(localStorage).filter((k) => k !== "galpi.hint.firstGuide"))).toEqual([]);
+  // nothing stored by the site — the only keys are the ones the shared fixture sets (C-20 · C-21 guides marked as seen)
+  const fixture = ["galpi.hint.firstGuide", "galpi.hint.resultGuide"];
+  expect(await page.evaluate((keys) => Object.keys(localStorage).filter((k) => !keys.includes(k)), fixture)).toEqual([]);
 });
 
 test("footer links to the policy from the home page", async ({ page }) => {
