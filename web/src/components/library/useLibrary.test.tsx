@@ -102,4 +102,23 @@ describe("useLibrary (S-09)", () => {
     expect(done).toBe(false);
     expect(track).not.toHaveBeenCalledWith("shelf_created", expect.anything());
   });
+
+  it("moves and removes at once on screen, before the server answers — and puts it back if the server says no", async () => {
+    request.mockResolvedValue(ok(VIEW));
+    const { result } = renderHook(() => useLibrary());
+    await waitFor(() => expect(result.current.status).toBe("ready"));
+    let answer: (v: unknown) => void = () => {};
+    request.mockImplementationOnce(() => new Promise((r) => { answer = r; }));
+    let moving: Promise<boolean> = Promise.resolve(false);
+    act(() => { moving = result.current.move("1", "b", "hold"); });
+    expect(result.current.view?.shelves.map((s) => s.bookmarks.map((b) => b.isbn))).toEqual([[], ["1"]]);   // already moved
+    await act(async () => { answer({ ok: false, status: 500, body: null }); await moving; });
+    expect(result.current.view?.shelves.map((s) => s.bookmarks.map((b) => b.isbn))).toEqual([["1"], []]);   // back again
+    expect(track).not.toHaveBeenCalledWith("bookmark_moved", expect.anything());
+
+    request.mockImplementationOnce(() => new Promise(() => {}));
+    act(() => { void result.current.remove("1"); });
+    expect(result.current.view?.count).toBe(0);
+  });
 });
+

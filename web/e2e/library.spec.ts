@@ -190,12 +190,13 @@ test("S-09: hold to move, move by the back face, add a rod, remove, log out (E-1
   await expect(page.getByRole("button", { name: "지어낸 둘째 책 책갈피" })).toHaveCount(0);
 
   expect(named(events, "library_viewed").map((e) => e.props)).toEqual([{ saved_count: 2 }]);
-  expect(named(events, "bookmark_moved").map((e) => e.props)).toEqual([
+  // moves and removes show before the server answers (10-02): their events follow a moment later
+  await expect.poll(() => named(events, "bookmark_moved").map((e) => e.props)).toEqual([
     { book_id: "9790000000001", method: "hold" }, { book_id: "9790000000001", method: "menu" },
   ]);
   expect(named(events, "yes24_link_clicked").map((e) => e.props)).toEqual([{ book_id: "9790000000001", source: "library", pick_type: null }]);
   expect(named(events, "shelf_created").map((e) => e.props)).toEqual([{ shelf_count: 3 }]);
-  expect(named(events, "book_unsaved").map((e) => e.props)).toEqual([{ book_id: "9790000000002" }]);
+  await expect.poll(() => named(events, "book_unsaved").map((e) => e.props)).toEqual([{ book_id: "9790000000002" }]);
   expect(JSON.stringify(events)).not.toContain("밤에 읽기");                // rod names never in events (taxonomy 6-1)
   expect(JSON.stringify(events)).not.toContain("마음에 남은");
   expect(specMismatches(events)).toEqual([]);

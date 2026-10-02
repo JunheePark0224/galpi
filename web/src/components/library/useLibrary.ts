@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { addSavedCount, setSavedCount, signedOut } from "@/lib/account/store";
 import { libraryRequest } from "@/lib/library/client";
 import type { LibraryView } from "@/lib/library/types";
+import { moveLocally, removeLocally } from "@/lib/library/view";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
 
@@ -18,6 +19,8 @@ export function useLibrary() {
   const [status, setStatus] = useState<LibraryStatus>("loading");
   const [view, setView] = useState<LibraryView | null>(null);
   const viewed = useRef(false);
+  const current = useRef<LibraryView | null>(null);
+  useEffect(() => { current.current = view; }, [view]);
 
   const reload = useCallback(async () => {
     const answer = await libraryRequest("GET", "/api/library");
@@ -55,15 +58,40 @@ export function useLibrary() {
     return true;
   }, [reload]);
 
+  /**
+   * Moving and removing show at once (user, 10-02 — no wait for two server trips): the rods change on screen first, then
+   * the server is told; if it says no, the rods go back as they were and the caller says so. The rods are read again
+   * quietly afterwards so the server's order wins.
+   */
+  const atOnce = useCallback(async (next: (v: LibraryView) => LibraryView, method: "PATCH" | "DELETE", body: unknown, after: () => void) => {
+    const before = current.current;
+    if (before) {
+      const drawn = next(before);
+      current.current = drawn;
+      setView(drawn);
+    }
+    const answer = await libraryRequest(method, "/api/library/saves", body);
+    if (!answer.ok) {
+      if (before) {
+        current.current = before;
+        setView(before);
+      }
+      return false;
+    }
+    after();
+    void reload();
+    return true;
+  }, [reload]);
+
   const shelfCount = view?.shelves.length ?? 0;
   return {
     status,
     view,
     reload,
     move: (isbn: string, shelfId: string, method: MoveMethod) =>
-      change("PATCH", "/api/library/saves", { isbn, shelfId }, () => track("bookmark_moved", { book_id: isbn, method })),
+      atOnce((v) => moveLocally(v, isbn, shelfId), "PATCH", { isbn, shelfId }, () => track("bookmark_moved", { book_id: isbn, method })),
     remove: (isbn: string) =>
-      change("DELETE", "/api/library/saves", { isbn }, () => {
+      atOnce((v) => removeLocally(v, isbn), "DELETE", { isbn }, () => {
         track("book_unsaved", { book_id: isbn });
         addSavedCount(-1);
       }),
