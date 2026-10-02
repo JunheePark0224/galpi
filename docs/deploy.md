@@ -109,3 +109,7 @@ delete from events where created_at < '<배포 시각>';
 - 요청 한도(`/api/track` 분당 120, `/api/books/draw` 분당 60, `/api/books/[isbn]` 분당 60, `/api/goal/classify` 분당 10 + Claude 호출 하루 300번)는 서버리스 인스턴스 메모리에 있어 인스턴스마다 따로 센다. 스크립트 하나가 `events`를 채우거나 Claude 호출 비용을 키우는 것을 막는 정도이고 (하루 300번은 인스턴스마다·UTC 날짜 기준, 다 쓰면 단어 매칭으로 답한다), 트래픽이 커지면 Vercel Firewall이나 Upstash 같은 공유 저장소로 바꾼다.
 - 같은 출처 확인은 브라우저 요청만 걸러 낸다. 브라우저 밖에서 `Origin`을 직접 붙여 보내는 것은 막지 못한다 (한도와 크기·형식 검사가 그 몫).
 - 이 배포에는 로그인·저장이 없다 (P5). 카카오·구글 로그인 설정은 그때 한다.
+
+## 함수 지역 (10-02)
+
+- `web/vercel.json`의 `regions: ["icn1"]` — 서버 함수를 서울에서 돌린다(Supabase가 한국 가까이). 확인: `curl -sI https://galpi-omega.vercel.app/api/me | grep -i x-vercel-id` → `icn1::icn1::…`(마지막 앞 칸이 함수 지역)

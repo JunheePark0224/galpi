@@ -25,8 +25,8 @@ describe("keep (F-12 꽂기)", () => {
     request.mockResolvedValue({ ok: true, status: 200, body: { ok: true, saved: true } });
     keep.pressKeep(item(), true);
     expect(track).toHaveBeenCalledWith("save_clicked", { book_id: ISBN, is_logged_in: true });
-    expect(store.keepSnapshot(ISBN)).toBe("saving");
-    await vi.waitFor(() => expect(store.keepSnapshot(ISBN)).toBe("saved"));
+    expect(store.keepSnapshot(ISBN)).toBe("saved");                               // shown as kept at once (10-02)
+    await vi.waitFor(() => expect(track).toHaveBeenLastCalledWith("book_saved", { book_id: ISBN, is_auto_save: false }));
     expect(request).toHaveBeenCalledWith("POST", "/api/library/saves", item());
     expect(track).toHaveBeenLastCalledWith("book_saved", { book_id: ISBN, is_auto_save: false });
     expect(store.accountSnapshot().count).toBe(3);

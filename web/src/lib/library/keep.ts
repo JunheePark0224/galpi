@@ -11,7 +11,8 @@ import type { SaveInput } from "./service";
  * bookmark waiting.
  */
 export async function keepBookmark(item: SaveInput, auto: boolean): Promise<void> {
-  setKeepState(item.isbn, "saving");
+  // Shown as kept at once (10-02, user: the wait felt long) — like moving a bookmark; a refusal takes it back below.
+  setKeepState(item.isbn, "saved");
   const answer = await libraryRequest("POST", "/api/library/saves", item);
   if (answer.status === 401) {
     signedOut();
