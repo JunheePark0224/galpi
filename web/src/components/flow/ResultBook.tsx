@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, LinkButton } from "@/components/Button";
 import { GenreTag } from "@/components/GenreTag";
 import { yes24SearchUrl, type BookDetail } from "@/lib/books/detail";
@@ -9,7 +9,7 @@ import { truncateIntro } from "@/lib/recommend";
 import { track } from "@/lib/track/client";
 import { keepSnapshot, useAccount } from "@/lib/account/store";
 import { readPending } from "@/lib/library/pending";
-import { BookmarkInBook } from "./BookmarkInBook";
+import { BookmarkInBook, type BookmarkHandle } from "./BookmarkInBook";
 import { KeepButton } from "./KeepButton";
 import styles from "./ResultBook.module.css";
 
@@ -50,6 +50,7 @@ export function ResultBook({ pick, position, total, onNext }: Props) {
   const [out, setOut] = useState(startOut);
   const account = useAccount();
   const keepLeads = out && (account.status === "in" || account.status === "out");
+  const bookmark = useRef<BookmarkHandle>(null);
 
   useEffect(() => {
     let live = true;
@@ -71,7 +72,7 @@ export function ResultBook({ pick, position, total, onNext }: Props) {
     <section className={styles.result} aria-labelledby="result-title" aria-busy={detail === null}>
       <p className={styles.progress}>{`궁금해요 ${position} / ${total}`}</p>
 
-      <BookmarkInBook pick={pick} position={position} startOut={startOut} onOutChange={setOut} keep={<KeepButton pick={pick} />}>
+      <BookmarkInBook handle={bookmark} pick={pick} position={position} startOut={startOut} onOutChange={setOut} keep={<KeepButton pick={pick} />}>
         <div className={styles.coverBox}>
           {cover ? (
             // A third-party cover shown as YES24 serves it — not copied through our image optimiser. No Referer is sent (hotlink
@@ -89,7 +90,17 @@ export function ResultBook({ pick, position, total, onNext }: Props) {
 
       <div className={styles.head}>
         <GenreTag card={card} />
-        <h1 id="result-title" className={styles.title}>{card.title}</h1>
+        <div className={styles.titleRow}>
+          <h1 id="result-title" className={styles.title}>{card.title}</h1>
+          {/* A seen shortcut for the peeking bookmark (10-02, user): pointer only — assistive tech and the keyboard use the
+              bookmark's own "책갈피 꺼내기" button (aria-expanded), so the control is not announced twice. */}
+          <button
+            type="button" className={styles.titlePull} data-testid="title-pull" aria-hidden="true" tabIndex={-1}
+            onClick={() => bookmark.current?.toggle()}
+          >
+            <span className={styles.titlePullFace}>{out ? "책갈피 넣기" : "책갈피 꺼내기"}</span>
+          </button>
+        </div>
         <p className={styles.author}>{card.author}</p>
         {line.length > 0 && <p className={styles.facts}>{line.join(" · ")}</p>}
       </div>

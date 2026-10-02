@@ -1,6 +1,6 @@
 "use client";
 import {
-  useEffect, useRef, useState, type AnimationEvent, type MouseEvent, type PointerEvent, type ReactNode,
+  useEffect, useImperativeHandle, useRef, useState, type AnimationEvent, type MouseEvent, type PointerEvent, type ReactNode, type Ref,
 } from "react";
 import { Bookmark } from "@/components/Bookmark";
 import { BookmarkBack } from "@/components/BookmarkBack";
@@ -26,9 +26,13 @@ type Pose = "in" | "out";
  * keep: the [내 책갈피에 꽂기] block (P5), shown under the book while the bookmark is out. startOut: open with the bookmark
  * already out — the page came back from a login for this book (F-12). onOutChange: tells S-06 which button leads.
  */
+/** What S-06 can ask of the bookmark from outside — the [책갈피 꺼내기] next to the title (10-02). */
+export interface BookmarkHandle { toggle: () => void }
+
 interface Props {
   pick: PickView; position: number; children: ReactNode;
   keep?: ReactNode; startOut?: boolean; onOutChange?: (out: boolean) => void;
+  handle?: Ref<BookmarkHandle>;
 }
 
 /**
@@ -38,7 +42,7 @@ interface Props {
  * turned over to its back (C-13: 나온 이유 + 만난 날), and kept with [내 책갈피에 꽂기] (P5, `keep`).
  * Touch is tap only: a finger swipe on the peek scrolls the page like anywhere else.
  */
-export function BookmarkInBook({ pick, position, children, keep, startOut = false, onOutChange }: Props) {
+export function BookmarkInBook({ pick, position, children, keep, startOut = false, onOutChange, handle }: Props) {
   const { card, kind, art, reason } = pick;
   const [pose, setPose] = useState<Pose>(startOut ? "out" : "in");
   const [moving, setMoving] = useState(false);
@@ -62,6 +66,8 @@ export function BookmarkInBook({ pick, position, children, keep, startOut = fals
     onOutChange?.(next === "out");
     if (next === "out") track("bookmark_pulled", { book_id: card.id, position, pick_type: kind });
   };
+
+  useImperativeHandle(handle, () => ({ toggle }));
 
   const flip = () => {
     const next = !flipped;

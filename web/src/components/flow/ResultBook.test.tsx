@@ -294,4 +294,21 @@ describe("ResultBook — the bookmark in the book (C-16)", () => {
     expect(link).toHaveAttribute("data-variant", "primary");
     expect(screen.queryByText(/내 책갈피에 꽂기|로그인하면/)).toBeNull();
   });
+
+  it("a [책갈피 꺼내기] next to the title pulls it out too (E-27 once), and reads [책갈피 넣기] while it is out", () => {
+    show(DETAIL, 1, 2);
+    const shortcut = screen.getByTestId("title-pull");
+    expect(shortcut).toHaveTextContent("책갈피 꺼내기");
+    expect(shortcut).toHaveAttribute("aria-hidden", "true");          // screen readers already have the bookmark's own button
+    expect(shortcut).toHaveAttribute("tabindex", "-1");
+    fireEvent.click(shortcut);
+    expect(stage()).toHaveAttribute("data-pose", "out");
+    expect(pullButton()).toHaveAttribute("aria-expanded", "true");
+    expect(shortcut).toHaveTextContent("책갈피 넣기");
+    expect(vi.mocked(track).mock.calls.filter(([name]) => name === "bookmark_pulled")).toHaveLength(1);
+    fireEvent.click(shortcut);
+    expect(stage()).toHaveAttribute("data-pose", "in");
+    expect(shortcut).toHaveTextContent("책갈피 꺼내기");
+  });
 });
+
