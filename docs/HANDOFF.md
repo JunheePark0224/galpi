@@ -43,6 +43,12 @@ Last Updated: 2026-10-01 밤 (main `b54264c` 기준, 배포됨)
 4. 졸업 기준 (`docs/deploy.md` 7절): ① 연속 3회 모든 항목 95%+ — **현재 1/3** ② 그 3회 일치 책 표본 10권 이상·바뀐 책 5% 이하 — **현재 표본 3권, 바뀜 0**. 둘 다 넘으면 사용자에게 물어본 뒤 `data/pipeline/config.json` `auto_merge: true`
 5. 일치율 기록: `data/pipeline/agreement.csv`
 
+## 3b. 키워드 후보 → 승인 (10-02)
+
+- 매일 PR 본문 "### 키워드 후보"에 같은 후보가 **5권 이상**이면 "추가할까요?" — 사용자에게 물어 정의 문장 확인 → `PYTHONIOENCODING=utf-8 python src/backfill_keywords.py promote "주제:이름" --pattern "<단어 규칙>" --definition "<정의>"` → `cd web && npm run books:import && npx vitest run` → 커밋 (`plans/2026-10-02-keyword-candidates.md`)
+- 새 키워드를 기존 책에 붙일 때: `python src/backfill_keywords.py build "주제:이름,…"`(단어 규칙 후보) → Claude가 정의대로 판단해 `apply` (10-02: 사용자는 예스24 글을 볼 수 없는 페이지로 판단하지 않는다)
+- 10-02에 다시 넣은 키워드: 데이터 분석 엑셀·파이썬·데이터 리터러시, AI 활용 LLM 원리. 사람 검수는 키워드 5개까지(AI는 3개)
+
 ## 4. 남은 작업 (순서)
 
 1. **D-C 매일 검수 루프** (위 3절) — 10-02부터
