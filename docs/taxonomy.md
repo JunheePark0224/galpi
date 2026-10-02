@@ -10,6 +10,7 @@
 | taxonomy v0.5.1 | 2026-10-01 | 최종 검토 (integrate/pilot) | home-nav `round` 변경 기록·3-1a 함수 이름 (8절) |
 | taxonomy v0.6 | 2026-10-01 | PRD F-24 "이렇게 이해했어요" (시안 C′) | E-22 `understood`, E-21 `has_missing`·`missing_text`(Supabase only), E-18 `source` "first_page"(book_id null), E-02 `source`, ③ [🍃 그냥 한 권] round +1 (8절) |
 | taxonomy v0.7 | 2026-10-01 | DESIGN C-16 책 속 책갈피 (PRD F-12 보이는 부분) | E-27 `bookmark_pulled`·E-28 `bookmark_flipped` live, 동사 `pulled`·`flipped` (8절) |
+| taxonomy v0.9 | 2026-10-02 | 밸런스 게임 순서 무작위 (PRD F-03, balance-game 2절) | E-24·E-25 `position` 추가 (8절) |
 | taxonomy v0.8 | 2026-10-01 | P5 로그인·내 책갈피 `plans/2026-10-01-p5-login-library.md` | 3-2 결정(Q5), E-29 `shelf_created`·E-30 `bookmark_moved` 추가, 막대 이름은 이벤트에 넣지 않음, E-11~17 설명을 [내 책갈피에 꽂기]로 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
@@ -323,12 +324,13 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 밸런스게임 | click | live | 같음 |
 
-**언제**: S-02 🍃에서 선택지 카드를 누를 때(질문이 뜬 뒤 250ms 안의 누름은 무시) 또는 [갈피를 못 잡겠어요]를 0.8초 꾹 눌러 넘어갈 때. 문항마다 1번  
+**언제**: S-02 🍃에서 선택지 카드를 누를 때(질문이 뜬 뒤 250ms 안의 누름은 무시) 또는 [갈피를 못 잡겠어요]를 0.8초 꾹 눌러 넘어갈 때. 문항마다 1번. v0.9부터 **문항 순서가 판마다 무작위** — 문항은 `question_no`, 몇 번째에 나왔는지는 `position`  
 **분석 질문**: Q-01, Q-09
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `question_no` | `question` → `question_no` | Number | 1, 5, 9 | 문항 번호 (balance-game.md 2절 순서) — 1~4·5~8이 같은 축, 9는 분량 |
+| `question_no` | `question` → `question_no` | Number | 1, 5, 9 | 문항 번호 (balance-game.md 2절 표) — 1~4·5~8이 같은 축, 9는 분량. 나온 순서와는 무관 (v0.9) |
+| `position` | 추가 (v0.9) | Number | 1, 9 | 이 판에서 몇 번째로 나온 질문인지 (1~9) — 순서가 무작위라 Q-09 ③ "몇 번째에서 그만두나"는 이것으로 |
 | `choice` | 같음 | String | "A", "B", "unsure" | 고른 답. A/B는 balance-game.md 표의 열 이름 — 대문자 A·B는 명명 규칙의 예외 (문서 표기와 맞춤) |
 | `side` | 같음 | String | null, "left", "right" | 누른 카드가 왼쪽인지 오른쪽인지. unsure면 null — 5~8번은 A가 오른쪽 |
 | `elapsed_ms` | `ms` → `elapsed_ms` | Number | 2400 | 질문이 보인 뒤 답할 때까지 걸린 시간 (ms) |
@@ -346,6 +348,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `question_no` | `question` → `question_no` | Number | 1, 5, 9 | 문항 번호 |
+| `position` | 추가 (v0.9) | Number | 1, 9 | 이 판에서 몇 번째로 나온 질문인지 (1~9) |
 | `held_ms` | 같음 | Number | 350 | 누르고 있던 시간 (ms, 800 미만) |
 | `is_edit` | `edit` → `is_edit` | Boolean | TRUE, FALSE | 고치기 중인지 |
 
@@ -1026,6 +1029,8 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.7 | 2026-10-01 | Claude (C-16 구현) | S-06 책 속 책갈피(DESIGN C-16, PRD F-12의 보이는 부분)와 함께 E-27 `bookmark_pulled`(`book_id`·`position`·`pick_type`)·E-28 `bookmark_flipped`(`book_id`·`pick_type`)를 추가해 바로 `live`. 2-2 동사 `pulled`·`flipped` 추가, Q-11·5-3 지표(꺼냄율·뒷면율). 모으는 정보는 그대로(책 ID·위치·추천/무작위뿐) — `/privacy` 변경 없음. v0.6은 F-24 브랜치의 변경 |
 
 | v0.8 | 2026-10-01 | Claude (P5 계획, 사용자 결정 반영) | 3-2 결정(Q5 — 후보안 채택 + `user_id`는 `/api/track`이 세션으로 채움, 로그아웃 때 `setUserId(undefined)`). E-29 `shelf_created`(`shelf_count`)·E-30 `bookmark_moved`(`book_id`·`method`) 추가 `planned-P5`, 동사 `created`·`moved`, Q-13·꾸미기율. 막대 이름은 이벤트·Amplitude·DOM 속성 금지(6-1). 로그아웃·막대 이름 바꾸기·막대 지우기는 이벤트 없음(답할 질문이 없음, 1-1). E-11·E-12·E-14·E-15·E-16·E-17 설명을 [내 책갈피에 꽂기]·뒷면 [빼기]로. 처리방침 변경 6-3d. 기존 이벤트의 이름·속성 변경 없음. 구현 뒤 리뷰: E-14는 서버 쿠키로 확인된 로그인에만, E-12 header에 S-09 [로그인] 포함 |
+
+| v0.9 | 2026-10-02 | Claude (사용자 요청) | 밸런스 게임 문항 순서를 판마다 무작위로(PRD F-03, balance-game 2절 — 같은 축 두 질문은 붙지 않게, 좌우는 문항마다 고정). E-24 `balance_answered`·E-25 `unsure_hold_cancelled`에 `position`(Number, 1~9 — 이 판에서 몇 번째로 나왔는지) 추가. `question_no`는 이제 순서가 아니라 문항 번호. 같은 축 일치율(5-3)은 문항 번호 쌍 그대로. 저장 흐름 `VERSION` 4 → 5. 모으는 정보 변화 없음(처리방침 그대로) |
 
 ---
 

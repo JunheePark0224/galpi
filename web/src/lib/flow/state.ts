@@ -4,6 +4,7 @@ import type { BookCard } from "@/lib/books/types";
 import type { Reason } from "@/lib/recommend";
 import type { GoalMatch } from "@/lib/goal/match";
 import { understoodOf } from "@/lib/goal/understood";
+import { IDENTITY_ORDER, inQuestionOrder } from "./order";
 import { QUESTIONS } from "./questions";
 import { EMPTY_FORM, type TargetForm } from "./target";
 
@@ -17,7 +18,8 @@ export type DrawStatus = "idle" | "loading" | "ready" | "error";
 export interface FlowState {
   step: Step;
   entry: Entry | null;
-  choices: BalanceChoice[];               // 🍃 answers of this pass
+  choices: BalanceChoice[];               // 🍃 answers of this pass — in the order shown while answering, by question number once done
+  order: number[];                        // 🍃 the order the questions are shown in this pass (PRD F-03, 10-02 — new every pass)
   prevChoices: BalanceChoice[] | null;    // 🍃 answers before the one edit (E-06)
   form: TargetForm;
   prevForm: TargetForm | null;            // 🎯 form before the one edit (E-06)
@@ -34,19 +36,19 @@ export interface FlowState {
 }
 
 export const INITIAL: FlowState = {
-  step: "home", entry: null, choices: [], prevChoices: null, form: EMPTY_FORM, prevForm: null, goal: null,
+  step: "home", entry: null, choices: [], order: [...IDENTITY_ORDER], prevChoices: null, form: EMPTY_FORM, prevForm: null, goal: null,
   status: "idle", drawId: 0, draw: null, opened: false, edited: false, index: 0, reactions: [], result: 0, seen: [],
 };
 
 export type FlowAction =
-  | { type: "start"; entry: Entry }
+  | { type: "start"; entry: Entry; order?: number[] }
   | { type: "answer"; choice: BalanceChoice }
   | { type: "submitTarget"; form: TargetForm; goal: GoalMatch | null }
   | { type: "drawn"; id: number; draw: DrawView }
   | { type: "drawFailed"; id: number }
   | { type: "retry" }
   | { type: "open" }
-  | { type: "edit" }
+  | { type: "edit"; order?: number[] }
   | { type: "next" }
   | { type: "react"; reaction: Reaction }
   | { type: "nextResult" }
@@ -68,11 +70,12 @@ const addSeen = (seen: string[], id: string) => (seen.includes(id) ? seen : [...
 export function flowReducer(s: FlowState, a: FlowAction): FlowState {
   switch (a.type) {
     case "start":
-      return { ...INITIAL, seen: s.seen, entry: a.entry, step: a.entry };
+      return { ...INITIAL, seen: s.seen, entry: a.entry, step: a.entry, order: a.order ?? [...IDENTITY_ORDER] };
     case "answer": {
       if (s.step !== "leaf" || s.choices.length >= QUESTIONS.length) return s;
-      const next = { ...s, choices: [...s.choices, a.choice] };
-      return next.choices.length === QUESTIONS.length ? requestDraw(next) : next;
+      const choices = [...s.choices, a.choice];
+      // the last answer: back to question-number order — what scoring, the first page and E-06 read
+      return choices.length === QUESTIONS.length ? requestDraw({ ...s, choices: inQuestionOrder(s.order, choices) }) : { ...s, choices };
     }
     case "submitTarget":
       if (s.step !== "target") return s;
@@ -93,7 +96,7 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
     case "edit":
       if (s.step !== "first" || s.edited) return s;
       return s.entry === "leaf"
-        ? { ...s, edited: true, prevChoices: s.choices, choices: [], step: "leaf" }
+        ? { ...s, edited: true, prevChoices: s.choices, choices: [], order: a.order ?? [...IDENTITY_ORDER], step: "leaf" }
         : { ...s, edited: true, prevForm: s.form, step: "target" };
     case "next":
       if (s.step !== "first" || s.status !== "ready" || !s.draw || s.draw.picks.length === 0) return s;

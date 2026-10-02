@@ -1,10 +1,12 @@
 import { loginMarkAtLoad } from "@/lib/auth/next";
 import { nextRound, setEntry } from "@/lib/track/common";
+import { QUESTIONS } from "./questions";
 import { INITIAL, STEPS, type FlowState } from "./state";
 
 export const FLOW_KEY = "galpi.flow";
-const VERSION = 4;   // 2 (P4): picks carry their reason, S-06 keeps its place; 3: 마음·회복 left the keyword list; 4 (F-24): goals carry
-                     // `missing` and a goal with no topic draws nothing — an older saved flow starts over
+const VERSION = 5;   // 2 (P4): picks carry their reason, S-06 keeps its place; 3: 마음·회복 left the keyword list; 4 (F-24): goals carry
+                     // `missing` and a goal with no topic draws nothing; 5 (10-02): 🍃 questions come in a shuffled `order` — an older saved flow
+                     // starts over
 
 /**
  * Resume only when the load is a reload or a history traversal, or the tab was discarded and restored (KakaoTalk's in-app
@@ -16,6 +18,10 @@ export function shouldResume(navType: string | undefined, wasDiscarded: boolean,
   return fromLogin || wasDiscarded || navType === undefined || navType === "reload" || navType === "back_forward";
 }
 
+/** A shuffle of the nine question indices, each once (lib/flow/order). */
+const isOrder = (v: unknown): v is number[] =>
+  Array.isArray(v) && v.length === QUESTIONS.length && [...v].sort((a, b) => a - b).every((q, k) => q === k);
+
 function readSaved(): FlowState | null {
   try {
     const raw = window.sessionStorage.getItem(FLOW_KEY);
@@ -23,6 +29,7 @@ function readSaved(): FlowState | null {
     const saved = JSON.parse(raw) as { v?: unknown; state?: Partial<FlowState> };
     const state = saved.state;
     if (saved.v !== VERSION || !state || !STEPS.includes(state.step as FlowState["step"])) return null;
+    if (!isOrder(state.order)) return null;   // a broken or edited question order: start over rather than ask the wrong question
     return { ...INITIAL, ...state } as FlowState;
   } catch {
     return null;

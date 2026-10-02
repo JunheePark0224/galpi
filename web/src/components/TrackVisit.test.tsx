@@ -7,7 +7,7 @@ import type { FlowState } from "@/lib/flow/state";
  * HTML (S-01) hydrated on the client: TrackVisit's effect runs in the hydration commit, before FlowRoot switches to Flow.
  */
 describe("site_visited on a fresh open vs a reload (hydrated TrackVisit + FlowRoot)", () => {
-  const midRound = { step: "bookmarks", entry: "leaf", choices: ["A", "B"], seen: ["b1"] } as unknown as FlowState;
+  const midRound = { step: "bookmarks", entry: "leaf", choices: ["A", "B"], order: [0, 1, 2, 3, 4, 5, 6, 7, 8], seen: ["b1"] } as unknown as FlowState;
   let unmount: (() => void) | null = null;
 
   afterEach(() => {
@@ -20,7 +20,7 @@ describe("site_visited on a fresh open vs a reload (hydrated TrackVisit + FlowRo
   });
 
   async function openWith(navType: string) {
-    sessionStorage.setItem("galpi.flow", JSON.stringify({ v: 4, state: { ...midRound, status: "idle", draw: null } }));
+    sessionStorage.setItem("galpi.flow", JSON.stringify({ v: 5, state: { ...midRound, status: "idle", draw: null } }));
     sessionStorage.setItem("galpi.round", "1");
     sessionStorage.setItem("galpi.entry", "leaf");
     vi.spyOn(performance, "getEntriesByType").mockReturnValue([{ type: navType }] as unknown as PerformanceEntryList);

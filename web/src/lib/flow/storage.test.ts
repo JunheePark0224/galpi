@@ -27,7 +27,8 @@ describe("flow storage", () => {
     ["a version-1 flow (picks without a reason)", JSON.stringify({ v: 1, state: { ...INITIAL, step: "end" } })],
     ["a version-2 flow (may carry the removed 마음·회복 keyword)", JSON.stringify({ v: 2, state: { ...INITIAL, step: "end" } })],
     ["a version-3 flow (goals without F-24 missing, a no-topic goal still drawing)", JSON.stringify({ v: 3, state: { ...INITIAL, step: "end" } })],
-    ["an unknown step", JSON.stringify({ v: 4, state: { ...INITIAL, step: "shelf" } })],
+    ["an unknown step", JSON.stringify({ v: 5, state: { ...INITIAL, step: "shelf" } })],
+    ["a broken question order", JSON.stringify({ v: 5, state: { ...INITIAL, step: "leaf", order: [0, 0, 1, 2, 3, 4, 5, 6, 7] } })],
   ])("starts over on %s", (_, raw) => {
     if (raw !== null) sessionStorage.setItem(FLOW_KEY, raw);
     expect(loadFlow()).toEqual(INITIAL);

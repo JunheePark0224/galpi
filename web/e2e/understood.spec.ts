@@ -139,7 +139,7 @@ test("F-24 ③: no topic — no draw and no bookmarks; YES24, 다른 말로 쓰�
   expect(draws()).toBe(0);
 
   await page.getByRole("button", { name: "🍃 그냥 한 권" }).click();
-  await expect(page.getByRole("heading", { name: "책을 덮은 뒤, 남았으면 하는 건?" })).toBeVisible();
+  await expect(page.getByText("1 / 9")).toBeVisible();                         // the 🍃 game (questions in a new order each pass)
 
   await expect.poll(() => named(events, "entry_selected").length).toBe(2);
   expect(named(events, "entry_selected").map((e) => [e.props, e.common.entry, e.common.round]))

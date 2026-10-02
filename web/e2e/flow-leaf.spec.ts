@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { QUESTIONS } from "../src/lib/flow/questions";
 import { named, reactToBookmarks, recordEvents, specMismatches, test } from "./helpers";
 
 test.use({ reducedMotion: "reduce" });
@@ -14,6 +15,29 @@ async function holdUnsure(page: Page, ms: number) {
 // BalanceGame ignores card taps in the first 250 ms of a question (a double tap must not answer the next one).
 const TAP_GUARD_MS = 250;
 
+/** The question on screen (the order is new every pass — PRD F-03, 10-02). */
+async function shownQuestion(page: Page) {
+  const text = await page.locator("#balance-question").innerText();
+  const q = QUESTIONS.find((x) => x.text === text);
+  if (!q) throw new Error(`unknown question: ${text}`);
+  return q;
+}
+
+/** Answers each question as it comes, by its number — whatever the order: `pick(n)` is the answer for question n. */
+async function answerByNumber(page: Page, pick: (n: number) => "A" | "B" | "unsure", from = 1) {
+  for (let k = from; k <= 9; k++) {
+    await expect(page.getByText(`${k} / 9`)).toBeVisible();
+    const q = await shownQuestion(page);
+    const answer = pick(q.n);
+    if (answer === "unsure") {
+      await holdUnsure(page, 1000);
+      continue;
+    }
+    await page.waitForTimeout(TAP_GUARD_MS + 50);
+    await page.getByRole("button", { name: answer === "A" ? q.a : q.b, exact: true }).click();
+  }
+}
+
 /** Taps the left card from question `from` to 9, waiting for each question to appear and to become tappable. */
 async function answerLeft(page: Page, from: number) {
   for (let q = from; q <= 9; q++) {
@@ -27,11 +51,12 @@ test("🍃 nine answers (one held 못 잡겠어요) → book → five bookmarks"
   const { events, statuses } = await recordEvents(page);
   await page.goto("/");
   await page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ }).click();
-  await expect(page.getByRole("heading", { name: "책을 덮은 뒤, 남았으면 하는 건?" })).toBeVisible();
-  await holdUnsure(page, 300);                                           // let go early: still question 1
   await expect(page.getByText("1 / 9")).toBeVisible();
-  await holdUnsure(page, 1000);                                          // the 0.8s timer passes
-  await answerLeft(page, 2);                                             // Q2–4 A, Q5–8 B (A sits right), Q9 A
+  const first = await shownQuestion(page);
+  await holdUnsure(page, 300);                                           // let go early: still the first question
+  await expect(page.getByText("1 / 9")).toBeVisible();
+  // by question number, whatever order they come in: Q1 못 잡겠어요, Q2–4 A, Q5–8 B, Q9 A
+  await answerByNumber(page, (n) => (n === 1 ? "unsure" : n >= 5 && n <= 8 ? "B" : "A"));
 
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await expect(page.getByText("당신의 책 취향")).toBeVisible();
@@ -44,12 +69,14 @@ test("🍃 nine answers (one held 못 잡겠어요) → book → five bookmarks"
   await expect.poll(() => named(events, "bookmark_reacted").length).toBe(5);
   const answers = named(events, "balance_answered");
   expect(answers).toHaveLength(9);
-  expect(answers[0].props).toMatchObject({ question_no: 1, choice: "unsure", side: null, is_edit: false });
-  expect(answers[4].props).toMatchObject({ question_no: 5, choice: "B", side: "left" });
+  const byNumber = (n: number) => answers.find((e) => e.props.question_no === n)?.props;
+  expect(byNumber(1)).toMatchObject({ choice: "unsure", side: null, is_edit: false });
+  expect(byNumber(5)).toMatchObject({ choice: "B", side: "left" });                       // A sits right on 5–8
+  expect(answers.map((e) => e.props.position)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);       // shown 1st … 9th (v0.9)
   expect(answers.every((e) => typeof e.props.elapsed_ms === "number")).toBe(true);
   const cancelled = named(events, "unsure_hold_cancelled");
   expect(cancelled).toHaveLength(1);
-  expect(cancelled[0].props.question_no).toBe(1);
+  expect(cancelled[0].props).toMatchObject({ question_no: first.n, position: 1 });
   expect(cancelled[0].props.held_ms as number).toBeGreaterThan(200);
   const shown = named(events, "bookmark_shown");
   expect(shown).toHaveLength(5);

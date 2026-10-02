@@ -51,7 +51,7 @@ test("🎯 example chip → book → first page → five bookmarks → 궁금해
   await expect(page.getByRole("heading", { name: "다음 책갈피를 만나 볼까요?" })).toBeVisible();   // S-08
   await page.getByRole("button", { name: "처음으로" }).click();
   await page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ }).click();   // a new round in the same tab
-  await expect(page.getByRole("heading", { name: "책을 덮은 뒤, 남았으면 하는 건?" })).toBeVisible();
+  await expect(page.getByText("1 / 9")).toBeVisible();                         // the 🍃 game (questions in a new order each pass)
 
   await expect.poll(() => named(events, "entry_selected").length).toBe(2);
   expect(named(events, "site_visited")).toHaveLength(1);

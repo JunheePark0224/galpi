@@ -9,6 +9,7 @@ import type { LibraryCount } from "@/lib/books/library";
 import type { Vocab } from "@/lib/books/types";
 import { drawBody, goalFor, requestDraw, toDrawView } from "@/lib/flow/api";
 import { curiousPicks, flowReducer, type FlowAction, type FlowState, type Reaction } from "@/lib/flow/state";
+import { questionOrder } from "@/lib/flow/order";
 import { loadFlow, saveFlow } from "@/lib/flow/storage";
 import { coverageBucket, editedQuestions, editedTargetFields } from "@/lib/flow/summary";
 import { goalSubmittedProps, type TargetForm } from "@/lib/flow/target";
@@ -28,6 +29,9 @@ import { TargetInput } from "./TargetInput";
  * vocab: the active 🎯 topics only (FlowRoot) — the word matching used when /api/goal/classify cannot answer.
  * library: the F-23 count for S-01 (FlowRoot).
  */
+/** 🍃 questions in a new order every pass (PRD F-03, 10-02). */
+const newOrder = (): number[] => questionOrder(Math.random);
+
 export function Flow({ vocab, library = null }: { vocab: Vocab; library?: LibraryCount | null }) {
   const [state, dispatch] = useReducer(flowReducer, undefined, loadFlow);
   const [classifying, setClassifying] = useState(false);
@@ -81,7 +85,7 @@ export function Flow({ vocab, library = null }: { vocab: Vocab; library?: Librar
   const start = (entry: Entry) => {
     setEntry(entry);
     track("entry_selected", { source: "home" });    // the entry itself is the common `entry`, set just above
-    act({ type: "start", entry });
+    act({ type: "start", entry, order: newOrder() });
   };
 
   /**
@@ -92,7 +96,7 @@ export function Flow({ vocab, library = null }: { vocab: Vocab; library?: Librar
     nextRound();
     setEntry("leaf");
     track("entry_selected", { source: "first_page" });
-    act({ type: "start", entry: "leaf" });
+    act({ type: "start", entry: "leaf", order: newOrder() });
   };
 
   /** F-24 ② link / ③ button: a YES24 search from the first page — no book (E-18). */
@@ -178,13 +182,13 @@ export function Flow({ vocab, library = null }: { vocab: Vocab; library?: Librar
   return (
     <MotionConfig reducedMotion="user">
       {state.step === "home" && <Home onStart={start} library={library} />}
-      {state.step === "leaf" && <BalanceGame choices={state.choices} edit={state.edited} onAnswer={answer} />}
+      {state.step === "leaf" && <BalanceGame choices={state.choices} order={state.order} edit={state.edited} onAnswer={answer} />}
       {state.step === "target" && <TargetInput initial={state.form} edit={state.edited} busy={classifying} topics={topicsIn(vocab)} onSubmit={submitTarget} />}
       {inBook && (
         <BookScene
           state={state}
           onOpen={open}
-          onEdit={() => act({ type: "edit" })}
+          onEdit={() => act({ type: "edit", order: newOrder() })}
           onNext={nextPage}
           onRetry={() => act({ type: "retry" })}
           onReact={react}

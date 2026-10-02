@@ -75,12 +75,13 @@ export const EVENT_SPEC = {
   description_expanded: { book_id: BOOK_ID, pick_type: PICK_TYPE },
   balance_answered: {
     question_no: QUESTION_NO,
+    position: POSITION,
     choice: { type: ["A", "B", "unsure"] },
     side: { type: [null, "left", "right"] },
     elapsed_ms: { type: "number" },
     is_edit: IS_EDIT,
   },
-  unsure_hold_cancelled: { question_no: QUESTION_NO, held_ms: { type: "number" }, is_edit: IS_EDIT },
+  unsure_hold_cancelled: { question_no: QUESTION_NO, position: POSITION, held_ms: { type: "number" }, is_edit: IS_EDIT },
   goal_submitted: {
     topic: { type: "string" },
     is_free_text: { type: "boolean" },

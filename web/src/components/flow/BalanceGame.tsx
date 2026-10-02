@@ -9,6 +9,8 @@ import styles from "./BalanceGame.module.css";
 
 interface Props {
   choices: readonly BalanceChoice[];
+  /** The order the questions are shown in this pass (question indices — FlowState.order). */
+  order: readonly number[];
   edit: boolean;
   onAnswer: (choice: BalanceChoice) => void;
 }
@@ -34,10 +36,11 @@ function ChoiceCard({ s, onChoose }: { s: Side; onChoose: (s: Side) => void }) {
   );
 }
 
-/** S-02 🍃 (C-07): nine two-way questions, tap to go on; the second question of each axis swaps sides. */
-export function BalanceGame({ choices, edit, onAnswer }: Props) {
+/** S-02 🍃 (C-07): nine two-way questions in this pass's order (new every pass), tap to go on; sides stay with each question. */
+export function BalanceGame({ choices, order, edit, onAnswer }: Props) {
   const i = Math.min(choices.length, QUESTIONS.length - 1);
-  const q = QUESTIONS[i];
+  const q = QUESTIONS[order[i] ?? i];
+  const position = i + 1;
   const shownAt = useRef(0);
   useEffect(() => { shownAt.current = performance.now(); }, [i]);
   const elapsed = () => Math.round(performance.now() - shownAt.current);
@@ -47,14 +50,14 @@ export function BalanceGame({ choices, edit, onAnswer }: Props) {
 
   const choose = (s: Side) => {
     if (elapsed() < TAP_GUARD_MS) return;
-    track("balance_answered", { question_no: q.n, choice: s.choice, side: s.side, elapsed_ms: elapsed(), is_edit: edit });
+    track("balance_answered", { question_no: q.n, position, choice: s.choice, side: s.side, elapsed_ms: elapsed(), is_edit: edit });
     onAnswer(s.choice);
   };
   const unsure = () => {
-    track("balance_answered", { question_no: q.n, choice: "unsure", side: null, elapsed_ms: elapsed(), is_edit: edit });
+    track("balance_answered", { question_no: q.n, position, choice: "unsure", side: null, elapsed_ms: elapsed(), is_edit: edit });
     onAnswer("unsure");
   };
-  const cancelled = (heldMs: number) => track("unsure_hold_cancelled", { question_no: q.n, held_ms: heldMs, is_edit: edit });
+  const cancelled = (heldMs: number) => track("unsure_hold_cancelled", { question_no: q.n, position, held_ms: heldMs, is_edit: edit });
 
   return (
     <section className={styles.game} aria-labelledby="balance-question">
