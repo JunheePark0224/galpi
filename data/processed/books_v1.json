@@ -2128,7 +2128,9 @@
   "pages": 344,
   "way": "사례",
   "axes": null,
-  "keywords": [],
+  "keywords": [
+   "데이터 리터러시"
+  ],
   "one_liner": "직장 만화 속 에피소드로 상관관계와 실험 같은 데이터 상식을 익혀요",
   "one_liner_style": "summary"
  },
