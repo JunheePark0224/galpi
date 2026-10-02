@@ -6000,5 +6000,316 @@
   "keywords": [
    "설득·협상"
   ]
+ },
+ {
+  "isbn": "9791193904756",
+  "title": "한 권의 재테크 수업",
+  "author": "수미숨",
+  "pages": 340,
+  "one_liner": "사회 초년부터 노후까지 단계별로 돈을 쌓는 순서를 짚어 줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "재테크 기초",
+   "부동산·청약",
+   "연금·노후"
+  ]
+ },
+ {
+  "isbn": "9791175230576",
+  "title": "2027 트렌드 노트",
+  "author": "박현영 외",
+  "pages": 296,
+  "one_liner": "AI 시대에 달라지는 소비와 일상의 흐름을 짚어 보고 다음 기회를 읽어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "경제 상식",
+  "field": "돈·경제",
+  "topic": "경제 상식",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "트렌드"
+  ]
+ },
+ {
+  "isbn": "9791190006187",
+  "title": "신중년 꿈을 이루다",
+  "author": "권미경 외",
+  "pages": 330,
+  "one_liner": "40대 이후 생애 경력을 설계하고 재취업과 자격증 준비까지 단계별로 챙겨요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "취업·커리어",
+  "field": "일·커리어",
+  "topic": "취업·커리어",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "커리어 설계",
+   "이직·퇴사"
+  ]
+ },
+ {
+  "isbn": "9788966074310",
+  "title": "오정근의 커리어 코칭",
+  "author": "오정근",
+  "pages": 320,
+  "one_liner": "자기분석으로 흥미와 강점을 찾고 직업 선택과 실행 계획까지 이어 가요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "취업·커리어",
+  "field": "일·커리어",
+  "topic": "취업·커리어",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "커리어 설계"
+  ]
+ },
+ {
+  "isbn": "9791192522081",
+  "title": "한경커리어 직장 생활 센스와 매너",
+  "author": "한경커리어 특별취재팀",
+  "pages": 204,
+  "one_liner": "출근 복장, 인사, 회식 같은 사회 초년생의 궁금증에 상황별 답을 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "취업·커리어",
+  "field": "일·커리어",
+  "topic": "취업·커리어",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "직장 생활"
+  ]
+ },
+ {
+  "isbn": "9788964362495",
+  "title": "부캐와 함께 나만의 에세이 쓰기",
+  "author": "조동범",
+  "pages": 211,
+  "one_liner": "소재 찾기부터 문장 쓰기, 투고와 출간까지 에세이 쓰는 길을 안내해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "에세이·책 쓰기"
+  ]
+ },
+ {
+  "isbn": "9788993784794",
+  "title": "더 포맷",
+  "author": "이시쿠라 히데아키",
+  "pages": 208,
+  "one_liner": "빈칸만 채워 이메일과 문서를 쓰는 포맷과 테크닉을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "업무 글"
+  ]
+ },
+ {
+  "isbn": "9791191349764",
+  "title": "교육용 기초한자 1800자 쓰기노트",
+  "author": "이미선",
+  "pages": 272,
+  "one_liner": "하루 4개 단어를 따라 쓰며 기초 한자와 관련 어휘를 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "문해력·어휘"
+  ]
+ },
+ {
+  "isbn": "9791155817629",
+  "title": "스토리 설계자",
+  "author": "짐 에드워즈",
+  "pages": 312,
+  "one_liner": "헤드라인과 세일즈레터를 쓰는 공식으로 상품이 팔리는 글을 써 볼 수 있어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "카피라이팅"
+  ]
+ },
+ {
+  "isbn": "9791196604899",
+  "title": "금단의 세일즈 카피라이팅",
+  "author": "간다 마사노리",
+  "pages": 292,
+  "one_liner": "고객 마음을 움직이는 PASONA 법칙으로 팔리는 문장 쓰는 법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "카피라이팅"
+  ]
+ },
+ {
+  "isbn": "9791186151006",
+  "title": "세일즈 레터 & 카피라이팅",
+  "author": "댄 케네디",
+  "pages": 280,
+  "one_liner": "고객 이해부터 헤드라인, 가격 설득까지 세일즈 레터 쓰는 순서를 단계별로 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "카피라이팅"
+  ]
+ },
+ {
+  "isbn": "9791163036784",
+  "title": "Do it! 오라클로 배우는 SQL 입문",
+  "author": "이지훈",
+  "pages": 416,
+  "one_liner": "오라클 환경에서 조회·조인·서브쿼리를 직접 따라 치며 쿼리 작성 감각을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "데이터 분석",
+  "field": "데이터·통계",
+  "topic": "데이터 분석",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "SQL"
+  ]
+ },
+ {
+  "isbn": "9791163033806",
+  "title": "Do it! SQL 입문",
+  "author": "강성욱",
+  "pages": 360,
+  "one_liner": "나스닥 실제 데이터로 SELECT부터 따라 하며 쿼리를 직접 짜 볼 수 있어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "데이터 분석",
+  "field": "데이터·통계",
+  "topic": "데이터 분석",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "SQL"
+  ]
+ },
+ {
+  "isbn": "9791191905038",
+  "title": "Must Have 나성호의 R 데이터 분석 입문",
+  "author": "나성호",
+  "pages": 300,
+  "one_liner": "자료구조부터 차근차근 익혀 아파트 실거래 데이터를 직접 분석해 봐요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "데이터 분석",
+  "field": "데이터·통계",
+  "topic": "데이터 분석",
+  "way": "실습",
+  "axes": null,
+  "keywords": []
+ },
+ {
+  "isbn": "9791157687947",
+  "title": "통계학대백과사전",
+  "author": "이시이 도시아키",
+  "pages": 336,
+  "one_liner": "생활 속 사례로 잊었던 통계 개념과 공식을 핵심만 다시 정리해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "통계",
+  "field": "데이터·통계",
+  "topic": "통계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "기초 통계",
+   "확률",
+   "가설검정"
+  ]
+ },
+ {
+  "isbn": "9791161757742",
+  "title": "컴퓨터 시대의 통계적 추론",
+  "author": "브래들리 에프론 외",
+  "pages": 626,
+  "one_liner": "베이즈부터 부트스트랩까지 추론 방법이 어떻게 발전했는지 시대 순으로 이해해요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "통계",
+  "field": "데이터·통계",
+  "topic": "통계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "회귀분석",
+   "가설검정"
+  ]
+ },
+ {
+  "isbn": "9791160077179",
+  "title": "수학은 어렵지만 확률·통계는 알고 싶어",
+  "author": "요비노리 다쿠미",
+  "pages": 188,
+  "one_liner": "경우의 수부터 평균·표준편차까지 데이터를 보는 눈을 쉬운 대화로 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "통계",
+  "field": "데이터·통계",
+  "topic": "통계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "확률",
+   "기초 통계"
+  ]
+ },
+ {
+  "isbn": "9791188754564",
+  "title": "확률적 사고의 힘",
+  "author": "다부치 나오야",
+  "pages": 288,
+  "one_liner": "불확실한 미래를 확률로 따져 보고 결과보다 판단을 돌아보게 돼요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "통계",
+  "field": "데이터·통계",
+  "topic": "통계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "확률"
+  ]
  }
 ]
