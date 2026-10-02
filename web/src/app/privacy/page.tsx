@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AnonIdView } from "@/components/privacy/AnonIdView";
+import { GuideReset } from "@/components/privacy/GuideReset";
 import { CONTACT_PENDING, UPDATED } from "@/lib/privacy";
 import styles from "./page.module.css";
 
@@ -130,6 +131,7 @@ export default function PrivacyPage() {
           탈퇴하려면 로그인한 방법과 아래 익명 번호를 적어 문의 이메일로 보내 주세요. 계정과 내 책갈피, 기록을 함께 지워요.
         </p>
         <AnonIdView />
+        <GuideReset />
       </section>
 
       <section className={styles.section}>

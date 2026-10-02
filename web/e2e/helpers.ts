@@ -13,6 +13,11 @@ export const test = base.extend({
   extraHTTPHeaders: async ({}, provide, testInfo) => {
     await provide({ "x-forwarded-for": clientIp(testInfo.testId) });
   },
+  // C-20: the first-bookmark guide is marked as seen, so specs reach the reactions; first-guide.spec removes the mark.
+  page: async ({ page }, provide) => {
+    await page.addInitScript(() => { try { window.localStorage.setItem("galpi.hint.firstGuide", "1"); } catch { /* blocked */ } });
+    await provide(page);
+  },
 });
 
 export interface Sent { name: string; props: Record<string, unknown>; common: Record<string, unknown> }

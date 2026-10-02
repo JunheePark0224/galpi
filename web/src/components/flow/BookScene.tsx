@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
 import { Bookmark } from "@/components/Bookmark";
 import { Button } from "@/components/Button";
@@ -9,6 +9,8 @@ import { JUST_ONE, REWRITE, YES24_FIND, openYes24Search, understoodOf } from "@/
 import { BOOKMARK_AWAY, BOOKMARK_DOWN, BOOKMARK_RISE } from "@/lib/motion";
 import { Book, RuledPage } from "./Book";
 import { CoverPeeks } from "./CoverPeeks";
+import { FirstGuide } from "./FirstGuide";
+import { hasSeenFirstGuide, markFirstGuideSeen } from "@/lib/flow/firstGuide";
 import { FirstPage, FirstPageTitle } from "./FirstPage";
 import styles from "./BookScene.module.css";
 
@@ -45,6 +47,13 @@ interface Props {
 export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onHome, onYes24, onLeaf }: Props) {
   const [busy, setBusy] = useState(true);            // a bookmark is still moving: reactions wait (and frost stays off)
   const [last, setLast] = useState<Reaction>("pass");
+  // C-20: the first bookmark of a browser's first round explains itself once (logged in or not)
+  const [guide, setGuide] = useState(() => !hasSeenFirstGuide());
+  const scene = useRef<HTMLDivElement>(null);
+  const closeGuide = () => {
+    markFirstGuideSeen();
+    setGuide(false);
+  };
   const { step, status, draw } = state;
   const picks = draw?.picks ?? [];
   const pick = step === "bookmarks" ? picks[state.index] : undefined;
@@ -85,7 +94,7 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
   const tucked = step === "book" || step === "first" ? <CoverPeeks open={state.opened} /> : null;
 
   return (
-    <div className={styles.scene} data-wide-scene="" data-exits={uncovered ? "" : undefined} data-peeks={step === "book" ? "" : undefined} data-clip={tucked ? "" : undefined}>
+    <div ref={scene} className={styles.scene} data-wide-scene="" data-exits={uncovered ? "" : undefined} data-peeks={step === "book" ? "" : undefined} data-clip={tucked ? "" : undefined}>
       <div className={styles.stage}>
         <Book open={state.opened} onPress={step === "book" ? onOpen : undefined} left={left} right={right} tucked={tucked} />
         {pick && <p className={styles.folio}>{`${state.index + 1} / ${picks.length}`}</p>}
@@ -139,11 +148,13 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
       )}
 
       {step === "bookmarks" && pick && (
-        <div className={styles.actions}>
+        <div className={styles.actions} data-part="reactions">
           <Button variant="secondary" disabled={busy} onClick={() => react("pass")}>패스</Button>
           <Button disabled={busy} onClick={() => react("curious")}>궁금해요</Button>
         </div>
       )}
+
+      {step === "bookmarks" && pick && state.index === 0 && !busy && guide && <FirstGuide scope={scene} onDone={closeGuide} />}
     </div>
   );
 }

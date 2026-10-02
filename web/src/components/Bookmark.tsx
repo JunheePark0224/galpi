@@ -28,9 +28,9 @@ export function Bookmark({ card, art, moving = false }: Props) {
         <span className={frame.hole} />
         <div className={styles.window}><BookmarkArt art={art} clipId={`arch-${card.id}`} /></div>
         <GenreTag card={card} />
-        <h3 className={styles.title}>{card.title}</h3>
-        {card.author ? <p className={styles.author}>{card.author}</p> : null}
-        <p className={styles.line}>{card.oneLiner}</p>
+        <h3 className={styles.title} data-part="title">{card.title}</h3>
+        {card.author ? <p className={styles.author} data-part="author">{card.author}</p> : null}
+        <p className={styles.line} data-part="line">{card.oneLiner}</p>
         <span className={frame.stitch} />
         <span className={styles.mark}>갈피</span>
       </div>

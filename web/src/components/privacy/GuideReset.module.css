@@ -1,0 +1,6 @@
+.again {
+  align-self: flex-start; min-height: var(--touch); padding: 0; border: 0; background: none;
+  color: var(--ink); font: inherit; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+.again:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.done { margin: 0; font-size: 14px; color: var(--ink-muted); }
