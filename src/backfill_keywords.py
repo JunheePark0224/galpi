@@ -163,22 +163,47 @@ def apply(answers_path: Path) -> int:
     return 0
 
 
-def promote_rows(rows: list[dict], topic: str, name: str) -> tuple[list[dict], set[str]]:
-    """Rows of `topic` whose keyword_candidate is `name` (spaces and case ignored) with the keyword added (no duplicates)
-    and the candidate cleared — a new list; the input rows are not changed."""
-    key, out, changed = normalize(name), [], set()
+MAX_HUMAN_KEYWORDS = 5  # a person may give a book up to 5 keywords (the AI's cap stays 3, pipeline/prompt.py)
+JS_GROUPS = (":", "=", "!", "<=", "<!")  # the "(?…" groups Python and JS RegExp both read the same way
+
+
+def promote_rows(rows: list[dict], topic: str, name: str) -> tuple[list[dict], set[str], list[dict], set[str]]:
+    """(new rows, isbns changed, rows left as they are because they already hold MAX_HUMAN_KEYWORDS keywords, isbns of
+    `topic` that hold the keyword afterwards). A row of `topic` whose keyword_candidate is `name` (spaces and case ignored)
+    gets the keyword (no duplicates) and its candidate cleared. Any status counts (picked, review, reserve, dropped): the
+    keyword belongs to the book whatever happens to it. The input rows are not changed; running it again changes nothing."""
+    key, out, changed, full, has = normalize(name), [], set(), [], set()
     for r in rows:
-        cand = r.get("keyword_candidate")
-        if r.get("topic") == topic and isinstance(cand, str) and normalize(cand) == key:
-            out.append({**r, "keywords": list(dict.fromkeys([*(r.get("keywords") or []), name])), "keyword_candidate": None})
+        cand, kws = r.get("keyword_candidate"), list(r.get("keywords") or [])
+        mine = r.get("topic") == topic
+        if mine and isinstance(cand, str) and normalize(cand) == key:
+            if name not in kws and len(kws) >= MAX_HUMAN_KEYWORDS:
+                full.append(r)
+                out.append(r)
+                continue
+            r = {**r, "keywords": list(dict.fromkeys([*kws, name])), "keyword_candidate": None}
             changed.add(str(r["isbn"]))
-        else:
-            out.append(r)
-    return out, changed
+        if mine and name in (r.get("keywords") or []):
+            has.add(str(r["isbn"]))
+        out.append(r)
+    return out, changed, full, has
 
 
-def with_definition(text: str, row: str) -> str:
-    """`text` with `row` right after the last row of the "새 키워드 정의" table (its line ends kept)."""
+def _has_row(lines: list[str], topic: str, name: str) -> bool:
+    """Whether the definition table rows already hold (topic, name) — a rerun must not add a second row."""
+    current = ""
+    for line in lines:
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) >= 3 and not line.startswith("|---"):
+            current = re.sub(r"\s*\(.*\)$", "", cells[0]) or current
+            if current == topic and cells[1] == name:
+                return True
+    return False
+
+
+def with_definition(text: str, row: str, topic: str, name: str) -> str:
+    """`text` with `row` right after the last row of the "새 키워드 정의" table (its line ends kept); unchanged when the
+    table already has the keyword."""
     nl = "\r\n" if "\r\n" in text else "\n"
     lines = text.split(nl)
     start = next((i for i, line in enumerate(lines) if line.startswith(DEFS_MARKER)), None)
@@ -190,59 +215,96 @@ def with_definition(text: str, row: str) -> str:
     last = first
     while last + 1 < len(lines) and lines[last + 1].startswith("|"):
         last += 1
+    if _has_row(lines[first:last + 1], topic, name):
+        return text
     return nl.join([*lines[:last + 1], row, *lines[last + 1:]])
 
 
-def _checked(spec: str, pattern: str, definition: str, vocab: dict) -> tuple[str, str, str]:
+def js_unsafe(pattern: str) -> list[str]:
+    """The "(?…" groups of `pattern` that JS `new RegExp(p, "i")` (the app's word rule) cannot read the same way: only
+    lookbehind / lookahead and non-capturing groups are allowed. An escaped parenthesis is a plain character."""
+    out, i = [], 0
+    while i < len(pattern):
+        if pattern[i] == "\\":
+            i += 2
+            continue
+        if pattern.startswith("(?", i) and not pattern.startswith(JS_GROUPS, i + 2):
+            out.append(pattern[i:i + 4])
+        i += 1
+    return out
+
+
+def _checked_pattern(pattern: str) -> str:
+    if not pattern:
+        raise BackfillError("the word pattern is empty")
+    try:
+        rule = re.compile(pattern)
+    except re.error as err:
+        raise BackfillError(f"the word pattern does not compile: {err}") from None
+    if bad := js_unsafe(pattern):
+        allowed = ", ".join("(?" + g for g in JS_GROUPS)
+        raise BackfillError(f"the word pattern has groups JavaScript reads differently or not at all: {bad} (allowed: {allowed})")
+    if rule.search("") is not None:
+        raise BackfillError("the word pattern matches the empty string (it would hit every book)")
+    return pattern
+
+
+def _checked(spec: str, pattern: str, definition: str, vocab: dict) -> tuple[str, str, str, str]:
     topic, _, name = (part.strip() for part in spec.partition(":"))
     definition = " ".join(definition.split())
     if not topic or not name:
         raise BackfillError(f'give the keyword as "topic:name", not {spec!r}')
     if topic not in vocab:
         raise BackfillError(f"unknown topic {topic}")
-    if normalize(name) in {normalize(k) for k in vocab[topic].get("kept", {})}:
+    if normalize(name) == normalize(topic):
+        raise BackfillError(f"{name} is the topic itself")
+    if normalize(name) in {normalize(k) for k in vocab[topic].get("kept", {})}:  # folded / too_common names may come back
         raise BackfillError(f"{topic} › {name} is already on the keyword list")
     if not definition:
         raise BackfillError("the definition is empty")
     if any(c in s for s in (name, definition) for c in "|\n"):
         raise BackfillError("name and definition cannot hold | (they go into a markdown table)")
-    try:
-        re.compile(pattern)
-    except re.error as err:
-        raise BackfillError(f"the word pattern does not compile: {err}") from None
-    if not pattern:
-        raise BackfillError("the word pattern is empty")
-    return topic, name, definition
+    return topic, name, definition, _checked_pattern(pattern)
 
 
 def promote(spec: str, pattern: str, definition: str, processed: Path = PROCESSED, chips: Path = CHIPS,
             day: str | None = None) -> int:
-    """An approved candidate becomes a keyword: everything is checked and computed first, then the vocab, the definition
-    table and the book files are written."""
+    """An approved candidate becomes a keyword. Everything is checked and computed first, then written in an order that
+    can simply be run again after a failure part-way: the book files (idempotent), the definition table (a second row is
+    never added), the keyword list last — until the list has it, the same command is accepted again."""
     vocab_path = processed / "keyword_vocab.json"
     vocab = json.loads(vocab_path.read_text(encoding="utf-8"))
-    topic, name, definition = _checked(spec, pattern, definition, vocab)
+    topic, name, definition, pattern = _checked(spec, pattern, definition, vocab)
     sources = [processed / "books_v1.json", *(p for p in sorted((processed / "additions").glob("*.json"))
                                              if not p.name.endswith("-ai2.json"))]
     writes: list[tuple[Path, object, set[str]]] = []
+    full: list[dict] = []
+    books: set[str] = set()
     for path in sources:
         data = json.loads(path.read_text(encoding="utf-8"))
-        rows, changed = promote_rows(data if isinstance(data, list) else data["books"], topic, name)
+        rows, changed, too_many, has = promote_rows(data if isinstance(data, list) else data["books"], topic, name)
+        full += too_many
+        books |= has
         if changed:
             writes.append((path, rows if isinstance(data, list) else {**data, "books": rows}, changed))
-    books = set().union(*(c for _, _, c in writes))
+    # Books of any status get the keyword (review / reserve / dropped too — it describes the book), and n counts them all:
+    # every book of the topic that holds the keyword now.
+    if not books:
+        raise BackfillError(f"no {topic} book has the candidate {name} (or the keyword) — nothing to promote")
     new_vocab = {**vocab, topic: {**vocab[topic], "kept": {**vocab[topic].get("kept", {}),
                                                            name: {"pattern": pattern, "n": len(books)}}}}
     row = f"| {topic} ({day or date.today().isoformat()} 승인) | {name} | {definition} |"
-    doc = with_definition(chips.read_bytes().decode("utf-8"), row)  # line ends as they are
-    _write(vocab_path, new_vocab)
-    with chips.open("w", encoding="utf-8", newline="") as f:
-        f.write(doc)
+    doc = with_definition(chips.read_bytes().decode("utf-8"), row, topic, name)  # line ends as they are
     for path, data, _ in writes:
         _write(path, data)
-    print(f"keyword list: {topic} › {name} (pattern {pattern!r}, {len(books)} books) · definition row added to {chips.name}")
+    with chips.open("w", encoding="utf-8", newline="") as f:
+        f.write(doc)
+    _write(vocab_path, new_vocab)
+    print(f"keyword list: {topic} › {name} (pattern {pattern!r}, {len(books)} books) · definition row in {chips.name}")
     for path, _, changed in writes:
         print(f"  {path.name}: {len(changed)} books got {name} — {', '.join(sorted(changed))}")
+    for r in full:
+        print(f"  skipped, already {MAX_HUMAN_KEYWORDS} keywords — a person decides: {r.get('isbn')} {r.get('title') or ''}")
     print("next: cd web && npm run books:import && npx vitest run, then commit the vocab, the doc, the book files and web/src/data/")
     return 0
 

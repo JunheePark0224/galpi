@@ -130,6 +130,12 @@ def test_promote_adds_the_keyword_its_definition_and_puts_it_on_the_candidate_bo
     ("데이터 분석:", "x", "뜻", "topic:name"),
     ("데이터 분석:Power BI", "x", " ", "definition"),
     ("데이터 분석:Power|BI", "x", "뜻", "|"),
+    ("데이터 분석:데이터분석", "x", "뜻", "the topic itself"),
+    ("데이터 분석:Power BI", "(?i)power bi", "뜻", "JavaScript"),
+    ("데이터 분석:Power BI", "(?P<x>Power) BI", "뜻", "JavaScript"),
+    ("데이터 분석:Power BI", "Power|", "뜻", "empty string"),
+    ("데이터 분석:Power BI", "(?:BI)?", "뜻", "empty string"),
+    ("데이터 분석:Tableau", "Tableau", "뜻", "no 데이터 분석 book"),
 ])
 def test_promote_refuses_and_changes_nothing(repo, spec, pattern, definition, msg):
     processed, chips = repo
@@ -137,3 +143,50 @@ def test_promote_refuses_and_changes_nothing(repo, spec, pattern, definition, ms
     with pytest.raises(BackfillError, match=re.escape(msg)):
         _promote(repo, spec, pattern, definition)
     assert {p: p.read_bytes() for p in before} == before
+
+
+def test_promote_accepts_lookarounds_non_capturing_groups_and_escaped_parens(repo):
+    _promote(repo, pattern=r"(?<![A-Z])Power ?BI(?!\w)|(?:파워) ?BI|\(?PBI\)?")
+
+
+def test_a_name_the_list_left_out_on_purpose_can_be_promoted(repo):
+    processed, _ = repo
+    vocab = json.loads((processed / "keyword_vocab.json").read_text(encoding="utf-8"))
+    vocab["데이터 분석"]["folded"] = {"Power BI": 1}
+    (processed / "keyword_vocab.json").write_text(json.dumps(vocab, ensure_ascii=False), encoding="utf-8")
+    _promote(repo)
+    assert "Power BI" in json.loads((processed / "keyword_vocab.json").read_text(encoding="utf-8"))["데이터 분석"]["kept"]
+
+
+def test_a_book_already_at_five_keywords_is_left_for_a_person(repo, capsys):
+    processed, _ = repo
+    full = _cand("7", "Power BI", keywords=["SQL", "엑셀", "파이썬", "데이터 리터러시", "R"], title="꽉 찬 책")
+    (processed / "additions" / "2026-10-06.json").write_text(json.dumps({"books": [full]}, ensure_ascii=False), encoding="utf-8")
+    _promote(repo)
+    kept = json.loads((processed / "additions" / "2026-10-06.json").read_text(encoding="utf-8"))["books"][0]
+    assert kept == full                                                                # not pushed to 6, candidate kept
+    vocab = json.loads((processed / "keyword_vocab.json").read_text(encoding="utf-8"))
+    assert vocab["데이터 분석"]["kept"]["Power BI"]["n"] == 2
+    out = capsys.readouterr().out
+    assert "7" in out and "꽉 찬 책" in out and "5 keywords" in out
+
+
+def test_a_rerun_after_a_failure_before_the_vocab_write_finishes_the_job(repo, monkeypatch):
+    import backfill_keywords
+    processed, chips = repo
+    real = backfill_keywords._write
+    def fail_on_vocab(path, data):
+        if path.name == "keyword_vocab.json":
+            raise OSError("disk full")
+        real(path, data)
+    monkeypatch.setattr(backfill_keywords, "_write", fail_on_vocab)
+    with pytest.raises(OSError):
+        _promote(repo)
+    assert "Power BI" not in json.loads((processed / "keyword_vocab.json").read_text(encoding="utf-8"))["데이터 분석"]["kept"]
+    monkeypatch.setattr(backfill_keywords, "_write", real)
+    _promote(repo)                                                                    # the same command again
+    vocab = json.loads((processed / "keyword_vocab.json").read_text(encoding="utf-8"))
+    assert vocab["데이터 분석"]["kept"]["Power BI"] == {"pattern": "Power ?BI|파워 ?BI", "n": 2}
+    assert chips.read_text(encoding="utf-8").count("| Power BI |") == 1
+    rows = json.loads((processed / "books_v1.json").read_text(encoding="utf-8"))
+    assert rows[0]["keywords"] == ["SQL", "Power BI"] and rows[0]["keyword_candidate"] is None
