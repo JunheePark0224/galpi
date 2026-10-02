@@ -80,6 +80,10 @@ describe("forAmplitude (taxonomy 2-7: Supabase-only props stay out of the Amplit
     expect(forAmplitude("free_goal_written", written)).toEqual({ topic: "돈 관리·투자", keywords: [], is_matched: true, method: "llm", has_missing: true });
   });
 
+  it("F-26: leaves out the 갈피 우체통 letter and keeps its length (E-31, v0.10)", () => {
+    expect(forAmplitude("feedback_sent", { feedback_text: "좋았어요", text_length: 4 })).toEqual({ text_length: 4 });
+  });
+
   it("keeps only the keys the event's spec defines (allowlist): unknown keys never reach Amplitude", () => {
     const sent = { topic: "데이터 분석", keywords: [], is_matched: false, method: "word", goal_text: "x", note: "free text", constructor: "c" };
     expect(forAmplitude("free_goal_written", sent)).toEqual({ topic: "데이터 분석", keywords: [], is_matched: false, method: "word" });

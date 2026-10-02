@@ -12,6 +12,7 @@
 | taxonomy v0.7 | 2026-10-01 | DESIGN C-16 책 속 책갈피 (PRD F-12 보이는 부분) | E-27 `bookmark_pulled`·E-28 `bookmark_flipped` live, 동사 `pulled`·`flipped` (8절) |
 | taxonomy v0.9 | 2026-10-02 | 밸런스 게임 순서 무작위 (PRD F-03, balance-game 2절) | E-24·E-25 `position` 추가 (8절) |
 | taxonomy v0.8 | 2026-10-01 | P5 로그인·내 책갈피 `plans/2026-10-01-p5-login-library.md` | 3-2 결정(Q5), E-29 `shelf_created`·E-30 `bookmark_moved` 추가, 막대 이름은 이벤트에 넣지 않음, E-11~17 설명을 [내 책갈피에 꽂기]로 (8절) |
+| taxonomy v0.10 | 2026-10-02 | 갈피 우체통 (PRD F-26) `plans/2026-10-02-feedback-mailbox.md` | E-31 `feedback_sent` live, 동사 `sent`, 분류 `홈`, `feedback_text` Supabase only, Supabase 사본은 `/api/feedback`이 저장 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -100,6 +101,7 @@
 | `saved` / `unsaved` | 보관했다 / 보관에서 뺐다 | system / click |
 | `created` | 이용자가 새것을 만들었다 (내 책갈피 막대, v0.8) | click |
 | `moved` | 이용자가 자리를 옮겼다 (책갈피를 다른 막대로, v0.8) | click |
+| `sent` | 이용자가 쓴 글을 보냈고 서버가 저장했다 (갈피 우체통, v0.10) | click |
 
 ### 2-3. 속성 이름
 
@@ -137,6 +139,7 @@
 | 로그인 | S-07 | E-12, E-13, E-14 |
 | 내 책갈피 | S-09 | E-17, E-29, E-30 |
 | 마무리 | S-08 (E-20은 S-04의 막다른 길에서도) | E-19, E-20 |
+| 홈 | S-01 (퍼널 밖 — 갈피 우체통, v0.10) | E-31 |
 | 공통 | — | 공통 속성 (csv의 `*` 줄) |
 
 ### 2-6. 트리거 (Trigger)
@@ -153,7 +156,7 @@
 
 | 값 | 경로 | 비고 |
 |---|---|---|
-| `SDK` | 화면 코드에서 `track(name, props)` 하나 → ① `/api/track` → Supabase `events`(원본) ② 같은 이름·속성을 Amplitude 브라우저 SDK로 | 지금 모든 이벤트. Amplitude가 꺼져 있거나(키는 Production에만) 실패해도 ①은 영향 없음 |
+| `SDK` | 화면 코드에서 `track(name, props)` 하나 → ① `/api/track` → Supabase `events`(원본) ② 같은 이름·속성을 Amplitude 브라우저 SDK로 | 지금 모든 이벤트. Amplitude가 꺼져 있거나(키는 Production에만) 실패해도 ①은 영향 없음. **예외 하나 — E-31 `feedback_sent`(v0.10)**: 저장을 확인해야 "잘 받았어요"를 보이므로 ①은 `/api/feedback`이 직접 한다(같은 `saveEvent`·같은 서버 확인 `user_id`, 공통 속성은 브라우저가 보낸 것). 2xx를 받은 뒤 화면이 `trackStored(name, props, common)`으로 ②만 보낸다 — 같은 공통 속성, `Supabase only` 속성은 빠짐 |
 | `Server` | 서버 라우트가 `saveEvent()`로 `events`에 직접 쓰기 (Amplitude는 HTTP API, device_id = anon_id) | **예약만**. 지금 없음. 쓰게 되면 공통 속성을 요청에서 받아 같은 모양으로 채운다 |
 | `Autocapture` | Amplitude가 스스로 모으는 이벤트 (`[Amplitude] …` 이름) | Supabase에 없음. 이 택소노미의 지표 정의에는 쓰지 않는다 (3-3) |
 
@@ -162,6 +165,7 @@
 | 속성 | 표시 | 뜻 |
 |---|---|---|
 | E-21 `missing_text` (v0.6) | **`Supabase only`** | 분류가 적은 글에서 뽑은 "우리 키워드에 없는 구체적인 것"(≤20자, F-24). 적은 글에서 나온 말이라 `goal_text`와 같이 Amplitude 사본에서 뺀다 — Amplitude에는 `has_missing`(예/아니오)만 간다. 처리방침 6-3c |
+| E-31 `feedback_text` (v0.10) | **`Supabase only`** | 갈피 우체통에 적은 글(≤500자). Amplitude 사본에는 `text_length`(글자 수)만 간다. 처리방침 6-3e |
 | E-21 `goal_text` | **`Supabase only`** | 직접 쓴 글(≤30자)은 Supabase `events.props`에만 저장한다. **같은 이벤트의 Amplitude 사본에는 이 속성이 없다** — `topic`·`keywords`·`is_matched`·`method`는 그대로 간다. 이유·처리방침 변경은 6-2·6-3 |
 | E-01 `prompt_version` | `Amplitude only` | 강사 안내문 6단계 설치 확인값 (기존) |
 
@@ -252,7 +256,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 ### 4-1. 한눈에 보기
 
-상태 (v0.8): live 29 · planned-P4 0 · planned-P5 0 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned 없음(v0.8 — P5 이벤트 모두 live). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로
+상태 (v0.10): live 30 · planned-P4 0 · planned-P5 0 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned 없음(v0.8 — P5 이벤트 모두 live). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로. v0.10: 갈피 우체통(E-31) 추가 — 화면과 함께 live로
 
 | ID | 제안 이름 | 이전 이름 | 분류 | 트리거 | 상태 |
 |---|---|---|---|---|---|
@@ -285,8 +289,9 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-30 | `bookmark_moved` | (없음, v0.8) | 내 책갈피 | click | live |
 | E-19 | `redraw_clicked` | 같음 | 마무리 | click | live |
 | E-20 | `home_clicked` | 같음 | 마무리 | click | live |
+| E-31 | `feedback_sent` | (없음, v0.10) | 홈 | click | live |
 
-E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(29개 — `EVENT_NAMES`는 그 키). v0.8부터 planned 없음.
+E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(30개 — `EVENT_NAMES`는 그 키, v0.10). v0.8부터 planned 없음.
 
 ### 4-2. 이벤트별 상세
 
@@ -710,6 +715,20 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | `curious_count` | `curious` → `curious_count` | Number | 0, 2 | 이번 회차 궁금해요 수 |
 | `source` | 추가 — v0.3 구현 | String | "first_page", "end" | 누른 화면 — first_page=S-04(막다른 길), end=마무리 |
 
+#### E-31 `feedback_sent`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 홈 | click | live | 신규 (v0.10) |
+
+**언제**: S-01 갈피 우체통(PRD F-26) 시트에서 [넣기]를 눌러 **서버가 저장했을 때만**. Supabase 사본은 `/api/feedback`이 저장하고(2-7 예외), 2xx를 받은 뒤 브라우저가 Amplitude 사본을 보낸다 — Amplitude 사본에는 `feedback_text` 없이 `text_length`만. 빈 글·실패·중복 누름은 남지 않음. 저장이 꺼진 환경은 `TRACK_STORE=off`일 때만 202(로컬·E2E), 설정이 빠졌으면 503 — 저장되지 않은 글에 고마움을 보이지 않는다. 저장되면 운영자에게 도착 알림 메일(시각만, 글 없음)  
+**분석 질문**: 없음 — 운영용(첫 이용자 의견을 읽는 곳). 퍼널·지표(5절)에 넣지 않는다
+
+| 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
+|---|---|---|---|---|
+| `feedback_text` | 추가 (v0.10) | String | "책갈피가 귀여워요" | 우체통에 적은 글 (앞뒤 공백 제거, 1~500자). **`Supabase only`** (2-7·6-2) — 로그·DOM 속성에 넣지 않는다 |
+| `text_length` | 추가 (v0.10) | Number | 12, 480 | 앞뒤 공백을 뺀 글자 수 (UTF-16 단위, 1~500) |
+
 ### 4-3. 이벤트로 만들지 않는 것
 
 | 행동 | 이유 |
@@ -720,6 +739,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | 🎯 "무엇을" 비우고 [책 펼치기] (안내만 뜸) | 1-1 질문에 쓰이지 않는다. 필요해지면 `goal_submitted`의 실패 값이 아니라 새 질문과 함께 검토 |
 | 패스율 | `1 − 궁금해요율` — `bookmark_reacted`의 `reaction`으로 계산 |
 | 스크롤·표지 보기 시간 | 분석 질문 없음, 이벤트 수만 늘어난다 |
+| 갈피 우체통 열기·닫기, 보내기 실패 (v0.10) | 분석 질문 없음. 보낸 것만 E-31로 남는다 |
 
 ### 4-4. 마이그레이션 — 현재 → 제안
 
@@ -876,7 +896,7 @@ Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나
 
 - 이름, 이메일, 전화번호, 주소, 생년월일
 - 카카오·구글 계정 고유번호, 로그인 토큰 — 이벤트의 `user_id`는 Supabase 내부 UUID뿐
-- 직접 쓰기(E-21 `goal_text`, 30자 — 그리고 v0.6부터 그 글에서 뽑은 `missing_text`, 20자) 말고는 **이용자가 쓴 자유 글** — **내 책갈피 막대 이름(v0.8, 12자)도 이벤트에 넣지 않는다**: Supabase `shelves`에만, 화면 글자로만 보이고 DOM 속성(`aria-label`·`title`·`value` 밖의 속성)에 넣지 않으며 막대 이름 칸과 S-09 막대 머리글에 `data-amp-mask`(리플레이 가림) — 새 입력칸이 생기면 이 문서와 처리방침부터. `goal_text`도 **Supabase에만** 둔다(Amplitude로 보내지 않음, 6-2)
+- 직접 쓰기(E-21 `goal_text`, 30자 — 그리고 v0.6부터 그 글에서 뽑은 `missing_text`, 20자)와 갈피 우체통(E-31 `feedback_text`, 500자, v0.10 — Supabase에만) 말고는 **이용자가 쓴 자유 글** — **내 책갈피 막대 이름(v0.8, 12자)도 이벤트에 넣지 않는다**: Supabase `shelves`에만, 화면 글자로만 보이고 DOM 속성(`aria-label`·`title`·`value` 밖의 속성)에 넣지 않으며 막대 이름 칸과 S-09 막대 머리글에 `data-amp-mask`(리플레이 가림) — 새 입력칸이 생기면 이 문서와 처리방침부터. `goal_text`도 **Supabase에만** 둔다(Amplitude로 보내지 않음, 6-2)
 - 책소개·가격·표지 등 YES24 원문 (이벤트에는 `book_id`=ISBN만)
 - 키·비밀값, 서버 오류 원문
 
@@ -886,6 +906,7 @@ Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나
 |---|---|
 | `goal_text` | 최대 30자, 앞뒤 공백 제거. 입력칸 아래 "이름·연락처는 적지 마세요". **Supabase에만 저장한다 — Amplitude 사본에는 이 속성을 넣지 않는다**(결정 2026-09-30, 9절 Q3). 못 찾은 요청 분석(5-3)은 SQL로 하므로 잃는 것이 없다. Amplitude에는 `topic`·`keywords`·`is_matched`·`method`가 간다. 처리방침에 저장 명시, **Amplitude로는 안 간다는 문장은 v0.3에서 추가(6-3)**. **P4**: 주제를 찾으려고 이 글만 Anthropic(Claude Haiku)에 보낸다 — 익명 번호·공통 속성·다른 기록은 보내지 않고, 서버 로그에도 글을 남기지 않는다. 처리방침에 먼저 적었다(6-3b). 첫 장(S-04)이 이 글을 화면에 보이면 Session Replay(20%)가 화면 글자를 담을 수 있다 — v0.3: 직접 쓴 글이 있는 첫 장(`FirstPage.tsx`)과 글을 쓰는 입력 칸(`TargetInput.tsx`)에 `data-amp-mask`를 달아 리플레이에서 가린다 (v0.3.1: 입력 칸도 — 대시보드의 가림 수준이 `light`로 바뀌어도 가려진다) |
 | `missing_text` (v0.6) | 분류(Claude Haiku)가 `goal_text`에서 뽑은 짧은 말, 최대 20자(서버 `max`), `<` `>` 제거. `goal_text`와 같이 **Supabase에만** — Amplitude에는 `has_missing`만. 화면에서는 F-24 ②·③의 [예스24에서 찾기] 검색어로 쓰여, 누르면 **그 짧은 말만** 예스24 검색 주소에 실려 간다(익명 번호는 가지 않음. 짧은 글이면 그 말이 글과 같을 수 있다). **DOM 속성에는 절대 넣지 않는다** — Amplitude 자동 수집은 링크 `href`를 가리지 않고 보내고 Session Replay는 속성을 기록하므로, ②·③은 `<a href>`가 아니라 버튼이고 누를 때만 주소를 만들어 `window.open`으로 연다. 그 말이 보이는 글자는 `data-amp-mask`가 달린 첫 장 안에만 있어 리플레이·자동 수집 글자에서 가려진다 (단위·E2E 테스트가 속성·가림을 확인) |
+| `feedback_text` (v0.10) | 갈피 우체통 글, 앞뒤 공백 제거 1~500자(넘으면 서버가 받지 않음). **Supabase에만** — Amplitude에는 `text_length`만. 서버 로그·알림 메일·DOM 속성에 넣지 않는다(글칸의 값은 화면 글자로만). 글칸을 `data-amp-mask`로 감싸 리플레이에서 가린다. 시트에 "이름·연락처는 적지 마세요". 다른 이벤트와 같은 공통 속성(익명 번호, 로그인했으면 서버가 확인한 사용자 번호 등)과 함께 저장 — 처리방침 6-3e |
 | `referrer` | 500자에서 자름. Supabase에만. 검색 주소 등 쿼리 문자열에 개인 정보가 섞일 수 있어, 필요하면 호스트만 남기는 것을 검토 |
 | `anon_id` | 처리방침 "지우고 싶다면"에서 이 번호로 삭제 요청을 받는다 — 값의 형식·위치를 바꾸면 처리방침 화면도 함께 |
 | Autocapture·Session Replay | IP·대략적 지역·누른 요소가 Amplitude로 간다(처리방침에 명시). 리플레이는 입력칸을 가린다 — 새 입력칸도 가림 대상인지 확인 |
@@ -913,6 +934,10 @@ P4의 `/api/goal/classify`가 직접 쓴 글(≤30자)을 Anthropic API로 보�
 ### 6-3d. 처리방침 변경 — P5 (로그인·내 책갈피, v0.8)
 
 7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고친다(갱신일 바꿈). 표에 ① 로그인: Supabase 사용자 번호·로그인 방법(카카오/구글)·처음 로그인한 때 — 이름·이메일은 갈피 표에 두지 않음, **구글 로그인은 이메일을 로그인 서비스(Supabase Auth) 저장소에만 남김**(로그인 확인용, 기록·분석에 쓰지 않음), 카카오는 이메일을 받지 않음 ② 내 책갈피: 꽂은 책·그때 책갈피 그림·만난 날·막대와 막대 이름(직접 쓴 글 — 갈피 데이터베이스에만). "기록을 전달하는 곳"에 카카오·구글(로그인할 때 그 회사 화면으로 이동 — 그쪽이 받는 것은 그 회사 방침), 로그인한 뒤의 기록에 사용자 번호가 붙어 Amplitude에도 간다는 문장. "지우고 싶다면"에 로그아웃(이 기기에서 연결만 끊음)과 탈퇴 = 문의 메일 → 계정·내 책갈피·기록을 함께 지움.
+
+### 6-3e. 처리방침 변경 — 갈피 우체통 (PRD F-26, v0.10)
+
+7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고쳤다(갱신일 2026-10-02). 표에 새 행 — 갈피 우체통에 적은 글(최대 500자)을 익명 번호 등 다른 기록과 같은 정보(로그인했다면 사용자 번호)와 함께 갈피의 데이터베이스에만 저장, Amplitude에는 글자 수만. "기록을 전달하는 곳"에 — 우체통 글은 Amplitude에 보내지 않음, 운영자에게 가는 도착 알림 메일(Resend)에는 도착 시각만 들어가고 글·익명 번호는 들어가지 않음. 보관은 다른 기록과 같이 1년.
 
 ### 6-4. 보관
 
@@ -1003,7 +1028,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | 7 | 그 이벤트마다 `proposed`·`removed`가 아닌 속성 줄 집합 = `EVENT_SPEC[name]`의 키, 타입·배열 여부 일치. 열거형 명세면 Value Example의 따옴표 값 집합과 같음 | 속성이 어긋남 |
 | 8 | `*` 줄의 속성 = `COMMON_KEYS` (그리고 `parseCommon`이 돌려주는 키) | 공통 속성이 어긋남 |
 | 9 | `docs/taxonomy.md`의 `#### E-xx \`name\`` 제목에서 뽑은 (ID, 이름) 쌍 = csv의 쌍 (`*` 제외) | md와 csv가 어긋남 |
-| 10 | Status가 `live`인 이벤트 이름 집합 = 앱 소스(`web/src`, 테스트 제외)의 `track("…"` 호출 이름 집합. 한 이벤트의 줄은 모두 같은 Status(#4) | 심었는데 문서가 planned, 또는 문서는 live인데 호출이 없음 |
+| 10 | Status가 `live`인 이벤트 이름 집합 = 앱 소스(`web/src`, 테스트 제외)의 `track("…"`·`trackStored("…"`(v0.10 — 서버가 먼저 저장한 E-31의 Amplitude 사본) 호출 이름 집합. 한 이벤트의 줄은 모두 같은 Status(#4) | 심었는데 문서가 planned, 또는 문서는 live인데 호출이 없음 |
 | 11 | `docs/taxonomy.md`의 이벤트별 속성 표(4-2, `#### E-xx` 아래)의 속성 이름·타입(`String[]` = 배열)·값 = csv의 그 이벤트 줄의 Event Properties·Data Type·Array·Value Example | 속성 표를 md에서만 또는 csv에서만 고침 (#9는 이벤트 이름만 본다) |
 
 - 규칙: 열거형 속성은 csv Value Example에 **가능한 값을 모두** 적는다(지금 csv가 그렇게 되어 있다. `chip_value`·`topic`처럼 키 목록이 긴 값은 명세를 `"string"`으로 둔다)
@@ -1031,6 +1056,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.8 | 2026-10-01 | Claude (P5 계획, 사용자 결정 반영) | 3-2 결정(Q5 — 후보안 채택 + `user_id`는 `/api/track`이 세션으로 채움, 로그아웃 때 `setUserId(undefined)`). E-29 `shelf_created`(`shelf_count`)·E-30 `bookmark_moved`(`book_id`·`method`) 추가 `planned-P5`, 동사 `created`·`moved`, Q-13·꾸미기율. 막대 이름은 이벤트·Amplitude·DOM 속성 금지(6-1). 로그아웃·막대 이름 바꾸기·막대 지우기는 이벤트 없음(답할 질문이 없음, 1-1). E-11·E-12·E-14·E-15·E-16·E-17 설명을 [내 책갈피에 꽂기]·뒷면 [빼기]로. 처리방침 변경 6-3d. 기존 이벤트의 이름·속성 변경 없음. 구현 뒤 리뷰: E-14는 서버 쿠키로 확인된 로그인에만, E-12 header에 S-09 [로그인] 포함 |
 
 | v0.9 | 2026-10-02 | Claude (사용자 요청) | 밸런스 게임 문항 순서를 판마다 무작위로(PRD F-03, balance-game 2절 — 같은 축 두 질문은 붙지 않게, 좌우는 문항마다 고정). E-24 `balance_answered`·E-25 `unsure_hold_cancelled`에 `position`(Number, 1~9 — 이 판에서 몇 번째로 나왔는지) 추가. `question_no`는 이제 순서가 아니라 문항 번호. 같은 축 일치율(5-3)은 문항 번호 쌍 그대로. 저장 흐름 `VERSION` 4 → 5. 모으는 정보 변화 없음(처리방침 그대로) |
+| v0.10 | 2026-10-02 | Claude (사용자 요청) | 갈피 우체통(PRD F-26, S-01만)과 함께 E-31 `feedback_sent`(`feedback_text` String ≤500 **Supabase only**·`text_length` Number)를 추가해 바로 `live`. 동사 `sent`, 분류 `홈`(퍼널 밖 — 분석 질문 없음, 운영용). 저장을 확인한 뒤에만 "잘 받았어요"를 보이므로 Supabase 사본은 `/api/feedback`이 `/api/track`과 같은 저장·`user_id` 확인 경로(`lib/track/record.ts`)로 쓰고, 화면은 2xx 뒤 `trackStored()`로 Amplitude 사본만 보낸다(2-7 예외) — 검사 #10이 `trackStored("…"` 호출도 센다. 저장되면 운영자에게 Resend 도착 알림(시각만, 글 없음). 처리방침 6-3e 먼저(갱신일 2026-10-02). 기존 이벤트 변경 없음 |
 
 ---
 

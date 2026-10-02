@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { sendToAmplitude } from "./amplitude";
-import { track } from "./client";
+import { track, trackStored } from "./client";
 import { ROUND_ENDING_EVENTS } from "./schema";
 
 vi.mock("./amplitude", () => ({ sendToAmplitude: vi.fn(), startAmplitude: vi.fn() }));
@@ -119,5 +119,47 @@ describe("track", () => {
     // @ts-expect-error — prompt_version is Amplitude only: the Amplitude path adds it, callers never do
     track("site_visited", { prompt_version: "BA400.4" });
     expect(sendToAmplitude).toHaveBeenCalledTimes(4);
+  });
+
+  it("refuses E-31 at run time too — it is stored by /api/feedback, never through /api/track (taxonomy 2-7, v0.10)", () => {
+    const send = vi.fn().mockReturnValue(true);
+    const fetchMock = vi.fn();
+    Object.defineProperty(navigator, "sendBeacon", { value: send, configurable: true });
+    vi.stubGlobal("fetch", fetchMock);
+    // @ts-expect-error — the type forbids it as well
+    track("feedback_sent", { feedback_text: "x", text_length: 1 });
+    expect(send).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(sendToAmplitude).not.toHaveBeenCalled();
+  });
+});
+
+describe("trackStored (taxonomy 2-7, v0.10 — E-31)", () => {
+  const common = { anon_id: "a", user_id: null, session_id: "s", round: 3, entry: null, screen_version: "v1",
+    referrer: "", is_returning: false, device: "phone", is_in_app_browser: false } as const;
+
+  beforeEach(() => { vi.mocked(sendToAmplitude).mockReset(); });
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("sends only the Amplitude copy, with the common props the route stored — nothing to /api/track", () => {
+    const send = vi.fn();
+    const fetchMock = vi.fn();
+    Object.defineProperty(navigator, "sendBeacon", { value: send, configurable: true });
+    vi.stubGlobal("fetch", fetchMock);
+    trackStored("feedback_sent", { feedback_text: "좋아요", text_length: 3 }, common);
+    expect(sendToAmplitude).toHaveBeenCalledWith("feedback_sent", { feedback_text: "좋아요", text_length: 3 }, common);
+    expect(send).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("never throws when Amplitude does", () => {
+    vi.mocked(sendToAmplitude).mockImplementation(() => { throw new Error("down"); });
+    expect(() => trackStored("feedback_sent", { feedback_text: "x", text_length: 1 }, common)).not.toThrow();
+  });
+
+  it("only takes events stored by their own route — others are refused by type and at run time", () => {
+    // @ts-expect-error — site_visited goes through track()
+    trackStored("site_visited", {}, common);
+    expect(sendToAmplitude).not.toHaveBeenCalled();
   });
 });

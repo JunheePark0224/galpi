@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import type { Entry } from "@/lib/recommend";
 import type { LibraryCount } from "@/lib/books/library";
 import { LogoMark } from "@/components/Logo";
+import { Mailbox } from "@/components/feedback/Mailbox";
 import styles from "./Home.module.css";
 
 /** library: F-23 count from the server (page.tsx), null until the first fill — then the cover keeps the logo. */
@@ -68,6 +69,7 @@ export function Home({ onStart, library = null }: Props) {
           </button>
         ))}
       </div>
+      <Mailbox />
     </div>
   );
 }
