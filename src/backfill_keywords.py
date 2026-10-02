@@ -267,6 +267,14 @@ def _checked(spec: str, pattern: str, definition: str, vocab: dict) -> tuple[str
     return topic, name, definition, _checked_pattern(pattern)
 
 
+def without_name(topic_vocab: dict, name: str) -> dict:
+    """The topic's vocab with `name` (spaces and case ignored) gone from `folded` and `too_common`: a promoted keyword
+    must not also be listed as left out (the classifier prompt would show it twice). A new dict."""
+    key = normalize(name)
+    return {**topic_vocab, **{part: {k: v for k, v in topic_vocab[part].items() if normalize(k) != key}
+                              for part in ("folded", "too_common") if isinstance(topic_vocab.get(part), dict)}}
+
+
 def promote(spec: str, pattern: str, definition: str, processed: Path = PROCESSED, chips: Path = CHIPS,
             day: str | None = None) -> int:
     """An approved candidate becomes a keyword. Everything is checked and computed first, then written in an order that
@@ -291,8 +299,8 @@ def promote(spec: str, pattern: str, definition: str, processed: Path = PROCESSE
     # every book of the topic that holds the keyword now.
     if not books:
         raise BackfillError(f"no {topic} book has the candidate {name} (or the keyword) — nothing to promote")
-    new_vocab = {**vocab, topic: {**vocab[topic], "kept": {**vocab[topic].get("kept", {}),
-                                                           name: {"pattern": pattern, "n": len(books)}}}}
+    new_vocab = {**vocab, topic: {**without_name(vocab[topic], name),
+                                  "kept": {**vocab[topic].get("kept", {}), name: {"pattern": pattern, "n": len(books)}}}}
     row = f"| {topic} ({day or date.today().isoformat()} 승인) | {name} | {definition} |"
     doc = with_definition(chips.read_bytes().decode("utf-8"), row, topic, name)  # line ends as they are
     for path, data, _ in writes:

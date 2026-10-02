@@ -190,3 +190,15 @@ def test_a_rerun_after_a_failure_before_the_vocab_write_finishes_the_job(repo, m
     assert chips.read_text(encoding="utf-8").count("| Power BI |") == 1
     rows = json.loads((processed / "books_v1.json").read_text(encoding="utf-8"))
     assert rows[0]["keywords"] == ["SQL", "Power BI"] and rows[0]["keyword_candidate"] is None
+
+
+def test_a_promoted_name_leaves_folded_and_too_common_of_its_topic(repo):
+    processed, _ = repo
+    vocab = json.loads((processed / "keyword_vocab.json").read_text(encoding="utf-8"))
+    vocab["데이터 분석"] |= {"folded": {"power bi": 1, "R": 1}, "too_common": {"PowerBI": 9, "시각화": 11}}
+    vocab["통계"]["folded"] = {"Power BI": 2}
+    (processed / "keyword_vocab.json").write_text(json.dumps(vocab, ensure_ascii=False), encoding="utf-8")
+    _promote(repo)
+    after = json.loads((processed / "keyword_vocab.json").read_text(encoding="utf-8"))
+    assert after["데이터 분석"]["folded"] == {"R": 1} and after["데이터 분석"]["too_common"] == {"시각화": 11}
+    assert after["통계"]["folded"] == {"Power BI": 2}                              # another topic keeps its own
