@@ -100,8 +100,9 @@ test("logged out: 🔖 꽂기 (no pull first) → login sheet → Kakao → back
   await expect(page.getByRole("link", { name: /예스24에서 보기/ })).toHaveAttribute("data-variant", "primary");
   await page.getByRole("button", { name: "내 책갈피에 꽂기" }).click();
 
-  const sheet = page.getByRole("dialog", { name: "내 책갈피에 꽂으려면 로그인해 주세요" });
+  const sheet = page.getByRole("dialog", { name: "꽂은 책갈피는 내 책갈피에 이렇게 모여요" });
   await expect(sheet.getByRole("link", { name: "개인정보 처리방침" })).toHaveAttribute("href", "/privacy");   // PHASES P5
+  if (process.env.GUIDE_SHOTS) await page.screenshot({ path: `${process.env.GUIDE_SHOTS}/login-sheet.png` });
   await sheet.getByRole("button", { name: "카카오로 계속하기" }).click();
 
   // back from the login: the same S-06 book, kept without another press (its bookmark in, as it was left)

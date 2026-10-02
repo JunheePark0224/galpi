@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Sheet } from "@/components/Sheet";
+import { ExampleShelf } from "@/components/library/ExampleShelf";
 import { closeLoginSheet, useLoginSheet, type LoginSource } from "@/lib/account/store";
 import { startLogin } from "@/lib/auth/browser";
 import type { Provider } from "@/lib/auth/next";
@@ -8,10 +9,14 @@ import { clearPending } from "@/lib/library/pending";
 import { track } from "@/lib/track/client";
 import styles from "./LoginSheet.module.css";
 
+// 10-02 (5-friend test: "what does keeping give me?"): the sheet shows the payoff first — an example 내 책갈피 and three lines.
 const TITLE: Record<LoginSource, string> = {
-  save: "내 책갈피에 꽂으려면 로그인해 주세요",
+  save: "꽂은 책갈피는 내 책갈피에 이렇게 모여요",
   header: "로그인하고 내 책갈피를 모아 보세요",
 };
+export const LOGIN_BENEFITS = ["다시 보고 싶을 때 바로 꺼내 봐요", "막대로 나눠 정리해요", "휴대폰·PC 어디서나 이어져요"] as const;
+export const LOGIN_NOTE =
+  "갈피는 이름·연락처를 쓰지 않아요. 이메일·닉네임은 로그인 확인용으로 로그인 서비스에만 남아요. 처음 로그인한 방법으로 다시 들어와 주세요.";
 
 function KakaoMark() {
   return (
@@ -70,15 +75,17 @@ function LoginChoices({ source }: { source: LoginSource }) {
 
   return (
     <Sheet title={TITLE[source]} onClose={close}>
-      <p className={styles.lead}>
-        갈피는 이름·연락처를 쓰지 않아요. 이메일·닉네임은 로그인 확인용으로 로그인 서비스에만 남아요. 처음 로그인한 방법으로 다시 들어와 주세요.
-      </p>
+      <ExampleShelf />
+      <ul className={styles.benefits}>
+        {LOGIN_BENEFITS.map((line) => <li key={line}>{line}</li>)}
+      </ul>
       <button type="button" className={`${styles.provider} ${styles.kakao}`} disabled={leaving !== null} onClick={() => void login("kakao")}>
         <KakaoMark />카카오로 계속하기
       </button>
       <button type="button" className={`${styles.provider} ${styles.google}`} disabled={leaving !== null} onClick={() => void login("google")}>
         <GoogleMark />Google로 계속하기
       </button>
+      <p className={styles.lead}>{LOGIN_NOTE}</p>
       {failed && <p role="alert" className={styles.error}>로그인을 시작하지 못했어요. 잠시 뒤 다시 눌러 주세요.</p>}
       <div className={styles.foot}>
         <a href="/privacy" target="_blank" rel="noopener" className={styles.link}>개인정보 처리방침</a>

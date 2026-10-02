@@ -1,0 +1,13 @@
+/* A small made-up shelf in a white card (C-22, S-07). */
+.example { padding: var(--space-3); border: 1px solid var(--paper-line); border-radius: var(--radius-card); background: var(--card-bg); }
+.rodName { margin: 0 0 var(--space-1); font-family: var(--font-batang), serif; font-size: 14px; font-weight: 700; }
+.pen { font-size: 12px; color: var(--ink-muted); }
+.rod { height: 4px; border-radius: 2px; background: var(--cloth-edge); }
+.row { display: flex; gap: var(--space-2); margin: 0 0 var(--space-3) var(--space-2); }
+.mini { display: flex; flex-direction: column; align-items: center; width: 44px; }
+.string { width: 1.5px; height: 10px; background: var(--ink-muted); }
+.film {
+  width: 44px; height: 56px; padding: 4px 4px 0; overflow: hidden;
+  border: 1px solid var(--paper-line); border-radius: 22px 22px 3px 3px; background: var(--frost-fallback);
+}
+.film :global(svg) { border-radius: 18px 18px 0 0; }

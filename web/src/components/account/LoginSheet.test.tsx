@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const track = vi.fn();
@@ -6,7 +6,7 @@ const startLogin = vi.fn();
 vi.mock("@/lib/track/client", () => ({ track: (...a: unknown[]) => track(...a) }));
 vi.mock("@/lib/auth/browser", () => ({ startLogin: (...a: unknown[]) => startLogin(...a) }));
 import { closeLoginSheet, openLoginSheet } from "@/lib/account/store";
-import { LoginSheet } from "./LoginSheet";
+import { LoginSheet, LOGIN_BENEFITS } from "./LoginSheet";
 
 describe("LoginSheet (S-07, C-12)", () => {
   beforeEach(() => { startLogin.mockResolvedValue(true); window.history.replaceState(null, "", "/?y=2"); });
@@ -20,7 +20,7 @@ describe("LoginSheet (S-07, C-12)", () => {
   it("opens from 꽂기 with its own title, Kakao above Google, a privacy link, and sends E-12 once", () => {
     render(<LoginSheet />);
     act(() => openLoginSheet("save"));
-    const dialog = screen.getByRole("dialog", { name: "내 책갈피에 꽂으려면 로그인해 주세요" });
+    const dialog = screen.getByRole("dialog", { name: "꽂은 책갈피는 내 책갈피에 이렇게 모여요" });
     expect(dialog).toHaveAttribute("aria-modal", "true");
     const buttons = screen.getAllByRole("button");
     expect(buttons.map((b) => b.textContent)).toEqual(["카카오로 계속하기", "Google로 계속하기", "닫기"]);
@@ -28,6 +28,10 @@ describe("LoginSheet (S-07, C-12)", () => {
     expect(track).toHaveBeenCalledTimes(1);
     expect(track).toHaveBeenCalledWith("login_prompt_shown", { source: "save" });
     expect(document.activeElement).toBe(buttons[0]);
+    // 10-02: the payoff first — an example 내 책갈피 (decorative) and three lines, the privacy note below the buttons
+    expect(within(dialog).getAllByRole("listitem").map((li) => li.textContent)).toEqual([...LOGIN_BENEFITS]);
+    expect(within(dialog).getByText("읽기 완료!")).toBeInTheDocument();
+    expect(screen.getByText(/갈피는 이름·연락처를 쓰지 않아요/)).toBeInTheDocument();
   });
 
   it("from the header it invites to collect, and says what is not kept", () => {
