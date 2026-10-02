@@ -85,11 +85,13 @@
    "이미지·영상 생성": {
     "pattern": "미드저니|이미지 ?생성|영상 ?생성|캔바",
     "n": 5
+   },
+   "LLM 원리": {
+    "pattern": "LLM|(?:대규모|거대) ?언어 ?모델|언어 ?모델|트랜스포머|Transformer|파인 ?튜닝|(?<![A-Za-z])RAG(?![A-Za-z])",
+    "n": 1
    }
   },
-  "folded": {
-   "LLM 원리": 3
-  },
+  "folded": {},
   "too_common": {},
   "untagged": 0
  },

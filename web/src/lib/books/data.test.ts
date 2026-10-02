@@ -48,11 +48,12 @@ describe("app book data", () => {
     expect(TOPIC_CHIPS.map((c) => c.topic).filter((t) => !active.includes(t))).toEqual([]);
   });
 
-  it("vocab.json covers all twelve topics: the 19 keywords of v1.1 left after 마음·회복 moved out + 엑셀·파이썬·데이터 리터러시 back in 데이터 분석 (10-02), and the 33 D-A drafts (target-chips 2-1)", () => {
+  it("vocab.json covers all twelve topics: the 19 keywords of v1.1 left after 마음·회복 moved out + 엑셀·파이썬·데이터 리터러시 back in 데이터 분석 and LLM 원리 in AI 활용 (10-02), and the 33 D-A drafts (target-chips 2-1)", () => {
     expect(Object.keys(vocab)).toEqual([...TOPICS]);
     const count = (topics: readonly string[]) =>
       topics.reduce((n, t) => n + Object.keys((vocab as Vocab)[t].keywords).length, 0);
-    expect(count(TOPICS.slice(0, 6))).toBe(22);
+    expect(count(TOPICS.slice(0, 6))).toBe(23);
+    expect(Object.keys(vocab["AI 활용"].keywords)).toContain("LLM 원리");
     expect(Object.keys(vocab["데이터 분석"].keywords)).toEqual(["SQL", "엑셀", "파이썬", "데이터 리터러시"]);
     expect(count(TOPICS.slice(6))).toBe(33);
     expect(Object.keys(vocab["돈 관리·투자"].keywords)).toEqual(["재테크 기초", "주식", "ETF·펀드", "부동산·청약", "연금·노후", "돈의 심리"]);

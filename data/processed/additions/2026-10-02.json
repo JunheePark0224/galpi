@@ -81,8 +81,18 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/196901742"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196901742",
+   "draft": {
+    "topic": "경제 상식",
+    "keywords": [
+     "트렌드"
+    ],
+    "way": "개념",
+    "one_liner": "AI로 몰린 자본과 산업 변화의 흐름을 8개 분야로 짚어 봐요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791175230576",
@@ -248,8 +258,18 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/35300211"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/35300211",
+   "draft": {
+    "topic": "대화·관계",
+    "keywords": [
+     "거리 두기"
+    ],
+    "way": "개념",
+    "one_liner": "휘둘리거나 상처받지 않게 나와 세상 사이의 적당한 거리를 잡는 법을 알려줘요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791191636048",
@@ -321,8 +341,19 @@
     "way"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/176522439"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/176522439",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "커리어 설계",
+     "퍼스널 브랜딩"
+    ],
+    "way": "개념",
+    "one_liner": "경력을 운에 맡기지 않고 강점과 사이드 프로젝트로 직접 짜는 전략을 얻어요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791190006187",
@@ -428,8 +459,18 @@
    "issues": [
     "판단 이유가 책소개를 베낌"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/118318953"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/118318953",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "퍼스널 브랜딩"
+    ],
+    "way": "실습",
+    "one_liner": "SNS로 나만의 브랜드 콘셉트를 잡고 콘텐츠로 알리는 단계별 방법을 얻어요",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791173181887",
@@ -439,7 +480,9 @@
    "entry": "target",
    "topic": "취업·커리어",
    "field": "일·커리어",
-   "keywords": [],
+   "keywords": [
+    "퍼스널 브랜딩"
+   ],
    "keywords_regex": [
     "퍼스널 브랜딩"
    ],
@@ -462,8 +505,16 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/142069357"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/142069357",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [],
+    "way": "실습",
+    "one_liner": "전자책을 써서 출간하고 홍보하는 단계를 차근차근 따라 해 볼 수 있어요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791169213165",
@@ -565,7 +616,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/110540775",
-   "auto": "ai-agree"
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "직장 생활"
+    ],
+    "way": "실습",
+    "one_liner": "출근 복장, 인사, 회식 같은 사회 초년생의 궁금증에 상황별 답을 얻어요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9788964362495",
@@ -617,7 +678,7 @@
     "업무 글",
     "문해력·어휘"
    ],
-   "way": "실습",
+   "way": "사례",
    "one_liner_style": "summary",
    "one_liner": "집필부터 투고, 계약, 출간까지 단계별로 알려 줘서 책 쓰기에 도전하게 돕는 책이에요",
    "evidence": "출간 과정과 투고 정보를 단계별로 안내함",
@@ -635,8 +696,18 @@
     "way"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/124129451"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/124129451",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "에세이·책 쓰기"
+    ],
+    "way": "실습",
+    "one_liner": "집필부터 투고, 계약, 출간까지 단계별로 알려 줘서 책 쓰기에 도전하게 돕는 책이에요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788993784794",
@@ -809,7 +880,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/15447433",
-   "auto": "ai-agree"
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "카피라이팅"
+    ],
+    "way": "실습",
+    "one_liner": "고객 이해부터 헤드라인, 가격 설득까지 세일즈 레터 쓰는 순서를 단계별로 익혀요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9791190985215",
@@ -886,7 +967,9 @@
    "entry": "target",
    "topic": "데이터 분석",
    "field": "데이터·통계",
-   "keywords": [],
+   "keywords": [
+    "엑셀"
+   ],
    "keywords_regex": [
     "SQL"
    ],
@@ -906,8 +989,16 @@
    "issues": [
     "근거 김(33자)"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/140406762"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/140406762",
+   "draft": {
+    "topic": "데이터 분석",
+    "keywords": [],
+    "way": "실습",
+    "one_liner": "피벗 테이블과 차트로 데이터를 정리하고 숨은 패턴을 찾아내는 방법을 익혀요",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791163033806",
@@ -1196,7 +1287,7 @@
    ],
    "way": "실습",
    "one_liner_style": "summary",
-   "one_liner": "AI와 대화하며 26개 서비스를 직접 만들어 보고, 도구마다 다른 개발 방식도 경험해요",
+   "one_liner": "AI와 대화하며 26개 서비스를 직접 만들고 도구별 개발 방식도 경험해요",
    "evidence": "프로젝트 따라 만들며 도구별 방식을 익히는 구성",
    "confidence": 0.86,
    "fits": true,
@@ -1216,8 +1307,19 @@
    "issues": [
     "김(37자)"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/195959641"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/195959641",
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "바이브 코딩",
+     "클로드"
+    ],
+    "way": "실습",
+    "one_liner": "AI와 대화하며 26개 서비스를 직접 만들어 보고, 도구마다 다른 개발 방식도 경험해요",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791169213516",
@@ -1228,8 +1330,7 @@
    "topic": "AI 활용",
    "field": "AI·IT 활용",
    "keywords": [
-    "프롬프트 엔지니어링",
-    "AI 에이전트"
+    "LLM 원리"
    ],
    "keywords_regex": [
     "프롬프트 엔지니어링",
@@ -1256,8 +1357,19 @@
    "issues": [
     "근거 김(35자)"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/146828240"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/146828240",
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "프롬프트 엔지니어링",
+     "AI 에이전트"
+    ],
+    "way": "실습",
+    "one_liner": "트랜스포머 구조를 이해하고 실전 코드로 언어 모델을 직접 만들어 봐요",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791193059777",
@@ -1268,9 +1380,11 @@
    "topic": "AI 활용",
    "field": "AI·IT 활용",
    "keywords": [
+    "프롬프트 엔지니어링",
     "챗GPT",
     "클로드",
-    "프롬프트 엔지니어링"
+    "제미나이",
+    "바이브 코딩"
    ],
    "keywords_regex": [
     "챗GPT",
@@ -1299,8 +1413,20 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/184269953"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/184269953",
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "챗GPT",
+     "클로드",
+     "프롬프트 엔지니어링"
+    ],
+    "way": "실습",
+    "one_liner": "수업 준비와 행정 업무에 AI를 단계별로 적용해 시간을 아껴요",
+    "status": "review"
+   },
+   "reviewed": true
   }
  ]
 }
