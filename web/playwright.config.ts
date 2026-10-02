@@ -18,6 +18,8 @@ export default defineConfig({
     env: {
       TRACK_STORE: "off", BOOKS_SOURCE: "sample", NEXT_PUBLIC_AMPLITUDE_API_KEY: "",
       YES24_API_KEY: "", KAKAO_REST_KEY: "", ANTHROPIC_API_KEY: "",
+      // F-26: no 갈피 우체통 notice email ever leaves an E2E run.
+      RESEND_API_KEY: "", FEEDBACK_NOTIFY_TO: "",
       // P5: a made-up Supabase address turns the login place on; e2e/library.spec.ts answers the login and the
       // 내 책갈피 routes itself. No request reaches a real Supabase.
       NEXT_PUBLIC_SUPABASE_URL: "http://supabase.e2e.invalid", NEXT_PUBLIC_SUPABASE_ANON_KEY: "e2e-anon-not-a-key",

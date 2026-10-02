@@ -2,7 +2,7 @@
 import { useEffect, useId, useRef, type KeyboardEvent, type ReactNode } from "react";
 import styles from "./Sheet.module.css";
 
-const FOCUSABLE = "button:not([disabled]), a[href], input:not([disabled])";
+const FOCUSABLE = "button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled])";
 
 /** stepKey: change it when the sheet shows a new step (S-09 back → pick a rod) — focus moves to that step's first control. */
 interface Props { title: string; onClose: () => void; children: ReactNode; stepKey?: string }

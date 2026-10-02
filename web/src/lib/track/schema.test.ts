@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { COMMON_KEYS, cutText, EVENT_NAMES, EVENT_SPEC, isEventName, parseCommon, type PropsOf } from "./schema";
+import { COMMON_KEYS, cutText, EVENT_NAMES, EVENT_SPEC, isEventName, isOwnRouteEvent, OWN_ROUTE_EVENTS, parseCommon, type PropsOf } from "./schema";
 
 describe("event schema", () => {
-  it("lists the 29 taxonomy events in PRD order (E-04 removed, E-30 last)", () => {
-    expect(EVENT_NAMES).toHaveLength(29);
+  it("lists the 30 taxonomy events in PRD order (E-04 removed, E-31 last)", () => {
+    expect(EVENT_NAMES).toHaveLength(30);
     expect(EVENT_NAMES[0]).toBe("site_visited");
     expect(EVENT_NAMES[24]).toBe("goal_submitted");
-    expect(EVENT_NAMES.slice(25)).toEqual(["bookmark_pulled", "bookmark_flipped", "shelf_created", "bookmark_moved"]);   // v0.7 C-16, v0.8 P5 rods
+    expect(EVENT_NAMES.slice(25)).toEqual(["bookmark_pulled", "bookmark_flipped", "shelf_created", "bookmark_moved", "feedback_sent"]);   // v0.7 C-16, v0.8 P5 rods, v0.10 F-26
     expect(EVENT_NAMES).not.toContain("visit");
   });
 
@@ -21,6 +21,13 @@ describe("event schema", () => {
   it("marks goal_text Supabase only and prompt_version Amplitude only (taxonomy 2-7)", () => {
     expect(EVENT_SPEC.free_goal_written.goal_text).toMatchObject({ only: "supabase", max: 30 });
     expect(EVENT_SPEC.site_visited.prompt_version).toMatchObject({ only: "amplitude" });
+    expect(EVENT_SPEC.feedback_sent.feedback_text).toMatchObject({ only: "supabase", max: 500 });
+  });
+
+  it("names E-31 as the one event its own route stores (taxonomy 2-7, v0.10)", () => {
+    expect(OWN_ROUTE_EVENTS).toEqual(["feedback_sent"]);
+    expect(isOwnRouteEvent("feedback_sent")).toBe(true);
+    expect(isOwnRouteEvent("site_visited")).toBe(false);
   });
 
   it("F-24: the missing phrase is Supabase only (≤20), its yes/no goes to both; E-18 from the first page has no book", () => {

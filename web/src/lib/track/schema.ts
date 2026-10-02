@@ -26,6 +26,8 @@ const PICK_TYPE = { type: ["recommended", "random"] } as const;
 const ONE_LINER_STYLE = { type: ["summary", "question"] } as const;
 const CURIOUS_COUNT = { type: "number" } as const;
 const PROVIDER = { type: ["kakao", "google"] } as const;
+/** E-31: the longest 갈피 우체통 letter (UTF-16 units, after trimming) — the textarea, /api/feedback and the spec share it. */
+export const FEEDBACK_MAX = 500;
 
 /** Every live and planned event (taxonomy 4-1), in PRD order. Props are the event's own; common props are separate. */
 export const EVENT_SPEC = {
@@ -93,6 +95,10 @@ export const EVENT_SPEC = {
   bookmark_flipped: { book_id: BOOK_ID, pick_type: PICK_TYPE },
   shelf_created: { shelf_count: { type: "number" } },
   bookmark_moved: { book_id: BOOK_ID, method: { type: ["hold", "menu"] } },
+  feedback_sent: {
+    feedback_text: { type: "string", only: "supabase", max: FEEDBACK_MAX },
+    text_length: { type: "number" },
+  },
 } as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
 
 type Spec = typeof EVENT_SPEC;
@@ -118,6 +124,15 @@ export type PropsOf<N extends EventName> = keyof Sent<N> extends never ? Record<
  * home_clicked is live; redraw_clicked gets its [다시 뽑기] button in P4 and needs nothing more than its track() call.
  */
 export const ROUND_ENDING_EVENTS = ["redraw_clicked", "home_clicked"] as const satisfies readonly EventName[];
+
+/**
+ * taxonomy 2-7 (v0.10): events whose Supabase copy is written by their own route (E-31 → /api/feedback, which must confirm
+ * the save before the screen says thanks). /api/track refuses them; the browser sends only their Amplitude copy (trackStored).
+ */
+export const OWN_ROUTE_EVENTS = ["feedback_sent"] as const satisfies readonly EventName[];
+export type OwnRouteEvent = (typeof OWN_ROUTE_EVENTS)[number];
+const OWN_ROUTE: ReadonlySet<string> = new Set(OWN_ROUTE_EVENTS);
+export const isOwnRouteEvent = (name: EventName): name is OwnRouteEvent => OWN_ROUTE.has(name);
 
 /** Own keys only: "constructor" or "__proto__" are not event names. */
 export function isEventName(x: unknown): x is EventName {

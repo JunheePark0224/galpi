@@ -37,12 +37,15 @@ const listsNull = (example: string) => /(^|,\s*)null(\s*,|$)/.test(example.trim(
 const acceptsNull = (s: PropSpec) => (typeof s.type === "string" ? s.nullable === true : s.type.includes(null));
 const specOf = (name: string): Readonly<Record<string, PropSpec>> => EVENT_SPEC[name as EventName];
 
-/** Every `track("name"` in the app's source (tests excluded) — the events the code really sends. */
+/**
+ * Every `track("name"` in the app's source (tests excluded) — the events the code really sends — and, since v0.10, every
+ * `trackStored("name"` (taxonomy 2-7: an event its own route stored, only the Amplitude copy left to send — E-31).
+ */
 function trackedNames(): Set<string> {
   const files = readdirSync(SRC, { recursive: true, encoding: "utf8" })
     .filter((f) => /\.tsx?$/.test(f) && !/\.test\.tsx?$/.test(f));
   const text = files.map((f) => readFileSync(new URL(f.replaceAll("\\", "/"), SRC), "utf8")).join("\n");
-  return new Set([...text.matchAll(/\btrack\(\s*"([a-z0-9_]+)"/g)].map((m) => m[1]));
+  return new Set([...text.matchAll(/\btrack(?:Stored)?\(\s*"([a-z0-9_]+)"/g)].map((m) => m[1]));
 }
 
 describe("taxonomy.csv format and naming (taxonomy 2절)", () => {

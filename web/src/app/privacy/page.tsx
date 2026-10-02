@@ -14,7 +14,8 @@ function Contact() {
 
 /**
  * S-10 (F-16): what is collected and where it goes — Amplitude, (P4) the written goal to Anthropic for sorting, (F-24) a
- * short phrase to YES24 as a search word, (P5, taxonomy 6-3d) login, the Google email kept by the login service only, 내 책갈피.
+ * short phrase to YES24 as a search word, (P5, taxonomy 6-3d) login, the Google email kept by the login service only, 내 책갈피,
+ * (F-26, taxonomy 6-3e) the 갈피 우체통 letter — Supabase only, a time-only notice email through Resend.
  */
 export default function PrivacyPage() {
   return (
@@ -63,6 +64,10 @@ export default function PrivacyPage() {
             <td>내 책갈피를 다시 보여 주기 위해 — <strong>막대 이름에 이름·연락처는 적지 마세요</strong></td>
           </tr>
           <tr>
+            <td>갈피 우체통에 적은 글 (최대 500자)과 보낸 때 — 익명 번호 등 다른 기록과 같은 정보(로그인했다면 사용자 번호)와 함께 <strong>갈피의 데이터베이스(Supabase)에만 저장</strong>, Amplitude에는 글자 수만 보내요</td>
+            <td>써 본 분들의 의견을 읽고 갈피를 고치기 위해 — <strong>우체통 글에 이름·연락처는 적지 마세요</strong></td>
+          </tr>
+          <tr>
             <td>Amplitude가 자동으로 모으는 것: 페이지 주소(광고 태그 포함)와 페이지 이동, 누른 버튼·링크, 입력값을 뺀 입력 양식 사용 기록, 페이지 속도 측정, 같은 곳을 되풀이해 누르는 행동, 실패한 네트워크 요청 기록, 기기·브라우저 종류, 언어, IP 주소와 그걸로 짐작한 대략적인 지역</td>
             <td>어디서 그만두는지 살펴보기 위해</td>
           </tr>
@@ -103,6 +108,11 @@ export default function PrivacyPage() {
         <p>
           <strong>첫 장에서 [예스24에서 찾기]를 누르면, 그 글에서 찾은 짧은 말(예: &apos;캠핑 장비&apos;)만 검색어로 예스24에 보내요.</strong>{" "}
           글이 짧으면 그 말이 글과 같을 수 있어요. 익명 번호는 보내지 않아요.
+        </p>
+        <p>
+          <strong>갈피 우체통에 적은 글도 Amplitude에 보내지 않고, 갈피의 데이터베이스(Supabase)에만 저장해요.</strong>{" "}
+          글이 도착하면 운영자에게 알림 메일이 가요(메일 발송 서비스 Resend — 서버는 해외에 있을 수 있어요).
+          그 메일에는 도착 시각만 들어가고, 적은 글이나 익명 번호는 들어가지 않아요.
         </p>
         <p>
           <strong>로그인 버튼을 누르면 카카오나 구글의 로그인 화면으로 이동해요.</strong>{" "}

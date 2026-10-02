@@ -11,13 +11,23 @@ describe("Home (S-01)", () => {
     expect(onStart.mock.calls).toEqual([["target"], ["leaf"]]);
   });
 
-  it("has no login place before P5 — only the two entries can be pressed", () => {
+  it("has no login place of its own — the two entries, then the 갈피 우체통 last (F-26)", () => {
     render(<Home onStart={vi.fn()} />);
     expect(screen.queryByTestId("account-slot")).toBeNull();
     expect(screen.queryByText("로그인")).toBeNull();
-    expect(screen.getAllByRole("button")).toHaveLength(2);
+    expect(screen.getAllByRole("button").map((b) => b.getAttribute("aria-label") ?? b.textContent)).toEqual([
+      expect.stringMatching(/^알고 싶은 게 있어요/),
+      expect.stringMatching(/^그냥 한 권 만나고 싶어요/),
+      "갈피 우체통 — 써 보고 느낀 점을 넣어 주세요",
+    ]);
     expect(screen.getByRole("heading", { name: "갈피" })).toBeInTheDocument();
     expect(screen.getByText("읽을 책, 갈피가 안 잡힐 때")).toBeInTheDocument();
+  });
+
+  it("opens the 갈피 우체통 sheet from S-01 (F-26)", () => {
+    render(<Home onStart={vi.fn()} />);
+    fireEvent.click(screen.getByRole("button", { name: "갈피 우체통 — 써 보고 느낀 점을 넣어 주세요" }));
+    expect(screen.getByRole("dialog", { name: "갈피 우체통" })).toBeInTheDocument();
   });
 
   it("shows no library count below the first fill (F-23 hidden) — the cover keeps the logo", () => {
@@ -35,7 +45,7 @@ describe("Home (S-01)", () => {
     expect(art).toHaveTextContent("갈피의 서재");
     expect(art).toHaveTextContent("1,234권");
     expect(art).toHaveTextContent("+12");
-    expect(screen.getAllByRole("button")).toHaveLength(2);
+    expect(screen.getAllByRole("button")).toHaveLength(3);   // two entries + 갈피 우체통
   });
 
   it("leaves out today's bookmark and sentence on a day with no new books", () => {

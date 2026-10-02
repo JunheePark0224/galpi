@@ -10,11 +10,11 @@ describe("/privacy (S-10)", () => {
   it("shows the title, the date and the nine collected items", () => {
     render(<PrivacyPage />);
     expect(screen.getByRole("heading", { level: 1, name: "개인정보 처리방침" })).toBeInTheDocument();
-    expect(screen.getByText(/2026-10-01/)).toBeInTheDocument();
+    expect(screen.getByText(/2026-10-02/)).toBeInTheDocument();
     expect(screen.getByText("갈피는 이름·전화번호를 받지 않아요.")).toBeInTheDocument();
     expect(screen.getByText(/이메일·닉네임은 로그인할 때 로그인 확인용으로 로그인 서비스에만 남고, 갈피는 쓰지 않아요\./)).toBeInTheDocument();
     const rows = within(screen.getByRole("table")).getAllByRole("row");
-    expect(rows).toHaveLength(10); // header + 9 (P5: login, Google email, 내 책갈피)
+    expect(rows).toHaveLength(11); // header + 10 (P5: login, Google email, 내 책갈피; F-26: 갈피 우체통)
     expect(screen.getByRole("columnheader", { name: "모으는 것" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "왜" })).toBeInTheDocument();
     expect(screen.getByText("누른 버튼과 누른 시각, 고른 입구(🎯/🍃), 본 책갈피, 궁금해요/패스, 밸런스 게임 답과 답하는 데 걸린 시간, 고친 답, 몇 번째 뽑기인지")).toBeInTheDocument();
@@ -140,5 +140,21 @@ describe("/privacy (S-10)", () => {
     expect(screen.getByText(/로그인 버튼을 누르면 카카오나 구글의 로그인 화면으로 이동해요/)).toBeInTheDocument();
     expect(screen.getByText(/로그아웃은 내 책갈피 화면 맨 아래에서 할 수 있어요/)).toBeInTheDocument();
     expect(screen.getByText(/탈퇴하려면 로그인한 방법과 아래 익명 번호를 적어 문의 이메일로 보내 주세요/)).toBeInTheDocument();
+  });
+
+  it("lists the 갈피 우체통 letter — kept in Galpi's database with the anonymous number, only its length to Amplitude (F-26, taxonomy 6-3e)", () => {
+    render(<PrivacyPage />);
+    const cell = screen.getByRole("cell", { name: /갈피 우체통에 적은 글/ });
+    expect(cell).toHaveTextContent("갈피 우체통에 적은 글 (최대 500자)과 보낸 때 — 익명 번호 등 다른 기록과 같은 정보(로그인했다면 사용자 번호)와 함께 갈피의 데이터베이스(Supabase)에만 저장, Amplitude에는 글자 수만 보내요");
+    expect(screen.getByText("우체통 글에 이름·연락처는 적지 마세요").tagName).toBe("STRONG");
+  });
+
+  it("says the letter is not sent to Amplitude and the notice email carries only the arrival time (F-26)", () => {
+    render(<PrivacyPage />);
+    const only = screen.getByText("갈피 우체통에 적은 글도 Amplitude에 보내지 않고, 갈피의 데이터베이스(Supabase)에만 저장해요.");
+    expect(only.tagName).toBe("STRONG");
+    const p = only.closest("p");
+    expect(p).toHaveTextContent("글이 도착하면 운영자에게 알림 메일이 가요(메일 발송 서비스 Resend — 서버는 해외에 있을 수 있어요).");
+    expect(p).toHaveTextContent("그 메일에는 도착 시각만 들어가고, 적은 글이나 익명 번호는 들어가지 않아요.");
   });
 });

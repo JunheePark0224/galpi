@@ -1,32 +1,14 @@
-import { authClient, sessionUserId } from "@/lib/auth/server";
 import { guardJson } from "@/lib/server/guard";
 import { cleanJson, TooDeepError } from "@/lib/server/sanitize";
 import { parseProps } from "@/lib/track/props";
-import { cutText, isEventName, parseCommon } from "@/lib/track/schema";
-import { saveEvent } from "@/lib/track/store";
+import { recordEvent } from "@/lib/track/record";
+import { cutText, isEventName, isOwnRouteEvent, parseCommon } from "@/lib/track/schema";
 
 const MAX_BYTES = 8_000;
 const PER_MINUTE = 120;
 /** A flagged event names at most this many dropped keys, each cut short: the log line stays small whatever the body held. */
 const MAX_LOGGED_KEYS = 10;
 const MAX_LOGGED_KEY = 40;
-
-/** Supabase Auth keeps the session in cookies named sb-<project>-auth-token(.0, .1 …). */
-const hasAuthCookie = (req: Request): boolean => /(?:^|;\s*)sb-[^=;]*-auth-token/.test(req.headers.get("cookie") ?? "");
-
-/**
- * taxonomy 3-2 (v0.8): common.user_id is the logged-in person's Supabase id as this server verifies it from the session
- * cookie — whatever the browser wrote there is dropped, so nobody can file events under someone else's id.
- */
-async function verifiedUserId(req: Request): Promise<string | null> {
-  if (!hasAuthCookie(req)) return null;
-  try {
-    const client = await authClient();
-    return client ? await sessionUserId(client) : null;
-  } catch {
-    return null;              // the event still counts — as not logged in — rather than being lost
-  }
-}
 
 export async function POST(request: Request): Promise<Response> {
   const guarded = await guardJson(request, { route: "track", limit: PER_MINUTE, maxBytes: MAX_BYTES });
@@ -43,7 +25,8 @@ export async function POST(request: Request): Promise<Response> {
   }
   const b = body as { name?: unknown; props?: unknown; common?: unknown };
   const common = parseCommon(b.common);
-  if (!isEventName(b.name) || !common) return Response.json({ error: "invalid event" }, { status: 400 });
+  // E-31 is stored by /api/feedback alone (its own rate limit and checks): never a second way in here.
+  if (!isEventName(b.name) || isOwnRouteEvent(b.name) || !common) return Response.json({ error: "invalid event" }, { status: 400 });
   if (b.props !== undefined && (typeof b.props !== "object" || b.props === null || Array.isArray(b.props))) {
     return Response.json({ error: "invalid event" }, { status: 400 });
   }
@@ -54,7 +37,7 @@ export async function POST(request: Request): Promise<Response> {
     console.warn("track: dropped props", JSON.stringify({ name: b.name, keys }));
   }
   try {
-    const stored = await saveEvent({ name: b.name, props, common: { ...common, user_id: await verifiedUserId(request) } });
+    const stored = await recordEvent(request, { name: b.name, props, common });
     return Response.json({ stored }, { status: 202 });
   } catch (err) {
     console.error("track failed", (err as Error).message);

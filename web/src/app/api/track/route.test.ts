@@ -28,6 +28,12 @@ describe("POST /api/track", () => {
     expect(saveEvent).toHaveBeenCalledWith({ name: "site_visited", props: {}, common });
   });
 
+  it("refuses E-31 feedback_sent — only /api/feedback stores it (taxonomy 2-7, v0.10)", async () => {
+    const res = await POST(req({ name: "feedback_sent", props: { feedback_text: "x", text_length: 1 }, common }));
+    expect(res.status).toBe(400);
+    expect(saveEvent).not.toHaveBeenCalled();
+  });
+
   it("rejects an unknown event name", async () => {
     const res = await POST(req({ name: "drop_table", props: {}, common }));
     expect(res.status).toBe(400);
