@@ -39,17 +39,15 @@ def load_docs(folder: Path) -> list[dict]:
 def count(docs: list[dict]) -> list[dict]:
     """[{topic, name, n}] over the picked 🎯 books with a candidate, most books first. One row per (topic, normalized
     name); `name` is its most common spelling, `n` the number of different books."""
-    books: dict[tuple[str, str], set[str]] = defaultdict(set)
-    spellings: dict[tuple[str, str], Counter] = defaultdict(Counter)
+    groups: dict[tuple[str, str], dict[str, str]] = defaultdict(dict)  # (topic, key) → {isbn: spelling}: a book counts once
     for doc in docs:
         for b in doc["books"]:
             name = b.get("keyword_candidate")
             if b.get("entry") != "target" or b.get("status") != "picked" or not isinstance(name, str) or not name.strip():
                 continue
-            key = (b.get("topic") or "", normalize(name))
-            books[key].add(str(b.get("isbn")))
-            spellings[key][name.strip()] += 1
-    rows = [{"topic": t, "name": spellings[(t, k)].most_common(1)[0][0], "n": len(isbns)} for (t, k), isbns in books.items()]
+            groups[(b.get("topic") or "", normalize(name))][str(b.get("isbn"))] = name.strip()
+    rows = [{"topic": t, "name": Counter(by_book.values()).most_common(1)[0][0], "n": len(by_book)}
+            for (t, _), by_book in groups.items()]
     return sorted(rows, key=lambda r: (-r["n"], r["topic"], r["name"]))
 
 

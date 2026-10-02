@@ -105,3 +105,31 @@ def test_report_main_writes_the_body_from_the_files(tmp_path, monkeypatch, capsy
     out = tmp_path / "pr.md"
     assert report.main(["--date", "2026-10-05", "--out", str(out)]) == 0
     assert "AuthenticationError" in out.read_text(encoding="utf-8") and "졸업 연속 0/3" in out.read_text(encoding="utf-8")
+
+
+def test_the_pr_lists_keyword_candidates_and_leaves_the_section_out_when_there_are_none():
+    rows = [{"topic": "데이터 분석", "name": "Power BI", "n": 5}, {"topic": "통계", "name": "R", "n": 2}]
+    body = report.pr_body(OK, doc_of(), LEAF, SIM_OK, False, GRAD, candidates=rows)
+    part = body.split("### 키워드 후보")[1].split("###")[0]
+    assert "데이터 분석 › **Power BI** 5권 — **추가할까요?**" in part and "통계 › **R** 2권" in part
+    assert body.index("### 키워드 후보") < body.index("\n### 검수\n")
+    assert "### 키워드 후보" not in report.pr_body(OK, doc_of(), LEAF, SIM_OK, False, GRAD)
+
+
+def test_report_main_counts_candidates_over_every_additions_file(tmp_path, monkeypatch):
+    doc = doc_of()
+    doc["books"][0] = {**doc["books"][0], "keyword_candidate": "투자 철학"}
+    (tmp_path / "2026-10-05.json").write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+    older = {"books": [{"isbn": f"8{i}", "entry": "target", "topic": "돈 관리·투자", "status": "picked",
+                        "keyword_candidate": "투자철학"} for i in range(4)]}
+    (tmp_path / "2026-10-04.json").write_text(json.dumps(older, ensure_ascii=False), encoding="utf-8")
+    (tmp_path / "books.json").write_text(json.dumps(LEAF), encoding="utf-8")
+    for name, value in (("ADDITIONS", tmp_path), ("RUNS", tmp_path / "runs"), ("BOOKS", tmp_path / "books.json"),
+                        ("AGREEMENT", tmp_path / "agreement.csv")):
+        monkeypatch.setattr(report, name, value)
+    monkeypatch.setattr(report, "evaluate", lambda *a: SIM_OK)
+    monkeypatch.setattr(report, "leaf_pool", lambda rows: rows)
+    monkeypatch.setattr(report, "leaf_users", lambda: [])
+    out = tmp_path / "pr.md"
+    assert report.main(["--date", "2026-10-05", "--out", str(out)]) == 0
+    assert "돈 관리·투자 › **투자철학** 5권 — **추가할까요?**" in out.read_text(encoding="utf-8")
