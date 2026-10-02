@@ -1,5 +1,6 @@
 """Backfill of keywords put back on the list (10-02): proposals by the word rule, then a person's choices applied
 (src/backfill_keywords.py)."""
+import re
 import sys
 from pathlib import Path
 
@@ -7,7 +8,9 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from backfill_keywords import BackfillError, apply_choices, proposals  # noqa: E402
+import json  # noqa: E402
+
+from backfill_keywords import BackfillError, apply_choices, promote, proposals  # noqa: E402
 
 PATTERNS = {"데이터 분석": {"엑셀": "엑셀|Excel|피벗", "파이썬": "파이썬|판다스"}, "AI 활용": {"LLM 원리": "LLM|트랜스포머"}}
 BOOKS = [
@@ -51,3 +54,86 @@ def test_applies_chosen_keywords_to_the_source_rows_without_touching_others():
 def test_refuses_a_keyword_that_is_not_on_the_list():
     with pytest.raises(BackfillError, match="not on the keyword list"):
         apply_choices([{"isbn": "1", "keywords": []}], {"1": ["R"]}, {"엑셀"})
+
+
+CHIPS = """# doc
+새 키워드 정의 (붙이는 책 — 책의 중심이 이것일 때):
+
+| 주제 | 키워드 | 정의 |
+|---|---|---|
+| 돈 관리·투자 | 주식 | 개별 주식 |
+| AI 활용 (10-02 다시 넣음) | LLM 원리 | LLM이 동작하는 법 |
+
+경계 (한 책·한 글이 두 주제에 걸릴 때):
+
+| 경계 | 규칙 |
+|---|---|
+| a | b |
+"""
+
+
+def _cand(isbn, name, topic="데이터 분석", **over):
+    return {"isbn": isbn, "entry": "target", "topic": topic, "keywords": ["SQL"], "keyword_candidate": name, **over}
+
+
+@pytest.fixture
+def repo(tmp_path):
+    processed = tmp_path / "processed"
+    (processed / "additions").mkdir(parents=True)
+    vocab = {"데이터 분석": {"books": 17, "kept": {"SQL": {"pattern": "SQL", "n": 6}}, "folded": {}},
+             "통계": {"books": 9, "kept": {}}}
+    (processed / "keyword_vocab.json").write_text(json.dumps(vocab, ensure_ascii=False), encoding="utf-8")
+    (processed / "books_v1.json").write_text(json.dumps(
+        [_cand("1", "Power BI"), _cand("2", None), _cand("3", "power bi", topic="통계")], ensure_ascii=False), encoding="utf-8")
+    (processed / "additions" / "2026-10-05.json").write_text(json.dumps({"date": "2026-10-05", "books": [
+        _cand("4", "PowerBI", keywords=["SQL", "Power BI"]), _cand("5", "엑셀")]}, ensure_ascii=False), encoding="utf-8")
+    (processed / "additions" / "2026-10-01-pilot-ai2.json").write_text(json.dumps({"books": [_cand("6", "Power BI")]}),
+                                                                         encoding="utf-8")
+    chips = tmp_path / "target-chips.md"
+    chips.write_bytes(CHIPS.encode("utf-8"))  # LF like the repo (.gitattributes eol=lf)
+    return processed, chips
+
+
+def _promote(repo, spec="데이터 분석:Power BI", pattern="Power ?BI|파워 ?BI", definition="파워 BI로 대시보드를 만들어 분석"):
+    processed, chips = repo
+    return promote(spec, pattern, definition, processed=processed, chips=chips, day="2026-10-06")
+
+
+def test_promote_adds_the_keyword_its_definition_and_puts_it_on_the_candidate_books(repo, capsys):
+    processed, chips = repo
+    _promote(repo)
+    vocab = json.loads((processed / "keyword_vocab.json").read_text(encoding="utf-8"))
+    assert vocab["데이터 분석"]["kept"]["Power BI"] == {"pattern": "Power ?BI|파워 ?BI", "n": 2}
+    assert vocab["데이터 분석"]["kept"]["SQL"] == {"pattern": "SQL", "n": 6} and vocab["통계"] == {"books": 9, "kept": {}}
+    rows = json.loads((processed / "books_v1.json").read_text(encoding="utf-8"))
+    assert rows[0]["keywords"] == ["SQL", "Power BI"] and rows[0]["keyword_candidate"] is None
+    assert rows[2]["keyword_candidate"] == "power bi" and rows[2]["keywords"] == ["SQL"]       # another topic stays
+    add = json.loads((processed / "additions" / "2026-10-05.json").read_text(encoding="utf-8"))
+    assert add["books"][0]["keywords"] == ["SQL", "Power BI"] and add["books"][0]["keyword_candidate"] is None  # no duplicate
+    assert add["books"][1]["keyword_candidate"] == "엑셀" and add["date"] == "2026-10-05"
+    ai2 = json.loads((processed / "additions" / "2026-10-01-pilot-ai2.json").read_text(encoding="utf-8"))
+    assert ai2["books"][0]["keyword_candidate"] == "Power BI"                                    # the AI-2 copy is not touched
+    lines = chips.read_text(encoding="utf-8").splitlines()
+    i = lines.index("| AI 활용 (10-02 다시 넣음) | LLM 원리 | LLM이 동작하는 법 |")
+    assert lines[i + 1] == "| 데이터 분석 (2026-10-06 승인) | Power BI | 파워 BI로 대시보드를 만들어 분석 |"
+    assert lines[i + 2] == "" and lines.count("| a | b |") == 1
+    out = capsys.readouterr().out
+    assert "Power BI" in out and "2 books" in out and "npm run books:import && npx vitest run" in out
+    for path in (processed / "keyword_vocab.json", processed / "books_v1.json", chips):
+        assert b"\r\n" not in path.read_bytes()
+
+
+@pytest.mark.parametrize("spec, pattern, definition, msg", [
+    ("요리:Power BI", "x", "뜻", "unknown topic"),
+    ("데이터 분석:sql", "x", "뜻", "already"),
+    ("데이터 분석:Power BI", "(", "뜻", "pattern"),
+    ("데이터 분석:", "x", "뜻", "topic:name"),
+    ("데이터 분석:Power BI", "x", " ", "definition"),
+    ("데이터 분석:Power|BI", "x", "뜻", "|"),
+])
+def test_promote_refuses_and_changes_nothing(repo, spec, pattern, definition, msg):
+    processed, chips = repo
+    before = {p: p.read_bytes() for p in [*processed.rglob("*.json"), chips]}
+    with pytest.raises(BackfillError, match=re.escape(msg)):
+        _promote(repo, spec, pattern, definition)
+    assert {p: p.read_bytes() for p in before} == before
