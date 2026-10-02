@@ -36,7 +36,7 @@ from .sample import daily_docs, sample_books, trial_sample
 
 PAGES = OUT_DIR / "pipeline"
 KEEP = ("isbn", "title", "author", "pages", "link", "entry", "topic", "keywords", "way", "genre", "axes", "one_liner",
-        "evidence", "confidence", "fits", "second", "flags", "issues", "status")
+        "evidence", "confidence", "fits", "second", "flags", "issues", "status", "keyword_candidate")
 
 
 def needs_look(b: dict) -> bool:

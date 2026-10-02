@@ -5,7 +5,7 @@ copy) and the D4 page's axis labels (build_d4_review.AXIS_LABELS). Same download
 {isbn: {…, ok}}}). Per book: why it is here (flags / rule issues / "표본"), the YES24 intro and TOC, AI-1 and AI-2 side by
 side — 🎯 keywords and way, 🍃 the four axes — with [AI-1이 맞아요] / [AI-2가 맞아요] (copy that opinion into the form,
 confirm, and a "doesn't fit" opinion moves the book out), and the editable form: 🎯 topic · keyword chips (closed list) ·
-way, 🍃 genre · four axes as three-way choices (the D4 wording), the one-liner with a live rule check, and a decision
+way · a keyword candidate (a short name missing from the list, 12 characters — pipeline/keyword_candidates.py), 🍃 genre · four axes as three-way choices (the D4 wording), the one-liner with a live rule check, and a decision
 (넣기 / 대기 / 빼기). Progress stays in this browser (localStorage).
 """
 from build_pilot_review import COMMON, STYLE
@@ -45,7 +45,7 @@ const FLAG={fits:"두 AI 중 하나가 이 칸에 안 맞을 수 있다고 봐�
 const STATUS=[["picked","넣기"],["reserve","대기"],["dropped","빼기"]];
 const SAMPLE_WHY="표본 — 두 AI가 같게 봤어요. 사람이 한 번 확인해 두 AI가 같아도 틀리는지 재요";
 const side=(k,v)=>{const a=AXES.find(x=>x[0]===k);return v>0?a[2]:v<0?a[4]:a[3]};
-const base=b=>b.entry==="target"?{topic:b.topic,keywords:[...(b.keywords||[])],way:b.way}:{genre:b.genre,axes:{...b.axes}};
+const base=b=>b.entry==="target"?{topic:b.topic,keywords:[...(b.keywords||[])],way:b.way,keyword_candidate:b.keyword_candidate||""}:{genre:b.genre,axes:{...b.axes}};
 const cur=b=>st[b.isbn]||{...base(b),one_liner:b.one_liner,status:b.status==="reserve"?"reserve":"picked",ok:false};
 const put=(b,patch)=>{st[b.isbn]={...cur(b),...patch,ok:false,pick:null};save();render()};
 const kw=l=>l&&l.length?l.map(esc).join(", "):"(없음)";
@@ -66,7 +66,8 @@ function fields(b,c){
   return `<div class="row"><span class="lab">주제</span><select data-act="topic">${TOPICS.map(t=>`<option ${t===c.topic?"selected":""}>${esc(t)}</option>`).join("")}</select></div>
    <div class="row"><span class="lab">키워드</span>${kws||'<span class="cnt">(키워드 없음)</span>'}</div>
    ${defs?`<details class="defs"><summary>키워드 뜻 보기 (책의 중심일 때만 붙여요)</summary><ul>${defs}</ul></details>`:""}
-   <div class="row"><span class="lab">방식</span><select data-act="way">${WAYS.map(([w,l])=>`<option value="${w}" ${w===c.way?"selected":""}>${w} — ${esc(l)}</option>`).join("")}</select></div>`}
+   <div class="row"><span class="lab">방식</span><select data-act="way">${WAYS.map(([w,l])=>`<option value="${w}" ${w===c.way?"selected":""}>${w} — ${esc(l)}</option>`).join("")}</select></div>
+   <div class="row"><span class="lab">후보</span><input type="text" data-act="cand" maxlength="12" value="${esc(c.keyword_candidate||"")}" placeholder="목록에 없는 키워드 후보 (12자)" title="책의 중심이 위 키워드 목록에 없을 때만 — 짧은 이름. 5권이 모이면 키워드로 만들지 물어봐요"></div>`}
  const two=b.second||{axes:{}};
  return `<div class="row"><span class="lab">장르</span><select data-act="genre">${GENRES.map(g=>`<option ${g===c.genre?"selected":""}>${esc(g)}</option>`).join("")}</select></div>`
   +AXES.map(([k,q,p,z,m,hint])=>`<p class="q">${esc(q)} <span class="hint">— ${esc(hint)}</span></p><div class="opts">${[[p,1],[z,0],[m,-1]].map(([t,v])=>`<label><input type="radio" name="ax-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${c.axes[k]===v?"checked":""}><span>${esc(t)}
@@ -96,13 +97,16 @@ document.addEventListener("change",e=>{const b=bookOf(e); if(!b)return; const ac
  if(axis){put(b,{axes:{...cur(b).axes,[axis]:Number(v)}});return}
  if(act==="topic")put(b,{topic:v,keywords:[]}); if(act==="way")put(b,{way:v}); if(act==="genre")put(b,{genre:v});
  if(act==="status")put(b,{status:v})});  // the one-liner is stored by the input handler (a re-render here would swallow the next click)
-document.addEventListener("input",e=>{if(e.target.dataset.act!=="line")return; const b=bookOf(e), el=e.target.closest(".card");
+document.addEventListener("input",e=>{if(e.target.dataset.act==="cand"){const b=bookOf(e), el=e.target.closest(".card");
+  st[b.isbn]={...cur(b),keyword_candidate:e.target.value,ok:false,pick:null};save();
+  el.classList.remove("done"); const ok=el.querySelector(".ok"); if(ok)ok.textContent="맞아요"; return}
+ if(e.target.dataset.act!=="line")return; const b=bookOf(e), el=e.target.closest(".card");
  st[b.isbn]={...cur(b),one_liner:e.target.value,ok:false,pick:null};save();
  const li=issues(e.target.value,b), cnt=e.target.parentElement.nextElementSibling.firstElementChild;
  cnt.textContent=`${len(e.target.value)}자 ${li.join(" · ")}`; cnt.className="cnt"+(li.length?" bad":"");
  el.classList.remove("done"); const ok=el.querySelector(".ok"); if(ok)ok.textContent="맞아요"});
 document.getElementById("dl").onclick=()=>{const answers={};
- for(const b of BOOKS){const c=st[b.isbn]; if(c&&c.ok){const a={...c,one_liner:c.one_liner.trim()}; if(!a.pick)delete a.pick; answers[b.isbn]=a}}
+ for(const b of BOOKS){const c=st[b.isbn]; if(c&&c.ok){const a={...c,one_liner:c.one_liner.trim(),...(typeof c.keyword_candidate==="string"?{keyword_candidate:c.keyword_candidate.trim()}:{})}; if(!a.pick)delete a.pick; answers[b.isbn]=a}}
  const blob=new Blob([JSON.stringify({saved_at:new Date().toISOString(),file:NAME,answers},null,1)],{type:"application/json"});
  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`${NAME}-review.json`;a.click()};
 document.getElementById("name").textContent=NAME; render();
