@@ -263,3 +263,9 @@ def test_a_missing_candidate_does_not_spoil_the_answer_and_other_passes_have_non
     assert parse(raw, "target", "tag", ["주식"], topic="돈 관리·투자")["keyword_candidate"] is None
     assert "keyword_candidate" not in parse(check_answer("target", new_keyword="엑셀"), "target", "check", ["주식"])
     assert "keyword_candidate" not in parse(tag_answer("leaf", new_keyword="엑셀"), "leaf", "tag", [])
+
+
+def test_definitions_of_rows_with_a_dated_topic_note_reach_the_prompt():
+    """Rows like "데이터 분석 (10-02 다시 나눔)" or promote's "통계 (2026-10-05 승인)" belong to the topic before the note."""
+    p = system_prompt(VOC, "tag")
+    assert "  - 엑셀 — 엑셀로 데이터를 정리" in p and "  - LLM 원리 — LLM·언어 모델이" in p
