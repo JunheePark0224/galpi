@@ -10,6 +10,7 @@ interface Props {
   onPress?: () => void;   // S-03 only
   left?: ReactNode;       // inside of the cover once open
   right?: ReactNode;      // right-hand page
+  tucked?: ReactNode;     // C-19: bookmark tips tucked into the closed book (CoverPeeks)
 }
 
 /**
@@ -19,12 +20,13 @@ interface Props {
  * hidden until it opens. Opening swings the cover left around the spine (T-06) while the book settles to full size.
  * Transform and opacity only — no filter, no animated shadow. initial={false}: a resumed flow does not replay it.
  */
-export function Book({ open, onPress, left, right }: Props) {
+export function Book({ open, onPress, left, right, tucked }: Props) {
   return (
     <div className={styles.zoom} data-closed={open ? undefined : ""}>
       <motion.div className={styles.book} initial={false} animate={{ x: open ? "0%" : "-25%" }} transition={OPEN_COVER}>
         <div className={styles.board} aria-hidden="true" />
         <div className={styles.pageRight}>{right}</div>
+        {tucked}
         <motion.div className={styles.cover} initial={false} animate={{ rotateY: open ? -180 : 0 }} transition={OPEN_COVER}>
           <button
             type="button"

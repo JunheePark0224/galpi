@@ -38,11 +38,25 @@
   --scene-w: calc(min(100vw, var(--column)) - 2 * var(--space-4));
   --cover-h: calc(var(--scene-w) * 0.5 * 1.45 * var(--cover-zoom));
   --hint-h: 20px;
-  --group-h: calc(var(--cover-h) + var(--space-3) + var(--hint-h));
+  /* C-19 (CoverPeeks): bookmark scale (of the 160px C-02), page block top and board thickness (pre-zoom px); --peek-h = the part above
+     the cover on screen, joined to the group so the bookmarks never reach the header. 0 while there is nothing tucked. */
+  --s: 0.125; --face: 6px; --edge: 1.5px;
+  --peek-h: 0px;
+  --group-h: calc(var(--peek-h) + var(--cover-h) + var(--space-3) + var(--hint-h));
   --group-top: max(calc((var(--book-h) + var(--space-4) + var(--hint-h) - var(--group-h) - (var(--bm-room) + 6px)) / 2), calc(-1 * (var(--bm-room) + 6px)));
-  --cover-lift: calc(var(--group-top) + var(--cover-h) / 2 - var(--book-h) / 2);
-  --hint-pull: calc(var(--group-top) + var(--cover-h) + var(--space-3) - var(--book-h) - var(--space-4));
+  --cover-lift: calc(var(--group-top) + var(--peek-h) + var(--cover-h) / 2 - var(--book-h) / 2);
+  --hint-pull: calc(var(--group-top) + var(--peek-h) + var(--cover-h) + var(--space-3) - var(--book-h) - var(--space-4));
 }
+/* S-03 with C-19: the cover sits lower by the tips' height, so the closed book's hidden tall pages (zoomed with the cover)
+   would reach below the screen and make the page scroll — also while the book settles on S-04. Nothing else of the scene
+   sticks out there, so clip both ways on S-03 and S-04. */
+.scene[data-clip] { overflow: clip; }
+/* The tips take about 60px above the cover: on a phone the cover zooms less where the cover + tips + hint would not fit
+   (375 wide: needs ≈ zoom × 317px + 32px ≤ book + 148px). 1.32 below 667px tall, 1.54 to 739px, 1.6 from 740px. */
+.scene[data-peeks] { --cover-zoom: 1.32; }
+@media (min-height: 667px) { .scene[data-peeks] { --cover-zoom: 1.54; } }
+@media (min-height: 740px) { .scene[data-peeks] { --cover-zoom: 1.6; } }
+.scene[data-peeks] { --peek-h: calc((290px * var(--s) + var(--face) + 2 * var(--edge)) * var(--cover-zoom)); }
 .stage { position: relative; margin: 0 5px; }   /* the cloth rim stands 5px out */
 /* T-04b desktop (≥ 768px wide): the scene has left the 430px column (globals.css). The spread keeps book proportions —
    two 1 : 1.4 pages, 1.43 : 1 — as large as the screen allows and at most 1000px wide; the bookmark grows by height
@@ -53,10 +67,12 @@
   @media (min-width: 768px) {
     .scene {
       --cover-zoom: 1.2; --cover-lift: -10%; --hint-pull: 0px;   /* the cover is already a 1 : 1.4 page: grow it upward into the room above */
+      --s: 0.2; --face: 8px; --edge: 2px;
       --bm-scale: 1;
       /* Floor 340px: on a very short window the page scrolls rather than the bookmark overlapping the buttons. */
       --book-h: max(340px, min(calc(var(--screen-h) - 198px - var(--bm-room) - var(--exits-row)), calc((min(92vw, 1000px) - 10px) / 1.43)));
     }
+    .scene[data-peeks] { --cover-zoom: 1.2; --cover-lift: calc(-10% + var(--peek-h) * 0.5); --hint-pull: calc(var(--peek-h) * 0.5); }
     .stage { width: calc(var(--book-h) * 1.43); margin: 0 auto; }
     .actions { width: 100%; max-width: 480px; margin: 0 auto; }
   }

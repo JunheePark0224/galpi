@@ -52,7 +52,8 @@ async function walkTheBook(page: Page, mode: "fit" | "scrollOk" | "buttons" = "f
   if (!closed) throw new Error("the closed cover has no box");
   expect(closed.height / closed.width).toBeGreaterThanOrEqual(1.35);              // a normal book, not a tall strip
   expect(closed.height / closed.width).toBeLessThanOrEqual(1.55);
-  if (!scrollOk) expect(closed.width).toBeGreaterThanOrEqual(Math.min(viewport.width, 430) * 0.7); // and big (not on a very short window)
+  // and big (not on a very short window). Short phone browsers (548–620 tall) give some of it to the C-19 bookmark tips.
+  if (!scrollOk) expect(closed.width).toBeGreaterThanOrEqual(Math.min(viewport.width, 430) * (buttons ? 0.6 : 0.7));
   expect(closed.y).toBeGreaterThanOrEqual(52);                                     // below the logo header
   // controller ruling: the hint sits right under the cover, the pair is centred — not pushed toward the bottom of the screen
   const hint = await page.getByText("눌러서 펼치기").boundingBox();

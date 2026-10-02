@@ -1,0 +1,79 @@
+/* C-19 책 속 다섯 책갈피 (DESIGN 3절) — five bookmark tips tucked into the closed book (S-03). Decoration only.
+   Both layers sit in the book (the zoomed, lifted closed book), sized like the cover front; y = 0 is the cover's top edge.
+   Per layout (BookScene.module.css): --s (bookmark scale), --face (page block top), --edge (board). */
+.behind, .over {
+  position: absolute; left: 50%; right: -5px; height: 0; pointer-events: none;
+  /* phone: the front is a 1 : 1.45 box centred on the cover — its top = 50% − (W/2 + 5px) × 1.45 / 2 (W = book width) */
+  top: 50%; margin-top: calc(-36.25% - 3.625px);
+  transition: opacity 260ms ease-out;
+}
+.behind { z-index: 1; }   /* under the cover (z 2) */
+.over { z-index: 3; }     /* over it */
+.behind[data-open], .over[data-open] { opacity: 0; }
+@supports selector(:has(*)) {
+  @media (min-width: 768px) {
+    .behind, .over { top: -5px; margin-top: 0; }
+  }
+}
+
+/* The top of the book, seen a little from above: back board edge, the page block, the front board edge. */
+.backEdge {
+  position: absolute; left: 1px; right: 2px; top: calc(-2 * var(--edge) - var(--face)); height: var(--edge);
+  border-radius: 2px 4px 0 0; background: var(--cloth-edge);
+}
+.pages {
+  position: absolute; left: 3px; right: 4px; top: calc(-1 * var(--edge) - var(--face)); height: var(--face);
+  background:
+    linear-gradient(to bottom, rgba(43, 39, 36, 0.10), transparent 35%, transparent 70%, rgba(43, 39, 36, 0.12)),
+    repeating-linear-gradient(to bottom, var(--paper) 0 0.6px, var(--paper-line) 0.6px 0.9px),
+    var(--paper);
+}
+.frontEdge {
+  position: absolute; left: 0; right: 4px; top: calc(-1 * var(--edge)); height: var(--edge);
+  border-radius: 1px 3px 0 0; background: linear-gradient(to bottom, #8a5a3c, var(--cloth-edge));
+}
+
+/* One bookmark: the slot is the line where its page meets the top of the block (deeper = higher). */
+.slot {
+  position: absolute; left: var(--x); width: 0; height: 0;
+  top: calc(-1 * var(--edge) - var(--d) * var(--face));
+}
+/* The pages in front hide everything below the slot line. --s = tip width / 160 (the bookmark is drawn at 160 and scaled). */
+.clip {
+  position: absolute; bottom: 0; left: calc(-170px * var(--s)); width: calc(340px * var(--s)); height: calc(330px * var(--s));
+  overflow: hidden;
+}
+.tilt { position: absolute; left: 50%; bottom: 0; width: 0; height: 0; rotate: var(--tilt); scale: var(--s); }
+.lift { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+/* The real C-02 frame (BookmarkFrame.module.css: film, frost blur, white edge, hole), without its contents. */
+.bookmark { position: absolute; left: -80px; width: 160px; }
+.film { height: 344px; border-width: 4px; }   /* the 1px white edge, kept about 1px on screen at this scale */
+/* The film is pale on cream paper: a soft rim and drop shade behind it (box-shadow — the film's clip-path would cut its own). */
+.shade {
+  position: absolute; left: 0; right: 0; top: 26px; height: 344px; border-radius: var(--radius-bookmark);
+  box-shadow: 0 0 0 3px rgba(43, 39, 36, 0.20), 0 6px 14px rgba(43, 39, 36, 0.16);
+}
+/* C-02's punched hole, a little larger so it still reads at this scale (it carries the string). */
+.film .hole { top: 4px; width: 14px; height: 14px; margin-left: -7px; box-shadow: inset 0 0 0 2px var(--paper-line); }
+/* The arch window seen through the film: just its colour, soft — no animal, no sky or ground props. */
+.wash {
+  position: absolute; top: 16px; left: 9px; width: 142px; height: 108px;
+  border-radius: 71px 71px 0 0 / 71px 71px 0 0; background: var(--tint); opacity: 0.92;
+  filter: blur(1.2px);
+}
+.cord {
+  position: absolute; left: -160px; top: -400px; width: 320px; height: 600px;
+  overflow: visible; fill: none; stroke: var(--tone); stroke-width: 7.5; stroke-linecap: round;
+}
+.cordShadow { stroke: rgba(43, 39, 36, 0.28); }
+.knot { fill: var(--tone); stroke: none; }
+/* Where it goes into the pages: a soft shade on the bookmark just above the slot, and the dark gap between the pages. */
+.contact {
+  position: absolute; left: 50%; bottom: 0; width: calc(176px * var(--s)); height: calc(32px * var(--s));
+  translate: -50% 0;
+  background: radial-gradient(ellipse 60% 100% at 50% 100%, rgba(43, 39, 36, 0.40), transparent);
+}
+.gap {
+  position: absolute; top: -0.4px; left: calc(-112px * var(--s)); width: calc(224px * var(--s)); height: 0.8px;
+  background: linear-gradient(to right, transparent, rgba(43, 39, 36, 0.55) 15% 85%, transparent);
+}
