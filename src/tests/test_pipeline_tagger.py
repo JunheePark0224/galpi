@@ -247,7 +247,7 @@ def test_only_pass_a_on_a_target_book_is_asked_for_a_new_keyword():
 
 
 @pytest.mark.parametrize("given, kept", [
-    ("엑셀", "엑셀"), ("  <R>  ", "R"), ("투자  \n 철학", "투자 철학"), ("가" * 20, "가" * 12),
+    ("엑셀", "엑셀"), ("  <R>  ", "R"), ("투자  \n 철학", "투자 철학"), ("가" * 12, "가" * 12), ("가" * 13, None), ("가" * 20, None),
     ("", None), ("   ", None), ("<>", None), (None, None), (3, None),
     ("주식", None), (" 주 식 ", None), ("etf·펀드", None),       # already on the list (case / spaces ignored)
     ("돈 관리·투자", None), ("돈관리·투자", None),                 # the topic itself
@@ -269,3 +269,11 @@ def test_definitions_of_rows_with_a_dated_topic_note_reach_the_prompt():
     """Rows like "데이터 분석 (10-02 다시 나눔)" or promote's "통계 (2026-10-05 승인)" belong to the topic before the note."""
     p = system_prompt(VOC, "tag")
     assert "  - 엑셀 — 엑셀로 데이터를 정리" in p and "  - LLM 원리 — LLM·언어 모델이" in p
+
+
+def test_names_the_list_left_out_on_purpose_are_not_candidates():
+    """keyword_vocab.json `folded` / `too_common` names were excluded deliberately — not counted again as candidates."""
+    for name in ("R", "시각화", " r "):
+        got = parse(tag_answer("target", new_keyword=name), "target", "tag", ["SQL"], topic="데이터 분석", excluded=["R", "시각화"])
+        assert got["keyword_candidate"] is None
+    assert parse(tag_answer("target", new_keyword="R"), "target", "tag", ["SQL"], topic="데이터 분석")["keyword_candidate"] == "R"

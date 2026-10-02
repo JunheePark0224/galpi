@@ -20,14 +20,29 @@ def normalize(name: str) -> str:
     return "".join(name.split()).casefold()
 
 
-def clean(value: object, topic: str, keywords) -> str | None:
-    """A candidate name fit to store, or None: `<` `>` removed, spaces collapsed, cut to NAME_MAX characters; empty, the
-    topic itself or a keyword already on the topic's list (spaces and case ignored) gives None."""
+def clean(value: object, topic: str, keywords, excluded=()) -> str | None:
+    """A candidate name fit to store, or None: `<` `>` removed, spaces collapsed. Longer than NAME_MAX characters gives
+    None — never cut, a cut phrase could be a YES24 fragment. Empty, the topic itself, a keyword already on the topic's
+    list or a name the list left out on purpose (`excluded`: folded / too_common, spaces and case ignored) gives None."""
     if not isinstance(value, str):
         return None
-    name = " ".join(value.replace("<", " ").replace(">", " ").split())[:NAME_MAX].strip()
-    taken = {normalize(topic), *(normalize(k) for k in keywords)}
-    return name if name and normalize(name) not in taken else None
+    name = " ".join(value.replace("<", " ").replace(">", " ").split())
+    taken = {normalize(topic), *(normalize(k) for k in [*keywords, *excluded])}
+    return name if name and len(name) <= NAME_MAX and normalize(name) not in taken else None
+
+
+def excluded_names(topic_vocab: dict) -> list[str]:
+    """Names keyword_vocab.json left out of a topic on purpose: merged into another (`folded`) or on too many books
+    (`too_common`)."""
+    return [*topic_vocab.get("folded", {}), *topic_vocab.get("too_common", {})]
+
+
+MD_SPECIAL = "\\*_`[]|"
+
+
+def md(text: str) -> str:
+    """`text` with markdown's special characters escaped (a name in the PR body)."""
+    return "".join("\\" + c if c in MD_SPECIAL else c for c in text)
 
 
 def load_docs(folder: Path) -> list[dict]:
@@ -57,7 +72,7 @@ def section(rows: list[dict]) -> list[str]:
         return []
     ready = [r for r in rows if r["n"] >= PROMOTE_AT]
     others = [r for r in rows if r["n"] < PROMOTE_AT][:OTHERS_MAX]
-    line = lambda r: f"- {r['topic']} › **{r['name']}** {r['n']}권"  # noqa: E731
+    line = lambda r: f"- {md(r['topic'])} › **{md(r['name'])}** {r['n']}권"  # noqa: E731
     return ["### 키워드 후보",
             f"목록에 없는 키워드로 AI·사람이 적은 이름이에요(넣은 🎯 책 기준, 공백·대소문자 무시). {PROMOTE_AT}권 이상이면 키워드로 만들지 "
             "사용자가 정해요 — 승인하면 `python src/backfill_keywords.py promote \"주제:이름\" --pattern … --definition …`.",

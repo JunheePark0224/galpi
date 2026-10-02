@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from pipeline.keyword_candidates import clean, count, load_docs, normalize, section  # noqa: E402
+from pipeline.keyword_candidates import clean, count, excluded_names, load_docs, normalize, section  # noqa: E402
 
 
 def book(isbn, name, topic="데이터 분석", status="picked", entry="target"):
@@ -49,3 +49,15 @@ def test_section_asks_about_five_or_more_first_then_ten_others_by_count():
     assert len(others) == 10 and others[0] == "- 글쓰기 › **이름0** 4권" and "이름11" not in "\n".join(lines)
     assert "promote" in "\n".join(lines)
     assert section([]) == []
+
+
+def test_a_long_name_is_rejected_not_cut_and_excluded_names_are_taken():
+    assert clean("가" * 12, "t", []) == "가" * 12 and clean("가" * 13, "t", []) is None   # a cut phrase could be YES24 text
+    assert clean("시 각 화", "데이터 분석", ["SQL"], excluded=["시각화"]) is None
+    assert excluded_names({"kept": {"SQL": {}}, "folded": {"R": 1}, "too_common": {"시각화": 11}}) == ["R", "시각화"]
+    assert excluded_names({"kept": {}}) == []
+
+
+def test_the_pr_section_escapes_markdown_in_names():
+    lines = section([{"topic": "데이터 분석", "name": "*C_[x]|`y`", "n": 1}])
+    assert r"- 데이터 분석 › **\*C\_\[x\]\|\`y\`** 1권" in lines

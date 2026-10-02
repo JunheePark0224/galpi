@@ -31,6 +31,7 @@ from .agreement_log import MAX_SAMPLE_CHANGED, MIN_SAMPLE, STREAK, below, gradua
 from .candidates import yes24_env
 from .config import load_config
 from .gaps import GENRE_TARGET
+from .keyword_candidates import excluded_names
 from .review_page import TEMPLATE
 from .sample import daily_docs, sample_books, trial_sample
 
@@ -109,11 +110,12 @@ def apply(name: str, batch: str, picked: list[tuple[Path, dict, list[str]]], dow
     if stray:
         raise ReviewError(f"answers for books not on this page: {stray[:5]}")
     kept = {t: v.get("kept", {}) for t, v in vocab.items()}
+    left_out = {t: excluded_names(v) for t, v in vocab.items()}
     total, refused = Counter(), {}
     for path, doc, isbns in picked:
         ok, bad = screened({b["isbn"]: b for b in doc["books"]}, {i: a for i, a in answers.items() if i in isbns})
         refused |= bad
-        new_doc, tally = apply_answers(doc, ok, kept, None if batch == "daily" else set(ok))
+        new_doc, tally = apply_answers(doc, ok, kept, None if batch == "daily" else set(ok), left_out)
         path.write_text(json.dumps(new_doc, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="")
         total += tally
     if batch != "daily":
