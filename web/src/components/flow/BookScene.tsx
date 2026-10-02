@@ -8,6 +8,7 @@ import { coverageNote, firstPageNotices } from "@/lib/flow/summary";
 import { JUST_ONE, REWRITE, YES24_FIND, openYes24Search, understoodOf } from "@/lib/goal/understood";
 import { BOOKMARK_AWAY, BOOKMARK_DOWN, BOOKMARK_RISE } from "@/lib/motion";
 import { Book, RuledPage } from "./Book";
+import { CoverPeeks } from "./CoverPeeks";
 import { FirstPage, FirstPageTitle } from "./FirstPage";
 import styles from "./BookScene.module.css";
 
@@ -79,10 +80,14 @@ export function BookScene({ state, onOpen, onEdit, onNext, onRetry, onReact, onH
       />
     );
 
+  // C-19: five decorative bookmark tips stand out of the closed book (nothing from the draw — no wait, no hint).
+  // Also on F-24 ③: the same old book, opened onto the honest ways out. They fade as the cover opens.
+  const tucked = step === "book" || step === "first" ? <CoverPeeks open={state.opened} /> : null;
+
   return (
-    <div className={styles.scene} data-wide-scene="" data-exits={uncovered ? "" : undefined}>
+    <div className={styles.scene} data-wide-scene="" data-exits={uncovered ? "" : undefined} data-peeks={step === "book" ? "" : undefined} data-clip={tucked ? "" : undefined}>
       <div className={styles.stage}>
-        <Book open={state.opened} onPress={step === "book" ? onOpen : undefined} left={left} right={right} />
+        <Book open={state.opened} onPress={step === "book" ? onOpen : undefined} left={left} right={right} tucked={tucked} />
         {pick && <p className={styles.folio}>{`${state.index + 1} / ${picks.length}`}</p>}
         {pick && (
           <div className={styles.slot}>

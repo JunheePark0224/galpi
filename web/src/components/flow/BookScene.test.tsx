@@ -51,6 +51,46 @@ describe("BookScene", () => {
     expect(h.onOpen).toHaveBeenCalledTimes(1);
   });
 
+  describe("C-19: five bookmark tips tucked into the closed book", () => {
+    const tips = (c: HTMLElement) => c.querySelectorAll("[data-tip]");
+    const layers = (c: HTMLElement) => [...c.querySelectorAll("[data-cover-peeks]")];
+    const closed = (over: Partial<FlowState>): FlowState => ({ ...first, step: "book", opened: false, ...over });
+
+    it.each([
+      ["loading", closed({ status: "loading", draw: null })],
+      ["failed", closed({ status: "error", draw: null })],
+      ["ready", closed({})],
+      ["F-24 ③ (no draw)", closed({
+        ...written(g({ text: "캠핑 장비 고르기", topic: "취업·커리어", keywords: [], matched: false, missing: "캠핑 장비" }), { draw: null }),
+        step: "book", opened: false,
+      })],
+    ])("five tips, hidden from assistive tech, whatever the draw (%s)", (_, state) => {
+      const { container } = render(<BookScene state={state} {...handlers()} />);
+      expect(tips(container)).toHaveLength(5);
+      expect(layers(container).length).toBeGreaterThan(0);
+      for (const layer of layers(container)) {
+        expect(layer).toHaveAttribute("aria-hidden", "true");
+        expect(layer).not.toHaveAttribute("data-open");
+      }
+      expect(screen.getByRole("button", { name: "책 펼치기" })).toBeEnabled();   // the cover stays the one thing to press
+    });
+
+    it("shows nothing of the draw: no titles, no art", () => {
+      const { container } = render(<BookScene state={closed({})} {...handlers()} />);
+      const html = layers(container).map((l) => l.outerHTML).join("");
+      expect(html).not.toContain("책 0");
+      expect(html).not.toContain("/animals/");
+      expect(container.querySelectorAll("[data-cover-peeks] article")).toHaveLength(0);
+    });
+
+    it("fade out once the book is open (S-04), and are gone from S-05 on", () => {
+      const { container, rerender } = render(<BookScene state={first} {...handlers()} />);
+      for (const layer of layers(container)) expect(layer).toHaveAttribute("data-open", "");
+      rerender(<BookScene state={{ ...first, step: "bookmarks", index: 0 }} {...handlers()} />);
+      expect(layers(container)).toHaveLength(0);
+    });
+  });
+
   it("S-04: the title page faces the summary once the book is open", () => {
     render(<BookScene state={{ ...first, entry: "leaf", choices: ["A", "A", "A", "A", "A", "A", "A", "A", "A"] }} {...handlers()} />);
     const heading = screen.getByRole("heading", { name: "당신이 찾는 책" });
