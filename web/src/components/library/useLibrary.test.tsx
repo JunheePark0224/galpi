@@ -8,10 +8,14 @@ const addSavedCount = vi.fn();
 const setSavedCount = vi.fn();
 vi.mock("@/lib/track/client", () => ({ track: (...a: unknown[]) => track(...a) }));
 vi.mock("@/lib/library/client", () => ({ libraryRequest: (...a: unknown[]) => request(...a) }));
+const signedOut = vi.fn();
+const setAmplitudeUser = vi.fn();
 vi.mock("@/lib/account/store", () => ({
   addSavedCount: (...a: unknown[]) => addSavedCount(...a),
   setSavedCount: (...a: unknown[]) => setSavedCount(...a),
+  signedOut: () => signedOut(),
 }));
+vi.mock("@/lib/track/amplitude", () => ({ setAmplitudeUser: (...a: unknown[]) => setAmplitudeUser(...a) }));
 import { useLibrary } from "./useLibrary";
 
 const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false } as const;
@@ -47,6 +51,8 @@ describe("useLibrary (S-09)", () => {
     request.mockResolvedValueOnce({ ok: false, status: 401, body: null });
     const out = renderHook(() => useLibrary());
     await waitFor(() => expect(out.result.current.status).toBe("login"));
+    expect(signedOut).toHaveBeenCalled();                  // the header follows: the session ran out
+    expect(setAmplitudeUser).toHaveBeenCalledWith(null);
     expect(track).not.toHaveBeenCalled();
   });
 
