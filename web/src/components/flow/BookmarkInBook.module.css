@@ -30,7 +30,7 @@
 }
 
 /* T-06 card-flip to the back (C-13). The 3D context only while the film is opaque — never under a blurred film. */
-.flipper { position: relative; transition: transform var(--dur-card-flip) var(--ease-flip); }
+.flipper { position: relative; transition: transform var(--dur-card-flip) var(--ease-flip), translate 160ms ease-out; }
 .flipper[data-3d] { transform-style: preserve-3d; }
 .flipper[data-3d] .face { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 .backFace { position: absolute; inset: 0; transform: rotateY(180deg); }
@@ -46,21 +46,25 @@
 .stage[data-pose="out"] .hit { height: 100%; }
 .hit:focus-visible { outline: 3px solid var(--field-data); outline-offset: -3px; }
 
-/* C-14 paper slip, once per browser, beside the peeking bookmark. Narrow side padding so "책갈피를" stays on one line
-   down to a 320px phone (64px of text room). */
-.hint {
-  position: absolute; top: 34px; left: 0; z-index: 4; width: calc(50% - 72px - var(--space-1)); margin: 0;
-  padding: var(--space-3) var(--space-1) var(--space-2); border-radius: var(--radius-card); background: var(--paper-deep);
-  font-size: 13px; line-height: 1.45; color: var(--ink); word-break: keep-all; pointer-events: none;
+/* Hover cue (10-02, mouse and pen only — phones have no hover and tap as before): hovering the peek lifts the bookmark
+   a few px (translate only, so the pull animation's transform is untouched) and shows a small paper pill left of the
+   peek. Hover never pulls it out. Reduced motion: no lift, the pill just appears. */
+.cue {
+  position: absolute; top: 40px; right: calc(50% + 80px); z-index: 4; width: max-content; max-width: calc(50% - 84px);
+  margin: 0; padding: 2px 10px; border-radius: var(--radius-pill); background: var(--paper-deep);
+  box-shadow: 0 0 0 1px var(--paper-line); font-size: 12px; line-height: 1.6; color: var(--ink-soft);
+  word-break: keep-all; text-align: center; pointer-events: none; opacity: 0;
 }
-.hint::before {
-  content: ""; position: absolute; top: -5px; left: 50%; width: 40px; height: 10px; margin-left: -20px;
-  border-radius: 2px; background: var(--tape); box-shadow: 0 0 0 1px var(--paper-line);
+@media (hover: hover) and (pointer: fine) {
+  .stage[data-pose="in"]:has(.hit:hover) .cue { opacity: 1; }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .cue { transition: opacity 160ms ease-out; }
+  .stage[data-pose="in"] .pull:not([data-anim]):has(> .hit:hover) > .flipper { translate: 0 -6px; }
 }
 
 /* Under the book (CLAUDE.md: never a button on the bookmark itself). */
 .tools { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); margin-top: calc(-1 * var(--space-2)); }
-.tools > :first-child:not(.flip) { align-self: stretch; }
 .flip {
   min-height: var(--touch); padding: 0 var(--space-3); border: 0; background: none;
   font: inherit; font-size: 13px; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer;

@@ -165,28 +165,27 @@ test("S-06 C-16: the S-05 bookmark peeks out of the cover, pulls out, flips to �
   const stage = page.locator("[data-pose]");
   const pull = page.getByRole("button", { name: "책갈피 꺼내기" });
 
-  // In: the very bookmark of S-05, its top quarter above the cover, a 160 × 112 tap area and a one-time slip.
+  // In: the very bookmark of S-05, its top quarter above the cover, a 160 × 112 tap area (the C-14 slip retired 10-02).
   await expect(stage).toHaveAttribute("data-pose", "in");
   await expect(stage.locator("image")).toHaveAttribute("href", `/animals/${artOf(curious[0].props.book_id).animal}.svg`);
   await expect(pull).toHaveAttribute("aria-expanded", "false");
   const tap = (await pull.boundingBox())!;
   expect(tap.width).toBeGreaterThanOrEqual(160);
   expect(tap.height).toBeGreaterThanOrEqual(112);
-  await expect(page.getByText("책갈피를 꺼내 보세요")).toBeVisible();
+  await expect(page.getByText("책갈피를 꺼내 보세요")).toHaveCount(0);
   // Touch is tap only: a finger swipe that starts on the peek scrolls the page (fix round 1).
   expect(await pull.evaluate((el) => getComputedStyle(el).touchAction)).toBe("manipulation");
 
   // Out: in front of the book, the whole bookmark showing, still above the cover's bottom edge.
   await pull.click();
   await expect(pull).toHaveAttribute("aria-expanded", "true");                    // one name, the state says out
-  await expect(page.getByText("책갈피를 꺼내 보세요")).toHaveCount(0);
   await expect(stage.getByRole("article").first()).toBeVisible();              // out, the front reads as a bookmark again
   const mark = (await stage.locator("[data-pull]").boundingBox())!;
   const cover = (await page.locator("[data-pose] > div").last().boundingBox())!;
   expect(mark.y + mark.height).toBeLessThanOrEqual(cover.y + cover.height + 1);
-  // P5 (C-16): out, [내 책갈피에 꽂기] leads and YES24 steps down — one main button (login is on in E2E)
-  await expect(page.getByRole("button", { name: "내 책갈피에 꽂기" })).toHaveAttribute("data-variant", "primary");
-  await expect(page.getByRole("link", { name: "예스24에서 보기 ↗" })).toHaveAttribute("data-variant", "secondary");
+  // 10-02 (C-16b): out or in, YES24 stays the one main button; the only 꽂기 is the pill by the title (login is on in E2E)
+  await expect(page.getByRole("link", { name: "예스24에서 보기 ↗" })).toHaveAttribute("data-variant", "primary");
+  await expect(page.getByRole("button", { name: /꽂기/ })).toHaveCount(1);
 
   // Back: 나온 이유 and its items, 만난 날 today.
   await page.getByRole("button", { name: "뒷면 보기" }).click();
@@ -197,12 +196,11 @@ test("S-06 C-16: the S-05 bookmark peeks out of the cover, pulls out, flips to �
   await expect(page.getByRole("status").filter({ hasText: "책갈피 뒷면" })).toContainText("나온 이유");
   await expect(page.getByRole("button", { name: "앞면 보기" })).toBeVisible();
 
-  // Next book: a new bookmark, in again, no slip; the keyboard pulls it out too.
+  // Next book: a new bookmark, in again; the keyboard pulls it out too.
   await page.getByRole("button", { name: "다음 책" }).click();
   await expect(page.getByText("궁금해요 2 / 2")).toBeVisible();
   await expect(stage).toHaveAttribute("data-pose", "in");
   await expect(stage.locator("image")).toHaveAttribute("href", `/animals/${artOf(curious[1].props.book_id).animal}.svg`);
-  await expect(page.getByText("책갈피를 꺼내 보세요")).toHaveCount(0);
   await pull.focus();
   await page.keyboard.press("Enter");
   await expect(pull).toHaveAttribute("aria-expanded", "true");
@@ -217,7 +215,7 @@ test("S-06 C-16: the S-05 bookmark peeks out of the cover, pulls out, flips to �
 });
 
 for (const width of [320, 360, 412]) {
-  test(`S-06 C-16 at ${width}px: nothing runs off the side, the bookmark stays in the cover, the slip reads`, async ({ page }) => {
+  test(`S-06 C-16 at ${width}px: nothing runs off the side, the bookmark stays in the cover, ‹ › and 🔖 꽂기 fit`, async ({ page }) => {
     await page.setViewportSize({ width, height: 800 });
     const { events } = await recordEvents(page);
     await mockBooks(page);
@@ -226,11 +224,24 @@ for (const width of [320, 360, 412]) {
     await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
     const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(await overflow()).toBeLessThanOrEqual(0);
-    const slip = page.getByText("책갈피를 꺼내 보세요");
-    await expect(slip).toBeVisible();
-    expect(await slip.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);   // no word cut or spilling
     const pull = page.locator("[data-pull]");
     const cover = page.locator("[data-pose] > div").last();
+    // 10-02: ‹ › either side of the cover — 44px, on screen, clear of the cover and of the peeking bookmark
+    const c = (await cover.boundingBox())!;
+    const peek = (await page.getByRole("button", { name: "책갈피 꺼내기" }).boundingBox())!;
+    for (const name of ["앞 책 보기", "뒤 책 보기"]) {
+      const t = (await page.getByRole("button", { name }).boundingBox())!;
+      expect(t.width).toBeGreaterThanOrEqual(44);
+      expect(t.height).toBeGreaterThanOrEqual(44);
+      expect(t.x).toBeGreaterThanOrEqual(0);
+      expect(t.x + t.width).toBeLessThanOrEqual(width);
+      expect(t.x + t.width <= c.x || t.x >= c.x + c.width).toBe(true);           // outside the cover's edges
+      expect(t.y).toBeGreaterThan(peek.y + peek.height);                          // below the peek
+      expect(Math.abs(t.y + t.height / 2 - (c.y + c.height / 2))).toBeLessThanOrEqual(1);   // centred on the cover
+    }
+    const keep = (await page.getByRole("button", { name: "내 책갈피에 꽂기" }).boundingBox())!;
+    expect(keep.height).toBeGreaterThanOrEqual(44);
+    expect(keep.x + keep.width).toBeLessThanOrEqual(width);
     const bottom = async () => {
       const [b, c] = [(await pull.boundingBox())!, (await cover.boundingBox())!];
       return c.y + c.height - (b.y + b.height);
@@ -243,3 +254,27 @@ for (const width of [320, 360, 412]) {
     expect(await overflow()).toBeLessThanOrEqual(0);
   });
 }
+
+test("S-06 hover with a mouse lifts the peek a little and shows 눌러서 꺼내기 — it never pulls it out (10-02)", async ({ page }, info) => {
+  test.skip(info.project.name !== "laptop", "hover is for a mouse");
+  const { events } = await recordEvents(page);
+  await mockBooks(page);
+  await toBookmarks(page);
+  await reactToBookmarks(page, ["궁금해요", "궁금해요", "패스", "패스", "패스"]);
+  await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  const cue = page.getByText("눌러서 꺼내기");
+  const lift = () => page.locator("[data-pull] > div").first().evaluate((el) => getComputedStyle(el).translate);
+  await expect(cue).toHaveCSS("opacity", "0");
+  await page.getByRole("button", { name: "책갈피 꺼내기" }).hover();
+  await expect(cue).toHaveCSS("opacity", "1");
+  await expect.poll(lift).toBe("0px -6px");
+  await expect(page.locator("[data-pose]")).toHaveAttribute("data-pose", "in");
+  await page.mouse.move(5, 5);
+  await expect(cue).toHaveCSS("opacity", "0");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.getByRole("button", { name: "책갈피 꺼내기" }).hover();
+  await expect(cue).toHaveCSS("opacity", "1");
+  expect(await lift()).not.toBe("0px -6px");                                     // reduced motion: no lift
+  expect(named(events, "bookmark_pulled")).toEqual([]);
+});

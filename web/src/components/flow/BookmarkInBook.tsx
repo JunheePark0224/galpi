@@ -1,10 +1,8 @@
 "use client";
-import {
-  useEffect, useImperativeHandle, useRef, useState, type AnimationEvent, type MouseEvent, type PointerEvent, type ReactNode, type Ref,
-} from "react";
+import { useRef, useState, type AnimationEvent, type MouseEvent, type PointerEvent, type ReactNode } from "react";
 import { Bookmark } from "@/components/Bookmark";
 import { BookmarkBack } from "@/components/BookmarkBack";
-import { hasSeenPullHint, markPullHintSeen, metDate } from "@/lib/flow/bookmarkPull";
+import { metDate } from "@/lib/flow/bookmarkPull";
 import type { PickView } from "@/lib/flow/state";
 import { track } from "@/lib/track/client";
 import styles from "./BookmarkInBook.module.css";
@@ -13,7 +11,8 @@ import styles from "./BookmarkInBook.module.css";
 export const PULL_OUT = "책갈피 꺼내기";
 export const FLIP_BACK = "뒷면 보기";
 export const FLIP_FRONT = "앞면 보기";
-export const PULL_HINT = "책갈피를 꺼내 보세요";
+/** The hover cue (mouse and pen only, 10-02): hovering lifts the bookmark a little — it never pulls it out. */
+export const PULL_CUE = "눌러서 꺼내기";
 /** Read out (role="status") when the bookmark turns over — the visible face changes without focus moving. */
 export const SAID_FRONT = "책갈피 앞면";
 export const saidBack = (label: string, items: readonly string[], met: string) =>
@@ -22,39 +21,26 @@ export const saidBack = (label: string, items: readonly string[], met: string) =
 const DRAG_PX = 24;
 
 type Pose = "in" | "out";
-/**
- * keep: the [내 책갈피에 꽂기] block (P5), shown under the book while the bookmark is out. startOut: open with the bookmark
- * already out — the page came back from a login for this book (F-12). onOutChange: tells S-06 which button leads.
- */
-/** What S-06 can ask of the bookmark from outside — the [책갈피 꺼내기] next to the title (10-02). */
-export interface BookmarkHandle { toggle: () => void }
 
-interface Props {
-  pick: PickView; position: number; children: ReactNode;
-  keep?: ReactNode; startOut?: boolean; onOutChange?: (out: boolean) => void;
-  handle?: Ref<BookmarkHandle>;
-}
+interface Props { pick: PickView; position: number; children: ReactNode }
 
 /**
  * C-16 on S-06: the bookmark this book was met with on S-05 (`pick.art`) sticks out of the cover by its top quarter (string
  * + the top of the arch window). Tap it (or drag it up with a mouse or pen) → `bookmark-pull` lifts it out and lays it in
  * front of the book; while it lies over the cover its film is opaque (T-03 exception). Tap again → back in. Out, it can be
- * turned over to its back (C-13: 나온 이유 + 만난 날), and kept with [내 책갈피에 꽂기] (P5, `keep`).
- * Touch is tap only: a finger swipe on the peek scrolls the page like anywhere else.
+ * turned over to its back (C-13: 나온 이유 + 만난 날). Keeping it is the [🔖 꽂기] next to the title (C-16b, 10-02) —
+ * pulling out is not needed first. With a mouse or pen, hovering the peek lifts it a few px and shows "눌러서 꺼내기"
+ * (CSS only). Touch is tap only: a finger swipe on the peek scrolls the page like anywhere else.
  */
-export function BookmarkInBook({ pick, position, children, keep, startOut = false, onOutChange, handle }: Props) {
+export function BookmarkInBook({ pick, position, children }: Props) {
   const { card, kind, art, reason } = pick;
-  const [pose, setPose] = useState<Pose>(startOut ? "out" : "in");
+  const [pose, setPose] = useState<Pose>("in");
   const [moving, setMoving] = useState(false);
   const [flipped, setFlipped] = useState(false);
   const [said, setSaid] = useState("");
-  const [hint, setHint] = useState(() => !hasSeenPullHint());
   const [met] = useState(() => metDate(new Date()));
   const dragFrom = useRef<number | null>(null);
   const dragged = useRef(false);
-
-  // Shown once per browser: remembered as soon as it is on screen.
-  useEffect(() => { if (hint) markPullHintSeen(); }, [hint]);
 
   const toggle = () => {
     const next: Pose = pose === "in" ? "out" : "in";
@@ -62,12 +48,8 @@ export function BookmarkInBook({ pick, position, children, keep, startOut = fals
     setMoving(true);
     setFlipped(false);
     setSaid("");
-    setHint(false);
-    onOutChange?.(next === "out");
     if (next === "out") track("bookmark_pulled", { book_id: card.id, position, pick_type: kind });
   };
-
-  useImperativeHandle(handle, () => ({ toggle }));
 
   const flip = () => {
     const next = !flipped;
@@ -131,17 +113,16 @@ export function BookmarkInBook({ pick, position, children, keep, startOut = fals
             )}
           </div>
           <button
-            type="button" className={styles.hit} aria-expanded={out} aria-label={PULL_OUT}
+            type="button" className={styles.hit} aria-expanded={out} aria-label={PULL_OUT} data-part="peek"
             onClick={onClick} onKeyDown={onKeyDown} onPointerDown={onPointerDown} onPointerMove={onPointerMove}
             onPointerUp={onPointerUp} onPointerCancel={onPointerCancel} onLostPointerCapture={() => { dragFrom.current = null; }}
           />
         </div>
         <div className={styles.book}>{children}</div>
-        {hint && <p className={styles.hint}>{PULL_HINT}</p>}
+        {!out && <span className={styles.cue} aria-hidden="true">{PULL_CUE}</span>}
       </div>
       {out && (
         <div className={styles.tools}>
-          {keep}
           <button type="button" className={styles.flip} onClick={flip}>{flipped ? FLIP_FRONT : FLIP_BACK}</button>
           <span className={styles.said} role="status">{said}</span>
         </div>

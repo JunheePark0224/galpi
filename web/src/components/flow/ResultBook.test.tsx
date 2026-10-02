@@ -1,15 +1,20 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { emptyDetail, type BookDetail } from "@/lib/books/detail";
 import { loadDetail } from "@/lib/books/detailClient";
-import { forgetPullHintForTests, metDate, PULL_HINT_KEY } from "@/lib/flow/bookmarkPull";
+import { loadAccount, setKeepState } from "@/lib/account/store";
+import { metDate } from "@/lib/flow/bookmarkPull";
+import { RESULT_GUIDE_KEY, resultGuide } from "@/lib/flow/firstGuide";
 import type { PickView } from "@/lib/flow/state";
 import { track } from "@/lib/track/client";
-import { FLIP_BACK, FLIP_FRONT, PULL_HINT, PULL_OUT, SAID_FRONT } from "./BookmarkInBook";
+import { FLIP_BACK, FLIP_FRONT, PULL_CUE, PULL_OUT, SAID_FRONT } from "./BookmarkInBook";
+import { RESULT_GUIDE_KEEP, RESULT_GUIDE_PULL, RESULT_GUIDE_TURN } from "./FirstGuide";
 import { INTRO_HEADING, LAST_BOOK, NEXT_BOOK, NO_INTRO, ResultBook } from "./ResultBook";
 
 vi.mock("@/lib/track/client", () => ({ track: vi.fn() }));
 vi.mock("@/lib/books/detailClient", () => ({ loadDetail: vi.fn() }));
+const pressKeep = vi.fn();
+vi.mock("@/lib/library/keep", () => ({ pressKeep: (...a: unknown[]) => pressKeep(...a) }));
 
 const ISBN = "9790000000001";
 const LONG = `${"가".repeat(80)}. ${"나".repeat(60)}. 셋째 문장.`;       // folds after the second sentence (120+ chars)
@@ -33,7 +38,7 @@ describe("ResultBook (S-06, C-11)", () => {
   afterEach(() => {
     vi.clearAllMocks();
     window.localStorage.clear();
-    forgetPullHintForTests();
+    resultGuide.forgetForTests();
   });
 
   it("shows the big cover, title, rating · price · pages and a folded YES24 intro — no 나온 이유 line (10-01)", async () => {
@@ -149,7 +154,7 @@ describe("ResultBook — the bookmark in the book (C-16)", () => {
     vi.clearAllMocks();
     vi.useRealTimers();
     window.localStorage.clear();
-    forgetPullHintForTests();
+    resultGuide.forgetForTests();
   });
 
   const stage = () => document.querySelector("[data-pose]") as HTMLElement;
@@ -293,43 +298,100 @@ describe("ResultBook — the bookmark in the book (C-16)", () => {
     expect(stage()).toHaveAttribute("data-pose", "in");
   });
 
-  it("shows the paper slip hint only the first time in this browser, and drops it once pulled", () => {
+  it("has no C-14 slip any more (retired for the C-21 guide), only a hover cue that is not read out", () => {
     show(DETAIL);
-    expect(screen.getByText(PULL_HINT)).toBeInTheDocument();
-    expect(window.localStorage.getItem(PULL_HINT_KEY)).toBe("1");
+    expect(screen.queryByText("책갈피를 꺼내 보세요")).toBeNull();
+    expect(screen.getByText(PULL_CUE)).toHaveAttribute("aria-hidden", "true");     // the button's own name says it
     fireEvent.click(pullButton());
-    expect(screen.queryByText(PULL_HINT)).toBeNull();
+    expect(screen.queryByText(PULL_CUE)).toBeNull();                              // out: nothing to pull
   });
 
-  it("does not show the hint again for the next book", () => {
-    window.localStorage.setItem(PULL_HINT_KEY, "1");
-    show(DETAIL);
-    expect(screen.queryByText(PULL_HINT)).toBeNull();
-  });
-
-  it("keeps [예스24에서 보기] the one primary button, pulled or not — no keep button before P5", async () => {
+  it("keeps [예스24에서 보기] the one primary button, pulled or not — and no 꽂기 while nobody has answered who is here", async () => {
     show(DETAIL);
     const link = await screen.findByRole("link", { name: "예스24에서 보기 ↗" });
     expect(link).toHaveAttribute("data-variant", "primary");
     fireEvent.click(pullButton());
     expect(link).toHaveAttribute("data-variant", "primary");
-    expect(screen.queryByText(/내 책갈피에 꽂기|로그인하면/)).toBeNull();
-  });
-
-  it("a [책갈피 꺼내기] next to the title pulls it out too (E-27 once), and reads [책갈피 넣기] while it is out", () => {
-    show(DETAIL, 1, 2);
-    const shortcut = screen.getByTestId("title-pull");
-    expect(shortcut).toHaveTextContent("책갈피 꺼내기");
-    expect(shortcut).toHaveAttribute("aria-hidden", "true");          // screen readers already have the bookmark's own button
-    expect(shortcut).toHaveAttribute("tabindex", "-1");
-    fireEvent.click(shortcut);
-    expect(stage()).toHaveAttribute("data-pose", "out");
-    expect(pullButton()).toHaveAttribute("aria-expanded", "true");
-    expect(shortcut).toHaveTextContent("책갈피 넣기");
-    expect(vi.mocked(track).mock.calls.filter(([name]) => name === "bookmark_pulled")).toHaveLength(1);
-    fireEvent.click(shortcut);
-    expect(stage()).toHaveAttribute("data-pose", "in");
-    expect(shortcut).toHaveTextContent("책갈피 꺼내기");
+    expect(screen.queryByText(/꽂기|로그인하면/)).toBeNull();
+    expect(screen.queryByTestId("title-pull")).toBeNull();                        // the old [책갈피 꺼내기] pill is gone (10-02)
   });
 });
 
+describe("ResultBook — [🔖 꽂기] and the S-06 guide (10-02, C-16b · C-21)", () => {
+  beforeAll(async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => ({ enabled: true, loggedIn: true, id: "u1", count: 0 }) }));
+    await act(async () => { await loadAccount(true); });
+  });
+  afterEach(() => {
+    vi.clearAllMocks();
+    window.localStorage.clear();
+    resultGuide.forgetForTests();
+    act(() => setKeepState(ISBN, null));
+  });
+
+  const stage = () => document.querySelector("[data-pose]") as HTMLElement;
+  const seen = () => window.localStorage.setItem(RESULT_GUIDE_KEY, "1");
+  const guide = () => screen.queryByRole("dialog", { name: "궁금해요 책 보는 법" });
+  const pullButton = () => screen.getByRole("button", { name: PULL_OUT });
+
+  it("shows [🔖 꽂기] next to the title before any pull; one tap keeps, with the bookmark still in (no E-27)", async () => {
+    seen();
+    show(DETAIL);
+    const keep = await screen.findByRole("button", { name: "내 책갈피에 꽂기" });
+    expect(keep).toHaveTextContent("🔖 꽂기");
+    expect(keep.closest("div")?.querySelector("h1")).toHaveTextContent("여름의 우편함");   // in the title row
+    fireEvent.click(keep);
+    expect(pressKeep).toHaveBeenCalledWith(
+      { isbn: ISBN, art: pick.art, reason: pick.reason, metOn: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/) }, true);
+    expect(stage()).toHaveAttribute("data-pose", "in");
+    expect(track).not.toHaveBeenCalledWith("bookmark_pulled", expect.anything());
+    expect(screen.getByRole("link", { name: "예스24에서 보기 ↗" })).toHaveAttribute("data-variant", "primary");
+  });
+
+  it("has one 꽂기 only — none under the book when it is pulled out — and YES24 stays the main button", async () => {
+    seen();
+    show(DETAIL);
+    await screen.findByRole("button", { name: "내 책갈피에 꽂기" });
+    fireEvent.click(pullButton());
+    expect(screen.getAllByRole("button", { name: /꽂기/ })).toHaveLength(1);
+    expect(screen.getByRole("link", { name: "예스24에서 보기 ↗" })).toHaveAttribute("data-variant", "primary");
+  });
+
+  it("turns into 꽂았어요 ✓ with a way to 내 책갈피 once kept", async () => {
+    seen();
+    show(DETAIL);
+    await screen.findByRole("button", { name: "내 책갈피에 꽂기" });
+    act(() => setKeepState(ISBN, "saved"));
+    expect(screen.getByRole("status")).toHaveTextContent("꽂았어요 ✓");
+    expect(screen.getByRole("link", { name: "내 책갈피 보기" })).toHaveAttribute("href", "/library");
+    expect(screen.queryByRole("button", { name: "내 책갈피에 꽂기" })).toBeNull();
+  });
+
+  it("explains the first S-06 book once: ① the peek, ② ‹ ›, ③ 꽂기, focus on [알겠어요]; remembered when closed", async () => {
+    vi.mocked(loadDetail).mockResolvedValue(DETAIL);
+    const { rerender } = render(<ResultBook pick={pick} position={1} total={2} onNext={vi.fn()} onPrev={vi.fn()} />);
+    const dialog = await screen.findByRole("dialog", { name: "궁금해요 책 보는 법" }, { timeout: 5000 });
+    expect(within(dialog).getByText(`① ${RESULT_GUIDE_PULL}`)).toBeInTheDocument();
+    expect(within(dialog).getByText(`② ${RESULT_GUIDE_TURN}`)).toBeInTheDocument();
+    expect(within(dialog).getByText(`③ ${RESULT_GUIDE_KEEP}`)).toBeInTheDocument();
+    expect(within(dialog).getByRole("button", { name: "알겠어요" })).toHaveFocus();
+    fireEvent.click(within(dialog).getByRole("button", { name: "알겠어요" }));
+    expect(guide()).toBeNull();
+    expect(window.localStorage.getItem(RESULT_GUIDE_KEY)).toBe("1");
+
+    const next: PickView = { ...pick, card: { ...pick.card, id: "9790000000002", title: "겨울의 우체국" } };
+    rerender(<ResultBook key="next" pick={next} position={2} total={2} onNext={vi.fn()} onPrev={vi.fn()} />);
+    await new Promise((r) => setTimeout(r, 600));
+    expect(guide()).toBeNull();
+  });
+
+  it("with one book there are no arrows: two steps, ① the peek and ② 꽂기; Escape closes", async () => {
+    vi.mocked(loadDetail).mockResolvedValue(DETAIL);
+    render(<ResultBook pick={pick} position={1} total={1} onNext={vi.fn()} onPrev={vi.fn()} />);
+    const dialog = await screen.findByRole("dialog", { name: "궁금해요 책 보는 법" }, { timeout: 5000 });
+    expect(within(dialog).getByText(`② ${RESULT_GUIDE_KEEP}`)).toBeInTheDocument();
+    expect(within(dialog).queryByText(new RegExp(RESULT_GUIDE_TURN))).toBeNull();
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(guide()).toBeNull();
+  });
+});
