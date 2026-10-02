@@ -123,6 +123,12 @@ def build(spec: list[str], detail: Path = DETAIL) -> Path:
     return path
 
 
+def _write(path: Path, data: object) -> None:
+    """JSON with LF line ends (the repo's), whatever the OS."""
+    with path.open("w", encoding="utf-8", newline="\n") as f:
+        f.write(json.dumps(data, ensure_ascii=False, indent=1) + "\n")
+
+
 def apply(answers_path: Path) -> int:
     choices = {str(k): list(v) for k, v in json.loads(answers_path.read_text(encoding="utf-8"))["answers"].items()}
     vocab = json.loads((PROCESSED / "keyword_vocab.json").read_text(encoding="utf-8"))
@@ -131,7 +137,7 @@ def apply(answers_path: Path) -> int:
     base = PROCESSED / "books_v1.json"
     rows, changed = apply_choices(json.loads(base.read_text(encoding="utf-8")), choices, allowed)
     if changed:
-        base.write_text(json.dumps(rows, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        _write(base, rows)
     touched |= changed
     for path in sorted((PROCESSED / "additions").glob("*.json")):
         if path.name.endswith("-ai2.json"):
@@ -139,7 +145,7 @@ def apply(answers_path: Path) -> int:
         doc = json.loads(path.read_text(encoding="utf-8"))
         books, changed = apply_choices(doc["books"], choices, allowed)
         if changed:
-            path.write_text(json.dumps({**doc, "books": books}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+            _write(path, {**doc, "books": books})
         touched |= changed
     missing = set(choices) - touched
     print(f"keywords added to {len(touched)} books" + (f" · not found or already there: {sorted(missing)}" if missing else ""))
