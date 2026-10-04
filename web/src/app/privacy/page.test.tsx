@@ -3,29 +3,28 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CONTACT_PENDING } from "@/lib/privacy";
 import PrivacyPage from "./page";
 
+const ACTIONS = "누른 버튼과 누른 시각, 질문마다 고른 답(둘 중 하나 또는 \"갈피를 못 잡겠어요\")과 답하는 데 걸린 시간, 이전 질문으로 되돌린 것, 고른 길(평소/도전, 이야기/배우기), 본 책갈피, 궁금해요/패스, 몇 번째 뽑기인지";
+
 describe("/privacy (S-10)", () => {
   beforeEach(() => localStorage.clear());
   afterEach(() => vi.unstubAllEnvs());
 
-  it("shows the title, the date and the nine collected items", () => {
+  it("shows the title, the date and the nine collected items (v2: no written goal)", () => {
     render(<PrivacyPage />);
     expect(screen.getByRole("heading", { level: 1, name: "개인정보 처리방침" })).toBeInTheDocument();
-    expect(screen.getByText(/2026-10-02/)).toBeInTheDocument();
+    expect(screen.getByText(/2026-10-04/)).toBeInTheDocument();
     expect(screen.getByText("갈피는 이름·전화번호를 받지 않아요.")).toBeInTheDocument();
     expect(screen.getByText(/이메일·닉네임은 로그인할 때 로그인 확인용으로 로그인 서비스에만 남고, 갈피는 쓰지 않아요\./)).toBeInTheDocument();
     const rows = within(screen.getByRole("table")).getAllByRole("row");
-    expect(rows).toHaveLength(11); // header + 10 (P5: login, Google email, 내 책갈피; F-26: 갈피 우체통)
+    expect(rows).toHaveLength(10); // header + 9 (v2: the 🎯 written-goal row is gone)
     expect(screen.getByRole("columnheader", { name: "모으는 것" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "왜" })).toBeInTheDocument();
-    expect(screen.getByText("누른 버튼과 누른 시각, 고른 입구(🎯/🍃), 본 책갈피, 궁금해요/패스, 밸런스 게임 답과 답하는 데 걸린 시간, 고친 답, 몇 번째 뽑기인지")).toBeInTheDocument();
+    expect(screen.getByText(ACTIONS)).toBeInTheDocument();
     expect(screen.getByText("기기 종류(휴대폰/컴퓨터), 앱 안 브라우저 여부, 들어온 곳(이전 페이지 주소), 화면 버전")).toBeInTheDocument();
-    expect(screen.getByRole("cell", { name: /무엇을 알고 싶어요/ }))
-      .toHaveTextContent("🎯 \"무엇을 알고 싶어요\" 칸에 적은 글 (최대 30자, 갈피의 데이터베이스에만 저장, 주제를 찾을 때 Anthropic에 보내요) — 그 글에서 찾은 주제·키워드는 Amplitude에도 함께 보내요");
+    expect(screen.queryByRole("cell", { name: /무엇을 알고 싶어요/ })).toBeNull();
     expect(screen.getByText("같은 사람이 다시 왔는지 세기 위해")).toBeInTheDocument();
     expect(screen.getByText("추천이 잘 맞는지 분석하기 위해")).toBeInTheDocument();
     expect(screen.getByText("화면이 잘 동작하는지 확인하기 위해")).toBeInTheDocument();
-    expect(screen.getByText(/사람들이 찾는 주제를 알고 책을 늘리기 위해/)).toBeInTheDocument();
-    expect(screen.getByText("이름·연락처는 적지 마세요")).toBeInTheDocument();
   });
 
   it("lists what Amplitude collects on its own and the sampled screen recording with masked inputs", () => {
@@ -52,34 +51,14 @@ describe("/privacy (S-10)", () => {
     expect(screen.getByText(/새로 전달하는 곳이 생기면 이 페이지에 먼저 적어요/)).toBeInTheDocument();
   });
 
-  it("says the written goal stays in Galpi's database and is not sent to Amplitude (taxonomy 6-3)", () => {
+  it("says no written goal is taken and nothing goes to Anthropic any more, and what happens to old notes (v2, taxonomy 6-3f)", () => {
     render(<PrivacyPage />);
-    const onlyHere = screen.getByText("다만 🎯 \"무엇을 알고 싶어요\" 칸에 적은 글은 Amplitude에 보내지 않고, 갈피의 데이터베이스(Supabase)에만 저장해요.");
-    expect(onlyHere.tagName).toBe("STRONG");
-    expect(onlyHere.closest("section")).toHaveTextContent(/위 기록은 분석 서비스 Amplitude\(서버는 미국에 있어요\)에도 보내요\. 다만/);
-    expect(screen.getByText("갈피의 데이터베이스에만 저장").tagName).toBe("STRONG");
-  });
-
-  it("names Anthropic as where the written goal goes for sorting, and only that text (P4, taxonomy 6-2)", () => {
-    render(<PrivacyPage />);
-    const sent = screen.getByText(/에 적은 글은 우리 주제·키워드 중 어디에 맞는지 찾으려고 Anthropic\(AI 서비스 Claude, 서버는 미국에 있어요\)에 보내요\.$/);
-    expect(sent.tagName).toBe("STRONG");
-    const section = sent.closest("section");
-    expect(section).toHaveTextContent("보내는 것은 그 글(최대 30자)뿐이고, 익명 번호나 다른 기록은 함께 보내지 않아요. 예시 칩의 말을 그대로 내면 Anthropic에 보내지 않아요.");
-    expect(screen.queryByText(/직접 쓰기/)).toBeNull();   // 입력 B: no [직접 쓰기] control any more
-    expect(section).toHaveTextContent("Anthropic은 API로 받은 글을 AI 학습에 쓰지 않고, 30일 안에 지운다고 밝히고 있어요");
-    expect(section).toHaveTextContent("이 밖의 곳에는 주지 않아요.");
-    expect(screen.getByRole("cell", { name: /주제를 찾을 때 Anthropic에 보내요/ })).toBeInTheDocument();
-  });
-
-  it("says the YES24 search link sends only the short missing phrase, as a search word (F-24)", () => {
-    render(<PrivacyPage />);
-    const yes24 = screen.getByText("첫 장에서 [예스24에서 찾기]를 누르면, 그 글에서 찾은 짧은 말(예: '캠핑 장비')만 검색어로 예스24에 보내요.");
-    expect(yes24.tagName).toBe("STRONG");
-    expect(yes24.closest("p")).toHaveTextContent("글이 짧으면 그 말이 글과 같을 수 있어요. 익명 번호는 보내지 않아요.");
-    expect(yes24.closest("p")).not.toHaveTextContent("적은 글 전체");   // not guaranteed: a short note can be the phrase itself
-    expect(screen.getByRole("cell", { name: /무엇을 알고 싶어요/ }))
-      .toHaveTextContent("갈피에 아직 없는 걸 찾았다면 그걸 가리키는 짧은 말도 데이터베이스에만 저장해요");
+    expect(screen.queryByText(/Anthropic에 보내요/)).toBeNull();
+    expect(screen.queryByText(/예스24에서 찾기/)).toBeNull();
+    const old = screen.getByText("이제 갈피는 직접 쓴 목표 글을 받지 않고, 어떤 글도 AI 서비스(Anthropic)에 보내지 않아요.");
+    expect(old.tagName).toBe("STRONG");
+    expect(old.closest("p")).toHaveTextContent("예전 화면의 🎯 \"무엇을 알고 싶어요\" 칸에 적은 글은 갈피의 데이터베이스에만 남아 있다가, 수집일로부터 1년이 지나면 다른 기록과 함께 지워져요.");
+    expect(screen.getByText(/이 밖의 곳에는 주지 않아요\./)).toBeInTheDocument();
   });
 
   it("says Amplitude records are deleted together with the rest on request", () => {
@@ -151,7 +130,7 @@ describe("/privacy (S-10)", () => {
 
   it("says the letter is not sent to Amplitude and the notice email carries only the arrival time (F-26)", () => {
     render(<PrivacyPage />);
-    const only = screen.getByText("갈피 우체통에 적은 글도 Amplitude에 보내지 않고, 갈피의 데이터베이스(Supabase)에만 저장해요.");
+    const only = screen.getByText("갈피 우체통에 적은 글은 Amplitude에 보내지 않고, 갈피의 데이터베이스(Supabase)에만 저장해요.");
     expect(only.tagName).toBe("STRONG");
     const p = only.closest("p");
     expect(p).toHaveTextContent("글이 도착하면 운영자에게 알림 메일이 가요(메일 발송 서비스 Resend — 서버는 해외에 있을 수 있어요).");

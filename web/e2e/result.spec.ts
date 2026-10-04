@@ -1,5 +1,6 @@
 import { expect, type Page } from "@playwright/test";
-import { named, reactToBookmarks, recordEvents, specMismatches, test, type Sent } from "./helpers";
+import { SQL_PATH } from "../src/lib/paths/__fixtures__/paths";
+import { answerPath, named, reactToBookmarks, recordEvents, specMismatches, START, test, toBookmarks as openBookmarks, type Sent } from "./helpers";
 
 // S-06 with a mocked /api/books/<isbn> (E2E has no YES24 key): synthetic text, never real YES24 text.
 test.use({ reducedMotion: "reduce" });
@@ -22,19 +23,10 @@ async function mockBooks(page: Page): Promise<string[]> {
   return asked;
 }
 
-async function toBookmarks(page: Page) {
-  await page.goto("/");
-  await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
-  await page.getByRole("button", { name: "데이터 분석", exact: true }).click();
-  await page.getByRole("button", { name: "책 펼치기" }).click();
-  await page.getByRole("button", { name: "책 펼치기" }).click();
-  await page.getByRole("button", { name: "다음 장" }).click();
-}
-
 test("S-06 shows each 궁금해요 book with YES24 facts, folds the intro, links out (E-09·E-10·E-23·E-18)", async ({ page }) => {
   const { events } = await recordEvents(page);
   const asked = await mockBooks(page);
-  await toBookmarks(page);
+  await openBookmarks(page);
   await reactToBookmarks(page, ["궁금해요", "패스", "궁금해요", "패스", "패스"]);
 
   await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
@@ -70,7 +62,7 @@ test("S-06 shows each 궁금해요 book with YES24 facts, folds the intro, links
 test("S-06 survives a reload on the second book without sending its view again", async ({ page }) => {
   const { events } = await recordEvents(page);
   await mockBooks(page);
-  await toBookmarks(page);
+  await openBookmarks(page);
   await reactToBookmarks(page, ["궁금해요", "궁금해요", "패스", "패스", "패스"]);
   await page.getByRole("button", { name: "다음 책" }).click();
   await expect(page.getByText("궁금해요 2 / 2")).toBeVisible();
@@ -86,7 +78,7 @@ test("S-06 survives a reload on the second book without sending its view again",
 test("S-06 ‹ › turn back to a book already seen and on again, each book's view sent once (10-02)", async ({ page }) => {
   const { events } = await recordEvents(page);
   await mockBooks(page);
-  await toBookmarks(page);
+  await openBookmarks(page);
   await reactToBookmarks(page, ["궁금해요", "궁금해요", "패스", "패스", "패스"]);
   await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
   await expect(page.getByRole("button", { name: "앞 책 보기" })).toBeDisabled();
@@ -107,12 +99,8 @@ test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, 
   const { events } = await recordEvents(page);
   await mockBooks(page);
   await page.goto("/");
-  await page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ }).click();
-  for (let q = 1; q <= 9; q++) {
-    await expect(page.getByText(`${q} / 9`)).toBeVisible();
-    await page.waitForTimeout(300);                                          // BalanceGame's 250 ms tap guard
-    await page.locator('[data-side="left"]').click();
-  }
+  await page.getByRole("button", { name: START }).click();
+  await answerPath(page, SQL_PATH);
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await page.getByRole("button", { name: "다음 장" }).click();
   await reactToBookmarks(page, ["패스", "패스", "패스", "패스", "패스"]);
@@ -121,7 +109,7 @@ test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, 
   await page.getByRole("button", { name: "다시 뽑기" }).click();
   await expect(page.getByText("눌러서 펼치기")).toBeVisible();                                   // S-03 again
   await page.getByRole("button", { name: "책 펼치기" }).click();
-  await expect(page.getByRole("button", { name: "한 번 고치기" })).toBeVisible();                // a new round's one edit
+  await expect(page.getByRole("button", { name: "질문으로 돌아가기" })).toBeVisible();          // the way back stays on a new round
   await page.getByRole("button", { name: "다음 장" }).click();
   await reactToBookmarks(page, ["궁금해요", "패스", "패스", "패스", "패스"]);
   await expect(page.getByText("궁금해요 1 / 1")).toBeVisible();
@@ -133,14 +121,14 @@ test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, 
   expect(first).toHaveLength(5);
   expect(second).toHaveLength(5);
   expect(second.some((id) => first.includes(id))).toBe(false);                  // seen books stay out
-  expect(named(events, "redraw_clicked").map((e) => [e.props, e.common.round, e.common.entry])).toEqual([[{ curious_count: 0 }, 1, "leaf"]]);
+  expect(named(events, "redraw_clicked").map((e) => [e.props, e.common.round, e.common.entry])).toEqual([[{ curious_count: 0 }, 1, "target"]]);
   expect(named(events, "book_opened").map((e) => e.common.round)).toEqual([1, 2]);
-  expect(named(events, "balance_answered")).toHaveLength(9);                    // the answers were not asked again
+  expect(named(events, "question_answered")).toHaveLength(11);                // the answers were not asked again
   expect(named(events, "result_viewed")[0]).toMatchObject({ props: { curious_count: 1 }, common: { round: 2 } });
   expect(specMismatches(events)).toEqual([]);
 });
 
-/** Reacts 궁금해요 to the first two recommended bookmarks (their back says 나온 이유), 패스 to the rest. */
+/** Reacts 궁금해요 to the first two recommended bookmarks (their back says 나온 이유 or 이 책은), 패스 to the rest. */
 async function curiousAboutTwoRecommended(page: Page, events: Sent[]) {
   let curious = 0;
   for (let i = 1; i <= 5; i++) {
@@ -156,7 +144,7 @@ async function curiousAboutTwoRecommended(page: Page, events: Sent[]) {
 test("S-06 C-16: the S-05 bookmark peeks out of the cover, pulls out, flips to 나온 이유, changes with [다음 책] (E-27·E-28)", async ({ page }) => {
   const { events } = await recordEvents(page);
   await mockBooks(page);
-  await toBookmarks(page);
+  await openBookmarks(page);
   await curiousAboutTwoRecommended(page, events);
   await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
 
@@ -190,10 +178,10 @@ test("S-06 C-16: the S-05 bookmark peeks out of the cover, pulls out, flips to �
   // Back: 나온 이유 and its items, 만난 날 today.
   await page.getByRole("button", { name: "뒷면 보기" }).click();
   const back = page.getByRole("article", { name: /책갈피 뒷면$/ });
-  await expect(back).toContainText("나온 이유");
+  await expect(back).toContainText(/나온 이유|이 책은/);
   await expect(back).toContainText("만난 날");
   await expect(back.getByRole("listitem").first()).toBeVisible();
-  await expect(page.getByRole("status").filter({ hasText: "책갈피 뒷면" })).toContainText("나온 이유");
+  await expect(page.getByRole("status").filter({ hasText: "책갈피 뒷면" })).toContainText(/나온 이유|이 책은/);
   await expect(page.getByRole("button", { name: "앞면 보기" })).toBeVisible();
 
   // Next book: a new bookmark, in again; the keyboard pulls it out too.
@@ -219,7 +207,7 @@ for (const width of [320, 360, 412]) {
     await page.setViewportSize({ width, height: 800 });
     const { events } = await recordEvents(page);
     await mockBooks(page);
-    await toBookmarks(page);
+    await openBookmarks(page);
     await curiousAboutTwoRecommended(page, events);
     await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
     const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -259,7 +247,7 @@ test("S-06 hover with a mouse lifts the peek a little and shows 눌러서 꺼내
   test.skip(info.project.name !== "laptop", "hover is for a mouse");
   const { events } = await recordEvents(page);
   await mockBooks(page);
-  await toBookmarks(page);
+  await openBookmarks(page);
   await reactToBookmarks(page, ["궁금해요", "궁금해요", "패스", "패스", "패스"]);
   await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
   await page.emulateMedia({ reducedMotion: "no-preference" });

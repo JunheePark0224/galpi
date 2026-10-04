@@ -8,7 +8,7 @@
      header 52 + main padding 8 + room above 112 + gap 16 + buttons 44 = 232, plus 20px of air below the buttons = 252.
      On a taller screen the footer (52) fits too: its share fades in from 560px to 612px so the book never jumps. The 270px
      floor still holds the bookmark card (it reaches 264px into the book at scale 1). --screen-h is svh (tokens.css). */
-  --exits-row: 0px;   /* F-24 ③: a second button row (44 + gap 12) comes out of the book (floor too: ③ has no bookmark to hold) */
+  --exits-row: 0px;   /* kept at 0: the layout math below still reads it (F-24 ③ removed, v2) */
   --book-h: clamp(calc(270px - var(--exits-row)), calc(var(--screen-h) - 252px - var(--exits-row) - clamp(0px, calc(var(--screen-h) - 560px), 52px)), 420px);
   --bm-scale: 1;
   --bm-room: calc(106px * var(--bm-scale));   /* the bookmark's part above the book (plus 6px of air, see padding-top) */
@@ -103,7 +103,6 @@
 .hint { margin: 0; text-align: center; font-size: 13px; line-height: var(--hint-h, 20px); color: var(--ink-muted); translate: 0 var(--hint-pull); }
 .actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--space-3); }
 .actions > button { flex: 1 1 0; min-width: 120px; }
-/* F-24 ③: [예스24에서 찾기] (the one primary) full width on top, the two secondaries share the row below */
-.scene[data-exits] { --exits-row: 56px; }
-.exits > .full { flex: 1 1 100%; }
+/* S-04 [← 질문으로 돌아가기] is the longest label: one line, the button grows to it (a wrapped label made the row taller than the screen). */
+.actions > .back { min-width: max-content; white-space: nowrap; }
 .error { flex-basis: 100%; margin: 0; text-align: center; font-size: 13px; }

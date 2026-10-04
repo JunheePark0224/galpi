@@ -1,12 +1,12 @@
 import { loginMarkAtLoad } from "@/lib/auth/next";
-import { nextRound, setEntry } from "@/lib/track/common";
-import { QUESTIONS } from "./questions";
+import { nextRound, setEntry, setMode } from "@/lib/track/common";
+import { isPath } from "./path";
 import { INITIAL, STEPS, type FlowState } from "./state";
 
 export const FLOW_KEY = "galpi.flow";
-const VERSION = 5;   // 2 (P4): picks carry their reason, S-06 keeps its place; 3: 마음·회복 left the keyword list; 4 (F-24): goals carry
-                     // `missing` and a goal with no topic draws nothing; 5 (10-02): 🍃 questions come in a shuffled `order` — an older saved flow
-                     // starts over
+const VERSION = 6;   // 2 (P4): picks carry their reason, S-06 keeps its place; 3: 마음·회복 left the keyword list; 4 (F-24): goals carry
+                     // `missing`; 5 (10-02): 🍃 questions in a shuffled order; 6 (v2, 10-04): one entry and the question map's
+                     // `answers` — any older saved flow starts over
 
 /**
  * Resume only when the load is a reload or a history traversal, or the tab was discarded and restored (KakaoTalk's in-app
@@ -18,21 +18,23 @@ export function shouldResume(navType: string | undefined, wasDiscarded: boolean,
   return fromLogin || wasDiscarded || navType === undefined || navType === "reload" || navType === "back_forward";
 }
 
-/** A shuffle of the nine question indices, each once (lib/flow/order). */
-const isOrder = (v: unknown): v is number[] =>
-  Array.isArray(v) && v.length === QUESTIONS.length && [...v].sort((a, b) => a - b).every((q, k) => q === k);
+type Saved = { state: FlowState | null; rejected: boolean };
 
-function readSaved(): FlowState | null {
+/** `rejected`: something was saved but cannot be used (old version, answers off today's map, broken) — not the same as nothing saved. */
+function readSaved(): Saved {
+  const none: Saved = { state: null, rejected: false };
   try {
     const raw = window.sessionStorage.getItem(FLOW_KEY);
-    if (!raw) return null;
+    if (!raw) return none;
+    const rejected: Saved = { state: null, rejected: true };
     const saved = JSON.parse(raw) as { v?: unknown; state?: Partial<FlowState> };
     const state = saved.state;
-    if (saved.v !== VERSION || !state || !STEPS.includes(state.step as FlowState["step"])) return null;
-    if (!isOrder(state.order)) return null;   // a broken or edited question order: start over rather than ask the wrong question
-    return { ...INITIAL, ...state } as FlowState;
+    if (saved.v !== VERSION || !state || !STEPS.includes(state.step as FlowState["step"])) return rejected;
+    if (!isPath(state.answers)) return rejected;   // answers off today's map (the map was edited): start over
+    if (state.drawnFor !== null && state.drawnFor !== undefined && !isPath(state.drawnFor)) return rejected;
+    return { state: { ...INITIAL, ...state } as FlowState, rejected: false };
   } catch {
-    return null;
+    return { state: null, rejected: true };
   }
 }
 
@@ -43,13 +45,23 @@ function readSaved(): FlowState | null {
  * (React StrictMode runs reducer init twice in dev) sees "home" and does not move the round again.
  */
 export function restoreFlow(resume: boolean): FlowState {
-  const saved = readSaved();
-  if (!saved) return INITIAL;
+  const { state: saved, rejected } = readSaved();
+  if (!saved) {
+    if (rejected) {
+      // a round was in progress in a save we cannot read: it ends unfinished, like an abandoned one (once: the bad save is replaced)
+      nextRound();
+      setEntry(null);
+      setMode(null);
+      saveFlow(INITIAL);
+    }
+    return INITIAL;
+  }
   if (resume) return saved.status === "loading" ? { ...saved, status: "error" } : saved;
   const fresh: FlowState = { ...INITIAL, seen: saved.seen };
   if (saved.step !== "home") {
     nextRound();
     setEntry(null);
+    setMode(null);
   }
   saveFlow(fresh);
   return fresh;

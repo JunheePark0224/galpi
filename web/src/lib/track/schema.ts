@@ -20,8 +20,8 @@ export interface PropSpec {
 
 const BOOK_ID = { type: "string" } as const;
 const POSITION = { type: "number" } as const;
-const IS_EDIT = { type: "boolean" } as const;
-const QUESTION_NO = { type: "number" } as const;
+const NODE_ID = { type: "string" } as const;
+const DEPTH = { type: "number" } as const;
 const PICK_TYPE = { type: ["recommended", "random"] } as const;
 const ONE_LINER_STYLE = { type: ["summary", "question"] } as const;
 const CURIOUS_COUNT = { type: "number" } as const;
@@ -33,13 +33,18 @@ export const FEEDBACK_MAX = 500;
 export const EVENT_SPEC = {
   site_visited: { prompt_version: { type: "string", only: "amplitude" } },
   entry_selected: { source: { type: ["home", "first_page"] } },
-  chip_selected: {
-    chip_type: { type: ["example", "len", "way"] },
-    chip_value: { type: "string", nullable: true },
-    is_edit: IS_EDIT,
+  question_answered: {
+    node_id: NODE_ID,
+    kind: { type: ["narrow", "mood"] },
+    choice: { type: ["A", "B", "unsure"] },
+    depth: DEPTH,
+    position: POSITION,
+    elapsed_ms: { type: "number" },
   },
+  unsure_hold_cancelled: { node_id: NODE_ID, depth: DEPTH, held_ms: { type: "number" } },
+  question_back_clicked: { node_id: NODE_ID, depth: DEPTH, source: { type: ["question", "first_page"] } },
+  path_completed: { scope_id: { type: "string" }, depth: DEPTH, unsure_count: { type: "number" } },
   book_opened: {},
-  first_page_edited: { changed_items: { type: "string", array: true } },
   bookmark_shown: { book_id: BOOK_ID, position: POSITION, one_liner_style: ONE_LINER_STYLE, pick_type: PICK_TYPE, art: { type: "object" } },
   bookmark_reacted: {
     book_id: BOOK_ID, position: POSITION, reaction: { type: ["pass", "curious"] }, pick_type: PICK_TYPE, one_liner_style: ONE_LINER_STYLE,
@@ -59,38 +64,8 @@ export const EVENT_SPEC = {
     pick_type: { type: [null, "recommended", "random"] },
   },
   redraw_clicked: { curious_count: CURIOUS_COUNT },
-  home_clicked: { curious_count: CURIOUS_COUNT, source: { type: ["first_page", "end"] } },
-  free_goal_written: {
-    goal_text: { type: "string", only: "supabase", max: 30 },
-    topic: { type: "string" },
-    keywords: { type: "string", array: true },
-    is_matched: { type: "boolean" },
-    method: { type: ["word", "llm"] },
-    has_missing: { type: "boolean" },
-    missing_text: { type: "string", nullable: true, only: "supabase", max: 20 },
-  },
-  goal_coverage_checked: {
-    coverage_bucket: { type: ["0", "1-3", "4+"] },
-    found_count: { type: "number" },
-    understood: { type: ["keyword", "topic", "missing", "none", "nearest"] },
-  },
+  home_clicked: { curious_count: CURIOUS_COUNT, source: { type: ["first_page", "end", "question"] } },
   description_expanded: { book_id: BOOK_ID, pick_type: PICK_TYPE },
-  balance_answered: {
-    question_no: QUESTION_NO,
-    position: POSITION,
-    choice: { type: ["A", "B", "unsure"] },
-    side: { type: [null, "left", "right"] },
-    elapsed_ms: { type: "number" },
-    is_edit: IS_EDIT,
-  },
-  unsure_hold_cancelled: { question_no: QUESTION_NO, position: POSITION, held_ms: { type: "number" }, is_edit: IS_EDIT },
-  goal_submitted: {
-    topic: { type: "string" },
-    is_free_text: { type: "boolean" },
-    len: { type: [null, "thin", "normal", "thick"] },
-    way: { type: [null, "개념", "실습", "사례"] },
-    is_edit: IS_EDIT,
-  },
   bookmark_pulled: { book_id: BOOK_ID, position: POSITION, pick_type: PICK_TYPE },
   bookmark_flipped: { book_id: BOOK_ID, pick_type: PICK_TYPE },
   shelf_created: { shelf_count: { type: "number" } },
@@ -145,6 +120,7 @@ export interface CommonProps {
   session_id: string;
   round: number;
   entry: "leaf" | "target" | null;
+  mode: "normal" | "challenge" | null;
   screen_version: string;
   referrer: string;
   is_returning: boolean;
@@ -154,10 +130,10 @@ export interface CommonProps {
 
 /** taxonomy.md 3-1 — the csv `*` rows. parseCommon returns exactly these keys. */
 export const COMMON_KEYS = [
-  "anon_id", "user_id", "session_id", "round", "entry", "screen_version", "referrer", "is_returning", "device", "is_in_app_browser",
+  "anon_id", "user_id", "session_id", "round", "entry", "mode", "screen_version", "referrer", "is_returning", "device", "is_in_app_browser",
 ] as const satisfies readonly (keyof CommonProps)[];
 
-export const SCREEN_VERSION = "v1";
+export const SCREEN_VERSION = "v2";
 
 const MAX_ID = 200;
 const MAX_REFERRER = 500;
@@ -175,16 +151,17 @@ const text = (x: unknown, max: number, min = 0): x is string => typeof x === "st
 export function parseCommon(x: unknown): CommonProps | null {
   if (typeof x !== "object" || x === null || Array.isArray(x)) return null;
   const c = x as Record<string, unknown>;
-  const { anon_id, user_id, session_id, round, entry, screen_version, referrer, is_returning, device, is_in_app_browser } = c;
+  const { anon_id, user_id, session_id, round, entry, mode, screen_version, referrer, is_returning, device, is_in_app_browser } = c;
   if (!text(anon_id, MAX_ID, 1) || !text(session_id, MAX_ID, 1) || !text(screen_version, MAX_ID, 1)) return null;
   if (user_id !== null && !text(user_id, MAX_ID)) return null;
   if (typeof referrer !== "string") return null;
   if (typeof round !== "number" || !Number.isInteger(round) || round < 0 || round > MAX_ROUND) return null;
   if (entry !== null && entry !== "leaf" && entry !== "target") return null;
+  if (mode !== null && mode !== "normal" && mode !== "challenge") return null;
   if (device !== "phone" && device !== "desktop") return null;
   if (typeof is_returning !== "boolean" || typeof is_in_app_browser !== "boolean") return null;
   // referrer comes from the visitor's browser and may be a long URL: keep the event, cut the value.
   return {
-    anon_id, user_id, session_id, round, entry, screen_version, referrer: cutText(referrer, MAX_REFERRER), is_returning, device, is_in_app_browser,
+    anon_id, user_id, session_id, round, entry, mode, screen_version, referrer: cutText(referrer, MAX_REFERRER), is_returning, device, is_in_app_browser,
   };
 }

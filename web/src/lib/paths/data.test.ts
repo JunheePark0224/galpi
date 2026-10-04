@@ -3,6 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import built from "@/data/question-map.json";
 import vocab from "@/data/vocab.json";
+import { QUESTION_MAP } from "./map";
 import { parseQuestionMap } from "./parse";
 import { validateMap } from "./validate";
 import { mapVocabulary } from "./vocabulary";
@@ -16,5 +17,9 @@ describe("src/data/question-map.json", () => {
   });
   it("passes the checks against our topics, keywords and every genre we define (books or not)", () => {
     expect(validateMap(built as QuestionMap, mapVocabulary(vocab))).toEqual([]);
+  });
+  it("is what the app reads (QUESTION_MAP)", () => {
+    expect(QUESTION_MAP).toBe(built);
+    expect(QUESTION_MAP.start).toBe("start");
   });
 });

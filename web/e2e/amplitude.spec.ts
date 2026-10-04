@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { test } from "./helpers";
+import { START, test } from "./helpers";
 
 test.use({ reducedMotion: "reduce" });
 
@@ -15,11 +15,11 @@ test("without an Amplitude key nothing is sent to amplitude.com, no SDK code is 
   page.on("console", (msg) => { if (msg.type() === "warning") warnings.push(msg.text()); });
 
   await page.goto("/");
-  await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
+  await page.getByRole("button", { name: START }).click();
   await page.getByRole("link", { name: "처리방침" }).first().click();
   await expect(page.getByRole("heading", { level: 1, name: "개인정보 처리방침" })).toBeVisible();
   await page.getByRole("link", { name: "처음으로" }).click();
-  await expect(page.getByRole("button", { name: /알고 싶은 게 있어요/ })).toBeVisible();   // 처음으로 opens S-01 afresh
+  await expect(page.getByRole("button", { name: START })).toBeVisible();   // 처음으로 opens S-01 afresh
 
   // the SDK is a separate chunk that only a keyed build ever requests; its code carries Amplitude's ingestion host
   expect(scripts.length).toBeGreaterThan(0);

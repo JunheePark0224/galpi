@@ -3,21 +3,20 @@ import { describe, expect, it, vi } from "vitest";
 import { Home } from "./Home";
 
 describe("Home (S-01)", () => {
-  it("offers the two entries with their PRD wording", () => {
+  it("offers one entry with the v2 wording and the line under it (PRD F-01, design 10절)", () => {
     const onStart = vi.fn();
     render(<Home onStart={onStart} />);
-    fireEvent.click(screen.getByRole("button", { name: /알고 싶은 게 있어요.*배우고 싶은 주제로, 아직 모르는 책 만나기/ }));
-    fireEvent.click(screen.getByRole("button", { name: /그냥 한 권 만나고 싶어요.*밸런스 게임으로 내 취향에 맞는 한 권 만나기/ }));
-    expect(onStart.mock.calls).toEqual([["target"], ["leaf"]]);
+    fireEvent.click(screen.getByRole("button", { name: "갈피 잡으러 가기" }));
+    expect(onStart).toHaveBeenCalledTimes(1);
+    expect(screen.getByText("질문 몇 개면 한 권을 만나요")).toBeInTheDocument();
   });
 
-  it("has no login place of its own — the two entries, then the 갈피 우체통 last (F-26)", () => {
+  it("has no login place of its own — the one entry, then the 갈피 우체통 last (F-26)", () => {
     render(<Home onStart={vi.fn()} />);
     expect(screen.queryByTestId("account-slot")).toBeNull();
     expect(screen.queryByText("로그인")).toBeNull();
     expect(screen.getAllByRole("button").map((b) => b.getAttribute("aria-label") ?? b.textContent)).toEqual([
-      expect.stringMatching(/^알고 싶은 게 있어요/),
-      expect.stringMatching(/^그냥 한 권 만나고 싶어요/),
+      "갈피 잡으러 가기",
       "갈피 우체통 — 써 보고 느낀 점을 넣어 주세요",
     ]);
     expect(screen.getByRole("heading", { name: "갈피" })).toBeInTheDocument();
@@ -45,7 +44,7 @@ describe("Home (S-01)", () => {
     expect(art).toHaveTextContent("갈피의 서재");
     expect(art).toHaveTextContent("1,234권");
     expect(art).toHaveTextContent("+12");
-    expect(screen.getAllByRole("button")).toHaveLength(3);   // two entries + 갈피 우체통
+    expect(screen.getAllByRole("button")).toHaveLength(2);   // one entry + 갈피 우체통
   });
 
   it("leaves out today's bookmark and sentence on a day with no new books", () => {

@@ -1,7 +1,8 @@
 import { expect } from "@playwright/test";
 import { test } from "./helpers";
+import { SQL_PATH } from "../src/lib/paths/__fixtures__/paths";
 
-const common = { anon_id: "e2e", user_id: null, session_id: "e2e", round: 1, entry: null, screen_version: "v1",
+const common = { anon_id: "e2e", user_id: null, session_id: "e2e", round: 1, entry: null, mode: null, screen_version: "v2",
   referrer: "", is_returning: false, device: "desktop", is_in_app_browser: false };
 const event = { name: "site_visited", props: {}, common };
 
@@ -13,7 +14,7 @@ test("track refuses a request from another origin, or with no origin at all", as
 });
 
 test("draw refuses a request from another origin", async ({ request, baseURL }) => {
-  const body = { entry: "leaf", choices: ["A", "B", "A", "B", "A", "B", "A", "B", "A"] };
+  const body = { answers: SQL_PATH };
   expect((await request.post("/api/books/draw", { data: body, headers: { origin: "https://evil.example" } })).status()).toBe(403);
   expect((await request.post("/api/books/draw", { data: body, headers: { origin: baseURL! } })).status()).toBe(200);
 });
@@ -26,11 +27,4 @@ test("book detail answers our own pages only, and only for our books", async ({ 
   expect(ok.status()).toBe(200);
   expect((await ok.json()).source).toBeNull();                           // no keys in E2E: the empty detail
   expect((await request.get("/api/books/9788998441012", { headers: { referer: `${baseURL}/` } })).status()).toBe(404);
-});
-
-test("goal classify refuses another origin and answers our own page with word matching (no key in E2E)", async ({ request, baseURL }) => {
-  expect((await request.post("/api/goal/classify", { data: { text: "SQL" }, headers: { origin: "https://evil.example" } })).status()).toBe(403);
-  const ok = await request.post("/api/goal/classify", { data: { text: "SQL 공부" }, headers: { origin: baseURL! } });
-  expect(ok.status()).toBe(200);
-  expect(await ok.json()).toMatchObject({ topic: "데이터 분석", keywords: ["SQL"], method: "word" });
 });

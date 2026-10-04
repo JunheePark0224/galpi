@@ -32,7 +32,7 @@ Last Updated: 2026-09-30
 | `BOOKS_SOURCE` | **어디에도 두지 않는다** | 두지 않는다 | `sample`은 테스트용 30권 — 두면 실제 책이 안 나온다 |
 | `YES24_API_KEY` | 설정 (**Sensitive**) | 설정 안 함 | S-06 책 정보(P4). 서버에서만 읽는다. 없으면 카카오로, 둘 다 없으면 책 정보 없이 화면만 |
 | `KAKAO_REST_KEY` | 설정 (**Sensitive**) | 설정 안 함 | 예스24가 실패할 때 표지·가격만 대신(PRD F-14) |
-| `ANTHROPIC_API_KEY` | 설정 (**Sensitive**) | 설정 안 함 | 🎯 직접 쓰기 분류(Claude Haiku). 없으면 단어 매칭만. `/privacy`에 Anthropic 전달이 적혀 있어야 넣는다 |
+| `ANTHROPIC_API_KEY` | ~~설정~~ **넣지 않는다** | 설정 안 함 | v2(10-04)부터 사이트는 Claude를 부르지 않는다 — Vercel에서 **지운다**. 매일 태깅 파이프라인용 키는 GitHub Actions secret으로만 둔다(아래 96행 근처) |
 
 - [ ] Anthropic Console에서 이 키 전용 workspace를 만들고 월 사용 한도를 걸었다 — 지금 **$15**(10-01에 $5에서 올림: 라이브 분류기와 매일 책 파이프라인이 같은 워크스페이스를 쓴다. 7절) — 사용자가 직접
 - [ ] Production 값과 Preview 값을 위 표대로 각 환경 칸에 따로 넣었다

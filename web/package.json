@@ -12,13 +12,11 @@
     "test:cov": "vitest run --coverage",
     "e2e": "playwright test",
     "books:import": "tsx scripts/import-books.ts",
-    "goal:grade": "tsx scripts/grade-goals.ts",
     "map:build": "tsx scripts/build-question-map.ts",
     "map:coverage": "tsx scripts/paths-coverage.ts"
   },
   "dependencies": {
     "@amplitude/unified": "^1.1.38",
-    "@anthropic-ai/sdk": "^0.131.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.2",
     "motion": "^13.4.6",
