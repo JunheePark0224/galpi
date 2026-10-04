@@ -1,0 +1,17 @@
+/* 초판본 effects inside the art SVG (도감 v1, rare-art.html · first-edition-effects.gif). Opacity and transform only — cheap
+   on the compositor. `.still` (fx="light": a moving or small bookmark) and reduced motion keep the rim and a still aura. */
+.aura { animation: breathe 2.4s ease-in-out infinite; }
+.tw { transform-box: fill-box; transform-origin: center; animation: twinkle 1.8s ease-in-out infinite; }
+.dust { animation: rise 3.2s linear infinite; }
+.sweep { animation: sweep 3.6s ease-in-out infinite; }
+.still .aura { animation: none; opacity: 0.6; }
+
+@keyframes breathe { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.85; } }
+@keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1); } }
+@keyframes rise { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-34px); opacity: 0; } }
+@keyframes sweep { 0%, 60% { transform: translateX(-60px); } 100% { transform: translateX(160px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .aura { animation: none; opacity: 0.6; }
+  .tw, .dust, .sweep { display: none; }
+}

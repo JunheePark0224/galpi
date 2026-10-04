@@ -1,6 +1,9 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { verifyTicket } from "@/lib/collection/ticket";
 import { POST } from "./route";
+
+vi.mock("server-only", () => ({}));
 import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
 
 const PATH = { answers: SQL_PATH };
@@ -17,9 +20,10 @@ describe("POST /api/books/draw", () => {
   });
 
   it("is reproducible for a seed", async () => {
-    const a = await (await POST(req({ ...PATH, seed: 11 }))).json();
-    const b = await (await POST(req({ ...PATH, seed: 11 }))).json();
+    const { art: artA, ...a } = await (await POST(req({ ...PATH, seed: 11 }))).json();
+    const { art: artB, ...b } = await (await POST(req({ ...PATH, seed: 11 }))).json();
     expect(a).toEqual(b);
+    expect(artA.seed).not.toBe(artB.seed);   // 도감 v1: the request's seed replays the books, never the pictures
   });
 
   it("sends only what a bookmark shows — no scores, no tags", async () => {
@@ -77,8 +81,21 @@ describe("POST /api/books/draw", () => {
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.picks).toHaveLength(5);
-    expect(Object.keys(body).sort()).toEqual(["exhausted", "path", "picks", "widened"]);
+    expect(Object.keys(body).sort()).toEqual(["art", "exhausted", "path", "picks", "widened"]);
     expect(body.path.crumbs.at(-1)).toBe("DB에서 꺼내기");
     expect(Object.keys(body.picks[0].card).sort()).toEqual(["author", "entry", "field", "genre", "id", "oneLiner", "oneLinerStyle", "title"]);
+  });
+
+  it("signs the pictures' seed for the 도감 (dev secret outside production)", async () => {
+    const { art } = await (await POST(req({ ...PATH, seed: 5 }))).json();
+    expect(art).toMatchObject({ count: 5, seed: expect.any(Number), sig: expect.stringMatching(/^[A-Za-z0-9_-]{43}$/) });
+    expect(verifyTicket(art, "galpi-dev-only-collection-secret-not-for-production")).toBe(true);
+  });
+
+  it("fails closed in production without the secret: the pictures' seed comes unsigned", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("COLLECTION_SIGNING_SECRET", "");
+    const { art } = await (await POST(req({ ...PATH, seed: 5 }))).json();
+    expect(art).toMatchObject({ count: 5, sig: null });
   });
 });

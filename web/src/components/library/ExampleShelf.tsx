@@ -32,7 +32,7 @@ export function ExampleShelf() {
             {rod.arts.map((art, i) => (
               <span key={i} className={styles.mini}>
                 <span className={styles.string} />
-                <span className={styles.film}><BookmarkArt art={art} clipId={`example-${r}-${i}`} /></span>
+                <span className={styles.film}><BookmarkArt art={art} clipId={`example-${r}-${i}`} fx="light" /></span>
               </span>
             ))}
           </div>
