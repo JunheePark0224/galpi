@@ -67,6 +67,64 @@ describe("drawForPath", () => {
     expect(d.scopeCount).toBe(3);
   });
 
+  it("widened: every book the person narrowed to stays, the 운명 1장 comes from the level above, scores stay mood scores", () => {
+    const w = walkPath(MAP, SQL);
+    for (let seed = 1; seed <= 50; seed++) {
+      const d = drawForPath(BOOKS, MAP, w, opts(seed, ["sql1", "sql2"]));
+      const rec = d.picks.filter((p) => p.kind === "recommended").map((p) => p.book.id);
+      expect(rec).toHaveLength(4);
+      expect(rec).toEqual(expect.arrayContaining(["sql3", "sql4", "sql5"]));   // sql4 is thick: a weak mood match, kept anyway
+      const fate = d.picks.filter((p) => p.kind === "random").map((p) => p.book);
+      expect(fate).toHaveLength(1);
+      expect(fate[0].entry === "target" && fate[0].topic).toBe("데이터 분석");
+      expect(d.picks.every((p) => p.score === moodScore(p.book, w.mood))).toBe(true);
+      expect(d.exhausted).toBe(false);                                              // mean 2.75 of best 4
+    }
+  });
+
+  it("widened from a genre: all of that genre stays even past the broad genre cap", () => {
+    const books: Book[] = [
+      l("s1", "SF·판타지"), l("s2", "SF·판타지"), l("s3", "SF·판타지"),
+      ...["e1", "e2", "e3", "e4", "e5", "e6"].map((id) => l(id, "에세이")), l("k1", "한국 소설"), l("k2", "한국 소설"),
+    ];
+    const SF = [a("start", "A"), a("branch", "A"), a("story-world", "B"), a("mood-temp", "B"), a("mood-len", "B")];
+    for (let seed = 1; seed <= 50; seed++) {
+      const d = drawForPath(books, MAP, walkPath(MAP, SF), opts(seed));
+      expect(d.widenedScope).toBe(true);
+      expect(d.picks.filter((p) => p.kind === "recommended").map((p) => p.book.id)).toEqual(expect.arrayContaining(["s1", "s2", "s3"]));
+    }
+  });
+
+  it("the level above is thin too: widens once more to the whole entry, closer levels first", () => {
+    const sparse: Book[] = [
+      t("sql1", ["SQL"], "개념", 450), t("xl1", ["엑셀"], "개념", 450),
+      ...["m1", "m2", "m3", "m4"].map((id) => t(id, ["우울"], "실습", 200, "마음 돌보기")),
+      l("e1", "에세이"), l("e2", "에세이"),
+    ];
+    for (let seed = 1; seed <= 50; seed++) {
+      const d = drawForPath(sparse, MAP, walkPath(MAP, SQL), opts(seed));
+      const rec = d.picks.filter((p) => p.kind === "recommended").map((p) => p.book);
+      expect(d.widenedScope).toBe(true);
+      expect(d.scopeCount).toBe(1);
+      expect(rec).toHaveLength(4);
+      expect(rec.map((b) => b.id)).toEqual(expect.arrayContaining(["sql1", "xl1"]));   // weak mood matches, but closest
+      expect(rec.every((b) => b.entry === "target")).toBe(true);                       // the whole 🎯 entry, not the library
+      const fate = d.picks.filter((p) => p.kind === "random");
+      expect(fate).toHaveLength(1);
+      expect(fate[0].book.entry).toBe("target");
+      expect(d.exhausted).toBe(true);                                               // two weak matches: mean 1.5 of best 4
+    }
+  });
+
+  it("widened and still short: exhausted; with no mood asked, never short of a good match", () => {
+    const tiny: Book[] = [t("sql1", ["SQL"]), t("xl1", ["엑셀"])];
+    expect(drawForPath(tiny, MAP, walkPath(MAP, SQL), opts()).exhausted).toBe(true);
+    const plain = [a("start", "A"), a("branch", "B"), a("learn-area", "A"), a("learn-data", "A"), a("mood-way", "unsure"), a("mood-len", "unsure")];
+    const d = drawForPath(BOOKS, MAP, walkPath(MAP, plain), opts(1, ["sql1", "sql2"]));
+    expect(d.widenedScope).toBe(true);
+    expect(d.exhausted).toBe(false);
+  });
+
   it("challenge: a 데이터 분석 answer draws from the far side (에세이), keeping the mood", () => {
     const d = drawForPath(BOOKS, MAP, walkPath(MAP, [a("start", "B"), ...SQL.slice(1)]), opts());
     const rec = d.picks.filter((p) => p.kind === "recommended");
@@ -95,6 +153,25 @@ describe("drawForPath", () => {
       for (const p of rec) counts.set(p.book.genre, (counts.get(p.book.genre) ?? 0) + 1);
       expect(Math.max(...counts.values())).toBeLessThanOrEqual(2);
     }
+  });
+
+  it("whole library (no entry chosen) keeps the genre cap too", () => {
+    const wide: Book[] = [
+      ...["a1", "a2", "a3", "a4", "a5"].map((id) => l(id, "에세이")), l("b1", "한국 소설"), l("c1", "외국 소설"),
+      t("x1", ["SQL"]), t("x2", ["SQL"]), t("x3", ["SQL"]),
+    ];
+    const ALL = [a("start", "A"), a("branch", "unsure"), a("mood-len", "A")];
+    for (let seed = 1; seed <= 30; seed++) {
+      const rec = drawForPath(wide, MAP, walkPath(MAP, ALL), opts(seed)).picks.filter((p) => p.kind === "recommended");
+      const counts = new Map<string, number>();
+      for (const p of rec) counts.set(p.book.genre, (counts.get(p.book.genre) ?? 0) + 1);
+      expect(Math.max(...counts.values())).toBeLessThanOrEqual(2);
+    }
+  });
+
+  it("a narrowed 🎯 scope has no genre cap: four books of one topic", () => {
+    const d = drawForPath(BOOKS, MAP, walkPath(MAP, SQL), opts(3));
+    expect(new Set(d.picks.filter((p) => p.kind === "recommended").map((p) => p.book.genre))).toEqual(new Set(["데이터 분석"]));
   });
 
   it("is reproducible with the same seed", () => {
