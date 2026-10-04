@@ -224,7 +224,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | 탭에서 처음 시작 | 1 |
 | **[다시 뽑기]**(E-19)를 누를 때 | **+1** |
 | 같은 탭에서 **[처음으로]**(E-20)를 눌러 다시 시작할 때 (새 판) | **+1** |
-| S-04 [← 질문으로 돌아가기] → 다시 답해 재뽑기(같은 답이면 같은 다섯 장), 새로고침·뒤로 가기·버려진 탭 복원으로 같은 장 복원 | 그대로 (같은 판. 고친 판은 `is_edit`·E-06으로 구분) |
+| S-04 [← 질문으로 돌아가기] → 다시 답해 재뽑기(같은 답이면 같은 다섯 장), 새로고침·뒤로 가기·버려진 탭 복원으로 같은 장 복원 | 그대로 (같은 판) |
 | ~~**F-24 ③**(맞는 주제 없음 — 뽑기 없음)에서 **[🍃 그냥 한 권]** (v0.6)~~ | **+1** — E-02(`source`=first_page)를 보내기 **직전**. 끝 이벤트는 없다(그 🎯 판은 E-22 `understood`=none으로 끝난 것이 보인다). 한 판 = 한 입구로 두어 🎯 판과 🍃 판이 섞이지 않게. 구현: `Flow.tsx`의 `switchToLeaf`가 `nextRound()` → `setEntry("leaf")` → E-02 (`settleOpen`처럼 이벤트 없는 +1) — v1.0 없앰 |
 | S-02 **첫 질문**의 [← 이전 질문] — 처음 화면으로 (v1.0) | **+1** — E-20(`source`=question)을 보낸 직후. 그 판은 답이 하나도 없이 끝난다 |
 | 주소 다시 입력·링크·헤더 로고·/privacy [처음으로]로 **새로 열어** S-01에서 시작할 때, 저장돼 있던 흐름이 판 도중(step이 home이 아님)이었다 | **+1** (이벤트는 보내지 않는다 — 끝 이벤트 없이 끊긴 판이 곧 이탈 신호). 이미 처음 화면이었다면 그대로 |
@@ -625,7 +625,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `book_id` | 같음 (v0.6: null 허용) | String | null, "9788998441012" | 책 ISBN-13 (books.isbn). source=first_page면 null (책 없이 검색) |
-| `source` | 같음 (v0.6: "first_page" 추가) | String | "result", "library", "first_page" | 누른 화면 — result=S-06, library=S-09, first_page=S-04 F-24 ②·③ (어느 쪽인지는 같은 판의 E-22 `understood`) |
+| `source` | 같음 (v0.6: "first_page" 추가) | String | "result", "library", "first_page" | 누른 화면 — result=S-06, library=S-09, first_page=S-04 F-24 ②·③ (v1.0부터 보내지 않음 — v1 기록용. 어느 쪽인지는 같은 판의 E-22 `understood`) |
 | `pick_type` | 추가 — v0.3 명세 반영, 심는 것은 P4 | String | null, "recommended", "random" | 추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음). source=library·first_page면 null |
 
 #### E-11 `save_clicked`

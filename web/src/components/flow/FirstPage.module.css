@@ -17,9 +17,6 @@
   border-bottom: 1px dashed var(--paper-line);
   font-size: 13px; line-height: 1.5; word-break: keep-all;
 }
-.row dt { color: var(--ink-muted); }
-/* a 30-character goal with no spaces has no keep-all break point: let it wrap anywhere */
-.row dd { min-width: 0; margin: 0; text-align: right; overflow-wrap: anywhere; }
 /* C-10 v2: small section names and the challenge line */
 .label { margin: 0 0 var(--space-1); font-size: 12px; font-weight: 400; color: var(--ink-muted); }
 .challenge { margin: 0; font-family: var(--font-batang), serif; font-size: 14px; line-height: 1.5; word-break: keep-all; color: var(--cloth); }

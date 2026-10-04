@@ -33,8 +33,8 @@ const box = async (page: Page, selector: string) => {
   return b;
 };
 
-/** The SQL path → S-03, checking each book step on the way to the first bookmark. */
-/** `fit`: no page scroll at all. `scrollOk`: on a very short window the page may scroll vertically (the book has a floor),
+/** The SQL path → S-03, checking each book step on the way to the first bookmark.
+ *  `fit`: no page scroll at all. `scrollOk`: on a very short window the page may scroll vertically (the book has a floor),
  *  but never sideways. `buttons`: a short phone viewport — the footer may fall below the fold, the action buttons may not. */
 async function walkTheBook(page: Page, mode: "fit" | "scrollOk" | "buttons" = "fit") {
   const scrollOk = mode === "scrollOk";

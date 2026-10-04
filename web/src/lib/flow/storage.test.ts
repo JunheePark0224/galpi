@@ -34,6 +34,17 @@ describe("flow storage", () => {
     expect(loadFlow()).toEqual(INITIAL);
   });
 
+  it("starts over on a tampered drawnFor (not a path of today's map)", () => {
+    sessionStorage.setItem(FLOW_KEY, JSON.stringify({ v: 6, state: { ...INITIAL, step: "book", answers: SQL_PATH, drawnFor: [{ node: "branch", choice: "A" }] } }));
+    expect(loadFlow()).toEqual(INITIAL);
+  });
+
+  it("keeps a valid drawnFor", () => {
+    const s: FlowState = { ...INITIAL, step: "book", answers: SQL_PATH, drawnFor: SQL_PATH, status: "ready" };
+    saveFlow(s);
+    expect(loadFlow()).toEqual(s);
+  });
+
   it("never throws when storage is blocked", () => {
     vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => { throw new Error("blocked"); });
     vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => { throw new Error("blocked"); });
@@ -118,6 +129,19 @@ describe("restoreFlow on a fresh open", () => {
     const before = commonProps().round;
     expect(restoreFlow(false)).toEqual(INITIAL);
     expect(commonProps().round).toBe(before);
+  });
+
+  it("a rejected old save ends its round: next round, entry and mode cleared, once", () => {
+    setEntry("leaf");
+    setMode("challenge");
+    sessionStorage.setItem(FLOW_KEY, JSON.stringify({ v: 5, state: { ...INITIAL, step: "leaf" } }));
+    const before = commonProps().round;
+    expect(restoreFlow(true)).toEqual(INITIAL);
+    expect(commonProps().round).toBe(before + 1);
+    expect(commonProps().entry).toBeNull();
+    expect(commonProps().mode).toBeNull();
+    restoreFlow(true);   // StrictMode's second init: the bad save is gone, nothing moves again
+    expect(commonProps().round).toBe(before + 1);
   });
 
   it("resumes untouched when asked to", () => {

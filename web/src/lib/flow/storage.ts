@@ -18,17 +18,23 @@ export function shouldResume(navType: string | undefined, wasDiscarded: boolean,
   return fromLogin || wasDiscarded || navType === undefined || navType === "reload" || navType === "back_forward";
 }
 
-function readSaved(): FlowState | null {
+type Saved = { state: FlowState | null; rejected: boolean };
+
+/** `rejected`: something was saved but cannot be used (old version, answers off today's map, broken) — not the same as nothing saved. */
+function readSaved(): Saved {
+  const none: Saved = { state: null, rejected: false };
   try {
     const raw = window.sessionStorage.getItem(FLOW_KEY);
-    if (!raw) return null;
+    if (!raw) return none;
+    const rejected: Saved = { state: null, rejected: true };
     const saved = JSON.parse(raw) as { v?: unknown; state?: Partial<FlowState> };
     const state = saved.state;
-    if (saved.v !== VERSION || !state || !STEPS.includes(state.step as FlowState["step"])) return null;
-    if (!isPath(state.answers)) return null;   // answers off today's map (the map was edited): start over
-    return { ...INITIAL, ...state } as FlowState;
+    if (saved.v !== VERSION || !state || !STEPS.includes(state.step as FlowState["step"])) return rejected;
+    if (!isPath(state.answers)) return rejected;   // answers off today's map (the map was edited): start over
+    if (state.drawnFor !== null && state.drawnFor !== undefined && !isPath(state.drawnFor)) return rejected;
+    return { state: { ...INITIAL, ...state } as FlowState, rejected: false };
   } catch {
-    return null;
+    return { state: null, rejected: true };
   }
 }
 
@@ -39,8 +45,17 @@ function readSaved(): FlowState | null {
  * (React StrictMode runs reducer init twice in dev) sees "home" and does not move the round again.
  */
 export function restoreFlow(resume: boolean): FlowState {
-  const saved = readSaved();
-  if (!saved) return INITIAL;
+  const { state: saved, rejected } = readSaved();
+  if (!saved) {
+    if (rejected) {
+      // a round was in progress in a save we cannot read: it ends unfinished, like an abandoned one (once: the bad save is replaced)
+      nextRound();
+      setEntry(null);
+      setMode(null);
+      saveFlow(INITIAL);
+    }
+    return INITIAL;
+  }
   if (resume) return saved.status === "loading" ? { ...saved, status: "error" } : saved;
   const fresh: FlowState = { ...INITIAL, seen: saved.seen };
   if (saved.step !== "home") {
