@@ -127,7 +127,7 @@
 | E-15 | `book_saved` | 책 ID, 자동 보관(로그인 직후)인지 | F-12 |
 | E-16 | `book_unsaved` | 책 ID | F-13 |
 | E-17 | `library_viewed` | 보관한 책 수 | F-13 |
-| E-18 | `yes24_link_clicked` | 책 ID, 어디서(S-06 / S-09 / S-04 F-24 ②·③ — 책 없음), 추천/무작위(S-09·S-04에서는 없음) | F-09·13·24 |
+| E-18 | `yes24_link_clicked` | 책 ID, 어디서(S-06 / S-09 / `first_page` — v1.0부터 보내지 않음, v1 기록용), 추천/무작위(S-09·S-04에서는 없음) | F-09·13·24 |
 | E-19 | `redraw_clicked` | 궁금해요 개수 | F-10 |
 | E-20 | `home_clicked` | 궁금해요 개수, 어디서(S-04 / 마무리 / S-02 첫 질문의 이전 질문) | F-10 |
 | E-21 | ~~`free_goal_written`~~ | 삭제 (taxonomy v1.0, 10-04) | F-02·24 |

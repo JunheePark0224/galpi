@@ -11,7 +11,10 @@ const req = (body: unknown, headers: Record<string, string> = from("9.9.9.9")) =
 
 describe("POST /api/books/draw", () => {
   beforeEach(() => vi.stubEnv("BOOKS_SOURCE", "sample"));
-  afterEach(() => vi.unstubAllEnvs());
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllEnvs();
+  });
 
   it("is reproducible for a seed", async () => {
     const a = await (await POST(req({ ...PATH, seed: 11 }))).json();
@@ -36,6 +39,8 @@ describe("POST /api/books/draw", () => {
   });
 
   it("answers 429 with Retry-After after 60 draws a minute from one address", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });   // frozen clock: the 60 draws cannot straddle a minute boundary
+    vi.setSystemTime(new Date("2026-10-04T12:00:10Z"));
     for (let i = 0; i < 60; i++) expect((await POST(req({ ...PATH, seed: i }, from("7.7.7.7")))).status).toBe(200);
     const res = await POST(req(PATH, from("7.7.7.7")));
     expect(res.status).toBe(429);

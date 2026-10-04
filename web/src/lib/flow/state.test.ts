@@ -65,6 +65,14 @@ describe("flowReducer (v2 questions)", () => {
       expect(s.drawnFor?.at(-1)).toEqual({ node: "learn-len", choice: "B" });
     });
 
+    it("back while the draw is still loading, then the same answer: the late draw still lands on S-04", () => {
+      const s = run([{ type: "open" }, { type: "back" }, { type: "answer", choice: "A" }], asked());
+      expect(s).toMatchObject({ step: "first", status: "loading", drawId: 1 });
+      const landed = flowReducer(s, { type: "drawn", id: 1, draw: view(5) });
+      expect(landed).toMatchObject({ step: "first", status: "ready", drawId: 1 });
+      expect(landed.draw).not.toBeNull();
+    });
+
     it("the same answer after a failed draw asks again", () => {
       const s = run([{ type: "drawFailed", id: 1 }, { type: "open" }, { type: "back" }, { type: "answer", choice: "A" }], asked());
       expect(s).toMatchObject({ step: "first", status: "loading", drawId: 2 });
