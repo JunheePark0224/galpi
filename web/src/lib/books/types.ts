@@ -35,19 +35,6 @@ export interface BookCard {
 /** reason: S-06 "나온 이유" (PRD F-09) — worked out on the server, where the tags are; random picks get the same format. */
 export interface CardPick { card: BookCard; kind: DrawPick["kind"]; reason: Reason }
 
-/**
- * POST /api/books/draw response.
- * keywords: the requested 🎯 keywords that some book in the topic really has (the rest were dropped before scoring).
- * found: 🎯 books behind the coverage notice (keyword matches, or the whole topic when no keyword was asked); null for 🍃.
- */
-export interface DrawResponse {
-  picks: CardPick[];
-  exhausted: boolean;
-  widened: boolean;
-  found: number | null;
-  keywords: string[];
-}
-
 /** POST /api/books/draw for a v2 path: the same cards, plus what S-04 "당신이 고른 길" shows. */
 export interface PathDrawResponse {
   picks: CardPick[];
