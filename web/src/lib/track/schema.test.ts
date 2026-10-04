@@ -2,10 +2,10 @@ import { describe, expect, it } from "vitest";
 import { COMMON_KEYS, cutText, EVENT_NAMES, EVENT_SPEC, isEventName, isOwnRouteEvent, OWN_ROUTE_EVENTS, parseCommon, type PropsOf } from "./schema";
 
 describe("event schema", () => {
-  it("lists the 28 live taxonomy events in PRD order (v1.0: six removed, E-32 · E-25 · E-33 · E-34 after E-02; v1.2: E-35 last)", () => {
-    expect(EVENT_NAMES).toHaveLength(28);
+  it("lists the 30 live taxonomy events in PRD order (v1.0: six removed, E-32 · E-25 · E-33 · E-34 after E-02; v1.2: E-35; v1.3: E-36 · E-37 last)", () => {
+    expect(EVENT_NAMES).toHaveLength(30);
     expect(EVENT_NAMES.slice(0, 6)).toEqual(["site_visited", "entry_selected", "question_answered", "unsure_hold_cancelled", "question_back_clicked", "path_completed"]);
-    expect(EVENT_NAMES.slice(-6)).toEqual(["bookmark_pulled", "bookmark_flipped", "shelf_created", "bookmark_moved", "feedback_sent", "library_cleared"]);
+    expect(EVENT_NAMES.slice(-8)).toEqual(["bookmark_pulled", "bookmark_flipped", "shelf_created", "bookmark_moved", "feedback_sent", "library_cleared", "collection_item_found", "collection_viewed"]);
     for (const gone of ["visit", "balance_answered", "chip_selected", "goal_submitted", "free_goal_written", "goal_coverage_checked", "first_page_edited"]) {
       expect(EVENT_NAMES).not.toContain(gone);
     }

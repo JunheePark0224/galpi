@@ -143,3 +143,15 @@
   .hang { transition: none; }
   .ghost > .mini { transform: none; }
 }
+
+/* 도감 v1 시안 ①: [막대 | 도감] — a cream track, the shown side a white raised pill (44px to press). */
+.switch {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: var(--space-1); padding: 4px;
+  border-radius: var(--radius-pill); background: var(--paper-deep);
+}
+.switchButton {
+  min-height: var(--touch); border: 0; border-radius: var(--radius-pill); background: none; color: var(--ink-soft);
+  font: inherit; font-size: 15px; cursor: pointer;
+}
+.switchButton[aria-pressed="true"] { background: #fff; color: var(--ink); font-weight: 700; box-shadow: 0 2px 6px rgba(43, 39, 36, 0.12); }
+.switchButton:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }

@@ -230,3 +230,20 @@ export function BookmarkArt({ art, clipId, fx = "full" }: { art: ArtCombo; clipI
     </svg>
   );
 }
+
+/**
+ * 도감 못 만난 칸 (시안 ①②): the part's shape alone, drawn flat by the cell's CSS (a silhouette). Backgrounds have no
+ * shape of their own — only the "?" shows. Decorative.
+ */
+export function PartShape({ kind, value, className }: { kind: "animal" | "bg" | "sky" | "ground"; value: string; className?: string }) {
+  if (kind === "animal") {
+    // eslint-disable-next-line @next/next/no-img-element -- a 100 × 100 SVG drawn flat by CSS; no optimisation to gain
+    return <img className={className} src={`/animals/${value}.svg`} alt="" aria-hidden="true" draggable={false} />;
+  }
+  if (kind === "bg" || value === "none") return null;
+  return (
+    <svg className={className} viewBox="0 0 100 76" aria-hidden="true" focusable="false">
+      {kind === "sky" ? <Sky kind={value as SkyProp} sky="#000" /> : <Ground kind={value as GroundProp} />}
+    </svg>
+  );
+}
