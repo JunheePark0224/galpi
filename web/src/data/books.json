@@ -6799,5 +6799,151 @@
   "keywords": [
    "자소서·면접"
   ]
+ },
+ {
+  "isbn": "9791129708328",
+  "title": "회사는 엑셀을 가르쳐주지 않아요",
+  "author": "쏘피",
+  "pages": 340,
+  "one_liner": "실무에서 자주 쓰는 함수와 피벗, 차트만 골라 바로 따라 해요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "데이터 분석",
+  "field": "데이터·통계",
+  "topic": "데이터 분석",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "엑셀"
+  ]
+ },
+ {
+  "isbn": "9788966264629",
+  "title": "기초부터 다지는 통계학 교과서 with 파이썬",
+  "author": "트레버 헤이스티 외",
+  "pages": 760,
+  "one_liner": "선형회귀부터 분류, 딥러닝까지 통계적 학습 기법을 파이썬 실습과 함께 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "통계",
+  "field": "데이터·통계",
+  "topic": "통계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "회귀분석"
+  ]
+ },
+ {
+  "isbn": "9791158742553",
+  "title": "확률로 바라본 수학적 일상",
+  "author": "장톈룽",
+  "pages": 320,
+  "one_liner": "확률의 역설과 베이즈, 엔트로피를 거쳐 인공지능이 생각하는 원리까지 이해해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "통계",
+  "field": "데이터·통계",
+  "topic": "통계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "확률"
+  ]
+ },
+ {
+  "isbn": "9788931480030",
+  "title": "시민 개발자의 시대, 생성형 AI 업무 자동화",
+  "author": "김우현",
+  "pages": 400,
+  "one_liner": "코딩을 몰라도 AI에게 질문해 반복되는 사무 업무를 줄이는 방법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "업무 자동화",
+  "field": "AI·IT 활용",
+  "topic": "업무 자동화",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "AI 업무 활용"
+  ]
+ },
+ {
+  "isbn": "9791191462470",
+  "title": "당신의 집중력은 잘못이 없다",
+  "author": "반건호",
+  "pages": 336,
+  "one_liner": "산만함이 의지 탓이 아니라 뇌가 작동하는 방식 때문임을 이해하게 돼요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "뇌과학",
+   "집중력"
+  ]
+ },
+ {
+  "isbn": "9788998441074",
+  "title": "나는 소망한다 내게 금지된 것을",
+  "author": "양귀자",
+  "pages": 368,
+  "one_liner": "납치와 감금이라는 위험한 관계 속에서 두 사람은 무엇을 마주하게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791168343887",
+  "title": "주와 연 (한정판 레드 에디션)",
+  "author": "청예",
+  "pages": 300,
+  "one_liner": "죽음과 환생을 따라가며 삶이 형벌인지 되묻게 되는 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 0,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937434488",
+  "title": "노르웨이의 숲",
+  "author": "무라카미 하루키",
+  "pages": 572,
+  "one_liner": "청춘의 상실과 기억을 예민하고 섬세하게 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 0,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
  }
 ]
