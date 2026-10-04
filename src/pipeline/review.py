@@ -3,11 +3,13 @@
 Usage (from the checkout, on the day's PR branch):
   PYTHONIOENCODING=utf-8 python -m src.pipeline.review 2026-10-05 [--no-sample]     → page
   PYTHONIOENCODING=utf-8 python -m src.pipeline.review 2026-10-05 --apply <download.json>
+  (a later batch of the same day: its id, e.g. `review 2026-10-06-2` — pipeline/batch.py; its agreement row has that id
+  in the `date` column)
   PYTHONIOENCODING=utf-8 python -m src.pipeline.review --sample 2026-W42 [--apply <download.json>]
   then: cd web && npm run books:import   (and commit to the PR branch)
 Shown: books a person must look at — the two passes disagreed or pass A was unsure (flags), or a rule check held the book
 (issues) — or every book of a weekly sample. Books the passes agreed on are auto-accepted and counted apart. During the
-trial a fixed `sample_rate` share of them (sample.trial_sample, seeded by the date) is shown too ("표본") BY DEFAULT, so
+trial a fixed `sample_rate` share of them (sample.trial_sample, seeded by the batch id) is shown too ("표본") BY DEFAULT, so
 the agreement figures also say how often an agreed book was still wrong; `--no-sample` turns that off. The page shows YES24
 intro/TOC from the local cache (fetched with the local .env key when missing), so it is written under data/processed/check/
 (git-ignored) and never committed. Applying the same download again changes nothing (any book of the day may be answered).

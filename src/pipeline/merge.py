@@ -44,9 +44,11 @@ def record(cand: Candidate, a: dict, b: dict, flags: list[str], issues: list[str
     return out | ({"auto": auto} if auto else {})
 
 
-def additions_doc(date: str, model: str, second_model: str, books: list[dict]) -> dict:
-    return {"date": date, "batch": "daily", "reviewed": False, "model": model, "second_model": second_model,
-            "note": NOTE, "books": books}
+def additions_doc(date: str, model: str, second_model: str, books: list[dict], batch_id: str | None = None) -> dict:
+    """`date` = the calendar day; `batch_id` = the file's key (the day, or `<day>-N` for a later run that day —
+    pipeline/batch.py). `batch` stays "daily": it is the kind of file, not its id."""
+    return {"date": date, "batch_id": batch_id or date, "batch": "daily", "reviewed": False, "model": model,
+            "second_model": second_model, "note": NOTE, "books": books}
 
 
 def write_doc(path: Path, doc: dict) -> None:
