@@ -89,7 +89,7 @@ test("logged in: [막대 | 도감] opens the 도감 — counts, tiers, NEW once,
 test("logged in on S-05: the shown bookmark is reported with its signed ticket, the badge shows, then fades (E-36)", async ({ page }) => {
   await phone(page);
   await account(page, true);
-  let ticket: { seed: number; count: number; sig: string } | null = null;
+  let ticket: { seed: number; count: number; iat: number; sub: string | null; sig: string } | null = null;
   await page.route("**/api/books/draw", async (route) => {
     const res = await route.fetch();
     const body = await res.json();
@@ -97,7 +97,7 @@ test("logged in on S-05: the shown bookmark is reported with its signed ticket, 
     ticket = { ...body.art, seed: FIRST_EDITION_SEED };
     await route.fulfill({ response: res, json: { ...body, art: ticket } });
   });
-  const reports: { seed: number; count: number; sig: string; index: number }[] = [];
+  const reports: { seed: number; count: number; iat: number; sub: string | null; sig: string; index: number }[] = [];
   await page.route("**/api/collection/found", (route) => {
     reports.push(route.request().postDataJSON());
     const found = reports.length === 1 ? [{ kind: "animal", value: "redbird" }, { kind: "sky", value: "rainbow" }] : [];
@@ -114,7 +114,7 @@ test("logged in on S-05: the shown bookmark is reported with its signed ticket, 
   }
   await expect(badge).toBeHidden({ timeout: 5000 });                       // about 2.5 s, then gone
   expect(ticket).not.toBeNull();
-  expect(reports[0]).toEqual({ seed: ticket!.seed, count: 5, sig: ticket!.sig, index: 0 });
+  expect(reports[0]).toEqual({ ...ticket!, count: 5, index: 0 });
   await expect.poll(() => named(events, "collection_item_found").map((e) => e.props)).toEqual([
     { part_kind: "animal", part_value: "redbird", tier: "first_edition" },
     { part_kind: "sky", part_value: "rainbow", tier: "limited" },
@@ -150,11 +150,13 @@ test("the server records nothing for a tampered ticket (403) and asks a login fo
   const draw = await request.post("/api/books/draw", { headers, data: { answers: SQL_PATH } });
   expect(draw.status()).toBe(200);
   const { art } = await draw.json();
-  expect(art).toMatchObject({ count: 5, sig: expect.stringMatching(/^[A-Za-z0-9_-]{43}$/) });
+  expect(art).toMatchObject({ count: 5, sub: null, iat: expect.any(Number), sig: expect.stringMatching(/^[A-Za-z0-9_-]{43}$/) });
 
   const found = (body: object) => request.post("/api/collection/found", { headers, data: body });
   expect((await found({ ...art, seed: (art.seed + 1) % 2 ** 32, index: 0 })).status()).toBe(403);
   expect((await found({ ...art, count: 6, index: 5 })).status()).toBe(403);
+  expect((await found({ ...art, iat: art.iat - 3 * 60 * 60, index: 0 })).status()).toBe(403);          // re-dated
+  expect((await found({ ...art, sub: "11111111-1111-4111-8111-111111111111", index: 0 })).status()).toBe(403);   // re-bound
   expect((await found({ ...art, index: 7 })).status()).toBe(400);
   expect((await found({ ...art, index: 0 })).status()).toBe(401);           // signed and untouched, but nobody logged in
 });

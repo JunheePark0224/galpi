@@ -31,7 +31,7 @@ describe("flow api", () => {
   });
 
   it("draws the pictures from the server's signed seed and keeps the ticket for the 도감 (v1)", () => {
-    const art = { seed: 4242, count: 5, sig: "s".repeat(43) };
+    const art = { seed: 4242, count: 5, iat: 100, sub: null, sig: "s".repeat(43) };
     const view = toDrawView({ ...RES, art }, 9);
     expect(view.picks.map((p) => p.art)).toEqual(artsForDraw(5, 4242));
     expect(view.ticket).toEqual(art);

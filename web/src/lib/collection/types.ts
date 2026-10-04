@@ -1,10 +1,11 @@
 import type { ArtCombo, ArtKind, Tier } from "@/lib/art/combine";
 
 /**
- * 도감 v1: the server's seed for one draw's pictures (artsForDraw(count, seed)) and its HMAC signature over seed and count.
- * `sig` is null when the server has no signing secret in production — the pictures still show, nothing is recorded.
+ * 도감 v1: the server's seed for one draw's pictures (artsForDraw(count, seed)), when it was issued (`iat`, seconds — good
+ * for 2 hours), the logged-in person it was drawn for (`sub`, null when logged out) and the HMAC over all four. `sig` is
+ * null when the server has no (long enough) signing secret in production — the pictures still show, nothing is recorded.
  */
-export interface ArtTicket { seed: number; count: number; sig: string | null }
+export interface ArtTicket { seed: number; count: number; iat: number; sub: string | null; sig: string | null }
 
 /** One part met for the first time — what /api/collection/found returns and E-36 sends (no personal data). */
 export interface FoundItem { kind: ArtKind; value: string; tier: Tier }

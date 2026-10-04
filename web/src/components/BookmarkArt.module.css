@@ -1,5 +1,7 @@
-/* 초판본 effects inside the art SVG (도감 v1, rare-art.html · first-edition-effects.gif). Opacity and transform only — cheap
-   on the compositor. `.still` (fx="light": a moving or small bookmark) and reduced motion keep the rim and a still aura. */
+/* 초판본 effects inside the art SVG (도감 v1, rare-art.html · first-edition-effects.gif). Animations on SVG children are
+   NOT compositor-only: each frame repaints the SVG. So only one full-effect bookmark may animate at a time — the landed
+   S-05 bookmark (fx="full"); everything else (moving, the rods, the sheet, the 도감, the examples) is fx="light" = `.still`,
+   rim and a still aura, as is reduced motion. Keep it that way when adding a new place that draws BookmarkArt. */
 .aura { animation: breathe 2.4s ease-in-out infinite; }
 .tw { transform-box: fill-box; transform-origin: center; animation: twinkle 1.8s ease-in-out infinite; }
 .dust { animation: rise 3.2s linear infinite; }

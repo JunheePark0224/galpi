@@ -23,6 +23,9 @@ alter table public.collection enable row level security;
 -- Logged-in people: select their own rows only. No insert / update / delete grant — the service role (server) writes.
 revoke all on public.collection from anon, authenticated;
 grant select on public.collection to authenticated;
+-- The server's key: /api/collection/found inserts (on conflict do nothing), /seen clears is_new. Said out loud rather than
+-- left to the project's default privileges.
+grant select, insert, update on public.collection to service_role;
 
 drop policy if exists collection_own_select on public.collection;
 create policy collection_own_select on public.collection for select to authenticated using (user_id = (select auth.uid()));

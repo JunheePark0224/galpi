@@ -14,7 +14,7 @@ insert into public.collection (user_id, kind, value, first_art) values
   ('00000000-0000-4000-8000-0000000000d2', 'animal', 'cat', '{"animal":"cat","bg":"peach","sky":"moon","ground":"none","rare":false}');
 
 create temp table rls_result (check_name text, ok boolean);
-grant all on rls_result to authenticated, anon;
+grant all on rls_result to authenticated, anon, service_role;
 
 do $$
 begin
@@ -58,6 +58,22 @@ begin
   exception when insufficient_privilege then
     insert into rls_result values ('C4 cannot delete rows', true);
   end;
+end $$;
+
+-- ── The server (service_role): may record and clear NEW ────────────────────────────────────────────────────────
+reset role;
+select set_config('request.jwt.claims', '', true);
+set local role service_role;
+do $$
+begin
+  insert into public.collection (user_id, kind, value, first_art)
+    values ('00000000-0000-4000-8000-0000000000c1', 'sky', 'moon', '{"animal":"fox","bg":"peach","sky":"moon","ground":"none","rare":false}')
+    on conflict do nothing;
+  update public.collection set is_new = false where user_id = '00000000-0000-4000-8000-0000000000c1';
+  insert into rls_result select 'S3 service_role can record and clear NEW',
+    count(*) = 2 and bool_and(not is_new) from public.collection where user_id = '00000000-0000-4000-8000-0000000000c1';
+exception when insufficient_privilege then
+  insert into rls_result values ('S3 service_role can record and clear NEW', false);
 end $$;
 
 -- ── Nobody logged in ────────────────────────────────────────────────────────────────────────────────────────────

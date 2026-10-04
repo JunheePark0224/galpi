@@ -4,6 +4,17 @@ import { verifyTicket } from "@/lib/collection/ticket";
 import { POST } from "./route";
 
 vi.mock("server-only", () => ({}));
+let userId: string | null = null;
+let lookups = 0;
+let failLookup = false;
+vi.mock("@/lib/auth/server", () => ({
+  authClient: async () => {
+    lookups += 1;
+    if (failLookup) throw new Error("auth down");
+    return {};
+  },
+  sessionUserId: async () => userId,
+}));
 import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
 
 const PATH = { answers: SQL_PATH };
@@ -88,8 +99,29 @@ describe("POST /api/books/draw", () => {
 
   it("signs the pictures' seed for the 도감 (dev secret outside production)", async () => {
     const { art } = await (await POST(req({ ...PATH, seed: 5 }))).json();
-    expect(art).toMatchObject({ count: 5, seed: expect.any(Number), sig: expect.stringMatching(/^[A-Za-z0-9_-]{43}$/) });
+    expect(art).toMatchObject({ count: 5, seed: expect.any(Number), iat: expect.any(Number), sub: null, sig: expect.stringMatching(/^[A-Za-z0-9_-]{43}$/) });
+    expect(Math.abs(art.iat - Date.now() / 1000)).toBeLessThan(5);
     expect(verifyTicket(art, "galpi-dev-only-collection-secret-not-for-production")).toBe(true);
+  });
+
+  it("binds the ticket to the logged-in person when the request carries a session", async () => {
+    userId = "11111111-1111-4111-8111-111111111111";
+    const { art } = await (await POST(req({ ...PATH, seed: 5 }, { ...from("9.9.9.9"), cookie: "sb-abc-auth-token=x" }))).json();
+    expect(art.sub).toBe(userId);
+    expect(verifyTicket(art, "galpi-dev-only-collection-secret-not-for-production")).toBe(true);
+    expect(verifyTicket({ ...art, sub: null }, "galpi-dev-only-collection-secret-not-for-production")).toBe(false);
+    userId = null;
+  });
+
+  it("looks the session up only when an auth cookie is there, and a failed lookup leaves the ticket unbound", async () => {
+    lookups = 0;
+    await POST(req({ ...PATH, seed: 5 }));
+    expect(lookups).toBe(0);
+    failLookup = true;
+    const { art } = await (await POST(req({ ...PATH, seed: 5 }, { ...from("9.9.9.9"), cookie: "sb-abc-auth-token=x" }))).json();
+    expect(lookups).toBe(1);
+    expect(art.sub).toBeNull();
+    failLookup = false;
   });
 
   it("fails closed in production without the secret: the pictures' seed comes unsigned", async () => {
