@@ -19,7 +19,7 @@ function tagErrors(where: string, e: Effects, vocab: Vocabulary, topicsSoFar: st
 
 /** Rule i covers rule j when every scope j matches, i matches too — then j never wins (walk.ts: the first match wins). */
 function covers(i: FarRule["from"], j: FarRule["from"]): boolean {
-  const within = (wide?: string[], narrow?: string[]) => !wide || (narrow !== undefined && narrow.every((v) => wide.includes(v)));
+  const within = (wide?: string[] | null, narrow?: string[] | null) => !wide || (narrow != null && narrow.every((v) => wide.includes(v)));
   return (!i.entry || i.entry === j.entry) && within(i.topics, j.topics) && within(i.keywords, j.keywords) && within(i.genres, j.genres);
 }
 
