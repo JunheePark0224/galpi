@@ -12,8 +12,11 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       include: ["src/lib/**"],
-      exclude: ["src/**/*.test.*", "src/**/__fixtures__/**", "src/lib/recommend/index.ts", "src/lib/recommend/types.ts"],
-      thresholds: { "src/lib/recommend/**": { lines: 100, branches: 100, functions: 100, statements: 100 } },
+      exclude: ["src/**/*.test.*", "src/**/__fixtures__/**", "src/lib/recommend/index.ts", "src/lib/recommend/types.ts", "src/lib/paths/index.ts"],
+      thresholds: {
+        "src/lib/recommend/**": { lines: 100, branches: 100, functions: 100, statements: 100 },
+        "src/lib/paths/**": { lines: 100, branches: 100, functions: 100, statements: 100 },
+      },
     },
   },
 });
