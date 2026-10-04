@@ -36,11 +36,27 @@ export async function removeBookmark(store: LibraryStore, isbn: string): Promise
   return (await store.deleteSave(isbn)) ? { ok: true } : { ok: false, error: "missing" };
 }
 
-/** F-13 옮기기 (hold or back-face menu): to the front of one of the person's own rods. */
-export async function moveBookmark(store: LibraryStore, isbn: string, shelfId: string): Promise<Result> {
+/**
+ * F-13 옮기기 onto one of the person's own rods. Without `index` (the [다른 막대로 옮기기] menu): to the front. With it
+ * (drag, 10-04): at that place in the rod's other bookmarks (clamped), and the rod is numbered 0..n-1 again — only the
+ * rows whose rod or position changed are written.
+ */
+export async function moveBookmark(store: LibraryStore, isbn: string, shelfId: string, index?: number): Promise<Result> {
   if (!(await store.shelves()).some((s) => s.id === shelfId)) return { ok: false, error: "missing" };
-  const moved = await store.updateSave(isbn, { shelfId, position: await frontOf(store, shelfId) });
-  return moved ? { ok: true } : { ok: false, error: "missing" };
+  if (index === undefined) {
+    const moved = await store.updateSave(isbn, { shelfId, position: await frontOf(store, shelfId) });
+    return moved ? { ok: true } : { ok: false, error: "missing" };
+  }
+  const saves = await store.saves();
+  const moving = saves.find((s) => s.isbn === isbn);
+  if (!moving) return { ok: false, error: "missing" };
+  const others = saves.filter((s) => s.shelfId === shelfId && s.isbn !== isbn);
+  const at = Math.min(Math.max(index, 0), others.length);
+  const order = [...others.slice(0, at), moving, ...others.slice(at)];
+  const changed = order.flatMap((s, position) => (s.shelfId === shelfId && s.position === position ? [] : [{ isbn: s.isbn, position }]));
+  const done = await Promise.all(changed.map((c) => store.updateSave(c.isbn, { shelfId, position: c.position })));
+  const movedAt = changed.findIndex((c) => c.isbn === isbn);
+  return movedAt === -1 || done[movedAt] ? { ok: true } : { ok: false, error: "missing" };
 }
 
 /** [＋ 막대 추가]: the first free place after the first rod (which it makes if missing). */

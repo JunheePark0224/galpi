@@ -88,6 +88,41 @@ describe("moving and removing bookmarks", () => {
     expect(await moveBookmark(store, "9790000000009", "a")).toEqual({ ok: false, error: "missing" });
   });
 
+  it("drags a bookmark to a place on a rod: inserted there, the rod numbered 0..n-1, only changed rows written", async () => {
+    const isbns = (view: Awaited<ReturnType<typeof libraryView>>) => view.shelves.map((s) => s.bookmarks.map((b) => b.isbn.slice(-1)));
+    const store = memoryStore({
+      shelves: [{ id: "a", name: "첫", position: 0 }, { id: "b", name: "둘", position: 1 }],
+      saves: [
+        { ...input("9790000000001"), shelfId: "a", position: -2 }, { ...input("9790000000002"), shelfId: "a", position: -1 },
+        { ...input("9790000000003"), shelfId: "a", position: 0 }, { ...input("9790000000004"), shelfId: "b", position: 0 },
+      ],
+    });
+    const writes: string[] = [];
+    const update = store.updateSave;
+    store.updateSave = (isbn, change) => { writes.push(isbn.slice(-1)); return update(isbn, change); };
+
+    expect(await moveBookmark(store, "9790000000001", "a", 2)).toEqual({ ok: true });       // same rod, to the end
+    expect(isbns(await libraryView(store, card))).toEqual([["2", "3", "1"], ["4"]]);
+    expect(store.data.saves.filter((s) => s.shelfId === "a").map((s) => s.position).sort()).toEqual([0, 1, 2]);
+    writes.length = 0;
+    expect(await moveBookmark(store, "9790000000003", "b", 1)).toEqual({ ok: true });       // another rod, after its one
+    expect(isbns(await libraryView(store, card))).toEqual([["2", "1"], ["4", "3"]]);
+    expect(writes).toEqual(["3"]);                                                          // "4" kept its place 0
+    expect(await moveBookmark(store, "9790000000002", "b", 99)).toEqual({ ok: true });      // clamped to the end
+    expect(isbns(await libraryView(store, card))[1]).toEqual(["4", "3", "2"]);
+    writes.length = 0;
+    expect(await moveBookmark(store, "9790000000002", "b", 2)).toEqual({ ok: true });       // its own place: nothing written
+    expect(writes).toEqual([]);
+    expect(await moveBookmark(store, "9790000000009", "b", 0)).toEqual({ ok: false, error: "missing" });
+    expect(await moveBookmark(store, "9790000000002", "zz", 0)).toEqual({ ok: false, error: "missing" });
+  });
+
+  it("reports a drag whose bookmark went away while it was written as missing", async () => {
+    const store = memoryStore({ shelves: [{ id: "a", name: "첫", position: 0 }], saves: [{ ...input("9790000000001"), shelfId: "a", position: 5 }] });
+    store.updateSave = async () => false;
+    expect(await moveBookmark(store, "9790000000001", "a", 0)).toEqual({ ok: false, error: "missing" });
+  });
+
   it("removes a bookmark", async () => {
     const store = memoryStore({ shelves: [{ id: "a", name: "첫", position: 0 }], saves: [{ ...input("9790000000001"), shelfId: "a", position: 0 }] });
     expect(await removeBookmark(store, "9790000000001")).toEqual({ ok: true });

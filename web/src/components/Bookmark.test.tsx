@@ -51,6 +51,15 @@ describe("Bookmark", () => {
     expect(container.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
   });
 
+  it("shows the day it was met above the stitch line only in 내 책갈피 (met given), and reads it", () => {
+    const { container, rerender } = render(<Bookmark card={leaf} art={art} />);
+    expect(container.querySelector("[data-part=met]")).toBeNull();
+    rerender(<Bookmark card={leaf} art={art} met="2026. 10. 4." />);
+    const met = screen.getByText("2026. 10. 4. 만남");
+    expect(met.previousElementSibling).toHaveTextContent("오늘 아침은 몇 걸음이었을까요?");
+    expect(screen.getByRole("article", { name: "천천히 걷는 아침, 천아침, 오늘 아침은 몇 걸음이었을까요?, 에세이, 2026. 10. 4. 만남" })).toBeInTheDocument();
+  });
+
   it("turns the frost off while it moves", () => {
     render(<Bookmark card={leaf} art={art} moving />);
     expect(screen.getByRole("article")).toHaveAttribute("data-moving");

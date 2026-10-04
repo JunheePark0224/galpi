@@ -16,6 +16,7 @@
 | taxonomy v0.12 | 2026-10-02 | S-06 [🔖 꽂기] 제목 옆·늘 보임 (PRD F-12, DESIGN C-16b, 친구 시험) | E-11은 꺼내지 않아도 남음, E-27은 꽂기와 무관한 뒷면 보기 신호. 이벤트·속성·`schema.ts` 변경 없음 (8절) |
 | taxonomy v0.10 | 2026-10-02 | 갈피 우체통 (PRD F-26) `plans/2026-10-02-feedback-mailbox.md` | E-31 `feedback_sent` live, 동사 `sent`, 분류 `홈`, `feedback_text` Supabase only, Supabase 사본은 `/api/feedback`이 저장 (8절) |
 | taxonomy v1.0 | 2026-10-04 | v2 설계 `plans/2026-10-04-galpi-v2-paths-design.md` 6절 · 계획 2 | 갈림길 이벤트 E-32·E-33·E-34, E-25 속성 교체, 공통 `mode`·`entry`=갈래·`screen_version` v2, 🎯 입력·밸런스 이벤트 6개 `removed` (8절) |
+| taxonomy v1.1 | 2026-10-04 | 내 책갈피 끌어서 옮기기 `plans/2026-10-04-library-front-drag.md` | E-30 `method` "drag" 추가("hold"는 보내지 않음), `is_same_shelf` 추가, 같은 막대 안 순서 바꾸기도 남김 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -103,7 +104,7 @@
 | `completed` | 과정이 성공으로 끝났다 | system |
 | `saved` / `unsaved` | 보관했다 / 보관에서 뺐다 | system / click |
 | `created` | 이용자가 새것을 만들었다 (내 책갈피 막대, v0.8) | click |
-| `moved` | 이용자가 자리를 옮겼다 (책갈피를 다른 막대로, v0.8) | click |
+| `moved` | 이용자가 자리를 옮겼다 (책갈피를 다른 막대로, v0.8 · 같은 막대 안 다른 자리로, v1.1) | click |
 | `sent` | 이용자가 쓴 글을 보냈고 서버가 저장했다 (갈피 우체통, v0.10) | click |
 
 ### 2-3. 속성 이름
@@ -739,15 +740,16 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 내 책갈피 | click | live | 신규 (v0.8) |
+| 내 책갈피 | click | live | 신규 (v0.8) · v1.1: "drag", `is_same_shelf` |
 
-**언제**: S-09에서 책갈피를 다른 막대로 옮겼을 때 (저장 성공 뒤). 같은 막대에 다시 놓으면(취소) 남지 않음. 막대 이름·번호는 넣지 않는다  
+**언제**: S-09에서 책갈피를 다른 막대로, 또는 같은 막대 안 다른 자리로(v1.1) 옮겼을 때 (저장 성공 뒤). 제자리에 놓거나 막대 밖에서 놓으면 남지 않음. 막대 이름·번호·자리 번호는 넣지 않는다  
 **분석 질문**: Q-13
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `book_id` | 추가 | String | "9788998441012" | 책 ISBN-13 (books.isbn) |
-| `method` | 추가 | String | "hold", "menu" | 옮긴 방법 — hold=꾹 눌러 집고 막대 누르기, menu=뒷면 [다른 막대로 옮기기] |
+| `method` | v1.1: "drag" 추가 | String | "drag", "menu", "hold" | 옮긴 방법 — drag=꾹 눌러 끌어서 놓기(v1.1), menu=시트 [다른 막대로 옮기기](맨 앞에 붙음), hold=꾹 눌러 집고 막대 누르기(v1.0까지 — v1.1부터 보내지 않음, 옛 탭·옛 기록용으로 스펙에 남김) |
+| `is_same_shelf` | 추가 (v1.1) | Boolean | TRUE, FALSE | 같은 막대 안에서 자리만 바꿨는지 (끌기로만 TRUE — 메뉴는 다른 막대만) |
 
 #### E-19 `redraw_clicked`
 
@@ -1128,6 +1130,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.11 | 2026-10-02 | Claude (사용자 요청) | 친구 5명 시험 의견("아까 본 책을 다시 못 본다")으로 S-06에 ‹ › 앞뒤 넘기기(PRD F-09, DESIGN C-11). E-10 `result_book_viewed`는 판마다 **책당 한 번**(돌아가 다시 봐도 또 남지 않음 — position 별 조회 수가 부풀지 않게). 앞뒤 이동 자체는 이벤트 없음(답할 질문이 없음, 1-1). 이벤트 이름·속성·`schema.ts` 변경 없음, 모으는 정보 변화 없음 |
 | v0.12 | 2026-10-02 | Claude (사용자 결정) | 친구 5명 시험에서 꽂는 법을 아무도 못 찾음 → S-06 꽂기를 제목 옆 작은 잉크 알약 [🔖 꽂기]로, 늘 보이고 한 번에 꽂힘(PRD F-12, DESIGN C-16b). 책 아래 [내 책갈피에 꽂기]는 없앰, 주 버튼은 늘 [예스24에서 보기]. **E-11 `save_clicked`는 이제 E-27 `bookmark_pulled` 없이도 남는다** — 5-3 꺼냄율·뒷면율은 그대로지만 v0.12 전후의 "꺼냄 → 꽂기" 순서를 퍼널로 잇지 않는다(그 전에는 꽂으려면 꺼내야 했다). 마우스 hover(들림 + "눌러서 꺼내기")는 이벤트 없음. 처음 S-06 안내(C-21)도 이벤트 없음(C-20과 같음, 1-1). 이벤트 이름·속성·`schema.ts` 변경 없음, 모으는 정보 변화 없음 — `/privacy` 그대로(localStorage 열쇠 `galpi.hint.resultGuide` 하나 추가는 C-20과 같은 화면 설정) |
 | v1.0 | 2026-10-04 | Claude (v2 계획 2) | 갈피 v2(입구 하나, 둘 중 하나 고르는 갈림길). **새로**: E-32 `question_answered`(node_id·kind·choice·depth·position·elapsed_ms — E-24 대신, 이름을 바꿔 v1과 섞이지 않게), E-33 `question_back_clicked`(node_id·depth·source), E-34 `path_completed`(scope_id·depth·unsure_count), 공통 `mode`. **바꿈**: E-25 `unsure_hold_cancelled` 속성 question_no·position·is_edit → node_id·depth, 분류 갈림길. E-20 `source`에 "question"(첫 질문의 이전 질문 → 새 판, 3-1a). 공통 `entry` 뜻 = 갈래(값 그대로), `screen_version` v2. **없앰(`removed`, 줄은 기록으로)**: E-03 `chip_selected`, E-26 `goal_submitted`, E-21 `free_goal_written`, E-22 `goal_coverage_checked`, E-06 `first_page_edited`, E-24 `balance_answered`. E-02 `source`=first_page와 E-18 `source`=first_page 값은 더 나오지 않지만 v1 기록을 읽으려고 스펙에 남김. 처리방침 6-3f를 먼저. v1 기준점과는 책갈피 이후 이벤트(공통)로만 비교(설계 9절) |
+| v1.1 | 2026-10-04 | Claude (사용자 요청) | 내 책갈피(S-09)를 꾹 눌러 **끌어서** 다른 막대 어디든·같은 막대 안 다른 자리로 옮김(PRD F-13, `plans/2026-10-04-library-front-drag.md`). E-30 `bookmark_moved`: `method`에 "drag" 추가, "hold"(들고 → 막대 누르기)는 v1.1부터 보내지 않음 — 그 화면이 없어짐, 옛 탭과 v1.0까지의 기록을 읽으려고 스펙에 남김. 새 속성 `is_same_shelf`(Boolean — 2-3 규칙으로 `is_`, 계획서의 `same_shelf`). 같은 막대 안 순서 바꾸기도 남김, 제자리·막대 밖 놓기는 남지 않음. 놓인 자리 번호는 넣지 않음(답할 질문이 없음, 1-1). 모으는 정보 변화 없음 — `/privacy` 그대로 |
 
 ---
 

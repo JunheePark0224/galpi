@@ -8,7 +8,8 @@ import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
 
 export type LibraryStatus = "loading" | "ready" | "error" | "login";
-export type MoveMethod = "hold" | "menu";
+/** E-30 method: drag = 꾹 눌러 끌어서 놓기 (10-04), menu = the sheet's [다른 막대로 옮기기]. */
+export type MoveMethod = "drag" | "menu";
 
 /**
  * S-09's rods from /api/library, and the changes (each sent to the API, then the rods are read again — the server is the
@@ -88,8 +89,12 @@ export function useLibrary() {
     status,
     view,
     reload,
-    move: (isbn: string, shelfId: string, method: MoveMethod) =>
-      atOnce((v) => moveLocally(v, isbn, shelfId), "PATCH", { isbn, shelfId }, () => track("bookmark_moved", { book_id: isbn, method })),
+    /** To `index` of the rod's other bookmarks (a drag — the same rod too), or without it to the rod's front (the menu). */
+    move: (isbn: string, shelfId: string, method: MoveMethod, index?: number) => {
+      const sameShelf = !!view?.shelves.find((s) => s.id === shelfId)?.bookmarks.some((b) => b.isbn === isbn);
+      return atOnce((v) => moveLocally(v, isbn, shelfId, index), "PATCH", index === undefined ? { isbn, shelfId } : { isbn, shelfId, index },
+        () => track("bookmark_moved", { book_id: isbn, method, is_same_shelf: sameShelf }));
+    },
     remove: (isbn: string) =>
       atOnce((v) => removeLocally(v, isbn), "DELETE", { isbn }, () => {
         track("book_unsaved", { book_id: isbn });

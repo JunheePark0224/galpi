@@ -24,5 +24,5 @@
    그 자리에 넣고 그 막대의 순서를 0..n-1로 다시 매긴다; 없으면 지금처럼 맨 앞. `index`는 0~500 정수만.
 6. **이벤트 (taxonomy v1.1, 원칙 3-1)**: E-30 `bookmark_moved` — 같은 막대 안 자리 바꾸기도 남긴다(제자리는 안 남음).
    `method` 값 "drag"(끌어서 놓기) 추가, "hold"는 v1.1부터 보내지 않음(옛 탭 호환으로 스키마엔 남김),
-   새 속성 `same_shelf` Boolean(같은 막대 안 순서 바꾸기면 true). 모으는 개인정보는 같음 — `/privacy` 변경 없음.
+   새 속성 `same_shelf` Boolean(같은 막대 안 순서 바꾸기면 true) — 구현에서는 taxonomy 2-3 이름 규칙대로 **`is_same_shelf`** (context 10-04). 모으는 개인정보는 같음 — `/privacy` 변경 없음.
    PRD F-13·E-30, DESIGN C-13·C-17·C-22, taxonomy.md·csv·schema.ts·테스트·track 같은 커밋.

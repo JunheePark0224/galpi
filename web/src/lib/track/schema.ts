@@ -69,7 +69,8 @@ export const EVENT_SPEC = {
   bookmark_pulled: { book_id: BOOK_ID, position: POSITION, pick_type: PICK_TYPE },
   bookmark_flipped: { book_id: BOOK_ID, pick_type: PICK_TYPE },
   shelf_created: { shelf_count: { type: "number" } },
-  bookmark_moved: { book_id: BOOK_ID, method: { type: ["hold", "menu"] } },
+  // v1.1: "hold" is no longer sent (old tabs and records only)
+  bookmark_moved: { book_id: BOOK_ID, method: { type: ["drag", "menu", "hold"] }, is_same_shelf: { type: "boolean" } },
   feedback_sent: {
     feedback_text: { type: "string", only: "supabase", max: FEEDBACK_MAX },
     text_length: { type: "number" },
