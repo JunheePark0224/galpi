@@ -21,10 +21,11 @@ describe("BookmarkArt (C-03, 도감 v1)", () => {
     const [a, b] = container.querySelectorAll("svg");
     expect(a).toHaveAttribute("data-tier", "first_edition");
     expect(a.querySelector("[data-part=rim]")).not.toBeNull();
-    expect(a.querySelector("radialGradient")?.id).toBe("a-aura");
-    expect(b.querySelector("radialGradient")?.id).toBe("b-aura");
-    expect(b.querySelector("linearGradient")?.id).toBe("b-sun");
-    expect(b.querySelector("rect")?.getAttribute("fill")).toBe("url(#b-sun)");
+    expect(a.querySelector("radialGradient")?.id).toMatch(/^a-.+-aura$/);
+    expect(b.querySelector("radialGradient")?.id).toMatch(/^b-.+-aura$/);
+    const sun = b.querySelector("linearGradient")!.id;
+    expect(sun).toMatch(/^b-[A-Za-z0-9_-]+-sun$/);
+    expect(b.querySelector("rect")?.getAttribute("fill")).toBe(`url(#${sun})`);
     expect(a.querySelectorAll("path[style*='animation-delay']").length).toBe(4 + 2 + 2);   // animal 4, goldmoon 2, goldbook 2
     expect(a.querySelectorAll("circle[style*='animation-delay']").length).toBe(7);          // galaxy dust
     expect(a.querySelector("[transform='skewX(-20)']")).not.toBeNull();                     // the sweep
@@ -38,7 +39,18 @@ describe("BookmarkArt (C-03, 도감 v1)", () => {
     expect(svg.querySelector("[data-part=rim]")).not.toBeNull();
     expect(svg.querySelectorAll("[style*='animation-delay']")).toHaveLength(0);
     expect(svg.querySelector("[transform='skewX(-20)']")).toBeNull();
-    expect(svg.querySelectorAll("circle[fill='url(#l-aura)']").length).toBe(3);             // animal + two props
+    const aura = svg.querySelector("radialGradient")!.id;
+    expect(svg.querySelectorAll(`circle[fill='url(#${aura})']`).length).toBe(3);             // animal + two props
+  });
+
+  it("keeps ids apart when the same book is drawn twice on one page (rod + sheet, drag copy)", () => {
+    const { container } = render(<><BookmarkArt art={FIRST} clipId="arch-978" /><BookmarkArt art={FIRST} clipId="arch-978" /></>);
+    const ids = [...container.querySelectorAll("[id]")].map((el) => el.id);
+    expect(ids).toHaveLength(4);
+    expect(new Set(ids).size).toBe(4);
+    const [first, second] = container.querySelectorAll("svg");
+    expect(first.querySelector("g[clip-path]")?.getAttribute("clip-path")).toBe(`url(#${first.querySelector("clipPath")!.id})`);
+    expect(second.querySelector("g[clip-path]")?.getAttribute("clip-path")).toBe(`url(#${second.querySelector("clipPath")!.id})`);
   });
 
   it("gives a 한정판 picture its parts but no effect", () => {

@@ -9,7 +9,7 @@ Last Updated: 2026-10-04 (v2 계획 2 `feat/v2-screens` 병합 전 · 배포 중
 - **도감 v1 (`feat/collection-dex`, `.worktrees/dex`, 병합 전, 10-05)**: 한정판·초판본 그림(동물 16·배경 11·소품 16, 부분마다 90/9/1), 초판본 효과, S-09 [막대 | 도감], S-05 "처음 만난 …!" 배지, 서버 서명 seed로 기록, taxonomy v1.3(E-36·E-37), 처리방침 갱신일 10-05. 설계는 `plans/2026-10-05-collection-dex.md` "설계 (구현)". 스크린샷 `mockups/2026-10-05-dex/impl-*.png`.
   **사용자가 할 일 (병합·배포 전, 순서대로)**:
   1. Supabase 대시보드 → SQL Editor → New query에 `web/supabase/migrations/0004_collection.sql` 전체를 붙여 **Run** (0001~0003 다음, 한 번만). "Success. No rows returned"가 나오면 됨.
-  2. 새 query에 `web/supabase/checks/collection_rls.sql` 전체를 붙여 Run → 빨간 오류 상자 "RLS CHECK RESULT" 안 8줄이 모두 `ok`인지 확인(이 오류는 정상 — 시험 데이터를 되돌리는 장치). `FAILED`나 다른 오류면 그 글을 Claude에게.
+  2. 새 query에 `web/supabase/checks/collection_rls.sql` 전체를 붙여 Run → 빨간 오류 상자 "RLS CHECK RESULT" 안 9줄이 모두 `ok`인지 확인(이 오류는 정상 — 시험 데이터를 되돌리는 장치). `FAILED`나 다른 오류면 그 글을 Claude에게.
   3. Vercel → Settings → Environment Variables → `COLLECTION_SIGNING_SECRET`을 **Production에만**, Sensitive로 추가(32자 이상 무작위 — 만드는 법 `deploy.md` 3절). 값은 대화에 붙이지 않는다. Preview에는 넣지 않는다(넣지 않으면 Preview는 도감 기록만 꺼짐).
   4. `SUPABASE_SERVICE_ROLE_KEY`가 Production에 이미 있는지 확인(도감 쓰기에 씀 — 없으면 도감 기록이 꺼짐).
   5. 병합·배포 → 로그인해 책갈피 몇 장을 넘긴 뒤 `select kind, value, first_met_at from collection order by first_met_at desc limit 5;`에 줄이 생기는지, [도감]에 그 그림이 보이는지.

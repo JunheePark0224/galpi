@@ -2,6 +2,7 @@ import { catalog } from "@/lib/books/catalog";
 import { drawPath } from "@/lib/books/draw";
 import { parseDrawRequest } from "@/lib/books/request";
 import { issueTicket } from "@/lib/collection/ticket";
+import { verifiedUserId } from "@/lib/track/record";
 import { guardJson } from "@/lib/server/guard";
 import { mulberry32 } from "@/lib/recommend";
 
@@ -22,5 +23,7 @@ export async function POST(request: Request): Promise<Response> {
   const rng = mulberry32(parsed.seed ?? crypto.getRandomValues(new Uint32Array(1))[0]);
   const drawn = drawPath(parsed.answers, new Set(parsed.seen), rng, catalog());
   // 도감 v1: the pictures' seed is always the server's own (never the request's `seed`, which only replays the books)
-  return Response.json({ ...drawn, art: issueTicket(drawn.picks.length) });
+  // the ticket is bound to the logged-in person (sub); the session is looked up only when an auth cookie is there
+  const sub = await verifiedUserId(request);
+  return Response.json({ ...drawn, art: issueTicket(drawn.picks.length, { sub }) });
 }

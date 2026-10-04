@@ -20,7 +20,8 @@ export function parseFound(body: unknown): FoundItem[] {
 /** S-05: bookmark `index` of a signed draw was shown to a logged-in person. The new parts, or [] (refused, offline, off). */
 export async function reportMeeting(ticket: ArtTicket, index: number): Promise<FoundItem[]> {
   if (!ticket.sig) return [];
-  const answer = await libraryRequest("POST", "/api/collection/found", { seed: ticket.seed, count: ticket.count, sig: ticket.sig, index });
+  const { seed, count, iat, sub, sig } = ticket;
+  const answer = await libraryRequest("POST", "/api/collection/found", { seed, count, iat, sub, sig, index });
   return answer.ok ? parseFound(answer.body) : [];
 }
 

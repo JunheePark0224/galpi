@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { BACKGROUNDS, artTier, tierOf, type ArtCombo, type Background, type GroundProp, type SkyProp } from "@/lib/art/combine";
 import styles from "./BookmarkArt.module.css";
 
@@ -170,9 +171,11 @@ function PropSparkles({ kind }: { kind: string }) {
  * 초판본 parts (도감 v1, rare-art.html · first-edition-effects.gif): a gold rim on the window and a light sweep now and then;
  * an animal gets a breathing aura + four sparkles, a background gold dust, a prop a glow + two sparkles. `fx="light"`
  * (a moving or small bookmark — T-03, the rods, the 도감) and prefers-reduced-motion keep the rim and a still aura only.
- * Ids (clip, gradients) are made from `clipId`, so it must be unique on the page.
+ * Ids (clip, gradients) are `clipId` + this instance's useId(): the same book drawn twice on one page (a rod and its
+ * sheet, the drag copy) never shares a clip or gradient.
  */
-export function BookmarkArt({ art, clipId, fx = "full" }: { art: ArtCombo; clipId: string; fx?: "full" | "light" }) {
+export function BookmarkArt({ art, clipId: base, fx = "full" }: { art: ArtCombo; clipId: string; fx?: "full" | "light" }) {
+  const clipId = `${base}-${useId().replace(/[^A-Za-z0-9_-]/g, "")}`;
   const bg = BACKGROUNDS[art.bg] ?? BACKGROUNDS.peach;
   const first = (kind: "animal" | "bg" | "sky" | "ground") => tierOf(kind, art[kind]) === "first_edition";
   const tier = artTier(art);
