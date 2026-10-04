@@ -10,13 +10,19 @@ import { GenreTag } from "./GenreTag";
 import frame from "./BookmarkFrame.module.css";
 import styles from "./Bookmark.module.css";
 
-interface Props { card: BookCard; art: ArtCombo; moving?: boolean }
+interface Props {
+  card: BookCard;
+  art: ArtCombo;
+  moving?: boolean;
+  /** 내 책갈피 only (DESIGN C-13, 10-04): the day it was kept, "2026. 10. 4." — shown as "… 만남" above the stitch line. */
+  met?: string;
+}
 
 /**
  * C-02 (DESIGN 4절): frost film, arched window, name tag, title, author (PRD F-08), one-liner, stitch line, swallowtail, string.
  * The shape is shared with the balance cards (BookmarkFrame.module.css).
  */
-export function Bookmark({ card, art, moving = false }: Props) {
+export function Bookmark({ card, art, moving = false, met }: Props) {
   const tone = toneOf(card);
   const titleRef = useRef<HTMLHeadingElement>(null);
   useFitTitle(titleRef, card.title);
@@ -25,7 +31,7 @@ export function Bookmark({ card, art, moving = false }: Props) {
     <article
       className={`${frame.frame} ${styles.bookmark}`}
       data-moving={moving ? "" : undefined}
-      aria-label={[card.title, card.author, card.oneLiner, card.genre].filter(Boolean).join(", ")}
+      aria-label={[card.title, card.author, card.oneLiner, card.genre, met && `${met} 만남`].filter(Boolean).join(", ")}
       style={{ "--tone": tone.bg } as CSSProperties}
     >
       <span className={frame.string} aria-hidden="true" />
@@ -36,6 +42,7 @@ export function Bookmark({ card, art, moving = false }: Props) {
         <h3 ref={titleRef} className={styles.title} data-part="title">{bookTitle(card.title)}</h3>
         {card.author ? <p className={styles.author} data-part="author">{card.author}</p> : null}
         <p className={styles.line} data-part="line">{card.oneLiner}</p>
+        {met ? <p className={styles.met} data-part="met">{`${met} 만남`}</p> : null}
         <span className={frame.stitch} />
         <span className={styles.mark}>갈피</span>
       </div>

@@ -102,6 +102,18 @@ describe("내 책갈피 routes", () => {
     expect((await move(send("PATCH", "/api/library/saves", { isbn: BODY.isbn, shelfId: B }))).status).toBe(200);
     expect(store.data.saves[0].shelfId).toBe(B);
     expect((await move(send("PATCH", "/api/library/saves", { isbn: BODY.isbn, shelfId: "not-a-uuid" }))).status).toBe(400);
+    expect((await move(send("PATCH", "/api/library/saves", { isbn: BODY.isbn, shelfId: B, index: 0 }))).status).toBe(200);   // a drag
+    expect(store.data.saves[0]).toMatchObject({ shelfId: B, position: 0 });
+    expect((await move(send("PATCH", "/api/library/saves", { isbn: BODY.isbn, shelfId: B, index: 500 }))).status).toBe(200);
+    // the place counts only books still in the catalogue: one that left it is not a neighbour
+    store.data.saves = [...store.data.saves, { ...store.data.saves[0], isbn: "9790000000009", shelfId: A, position: 0 }];
+    expect((await move(send("PATCH", "/api/library/saves", { isbn: BODY.isbn, shelfId: A, index: 1 }))).status).toBe(200);
+    expect(store.data.saves.find((s) => s.isbn === BODY.isbn)).toMatchObject({ shelfId: A, position: 0 });   // index 1 → the drawn front
+    expect((await move(send("PATCH", "/api/library/saves", { isbn: BODY.isbn, shelfId: B }))).status).toBe(200);
+    store.data.saves = store.data.saves.filter((s) => s.isbn !== "9790000000009");
+    for (const index of [-1, 501, 1.5, "1", null, true]) {
+      expect((await move(send("PATCH", "/api/library/saves", { isbn: BODY.isbn, shelfId: B, index }))).status, String(index)).toBe(400);
+    }
     expect((await removeShelf(send("DELETE", "/api/library/shelves", { id: B }))).status).toBe(409);   // not empty
     expect((await unsave(send("DELETE", "/api/library/saves", { isbn: BODY.isbn }))).status).toBe(200);
     expect((await unsave(send("DELETE", "/api/library/saves", { isbn: BODY.isbn }))).status).toBe(404);

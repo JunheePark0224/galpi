@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { BookCard } from "@/lib/books/types";
 import { memoryStore } from "./__fixtures__/memoryStore";
-import { addShelf, FIRST_SHELF_NAME, libraryView, MAX_SAVES, MAX_SHELVES, moveBookmark, removeBookmark, removeShelf, renameShelf, saveBookmark } from "./service";
+import { addShelf, FIRST_SHELF_NAME, libraryView, MAX_SAVES, MAX_SHELVES, moveBookmark, POSITION_STEP, removeBookmark, removeShelf, renameShelf, saveBookmark } from "./service";
 import type { SaveRow } from "./types";
 
 const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false } as const;
@@ -86,6 +86,94 @@ describe("moving and removing bookmarks", () => {
     expect(view.shelves[1].bookmarks.map((b) => b.isbn)).toEqual(["9790000000001", "9790000000002"]);
     expect(await moveBookmark(store, "9790000000001", "zz")).toEqual({ ok: false, error: "missing" });
     expect(await moveBookmark(store, "9790000000009", "a")).toEqual({ ok: false, error: "missing" });
+  });
+
+  describe("drag to a place (index, 10-04)", () => {
+    const isbn = (n: number) => `97900000000${String(n).padStart(2, "0")}`;
+    /** Rod "a" with these positions (books 1, 2, …), book 50 on rod "b", rod "c" empty; writes are recorded. */
+    const rods = (positions: number[]) => {
+      const store = memoryStore({
+        shelves: [{ id: "a", name: "첫", position: 0 }, { id: "b", name: "둘", position: 1 }, { id: "c", name: "셋", position: 2 }],
+        saves: [...positions.map((position, i) => ({ ...input(isbn(i + 1)), shelfId: "a", position })), { ...input(isbn(50)), shelfId: "b", position: 0 }],
+      });
+      const writes: { isbn: string; position: number }[] = [];
+      let open = 0;
+      let most = 0;
+      const update = store.updateSave;
+      store.updateSave = async (id, change) => {
+        writes.push({ isbn: id, position: change.position });
+        most = Math.max(most, ++open);
+        await new Promise((r) => setTimeout(r, 0));
+        open--;
+        return update(id, change);
+      };
+      const order = async (shelf = "a") => (await libraryView(store, card)).shelves.find((s) => s.id === shelf)!.bookmarks.map((b) => Number(b.isbn.slice(-2)));
+      return { store, writes, order, most: () => most };
+    };
+
+    it("between two neighbours: one row, at the midpoint", async () => {
+      const r = rods([0, 10]);
+      expect(await moveBookmark(r.store, isbn(50), "a", 1)).toEqual({ ok: true });
+      expect(r.writes).toEqual([{ isbn: isbn(50), position: 5 }]);
+      expect(await r.order()).toEqual([1, 50, 2]);
+    });
+
+    it("at the front: one before the first; at the end: one after the last; an empty rod: 0", async () => {
+      const r = rods([3, 10]);
+      await moveBookmark(r.store, isbn(50), "a", 0);
+      expect(r.writes).toEqual([{ isbn: isbn(50), position: 2 }]);
+      await moveBookmark(r.store, isbn(1), "a", 9);                       // clamped to the end, its own rod
+      expect(r.writes.at(-1)).toEqual({ isbn: isbn(1), position: 11 });
+      expect(await r.order()).toEqual([50, 2, 1]);
+      await moveBookmark(r.store, isbn(2), "c", 0);
+      expect(r.writes.at(-1)).toEqual({ isbn: isbn(2), position: 0 });
+      expect(r.writes).toHaveLength(3);
+    });
+
+    it("no whole number left between the neighbours: the rod is spaced 1024 apart, only changed rows written", async () => {
+      const r = rods([0, 1, 2]);
+      expect(await moveBookmark(r.store, isbn(50), "a", 1)).toEqual({ ok: true });
+      expect(await r.order()).toEqual([1, 50, 2, 3]);
+      expect(r.writes).toEqual([                                          // book 1 kept its 0
+        { isbn: isbn(50), position: 1024 }, { isbn: isbn(2), position: 2048 }, { isbn: isbn(3), position: 3072 },
+      ]);
+      expect(POSITION_STEP).toBe(1024);
+    });
+
+    it("renumbers a long rod a few writes at a time", async () => {
+      const r = rods(Array.from({ length: 30 }, (_, i) => i));
+      expect(await moveBookmark(r.store, isbn(50), "a", 15)).toEqual({ ok: true });
+      expect(r.writes).toHaveLength(30);
+      expect(r.most()).toBeLessThanOrEqual(10);
+      expect((await r.order()).slice(14, 17)).toEqual([15, 50, 16]);
+    });
+
+    it("counts only the bookmarks S-09 draws: a book that left the catalogue keeps its place and is not a neighbour", async () => {
+      const r = rods([0, 1, 4]);                                          // book 2 (position 1) is no longer in the catalogue
+      const shown = (id: string) => id !== isbn(2);
+      expect(await moveBookmark(r.store, isbn(50), "a", 1, shown)).toEqual({ ok: true });
+      expect(r.writes).toEqual([{ isbn: isbn(50), position: 2 }]);       // between books 1 (0) and 3 (4)
+      expect((await r.order()).filter((n) => n !== 2)).toEqual([1, 50, 3]);
+      expect(await moveBookmark(r.store, isbn(3), "a", 2, shown)).toEqual({ ok: true });   // drawn [1, 50, 3]: already there
+      expect(r.writes).toHaveLength(1);
+    });
+
+    it("writes nothing for its own place, and reports a missing bookmark or rod", async () => {
+      const r = rods([0, 5]);
+      expect(await moveBookmark(r.store, isbn(2), "a", 1)).toEqual({ ok: true });
+      expect(r.writes).toEqual([]);
+      expect(await moveBookmark(r.store, isbn(9), "a", 0)).toEqual({ ok: false, error: "missing" });
+      expect(await moveBookmark(r.store, isbn(1), "zz", 0)).toEqual({ ok: false, error: "missing" });
+    });
+  });
+
+  it("reports a drag whose bookmark went away while it was written as missing", async () => {
+    const store = memoryStore({
+      shelves: [{ id: "a", name: "첫", position: 0 }, { id: "b", name: "둘", position: 1 }],
+      saves: [{ ...input("9790000000001"), shelfId: "a", position: 5 }],
+    });
+    store.updateSave = async () => false;
+    expect(await moveBookmark(store, "9790000000001", "b", 0)).toEqual({ ok: false, error: "missing" });
   });
 
   it("removes a bookmark", async () => {

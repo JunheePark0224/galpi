@@ -62,10 +62,25 @@ describe("useLibrary (S-09)", () => {
     await waitFor(() => expect(result.current.status).toBe("ready"));
     request.mockResolvedValueOnce(ok()).mockResolvedValueOnce(ok(VIEW));
     let done = false;
-    await act(async () => { done = await result.current.move("1", "b", "hold"); });
+    await act(async () => { done = await result.current.move("1", "b", "menu"); });
     expect(done).toBe(true);
     expect(request).toHaveBeenCalledWith("PATCH", "/api/library/saves", { isbn: "1", shelfId: "b" });
-    expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "1", method: "hold" });
+    expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "1", method: "menu", is_same_shelf: false });
+  });
+
+  it("drags a bookmark to a place — another rod or its own (E-30 drag, is_same_shelf)", async () => {
+    const two = { ...VIEW, count: 2, shelves: [{ ...VIEW.shelves[0], bookmarks: [VIEW.shelves[0].bookmarks[0], { ...VIEW.shelves[0].bookmarks[0], isbn: "2" }] }, VIEW.shelves[1]] };
+    request.mockResolvedValue(ok(two));
+    const { result } = renderHook(() => useLibrary());
+    await waitFor(() => expect(result.current.status).toBe("ready"));
+    request.mockResolvedValueOnce(ok()).mockResolvedValueOnce(ok(two));
+    await act(async () => { await result.current.move("1", "a", "drag", 1); });
+    expect(request).toHaveBeenCalledWith("PATCH", "/api/library/saves", { isbn: "1", shelfId: "a", index: 1 });
+    expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "1", method: "drag", is_same_shelf: true });
+    request.mockResolvedValueOnce(ok()).mockResolvedValueOnce(ok(two));
+    await act(async () => { await result.current.move("2", "b", "drag", 0); });
+    expect(request).toHaveBeenCalledWith("PATCH", "/api/library/saves", { isbn: "2", shelfId: "b", index: 0 });
+    expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "2", method: "drag", is_same_shelf: false });
   });
 
   it("removes a bookmark (E-16), one less in the header", async () => {
@@ -116,9 +131,12 @@ describe("useLibrary (S-09)", () => {
     let answer: (v: unknown) => void = () => {};
     request.mockImplementationOnce(() => new Promise((r) => { answer = r; }));
     let moving: Promise<boolean> = Promise.resolve(false);
-    act(() => { moving = result.current.move("1", "b", "hold"); });
+    act(() => { moving = result.current.move("1", "b", "drag", 0); });
     expect(result.current.view?.shelves.map((s) => s.bookmarks.map((b) => b.isbn))).toEqual([[], ["1"]]);   // already moved
+    request.mockResolvedValueOnce(ok(VIEW));                                                       // the quiet re-read after it
+    const reads = request.mock.calls.filter(([m]) => m === "GET").length;
     await act(async () => { answer({ ok: false, status: 500, body: null }); await moving; });
+    await waitFor(() => expect(request.mock.calls.filter(([m]) => m === "GET")).toHaveLength(reads + 1));   // the server's order wins
     expect(result.current.view?.shelves.map((s) => s.bookmarks.map((b) => b.isbn))).toEqual([["1"], []]);   // back again
     expect(track).not.toHaveBeenCalledWith("bookmark_moved", expect.anything());
 
