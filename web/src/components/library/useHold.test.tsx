@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { HOLD_MS, useHold } from "./useHold";
 
-function Probe({ onHold, onClick }: { onHold: () => void; onClick: () => void }) {
+function Probe({ onHold, onClick }: { onHold: (at: { x: number; y: number }, pointerId: number) => void; onClick: () => void }) {
   const hold = useHold(onHold);
   return <button type="button" {...hold.handlers} onClick={() => { if (!hold.wasHold()) onClick(); }}>bm</button>;
 }
@@ -21,11 +21,13 @@ describe("useHold — 꾹 누르기 (0.5 s) without fighting the sideways scroll
   it("holds after 0.5 s of a still press, and the click that follows the release is not a tap", () => {
     const { onHold, onClick, el } = setup();
     expect(HOLD_MS).toBe(500);
-    fireEvent.pointerDown(el, { clientX: 10, clientY: 10, pointerType: "touch" });
+    fireEvent.pointerDown(el, { clientX: 10, clientY: 10, pointerType: "touch", pointerId: 7 });
+    fireEvent.pointerMove(el, { clientX: 13, clientY: 14 });
     act(() => { vi.advanceTimersByTime(499); });
     expect(onHold).not.toHaveBeenCalled();
     act(() => { vi.advanceTimersByTime(1); });
     expect(onHold).toHaveBeenCalledTimes(1);
+    expect(onHold).toHaveBeenCalledWith({ x: 13, y: 14 }, 7);           // the drag starts where this finger is now
     fireEvent.pointerUp(el);
     fireEvent.click(el);
     expect(onClick).not.toHaveBeenCalled();

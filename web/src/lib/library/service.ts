@@ -36,11 +36,58 @@ export async function removeBookmark(store: LibraryStore, isbn: string): Promise
   return (await store.deleteSave(isbn)) ? { ok: true } : { ok: false, error: "missing" };
 }
 
-/** F-13 옮기기 (hold or back-face menu): to the front of one of the person's own rods. */
-export async function moveBookmark(store: LibraryStore, isbn: string, shelfId: string): Promise<Result> {
+/** A rod renumbered by a drag (only when no whole number is left between the new neighbours) is spaced this far apart. */
+export const POSITION_STEP = 1024;
+/** At most this many row writes at once while renumbering a rod. */
+const WRITE_BATCH = 10;
+
+/** Writes the changes a few at a time (not one request per row all at once); true when every row was there. */
+async function writeInBatches(store: LibraryStore, shelfId: string, changes: { isbn: string; position: number }[]): Promise<boolean[]> {
+  const done: boolean[] = [];
+  for (let i = 0; i < changes.length; i += WRITE_BATCH) {
+    const batch = changes.slice(i, i + WRITE_BATCH);
+    done.push(...(await Promise.all(batch.map((c) => store.updateSave(c.isbn, { shelfId, position: c.position })))));
+  }
+  return done;
+}
+
+/**
+ * F-13 옮기기 onto one of the person's own rods. Without `index` (the [다른 막대로 옮기기] menu): to the front. With it
+ * (drag, 10-04): at that place among the rod's other bookmarks that are drawn (`shown` — a book that left the catalogue is
+ * not drawn, so it does not count; it keeps its own position). Usually one row is written: a position between the new
+ * neighbours (one before the first, one after the last, 0 on an empty rod). Only when no whole number is left between
+ * them is the rod renumbered POSITION_STEP apart — the changed rows only, a few at a time.
+ */
+export async function moveBookmark(
+  store: LibraryStore, isbn: string, shelfId: string, index?: number, shown: (isbn: string) => boolean = () => true,
+): Promise<Result> {
   if (!(await store.shelves()).some((s) => s.id === shelfId)) return { ok: false, error: "missing" };
-  const moved = await store.updateSave(isbn, { shelfId, position: await frontOf(store, shelfId) });
-  return moved ? { ok: true } : { ok: false, error: "missing" };
+  if (index === undefined) {
+    const moved = await store.updateSave(isbn, { shelfId, position: await frontOf(store, shelfId) });
+    return moved ? { ok: true } : { ok: false, error: "missing" };
+  }
+  const saves = await store.saves();
+  const moving = saves.find((s) => s.isbn === isbn);
+  if (!moving) return { ok: false, error: "missing" };
+  const rod = saves.filter((s) => s.shelfId === shelfId && s.isbn !== isbn);
+  const drawn = rod.filter((s) => shown(s.isbn));
+  const at = Math.min(Math.max(index, 0), drawn.length);
+  const now = saves.filter((s) => s.shelfId === shelfId && shown(s.isbn)).findIndex((s) => s.isbn === isbn);
+  if (moving.shelfId === shelfId && now === at) return { ok: true };          // its own place
+  const prev = drawn[at - 1];
+  const next = drawn[at];
+  const between = !prev ? (next ? next.position - 1 : 0)
+    : !next ? prev.position + 1
+    : next.position - prev.position > 1 ? Math.floor((prev.position + next.position) / 2) : null;
+  if (between !== null) {
+    return (await store.updateSave(isbn, { shelfId, position: between })) ? { ok: true } : { ok: false, error: "missing" };
+  }
+  // No room: the whole rod in its new order (hidden books where they were), spaced apart again.
+  const cut = rod.indexOf(next);
+  const order = [...rod.slice(0, cut), moving, ...rod.slice(cut)];
+  const changed = order.flatMap((s, i) => (s.shelfId === shelfId && s.position === i * POSITION_STEP ? [] : [{ isbn: s.isbn, position: i * POSITION_STEP }]));
+  const done = await writeInBatches(store, shelfId, changed);
+  return done[changed.findIndex((c) => c.isbn === isbn)] ? { ok: true } : { ok: false, error: "missing" };
 }
 
 /** [＋ 막대 추가]: the first free place after the first rod (which it makes if missing). */

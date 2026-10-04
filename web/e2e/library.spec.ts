@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, type Locator, type Page } from "@playwright/test";
 import { answerToClosedBook, named, reactToBookmarks, recordEvents, specMismatches, test } from "./helpers";
 
 // P5 (PRD F-11·F-12·F-13). No real Kakao / Google: the build has a made-up Supabase address (playwright.config), the
@@ -10,7 +10,7 @@ const SUPABASE = "http://supabase.e2e.invalid";
 const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false };
 
 interface Saved { isbn: string; shelfId: string; title: string }
-interface FakeLibrary { loggedIn: boolean; justLoggedIn?: string; shelves: { id: string; name: string; position: number }[]; saved: Saved[]; posts: unknown[] }
+interface FakeLibrary { loggedIn: boolean; justLoggedIn?: string; shelves: { id: string; name: string; position: number }[]; saved: Saved[]; posts: unknown[]; moves?: unknown[] }
 
 const ROD_A = "11111111-1111-4111-8111-111111111111";
 const ROD_B = "22222222-2222-4222-8222-222222222222";
@@ -36,7 +36,7 @@ async function fakeAccount(page: Page, lib: FakeLibrary) {
     return route.fulfill({ json: { shelves, count: lib.saved.length, animals: lib.saved.length ? 1 : 0 } });
   });
   await page.route("**/api/library/saves", async (route) => {
-    const body = route.request().postDataJSON() as { isbn: string; shelfId?: string };
+    const body = route.request().postDataJSON() as { isbn: string; shelfId?: string; index?: number };
     const method = route.request().method();
     if (method === "POST") {
       lib.posts.push(body);
@@ -45,7 +45,14 @@ async function fakeAccount(page: Page, lib: FakeLibrary) {
       if (saved) lib.saved.unshift({ isbn: body.isbn, shelfId: ROD_A, title: "꽂은 책" });
       return route.fulfill({ json: { ok: true, shelfId: ROD_A, saved } });
     }
-    if (method === "PATCH") lib.saved = lib.saved.map((s) => (s.isbn === body.isbn ? { ...s, shelfId: body.shelfId as string } : s));
+    if (method === "PATCH") {               // at `index` of the rod's other bookmarks, or its front (service.moveBookmark)
+      lib.moves?.push(body);
+      const moving = lib.saved.find((s) => s.isbn === body.isbn);
+      const rest = lib.saved.filter((s) => s.isbn !== body.isbn);
+      const on = rest.filter((s) => s.shelfId === body.shelfId);
+      const at = Math.min(body.index ?? 0, on.length);
+      if (moving) lib.saved = [...rest.filter((s) => s.shelfId !== body.shelfId), ...on.slice(0, at), { ...moving, shelfId: body.shelfId as string }, ...on.slice(at)];
+    }
     if (method === "DELETE") lib.saved = lib.saved.filter((s) => s.isbn !== body.isbn);
     return route.fulfill({ json: { ok: true } });
   });
@@ -141,60 +148,103 @@ test("logged in: 🔖 꽂기 keeps at once, no pull first (E-11 → E-15, no E-2
   expect(specMismatches(events)).toEqual([]);
 });
 
-test("S-09: hold to move, move by the back face, add a rod, remove, log out (E-16·17·18·29·30)", async ({ page }) => {
+/** Hold a bookmark 0.5 s with the mouse, then drag it in steps to a point and let go (S-09 끌어서 옮기기, 10-04). */
+async function dragTo(page: Page, bookmark: Locator, to: { x: number; y: number }) {
+  await bookmark.scrollIntoViewIfNeeded();
+  const box = await bookmark.boundingBox();
+  if (!box) throw new Error("no bookmark box");
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.waitForTimeout(600);
+  await page.mouse.move(to.x, to.y, { steps: 12 });
+  await expect(page.getByRole("status").filter({ hasText: "놓을 자리로 끌어서 놓으세요" })).toBeVisible();
+  await page.mouse.up();
+}
+
+/** A point just right of a bookmark's centre — past it, so the dragged one lands after it. */
+async function after(bookmark: Locator) {
+  const box = await bookmark.boundingBox();
+  if (!box) throw new Error("no bookmark box");
+  return { x: box.x + box.width * 0.75, y: box.y + box.height / 2 };
+}
+
+const titlesOn = (page: Page, rod: string) =>
+  page.getByRole("list", { name: rod }).getByRole("button").evaluateAll((els) => els.map((el) => el.getAttribute("aria-label")));
+
+test("S-09: drag to a place on a rod, move by the sheet, add a rod, remove, log out (E-16·17·18·29·30)", async ({ page }) => {
   const lib: FakeLibrary = {
     loggedIn: true,
     shelves: [{ id: ROD_A, name: "읽을 책", position: 0 }, { id: ROD_B, name: "마음에 남은", position: 1 }],
-    saved: [{ isbn: "9790000000001", shelfId: ROD_A, title: "지어낸 첫째 책" }, { isbn: "9790000000002", shelfId: ROD_A, title: "지어낸 둘째 책" }],
+    saved: [
+      { isbn: "9790000000001", shelfId: ROD_A, title: "지어낸 첫째 책" }, { isbn: "9790000000002", shelfId: ROD_A, title: "지어낸 둘째 책" },
+      { isbn: "9790000000003", shelfId: ROD_A, title: "지어낸 셋째 책" }, { isbn: "9790000000004", shelfId: ROD_B, title: "지어낸 넷째 책" },
+    ],
     posts: [],
+    moves: [],
   };
   await fakeAccount(page, lib);
   await page.context().route("https://www.yes24.com/**", (route) => route.fulfill({ contentType: "text/html", body: "<title>YES24</title>" }));
   const { events } = await recordEvents(page);
+  const bm = (title: string) => page.getByRole("button", { name: `${title} 책갈피` });
 
   await page.goto("/library");
-  await expect(page.getByText("2개 · 동물 1종")).toBeVisible();
+  await expect(page.getByText("4개 · 동물 1종")).toBeVisible();
   await expect(page.getByRole("heading", { name: "마음에 남은" })).toHaveAttribute("data-amp-mask", "");
+  await expect(bm("지어낸 첫째 책").getByText("2026. 10. 1. 만남")).toBeAttached();          // the met date on the small front too
 
-  // hold (0.5 s) → the other rod becomes the place to put it
-  const first = page.getByRole("button", { name: "지어낸 첫째 책 책갈피" });
-  await first.scrollIntoViewIfNeeded();
-  const box = await first.boundingBox();
-  if (!box) throw new Error("no bookmark box");
-  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-  await page.mouse.down();
-  await page.waitForTimeout(700);
-  await page.mouse.up();
-  await expect(first).toHaveAttribute("aria-pressed", "true");
-  await page.getByRole("button", { name: "여기를 누르면 옮겨져요" }).click();
-  await expect(page.getByRole("list", { name: "마음에 남은" }).getByRole("button", { name: "지어낸 첫째 책 책갈피" })).toBeVisible();
+  // within a rod: the first one after the second
+  await dragTo(page, bm("지어낸 첫째 책"), await after(bm("지어낸 둘째 책")));
+  await expect.poll(() => titlesOn(page, "읽을 책")).toEqual(["지어낸 둘째 책 책갈피", "지어낸 첫째 책 책갈피", "지어낸 셋째 책 책갈피"]);
 
-  // a tap turns it over: YES24, then move back through the menu
-  await page.getByRole("button", { name: "지어낸 첫째 책 책갈피" }).click();
-  const sheet = page.getByRole("dialog", { name: "지어낸 첫째 책" });
-  await expect(sheet.getByText("만난 날")).toBeVisible();
+  // to another rod, after the one hanging there
+  await dragTo(page, bm("지어낸 셋째 책"), await after(bm("지어낸 넷째 책")));
+  await expect.poll(() => titlesOn(page, "마음에 남은")).toEqual(["지어낸 넷째 책 책갈피", "지어낸 셋째 책 책갈피"]);
+  await expect(page.getByRole("status").filter({ hasText: "으로 옮겼어요" })).toBeVisible();
+
+  // let go outside every rod: nothing changes, nothing is sent
+  const outside = await page.getByRole("button", { name: "＋ 막대 추가" }).boundingBox();
+  if (!outside) throw new Error("no add-rod box");
+  await dragTo(page, bm("지어낸 첫째 책"), { x: outside.x + outside.width / 2, y: outside.y + outside.height / 2 });
+  await expect(page.getByRole("status").filter({ hasText: "놓을 자리로 끌어서 놓으세요" })).toHaveCount(0);
+  expect(await titlesOn(page, "읽을 책")).toEqual(["지어낸 둘째 책 책갈피", "지어낸 첫째 책 책갈피"]);
+  await expect(page.getByRole("dialog")).toHaveCount(0);                      // the release after a drag is not a tap
+  expect(lib.moves).toHaveLength(2);
+
+  // a tap opens the front, large, with the day it was met — no back face; YES24, then the menu move (to the front)
+  await bm("지어낸 둘째 책").click();
+  const sheet = page.getByRole("dialog", { name: "지어낸 둘째 책" });
+  await expect(sheet.getByText("2026. 10. 1. 만남")).toBeVisible();
+  await expect(sheet.getByText("나온 이유")).toHaveCount(0);
+  await expect(sheet.getByText("만난 날")).toHaveCount(0);
   const [tab] = await Promise.all([page.waitForEvent("popup"), sheet.getByRole("link", { name: /예스24에서 보기/ }).click()]);
   await tab.close();
   await sheet.getByRole("button", { name: "다른 막대로 옮기기" }).click();
-  await page.getByRole("dialog", { name: "어느 막대로 옮길까요?" }).getByRole("button", { name: "읽을 책" }).click();
-  await expect(page.getByRole("list", { name: "읽을 책" }).getByRole("button", { name: "지어낸 첫째 책 책갈피" })).toBeVisible();
+  await page.getByRole("dialog", { name: "어느 막대로 옮길까요?" }).getByRole("button", { name: "마음에 남은" }).click();
+  await expect.poll(() => titlesOn(page, "마음에 남은")).toEqual(["지어낸 둘째 책 책갈피", "지어낸 넷째 책 책갈피", "지어낸 셋째 책 책갈피"]);
+  expect(lib.moves).toEqual([
+    { isbn: "9790000000001", shelfId: ROD_A, index: 1 },
+    { isbn: "9790000000003", shelfId: ROD_B, index: 1 },
+    { isbn: "9790000000002", shelfId: ROD_B },
+  ]);
 
   // a new rod, then take the second book out
   await page.getByRole("button", { name: "＋ 막대 추가" }).click();
   await page.getByRole("textbox", { name: "새 막대 이름" }).fill("밤에 읽기");
   await page.getByRole("button", { name: "만들기" }).click();
   await expect(page.getByRole("heading", { name: "밤에 읽기" })).toBeVisible();
-  await page.getByRole("button", { name: "지어낸 둘째 책 책갈피" }).click();
+  await bm("지어낸 둘째 책").click();
   await page.getByRole("button", { name: "빼기" }).click();
   await page.getByRole("button", { name: "빼기" }).click();
-  await expect(page.getByRole("button", { name: "지어낸 둘째 책 책갈피" })).toHaveCount(0);
+  await expect(bm("지어낸 둘째 책")).toHaveCount(0);
 
-  expect(named(events, "library_viewed").map((e) => e.props)).toEqual([{ saved_count: 2 }]);
+  expect(named(events, "library_viewed").map((e) => e.props)).toEqual([{ saved_count: 4 }]);
   // moves and removes show before the server answers (10-02): their events follow a moment later
   await expect.poll(() => named(events, "bookmark_moved").map((e) => e.props)).toEqual([
-    { book_id: "9790000000001", method: "hold" }, { book_id: "9790000000001", method: "menu" },
+    { book_id: "9790000000001", method: "drag", is_same_shelf: true },
+    { book_id: "9790000000003", method: "drag", is_same_shelf: false },
+    { book_id: "9790000000002", method: "menu", is_same_shelf: false },
   ]);
-  expect(named(events, "yes24_link_clicked").map((e) => e.props)).toEqual([{ book_id: "9790000000001", source: "library", pick_type: null }]);
+  expect(named(events, "yes24_link_clicked").map((e) => e.props)).toEqual([{ book_id: "9790000000002", source: "library", pick_type: null }]);
   expect(named(events, "shelf_created").map((e) => e.props)).toEqual([{ shelf_count: 3 }]);
   await expect.poll(() => named(events, "book_unsaved").map((e) => e.props)).toEqual([{ book_id: "9790000000002" }]);
   expect(JSON.stringify(events)).not.toContain("밤에 읽기");                // rod names never in events (taxonomy 6-1)
@@ -207,6 +257,59 @@ test("S-09: hold to move, move by the back face, add a rod, remove, log out (E-1
   await expect(page.getByRole("banner").getByRole("button", { name: "로그인" })).toBeVisible();
 });
 
+// Real touch in Chromium (CDP touch events on the phone project): the browser decides at touchstart whether the finger's
+// moves can be held back. If the page could still pan, it would send pointercancel mid-drag and nothing would move.
+test("S-09 on a touch screen: hold, then drag with the finger — the page does not take the touch over; a quick swipe is a scroll", async ({ page }, info) => {
+  test.skip(info.project.name !== "phone", "touch is emulated on the phone project only");
+  const lib: FakeLibrary = {
+    loggedIn: true,
+    shelves: [{ id: ROD_A, name: "읽을 책", position: 0 }, { id: ROD_B, name: "마음에 남은", position: 1 }],
+    saved: [
+      { isbn: "9790000000001", shelfId: ROD_A, title: "지어낸 첫째 책" }, { isbn: "9790000000002", shelfId: ROD_A, title: "지어낸 둘째 책" },
+      { isbn: "9790000000004", shelfId: ROD_B, title: "지어낸 넷째 책" },
+    ],
+    posts: [],
+    moves: [],
+  };
+  await fakeAccount(page, lib);
+  const { events } = await recordEvents(page);
+  const bm = (title: string) => page.getByRole("button", { name: `${title} 책갈피` });
+  await page.goto("/library");
+  await expect(page.getByText("3개 · 동물 1종")).toBeVisible();
+
+  const cdp = await page.context().newCDPSession(page);
+  const touch = (type: "touchStart" | "touchMove" | "touchEnd", x = 0, y = 0) =>
+    cdp.send("Input.dispatchTouchEvent", { type, touchPoints: type === "touchEnd" ? [] : [{ x, y }] });
+  const centre = async (title: string) => {
+    const box = await bm(title).boundingBox();
+    if (!box) throw new Error("no bookmark box");
+    return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+  };
+
+  // a quick swipe (no hold) is the browser's scroll, never a drag
+  const swipe = await centre("지어낸 둘째 책");
+  await touch("touchStart", swipe.x, swipe.y);
+  for (let i = 1; i <= 6; i++) await touch("touchMove", swipe.x - i * 10, swipe.y);
+  await touch("touchEnd");
+  await expect(page.getByRole("status").filter({ hasText: "놓을 자리로 끌어서 놓으세요" })).toHaveCount(0);
+
+  // hold 0.5 s, then drag down onto the other rod, after the one there
+  const from = await centre("지어낸 첫째 책");
+  const to = await after(bm("지어낸 넷째 책"));
+  const scrolled = await page.evaluate(() => window.scrollY);
+  await touch("touchStart", from.x, from.y);
+  await page.waitForTimeout(600);
+  await expect(page.getByRole("status").filter({ hasText: "놓을 자리로 끌어서 놓으세요" })).toBeVisible();
+  for (let i = 1; i <= 15; i++) await touch("touchMove", from.x + ((to.x - from.x) * i) / 15, from.y + ((to.y - from.y) * i) / 15);
+  await expect(page.getByRole("status").filter({ hasText: "놓을 자리로 끌어서 놓으세요" })).toBeVisible();   // no pointercancel
+  await touch("touchEnd");
+  await expect.poll(() => titlesOn(page, "마음에 남은")).toEqual(["지어낸 넷째 책 책갈피", "지어낸 첫째 책 책갈피"]);
+  expect(Math.abs((await page.evaluate(() => window.scrollY)) - scrolled)).toBeLessThan(60);   // only the edge auto-scroll, no pan
+  expect(lib.moves).toEqual([{ isbn: "9790000000001", shelfId: ROD_B, index: 1 }]);
+  await expect.poll(() => named(events, "bookmark_moved").map((e) => e.props)).toEqual([{ book_id: "9790000000001", method: "drag", is_same_shelf: false }]);
+  await expect(page.getByRole("dialog")).toHaveCount(0);                      // the lift-off is not a tap
+});
+
 test("S-09 first visit: the example-shelf guide opens once, [시작하기] closes it (C-22)", async ({ page }) => {
   const lib: FakeLibrary = { loggedIn: true, shelves: [{ id: ROD_A, name: "첫 막대", position: 0 }], saved: [], posts: [] };
   await fakeAccount(page, lib);
@@ -214,7 +317,7 @@ test("S-09 first visit: the example-shelf guide opens once, [시작하기] close
   await page.goto("/library");
   const guide = page.getByRole("dialog", { name: "내 책갈피, 이렇게 써 보세요" });
   await expect(guide).toBeVisible();
-  await expect(guide.getByText("책갈피를 꾹 누르면 들려요 → 옮길 막대를 누르세요")).toBeVisible();
+  await expect(guide.getByText("책갈피를 꾹 눌러 끌면 원하는 자리로 옮겨져요")).toBeVisible();
   if (process.env.GUIDE_SHOTS) await page.screenshot({ path: `${process.env.GUIDE_SHOTS}/library-guide.png` });
   await guide.getByRole("button", { name: "시작하기" }).click();
   await expect(guide).toHaveCount(0);

@@ -6,18 +6,23 @@ const counted = (shelves: LibraryShelf[]): LibraryView => {
 };
 
 /**
- * S-09 moves at once (user, 10-02): the rods as the server will order them — the bookmark in front of the other rod
- * (service.moveBookmark) — drawn before the server answers. Same view back when nothing would change.
+ * S-09 moves at once (user, 10-02): the rods as the server will order them (service.moveBookmark) — at `index` of the
+ * rod's other bookmarks (a drag, 10-04 — the same rod too), or in front of another rod — drawn before the server answers.
+ * Same view back when nothing would change.
  */
-export function moveLocally(view: LibraryView, isbn: string, shelfId: string): LibraryView {
+export function moveLocally(view: LibraryView, isbn: string, shelfId: string, index?: number): LibraryView {
   const from = view.shelves.find((s) => s.bookmarks.some((b) => b.isbn === isbn));
   const to = view.shelves.find((s) => s.id === shelfId);
-  if (!from || !to || from.id === to.id) return view;
+  if (!from || !to || (from.id === to.id && index === undefined)) return view;
   const moving = from.bookmarks.find((b) => b.isbn === isbn);
   if (!moving) return view;
+  const others = to.bookmarks.filter((b) => b.isbn !== isbn);
+  const at = Math.min(Math.max(index ?? 0, 0), others.length);
+  const placed = [...others.slice(0, at), moving, ...others.slice(at)];
+  if (from.id === to.id && placed.every((b, i) => b === to.bookmarks[i])) return view;
   return counted(view.shelves.map((s) => {
+    if (s.id === to.id) return { ...s, bookmarks: placed };
     if (s.id === from.id) return { ...s, bookmarks: s.bookmarks.filter((b) => b.isbn !== isbn) };
-    if (s.id === to.id) return { ...s, bookmarks: [moving, ...s.bookmarks] };
     return s;
   }));
 }

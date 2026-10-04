@@ -1,7 +1,7 @@
 /* DESIGN 4절: 160 × 344 (09-30: +24px so large text fits); the shape itself (string, film, notch, hole, stitch) is
    BookmarkFrame.module.css. Window = card − 18.
    Text room: the whole title (10-04: in 『 』, broken between words; two lines stepping down to 12px, then a third — fitTitle.ts) + 1-line author + 4-line one-liner fits all 200 real books at normal and x1.15 text
-   (e2e/design.spec.ts); nothing in the column may shrink. The author line (09-30) was paid for with tighter spacing, not
+   (e2e/design.spec.ts), and so does 내 책갈피's "… 만남" line under it (10-04, .met below); nothing in the column may shrink. The author line (09-30) was paid for with tighter spacing, not
    smaller text: gap 4 → 3px, top padding 18 → 16px, title line-height 1.4 → 1.3, one-liner 1.35 → 1.3, name tag padding
    4 → 2px, "갈피" line-height 1.2 → 1. The notch is 7% of the height, so the bottom padding stays 25px to keep "갈피" above it.
    The book scene may scale the whole bookmark up (transform), never its parts. */
@@ -26,4 +26,13 @@
   flex-shrink: 0; margin: 0; font-size: 13px; line-height: 1.3; color: var(--ink);
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden;
 }
+/* DESIGN C-13 만난 날 (내 책갈피 only, 10-04 시안 A): under the one-liner, right above the stitch line; the free room
+   (if any) goes above it. Its line is paid for like a third title line — tighter gaps and lines, no smaller text — so
+   the longest one-liners keep all four lines at x1.15 text too (e2e/design.spec.ts). */
+.met { flex-shrink: 0; margin: auto 0 0; font-size: 12px; line-height: 1; color: var(--ink-muted); position: relative; top: -2px; }   /* drawn 2px up, off the stitch line, without taking room (the one-liner keeps 2px under it) */
+.met + span { margin-top: 0; }   /* the stitch line follows right under it */
+.card:has(> .met) { gap: 1px; }
+.card:has(> .met) > .title[data-lines="3"] { line-height: 1.1; }
+.card:has(> .met) > .author { line-height: 1.2; }
+.card:has(> .met) > .line { line-height: 1.2; padding-bottom: 2px; }   /* the padding keeps the last line's glyphs unclipped */
 .mark { align-self: center; line-height: 1; font-family: var(--font-batang), serif; font-size: 12px; font-weight: 700; color: var(--ink); }

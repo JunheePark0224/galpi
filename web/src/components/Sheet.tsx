@@ -4,11 +4,11 @@ import styles from "./Sheet.module.css";
 
 const FOCUSABLE = "button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled])";
 
-/** stepKey: change it when the sheet shows a new step (S-09 back → pick a rod) — focus moves to that step's first control. */
+/** stepKey: change it when the sheet shows a new step (S-09 bookmark front → pick a rod) — focus moves to that step's first control. */
 interface Props { title: string; onClose: () => void; children: ReactNode; stepKey?: string }
 
 /**
- * A sheet from the bottom over a dimmed page (S-07 C-12, S-09 back face / rod picker). A modal dialog: focus goes to its
+ * A sheet from the bottom over a dimmed page (S-07 C-12, S-09 bookmark front / rod picker). A modal dialog: focus goes to its
  * first control and stays inside (Tab wraps), Escape and a tap outside close it, focus returns to what opened it.
  * Rendered only while open — the parent decides.
  */

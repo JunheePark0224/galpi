@@ -65,18 +65,24 @@ test("design page shows a bookmark with its reading label", async ({ page }) => 
 // the one-liner may not be cut. The second run scales the name tag, title, author, one-liner and "갈피" by 1.15 (Android
 // large-text setting) and also requires the stitch line and "갈피" to sit above the swallowtail notch (7% of the card height,
 // cut into the bottom centre). The book scene scales the whole bookmark uniformly (transform), which does not change this layout.
-for (const scale of [1, 1.15]) {
-  test(`every real book's title, author and one-liner fit the bookmark frame at text x${scale}`, async ({ page }) => {
+// 내 책갈피's front (C-13, 10-04) adds "YYYY. M. D. 만남" under the one-liner: the same checks run on it too, with the date
+// on one line between the one-liner and the stitch line.
+for (const scale of [1, 1.15]) for (const met of [false, true]) {
+  test(`every real book's title, author and one-liner fit the bookmark frame${met ? " with the met date" : ""} at text x${scale}`, async ({ page }) => {
     const books = (JSON.parse(readFileSync("src/data/books.json", "utf8")) as { isbn: string; title: string; author: string; one_liner: string }[])
       .map((b) => ({ ...b, shown: bookTitle(b.title) }));
     expect(books.length).toBeGreaterThanOrEqual(200); // 200 base + pilot additions (288 on 10-01)
     await page.goto("/design");
     await page.evaluate(() => document.fonts.ready);
 
-    const problems = await page.evaluate(({ all, textScale }) => {
-      const card = document.querySelector("article")?.children[1] as HTMLElement;
-      const [, win, tag, title, author, line, stitch, mark] = Array.from(card.children) as HTMLElement[];
-      for (const el of [tag, title, author, line, mark]) el.style.fontSize = `${parseFloat(getComputedStyle(el).fontSize) * textScale}px`;
+    const problems = await page.evaluate(({ all, textScale, withMet }) => {
+      const article = document.querySelector(withMet ? "article:has([data-part=met])" : "article:not(:has([data-part=met]))");
+      const card = article?.children[1] as HTMLElement;
+      const parts = Array.from(card.children) as HTMLElement[];
+      const [, win, tag, title, author, line] = parts;
+      const [stitch, mark] = parts.slice(-2);
+      const date = withMet ? card.querySelector<HTMLElement>("[data-part=met]") : null;
+      for (const el of [tag, title, author, line, mark, date]) if (el) el.style.fontSize = `${parseFloat(getComputedStyle(el).fontSize) * textScale}px`;
       const cardBox = card.getBoundingClientRect();
       const room = cardBox.bottom - parseFloat(getComputedStyle(card).paddingBottom) - 1;
       const notchY = cardBox.top + cardBox.height * 0.93;                // lowest point of the frame at the centre
@@ -105,6 +111,11 @@ for (const scale of [1, 1.15]) {
         // at normal size every author fits whole; at x1.15 a very long single name may end in "…" (one line kept)
         if (textScale === 1 && author.scrollWidth > author.clientWidth + 1) why.push("author is cut");
         if (line.getBoundingClientRect().bottom > stitch.getBoundingClientRect().top) why.push("text runs into the stitch line");
+        if (date) {
+          if (date.getBoundingClientRect().height > parseFloat(getComputedStyle(date).lineHeight) + 1 || date.scrollWidth > date.clientWidth + 1) why.push("met date is not one whole line");
+          if (line.getBoundingClientRect().bottom > date.getBoundingClientRect().top + 0.5) why.push("one-liner runs into the met date");
+          if (date.getBoundingClientRect().bottom > stitch.getBoundingClientRect().top + 0.5) why.push("met date runs into the stitch line");
+        }
         if (mark.getBoundingClientRect().bottom > room + 0.5) why.push("갈피 mark leaves the card");
         if (mark.getBoundingClientRect().bottom > notchY) why.push("갈피 mark is caught by the swallowtail notch");
         if (stitch.getBoundingClientRect().bottom > mark.getBoundingClientRect().top) why.push("stitch line overlaps 갈피");
@@ -112,7 +123,7 @@ for (const scale of [1, 1.15]) {
         if (why.length) found.push(`${b.isbn} ${b.title} / ${b.author}: ${why.join(", ")}`);
       }
       return found;
-    }, { all: books.map(({ isbn, title, shown, author, one_liner }) => ({ isbn, title, shown, author, one_liner })), textScale: scale });
+    }, { all: books.map(({ isbn, title, shown, author, one_liner }) => ({ isbn, title, shown, author, one_liner })), textScale: scale, withMet: met });
     expect(problems).toEqual([]);
   });
 }

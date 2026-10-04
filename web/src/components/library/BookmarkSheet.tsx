@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { BookmarkBack } from "@/components/BookmarkBack";
+import { Bookmark } from "@/components/Bookmark";
 import { Button, LinkButton } from "@/components/Button";
 import { Sheet } from "@/components/Sheet";
 import { yes24SearchUrl } from "@/lib/books/detail";
@@ -8,7 +8,7 @@ import type { LibraryBookmark, LibraryShelf } from "@/lib/library/types";
 import { track } from "@/lib/track/client";
 import styles from "./Library.module.css";
 
-/** New copy (DESIGN C-17 back face). */
+/** New copy (DESIGN C-13·C-17). */
 export const MOVE_TO = "다른 막대로 옮기기";
 export const PICK_SHELF = "어느 막대로 옮길까요?";
 export const UNSAVE = "빼기";
@@ -19,7 +19,7 @@ export function metLabel(iso: string): string {
   return `${y}. ${m}. ${d}.`;
 }
 
-type Mode = "back" | "pick" | "remove";
+type Mode = "front" | "pick" | "remove";
 interface Props {
   bookmark: LibraryBookmark;
   shelfId: string;
@@ -30,12 +30,12 @@ interface Props {
 }
 
 /**
- * A bookmark of S-09 turned over (C-13): its back — 나온 이유 and 만난 날 as kept — with [예스24에서 보기] (E-18 library),
- * [다른 막대로 옮기기] (the way to move without holding — pick a rod; F-13) and [빼기] (asked once more).
- * Rod names are the person's words: shown as masked text only.
+ * A bookmark of S-09 opened (C-13, 10-04): its front, large, with the day it was met — no back face here — and
+ * [예스24에서 보기] (E-18 library), [다른 막대로 옮기기] (the way to move without dragging — pick a rod, it goes to the
+ * front; F-13) and [빼기] (asked once more). Rod names are the person's words: shown as masked text only.
  */
 export function BookmarkSheet({ bookmark, shelfId, shelves, onMove, onRemove, onClose }: Props) {
-  const [mode, setMode] = useState<Mode>("back");
+  const [mode, setMode] = useState<Mode>("front");
   const [failed, setFailed] = useState(false);
   const [busy, setBusy] = useState(false);
   const { card } = bookmark;
@@ -63,21 +63,23 @@ export function BookmarkSheet({ bookmark, shelfId, shelves, onMove, onRemove, on
           ))}
         </ul>
         {failed && <p role="alert" className={styles.error}>옮기지 못했어요. 다시 해 주세요.</p>}
-        <button type="button" className={styles.textButton} onClick={() => setMode("back")}>뒤로</button>
+        <button type="button" className={styles.textButton} onClick={() => setMode("front")}>뒤로</button>
       </Sheet>
     );
   }
 
   return (
     <Sheet title={card.title} onClose={onClose} stepKey={mode}>
-      <div className={styles.backFace}>
-        <BookmarkBack card={card} reason={bookmark.reason} met={metLabel(bookmark.metOn)} moving />
+      <div className={styles.frontFace}>
+        <span className={styles.big}>
+          <Bookmark card={card} art={bookmark.art} met={metLabel(bookmark.metOn)} moving />
+        </span>
       </div>
       {mode === "remove" ? (
         <div className={styles.sheetActions}>
           <p className={styles.confirm}>이 책갈피를 뺄까요? 빼면 다시 만나야 꽂을 수 있어요.</p>
           <Button onClick={() => void run(onRemove)} disabled={busy}>{UNSAVE}</Button>
-          <Button variant="secondary" onClick={() => setMode("back")}>그대로 두기</Button>
+          <Button variant="secondary" onClick={() => setMode("front")}>그대로 두기</Button>
         </div>
       ) : (
         <div className={styles.sheetActions}>

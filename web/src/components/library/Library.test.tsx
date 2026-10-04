@@ -37,7 +37,7 @@ const IN = { enabled: true, loggedIn: true, id: "u1", count: 2 };
 describe("Library (S-09)", () => {
   // C-22 is covered by LibraryGuide.test and e2e/library.spec — here the guide counts as seen
   beforeEach(() => { request.mockReset(); request.mockResolvedValue(ok(VIEW)); libraryGuide.markSeen(); });
-  afterEach(() => { vi.unstubAllGlobals(); vi.clearAllMocks(); vi.useRealTimers(); });
+  afterEach(() => { vi.unstubAllGlobals(); vi.clearAllMocks(); vi.restoreAllMocks(); vi.useRealTimers(); });
 
   it("logged out: offers the login instead of the rods", async () => {
     const store = await mount({ enabled: true, loggedIn: false, id: null, count: 0 });
@@ -60,38 +60,147 @@ describe("Library (S-09)", () => {
     expect(track).toHaveBeenCalledWith("library_viewed", { saved_count: 2 });
   });
 
-  it("hold a bookmark, then tap another rod: it moves there (E-30 hold) and says where", async () => {
-    vi.useFakeTimers({ shouldAdvanceTime: true });
-    await mount(IN);
-    const moso = await screen.findByRole("button", { name: "모순 책갈피" });
-    fireEvent.pointerDown(moso, { clientX: 5, clientY: 5 });
+  // jsdom has no layout: rod "a" is the band y 0–300, rod "b" y 300–600, and each rod's slots sit 100 px apart (centres 50, 150, …)
+  const layout = () => vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(function (this: Element) {
+    const box = (left: number, top: number, width: number, height: number) => ({ left, top, width, height, right: left + width, bottom: top + height, x: left, y: top, toJSON: () => ({}) }) as DOMRect;
+    const el = this as HTMLElement;
+    if (el.dataset.rod) return box(0, el.dataset.rod === "a" ? 0 : 300, 400, 300);
+    const slot = el.closest<HTMLElement>("li[data-slot], li[aria-hidden]");
+    if (slot) return box(Array.from(slot.parentElement!.children).indexOf(slot) * 100, 0, 100, 200);
+    return box(0, 0, 0, 0);
+  });
+  const lift = async (name: string) => {
+    const el = await screen.findByRole("button", { name });
+    fireEvent.pointerDown(el, { clientX: 50, clientY: 100 });
     act(() => { vi.advanceTimersByTime(500); });
-    fireEvent.pointerUp(moso);
-    expect(moso).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("status")).toHaveTextContent("책갈피를 들었어요");
+    return el;
+  };
+  const dragTo = (x: number, y: number) => { act(() => { fireEvent.pointerMove(window, { clientX: x, clientY: y }); }); };
+
+  it("hold, drag onto another rod and let go: a gap opens there, it moves to that place (E-30 drag)", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    layout();
+    await mount(IN);
+    const moso = await lift("모순 책갈피");
+    expect(screen.getByRole("status")).toHaveTextContent("놓을 자리로 끌어서 놓으세요");
+    expect(moso).toHaveAttribute("data-lifted");
+    dragTo(150, 450);
+    expect(screen.queryByText("아직 비어 있어요")).toBeNull();                        // the empty rod shows the gap instead
+    expect(document.querySelectorAll('[data-rod="b"] li')).toHaveLength(1);
     request.mockResolvedValueOnce(ok()).mockResolvedValueOnce(ok(VIEW));
-    fireEvent.click(screen.getByRole("button", { name: "여기를 누르면 옮겨져요" }));
-    await waitFor(() => expect(request).toHaveBeenCalledWith("PATCH", "/api/library/saves", { isbn: "9788998441012", shelfId: "b" }));
-    expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "9788998441012", method: "hold" });
-    expect(await screen.findByText("으로 옮겼어요", { exact: false })).toBeInTheDocument();
+    act(() => { fireEvent.pointerUp(window); });
+    await waitFor(() => expect(request).toHaveBeenCalledWith("PATCH", "/api/library/saves", { isbn: "9788998441012", shelfId: "b", index: 0 }));
+    expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "9788998441012", method: "drag", is_same_shelf: false });
+    expect((await screen.findByText("'마음에 남은'")).parentElement).toHaveTextContent("'마음에 남은'으로 옮겼어요");
+    fireEvent.click(moso);                                                              // the click after the drag is not a tap
+    expect(screen.queryByRole("dialog")).toBeNull();
   });
 
-  it("a held bookmark goes back down on [취소] or a tap on it", async () => {
+  it("reorders within a rod (is_same_shelf), and the gap stays shut over its own place", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
+    layout();
+    await mount(IN);
+    await lift("모순 책갈피");
+    dragTo(60, 100);                                                                    // its own place: no gap
+    expect(document.querySelectorAll('[data-rod="a"] li')).toHaveLength(2);
+    dragTo(260, 100);                                                                   // past 데미안's centre
+    expect(document.querySelectorAll('[data-rod="a"] li')).toHaveLength(3);
+    request.mockResolvedValueOnce(ok()).mockResolvedValueOnce(ok(VIEW));
+    act(() => { fireEvent.pointerUp(window); });
+    await waitFor(() => expect(request).toHaveBeenCalledWith("PATCH", "/api/library/saves", { isbn: "9788998441012", shelfId: "a", index: 1 }));
+    expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "9788998441012", method: "drag", is_same_shelf: true });
+    await waitFor(() => expect(request).toHaveBeenLastCalledWith("GET", "/api/library"));        // the quiet re-read
+    expect(screen.queryByRole("status")).toBeNull();                                         // a reorder says nothing
+  });
+
+  it("let go outside the rods, on its own place, with Escape or a cancelled pointer: nothing moves, no event", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    layout();
+    await mount(IN);
+    const calls = request.mock.calls.length;
+    for (const end of [
+      () => { dragTo(150, 900); fireEvent.pointerUp(window); },
+      () => { dragTo(40, 120); fireEvent.pointerUp(window); },
+      () => { dragTo(150, 450); fireEvent.keyDown(window, { key: "Escape" }); },
+      () => { dragTo(150, 450); fireEvent.pointerCancel(window); },
+    ]) {
+      const moso = await lift("모순 책갈피");
+      act(end);
+      expect(moso).not.toHaveAttribute("data-lifted");
+      expect(screen.queryByText("놓을 자리로 끌어서 놓으세요")).toBeNull();
+    }
+    expect(request.mock.calls.length).toBe(calls);
+    expect(track).not.toHaveBeenCalledWith("bookmark_moved", expect.anything());
+  });
+
+  it("a drag the server refuses goes back where it was, says so, and the rods are read again", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    layout();
+    await mount(IN);
+    await lift("모순 책갈피");
+    dragTo(150, 450);
+    request.mockResolvedValueOnce({ ok: false, status: 500, body: null }).mockResolvedValueOnce(ok(VIEW));
+    act(() => { fireEvent.pointerUp(window); });
+    expect(await screen.findByText("옮기지 못했어요. 다시 해 주세요.")).toBeInTheDocument();
+    expect(screen.getByRole("list", { name: "읽을 책" })).toContainElement(screen.getByRole("button", { name: "모순 책갈피" }));
+    await waitFor(() => expect(request).toHaveBeenLastCalledWith("GET", "/api/library"));
+    expect(track).not.toHaveBeenCalledWith("bookmark_moved", expect.anything());
+  });
+
+  it("blocks touch panning only while dragging, with a touchmove listener there from the start (cancelable from touchstart)", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    layout();
+    const add = vi.spyOn(document, "addEventListener");
+    await mount(IN);
+    expect(add).toHaveBeenCalledWith("touchmove", expect.any(Function), { passive: false });   // before any hold
+    const touch = (cancelable = true) => {
+      const e = new Event("touchmove", { bubbles: true, cancelable });
+      document.dispatchEvent(e);
+      return e.defaultPrevented;
+    };
+    expect(touch()).toBe(false);                                                 // a plain scroll stays a scroll
+    await lift("모순 책갈피");
+    expect(add.mock.calls.filter(([type]) => type === "touchmove")).toHaveLength(1);   // not added again mid-touch
+    expect(touch()).toBe(true);
+    expect(touch(false)).toBe(false);
+    act(() => { fireEvent.pointerUp(window); });
+    expect(touch()).toBe(false);
+  });
+
+  it("follows only the finger that held it: another pointer's moves and release are ignored", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    layout();
     await mount(IN);
     const moso = await screen.findByRole("button", { name: "모순 책갈피" });
-    fireEvent.pointerDown(moso, { clientX: 5, clientY: 5 });
+    fireEvent.pointerDown(moso, { clientX: 50, clientY: 100, pointerId: 3 });
     act(() => { vi.advanceTimersByTime(500); });
-    fireEvent.click(within(screen.getByRole("status")).getByRole("button", { name: "취소" }));
-    expect(moso).toHaveAttribute("aria-pressed", "false");
-    expect(screen.queryByRole("button", { name: "여기를 누르면 옮겨져요" })).toBeNull();
+    act(() => { fireEvent.pointerMove(window, { clientX: 150, clientY: 450, pointerId: 4 }); });
+    expect(document.querySelectorAll('[data-rod="b"] li')).toHaveLength(0);       // no gap from the other finger
+    act(() => { fireEvent.pointerUp(window, { pointerId: 4 }); });
+    expect(moso).toHaveAttribute("data-lifted");                                 // still dragging
+    act(() => { fireEvent.pointerMove(window, { clientX: 150, clientY: 450, pointerId: 3 }); });
+    expect(document.querySelectorAll('[data-rod="b"] li')).toHaveLength(1);
+    act(() => { fireEvent.pointerCancel(window, { pointerId: 3 }); });
+    expect(moso).not.toHaveAttribute("data-lifted");
   });
 
-  it("a tap turns the bookmark over: its back, YES24 (E-18 library), and moving through the menu (E-30 menu)", async () => {
+  it("a keyboard press opens the sheet even right after a touch drag", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    layout();
+    await mount(IN);
+    const moso = await lift("모순 책갈피");
+    act(() => { fireEvent.pointerUp(window); });
+    fireEvent.click(moso, { detail: 0 });                                          // Enter / Space
+    expect(screen.getByRole("dialog", { name: "모순" })).toBeInTheDocument();
+  });
+
+  it("a tap opens the bookmark's front, large, with the day it was met; YES24 (E-18 library) and the menu move (E-30 menu)", async () => {
     await mount(IN);
     fireEvent.click(await screen.findByRole("button", { name: "모순 책갈피" }));
     const sheet = screen.getByRole("dialog", { name: "모순" });
-    expect(within(sheet).getByText("만난 날")).toBeInTheDocument();
+    expect(within(sheet).getByText("2026. 10. 1. 만남")).toBeInTheDocument();
+    expect(within(sheet).queryByText("나온 이유")).toBeNull();                         // no back face in 내 책갈피 (10-04)
+    expect(within(sheet).queryByText("만난 날")).toBeNull();
     fireEvent.click(within(sheet).getByRole("link", { name: /예스24에서 보기/ }));
     expect(track).toHaveBeenCalledWith("yes24_link_clicked", { book_id: "9788998441012", source: "library", pick_type: null });
     fireEvent.click(within(sheet).getByRole("button", { name: "다른 막대로 옮기기" }));
@@ -99,7 +208,7 @@ describe("Library (S-09)", () => {
     expect(within(picker).getByRole("button", { name: /읽을 책 \(지금\)/ })).toBeDisabled();
     request.mockResolvedValueOnce(ok()).mockResolvedValueOnce(ok(VIEW));
     fireEvent.click(within(picker).getByRole("button", { name: "마음에 남은" }));
-    await waitFor(() => expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "9788998441012", method: "menu" }));
+    await waitFor(() => expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "9788998441012", method: "menu", is_same_shelf: false }));
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 
