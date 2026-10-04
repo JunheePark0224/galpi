@@ -151,6 +151,7 @@ describe("Library (S-09)", () => {
     expect(track).toHaveBeenCalledWith("library_cleared", { removed_count: 2 });
     expect(track).not.toHaveBeenCalledWith("book_unsaved", expect.anything());
     expect(request).toHaveBeenLastCalledWith("GET", "/api/library");
+    expect(screen.getByRole("heading", { level: 1, name: "내 책갈피" })).toHaveFocus();   // not lost on the body
   });
 
   it("[모두 빼기] pressed twice quickly sends once", async () => {

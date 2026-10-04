@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Bookmark } from "@/components/Bookmark";
 import { Button } from "@/components/Button";
 import { loadAccount, openLoginSheet, signedOut, useAccount } from "@/lib/account/store";
@@ -77,6 +77,9 @@ function Rods() {
   const [note, setNote] = useState<string | null>(null);
   const [moveMode, setMoveMode] = useState(false);
   const [clearing, setClearing] = useState(false);
+  // after [모두 빼기] the button that opened the sheet is gone: focus lands on the page title instead of the body
+  const title = useRef<HTMLHeadingElement>(null);
+  const cleared = useRef(false);
   // C-22: the first visit to 내 책갈피 shows a small example shelf once (per browser)
   const [guide, setGuide] = useState(() => !libraryGuide.hasSeen());
   // a move that worked says nothing (user, 10-04) — the rods already show it
@@ -94,6 +97,12 @@ function Rods() {
     const timer = setTimeout(() => setNote(null), NOTE_MS);
     return () => clearTimeout(timer);
   }, [note]);
+
+  useEffect(() => {
+    if (clearing || !cleared.current) return;
+    cleared.current = false;
+    title.current?.focus();
+  }, [clearing]);
 
   // Escape leaves move mode — but not while a drag is live (there it only puts the bookmark back, useDrag) or a sheet is open
   useEffect(() => {
@@ -153,7 +162,7 @@ function Rods() {
   return (
     <div className={styles.page} data-move-mode={moving ? "" : undefined} data-dragging={drag ? "" : undefined}>
       {guide && !open && <LibraryGuide onClose={closeGuide} />}
-      <h1 className={styles.title}>내 책갈피</h1>
+      <h1 ref={title} tabIndex={-1} className={styles.title}>내 책갈피</h1>
       <p className={styles.stat}>{`${view.count}개 · 동물 ${view.animals}종`}</p>
       {view.count === 0 && <p className={styles.quiet}>책을 만나 🔖 꽂기를 누르면 첫 막대에 걸려요.</p>}
       {view.count > 0 && (
@@ -226,7 +235,17 @@ function Rods() {
           onClose={() => setOpen(null)}
         />
       )}
-      {clearing && <ClearSheet count={view.count} onClear={lib.clearAll} onClose={() => setClearing(false)} />}
+      {clearing && (
+        <ClearSheet
+          count={view.count}
+          onClear={async () => {
+            const ok = await lib.clearAll();
+            cleared.current = ok;
+            return ok;
+          }}
+          onClose={() => setClearing(false)}
+        />
+      )}
     </div>
   );
 }
