@@ -5,7 +5,7 @@ import type { Book, TargetBook } from "@/lib/recommend";
 import { coverage, pathEnds } from "./coverage";
 import { parseQuestionMap } from "./parse";
 
-const MAP = parseQuestionMap(readFileSync(path.join(__dirname, "__fixtures__/mini-map.md"), "utf8"));
+const MAP = parseQuestionMap(readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/mini-map.md"), "utf8"));
 const t = (id: string, k: string): TargetBook => ({ id, entry: "target", field: "f", topic: "데이터 분석", genre: "데이터 분석", pages: 200, way: "실습", keywords: [k] });
 
 describe("pathEnds", () => {
