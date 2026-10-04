@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { named, reactToBookmarks, recordEvents, specMismatches, test } from "./helpers";
+import { answerToClosedBook, named, reactToBookmarks, recordEvents, specMismatches, test } from "./helpers";
 
 // P5 (PRD F-11·F-12·F-13). No real Kakao / Google: the build has a made-up Supabase address (playwright.config), the
 // leave-for-login navigation to it is answered here as if the login came back, and the 내 책갈피 routes answer from a
@@ -75,9 +75,7 @@ async function mockBooks(page: Page) {
 }
 
 async function toFirstResult(page: Page) {
-  await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
-  await page.getByRole("button", { name: "데이터 분석", exact: true }).click();
-  await page.getByRole("button", { name: "책 펼치기" }).click();
+  await answerToClosedBook(page);
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await page.getByRole("button", { name: "다음 장" }).click();
   await reactToBookmarks(page, ["궁금해요", "패스", "궁금해요", "패스", "패스"]);

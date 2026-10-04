@@ -19,7 +19,7 @@ test("sends exactly one site_visited event and the server accepts it", async ({ 
   expect(bodies).toHaveLength(1);
   const sent = JSON.parse(bodies[0]);
   expect(sent.name).toBe("site_visited");
-  expect(sent.common.screen_version).toBe("v1");
+  expect(sent.common.screen_version).toBe("v2");
   expect(sent.common.anon_id).toMatch(/^[0-9a-f-]{36}$/);
   expect(statuses[0]).toBe(202);
   // TRACK_STORE=off in playwright.config.ts: accepted but not stored.

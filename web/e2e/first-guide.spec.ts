@@ -1,17 +1,12 @@
 import { expect, type Page } from "@playwright/test";
-import { reactToBookmarks, test } from "./helpers";
+import { reactToBookmarks, test, toBookmarks } from "./helpers";
 
 // C-20: the first bookmark explains itself once per browser — three lit parts, words, [알겠어요] (10-02).
 const SHOTS = process.env.GUIDE_SHOTS;   // a folder: save screenshots there when set (manual design check)
 
 async function toFirstBookmark(page: Page) {
   await page.addInitScript(() => { try { window.localStorage.removeItem("galpi.hint.firstGuide"); } catch { /* blocked */ } });
-  await page.goto("/");
-  await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
-  await page.getByRole("button", { name: "데이터 분석", exact: true }).click();
-  await page.getByRole("button", { name: "책 펼치기" }).click();
-  await page.getByRole("button", { name: "책 펼치기" }).click();
-  await page.getByRole("button", { name: "다음 장" }).click();
+  await toBookmarks(page);
 }
 const guide = (page: Page) => page.getByRole("dialog", { name: "책갈피 보는 법" });
 

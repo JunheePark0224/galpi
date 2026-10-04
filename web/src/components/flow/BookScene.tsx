@@ -110,7 +110,7 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
             </>
           ) : (
             <>
-              <Button variant="secondary" onClick={onBack}><span aria-hidden="true">← </span>{BACK_TO_QUESTIONS}</Button>
+              <Button variant="secondary" className={styles.back} onClick={onBack}><span aria-hidden="true">← </span>{BACK_TO_QUESTIONS}</Button>
               {noBooks
                 ? <Button onClick={onHome}>처음으로</Button>
                 : <Button onClick={onNext} disabled={status !== "ready"}>다음 장</Button>}
