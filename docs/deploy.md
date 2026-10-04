@@ -25,7 +25,8 @@ Last Updated: 2026-09-30
 | 이름 | Production | Preview | 비고 |
 |---|---|---|---|
 | `SUPABASE_URL` | 설정 | 설정 안 함 | Supabase 프로젝트 URL |
-| `SUPABASE_SERVICE_ROLE_KEY` | 설정 (**Sensitive/secret**) | 설정 안 함 | 서버에서만 쓰는 키. `NEXT_PUBLIC_` 접두사를 붙이지 않는다 |
+| `SUPABASE_SERVICE_ROLE_KEY` | 설정 (**Sensitive/secret**) | 설정 안 함 | 서버에서만 쓰는 키. `NEXT_PUBLIC_` 접두사를 붙이지 않는다. 도감 v1부터 도감 기록(`collection` 쓰기)도 이 키로 |
+| `COLLECTION_SIGNING_SECRET` | **설정 (사용자, Sensitive)** | 설정 안 함 | 도감 v1(10-05): 뽑기 그림 seed에 서명하는 비밀값. **32자 이상 무작위**(예: PowerShell `[Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(48))`(PowerShell 7) 또는 비밀번호 관리자 생성기) — 대화·코드에 붙이지 않는다. 없으면 Production에서 도감 기록이 꺼진다(사이트·그림은 그대로, 배지 없음). 바꾸면 그 전에 받은 뽑기는 기록되지 않을 뿐. 넣은 뒤 다시 배포 |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | 설정 | 설정 | `/privacy`에 표시되는 문의 이메일. 빌드 때 박히므로 바꾸면 다시 배포 |
 | `NEXT_PUBLIC_AMPLITUDE_API_KEY` | 설정 | **설정 안 함** | Amplitude 공개 수집용 키(브라우저에 들어가는 키라 `NEXT_PUBLIC_`). 빌드 때 박히므로 바꾸면 다시 배포. 없으면 Amplitude가 꺼지고 콘솔에 경고 한 줄만 남는다 |
 | `TRACK_STORE` | 설정 안 함 | **`off`** | Preview 배포가 실제 `events`에 쓰지 않게 한다 |
@@ -45,6 +46,7 @@ Last Updated: 2026-09-30
 - [ ] SQL Editor에서 `web/supabase/migrations/0002_retention.sql` 실행 — 1년 지난 기록을 매일 지우는 pg_cron 작업
   - `create extension`에서 권한 오류가 나면 Database → Extensions → pg_cron을 켠 뒤 다시 실행
 - [ ] `select * from cron.job;`에 `galpi-events-retention`이 보인다
+- [ ] (도감 v1) SQL Editor에서 `web/supabase/migrations/0004_collection.sql` 실행 → 이어서 `web/supabase/checks/collection_rls.sql` 실행, 마지막 "RLS CHECK RESULT" 상자의 줄이 모두 `ok`
 
 ## 5. 배포 후 확인 (Production URL에서, 휴대폰으로도)
 
