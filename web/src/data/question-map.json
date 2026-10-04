@@ -1925,13 +1925,20 @@
    "a": {
     "label": "원리부터 차근차근",
     "effects": {
-     "way": "개념"
+     "ways": [
+      "개념"
+     ]
     },
     "next": "learn-len"
    },
    "b": {
     "label": "실제로 써먹는 쪽",
-    "effects": {},
+    "effects": {
+     "ways": [
+      "실습",
+      "사례"
+     ]
+    },
     "next": "learn-way-use"
    },
    "unsureNext": "learn-len"
@@ -1943,14 +1950,18 @@
    "a": {
     "label": "바로 따라 해 보기",
     "effects": {
-     "way": "실습"
+     "ways": [
+      "실습"
+     ]
     },
     "next": "learn-len"
    },
    "b": {
     "label": "남의 사례로 배우기",
     "effects": {
-     "way": "사례"
+     "ways": [
+      "사례"
+     ]
     },
     "next": "learn-len"
    },
@@ -1961,14 +1972,14 @@
    "kind": "mood",
    "question": "오늘은 얼마나 읽고 싶어요?",
    "a": {
-    "label": "가볍게 한 권",
+    "label": "가볍게 읽히는 얇은 책",
     "effects": {
      "len": 1
     },
     "next": "draw"
    },
    "b": {
-    "label": "깊게 파고들기",
+    "label": "두툼한 책 한 권",
     "effects": {
      "len": -1
     },

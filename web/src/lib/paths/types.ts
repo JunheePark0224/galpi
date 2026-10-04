@@ -8,7 +8,8 @@ export interface Effects {
   genres?: string[];
   axes?: Partial<Record<AxisKey, Tag>>;
   len?: Tag;
-  way?: Way;
+  /** One way, or more when a choice covers several ("실제로 써먹는 쪽" = 실습 or 사례) — a book of any of them gets the way points. */
+  ways?: Way[];
   mode?: "normal" | "challenge";
 }
 
@@ -28,13 +29,17 @@ export interface QNode {
 /** Challenge route (design 4절): a scope the person's answers point to → the far scope to draw from instead. */
 export interface FarRule { from: Partial<Scope>; to: Partial<Scope> }
 
-export interface QuestionMap { start: string; nodes: Record<string, QNode>; far: FarRule[] }
+/**
+ * skip: mood questions that cannot change the draw where they would be asked (skip.ts — moodSkips over books.json, built
+ * into src/data/mood-skips.json). The walk passes over them as if answered "unsure"; client and server read the same set.
+ */
+export interface QuestionMap { start: string; nodes: Record<string, QNode>; far: FarRule[]; skip?: ReadonlySet<string> }
 
 export interface Scope { entry: Entry | null; topics: string[] | null; keywords: string[] | null; genres: string[] | null }
 export const ALL_SCOPE: Scope = { entry: null, topics: null, keywords: null, genres: null };
 
-export interface Mood { axes: Record<AxisKey, number>; len: Tag; way: Way | null }
-export const NEUTRAL_MOOD: Mood = { axes: { temp: 0, pull: 0, gain: 0, world: 0 }, len: 0, way: null };
+export interface Mood { axes: Record<AxisKey, number>; len: Tag; ways: readonly Way[] }
+export const NEUTRAL_MOOD: Mood = { axes: { temp: 0, pull: 0, gain: 0, world: 0 }, len: 0, ways: [] };
 
 export type AnswerChoice = "A" | "B" | "unsure";
 export interface Answer { node: string; choice: AnswerChoice }

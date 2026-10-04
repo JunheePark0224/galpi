@@ -4,7 +4,7 @@ export interface Vocabulary { topics: Record<string, string[]>; genres: string[]
 
 const SIDES = [["A", "a"], ["B", "b"]] as const;
 const setsScope = (e: Effects) => Boolean(e.entry || e.topics || e.keywords || e.genres);
-const setsMood = (e: Effects) => Boolean(e.axes || e.len !== undefined || e.way);
+const setsMood = (e: Effects) => Boolean(e.axes || e.len !== undefined || e.ways);
 
 function tagErrors(where: string, e: Effects, vocab: Vocabulary, topicsSoFar: string[] | null): string[] {
   const out: string[] = [];

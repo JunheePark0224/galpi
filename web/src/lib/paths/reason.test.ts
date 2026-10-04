@@ -13,9 +13,10 @@ describe("pathReason (S-06 / 책갈피 뒷면 나온 이유, from the path)", ()
     expect(pathReason(leaf, w)).toEqual({ label: "나온 이유", items: ["따뜻함"] });
   });
 
-  it("🎯 in the narrowed scope: topic, the keyword it matched, way and length", () => {
-    const w = { scope: { ...ALL_SCOPE, entry: "target" as const, topics: ["데이터 분석"], keywords: ["SQL"] }, mood: { ...NEUTRAL_MOOD, way: "실습" as const, len: 1 as const } };
+  it("🎯 in the narrowed scope: topic, the keyword it matched, the way it is (one of those chosen) and length", () => {
+    const w = { scope: { ...ALL_SCOPE, entry: "target" as const, topics: ["데이터 분석"], keywords: ["SQL"] }, mood: { ...NEUTRAL_MOOD, ways: ["실습", "사례"] as const, len: 1 as const } };
     expect(pathReason(t("데이터 분석", ["SQL"], "실습", 200), w)).toEqual({ label: "나온 이유", items: ["데이터 분석", "SQL", "따라 하며 실습", "얇게"] });
+    expect(pathReason(t("데이터 분석", ["SQL"], "개념", 200), w)).toEqual({ label: "나온 이유", items: ["데이터 분석", "SQL", "얇게"] });
   });
 
   it("🎯 from above the scope (the 운명 1장 or a widened draw): what the book is", () => {

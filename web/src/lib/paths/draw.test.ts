@@ -2,9 +2,9 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { mulberry32, type Book, type LeafBook, type TargetBook } from "@/lib/recommend";
-import { drawForPath, maxPossible, moodScore } from "./draw";
+import { distinctAuthors, drawForPath, levelsUp, maxPossible, moodScore } from "./draw";
 import { parseQuestionMap } from "./parse";
-import { NEUTRAL_MOOD, type Answer } from "./types";
+import { ALL_SCOPE, NEUTRAL_MOOD, type Answer } from "./types";
 import { walkPath } from "./walk";
 
 const MAP = parseQuestionMap(readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/mini-map.md"), "utf8"));
@@ -24,25 +24,30 @@ const opts = (seed = 1, seen: string[] = []) => ({ seen: new Set(seen), rng: mul
 
 describe("moodScore", () => {
   it("scores a 🎯 book by way and length, a 🍃 book by the axes and length", () => {
-    expect(moodScore(t("x", [], "실습", 200), { ...NEUTRAL_MOOD, way: "실습", len: 1 })).toBe(4);   // way 2 + thin 2
+    expect(moodScore(t("x", [], "실습", 200), { ...NEUTRAL_MOOD, ways: ["실습"], len: 1 })).toBe(4);   // way 2 + thin 2
     expect(moodScore(l("y", "에세이"), { ...NEUTRAL_MOOD, axes: { temp: 1, pull: 0, gain: 0, world: 0 }, len: 0 })).toBe(1);
     expect(moodScore(t("z", []), NEUTRAL_MOOD)).toBe(0);
   });
   it("counts length -1 for both entries and no way as nothing", () => {
-    expect(moodScore(t("x", [], "실습", 450), { ...NEUTRAL_MOOD, way: null, len: -1 })).toBe(1);          // thick welcome 1
+    expect(moodScore(t("x", [], "실습", 450), { ...NEUTRAL_MOOD, ways: [], len: -1 })).toBe(1);          // thick welcome 1
     expect(moodScore(l("y", "에세이"), { ...NEUTRAL_MOOD, len: -1 })).toBe(-1);                             // 250p is thin
+  });
+  it("gives the way points to a book of any of the ways chosen (실제로 써먹는 쪽 = 실습 or 사례)", () => {
+    const either = { ...NEUTRAL_MOOD, ways: ["실습", "사례"] as const };
+    expect([moodScore(t("a", [], "실습", 320), either), moodScore(t("b", [], "사례", 320), either), moodScore(t("c", [], "개념", 320), either)]).toEqual([2, 2, 0]);
+    expect(maxPossible("target", either)).toBe(2);
   });
 });
 
 describe("maxPossible", () => {
-  const mood = { axes: { temp: 1, pull: -1, gain: 0, world: 0 }, len: -1 as const, way: "실습" as const };
+  const mood = { axes: { temp: 1, pull: -1, gain: 0, world: 0 }, len: -1 as const, ways: ["실습"] as const };
   it("follows the pool's entry: 🍃 axes + length, 🎯 way + length points, both → the larger", () => {
     expect(maxPossible("leaf", mood)).toBe(3);
     expect(maxPossible("target", mood)).toBe(3);                                       // way 2 + thick 1
-    expect(maxPossible("target", { ...mood, way: null, len: 1 })).toBe(2);             // thin 2
+    expect(maxPossible("target", { ...mood, ways: [], len: 1 })).toBe(2);             // thin 2
     expect(maxPossible("target", { ...mood, len: 0 })).toBe(2);
     expect(maxPossible(null, { ...mood, len: 1 })).toBe(4);                             // 🎯 2 + 2 beats 🍃 1 + 1 + 1
-    expect(maxPossible(null, { ...mood, way: null })).toBe(3);                          // 🍃 3 beats 🎯 1
+    expect(maxPossible(null, { ...mood, ways: [] })).toBe(3);                          // 🍃 3 beats 🎯 1
   });
 });
 
@@ -135,7 +140,8 @@ describe("drawForPath", () => {
 
   it("challenge to the other entry: judged by what that entry can score, not exhausted for crossing", () => {
     const d = drawForPath(BOOKS, MAP, walkPath(MAP, [a("start", "B"), ...SQL.slice(1)]), opts());   // way 실습 + thin, far side 🍃
-    expect(d.picks.filter((p) => p.kind === "recommended").every((p) => p.score === 1)).toBe(true);  // thin 1 is all a 🍃 book can get
+    expect(d.drawnFrom.mood.axes.world).toBe(1);                                                     // 실습 leans 현실 there
+    expect(d.picks.filter((p) => p.kind === "recommended").every((p) => p.score === 1)).toBe(true);  // thin 1, these books are world 0
     expect(d.exhausted).toBe(false);
   });
 
@@ -182,5 +188,101 @@ describe("drawForPath", () => {
 
   it("refuses to draw before the path ends", () => {
     expect(() => drawForPath(BOOKS, MAP, walkPath(MAP, SQL.slice(0, 2)), opts())).toThrow(/not finished/);
+  });
+});
+
+describe("drawForPath — 10-05 rules (design 5절)", () => {
+  const MIXED = [a("start", "A"), a("branch", "unsure"), a("mood-len", "unsure")];
+  const STORY = [a("start", "A"), a("branch", "A"), a("story-world", "unsure"), a("mood-temp", "unsure"), a("mood-len", "unsure")];
+  const by = (b: Book, ...authors: string[]): Book => ({ ...b, authors });
+  const rec = (d: ReturnType<typeof drawForPath>) => d.picks.filter((p) => p.kind === "recommended").map((p) => p.book);
+  const fate = (d: ReturnType<typeof drawForPath>) => d.picks.find((p) => p.kind === "random")?.book;
+
+  it("levelsUp: the person's scope, then each level narrowed through, up to the branch — the whole library only with no branch", () => {
+    const sql = walkPath(MAP, SQL);
+    expect(levelsUp(sql).map((s) => s.keywords ?? s.topics ?? s.entry)).toEqual([["SQL"], ["데이터 분석"], "target"]);
+    expect(levelsUp(walkPath(MAP, MIXED))).toEqual([ALL_SCOPE]);
+  });
+
+  it("widens one level at a time: an empty keyword draws its topic, not the whole branch", () => {
+    const books: Book[] = [...["d1", "d2", "d3", "d4", "d5"].map((id) => t(id, ["엑셀"])), ...["m1", "m2", "m3", "m4", "m5"].map((id) => t(id, ["우울"], "실습", 200, "마음 돌보기"))];
+    for (let seed = 1; seed <= 30; seed++) {
+      const d = drawForPath(books, MAP, walkPath(MAP, SQL), opts(seed));
+      expect(d.scopeCount).toBe(0);
+      expect(d.widenedScope).toBe(true);
+      expect(rec(d).every((b) => b.entry === "target" && b.topic === "데이터 분석")).toBe(true);
+      const f = fate(d);
+      expect(f?.entry === "target" && f.topic).toBe("데이터 분석");   // the 운명 1장: the level the four came from
+    }
+  });
+
+  it("one book per author: never two of one author, and a scope short of authors widens like a short scope", () => {
+    const books: Book[] = [
+      by(t("s1", ["SQL"]), "강성욱"), by(t("s2", ["SQL"]), "강성욱"), by(t("s3", ["SQL"]), "오세종"), by(t("s4", ["SQL"]), "최준선"),
+      by(t("x1", ["엑셀"]), "권현욱"), by(t("x2", ["엑셀"]), "에이블런"),
+    ];
+    expect(distinctAuthors(books.slice(0, 4))).toBe(3);
+    for (let seed = 1; seed <= 30; seed++) {
+      const d = drawForPath(books, MAP, walkPath(MAP, SQL), opts(seed));
+      const names = d.picks.flatMap((p) => p.book.authors ?? []);
+      expect(new Set(names).size).toBe(names.length);
+      expect(d.widenedScope).toBe(true);
+      expect(rec(d)).toHaveLength(4);
+      expect(rec(d).filter((b) => b.entry === "target" && b.keywords.includes("SQL"))).toHaveLength(3);   // all three SQL authors first
+    }
+  });
+
+  it("섞어서: two 이야기 and two 배우기 books, the 운명 1장 from either", () => {
+    const books: Book[] = [
+      ...["e1", "e2", "e3"].map((id) => l(id, "에세이")), ...["k1", "k2"].map((id) => l(id, "한국 소설")),
+      ...["x1", "x2", "x3", "x4", "x5", "x6"].map((id, i) => t(id, [], "실습", 200, ["데이터 분석", "통계", "AI 활용"][i % 3])),
+    ];
+    const entries = new Set<string>();
+    for (let seed = 1; seed <= 40; seed++) {
+      const d = drawForPath(books, MAP, walkPath(MAP, MIXED), opts(seed));
+      expect(rec(d).filter((b) => b.entry === "leaf")).toHaveLength(2);
+      expect(rec(d).filter((b) => b.entry === "target")).toHaveLength(2);
+      entries.add(fate(d)!.entry);
+    }
+    expect(entries).toEqual(new Set(["leaf", "target"]));
+  });
+
+  it("the 운명 1장 stays in the branch chosen: a story path with no genre never gets a 배우기 book", () => {
+    const books: Book[] = [...["e1", "e2", "e3"].map((id) => l(id, "에세이")), l("k1", "한국 소설"), l("k2", "외국 소설"), ...BOOKS.filter((b) => b.entry === "target")];
+    for (let seed = 1; seed <= 40; seed++) {
+      expect(drawForPath(books, MAP, walkPath(MAP, STORY), opts(seed)).picks.every((p) => p.book.entry === "leaf")).toBe(true);
+    }
+  });
+
+  it("도전 + 섞어서: one side at random by the seed, reproducible, not the usual mixed draw", () => {
+    const books: Book[] = [...["e1", "e2", "e3", "e4", "e5"].map((id) => l(id, "에세이")), ...["x1", "x2", "x3", "x4", "x5"].map((id) => t(id, ["SQL"]))];
+    const route = [a("start", "B"), a("branch", "unsure"), a("mood-len", "unsure")];
+    const sides = new Set<string>();
+    for (let seed = 1; seed <= 20; seed++) {
+      const d = drawForPath(books, MAP, walkPath(MAP, route), opts(seed));
+      const side = d.drawnFrom.scope.entry!;
+      expect(d.picks.every((p) => p.book.entry === side)).toBe(true);
+      expect(drawForPath(books, MAP, walkPath(MAP, route), opts(seed)).picks.map((p) => p.book.id)).toEqual(d.picks.map((p) => p.book.id));
+      sides.add(side);
+    }
+    expect(sides).toEqual(new Set(["leaf", "target"]));
+  });
+
+  it("도전 from 배우기: the way answer scores on the far side's story axes", () => {
+    const essay = (id: string, axes: LeafBook["axes"]): LeafBook => ({ id, entry: "leaf", genre: "에세이", pages: 320, axes });
+    const books: Book[] = [
+      ...BOOKS.filter((b) => b.entry === "target"),
+      essay("know1", { temp: 0, pull: 0, gain: 1, world: 0 }), essay("know2", { temp: 0, pull: 0, gain: 1, world: 0 }),
+      essay("real1", { temp: 0, pull: 0, gain: 0, world: 1 }), essay("real2", { temp: 0, pull: 0, gain: 0, world: 1 }),
+      essay("n1", { temp: 0, pull: 0, gain: 0, world: 0 }), essay("n2", { temp: 0, pull: 0, gain: 0, world: 0 }),
+    ];
+    const route = (way: "A" | "B") => [a("start", "B"), a("branch", "B"), a("learn-area", "A"), a("learn-data", "A"), a("mood-way", way), a("mood-len", "unsure")];
+    const shown = (way: "A" | "B", prefix: string) => {
+      let n = 0;
+      for (let seed = 1; seed <= 200; seed++) n += rec(drawForPath(books, MAP, walkPath(MAP, route(way)), opts(seed))).filter((b) => b.id.startsWith(prefix)).length;
+      return n / 200;
+    };
+    expect(shown("A", "know")).toBeGreaterThan(shown("B", "know") + 0.5);   // 개념 → 알게 됨 (gain +1)
+    expect(shown("B", "real")).toBeGreaterThan(shown("A", "real") + 0.5);   // 실습 → 현실 (world +1)
   });
 });
