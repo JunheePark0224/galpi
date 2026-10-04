@@ -1,11 +1,9 @@
 import real from "@/data/books.json";
 import sample from "@/data/books.sample.json";
-import vocab from "@/data/vocab.json";
 import libraryData from "@/data/library.json";
 import type { Book } from "@/lib/recommend";
-import { activeTopics, activeVocab } from "./active";
 import { kstDate, libraryCount, type LibraryCount } from "./library";
-import type { BookCard, CatalogBook, Vocab } from "./types";
+import type { BookCard, CatalogBook } from "./types";
 
 /** BOOKS_SOURCE=sample (E2E, tests) draws from the 30-book fixture; otherwise the imported catalogue. Read on every call. */
 export function catalog(): CatalogBook[] {
@@ -13,15 +11,8 @@ export function catalog(): CatalogBook[] {
 }
 
 /**
- * vocab.json cut to the 🎯 topics the published catalogue (books.json) can fill — what 직접 쓰기 sorting and word matching
- * may answer with (lib/books/active.ts). Always the real books: BOOKS_SOURCE=sample only changes which books are drawn,
- * so E2E sorts notes into the same topics as production. Server code only — it carries the whole catalogue.
- */
-export const ACTIVE_VOCAB: Vocab = activeVocab(vocab as Vocab, activeTopics(real as unknown as CatalogBook[]));
-
-/**
  * F-23 on S-01: the published catalogue's size and the books its additions file of today (Korean date) added — null below
- * LIBRARY_MIN_BOOKS. Real books always, like ACTIVE_VOCAB. page.tsx calls it on each regeneration so "오늘" moves with the day.
+ * LIBRARY_MIN_BOOKS. Real books always. page.tsx calls it on each regeneration so "오늘" moves with the day.
  */
 export function library(now: Date): LibraryCount | null {
   return libraryCount(real.length, libraryData.added as Record<string, number>, kstDate(now));
