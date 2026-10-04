@@ -5,7 +5,12 @@ export class MapParseError extends Error {}
 
 const BLOCK = /```(node|far)\r?\n([\s\S]*?)```/g;
 const WAYS: readonly Way[] = ["개념", "실습", "사례"];
-const list = (v: string) => v.split(",").map((s) => s.trim()).filter(Boolean);
+
+function list(id: string, key: string, v: string): string[] {
+  const out = v.split(",").map((s) => s.trim()).filter(Boolean);
+  if (!out.length) throw new MapParseError(`node ${id}: ${key} is empty`);
+  return out;
+}
 
 function tag(id: string, name: string, v: string): Tag {
   if (v === "+1" || v === "1") return 1;
@@ -25,9 +30,9 @@ function parts(id: string, text: string, withNext: boolean): { label: string; ef
     const value = p.slice(eq + 1).trim();
     if (key === "next" && withNext) next = value;
     else if (key === "entry" && (value === "leaf" || value === "target")) effects.entry = value as Entry;
-    else if (key === "topics") effects.topics = list(value);
-    else if (key === "keywords") effects.keywords = list(value);
-    else if (key === "genres") effects.genres = list(value);
+    else if (key === "topics") effects.topics = list(id, key, value);
+    else if (key === "keywords") effects.keywords = list(id, key, value);
+    else if (key === "genres") effects.genres = list(id, key, value);
     else if ((AXES as readonly string[]).includes(key)) effects.axes = { ...effects.axes, [key as AxisKey]: tag(id, key, value) };
     else if (key === "len") effects.len = tag(id, key, value);
     else if (key === "way" && (WAYS as readonly string[]).includes(value)) effects.way = value as Way;
@@ -50,21 +55,31 @@ function choice(id: string, text: string): Choice {
   return { label, effects, next };
 }
 
-function linesOf(body: string): Map<string, string> {
-  const out = new Map<string, string>();
+/** "key: value" lines of a block, and the keys given more than once. */
+function linesOf(body: string): { lines: Map<string, string>; twice: string[] } {
+  const lines = new Map<string, string>();
+  const twice: string[] = [];
   for (const raw of body.split(/\r?\n/)) {
     const line = raw.trim();
     const colon = line.indexOf(":");
     if (!line || colon < 0) continue;
-    out.set(line.slice(0, colon).trim(), line.slice(colon + 1).trim());
+    const key = line.slice(0, colon).trim();
+    if (lines.has(key)) twice.push(key);
+    lines.set(key, line.slice(colon + 1).trim());
   }
-  return out;
+  return { lines, twice };
 }
 
-function scopeOf(id: string, text: string): Partial<Scope> {
-  const { effects } = parts(id, `rule | ${text}`, false);
+function once(where: string, twice: string[]): void {
+  if (twice.length) throw new MapParseError(`${where}: "${twice[0]}:" line appears twice`);
+}
+
+function scopeOf(side: "from" | "to", text: string): Partial<Scope> {
+  const { effects } = parts("far", `rule | ${text}`, false);
   const { entry, topics, keywords, genres } = effects;
-  return { ...(entry ? { entry } : {}), ...(topics ? { topics } : {}), ...(keywords ? { keywords } : {}), ...(genres ? { genres } : {}) };
+  const scope = { ...(entry ? { entry } : {}), ...(topics ? { topics } : {}), ...(keywords ? { keywords } : {}), ...(genres ? { genres } : {}) };
+  if (!Object.keys(scope).length) throw new MapParseError(`far: ${side} sets no scope (entry, topics, keywords or genres)`);
+  return scope;
 }
 
 export function parseQuestionMap(markdown: string): QuestionMap {
@@ -72,17 +87,20 @@ export function parseQuestionMap(markdown: string): QuestionMap {
   const far: FarRule[] = [];
   let start: string | null = null;
   for (const m of markdown.matchAll(BLOCK)) {
-    const lines = linesOf(m[2]);
+    const { lines, twice } = linesOf(m[2]);
     if (m[1] === "far") {
-      far.push({ from: scopeOf("far", field("far", lines, "from")), to: scopeOf("far", field("far", lines, "to")) });
+      once("far", twice);
+      far.push({ from: scopeOf("from", field("far", lines, "from")), to: scopeOf("to", field("far", lines, "to")) });
       continue;
     }
     const id = field("?", lines, "id");
+    once(`node ${id}`, twice);
     if (nodes[id]) throw new MapParseError(`node ${id}: id used twice`);
     const kind = field(id, lines, "kind");
     if (kind !== "narrow" && kind !== "mood") throw new MapParseError(`node ${id}: kind must be narrow or mood`);
     const unsure = parts(id, `unsure | ${field(id, lines, "unsure")}`, true);
     if (!unsure.next) throw new MapParseError(`node ${id}: unsure has no next=`);
+    if (Object.keys(unsure.effects).length) throw new MapParseError(`node ${id}: unsure may only have next=`);
     nodes[id] = {
       id, kind, question: field(id, lines, "question"),
       a: choice(id, field(id, lines, "A")), b: choice(id, field(id, lines, "B")), unsureNext: unsure.next,

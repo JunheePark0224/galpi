@@ -39,4 +39,36 @@ describe("parseQuestionMap", () => {
     const noNext = "```node\nid: w\nkind: mood\nquestion: q\nA: a | len=+1\nB: b | next=draw\nunsure: next=draw\n```";
     expect(() => parseQuestionMap(noNext)).toThrow(/w.*next/);
   });
+
+  const node = (lines: string) => `\`\`\`node\nid: n\nkind: mood\nquestion: q\n${lines}\n\`\`\``;
+  const AB = "A: a | next=draw\nB: b | next=draw";
+
+  it("refuses a part that is not key=value, a choice without a label, a bad kind, an unsure without next", () => {
+    expect(() => parseQuestionMap(node(`A: a | oops | next=draw\nB: b | next=draw\nunsure: next=draw`))).toThrow(/n.*"oops" is not key=value/);
+    expect(() => parseQuestionMap(node(`A: | next=draw\nB: b | next=draw\nunsure: next=draw`))).toThrow(/n.*no label/);
+    expect(() => parseQuestionMap(node(`${AB}\nunsure: next=draw`).replace("kind: mood", "kind: other"))).toThrow(/n.*kind/);
+    expect(() => parseQuestionMap(node(`${AB}\nunsure: next=`))).toThrow(/n.*unsure has no next/);
+  });
+
+  it("refuses a line given twice in a block", () => {
+    expect(() => parseQuestionMap(node(`${AB}\nB: c | next=draw\nunsure: next=draw`))).toThrow(/n.*"B:" line appears twice/);
+    const far = `${MINI}\n\`\`\`far\nfrom: entry=leaf\nfrom: entry=target\nto: entry=leaf\n\`\`\``;
+    expect(() => parseQuestionMap(far)).toThrow(/far.*"from:" line appears twice/);
+  });
+
+  it("refuses an unsure line that sets anything besides next", () => {
+    expect(() => parseQuestionMap(node(`${AB}\nunsure: len=+1 | next=draw`))).toThrow(/n.*unsure may only have next=/);
+  });
+
+  it("refuses an empty list", () => {
+    expect(() => parseQuestionMap(node(`A: a | genres= | next=draw\nB: b | next=draw\nunsure: next=draw`))).toThrow(/n.*genres is empty/);
+    expect(() => parseQuestionMap(node(`A: a | keywords= , | next=draw\nB: b | next=draw\nunsure: next=draw`))).toThrow(/n.*keywords is empty/);
+  });
+
+  it("reads far scopes by keywords or genres alone, and refuses a far side with no scope", () => {
+    const far = (from: string, to: string) => parseQuestionMap(`${MINI}\n\`\`\`far\nfrom: ${from}\nto: ${to}\n\`\`\``).far[1];
+    expect(far("keywords=SQL", "genres=시")).toEqual({ from: { keywords: ["SQL"] }, to: { genres: ["시"] } });
+    expect(() => far("len=+1", "entry=leaf")).toThrow(/far: from sets no scope/);
+    expect(() => far("entry=leaf", "way=개념")).toThrow(/far: to sets no scope/);
+  });
 });
