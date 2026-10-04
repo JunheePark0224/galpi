@@ -78,7 +78,7 @@ for (const scale of [1, 1.15]) for (const met of [false, true]) {
     const problems = await page.evaluate(({ all, textScale, withMet }) => {
       const article = document.querySelector(withMet ? "article:has([data-part=met])" : "article:not(:has([data-part=met]))");
       const card = article?.children[1] as HTMLElement;
-      const parts = Array.from(card.children) as HTMLElement[];
+      const parts = (Array.from(card.children) as HTMLElement[]).filter((el) => el.dataset.part !== "gap");
       const [, win, tag, title, author, line] = parts;
       const [stitch, mark] = parts.slice(-2);
       const date = withMet ? card.querySelector<HTMLElement>("[data-part=met]") : null;
@@ -113,7 +113,9 @@ for (const scale of [1, 1.15]) for (const met of [false, true]) {
         if (line.getBoundingClientRect().bottom > stitch.getBoundingClientRect().top) why.push("text runs into the stitch line");
         if (date) {
           if (date.getBoundingClientRect().height > parseFloat(getComputedStyle(date).lineHeight) + 1 || date.scrollWidth > date.clientWidth + 1) why.push("met date is not one whole line");
-          if (line.getBoundingClientRect().bottom > date.getBoundingClientRect().top + 0.5) why.push("one-liner runs into the met date");
+          // the one-liner's text, not its 2px glyph padding (Bookmark.module.css): the date is drawn 2px up into that blank
+          const lineText = line.getBoundingClientRect().bottom - parseFloat(getComputedStyle(line).paddingBottom);
+          if (lineText > date.getBoundingClientRect().top + 0.5) why.push("one-liner runs into the met date");
           if (date.getBoundingClientRect().bottom > stitch.getBoundingClientRect().top + 0.5) why.push("met date runs into the stitch line");
         }
         if (mark.getBoundingClientRect().bottom > room + 0.5) why.push("갈피 mark leaves the card");

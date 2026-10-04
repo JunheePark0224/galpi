@@ -41,6 +41,7 @@ export function Bookmark({ card, art, moving = false, met }: Props) {
         <GenreTag card={card} />
         <h3 ref={titleRef} className={styles.title} data-part="title">{bookTitle(card.title)}</h3>
         {card.author ? <p className={styles.author} data-part="author">{card.author}</p> : null}
+        <span className={styles.gap} data-part="gap" />
         <p className={styles.line} data-part="line">{card.oneLiner}</p>
         {met ? <p className={styles.met} data-part="met">{`${met} 만남`}</p> : null}
         <span className={frame.stitch} />
