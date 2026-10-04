@@ -1,7 +1,7 @@
 """Samples a person checks (design 2-3): the trial sample of a day and the weekly sample after graduation.
 
 Trial (auto_merge false — a person reviews every day's PR): `trial_sample` = a fixed `sample_rate` share of the day's books
-that were accepted because both passes agreed (seeded by the date; stable across applies). review.py shows them by default, so the agreement
+that were accepted because both passes agreed (seeded by the batch id — the date for a day's first batch; stable across applies). review.py shows them by default, so the agreement
 figures also say how often an agreed book was still wrong; the PR body says how many agreed books stay unseen.
 Weekly (auto_merge true): `sample_rate` of last week's daily additions as a GitHub issue body.
 
@@ -36,10 +36,12 @@ def sample_size(n_agreed: int, rate: float) -> int:
 
 
 def trial_sample(doc: dict, rate: float) -> list[str]:
-    """A fixed share of the day's agreed books (seeded by the date), reviewed by default during the trial. The same books
-    come back after a review is applied and the page is built again."""
+    """A fixed share of the batch's agreed books, reviewed by default during the trial. Seeded by the batch id
+    (`batch_id`; files from before 10-05 have none and use `date`, which is the same id for a day's first batch). The same
+    books come back after a review is applied and the page is built again."""
     agreed = agreed_isbns(doc)
-    return sorted(random.Random(doc["date"]).sample(agreed, sample_size(len(agreed), rate)))
+    seed = doc.get("batch_id") or doc["date"]
+    return sorted(random.Random(seed).sample(agreed, sample_size(len(agreed), rate)))
 
 
 def last_week(today: date) -> str:

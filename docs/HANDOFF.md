@@ -58,6 +58,18 @@ Last Updated: 2026-10-04 (v2 계획 2 `feat/v2-screens` 병합 전 · 배포 중
 4. 졸업 기준 (`docs/deploy.md` 7절): ① 연속 3회 모든 항목 95%+ — **현재 1/3** ② 그 3회 일치 책 표본 10권 이상·바뀐 책 5% 이하 — **현재 표본 3권, 바뀜 0**. 둘 다 넘으면 사용자에게 물어본 뒤 `data/pipeline/config.json` `auto_merge: true`
 5. 일치율 기록: `data/pipeline/agreement.csv`
 
+### 여러 번 돌리기 (10-06 공개 준비)
+
+하루에 묶음(batch)을 여러 번 돌려 책을 376권 → 1,000권으로 늘린다(묶음당 100권, 7~9번). 첫 묶음은 그대로 `<날짜>`, 같은 날 다음 묶음은 `<날짜>-2`, `-3` … — 브랜치 `books/<묶음>`, 파일 `data/processed/additions/<묶음>.json`, 검수 명령, `agreement.csv`의 `date` 칸(`batch`는 그대로 `daily`)이 모두 이 이름을 쓴다. 책의 날짜(`date`)는 달력 날짜 그대로.
+
+1. 실행 (열린 `books/` PR이 없을 때만 돈다 — 있으면 API 호출 없이 쉰다):
+   `gh workflow run daily-books.yml -f next_batch=true -f count=100 -f dry_run=false`
+   → 실행 화면 Summary 첫 줄 `Batch: 2026-10-06-2`가 이번 묶음 이름. 오늘 main에 아무것도 없으면 `<날짜>` 그대로
+2. PR `books/<묶음>` 브랜치에서 검수: `PYTHONIOENCODING=utf-8 python -m src.pipeline.review <묶음>` (예: `… review 2026-10-06-2`) → 내려받기 → `python -m src.pipeline.review <묶음> --apply <내려받은 파일>` → `cd web && npm run books:import` → `npm test` → PR 브랜치에 커밋
+3. **병합한 뒤에** 1로 돌아가 다음 묶음. 병합 전에 돌리면 쉰다(한 번에 PR 하나 — books.json 충돌 방지). 앞 묶음 책은 main의 파일로 빠지므로 같은 책이 두 번 오지 않는다
+- 매일 06:00 자동 실행은 그대로 — 그날 이미 묶음이 main에 있으면 쉰다. `next_batch` 없이 손으로 돌려도 마찬가지
+- 묶음마다 약 $1.2(100권, 권당 약 $0.0115). 월 한도 $15를 사이트와 같이 쓰니 9번이면 약 $10.4 — 시작 전에 Console 사용량 확인
+
 ## 3b. 키워드 후보 → 승인 (10-02)
 
 - 매일 PR 본문 "### 키워드 후보"에 같은 후보가 **5권 이상**이면 "추가할까요?" — 사용자에게 물어 정의 문장 확인 → `PYTHONIOENCODING=utf-8 python src/backfill_keywords.py promote "주제:이름" --pattern "<단어 규칙>" --definition "<정의>"` → `cd web && npm run books:import && npx vitest run` → 커밋 (`plans/2026-10-02-keyword-candidates.md`)

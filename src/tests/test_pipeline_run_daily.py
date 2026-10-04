@@ -287,3 +287,31 @@ def test_the_run_passes_the_topics_excluded_names_to_the_parser(day, tmp_path):
     run_daily.run("2026-10-05", CFG, ENV, FakeClient(coin))
     books = json.loads((day / "2026-10-05.json").read_text(encoding="utf-8"))["books"]
     assert books and all(b["keyword_candidate"] is None for b in books)
+
+
+def test_a_second_batch_the_same_day_never_offers_a_book_of_the_first(day, monkeypatch, tmp_path):
+    first = run_daily.run("2026-10-05", parse_config({**CFG.__dict__, "daily_count": 2}), ENV, FakeClient())
+    assert first["status"] == "ok" and first["batch"] == "2026-10-05"
+    second = run_daily.run("2026-10-05-2", CFG, ENV, FakeClient())                 # the first batch is merged: its file is on main
+    assert second["date"] == "2026-10-05" and second["batch"] == "2026-10-05-2"
+    one = json.loads((day / "2026-10-05.json").read_text(encoding="utf-8"))
+    two = json.loads((day / "2026-10-05-2.json").read_text(encoding="utf-8"))
+    isbns = lambda d: {b["isbn"] for b in d["books"]}  # noqa: E731
+    assert len(isbns(one)) == 2 and len(isbns(two)) == 3 and not isbns(one) & isbns(two)
+    assert (one["date"], one["batch_id"], two["date"], two["batch_id"]) == ("2026-10-05", "2026-10-05", "2026-10-05", "2026-10-05-2")
+    assert two["batch"] == "daily"                                                   # the kind of file, as before
+
+
+def test_main_keys_a_later_batch_by_its_id_and_checks_it(day, monkeypatch, tmp_path, capsys):
+    monkeypatch.setattr(run_daily, "yes24_env", lambda: ENV)
+    monkeypatch.setattr(run_daily, "anthropic_key", lambda: "sk-test-secret-value")
+    monkeypatch.setattr(run_daily, "load_config", lambda count=None: CFG)
+    monkeypatch.setattr(anthropic, "Anthropic", lambda **kw: FakeClient())
+    (day / "2026-10-05.json").write_text(json.dumps({"date": "2026-10-05", "books": []}), encoding="utf-8")
+    assert run_daily.main(["--batch", "2026-10-05-2"]) == 0
+    assert json.loads((tmp_path / "runs" / "2026-10-05-2.json").read_text(encoding="utf-8"))["batch"] == "2026-10-05-2"
+    assert (day / "2026-10-05-2.json").exists() and not (tmp_path / "runs" / "2026-10-05.json").exists()
+    assert run_daily.main(["--batch", "2026-10-05-2"]) == 0 and "already exists" in capsys.readouterr().out
+    for bad in (["--batch", "2026-10-05-1"], ["--batch", "2026-10-05-pilot"], ["--date", "2026-10-04", "--batch", "2026-10-05-2"]):
+        with pytest.raises(SystemExit):
+            run_daily.main(bad)
