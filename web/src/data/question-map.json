@@ -1,0 +1,2564 @@
+{
+ "start": "start",
+ "nodes": {
+  "start": {
+   "id": "start",
+   "kind": "narrow",
+   "question": "오늘은 어느 쪽으로 걸어 볼까요?",
+   "a": {
+    "label": "평소 끌리는 쪽으로",
+    "effects": {
+     "mode": "normal"
+    },
+    "next": "branch"
+   },
+   "b": {
+    "label": "오늘은 낯선 쪽으로 도전",
+    "effects": {
+     "mode": "challenge"
+    },
+    "next": "branch"
+   },
+   "unsureNext": "branch"
+  },
+  "branch": {
+   "id": "branch",
+   "kind": "narrow",
+   "question": "지금 더 끌리는 건 어느 쪽이에요?",
+   "a": {
+    "label": "이야기에 빠지기",
+    "effects": {
+     "entry": "leaf"
+    },
+    "next": "story-intro"
+   },
+   "b": {
+    "label": "뭔가 배우기",
+    "effects": {
+     "entry": "target"
+    },
+    "next": "learn-intro"
+   },
+   "unsureNext": "mix-len"
+  },
+  "mix-len": {
+   "id": "mix-len",
+   "kind": "mood",
+   "question": "오늘은 어떤 책이 손에 잡힐까요?",
+   "a": {
+    "label": "가볍게 얇은 책",
+    "effects": {
+     "len": 1
+    },
+    "next": "draw"
+   },
+   "b": {
+    "label": "든든하게 두꺼운 책",
+    "effects": {
+     "len": -1
+    },
+    "next": "draw"
+   },
+   "unsureNext": "draw"
+  },
+  "story-intro": {
+   "id": "story-intro",
+   "kind": "narrow",
+   "question": "읽고 싶은 이야기가 떠올라요?",
+   "a": {
+    "label": "떠오르는 게 있어요",
+    "effects": {},
+    "next": "story-shelf"
+   },
+   "b": {
+    "label": "기분 따라 갈래요",
+    "effects": {},
+    "next": "story-gain"
+   },
+   "unsureNext": "story-gain"
+  },
+  "story-shelf": {
+   "id": "story-shelf",
+   "kind": "narrow",
+   "question": "어떤 책장 앞에 서 볼까요?",
+   "a": {
+    "label": "소설 속으로",
+    "effects": {
+     "genres": [
+      "한국 소설",
+      "외국 소설",
+      "SF·판타지",
+      "추리·스릴러",
+      "호러·괴담"
+     ]
+    },
+    "next": "story-fiction"
+   },
+   "b": {
+    "label": "진짜 세상 이야기",
+    "effects": {
+     "genres": [
+      "에세이",
+      "시",
+      "인문",
+      "과학 교양",
+      "예술·여행",
+      "역사",
+      "사회·시사"
+     ]
+    },
+    "next": "story-nonfiction"
+   },
+   "unsureNext": "story-gain"
+  },
+  "story-fiction": {
+   "id": "story-fiction",
+   "kind": "narrow",
+   "question": "소설이라면 어느 쪽이에요?",
+   "a": {
+    "label": "현실에 발 딛은 소설",
+    "effects": {
+     "genres": [
+      "한국 소설",
+      "외국 소설"
+     ]
+    },
+    "next": "story-novel"
+   },
+   "b": {
+    "label": "장르의 짜릿함",
+    "effects": {
+     "genres": [
+      "SF·판타지",
+      "추리·스릴러",
+      "호러·괴담"
+     ]
+    },
+    "next": "story-genre"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-novel": {
+   "id": "story-novel",
+   "kind": "narrow",
+   "question": "어디서 온 이야기가 좋아요?",
+   "a": {
+    "label": "우리 곁의 한국 소설",
+    "effects": {
+     "genres": [
+      "한국 소설"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "b": {
+    "label": "바다 건너 외국 소설",
+    "effects": {
+     "genres": [
+      "외국 소설"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-genre": {
+   "id": "story-genre",
+   "kind": "narrow",
+   "question": "어떤 짜릿함이 끌려요?",
+   "a": {
+    "label": "여기 없는 딴 세상",
+    "effects": {
+     "genres": [
+      "SF·판타지"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "b": {
+    "label": "숨죽이는 긴장감",
+    "effects": {
+     "genres": [
+      "추리·스릴러",
+      "호러·괴담"
+     ]
+    },
+    "next": "story-thrill"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-thrill": {
+   "id": "story-thrill",
+   "kind": "narrow",
+   "question": "무엇에 더 숨죽여요?",
+   "a": {
+    "label": "범인을 쫓는 추리",
+    "effects": {
+     "genres": [
+      "추리·스릴러"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "b": {
+    "label": "등골 서늘한 괴담",
+    "effects": {
+     "genres": [
+      "호러·괴담"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-nonfiction": {
+   "id": "story-nonfiction",
+   "kind": "narrow",
+   "question": "진짜 세상의 어떤 글이 좋아요?",
+   "a": {
+    "label": "마음을 건드리는 글",
+    "effects": {
+     "genres": [
+      "에세이",
+      "시",
+      "예술·여행"
+     ]
+    },
+    "next": "story-heart"
+   },
+   "b": {
+    "label": "세상을 알아 가는 글",
+    "effects": {
+     "genres": [
+      "인문",
+      "과학 교양",
+      "역사",
+      "사회·시사"
+     ]
+    },
+    "next": "story-know"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-heart": {
+   "id": "story-heart",
+   "kind": "narrow",
+   "question": "어떤 글에 기대고 싶어요?",
+   "a": {
+    "label": "짧고 깊은 시 한 편",
+    "effects": {
+     "genres": [
+      "시"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "b": {
+    "label": "천천히 읽는 산문",
+    "effects": {
+     "genres": [
+      "에세이",
+      "예술·여행"
+     ]
+    },
+    "next": "story-prose"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-prose": {
+   "id": "story-prose",
+   "kind": "narrow",
+   "question": "누구의 걸음을 따라갈까요?",
+   "a": {
+    "label": "누군가의 하루, 에세이",
+    "effects": {
+     "genres": [
+      "에세이"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "b": {
+    "label": "그림·여행 따라 걷기",
+    "effects": {
+     "genres": [
+      "예술·여행"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-know": {
+   "id": "story-know",
+   "kind": "narrow",
+   "question": "무엇을 알아 가고 싶어요?",
+   "a": {
+    "label": "우주와 생명의 원리",
+    "effects": {
+     "genres": [
+      "과학 교양"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "b": {
+    "label": "사람과 사회 이야기",
+    "effects": {
+     "genres": [
+      "인문",
+      "역사",
+      "사회·시사"
+     ]
+    },
+    "next": "story-people"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-people": {
+   "id": "story-people",
+   "kind": "narrow",
+   "question": "어느 쪽 이야기가 더 궁금해요?",
+   "a": {
+    "label": "생각하는 법, 인문",
+    "effects": {
+     "genres": [
+      "인문"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "b": {
+    "label": "지난 일과 지금 일",
+    "effects": {
+     "genres": [
+      "역사",
+      "사회·시사"
+     ]
+    },
+    "next": "story-time"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-time": {
+   "id": "story-time",
+   "kind": "narrow",
+   "question": "어느 시간이 더 궁금해요?",
+   "a": {
+    "label": "지나간 시간, 역사",
+    "effects": {
+     "genres": [
+      "역사"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "b": {
+    "label": "오늘의 사회",
+    "effects": {
+     "genres": [
+      "사회·시사"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-gain": {
+   "id": "story-gain",
+   "kind": "mood",
+   "question": "다 읽고 난 나는 어떤 모습일까요?",
+   "a": {
+    "label": "뭔가 하나 알게 된 나",
+    "effects": {
+     "axes": {
+      "gain": 1
+     }
+    },
+    "next": "story-world"
+   },
+   "b": {
+    "label": "마음이 조금 달라진 나",
+    "effects": {
+     "axes": {
+      "gain": -1
+     }
+    },
+    "next": "story-world"
+   },
+   "unsureNext": "story-world"
+  },
+  "story-world": {
+   "id": "story-world",
+   "kind": "mood",
+   "question": "책 속 세상은 어디가 좋아요?",
+   "a": {
+    "label": "옆집 이야기 같은 현실",
+    "effects": {
+     "axes": {
+      "world": 1
+     }
+    },
+    "next": "story-temp"
+   },
+   "b": {
+    "label": "여기 없는 딴 세상",
+    "effects": {
+     "axes": {
+      "world": -1
+     }
+    },
+    "next": "story-temp"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-temp": {
+   "id": "story-temp",
+   "kind": "mood",
+   "question": "책을 덮은 뒤 무엇이 남으면 좋겠어요?",
+   "a": {
+    "label": "몽글몽글 따뜻함",
+    "effects": {
+     "axes": {
+      "temp": 1
+     }
+    },
+    "next": "story-pull"
+   },
+   "b": {
+    "label": "한동안 멍한 여운",
+    "effects": {
+     "axes": {
+      "temp": -1
+     }
+    },
+    "next": "story-pull"
+   },
+   "unsureNext": "story-pull"
+  },
+  "story-pull": {
+   "id": "story-pull",
+   "kind": "mood",
+   "question": "딱 하나만 가질 수 있다면요?",
+   "a": {
+    "label": "밑줄 긋고 싶은 문장",
+    "effects": {
+     "axes": {
+      "pull": 1
+     }
+    },
+    "next": "story-len"
+   },
+   "b": {
+    "label": "다음 장이 궁금한 밤",
+    "effects": {
+     "axes": {
+      "pull": -1
+     }
+    },
+    "next": "story-len"
+   },
+   "unsureNext": "story-len"
+  },
+  "story-len": {
+   "id": "story-len",
+   "kind": "mood",
+   "question": "오늘 가방에 넣을 책은요?",
+   "a": {
+    "label": "쏙 들어가는 얇은 책",
+    "effects": {
+     "len": 1
+    },
+    "next": "draw"
+   },
+   "b": {
+    "label": "든든하게 두꺼운 책",
+    "effects": {
+     "len": -1
+    },
+    "next": "draw"
+   },
+   "unsureNext": "draw"
+  },
+  "learn-intro": {
+   "id": "learn-intro",
+   "kind": "narrow",
+   "question": "배우고 싶은 게 떠올라요?",
+   "a": {
+    "label": "떠오르는 게 있어요",
+    "effects": {},
+    "next": "learn-area"
+   },
+   "b": {
+    "label": "기분 따라 갈래요",
+    "effects": {},
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-area": {
+   "id": "learn-area",
+   "kind": "narrow",
+   "question": "어떤 걸 배우고 싶어요?",
+   "a": {
+    "label": "일을 더 잘하기",
+    "effects": {
+     "topics": [
+      "데이터 분석",
+      "통계",
+      "AI 활용",
+      "업무 자동화",
+      "취업·커리어",
+      "글쓰기",
+      "시간·생산성"
+     ]
+    },
+    "next": "learn-work"
+   },
+   "b": {
+    "label": "나를 더 잘 돌보기",
+    "effects": {
+     "topics": [
+      "습관·집중",
+      "돈 관리·투자",
+      "경제 상식",
+      "마음 돌보기",
+      "대화·관계"
+     ]
+    },
+    "next": "learn-life"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-work": {
+   "id": "learn-work",
+   "kind": "narrow",
+   "question": "일에서 무엇을 키우고 싶어요?",
+   "a": {
+    "label": "숫자·도구 다루기",
+    "effects": {
+     "topics": [
+      "데이터 분석",
+      "통계",
+      "AI 활용",
+      "업무 자동화"
+     ]
+    },
+    "next": "learn-tools"
+   },
+   "b": {
+    "label": "일하는 방식 다듬기",
+    "effects": {
+     "topics": [
+      "취업·커리어",
+      "글쓰기",
+      "시간·생산성"
+     ]
+    },
+    "next": "learn-craft"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-tools": {
+   "id": "learn-tools",
+   "kind": "narrow",
+   "question": "어떤 도구가 더 끌려요?",
+   "a": {
+    "label": "데이터 읽고 분석",
+    "effects": {
+     "topics": [
+      "데이터 분석",
+      "통계"
+     ]
+    },
+    "next": "learn-data-field"
+   },
+   "b": {
+    "label": "AI로 일하기",
+    "effects": {
+     "topics": [
+      "AI 활용",
+      "업무 자동화"
+     ]
+    },
+    "next": "learn-ai-field"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-craft": {
+   "id": "learn-craft",
+   "kind": "narrow",
+   "question": "어느 쪽을 다듬고 싶어요?",
+   "a": {
+    "label": "시간과 일하는 법",
+    "effects": {
+     "topics": [
+      "시간·생산성"
+     ]
+    },
+    "next": "learn-time"
+   },
+   "b": {
+    "label": "커리어와 글",
+    "effects": {
+     "topics": [
+      "취업·커리어",
+      "글쓰기"
+     ]
+    },
+    "next": "learn-career-field"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-time": {
+   "id": "learn-time",
+   "kind": "narrow",
+   "question": "시간과 일, 어디가 궁금해요?",
+   "a": {
+    "label": "일 잘하는 법 콕",
+    "effects": {
+     "keywords": [
+      "일하는 법"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "시간·기록 두루",
+    "effects": {
+     "topics": [
+      "시간·생산성"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-life": {
+   "id": "learn-life",
+   "kind": "narrow",
+   "question": "무엇을 돌보고 싶어요?",
+   "a": {
+    "label": "마음과 관계",
+    "effects": {
+     "topics": [
+      "마음 돌보기",
+      "대화·관계"
+     ]
+    },
+    "next": "learn-mind-field"
+   },
+   "b": {
+    "label": "하루와 살림",
+    "effects": {
+     "topics": [
+      "습관·집중",
+      "돈 관리·투자",
+      "경제 상식"
+     ]
+    },
+    "next": "learn-daily"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-daily": {
+   "id": "learn-daily",
+   "kind": "narrow",
+   "question": "어느 쪽을 바꾸고 싶어요?",
+   "a": {
+    "label": "습관과 집중",
+    "effects": {
+     "topics": [
+      "습관·집중"
+     ]
+    },
+    "next": "learn-habit"
+   },
+   "b": {
+    "label": "돈과 경제",
+    "effects": {
+     "topics": [
+      "돈 관리·투자",
+      "경제 상식"
+     ]
+    },
+    "next": "learn-money-field"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-data-field": {
+   "id": "learn-data-field",
+   "kind": "narrow",
+   "question": "데이터의 어느 쪽이 끌려요?",
+   "a": {
+    "label": "데이터 꺼내는 도구",
+    "effects": {
+     "topics": [
+      "데이터 분석"
+     ],
+     "keywords": [
+      "SQL",
+      "엑셀",
+      "파이썬"
+     ]
+    },
+    "next": "learn-data-tool"
+   },
+   "b": {
+    "label": "숫자를 읽는 눈",
+    "effects": {
+     "topics": [
+      "데이터 분석",
+      "통계"
+     ]
+    },
+    "next": "learn-data-read"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-data-tool": {
+   "id": "learn-data-tool",
+   "kind": "narrow",
+   "question": "어떤 쪽이 더 끌려요?",
+   "a": {
+    "label": "DB에서 꺼내기",
+    "effects": {
+     "keywords": [
+      "SQL"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "표·코드로 분석",
+    "effects": {
+     "keywords": [
+      "엑셀",
+      "파이썬"
+     ]
+    },
+    "next": "learn-data-sheet"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-data-sheet": {
+   "id": "learn-data-sheet",
+   "kind": "narrow",
+   "question": "무엇으로 분석해 볼까요?",
+   "a": {
+    "label": "표로 (엑셀)",
+    "effects": {
+     "keywords": [
+      "엑셀"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "코드로 (파이썬)",
+    "effects": {
+     "keywords": [
+      "파이썬"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-data-read": {
+   "id": "learn-data-read",
+   "kind": "narrow",
+   "question": "숫자를 어떻게 읽고 싶어요?",
+   "a": {
+    "label": "데이터로 말하기",
+    "effects": {
+     "topics": [
+      "데이터 분석"
+     ],
+     "keywords": [
+      "데이터 리터러시"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "통계로 따져 보기",
+    "effects": {
+     "topics": [
+      "통계"
+     ]
+    },
+    "next": "learn-stats"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-stats": {
+   "id": "learn-stats",
+   "kind": "narrow",
+   "question": "통계, 어디부터 볼까요?",
+   "a": {
+    "label": "기초부터 다지기",
+    "effects": {
+     "keywords": [
+      "기초 통계",
+      "확률"
+     ]
+    },
+    "next": "learn-stats-base"
+   },
+   "b": {
+    "label": "분석 기법 익히기",
+    "effects": {
+     "keywords": [
+      "회귀분석",
+      "가설검정"
+     ]
+    },
+    "next": "learn-stats-method"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-stats-base": {
+   "id": "learn-stats-base",
+   "kind": "narrow",
+   "question": "어느 쪽이 더 궁금해요?",
+   "a": {
+    "label": "평균·분포 읽기",
+    "effects": {
+     "keywords": [
+      "기초 통계"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "확률로 생각하기",
+    "effects": {
+     "keywords": [
+      "확률"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-stats-method": {
+   "id": "learn-stats-method",
+   "kind": "narrow",
+   "question": "어떤 질문에 답하고 싶어요?",
+   "a": {
+    "label": "관계를 찾는 회귀",
+    "effects": {
+     "keywords": [
+      "회귀분석"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "차이를 따지는 검정",
+    "effects": {
+     "keywords": [
+      "가설검정"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-ai-field": {
+   "id": "learn-ai-field",
+   "kind": "narrow",
+   "question": "AI와 어떻게 만나고 싶어요?",
+   "a": {
+    "label": "AI 똑똑하게 쓰기",
+    "effects": {
+     "topics": [
+      "AI 활용"
+     ]
+    },
+    "next": "learn-ai"
+   },
+   "b": {
+    "label": "AI로 업무 줄이기",
+    "effects": {
+     "topics": [
+      "업무 자동화"
+     ]
+    },
+    "next": "learn-auto"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-ai": {
+   "id": "learn-ai",
+   "kind": "narrow",
+   "question": "AI로 무엇을 하고 싶어요?",
+   "a": {
+    "label": "AI와 잘 대화하기",
+    "effects": {
+     "keywords": [
+      "챗GPT",
+      "클로드",
+      "제미나이",
+      "프롬프트 엔지니어링"
+     ]
+    },
+    "next": "learn-ai-chat"
+   },
+   "b": {
+    "label": "만들고 파고들기",
+    "effects": {
+     "keywords": [
+      "바이브 코딩",
+      "AI 에이전트",
+      "이미지·영상 생성",
+      "LLM 원리"
+     ]
+    },
+    "next": "learn-ai-make"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-ai-chat": {
+   "id": "learn-ai-chat",
+   "kind": "narrow",
+   "question": "어느 쪽이 더 끌려요?",
+   "a": {
+    "label": "AI 하나 깊게 쓰기",
+    "effects": {
+     "keywords": [
+      "챗GPT",
+      "클로드",
+      "제미나이"
+     ]
+    },
+    "next": "learn-ai-tool"
+   },
+   "b": {
+    "label": "어떤 AI든 잘 묻기",
+    "effects": {
+     "keywords": [
+      "프롬프트 엔지니어링"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-ai-tool": {
+   "id": "learn-ai-tool",
+   "kind": "narrow",
+   "question": "어떤 AI와 친해질까요?",
+   "a": {
+    "label": "챗GPT",
+    "effects": {
+     "keywords": [
+      "챗GPT"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "다른 AI도 궁금해요",
+    "effects": {
+     "keywords": [
+      "클로드",
+      "제미나이"
+     ]
+    },
+    "next": "learn-ai-other"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-ai-other": {
+   "id": "learn-ai-other",
+   "kind": "narrow",
+   "question": "둘 중 누구와 먼저요?",
+   "a": {
+    "label": "클로드",
+    "effects": {
+     "keywords": [
+      "클로드"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "제미나이",
+    "effects": {
+     "keywords": [
+      "제미나이"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-ai-make": {
+   "id": "learn-ai-make",
+   "kind": "narrow",
+   "question": "AI의 어느 쪽이 궁금해요?",
+   "a": {
+    "label": "직접 만들어 보기",
+    "effects": {
+     "keywords": [
+      "바이브 코딩",
+      "AI 에이전트",
+      "이미지·영상 생성"
+     ]
+    },
+    "next": "learn-ai-create"
+   },
+   "b": {
+    "label": "AI 속 원리 알기",
+    "effects": {
+     "keywords": [
+      "LLM 원리"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-ai-create": {
+   "id": "learn-ai-create",
+   "kind": "narrow",
+   "question": "무엇을 만들어 볼까요?",
+   "a": {
+    "label": "프로그램과 AI 일꾼",
+    "effects": {
+     "keywords": [
+      "바이브 코딩",
+      "AI 에이전트"
+     ]
+    },
+    "next": "learn-ai-build"
+   },
+   "b": {
+    "label": "그림·영상 만들기",
+    "effects": {
+     "keywords": [
+      "이미지·영상 생성"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-ai-build": {
+   "id": "learn-ai-build",
+   "kind": "narrow",
+   "question": "어느 쪽이 더 끌려요?",
+   "a": {
+    "label": "말로 앱 만들기",
+    "effects": {
+     "keywords": [
+      "바이브 코딩"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "일 맡길 AI 에이전트",
+    "effects": {
+     "keywords": [
+      "AI 에이전트"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-auto": {
+   "id": "learn-auto",
+   "kind": "narrow",
+   "question": "무엇으로 일을 줄여 볼까요?",
+   "a": {
+    "label": "AI에게 일 맡기기",
+    "effects": {
+     "keywords": [
+      "코파일럿·M365",
+      "AI 업무 활용"
+     ]
+    },
+    "next": "learn-auto-ai"
+   },
+   "b": {
+    "label": "코드로 반복 줄이기",
+    "effects": {
+     "keywords": [
+      "파이썬 자동화"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-auto-ai": {
+   "id": "learn-auto-ai",
+   "kind": "narrow",
+   "question": "어떤 AI로 일할까요?",
+   "a": {
+    "label": "오피스 속 코파일럿",
+    "effects": {
+     "keywords": [
+      "코파일럿·M365"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "여러 AI 두루 쓰기",
+    "effects": {
+     "keywords": [
+      "AI 업무 활용"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-career-field": {
+   "id": "learn-career-field",
+   "kind": "narrow",
+   "question": "어느 쪽을 다듬고 싶어요?",
+   "a": {
+    "label": "일터에서 내 자리",
+    "effects": {
+     "topics": [
+      "취업·커리어"
+     ]
+    },
+    "next": "learn-career"
+   },
+   "b": {
+    "label": "글 잘 쓰기",
+    "effects": {
+     "topics": [
+      "글쓰기"
+     ]
+    },
+    "next": "learn-writing"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-career": {
+   "id": "learn-career",
+   "kind": "narrow",
+   "question": "지금 커리어 고민은요?",
+   "a": {
+    "label": "들어가고 나오기",
+    "effects": {
+     "keywords": [
+      "자소서·면접",
+      "이직·퇴사"
+     ]
+    },
+    "next": "learn-career-move"
+   },
+   "b": {
+    "label": "지금 자리에서 크기",
+    "effects": {
+     "keywords": [
+      "커리어 설계",
+      "퍼스널 브랜딩",
+      "직장 생활"
+     ]
+    },
+    "next": "learn-career-grow"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-career-move": {
+   "id": "learn-career-move",
+   "kind": "narrow",
+   "question": "어느 문 앞에 서 있어요?",
+   "a": {
+    "label": "합격하는 자소서·면접",
+    "effects": {
+     "keywords": [
+      "자소서·면접"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "이직·퇴사 고민",
+    "effects": {
+     "keywords": [
+      "이직·퇴사"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-career-grow": {
+   "id": "learn-career-grow",
+   "kind": "narrow",
+   "question": "무엇을 키우고 싶어요?",
+   "a": {
+    "label": "회사 생활 잘하기",
+    "effects": {
+     "keywords": [
+      "직장 생활"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "내 길 그리기",
+    "effects": {
+     "keywords": [
+      "커리어 설계",
+      "퍼스널 브랜딩"
+     ]
+    },
+    "next": "learn-career-path"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-career-path": {
+   "id": "learn-career-path",
+   "kind": "narrow",
+   "question": "어느 쪽이 더 끌려요?",
+   "a": {
+    "label": "커리어 지도 그리기",
+    "effects": {
+     "keywords": [
+      "커리어 설계"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "나를 알리기",
+    "effects": {
+     "keywords": [
+      "퍼스널 브랜딩"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-writing": {
+   "id": "learn-writing",
+   "kind": "narrow",
+   "question": "어떤 글을 쓰고 싶어요?",
+   "a": {
+    "label": "일하는 글",
+    "effects": {
+     "keywords": [
+      "업무 글",
+      "카피라이팅",
+      "문해력·어휘"
+     ]
+    },
+    "next": "learn-writing-work"
+   },
+   "b": {
+    "label": "나를 쓰는 글",
+    "effects": {
+     "keywords": [
+      "에세이·책 쓰기",
+      "일기·편지"
+     ]
+    },
+    "next": "learn-writing-self"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-writing-work": {
+   "id": "learn-writing-work",
+   "kind": "narrow",
+   "question": "어디부터 다질까요?",
+   "a": {
+    "label": "읽고 쓰는 기본기",
+    "effects": {
+     "keywords": [
+      "문해력·어휘"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "바로 써먹는 글",
+    "effects": {
+     "keywords": [
+      "업무 글",
+      "카피라이팅"
+     ]
+    },
+    "next": "learn-writing-use"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-writing-use": {
+   "id": "learn-writing-use",
+   "kind": "narrow",
+   "question": "어떤 글이 필요해요?",
+   "a": {
+    "label": "보고서·메일",
+    "effects": {
+     "keywords": [
+      "업무 글"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "마음을 끄는 카피",
+    "effects": {
+     "keywords": [
+      "카피라이팅"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-writing-self": {
+   "id": "learn-writing-self",
+   "kind": "narrow",
+   "question": "어디에 쓰고 싶어요?",
+   "a": {
+    "label": "책 한 권 내기",
+    "effects": {
+     "keywords": [
+      "에세이·책 쓰기"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "일기·편지에",
+    "effects": {
+     "keywords": [
+      "일기·편지"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-habit": {
+   "id": "learn-habit",
+   "kind": "narrow",
+   "question": "어느 쪽이 더 끌려요?",
+   "a": {
+    "label": "습관·집중 고치기",
+    "effects": {
+     "keywords": [
+      "습관",
+      "집중력"
+     ]
+    },
+    "next": "learn-habit-fix"
+   },
+   "b": {
+    "label": "뇌가 움직이는 원리",
+    "effects": {
+     "keywords": [
+      "뇌과학"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-habit-fix": {
+   "id": "learn-habit-fix",
+   "kind": "narrow",
+   "question": "무엇부터 고칠까요?",
+   "a": {
+    "label": "좋은 습관 들이기",
+    "effects": {
+     "keywords": [
+      "습관"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "한 가지에 몰입",
+    "effects": {
+     "keywords": [
+      "집중력"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-money-field": {
+   "id": "learn-money-field",
+   "kind": "narrow",
+   "question": "돈의 어느 쪽이 궁금해요?",
+   "a": {
+    "label": "내 돈 굴리기",
+    "effects": {
+     "topics": [
+      "돈 관리·투자"
+     ]
+    },
+    "next": "learn-money"
+   },
+   "b": {
+    "label": "경제 흐름 읽기",
+    "effects": {
+     "topics": [
+      "경제 상식"
+     ]
+    },
+    "next": "learn-econ"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-money": {
+   "id": "learn-money",
+   "kind": "narrow",
+   "question": "지금 돈 고민은요?",
+   "a": {
+    "label": "투자 시작하기",
+    "effects": {
+     "keywords": [
+      "주식",
+      "ETF·펀드",
+      "부동산·청약"
+     ]
+    },
+    "next": "learn-invest"
+   },
+   "b": {
+    "label": "모으고 지키기",
+    "effects": {
+     "keywords": [
+      "재테크 기초",
+      "연금·노후",
+      "돈의 심리"
+     ]
+    },
+    "next": "learn-save"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-invest": {
+   "id": "learn-invest",
+   "kind": "narrow",
+   "question": "어디에 투자해 볼까요?",
+   "a": {
+    "label": "내 집 마련",
+    "effects": {
+     "keywords": [
+      "부동산·청약"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "주식 시장",
+    "effects": {
+     "keywords": [
+      "주식",
+      "ETF·펀드"
+     ]
+    },
+    "next": "learn-stock"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-stock": {
+   "id": "learn-stock",
+   "kind": "narrow",
+   "question": "어떻게 사 볼까요?",
+   "a": {
+    "label": "종목 골라 사기",
+    "effects": {
+     "keywords": [
+      "주식"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "묶어서 사기 (ETF)",
+    "effects": {
+     "keywords": [
+      "ETF·펀드"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-save": {
+   "id": "learn-save",
+   "kind": "narrow",
+   "question": "무엇부터 챙길까요?",
+   "a": {
+    "label": "돈 대하는 마음",
+    "effects": {
+     "keywords": [
+      "돈의 심리"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "모으고 대비하기",
+    "effects": {
+     "keywords": [
+      "재테크 기초",
+      "연금·노후"
+     ]
+    },
+    "next": "learn-save-plan"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-save-plan": {
+   "id": "learn-save-plan",
+   "kind": "narrow",
+   "question": "언제를 준비할까요?",
+   "a": {
+    "label": "월급 관리 첫걸음",
+    "effects": {
+     "keywords": [
+      "재테크 기초"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "노후 미리 준비",
+    "effects": {
+     "keywords": [
+      "연금·노후"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-econ": {
+   "id": "learn-econ",
+   "kind": "narrow",
+   "question": "경제의 어느 쪽이 궁금해요?",
+   "a": {
+    "label": "지금의 경제 뉴스",
+    "effects": {
+     "keywords": [
+      "금리·환율",
+      "시사·경제 이슈",
+      "트렌드"
+     ]
+    },
+    "next": "learn-econ-now"
+   },
+   "b": {
+    "label": "경제의 큰 원리",
+    "effects": {
+     "keywords": [
+      "행동경제학",
+      "경제사·자본주의"
+     ]
+    },
+    "next": "learn-econ-deep"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-econ-now": {
+   "id": "learn-econ-now",
+   "kind": "narrow",
+   "question": "언제의 이야기가 궁금해요?",
+   "a": {
+    "label": "다가올 트렌드",
+    "effects": {
+     "keywords": [
+      "트렌드"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "오늘의 경제 뉴스",
+    "effects": {
+     "keywords": [
+      "금리·환율",
+      "시사·경제 이슈"
+     ]
+    },
+    "next": "learn-econ-news"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-econ-news": {
+   "id": "learn-econ-news",
+   "kind": "narrow",
+   "question": "어느 쪽을 읽고 싶어요?",
+   "a": {
+    "label": "금리·환율의 원리",
+    "effects": {
+     "keywords": [
+      "금리·환율"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "경제 이슈 따라잡기",
+    "effects": {
+     "keywords": [
+      "시사·경제 이슈"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-econ-deep": {
+   "id": "learn-econ-deep",
+   "kind": "narrow",
+   "question": "어느 쪽이 더 끌려요?",
+   "a": {
+    "label": "사람의 선택 심리",
+    "effects": {
+     "keywords": [
+      "행동경제학"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "돈과 자본의 역사",
+    "effects": {
+     "keywords": [
+      "경제사·자본주의"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-mind-field": {
+   "id": "learn-mind-field",
+   "kind": "narrow",
+   "question": "누구를 돌보고 싶어요?",
+   "a": {
+    "label": "내 마음 돌보기",
+    "effects": {
+     "topics": [
+      "마음 돌보기"
+     ]
+    },
+    "next": "learn-mind"
+   },
+   "b": {
+    "label": "사람 사이 다루기",
+    "effects": {
+     "topics": [
+      "대화·관계"
+     ]
+    },
+    "next": "learn-talk"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-mind": {
+   "id": "learn-mind",
+   "kind": "narrow",
+   "question": "요즘 마음은 어때요?",
+   "a": {
+    "label": "무거운 마음 덜기",
+    "effects": {
+     "keywords": [
+      "불안·걱정",
+      "우울",
+      "번아웃·스트레스"
+     ]
+    },
+    "next": "learn-mind-heavy"
+   },
+   "b": {
+    "label": "단단한 나 만들기",
+    "effects": {
+     "keywords": [
+      "자존감",
+      "감정 다루기",
+      "명상·마음챙김"
+     ]
+    },
+    "next": "learn-mind-solid"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-mind-heavy": {
+   "id": "learn-mind-heavy",
+   "kind": "narrow",
+   "question": "어느 쪽에 더 가까워요?",
+   "a": {
+    "label": "지쳐서 방전됐어요",
+    "effects": {
+     "keywords": [
+      "번아웃·스트레스"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "불안하고 가라앉아요",
+    "effects": {
+     "keywords": [
+      "불안·걱정",
+      "우울"
+     ]
+    },
+    "next": "learn-mind-low"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-mind-low": {
+   "id": "learn-mind-low",
+   "kind": "narrow",
+   "question": "어느 쪽이 더 커요?",
+   "a": {
+    "label": "걱정이 많아요",
+    "effects": {
+     "keywords": [
+      "불안·걱정"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "자꾸 가라앉아요",
+    "effects": {
+     "keywords": [
+      "우울"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-mind-solid": {
+   "id": "learn-mind-solid",
+   "kind": "narrow",
+   "question": "무엇을 키우고 싶어요?",
+   "a": {
+    "label": "나를 믿는 힘",
+    "effects": {
+     "keywords": [
+      "자존감"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "감정과 함께하기",
+    "effects": {
+     "keywords": [
+      "감정 다루기",
+      "명상·마음챙김"
+     ]
+    },
+    "next": "learn-mind-calm"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-mind-calm": {
+   "id": "learn-mind-calm",
+   "kind": "narrow",
+   "question": "어떻게 다독일까요?",
+   "a": {
+    "label": "감정 다스리기",
+    "effects": {
+     "keywords": [
+      "감정 다루기"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "명상·마음챙김",
+    "effects": {
+     "keywords": [
+      "명상·마음챙김"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-talk": {
+   "id": "learn-talk",
+   "kind": "narrow",
+   "question": "사람 사이에서 무엇이 필요해요?",
+   "a": {
+    "label": "말 잘하기",
+    "effects": {
+     "keywords": [
+      "말투·대화법",
+      "발표",
+      "설득·협상"
+     ]
+    },
+    "next": "learn-talk-say"
+   },
+   "b": {
+    "label": "관계 지키기",
+    "effects": {
+     "keywords": [
+      "거리 두기",
+      "갈등·무례 대처",
+      "호감·사회생활"
+     ]
+    },
+    "next": "learn-talk-keep"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-talk-say": {
+   "id": "learn-talk-say",
+   "kind": "narrow",
+   "question": "어디서 말할 때요?",
+   "a": {
+    "label": "여럿 앞에서 발표",
+    "effects": {
+     "keywords": [
+      "발표"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "일대일 대화",
+    "effects": {
+     "keywords": [
+      "말투·대화법",
+      "설득·협상"
+     ]
+    },
+    "next": "learn-talk-one"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-talk-one": {
+   "id": "learn-talk-one",
+   "kind": "narrow",
+   "question": "어떤 대화가 필요해요?",
+   "a": {
+    "label": "편한 말투·대화법",
+    "effects": {
+     "keywords": [
+      "말투·대화법"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "설득하고 협상하기",
+    "effects": {
+     "keywords": [
+      "설득·협상"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-talk-keep": {
+   "id": "learn-talk-keep",
+   "kind": "narrow",
+   "question": "어떤 관계가 고민이에요?",
+   "a": {
+    "label": "좋은 사람 곁에",
+    "effects": {
+     "keywords": [
+      "호감·사회생활"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "불편한 사람과",
+    "effects": {
+     "keywords": [
+      "거리 두기",
+      "갈등·무례 대처"
+     ]
+    },
+    "next": "learn-talk-hard"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-talk-hard": {
+   "id": "learn-talk-hard",
+   "kind": "narrow",
+   "question": "어떻게 대해 볼까요?",
+   "a": {
+    "label": "적당히 거리 두기",
+    "effects": {
+     "keywords": [
+      "거리 두기"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "무례에 맞서기",
+    "effects": {
+     "keywords": [
+      "갈등·무례 대처"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-way": {
+   "id": "learn-way",
+   "kind": "mood",
+   "question": "어떻게 배우는 게 좋아요?",
+   "a": {
+    "label": "원리부터 차근차근",
+    "effects": {
+     "way": "개념"
+    },
+    "next": "learn-len"
+   },
+   "b": {
+    "label": "실제로 써먹는 쪽",
+    "effects": {},
+    "next": "learn-way-use"
+   },
+   "unsureNext": "learn-len"
+  },
+  "learn-way-use": {
+   "id": "learn-way-use",
+   "kind": "mood",
+   "question": "써먹는다면 어떻게요?",
+   "a": {
+    "label": "바로 따라 해 보기",
+    "effects": {
+     "way": "실습"
+    },
+    "next": "learn-len"
+   },
+   "b": {
+    "label": "남의 사례로 배우기",
+    "effects": {
+     "way": "사례"
+    },
+    "next": "learn-len"
+   },
+   "unsureNext": "learn-len"
+  },
+  "learn-len": {
+   "id": "learn-len",
+   "kind": "mood",
+   "question": "오늘은 얼마나 읽고 싶어요?",
+   "a": {
+    "label": "가볍게 한 권",
+    "effects": {
+     "len": 1
+    },
+    "next": "draw"
+   },
+   "b": {
+    "label": "깊게 파고들기",
+    "effects": {
+     "len": -1
+    },
+    "next": "draw"
+   },
+   "unsureNext": "draw"
+  }
+ },
+ "far": [
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "에세이",
+     "시"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "추리·스릴러"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "호러·괴담"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "에세이",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "시"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "추리·스릴러",
+     "SF·판타지"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "에세이"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "예술·여행"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "추리·스릴러"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "과학 교양"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "에세이"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "인문"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지",
+     "추리·스릴러"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "한국 소설",
+     "외국 소설"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "과학 교양",
+     "인문"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "추리·스릴러",
+     "호러·괴담"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "에세이",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "역사",
+     "사회·시사"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지",
+     "호러·괴담"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "에세이",
+     "예술·여행"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지",
+     "추리·스릴러"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지",
+     "추리·스릴러",
+     "호러·괴담"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "에세이",
+     "시",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "에세이",
+     "시",
+     "예술·여행"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지",
+     "추리·스릴러"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "인문",
+     "역사",
+     "사회·시사"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지",
+     "호러·괴담"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "인문",
+     "과학 교양",
+     "역사",
+     "사회·시사"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "한국 소설",
+     "외국 소설",
+     "SF·판타지"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "한국 소설",
+     "외국 소설",
+     "SF·판타지",
+     "추리·스릴러",
+     "호러·괴담"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "인문",
+     "과학 교양",
+     "역사",
+     "사회·시사"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "에세이",
+     "시",
+     "인문",
+     "과학 교양",
+     "예술·여행",
+     "역사",
+     "사회·시사"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "한국 소설",
+     "외국 소설",
+     "SF·판타지",
+     "추리·스릴러",
+     "호러·괴담"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf"
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "인문",
+     "과학 교양",
+     "예술·여행",
+     "역사",
+     "사회·시사",
+     "호러·괴담"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "마음 돌보기"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "과학 교양"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "대화·관계"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "취업·커리어"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "글쓰기"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "과학 교양"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "시간·생산성"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "습관·집중"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "마음 돌보기",
+     "대화·관계"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "과학 교양",
+     "SF·판타지"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "취업·커리어",
+     "글쓰기"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "예술·여행",
+     "과학 교양"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "데이터 분석",
+     "통계"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "인문",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "AI 활용",
+     "업무 자동화"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "인문",
+     "시",
+     "에세이"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "돈 관리·투자",
+     "경제 상식"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "에세이"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "취업·커리어",
+     "글쓰기",
+     "시간·생산성"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "예술·여행",
+     "시",
+     "과학 교양"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "습관·집중",
+     "돈 관리·투자",
+     "경제 상식"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "에세이",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "데이터 분석",
+     "통계",
+     "AI 활용",
+     "업무 자동화"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "인문",
+     "시",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "습관·집중",
+     "돈 관리·투자",
+     "경제 상식",
+     "마음 돌보기",
+     "대화·관계"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "과학 교양",
+     "SF·판타지",
+     "추리·스릴러"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "데이터 분석",
+     "통계",
+     "AI 활용",
+     "업무 자동화",
+     "취업·커리어",
+     "글쓰기",
+     "시간·생산성"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "인문",
+     "시",
+     "예술·여행"
+    ]
+   }
+  }
+ ]
+}

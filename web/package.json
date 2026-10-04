@@ -12,7 +12,9 @@
     "test:cov": "vitest run --coverage",
     "e2e": "playwright test",
     "books:import": "tsx scripts/import-books.ts",
-    "goal:grade": "tsx scripts/grade-goals.ts"
+    "goal:grade": "tsx scripts/grade-goals.ts",
+    "map:build": "tsx scripts/build-question-map.ts",
+    "map:coverage": "tsx scripts/paths-coverage.ts"
   },
   "dependencies": {
     "@amplitude/unified": "^1.1.38",

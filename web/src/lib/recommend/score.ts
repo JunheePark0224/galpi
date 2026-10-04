@@ -11,7 +11,7 @@ export function maxPossibleLeaf(a: LeafAnswers): number {
   return AXES.reduce((sum, axis) => sum + Math.abs(a[axis]), Math.abs(a.len));
 }
 
-function lengthPoints(pages: number, len: TargetAnswers["len"]): number {
+export function lengthPoints(pages: number, len: TargetAnswers["len"]): number {
   if (len === 1) return pages <= 250 ? 2 : pages >= 400 ? -1 : 0;   // 얇게
   if (len === -1) return pages >= 300 ? 1 : 0;                        // 두꺼워도 좋아요
   return 0;                                                            // 보통 / 고르지 않음
