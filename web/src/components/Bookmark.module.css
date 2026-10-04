@@ -17,6 +17,10 @@
    room at x1.15 text too (e2e/design.spec.ts). */
 .title[data-lines="3"] { -webkit-line-clamp: 3; line-height: 1.15; }
 .card:has(> .title[data-lines="3"]) { gap: 1px; }
+/* About one blank line between the author and the one-liner (10-04, user): it gives way first when a long title or
+   one-liner needs the room, so the card still fits at x1.15 text. */
+.gap { flex: 0 1000 14px; min-height: 0; margin-bottom: -3px; }   /* shrinks before the name tag or "갈피" (they shrink by 1);
+   the negative margin takes back the card's row gap this extra item adds, so at 0 the layout is as before */
 /* PRD F-08: small, under the title, one line. On frost, so ink (DESIGN 7). */
 .author {
   flex-shrink: 0; max-width: 100%; margin: -2px 0 0; font-size: 12px; line-height: 1.35; color: var(--ink);
@@ -32,6 +36,7 @@
 .met { flex-shrink: 0; margin: auto 0 0; font-size: 12px; line-height: 1; color: var(--ink-muted); position: relative; top: -2px; }   /* drawn 2px up, off the stitch line, without taking room (the one-liner keeps 2px under it) */
 .met + span { margin-top: 0; }   /* the stitch line follows right under it */
 .card:has(> .met) { gap: 1px; }
+.card:has(> .met) > .gap { margin-bottom: -1px; }
 .card:has(> .met) > .title[data-lines="3"] { line-height: 1.1; }
 .card:has(> .met) > .author { line-height: 1.2; }
 .card:has(> .met) > .line { line-height: 1.2; padding-bottom: 2px; }   /* the padding keeps the last line's glyphs unclipped */
