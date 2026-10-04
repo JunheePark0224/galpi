@@ -5,7 +5,9 @@ import { parseQuestionMap } from "./parse";
 import { ALL_SCOPE, type Answer } from "./types";
 import { applyChallenge, PathError, walkPath } from "./walk";
 
-const MAP = parseQuestionMap(readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/mini-map.md"), "utf8"));
+const MINI = readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/mini-map.md"), "utf8");
+const MAP = parseQuestionMap(MINI);
+const FAR_SF = "```far\nfrom: entry=target\nto: entry=leaf | genres=SF·판타지\n```\n";
 const a = (node: string, choice: Answer["choice"]): Answer => ({ node, choice });
 const SQL = [a("start", "A"), a("branch", "B"), a("learn-area", "A"), a("learn-data", "A"), a("mood-way", "B"), a("mood-len", "A")];
 
@@ -30,6 +32,7 @@ describe("walkPath", () => {
     expect(w.scope).toEqual({ ...ALL_SCOPE, entry: "target" });
     expect(w.parentScope).toEqual(ALL_SCOPE);
     expect(w.unsure).toBe(1);
+    expect(w.crumbs).toEqual(["뭔가 배우기"]);
     expect(walkPath(MAP, SQL.slice(0, 3)).next).toBe("learn-data");
   });
 
@@ -50,6 +53,32 @@ describe("walkPath", () => {
   it("challenge with no far rule for the scope: the other side whole (story ↔ learn)", () => {
     const w = walkPath(MAP, [a("start", "B"), a("branch", "A"), a("story-world", "B"), a("mood-temp", "A"), a("mood-len", "A")]);
     expect(applyChallenge(MAP, w).scope).toEqual({ ...ALL_SCOPE, entry: "target" });
+  });
+
+  it("challenge with the whole library (no entry chosen): nothing to flip, the scope stays", () => {
+    const w = walkPath(MAP, [a("start", "B"), a("branch", "unsure"), a("mood-len", "A")]);
+    expect(w.mode).toBe("challenge");
+    expect(applyChallenge(MAP, w)).toBe(w);
+  });
+
+  it("challenge: the first far rule that matches wins", () => {
+    const route = [a("start", "B"), ...SQL.slice(1)];
+    const after = parseQuestionMap(`${MINI}\n${FAR_SF}`);
+    expect(applyChallenge(after, walkPath(after, route)).scope.genres).toEqual(["에세이"]);
+    const before = parseQuestionMap(MINI.replace("```far", `${FAR_SF}\n\`\`\`far`));
+    expect(applyChallenge(before, walkPath(before, route)).scope.genres).toEqual(["SF·판타지"]);
+  });
+
+  it("challenge: a rule naming another entry does not match", () => {
+    const other = parseQuestionMap(MINI.replace("from: entry=target", "from: entry=leaf"));
+    const w = walkPath(other, [a("start", "B"), ...SQL.slice(1)]);
+    expect(applyChallenge(other, w).scope).toEqual({ ...ALL_SCOPE, entry: "leaf" });
+  });
+
+  it("unsure at the first question keeps the usual mode", () => {
+    const w = walkPath(MAP, [a("start", "unsure"), a("branch", "A")]);
+    expect(w.mode).toBe("normal");
+    expect(w.crumbs).toEqual(["이야기에 빠지기"]);
   });
 
   it("leaves a normal path alone", () => {

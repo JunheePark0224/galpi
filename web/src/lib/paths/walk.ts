@@ -59,10 +59,15 @@ function matches(rule: FarRule, s: Scope): boolean {
     && covers(rule.from.topics, s.topics) && covers(rule.from.keywords, s.keywords) && covers(rule.from.genres, s.genres);
 }
 
-/** Design 4절: the "what" flips (far scope), the "how" (mood) stays. The 운명 1장 comes from the far side's whole entry. */
+/**
+ * Design 4절: the "what" flips (far scope), the "how" (mood) stays. The 운명 1장 comes from the far side's whole entry.
+ * The first far rule that matches wins. With no rule, the other entry whole; with no entry chosen (whole library)
+ * there is nothing to flip, so the walked scope stays (Ruling 4).
+ */
 export function applyChallenge(map: QuestionMap, w: Walked): Walked {
   if (w.mode !== "challenge") return w;
   const rule = map.far.find((r) => matches(r, w.scope));
+  if (!rule && w.scope.entry === null) return w;
   const other = w.scope.entry === "leaf" ? "target" : "leaf";
   const scope: Scope = rule ? { ...ALL_SCOPE, ...rule.to } : { ...ALL_SCOPE, entry: other };
   return { ...w, scope, parentScope: { ...ALL_SCOPE, entry: scope.entry } };
