@@ -7,6 +7,8 @@ them the person changed — the clean answer to "how often is an agreed book wro
 measured that day (no book of that entry was reviewed).
 The one place that knows the header and reads/writes the file: apply_review.py (pilot) uses it too, so there is only one
 header. No imports from apply_review, so apply_review can take HEAD from here.
+`date` of a daily row is the batch id (pipeline/batch.py): the plain date for a day's first batch, `2026-10-06-2` … for a
+later run that day; `batch` stays "daily". No new column, so the pilot rows and apply_review's header are untouched.
 
 Graduation (design 2-3 + the review of 10-01): the last STREAK daily reviews each have every measured field >= GRADUATE,
 together they measured every field, AND the AI-agreed books a person looked at in those reviews were changed in at most
@@ -16,6 +18,8 @@ so their shares alone cannot say how often an agreed book is wrong — and agree
 """
 import csv
 from pathlib import Path
+
+from .batch import sort_key
 
 TARGET_FIELDS = ("topic", "keywords", "way")
 LEAF_FIELDS = ("genre", "temp", "pull", "gain", "world")
@@ -60,7 +64,7 @@ def graduation(rows: list[dict]) -> dict:
     """Streak of the latest daily reviews whose measured fields are all >= GRADUATE; graduated when the streak is
     >= STREAK, the last STREAK of them together measured every field, and the agreed-book sample of those reviews is big
     enough (MIN_SAMPLE) and changed in at most MAX_SAMPLE_CHANGED percent."""
-    daily = sorted((r for r in rows if r.get("batch") == "daily"), key=lambda r: r["date"])
+    daily = sorted((r for r in rows if r.get("batch") == "daily"), key=lambda r: sort_key(r["date"]))  # '-10' after '-9'
     streak = []
     for r in reversed(daily):
         m = measured(r)

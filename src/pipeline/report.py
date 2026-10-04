@@ -1,6 +1,8 @@
 """After `npm run books:import`: the draw simulation, axis balance and the PR body (design 2-1 "simulate", 2-3).
 
-Usage (from the checkout):  PYTHONIOENCODING=utf-8 python -m src.pipeline.report --date YYYY-MM-DD --out pr.md
+Usage (from the checkout):  PYTHONIOENCODING=utf-8 python -m src.pipeline.report --batch ID --out pr.md
+  (ID = the batch id, pipeline/batch.py: YYYY-MM-DD for a day's first batch, YYYY-MM-DD-N for a later one; --date is the
+  old name of the same option)
 simulate_real's criteria on the new books.json (🍃 first-draw fill >= 95%, genres per draw >= 3.5) and each axis side
 >= 25% of 🍃 books (balance-game 4절) — a miss is a ⚠ line in the PR, not a failure. The body opens with the run's status
 (a run that stopped early is `partial` and says why and how many books made it), holds counts, titles and our tags only
@@ -92,8 +94,9 @@ def pr_body(summary: dict, doc: dict, books: list[dict], sim: dict, auto_merge: 
     t = tally(books)
     warn = warnings(sim, axis_shares(books))
     n_auto = sum(bool(b.get("auto")) for b in picked)  # counted from the file, not the run summary (which may be missing)
+    batch = doc.get("batch_id") or doc["date"]  # files from before 10-05 have no batch_id: their id is the date
     lines = [
-        f"## 오늘의 새 책 {doc['date']}", "", *status_banner(summary),
+        f"## 오늘의 새 책 {batch}", "", *status_banner(summary),
         f"- 앱에 넣음 **{len(picked)}권** (두 AI 일치·사람 안 봄 {n_auto} · 사람이 확인함 {len(picked) - n_auto}) · "
         f"**검수 대기 {len(waiting)}** (앱에 안 들어감) · 대기 {len(held)} · 뺌 {summary.get('dropped', 0)} · "
         f"후보 {summary.get('candidates', 0)} / 계획 {summary.get('wanted', 0)}",
@@ -110,7 +113,7 @@ def pr_body(summary: dict, doc: dict, books: list[dict], sim: dict, auto_merge: 
         *(["### 대기한 책 (규칙 검사에 걸렸거나, 자동 병합 중 두 AI가 엇갈림 — 검수 페이지에서 고쳐 넣을 수 있어요)", "| 제목 | 걸린 이유 |", "|---|---|",
            *map(held_line, held), ""] if held else []),
         *candidate_section(candidates or []),
-        "### 검수", f"`PYTHONIOENCODING=utf-8 python -m src.pipeline.review {doc['date']}` → 페이지 → 내려받기 → `--apply` → "
+        "### 검수", f"`PYTHONIOENCODING=utf-8 python -m src.pipeline.review {batch}` → 페이지 → 내려받기 → `--apply` → "
         "`cd web && npm run books:import` → 이 PR 브랜치에 커밋. 검수 없이 이 PR을 병합해도 **검수 대기 책은 앱에 들어가지 않아요**(나중에 검수해 넣을 수 있어요).",
         *review_notes(doc, auto_merge, sample_rate),
         f"졸업 연속 {grad['streak']}/{STREAK} · 일치 책 표본 {grad.get('sample_n', 0)}권 중 바뀐 책 {grad.get('sample_changed', 0)}권 "
@@ -122,15 +125,15 @@ def pr_body(summary: dict, doc: dict, books: list[dict], sim: dict, auto_merge: 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="PR body for a day of the pipeline")
-    ap.add_argument("--date", required=True)
+    ap.add_argument("--batch", "--date", dest="batch", required=True, help="batch id (the day, or YYYY-MM-DD-N)")
     ap.add_argument("--out", type=Path, required=True)
     args = ap.parse_args(argv)
-    path = ADDITIONS / f"{args.date}.json"
+    path = ADDITIONS / f"{args.batch}.json"
     if not path.exists():
-        print(f"{args.date}: no additions file — no PR")
+        print(f"{args.batch}: no additions file — no PR")
         return 0
     doc = json.loads(path.read_text(encoding="utf-8"))
-    summary_path = RUNS / f"{args.date}.json"
+    summary_path = RUNS / f"{args.batch}.json"
     summary = json.loads(summary_path.read_text(encoding="utf-8")) if summary_path.exists() else {}
     books = json.loads(BOOKS.read_text(encoding="utf-8"))
     sim = evaluate(leaf_pool(books), leaf_users())

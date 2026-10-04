@@ -1,6 +1,7 @@
 """One day of the pipeline (design 2-1): gaps → candidates → pass A + pass B → checks → additions file + run summary.
 
-Usage (from the checkout):  PYTHONIOENCODING=utf-8 python -m src.pipeline.run_daily [--date YYYY-MM-DD] [--count N]
+Usage (from the checkout):  PYTHONIOENCODING=utf-8 python -m src.pipeline.run_daily [--date YYYY-MM-DD | --batch ID] [--count N]
+  --batch: a later run of the same day, `YYYY-MM-DD-2`, `-3` … (pipeline/batch.py); the first batch is the plain date
 Then:                        cd web && npm run books:import && npm test      (the workflow does both, then report.py)
 Keys: YES24_API_KEY / ANTHROPIC_API_KEY from the environment (Actions secrets) or the local .env — never printed.
 Models and counts come from data/pipeline/config.json (model = pass A, second_model = blind pass B).
@@ -17,7 +18,8 @@ missing key, YES24 failed, the run stopped before any book was finished, or cand
   nothing to fill → `full`, zero API calls
 YES24 text (intro, TOC) lives on the Candidate in memory and goes to the tagger only; the additions file, the summary and
 stdout carry our tags and counts. Do not set ANTHROPIC_LOG=debug (the SDK would log request bodies with YES24 text).
-The summary goes to data/pipeline/runs/<date>.json (git-ignored) and stdout.
+Files are keyed by the batch id: additions/<id>.json, and the summary in data/pipeline/runs/<id>.json (git-ignored) and stdout.
+Candidates skip every ISBN in books.json and in every additions file — earlier batches of the same day included.
 A local run reuses the YES24 lists cached under data/raw/yes24/ (kept forever; only new searches are fetched), so its candidate
 pool can differ from the fresh one CI builds.
 """
@@ -32,6 +34,7 @@ import collect_candidates
 from compare_apis import load_env
 
 from . import ADDITIONS, BOOKS, KST, RUNS, VOCAB
+from .batch import BatchError, parse as parse_batch
 from .candidates import Candidate, find, known_from, yes24_env
 from .checks import decide, disagreements, rule_issues
 from .config import Config, load_config
@@ -95,11 +98,13 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     return record(cand, a, b, flags, issues, status, auto, hints), "ok"  # record() blanks any field that copied YES24 text
 
 
-def run(date: str, cfg: Config, env: dict, client) -> dict:
+def run(batch: str, cfg: Config, env: dict, client) -> dict:
+    """One batch (`batch` = the day, or `<day>-N` for a later run that day)."""
+    date = parse_batch(batch)[0]
     books, vocab, additions = load_state()
     kept = {t: list(v.get("kept", {})) for t, v in vocab.items()}
     wants = plan_day(books, kept, cfg.daily_count)
-    summary = {"date": date, "model": cfg.model, "second_model": cfg.second_model, "wanted": sum(w.n for w in wants),
+    summary = {"date": date, "batch": batch, "model": cfg.model, "second_model": cfg.second_model, "wanted": sum(w.n for w in wants),
                "slots": [f"{w.slot}{'/' + w.keyword if w.keyword else ''} {w.n}" for w in wants]}
     if not wants:
         return summary | {"status": "full"}
@@ -140,8 +145,8 @@ def run(date: str, cfg: Config, env: dict, client) -> dict:
                 "cost_usd": round(sum(u.cost(m) for m, u in ledger.items()), 4)}
     if not recs:
         return summary | {"status": "anthropic_failed" if stopped else "no_books"}
-    write_doc(ADDITIONS / f"{date}.json", additions_doc(date, cfg.model, cfg.second_model, recs))
-    return summary | {"status": "partial" if stopped else "ok", "file": f"data/processed/additions/{date}.json"}
+    write_doc(ADDITIONS / f"{batch}.json", additions_doc(date, cfg.model, cfg.second_model, recs, batch))
+    return summary | {"status": "partial" if stopped else "ok", "file": f"data/processed/additions/{batch}.json"}
 
 
 # exit 1 for the workflow: `no_books` = candidates were found but not one could be tagged (a systematic break — a changed
@@ -161,11 +166,19 @@ def anthropic_key() -> str:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="갈피 daily book pipeline")
-    ap.add_argument("--date", default=datetime.now(KST).date().isoformat())
+    ap.add_argument("--date", help="the day (default: today in KST) — the day's first batch")
+    ap.add_argument("--batch", help="batch id: YYYY-MM-DD, or YYYY-MM-DD-N for a later run that day")
     ap.add_argument("--count", type=int)
     args = ap.parse_args(argv)
-    if (ADDITIONS / f"{args.date}.json").exists():
-        print(f"{args.date}: additions file already exists — nothing to do")
+    batch = args.batch or args.date or datetime.now(KST).date().isoformat()
+    try:
+        day = parse_batch(batch)[0]
+    except BatchError as err:
+        ap.error(str(err))
+    if args.date and args.batch and args.date != day:
+        ap.error(f"--batch {args.batch} is not a batch of --date {args.date}")
+    if (ADDITIONS / f"{batch}.json").exists():
+        print(f"{batch}: additions file already exists — nothing to do")
         return 0
     cfg, env, key = load_config(count=args.count), yes24_env(), anthropic_key()
     missing = [n for n, v in (("YES24_API_KEY", env.get("YES24_API_KEY")), ("ANTHROPIC_API_KEY", key)) if not v]
@@ -173,9 +186,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ERROR: {', '.join(missing)} not set", file=sys.stderr)
         return 1
     import anthropic  # the SDK is only needed for a real run
-    summary = run(args.date, cfg, env, anthropic.Anthropic(api_key=key, max_retries=2, timeout=60))
+    summary = run(batch, cfg, env, anthropic.Anthropic(api_key=key, max_retries=2, timeout=60))
     RUNS.mkdir(parents=True, exist_ok=True)
-    (RUNS / f"{args.date}.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    (RUNS / f"{batch}.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(json.dumps(summary, ensure_ascii=False, indent=1))
     return 1 if summary["status"] in FAILED else 0
 

@@ -2,6 +2,8 @@
 # 06:00 KST every day + by hand (dry_run: everything but the PR). One PR per day, and only one open at a time —
 # books.json would conflict between stacked PRs, so a day with an earlier books/ PR still open is skipped. A day that is
 # already on main, or whose books/<date> branch is left over, is skipped too — before any API call is paid for.
+# By hand with next_batch (10-05, launch fill): another batch the same day, id <date>-2, -3 … (src/pipeline/batch.py) — the
+# next number with no additions file on main and no books/ branch. Still one open books/ PR at a time; the schedule is as before.
 # YES24 book text only reaches the tagger in memory: nothing below prints, uploads or commits it.
 # The two API keys are given to ONE step (Tag today's books) and are never echoed; ANTHROPIC_LOG stays unset (debug
 # logging would print request bodies, which hold YES24 text).
@@ -22,6 +24,10 @@ on:
         description: "Books today (empty = daily_count in data/pipeline/config.json)"
         type: string
         default: ""
+      next_batch:
+        description: "Another batch today (<date>-2, -3 …) even when today's books are already on main"
+        type: boolean
+        default: false
 
 permissions: {}
 
@@ -31,6 +37,7 @@ concurrency:
 
 env:
   DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+  NEXT_BATCH: ${{ github.event_name == 'workflow_dispatch' && inputs.next_batch }}
 
 jobs:
   gate:
@@ -40,9 +47,16 @@ jobs:
       pull-requests: read
     outputs:
       date: ${{ steps.day.outputs.date }}
+      batch: ${{ steps.day.outputs.batch }}
       go: ${{ steps.day.outputs.go }}
     steps:
-      - name: Day (KST), open books/ PRs, today already done
+      - name: Batch id code (next_batch only, no token kept)
+        if: env.NEXT_BATCH == 'true'
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: src/pipeline
+      - name: Day (KST), open books/ PRs, today already done, batch id
         id: day
         env:
           GH_TOKEN: ${{ github.token }}
@@ -58,13 +72,25 @@ jobs:
             open=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --json headRefName \
               --jq '[.[] | select(.headRefName | startswith("books/"))] | length')
             [ "$open" = "0" ] || skip "A books/ PR is still open — review and merge it first."
-            if gh api "repos/$GITHUB_REPOSITORY/contents/data/processed/additions/$day.json?ref=main" > /dev/null 2>&1; then
-              skip "Today's books ($day) are already on main."
-            fi
-            if gh api "repos/$GITHUB_REPOSITORY/branches/books/$day" > /dev/null 2>&1; then
-              skip "A books/$day branch is left over from an earlier run — merge or close its PR and delete the branch first."
+          fi
+          if [ "$NEXT_BATCH" = "true" ]; then
+            # the next free batch of today: after every additions file of today on main and every books/<day>… branch
+            files=$(gh api "repos/$GITHUB_REPOSITORY/contents/data/processed/additions?ref=main" --jq '.[].name')
+            branches=$(gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/heads/books/$day" --jq '.[].ref')
+            batch=$(python3 -m src.pipeline.batch next --date "$day" $files $branches)
+          else
+            batch=$day
+            if [ "$DRY_RUN" != "true" ]; then
+              if gh api "repos/$GITHUB_REPOSITORY/contents/data/processed/additions/$day.json?ref=main" > /dev/null 2>&1; then
+                skip "Today's books ($day) are already on main. (Another batch today: run by hand with next_batch.)"
+              fi
+              if gh api "repos/$GITHUB_REPOSITORY/branches/books/$day" > /dev/null 2>&1; then
+                skip "A books/$day branch is left over from an earlier run — merge or close its PR and delete the branch first."
+              fi
             fi
           fi
+          echo "batch=$batch" >> "$GITHUB_OUTPUT"
+          echo "Batch: $batch" | tee -a "$GITHUB_STEP_SUMMARY"
           echo "go=true" >> "$GITHUB_OUTPUT"
 
   books:
@@ -77,7 +103,7 @@ jobs:
       pull-requests: write
     env:
       PYTHONIOENCODING: utf-8
-      DAY: ${{ needs.gate.outputs.date }}
+      BATCH: ${{ needs.gate.outputs.batch }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -106,9 +132,9 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           COUNT: ${{ inputs.count }}
         run: |
-          python -m src.pipeline.run_daily --date "$DAY" ${COUNT:+--count "$COUNT"}
-          # only a run that wrote today's file counts (an existing file makes run_daily do nothing and leaves no summary)
-          status=$(jq -r .status "data/pipeline/runs/$DAY.json" 2>/dev/null || true)
+          python -m src.pipeline.run_daily --batch "$BATCH" ${COUNT:+--count "$COUNT"}
+          # only a run that wrote this batch's file counts (an existing file makes run_daily do nothing and leaves no summary)
+          status=$(jq -r .status "data/pipeline/runs/$BATCH.json" 2>/dev/null || true)
           if [ "$status" = "ok" ] || [ "$status" = "partial" ]; then echo "added=true" >> "$GITHUB_OUTPUT"; fi
 
       - name: Import into books.json and test the app data
@@ -119,17 +145,17 @@ jobs:
       - name: PR body
         if: steps.run.outputs.added == 'true'
         run: |
-          python -m src.pipeline.report --date "$DAY" --out "$RUNNER_TEMP/pr.md"
+          python -m src.pipeline.report --batch "$BATCH" --out "$RUNNER_TEMP/pr.md"
           cat "$RUNNER_TEMP/pr.md" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Keep the dry run's result (our tags only)
         if: steps.run.outputs.added == 'true' && env.DRY_RUN == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: dry-run-${{ needs.gate.outputs.date }}
+          name: dry-run-${{ needs.gate.outputs.batch }}
           path: |
-            data/processed/additions/${{ needs.gate.outputs.date }}.json
-            data/pipeline/runs/${{ needs.gate.outputs.date }}.json
+            data/processed/additions/${{ needs.gate.outputs.batch }}.json
+            data/pipeline/runs/${{ needs.gate.outputs.batch }}.json
           retention-days: 7
 
       - name: Open the PR (merge it too when auto_merge is true)
@@ -137,15 +163,15 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          branch="books/$DAY"
+          branch="books/$BATCH"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git switch -c "$branch"
-          git add "data/processed/additions/$DAY.json" web/src/data/books.json web/src/data/vocab.json web/src/data/library.json
-          git commit -m "data: daily books $DAY"
+          git add "data/processed/additions/$BATCH.json" web/src/data/books.json web/src/data/vocab.json web/src/data/library.json
+          git commit -m "data: daily books $BATCH"
           git push -u origin "$branch"
-          gh pr create --base main --head "$branch" --title "오늘의 새 책 $DAY" --body-file "$RUNNER_TEMP/pr.md"
+          gh pr create --base main --head "$branch" --title "오늘의 새 책 $BATCH" --body-file "$RUNNER_TEMP/pr.md"
           if [ "$(jq -r .auto_merge data/pipeline/config.json)" = "true" ]; then
             merged=false
             for i in 1 2 3; do

@@ -97,10 +97,11 @@ delete from events where created_at < '<배포 시각>';
 - [ ] Settings → Actions → General → Workflow permissions: **Read and write permissions** + **Allow GitHub Actions to create and approve pull requests**
 - [ ] 워크플로는 main에 있어야 돈다: `daily-books`(매일 06:00 KST, 손으로 실행하면 `dry_run` 기본), `weekly-sample`(월 09:00 KST, `auto_merge`가 true일 때만 이슈)
 - [ ] 열린 `books/` PR이 있으면 그날은 쉰다 — 검수·병합하면 다음 날 이어서 (`dry_run`은 돈다)
+- 손으로 실행할 때 입력: `dry_run`(기본 켬 — PR 없이 끝까지), `count`(이번 권수, 최대 100, 비우면 `daily_count`), `next_batch`(기본 끔 — 켜면 오늘 이미 main에 책이 있어도 같은 날 다음 묶음 `<날짜>-2`, `-3` …을 돈다. 열린 `books/` PR이 있으면 여전히 쉰다). 같은 날 여러 번: `gh workflow run daily-books.yml -f next_batch=true -f count=100 -f dry_run=false` → 검수·병합 → 다시 (`HANDOFF.md` 3절)
 - [ ] 첫 한 바퀴: Actions → daily-books → Run workflow → `dry_run` 켜 둔 채 `count` 5 → 끝나면 실행 화면의 Summary(PR 본문 미리보기)와 Artifacts의 `dry-run-<날짜>`(우리 태그 파일·요약, 7일)를 본다
 - 검수 없이 PR을 병합해도 **두 AI가 엇갈린 책은 앱에 들어가지 않는다**(파일에 `status: "review"`로 남고, 검수 `--apply`가 넣기·빼기를 정한다). 두 AI가 같게 본 책만 병합과 함께 앱에 들어간다
 - 설정: `data/pipeline/config.json`(`daily_count`·`auto_merge`·`sample_rate`·`model`·`second_model`). `auto_merge`는 졸업 기준을 **둘 다** 넘고 **사용자가 승인했을 때만** true — ① 연속 3회, 사람이 본 책(엇갈린 책 + 일치 책 표본)의 모든 항목 95%+ ② 그 3회에 본 일치 책이 10권 이상이고 바뀐 책이 5% 이하. 검수 때 두 숫자가 함께 출력되고 PR 본문 맨 아래에도 보인다. 일치한 책 중 표본 밖은 사람이 보지 않는다. 첫 번째 기준(엇갈린 책이 섞인 행의 모든 항목 95%+)은 키워드가 특히 어려워 잘 안 넘을 수 있다 — 자동 병합 전환은 3~5일보다 오래 걸리기 쉽고, 두 번째 기준(일치 책 표본)만으로 판단할지는 사용자가 정한다
-- 검수: 그날 PR 브랜치에서 `PYTHONIOENCODING=utf-8 python -m src.pipeline.review <날짜>` → 로컬 페이지(예스24 글이 보이므로 `data/processed/check/`에만 저장, 커밋 안 함) → 내려받기 → `--apply <파일>` → `cd web && npm run books:import` → PR 브랜치에 커밋. 엇갈린 책과 함께 두 AI가 같게 본 책의 10% 표본도 기본으로 보인다(끄려면 `--no-sample`)
+- 검수: 그날 PR 브랜치에서 `PYTHONIOENCODING=utf-8 python -m src.pipeline.review <날짜>`(같은 날 다음 묶음이면 `<날짜>-2` 같은 묶음 이름) → 로컬 페이지(예스24 글이 보이므로 `data/processed/check/`에만 저장, 커밋 안 함) → 내려받기 → `--apply <파일>` → `cd web && npm run books:import` → PR 브랜치에 커밋. 엇갈린 책과 함께 두 AI가 같게 본 책의 10% 표본도 기본으로 보인다(끄려면 `--no-sample`)
 - 매일 할 일 — **PR의 키워드 후보 확인 → 5권 이상이면 사용자에게 물어 promote**: 본문 "### 키워드 후보"는 넣은 🎯 책에 AI·검수자가 적은 목록 밖 키워드 이름을 (주제, 이름)별로 센 것(모든 추가 파일, 공백·대소문자 무시). 5권 이상은 "추가할까요?"로 위에 보인다. 사용자가 승인하면 단어 규칙·정의 문장(사용자 확인)을 정해 `PYTHONIOENCODING=utf-8 python src/backfill_keywords.py promote "주제:이름" --pattern "…" --definition "…"` → `cd web && npm run books:import && npx vitest run` → 커밋. 승인 없이는 만들지 않는다(`plans/2026-10-02-keyword-candidates.md`)
 - 실패하면 그날은 PR이 없고 Actions 기록에 이유(예스24 경로 이름·오류 종류)만 남는다. 도중에 멈추면(`partial`) 된 만큼만 PR에 들어가고 본문 맨 위에 이유가 보인다. 예스24 책소개·목차는 어디에도 남지 않는다
 
