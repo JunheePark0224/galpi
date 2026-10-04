@@ -15,8 +15,7 @@ export function reasonLine(book: Book, answers: LeafAnswers | TargetAnswers): Re
     if (book.topic !== a.topic) return { label: "이 책은", items: [book.topic, WAY_LABEL[book.way]] };
     const items = [book.topic, ...a.keywords.filter((k) => book.keywords.includes(k))];
     if (a.way && a.way === book.way) items.push(WAY_LABEL[a.way]);
-    if (a.len === 1 && book.pages <= 250) items.push("얇게");
-    if (a.len === -1 && book.pages >= 300) items.push("두껍게");
+    if (a.len !== 0 && a.len === lengthTag(book.pages)) items.push(a.len > 0 ? "얇게" : "두껍게");
     return { label: "나온 이유", items: items.slice(0, MAX_ITEMS) };
   }
   const a = answers as LeafAnswers;

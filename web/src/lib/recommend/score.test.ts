@@ -29,11 +29,12 @@ describe("targetScore", () => {
     const a = tans({ keywords: ["확률", "회귀분석"], way: "개념", len: 1 });
     expect(targetScore(tbook({ pages: 240 }), a)).toBe(3 + 2 + 2);
   });
-  it("penalises thick books for 얇게 and rewards them for 두꺼워도 좋아요", () => {
-    expect(targetScore(tbook({ pages: 450 }), tans({ len: 1 }))).toBe(-1);
+  it("penalises thick books for the thin choice and rewards them for the thick one (one page rule: ≤280 / ≥380)", () => {
+    expect(targetScore(tbook({ pages: 380 }), tans({ len: 1 }))).toBe(-1);
     expect(targetScore(tbook({ pages: 320 }), tans({ len: 1 }))).toBe(0);
-    expect(targetScore(tbook({ pages: 320 }), tans({ len: -1 }))).toBe(1);
-    expect(targetScore(tbook({ pages: 280 }), tans({ len: -1 }))).toBe(0);
+    expect(targetScore(tbook({ pages: 280 }), tans({ len: 1 }))).toBe(2);
+    expect(targetScore(tbook({ pages: 380 }), tans({ len: -1 }))).toBe(1);
+    expect(targetScore(tbook({ pages: 379 }), tans({ len: -1 }))).toBe(0);
   });
   it("ignores a different way", () => {
     expect(targetScore(tbook({ way: "실습" }), tans({ way: "개념" }))).toBe(0);
