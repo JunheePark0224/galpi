@@ -31,5 +31,19 @@ describe("validateMap", () => {
   it("keeps the two kinds apart: mood nodes set no scope, narrow nodes set no mood", () => {
     expect(validateMap(edit("temp=+1", "genres=에세이"), VOCAB)).toContain("mood-temp: A is a mood question but changes the scope");
     expect(validateMap(edit("keywords=SQL", "keywords=SQL | len=+1"), VOCAB)).toContain("learn-data: A is a narrow question but sets a mood");
+    expect(validateMap(edit("temp=+1", "mode=challenge"), VOCAB)).toContain("mood-temp: A is a mood question but switches the mode");
+  });
+  it("names an unsure that goes nowhere and far tags that are not ours", () => {
+    expect(validateMap(edit("unsure: next=mood-way", "unsure: next=nowhere"), VOCAB)).toContain('learn-area: unsure goes to unknown node "nowhere"');
+    expect(validateMap(edit("genres=에세이\n```", "genres=무협\n```"), VOCAB)).toContain('far 1 to: genre "무협" is not one of ours');
+    expect(validateMap(edit("from: entry=target | topics=데이터 분석", "from: topics=요리"), VOCAB)).toContain('far 1 from: topic "요리" is not one of ours');
+  });
+  it("names a far rule that can never win because an earlier rule covers it (the first rule wins)", () => {
+    const far = (...froms: string[]) => parseQuestionMap(froms.reduce((md, f) => `${md}\n\`\`\`far\nfrom: ${f}\nto: entry=leaf | genres=에세이\n\`\`\``, MINI));
+    const errors = (...froms: string[]) => validateMap(far(...froms), VOCAB);
+    expect(errors("entry=target | topics=데이터 분석 | keywords=SQL")).toEqual(["far 2 is shadowed by far 1"]);
+    expect(errors("entry=target")).toEqual([]);                                         // wider rule below a narrow one: fine
+    expect(errors("entry=leaf | topics=데이터 분석")).toEqual([]);                        // another entry
+    expect(errors("genres=SF·판타지", "genres=SF·판타지,에세이", "genres=SF·판타지")).toEqual(["far 4 is shadowed by far 2"]);
   });
 });

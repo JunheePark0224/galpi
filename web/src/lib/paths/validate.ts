@@ -1,4 +1,4 @@
-import type { Choice, Effects, QNode, QuestionMap } from "./types";
+import type { Choice, Effects, FarRule, QNode, QuestionMap } from "./types";
 
 export interface Vocabulary { topics: Record<string, string[]>; genres: string[] }
 
@@ -15,6 +15,12 @@ function tagErrors(where: string, e: Effects, vocab: Vocabulary, topicsSoFar: st
     if (!topics.some((t) => vocab.topics[t]?.includes(k))) out.push(`${where} keyword "${k}" is not in ${topics.join("·")}`);
   }
   return out;
+}
+
+/** Rule i covers rule j when every scope j matches, i matches too — then j never wins (walk.ts: the first match wins). */
+function covers(i: FarRule["from"], j: FarRule["from"]): boolean {
+  const within = (wide?: string[], narrow?: string[]) => !wide || (narrow !== undefined && narrow.every((v) => wide.includes(v)));
+  return (!i.entry || i.entry === j.entry) && within(i.topics, j.topics) && within(i.keywords, j.keywords) && within(i.genres, j.genres);
 }
 
 export function validateMap(map: QuestionMap, vocab: Vocabulary): string[] {
@@ -57,8 +63,10 @@ export function validateMap(map: QuestionMap, vocab: Vocabulary): string[] {
   walk(map.start, [], null);
   for (const id of Object.keys(nodes)) if (!reached.has(id)) errors.push(`${id}: not reachable from the start`);
 
-  map.far.forEach((r, i) => {
-    errors.push(...tagErrors(`far ${i + 1} from:`, r.from as Effects, vocab, null), ...tagErrors(`far ${i + 1} to:`, r.to as Effects, vocab, null));
+  map.far.forEach((r, j) => {
+    errors.push(...tagErrors(`far ${j + 1} from:`, r.from as Effects, vocab, null), ...tagErrors(`far ${j + 1} to:`, r.to as Effects, vocab, null));
+    const i = map.far.findIndex((earlier, k) => k < j && covers(earlier.from, r.from));
+    if (i >= 0) errors.push(`far ${j + 1} is shadowed by far ${i + 1}`);
   });
   return [...new Set(errors)];
 }
