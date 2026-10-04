@@ -1,5 +1,61 @@
 import { expect, test as base, type Page } from "@playwright/test";
 import { COMMON_KEYS, EVENT_SPEC, isEventName, type PropSpec } from "../src/lib/track/schema";
+import built from "../src/data/question-map.json";
+import { SQL_PATH } from "../src/lib/paths/__fixtures__/paths";
+import type { Answer, QuestionMap } from "../src/lib/paths/types";
+
+const MAP = built as QuestionMap;
+/** S-01's one entry (PRD F-01 v2). */
+export const START = "갈피 잡으러 가기";
+/** Question.tsx ignores card taps in the first 250 ms of a question (a double tap must not answer the next one). */
+const TAP_GUARD_MS = 250;
+
+/** The card label for an answer, or null for 갈피를 못 잡겠어요 (the hold). */
+export function labelOf(a: Answer): string | null {
+  const n = MAP.nodes[a.node];
+  return a.choice === "unsure" ? null : a.choice === "A" ? n.a.label : n.b.label;
+}
+
+/** Keyboard hold (Enter) — same timer as touch; deterministic on both projects. */
+export async function holdUnsure(page: Page, ms = 1000) {
+  await page.getByRole("button", { name: "갈피를 못 잡겠어요" }).focus();
+  await page.keyboard.down("Enter");
+  await page.waitForTimeout(ms);
+  await page.keyboard.up("Enter");
+}
+
+/** Answers each question as it comes: waits for its heading, then taps the card (or holds 못 잡겠어요). */
+export async function answerPath(page: Page, answers: readonly Answer[]) {
+  for (const a of answers) {
+    await expect(page.getByRole("heading", { level: 1, name: MAP.nodes[a.node].question, exact: true })).toBeVisible();
+    const label = labelOf(a);
+    if (label === null) {
+      await holdUnsure(page);
+      continue;
+    }
+    await page.waitForTimeout(TAP_GUARD_MS + 50);
+    await page.getByRole("button", { name: label, exact: true }).click();
+  }
+}
+
+/** From S-01 already on screen: [갈피 잡으러 가기] → the path → S-03 (the closed book). */
+export async function answerToClosedBook(page: Page, answers: readonly Answer[] = SQL_PATH) {
+  await page.getByRole("button", { name: START }).click();
+  await answerPath(page, answers);
+  await expect(page.getByText("눌러서 펼치기")).toBeVisible();
+}
+
+export async function toClosedBook(page: Page, answers: readonly Answer[] = SQL_PATH) {
+  await page.goto("/");
+  await answerToClosedBook(page, answers);
+}
+
+/** … → open the book (S-04) → [다음 장] (S-05, the first bookmark). */
+export async function toBookmarks(page: Page, answers: readonly Answer[] = SQL_PATH) {
+  await toClosedBook(page, answers);
+  await page.getByRole("button", { name: "책 펼치기" }).click();
+  await page.getByRole("button", { name: "다음 장" }).click();
+}
 
 /** A stable pseudo address per test (from its id), so the API's per-address rate limit sees one visitor per test, as in production. */
 function clientIp(testId: string): string {

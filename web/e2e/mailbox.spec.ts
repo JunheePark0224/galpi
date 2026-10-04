@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { named, recordEvents, test } from "./helpers";
+import { named, recordEvents, START, test } from "./helpers";
 
 // PRD F-26 갈피 우체통 (S-01 only). TRACK_STORE=off: /api/feedback answers 202 { stored: false } and sends no notice.
 test.use({ reducedMotion: "reduce" });
@@ -58,9 +58,9 @@ test("a failed send keeps the letter and says so", async ({ page }) => {
   await expect(sheet.getByLabel("써 보고 느낀 점")).toHaveValue(LETTER);
 });
 
-test("the mailbox sits below the entries, smaller and fainter, with a 44px tap target", async ({ page }) => {
+test("the mailbox sits below the entry, smaller and fainter, with a 44px tap target", async ({ page }) => {
   await page.goto("/");
-  const entry = page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ });
+  const entry = page.getByRole("button", { name: START });
   const mailbox = page.getByRole("button", { name: MAILBOX });
   await expect(entry).toBeVisible();
   await expect(mailbox).toBeVisible();

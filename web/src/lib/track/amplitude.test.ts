@@ -25,7 +25,7 @@ const KEY_NAME = "NEXT_PUBLIC_AMPLITUDE_API_KEY";
 const FAKE_KEY = "test-key-not-real";
 
 const common: CommonProps = {
-  anon_id: "11111111-1111-4111-8111-111111111111", user_id: null, session_id: "s1", round: 2, entry: "leaf",
+  anon_id: "11111111-1111-4111-8111-111111111111", user_id: null, session_id: "s1", round: 2, entry: "leaf", mode: "normal",
   screen_version: "v1", referrer: "https://x.example/", is_returning: true, device: "phone", is_in_app_browser: false,
 };
 
@@ -161,11 +161,11 @@ describe("with a key", () => {
     vi.stubGlobal("requestIdleCallback", idle);
     const { startAmplitude, sendToAmplitude } = await load();
     startAmplitude();
-    for (let i = 0; i < 80; i++) sendToAmplitude("chip_selected", { chip_type: "len", chip_value: String(i), is_edit: false }, common);
+    for (let i = 0; i < 80; i++) sendToAmplitude("question_answered", { node_id: `n${i}`, kind: "mood", choice: "A", depth: 1, position: i + 1, elapsed_ms: 1 }, common);
     idle.mock.calls[0][0]();
     await vi.waitFor(() => expect(sdk.track).toHaveBeenCalled());
     expect(sdk.track).toHaveBeenCalledTimes(50);
-    expect(sdk.track.mock.calls[0][1].chip_value).toBe("0");
+    expect(sdk.track.mock.calls[0][1].node_id).toBe("n0");
   });
 
   it("never throws when initAll throws, stops sending and does not retry", async () => {
@@ -257,29 +257,12 @@ describe("sendToAmplitude", () => {
 
   it("sends the same event name and props plus the analysis-relevant common props", async () => {
     const send = await started();
-    send("chip_selected", { chip_type: "topic", chip_value: "데이터 분석", is_edit: false }, common);
+    send("question_back_clicked", { node_id: "branch", depth: 2, source: "question" }, common);
     expect(sdk.track).toHaveBeenCalledTimes(1);
-    expect(sdk.track).toHaveBeenCalledWith("chip_selected", {
-      entry: "leaf", round: 2, screen_version: "v1", device: "phone", is_in_app_browser: false, is_returning: true,
-      chip_type: "topic", chip_value: "데이터 분석", is_edit: false,
+    expect(sdk.track).toHaveBeenCalledWith("question_back_clicked", {
+      entry: "leaf", mode: "normal", round: 2, screen_version: "v1", device: "phone", is_in_app_browser: false, is_returning: true,
+      node_id: "branch", depth: 2, source: "question",
     }, { time: expect.any(Number) });
-  });
-
-  it("sends free_goal_written without goal_text — the written words stay in Supabase (taxonomy 2-7, 6-2)", async () => {
-    const send = await started();
-    const written = { goal_text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" };
-    send("free_goal_written", written, common);
-    expect(sdk.track.mock.calls[0][1]).not.toHaveProperty("goal_text");
-    expect(sdk.track.mock.calls[0][1]).toMatchObject({ topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" });
-    expect(JSON.stringify(sdk.track.mock.calls)).not.toContain("SQL 공부");
-  });
-
-  it("sends free_goal_written without missing_text — the missing phrase stays in Supabase too (F-24)", async () => {
-    const send = await started();
-    const written = { goal_text: "주식 단타", topic: "돈 관리·투자", keywords: [], is_matched: true, method: "llm", has_missing: true, missing_text: "단타 매매" };
-    send("free_goal_written", written, common);
-    expect(sdk.track.mock.calls[0][1]).toMatchObject({ has_missing: true });
-    expect(JSON.stringify(sdk.track.mock.calls)).not.toContain("단타");
   });
 
   it("drops a prop the spec does not define, so it can neither leak nor shadow a common prop", async () => {
@@ -295,6 +278,12 @@ describe("sendToAmplitude", () => {
     expect(sdk.track.mock.calls[0][1]).not.toHaveProperty("entry");
   });
 
+  it("leaves out mode before the first answer", async () => {
+    const send = await started();
+    send("site_visited", {}, { ...common, mode: null });
+    expect(sdk.track.mock.calls[0][1]).not.toHaveProperty("mode");
+  });
+
   it("adds prompt_version only to site_visited", async () => {
     const send = await started();
     send("site_visited", {}, common);
@@ -305,9 +294,9 @@ describe("sendToAmplitude", () => {
 
   it("sends props alone when common props are unavailable", async () => {
     const send = await started();
-    const own = { chip_type: "len", chip_value: "thin", is_edit: false };
-    send("chip_selected", own, null);
-    expect(sdk.track).toHaveBeenCalledWith("chip_selected", own, { time: expect.any(Number) });
+    const own = { node_id: "start", depth: 1, held_ms: 300 };
+    send("unsure_hold_cancelled", own, null);
+    expect(sdk.track).toHaveBeenCalledWith("unsure_hold_cancelled", own, { time: expect.any(Number) });
   });
 
   it("never throws when Amplitude's track throws", async () => {

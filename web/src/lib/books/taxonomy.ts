@@ -2,7 +2,7 @@ import type { Entry, Way } from "../recommend/types";
 
 /**
  * docs/plans/2026-09-30-d3-tags.md — topic → field, in topic order. For 🎯 books genre === topic. The last six came with D-A
- * (10-01, docs/target-chips.md 2절); a topic is offered to readers only once it has enough books (lib/books/active.ts).
+ * (10-01, docs/target-chips.md 2절).
  */
 export const FIELD_OF_TOPIC = {
   "데이터 분석": "데이터·통계",

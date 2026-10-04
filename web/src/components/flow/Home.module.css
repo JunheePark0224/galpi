@@ -37,22 +37,33 @@
 .peek:nth-child(2) { right: 52px; top: 0; transform: rotate(3deg); }
 
 .entries { display: flex; flex-direction: column; gap: var(--space-3); }
+/* C-05 S-01 (시안 A, 10-04): the cover's leather with gold-foil letters, a stitched line, and a slow light sweep. */
 .entry {
-  display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
-  width: 100%; min-height: 88px; padding: var(--space-4);
-  border: var(--card-edge); border-radius: var(--radius-card);
-  background: var(--card-bg); color: var(--ink); font: inherit; text-align: left; cursor: pointer;
-  box-shadow: var(--shadow-soft);
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center; gap: var(--space-2);
+  width: 100%; min-height: 64px; padding: 0 var(--space-5);
+  border: 0; border-radius: 14px;
+  background: var(--leather-grain), var(--leather-sheen), var(--cloth); color: var(--foil);
+  font: inherit; cursor: pointer;
+  box-shadow: inset 0 0 0 2px var(--cloth-edge), 0 12px 22px -12px rgba(43, 39, 36, 0.6);
+  transition: transform 160ms ease;
 }
-.entry:active { background: var(--paper-deep); }
+.entry::before { /* the stitched line */
+  content: ""; position: absolute; inset: 6px; border: 1px dashed var(--foil-line); border-radius: 9px; pointer-events: none;
+}
+.entry::after { /* the light sweeping across */
+  content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 30%; pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255, 240, 200, 0.28), transparent);
+  animation: sheen 3.6s ease-in-out infinite;
+}
+@keyframes sheen { 0%, 55% { left: -40%; } 100% { left: 130%; } }
+@media (hover: hover) { .entry:hover { transform: translateY(-1px); } }
+.entry:active { transform: translateY(1px); background: var(--leather-grain), var(--leather-sheen), var(--cloth-edge); }
 .entry:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
-.entryText { display: flex; flex-direction: column; gap: var(--space-1); }
-.entryTitle { font-family: var(--font-batang), serif; font-size: 18px; font-weight: 700; }
-.entryDesc { font-size: 13px; color: var(--ink-muted); }
-.go {
-  display: flex; flex-shrink: 0; align-items: center; justify-content: center;
-  width: 36px; height: 36px; border-radius: 50%; background: var(--paper-deep); color: var(--ink-soft);
-}
+@media (prefers-reduced-motion: reduce) { .entry::after { animation: none; display: none; } .entry { transition: none; } }
+.entryTitle { font-family: var(--font-batang), serif; font-size: 19px; font-weight: 700; letter-spacing: 0.5px; }
+.entryNote { margin: 0; font-size: 13px; color: var(--ink-muted); text-align: center; }
+.go { display: flex; flex-shrink: 0; align-items: center; color: var(--foil); }
 .arrow { display: block; }
 
 /* F-23 (시안 B, 10-01): the library count in gold foil on the cover; today's books on a frosted bookmark with "+M". */

@@ -5,3 +5,6 @@ export { MAP_GENRES, mapVocabulary } from "./vocabulary";
 export { walkPath, applyChallenge, PathError, type Walked } from "./walk";
 export { drawForPath, moodScore, type PathDraw } from "./draw";
 export { coverage, pathEnds, type PathEnd } from "./coverage";
+export { QUESTION_MAP } from "./map";
+export { pathSummary, type PathSummary } from "./summary";
+export { pathReason } from "./reason";

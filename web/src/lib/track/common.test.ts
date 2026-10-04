@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { commonProps, detectDevice, nextRound, setEntry } from "./common";
+import { commonProps, detectDevice, nextRound, setEntry, setMode } from "./common";
 
 describe("detectDevice", () => {
   it("detects a phone inside the KakaoTalk in-app browser", () => {
@@ -50,7 +50,14 @@ describe("commonProps", () => {
     const p = commonProps();
     expect(p.entry).toBe("leaf");
     expect(p.round).toBe(2);
-    expect(p.screen_version).toBe("v1");
+    expect(p.screen_version).toBe("v2");
+  });
+
+  it("carries the route (mode) and clears it back to null (taxonomy v1.0)", () => {
+    setMode("challenge");
+    expect(commonProps().mode).toBe("challenge");
+    setMode(null);
+    expect(commonProps().mode).toBeNull();
   });
 
   it("keeps stable ids and returning=false when storage getters throw", async () => {

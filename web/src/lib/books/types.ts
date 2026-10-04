@@ -1,3 +1,4 @@
+import type { PathSummary } from "../paths/summary";
 import type { Reason } from "../recommend/reason";
 import type { AxisKey, DrawPick, Entry, Tag, Way } from "../recommend/types";
 
@@ -34,17 +35,12 @@ export interface BookCard {
 /** reason: S-06 "나온 이유" (PRD F-09) — worked out on the server, where the tags are; random picks get the same format. */
 export interface CardPick { card: BookCard; kind: DrawPick["kind"]; reason: Reason }
 
-/**
- * POST /api/books/draw response.
- * keywords: the requested 🎯 keywords that some book in the topic really has (the rest were dropped before scoring).
- * found: 🎯 books behind the coverage notice (keyword matches, or the whole topic when no keyword was asked); null for 🍃.
- */
-export interface DrawResponse {
+/** POST /api/books/draw for a v2 path: the same cards, plus what S-04 "당신이 고른 길" shows. */
+export interface PathDrawResponse {
   picks: CardPick[];
   exhausted: boolean;
   widened: boolean;
-  found: number | null;
-  keywords: string[];
+  path: PathSummary;
 }
 
 export interface VocabTopic { keywords: Record<string, string>; terms: string[] }

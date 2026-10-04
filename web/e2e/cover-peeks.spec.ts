@@ -1,16 +1,8 @@
 import { expect, type Page } from "@playwright/test";
-import { test } from "./helpers";
+import { test, toClosedBook } from "./helpers";
 
 // DESIGN C-19: five bookmark tips stand out of the closed book (S-03) — under the header, the cover + hint still on screen.
 
-/** 🎯 with one chip → S-03 (the closed book). */
-async function toClosedBook(page: Page) {
-  await page.goto("/");
-  await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
-  await page.getByRole("button", { name: "데이터 분석", exact: true }).click();
-  await page.getByRole("button", { name: "책 펼치기" }).click();                  // S-02 submit
-  await expect(page.getByText("눌러서 펼치기")).toBeVisible();
-}
 const tips = (page: Page) => page.locator("[data-tip]");
 
 /** Top of the highest tip (films, strings and knots — not the strings' oversized svg boxes), bottom of the header. */
@@ -73,6 +65,6 @@ test("the tips rise one after another (no frost blur while moving), then settle"
 test("opening the book fades the tips out", async ({ page }) => {
   await toClosedBook(page);
   await page.getByRole("button", { name: "책 펼치기" }).click();
-  await expect(page.getByRole("heading", { name: "당신이 찾는 책" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "당신이 고른 길" })).toBeVisible();
   for (const layer of await page.locator("[data-cover-peeks]").all()) await expect(layer).toHaveAttribute("data-open", "");
 });

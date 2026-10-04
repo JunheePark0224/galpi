@@ -124,7 +124,7 @@ describe("taxonomy.csv ↔ EVENT_SPEC ↔ code (taxonomy 7-3)", () => {
 
   it("#8 the `*` rows are COMMON_KEYS, and parseCommon returns exactly them", () => {
     expect(commonRows.map((r) => r["Event Properties"])).toEqual([...COMMON_KEYS]);
-    const sample = { anon_id: "a", user_id: null, session_id: "s", round: 1, entry: null, screen_version: "v1",
+    const sample = { anon_id: "a", user_id: null, session_id: "s", round: 1, entry: null, mode: null, screen_version: "v1",
       referrer: "", is_returning: false, device: "phone", is_in_app_browser: false };
     expect(Object.keys(parseCommon(sample) ?? {})).toEqual([...COMMON_KEYS]);
   });

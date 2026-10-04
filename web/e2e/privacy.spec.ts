@@ -1,17 +1,17 @@
 import { expect } from "@playwright/test";
-import { test } from "./helpers";
+import { START, test } from "./helpers";
 
 test.use({ reducedMotion: "reduce" });
 
-test("🎯 input → 처리방침 link → /privacy → 처음으로", async ({ page }) => {
+test("S-02 → 처리방침 link → /privacy → 처음으로", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
+  await page.getByRole("button", { name: START }).click();
   await page.getByRole("link", { name: "처리방침" }).first().click();
 
   await expect(page).toHaveURL(/\/privacy$/);
   await expect(page.getByRole("heading", { level: 1, name: "개인정보 처리방침" })).toBeVisible();
   await expect(page.getByText("수집일로부터 1년이 지나면 자동으로 지워져요.")).toBeVisible();
-  await expect(page.getByRole("table").getByRole("row")).toHaveCount(11);   // header + 10 (P5: login, Google email, 내 책갈피; F-26: 갈피 우체통)
+  await expect(page.getByRole("table").getByRole("row")).toHaveCount(10);   // header + 9 (v2: no written-goal row)
   // the home visit already created this browser's id; /privacy only shows it
   const stored = await page.evaluate(() => localStorage.getItem("galpi.anon"));
   expect(stored).toMatch(/^[0-9a-f-]{36}$/);
@@ -19,9 +19,8 @@ test("🎯 input → 처리방침 link → /privacy → 처음으로", async ({ 
 
   await page.getByRole("link", { name: "처음으로" }).click();
   await expect(page).toHaveURL(/\/$/);
-  // 처음으로 is a fresh open: S-01, not the 🎯 input screen it left
-  await expect(page.getByRole("button", { name: /알고 싶은 게 있어요/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ })).toBeVisible();
+  // 처음으로 is a fresh open: S-01, not the question it left
+  await expect(page.getByRole("button", { name: START })).toBeVisible();
 });
 
 test("a first visit straight to /privacy records nothing and creates no id", async ({ page }) => {
