@@ -21,6 +21,12 @@ describe("pathEnds", () => {
     expect(sql.crumbs).toEqual(["뭔가 배우기", "데이터를 다루기", "DB에서 꺼내기"]);
     expect(sql.example.at(-1)).toEqual({ node: "mood-len", choice: "unsure" });
   });
+
+  it("lists the challenge ends: far scopes, and the whole library stays whole", () => {
+    const challenge = pathEnds(MAP).filter((e) => e.mode === "challenge").map((e) => e.scopeKey);
+    expect(challenge).toEqual(expect.arrayContaining(["all", "entry=leaf;genres=에세이", "entry=leaf", "entry=target"]));
+    expect(new Set(challenge).size).toBe(challenge.length);
+  });
 });
 
 describe("coverage", () => {
