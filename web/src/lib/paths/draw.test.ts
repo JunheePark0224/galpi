@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { mulberry32, type Book, type LeafBook, type TargetBook } from "@/lib/recommend";
-import { drawForPath, moodScore } from "./draw";
+import { drawForPath, maxPossible, moodScore } from "./draw";
 import { parseQuestionMap } from "./parse";
 import { NEUTRAL_MOOD, type Answer } from "./types";
 import { walkPath } from "./walk";
@@ -27,6 +27,22 @@ describe("moodScore", () => {
     expect(moodScore(t("x", [], "실습", 200), { ...NEUTRAL_MOOD, way: "실습", len: 1 })).toBe(4);   // way 2 + thin 2
     expect(moodScore(l("y", "에세이"), { ...NEUTRAL_MOOD, axes: { temp: 1, pull: 0, gain: 0, world: 0 }, len: 0 })).toBe(1);
     expect(moodScore(t("z", []), NEUTRAL_MOOD)).toBe(0);
+  });
+  it("counts length -1 for both entries and no way as nothing", () => {
+    expect(moodScore(t("x", [], "실습", 450), { ...NEUTRAL_MOOD, way: null, len: -1 })).toBe(1);          // thick welcome 1
+    expect(moodScore(l("y", "에세이"), { ...NEUTRAL_MOOD, len: -1 })).toBe(-1);                             // 250p is thin
+  });
+});
+
+describe("maxPossible", () => {
+  const mood = { axes: { temp: 1, pull: -1, gain: 0, world: 0 }, len: -1 as const, way: "실습" as const };
+  it("follows the pool's entry: 🍃 axes + length, 🎯 way + length points, both → the larger", () => {
+    expect(maxPossible("leaf", mood)).toBe(3);
+    expect(maxPossible("target", mood)).toBe(3);                                       // way 2 + thick 1
+    expect(maxPossible("target", { ...mood, way: null, len: 1 })).toBe(2);             // thin 2
+    expect(maxPossible("target", { ...mood, len: 0 })).toBe(2);
+    expect(maxPossible(null, { ...mood, len: 1 })).toBe(4);                             // 🎯 2 + 2 beats 🍃 1 + 1 + 1
+    expect(maxPossible(null, { ...mood, way: null })).toBe(3);                          // 🍃 3 beats 🎯 1
   });
 });
 
@@ -57,6 +73,12 @@ describe("drawForPath", () => {
     expect(rec).toHaveLength(4);
     expect(rec.every((p) => p.book.entry === "leaf" && p.book.genre === "에세이")).toBe(true);
     expect(d.picks.filter((p) => p.kind === "random")).toHaveLength(1);
+  });
+
+  it("challenge to the other entry: judged by what that entry can score, not exhausted for crossing", () => {
+    const d = drawForPath(BOOKS, MAP, walkPath(MAP, [a("start", "B"), ...SQL.slice(1)]), opts());   // way 실습 + thin, far side 🍃
+    expect(d.picks.filter((p) => p.kind === "recommended").every((p) => p.score === 1)).toBe(true);  // thin 1 is all a 🍃 book can get
+    expect(d.exhausted).toBe(false);
   });
 
   it("broad 🍃 scope keeps the genre cap: never more than 2 recommended of one genre", () => {
