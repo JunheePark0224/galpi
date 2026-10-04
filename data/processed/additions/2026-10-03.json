@@ -103,7 +103,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/176913080",
-   "auto": "ai-agree"
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "LLM 원리"
+    ],
+    "way": "실습",
+    "one_liner": "트랜스포머 구조부터 PEFT와 서빙, 멀티모달 실습까지 직접 따라 하며 익혀요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9791169087599",
@@ -142,8 +152,19 @@
    "issues": [
     "과장 표현: 완벽"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/196182773"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196182773",
+   "draft": {
+    "topic": "마음 돌보기",
+    "keywords": [
+     "우울",
+     "감정 다루기"
+    ],
+    "way": "실습",
+    "one_liner": "완벽주의 뒤에 숨은 우울을 알아보고 억눌러온 감정을 다루는 단계별 방법을 얻어요",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791155501658",
@@ -331,7 +352,19 @@
     "근거 김(33자)"
    ],
    "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/122880370"
+   "link": "https://www.yes24.com/product/goods/122880370",
+   "draft": {
+    "topic": "통계",
+    "keywords": [
+     "기초 통계",
+     "가설검정",
+     "회귀분석"
+    ],
+    "way": "개념",
+    "one_liner": "만화 속 영업사원과 함께 평균과 상관, 가설검정까지 차근차근 이해해요",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791159715952",
@@ -351,7 +384,7 @@
    "way": "개념",
    "keyword_candidate": null,
    "one_liner_style": "summary",
-   "one_liner": "",
+   "one_liner": "숫자로 된 주장을 그대로 믿지 않고 통계를 따져 읽는 법을 익혀요",
    "evidence": "통계 읽기와 해석의 기본 원리 중심",
    "confidence": 0.7,
    "fits": true,
@@ -368,8 +401,19 @@
    "issues": [
     "한 줄이 책소개를 베낌"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/139561098"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/139561098",
+   "draft": {
+    "topic": "통계",
+    "keywords": [
+     "기초 통계",
+     "가설검정"
+    ],
+    "way": "개념",
+    "one_liner": "",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791124516492",
@@ -413,7 +457,19 @@
     "근거 김(32자)"
    ],
    "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/195027162"
+   "link": "https://www.yes24.com/product/goods/195027162",
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "클로드",
+     "AI 에이전트",
+     "바이브 코딩"
+    ],
+    "way": "실습",
+    "one_liner": "AI가 계획하고 실행하고 검증하는 루프를 짜서 개발 업무를 맡기는 법을 익혀요",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791175790452",
@@ -489,7 +545,18 @@
     "판단 이유가 책소개를 베낌"
    ],
    "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/148567951"
+   "link": "https://www.yes24.com/product/goods/148567951",
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "챗GPT",
+     "프롬프트 엔지니어링"
+    ],
+    "way": "실습",
+    "one_liner": "프롬프트를 직접 설계하고 마케팅·문서 같은 업무에 바로 적용해 볼 수 있어요.",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791194383116",
@@ -528,7 +595,18 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/140835200",
-   "auto": "ai-agree"
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "챗GPT",
+     "이미지·영상 생성"
+    ],
+    "way": "실습",
+    "one_liner": "검색, 이미지·영상 만들기, 일정 관리까지 챗GPT 쓰는 법을 예제로 따라 해 봐요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9791163038979",
@@ -840,8 +918,18 @@
    "issues": [
     "근거 약함(겹치는 단어 1개)"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/4594530"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/4594530",
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념",
+    "one_liner": "나이 들며 뇌가 어떻게 달라지고 어떤 점이 오히려 강해지는지 알려 줘요",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788925576688",
@@ -946,9 +1034,7 @@
    "entry": "target",
    "topic": "시간·생산성",
    "field": "습관·자기계발",
-   "keywords": [
-    "일하는 법"
-   ],
+   "keywords": [],
    "keywords_regex": [],
    "way": "실습",
    "keyword_candidate": "공부법",
@@ -969,8 +1055,18 @@
     "confidence"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/140374033"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/140374033",
+   "draft": {
+    "topic": "시간·생산성",
+    "keywords": [
+     "일하는 법"
+    ],
+    "way": "실습",
+    "one_liner": "메타인지로 약점을 짚고 회독과 시간 기록으로 공부 효율을 높이는 방법을 익혀요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788965705048",
@@ -1005,8 +1101,18 @@
    "issues": [
     "제목 반복"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/47245387"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/47245387",
+   "draft": {
+    "topic": "시간·생산성",
+    "keywords": [
+     "일하는 법"
+    ],
+    "way": "개념",
+    "one_liner": "야근 대신 업무의 질과 빈 시간으로 조직의 생산성을 높이는 길을 짚어 줘요",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791190955423",

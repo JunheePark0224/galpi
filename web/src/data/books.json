@@ -6508,6 +6508,24 @@
   ]
  },
  {
+  "isbn": "9791169087599",
+  "title": "우울 덮기",
+  "author": "마거릿 로빈슨 러더퍼드",
+  "pages": 368,
+  "one_liner": "완벽주의 뒤에 숨은 우울을 알아보고 억눌러온 감정을 다루는 단계별 방법을 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "우울",
+   "감정 다루기"
+  ]
+ },
+ {
   "isbn": "9791155501658",
   "title": "말하기 능력을 키우는 발표의 기술",
   "author": "김경훤 외",
@@ -6557,6 +6575,24 @@
   "axes": null,
   "keywords": [
    "직장 생활"
+  ]
+ },
+ {
+  "isbn": "9791159715952",
+  "title": "나를 위한 최소한의 통계 바로 읽기",
+  "author": "앨버트 러더퍼드",
+  "pages": 168,
+  "one_liner": "숫자로 된 주장을 그대로 믿지 않고 통계를 따져 읽는 법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "통계",
+  "field": "데이터·통계",
+  "topic": "통계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "기초 통계",
+   "가설검정"
   ]
  },
  {
@@ -6665,6 +6701,23 @@
   ]
  },
  {
+  "isbn": "9788956055008",
+  "title": "가장 뛰어난 중년의 뇌",
+  "author": "바버라 스트로치",
+  "pages": 332,
+  "one_liner": "나이 들며 뇌가 어떻게 달라지고 어떤 점이 오히려 강해지는지 알려 줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "뇌과학"
+  ]
+ },
+ {
   "isbn": "9791194347255",
   "title": "시간 디톡스",
   "author": "요시타케 아사코",
@@ -6676,6 +6729,38 @@
   "field": "습관·자기계발",
   "topic": "시간·생산성",
   "way": "실습",
+  "axes": null,
+  "keywords": [
+   "일하는 법"
+  ]
+ },
+ {
+  "isbn": "9791167600936",
+  "title": "미친 효율로 합격하는 최고의 공부 전략법",
+  "author": "손민규",
+  "pages": 208,
+  "one_liner": "메타인지로 약점을 짚고 회독과 시간 기록으로 공부 효율을 높이는 방법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "시간·생산성",
+  "field": "습관·자기계발",
+  "topic": "시간·생산성",
+  "way": "실습",
+  "axes": null,
+  "keywords": []
+ },
+ {
+  "isbn": "9788965705048",
+  "title": "생산성",
+  "author": "이가 야스요",
+  "pages": 259,
+  "one_liner": "야근 대신 업무의 질과 빈 시간으로 조직의 생산성을 높이는 길을 짚어 줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "시간·생산성",
+  "field": "습관·자기계발",
+  "topic": "시간·생산성",
+  "way": "개념",
   "axes": null,
   "keywords": [
    "일하는 법"
