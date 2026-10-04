@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { parseQuestionMap } from "./parse";
 import { validateMap, type Vocabulary } from "./validate";
 
-const MINI = readFileSync(path.join(__dirname, "__fixtures__/mini-map.md"), "utf8");
+const MINI = readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/mini-map.md"), "utf8");
 const VOCAB: Vocabulary = {
   topics: { "데이터 분석": ["SQL", "엑셀"], "마음 돌보기": ["우울"] },
   genres: ["한국 소설", "외국 소설", "에세이", "SF·판타지", "데이터 분석", "마음 돌보기"],
