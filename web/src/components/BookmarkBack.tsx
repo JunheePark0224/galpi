@@ -1,7 +1,10 @@
-import type { CSSProperties } from "react";
+"use client";
+import { useRef, type CSSProperties } from "react";
 import { toneOf } from "@/lib/books/taxonomy";
+import { bookTitle } from "@/lib/books/title";
 import type { BookCard } from "@/lib/books/types";
 import type { Reason } from "@/lib/recommend";
+import { useFitTitle } from "./fitTitle";
 import frame from "./BookmarkFrame.module.css";
 import styles from "./BookmarkBack.module.css";
 
@@ -14,6 +17,8 @@ interface Props { card: BookCard; reason: Reason; met: string; moving?: boolean 
  */
 export function BookmarkBack({ card, reason, met, moving = false }: Props) {
   const tone = toneOf(card);
+  const titleRef = useRef<HTMLParagraphElement>(null);
+  useFitTitle(titleRef, card.title);
   return (
     <article
       className={`${frame.frame} ${styles.back}`}
@@ -24,7 +29,7 @@ export function BookmarkBack({ card, reason, met, moving = false }: Props) {
       <span className={frame.string} aria-hidden="true" />
       <div className={`${frame.film} ${styles.card}`}>
         <span className={frame.hole} aria-hidden="true" />
-        <p className={styles.title}>{card.title}</p>
+        <p ref={titleRef} className={styles.title}>{bookTitle(card.title)}</p>
         {reason.items.length > 0 && (
           <>
             <span className={styles.rule} aria-hidden="true" />
