@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { Bookmark } from "@/components/Bookmark";
 import { Button } from "@/components/Button";
 import { loadAccount, openLoginSheet, signedOut, useAccount } from "@/lib/account/store";
 import { logout } from "@/lib/auth/browser";
@@ -9,20 +10,22 @@ import { SHELF_NAME_MAX } from "@/lib/library/validate";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { setUserId } from "@/lib/track/common";
 import { libraryGuide } from "@/lib/flow/firstGuide";
-import { BookmarkSheet } from "./BookmarkSheet";
+import { BookmarkSheet, metLabel } from "./BookmarkSheet";
 import { LibraryGuide } from "./LibraryGuide";
 import styles from "./Library.module.css";
 import { Shelf } from "./Shelf";
+import { samePlace, useDrag } from "./useDrag";
 import { useLibrary } from "./useLibrary";
 
 const NOTE_MS = 4000;
-interface Held { isbn: string; from: string }
+/** New copy (DESIGN C-17, 10-04): the toast while a bookmark is dragged. */
+export const DRAGGING = "놓을 자리로 끌어서 놓으세요";
 interface Open { bookmark: LibraryBookmark; shelfId: string }
 
 /**
- * S-09 내 책갈피 (PRD F-13, DESIGN S-09·C-17, 시안 `2026-10-01-p5-move-bookmark.png`): "N개 · 동물 M종", the rods,
- * [＋ 막대 추가], and a small [로그아웃] at the very bottom. Moving: hold a bookmark (it lifts), then tap the rod to put it
- * on — or turn it over and use [다른 막대로 옮기기]. Logged out, it offers the login instead.
+ * S-09 내 책갈피 (PRD F-13, DESIGN S-09·C-17, 시안 `2026-10-04-v2/library-front-drag.png`): "N개 · 동물 M종", the rods,
+ * [＋ 막대 추가], and a small [로그아웃] at the very bottom. Moving: hold a bookmark and drag it to a place on any rod —
+ * or open it and use [다른 막대로 옮기기] (no dragging needed). Logged out, it offers the login instead.
  */
 export function Library() {
   const account = useAccount();
@@ -44,7 +47,6 @@ export function Library() {
 
 function Rods() {
   const lib = useLibrary();
-  const [held, setHeld] = useState<Held | null>(null);
   const [open, setOpen] = useState<Open | null>(null);
   const [adding, setAdding] = useState(false);
   const [newName, setNewName] = useState("");
@@ -52,6 +54,11 @@ function Rods() {
   const [note, setNote] = useState<{ text: string; name?: string } | null>(null);
   // C-22: the first visit to 내 책갈피 shows a small example shelf once (per browser)
   const [guide, setGuide] = useState(() => !libraryGuide.hasSeen());
+  const { drag, start, ghostRef } = useDrag((isbn, to) => {
+    void lib.move(isbn, to.shelfId, "drag", to.index).then((ok) => setNote(ok
+      ? { text: "으로 옮겼어요", name: lib.view?.shelves.find((s) => s.id === to.shelfId)?.name ?? "" }
+      : { text: "옮기지 못했어요. 다시 해 주세요." }));
+  });
   const closeGuide = () => {
     libraryGuide.markSeen();
     setGuide(false);
@@ -85,14 +92,6 @@ function Rods() {
   const shelves = view.shelves;
   const nameOf = (id: string) => shelves.find((s) => s.id === id)?.name ?? "";
 
-  const drop = async (to: string) => {
-    if (!held) return;
-    const moving = held;
-    setHeld(null);
-    const ok = await lib.move(moving.isbn, to, "hold");
-    setNote(ok ? { text: "으로 옮겼어요", name: nameOf(to) } : { text: "옮기지 못했어요. 다시 해 주세요." });
-  };
-
   const add = async () => {
     if (addBusy) return;
     setAddBusy(true);
@@ -120,7 +119,7 @@ function Rods() {
   };
 
   return (
-    <div className={styles.page}>
+    <div className={styles.page} data-dragging={drag ? "" : undefined}>
       {guide && !open && <LibraryGuide onClose={closeGuide} />}
       <h1 className={styles.title}>내 책갈피</h1>
       <p className={styles.stat}>{`${view.count}개 · 동물 ${view.animals}종`}</p>
@@ -130,17 +129,10 @@ function Rods() {
         <Shelf
           key={shelf.id}
           shelf={shelf}
-          heldIsbn={held?.isbn ?? null}
-          heldFrom={held?.from ?? null}
-          onOpen={(bookmark) => {
-            if (held?.isbn === bookmark.isbn) setHeld(null);          // tapping the lifted one puts it back
-            else if (!held) setOpen({ bookmark, shelfId: shelf.id });
-          }}
-          onHold={(bookmark) => {
-            if (shelves.length < 2) setNote({ text: "막대를 하나 더 만들면 책갈피를 옮길 수 있어요." });   // nowhere to put it yet
-            else setHeld({ isbn: bookmark.isbn, from: shelf.id });
-          }}
-          onDrop={() => void drop(shelf.id)}
+          dragged={drag?.bookmark.isbn ?? null}
+          gap={drag?.over?.shelfId === shelf.id && !samePlace(drag.over, drag.from) ? drag.over.index : null}
+          onOpen={(bookmark) => setOpen({ bookmark, shelfId: shelf.id })}
+          onHold={(bookmark, index, at, box) => start(bookmark, { shelfId: shelf.id, index }, at, box)}
           onRename={(name) => lib.renameShelf(shelf.id, name)}
           onRemove={() => void lib.removeShelf(shelf.id)}
         />
@@ -161,13 +153,17 @@ function Rods() {
 
       <button type="button" className={styles.logout} onClick={() => void leave()}>로그아웃</button>
 
-      {held && (
-        <div className={styles.toast} role="status">
-          책갈피를 들었어요 · 놓을 막대를 누르세요 ·{" "}
-          <button type="button" className={styles.toastButton} onClick={() => setHeld(null)}>취소</button>
-        </div>
+      {drag && (
+        <>
+          <div ref={ghostRef} className={styles.ghost} aria-hidden="true">
+            <span className={styles.mini}>
+              <Bookmark card={drag.bookmark.card} art={drag.bookmark.art} met={metLabel(drag.bookmark.metOn)} moving />
+            </span>
+          </div>
+          <p className={styles.toast} role="status">{DRAGGING}</p>
+        </>
       )}
-      {!held && note && (
+      {!drag && note && (
         <p className={`${styles.toast} ${note.name ? styles.toastOk : ""}`} role="status">
           {note.name ? <><span data-amp-mask="">{`'${note.name}'`}</span>{note.text}</> : note.text}
         </p>

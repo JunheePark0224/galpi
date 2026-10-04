@@ -30,6 +30,23 @@ describe("moveLocally — the rods as they will be, before the server answers", 
   });
 });
 
+describe("moveLocally with a place (drag, 10-04)", () => {
+  const order = (v: LibraryView) => v.shelves.map((s) => s.bookmarks.map((b) => b.isbn));
+
+  it("puts it at that place among the rod's other bookmarks — on another rod or its own", () => {
+    expect(order(moveLocally(VIEW, "1", "b", 1))).toEqual([["2"], ["3", "1"]]);
+    expect(order(moveLocally(VIEW, "1", "b", 0))).toEqual([["2"], ["1", "3"]]);
+    expect(order(moveLocally(VIEW, "1", "a", 1))).toEqual([["2", "1"], ["3"]]);
+    expect(order(moveLocally(VIEW, "2", "a", -3))).toEqual([["2", "1"], ["3"]]);   // clamped
+    expect(order(moveLocally(VIEW, "3", "a", 9))).toEqual([["1", "2", "3"], []]);
+  });
+
+  it("changes nothing when the bookmark is dropped on its own place", () => {
+    expect(moveLocally(VIEW, "1", "a", 0)).toBe(VIEW);
+    expect(moveLocally(VIEW, "2", "a", 1)).toBe(VIEW);
+  });
+});
+
 describe("removeLocally", () => {
   it("takes the bookmark out and counts again", () => {
     const next = removeLocally(VIEW, "2");

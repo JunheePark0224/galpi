@@ -8,6 +8,8 @@ const DEMO: BookCard[] = [
   { id: "demo-leaf", entry: "leaf", title: "천천히 걷는 아침", author: "천아침", genre: "에세이", field: null, oneLiner: "오늘 아침은 몇 걸음이었을까요?", oneLinerStyle: "question" },
   { id: "demo-target", entry: "target", title: "처음 만나는 쿼리", author: "김쿼리", genre: "데이터 분석", field: "데이터·통계", oneLiner: "표에서 원하는 줄만 꺼내는 쿼리를 익혀요", oneLinerStyle: "summary" },
 ];
+/** 내 책갈피's front with the day it was kept (C-13, 10-04). */
+const DEMO_MET: BookCard = { id: "demo-met", entry: "leaf", title: "오래 걷는 저녁", author: "천저녁", genre: "에세이", field: null, oneLiner: "오늘 저녁은 어디까지 걸었나요?", oneLinerStyle: "question" };
 
 const COLORS = ["paper", "paper-deep", "paper-line", "cloth", "ink", "ink-soft", "ink-muted"];
 const GENRES = [
@@ -40,8 +42,9 @@ export default function DesignPage() {
         <Button>궁금해요</Button>
       </div>
       <h2>책갈피</h2>
-      <div style={{ display: "flex", gap: 16, paddingTop: 8, background: "var(--paper-deep)" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 16, paddingTop: 8, background: "var(--paper-deep)" }}>
         {DEMO.map((card, i) => <Bookmark key={card.id} card={card} art={artFromSeed(i + 1)} />)}
+        <Bookmark card={DEMO_MET} art={artFromSeed(3)} met="2026. 10. 4." />
       </div>
     </>
   );
