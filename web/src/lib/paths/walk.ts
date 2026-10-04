@@ -26,30 +26,35 @@ const withMood = (m: Mood, e: Effects): Mood => ({
 });
 const changesScope = (e: Effects) => Boolean(e.entry || e.topics || e.keywords || e.genres);
 
-export function walkPath(map: QuestionMap, answers: Answer[]): Walked {
-  let w: Walked = { next: map.start, scope: ALL_SCOPE, parentScope: ALL_SCOPE, mood: NEUTRAL_MOOD, mode: "normal", crumbs: [], depth: 0, unsure: 0 };
-  for (const ans of answers) {
-    if (w.next === null) throw new PathError(`answer for "${ans.node}" after the end of the path`);
-    if (ans.node !== w.next) throw new PathError(`expected an answer for "${w.next}", got "${ans.node}"`);
-    const node = map.nodes[ans.node];
-    if (ans.choice === "unsure") {
-      w = { ...w, next: node.unsureNext === "draw" ? null : node.unsureNext, depth: w.depth + 1, unsure: w.unsure + 1 };
-      continue;
-    }
-    const c = ans.choice === "A" ? node.a : node.b;
-    const narrows = changesScope(c.effects);
-    w = {
-      next: c.next === "draw" ? null : c.next,
-      scope: withScope(w.scope, c.effects),
-      parentScope: narrows ? w.scope : w.parentScope,
-      mood: withMood(w.mood, c.effects),
-      mode: c.effects.mode ?? w.mode,
-      crumbs: narrows ? [...w.crumbs, c.label] : w.crumbs,
-      depth: w.depth + 1,
-      unsure: w.unsure,
-    };
+/** Where every path starts: the first question, the whole library, no mood. */
+export function startWalk(map: QuestionMap): Walked {
+  return { next: map.start, scope: ALL_SCOPE, parentScope: ALL_SCOPE, mood: NEUTRAL_MOOD, mode: "normal", crumbs: [], depth: 0, unsure: 0 };
+}
+
+/** One answer further along the path. */
+export function takeAnswer(map: QuestionMap, w: Walked, ans: Answer): Walked {
+  if (w.next === null) throw new PathError(`answer for "${ans.node}" after the end of the path`);
+  if (ans.node !== w.next) throw new PathError(`expected an answer for "${w.next}", got "${ans.node}"`);
+  const node = map.nodes[ans.node];
+  if (ans.choice === "unsure") {
+    return { ...w, next: node.unsureNext === "draw" ? null : node.unsureNext, depth: w.depth + 1, unsure: w.unsure + 1 };
   }
-  return w;
+  const c = ans.choice === "A" ? node.a : node.b;
+  const narrows = changesScope(c.effects);
+  return {
+    next: c.next === "draw" ? null : c.next,
+    scope: withScope(w.scope, c.effects),
+    parentScope: narrows ? w.scope : w.parentScope,
+    mood: withMood(w.mood, c.effects),
+    mode: c.effects.mode ?? w.mode,
+    crumbs: narrows ? [...w.crumbs, c.label] : w.crumbs,
+    depth: w.depth + 1,
+    unsure: w.unsure,
+  };
+}
+
+export function walkPath(map: QuestionMap, answers: Answer[]): Walked {
+  return answers.reduce((w, ans) => takeAnswer(map, w, ans), startWalk(map));
 }
 
 /** A rule matches when every list it names covers the scope's list (and the entry is the same, if named). */

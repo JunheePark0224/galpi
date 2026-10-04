@@ -4,8 +4,10 @@ import { describe, expect, it } from "vitest";
 import type { Book, TargetBook } from "@/lib/recommend";
 import { coverage, pathEnds } from "./coverage";
 import { parseQuestionMap } from "./parse";
+import { PathError } from "./walk";
 
-const MAP = parseQuestionMap(readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/mini-map.md"), "utf8"));
+const MINI = readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/mini-map.md"), "utf8");
+const MAP = parseQuestionMap(MINI);
 const t = (id: string, k: string): TargetBook => ({ id, entry: "target", field: "f", topic: "데이터 분석", genre: "데이터 분석", pages: 200, way: "실습", keywords: [k] });
 
 describe("pathEnds", () => {
@@ -20,6 +22,19 @@ describe("pathEnds", () => {
     const sql = ends.find((e) => e.mode === "normal" && e.scopeKey.endsWith("keywords=SQL"))!;
     expect(sql.crumbs).toEqual(["뭔가 배우기", "데이터를 다루기", "DB에서 꺼내기"]);
     expect(sql.example.at(-1)).toEqual({ node: "mood-len", choice: "unsure" });
+  });
+
+  it("follows a mood question whose choices lead to different questions", () => {
+    const map = parseQuestionMap(MINI.replace("A: 따뜻한 이야기 | temp=+1 | next=mood-len", "A: 따뜻한 이야기 | temp=+1 | next=learn-data"));
+    const end = pathEnds(map).find((e) => e.mode === "normal" && e.scopeKey === "entry=leaf;keywords=SQL")!;
+    expect(end.example.map((x) => x.node)).toEqual(["start", "branch", "story-world", "mood-temp", "learn-data", "mood-way", "mood-len"]);
+    expect(end.example[3]).toEqual({ node: "mood-temp", choice: "A" });
+  });
+
+  it("stops on a loop instead of walking forever", () => {
+    const map = parseQuestionMap(MINI.replace("A: 가볍게 한 권 | len=+1 | next=draw", "A: 가볍게 한 권 | len=+1 | next=start"));
+    expect(() => pathEnds(map)).toThrow(PathError);
+    expect(() => pathEnds(map)).toThrow(/loop: start → .* → mood-len → start/);
   });
 
   it("lists the challenge ends: far scopes, and the whole library stays whole", () => {
