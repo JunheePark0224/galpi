@@ -8,7 +8,7 @@ import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
 
 export type LibraryStatus = "loading" | "ready" | "error" | "login";
-/** E-30 method: drag = 꾹 눌러 끌어서 놓기 (10-04), menu = the sheet's [다른 막대로 옮기기]. */
+/** E-30 method: drag = [책갈피 옮기기] 모드에서 끌어서 놓기 (10-04), menu = the sheet's [다른 막대로 옮기기]. */
 export type MoveMethod = "drag" | "menu";
 
 /**
