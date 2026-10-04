@@ -88,7 +88,8 @@
       "한국 소설",
       "외국 소설",
       "SF·판타지",
-      "추리·스릴러"
+      "추리·스릴러",
+      "호러·괴담"
      ]
     },
     "next": "story-fiction"
@@ -101,7 +102,9 @@
       "시",
       "인문",
       "과학 교양",
-      "예술·여행"
+      "예술·여행",
+      "역사",
+      "사회·시사"
      ]
     },
     "next": "story-nonfiction"
@@ -127,7 +130,8 @@
     "effects": {
      "genres": [
       "SF·판타지",
-      "추리·스릴러"
+      "추리·스릴러",
+      "호러·괴담"
      ]
     },
     "next": "story-genre"
@@ -172,10 +176,35 @@
     "next": "story-temp"
    },
    "b": {
-    "label": "범인을 쫓는 긴장감",
+    "label": "숨죽이는 긴장감",
+    "effects": {
+     "genres": [
+      "추리·스릴러",
+      "호러·괴담"
+     ]
+    },
+    "next": "story-thrill"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-thrill": {
+   "id": "story-thrill",
+   "kind": "narrow",
+   "question": "무엇에 더 숨죽여요?",
+   "a": {
+    "label": "범인을 쫓는 추리",
     "effects": {
      "genres": [
       "추리·스릴러"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "b": {
+    "label": "등골 서늘한 괴담",
+    "effects": {
+     "genres": [
+      "호러·괴담"
      ]
     },
     "next": "story-temp"
@@ -202,7 +231,9 @@
     "effects": {
      "genres": [
       "인문",
-      "과학 교양"
+      "과학 교양",
+      "역사",
+      "사회·시사"
      ]
     },
     "next": "story-know"
@@ -272,10 +303,61 @@
     "next": "story-temp"
    },
    "b": {
-    "label": "사람과 생각의 역사",
+    "label": "사람과 사회 이야기",
+    "effects": {
+     "genres": [
+      "인문",
+      "역사",
+      "사회·시사"
+     ]
+    },
+    "next": "story-people"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-people": {
+   "id": "story-people",
+   "kind": "narrow",
+   "question": "어느 쪽 이야기가 더 궁금해요?",
+   "a": {
+    "label": "생각하는 법, 인문",
     "effects": {
      "genres": [
       "인문"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "b": {
+    "label": "지난 일과 지금 일",
+    "effects": {
+     "genres": [
+      "역사",
+      "사회·시사"
+     ]
+    },
+    "next": "story-time"
+   },
+   "unsureNext": "story-temp"
+  },
+  "story-time": {
+   "id": "story-time",
+   "kind": "narrow",
+   "question": "어느 시간이 더 궁금해요?",
+   "a": {
+    "label": "지나간 시간, 역사",
+    "effects": {
+     "genres": [
+      "역사"
+     ]
+    },
+    "next": "story-temp"
+   },
+   "b": {
+    "label": "오늘의 사회",
+    "effects": {
+     "genres": [
+      "사회·시사"
      ]
     },
     "next": "story-temp"
@@ -427,7 +509,8 @@
       "AI 활용",
       "업무 자동화",
       "취업·커리어",
-      "글쓰기"
+      "글쓰기",
+      "시간·생산성"
      ]
     },
     "next": "learn-work"
@@ -437,7 +520,6 @@
     "effects": {
      "topics": [
       "습관·집중",
-      "시간·생산성",
       "돈 관리·투자",
       "경제 상식",
       "마음 돌보기",
@@ -465,14 +547,15 @@
     "next": "learn-tools"
    },
    "b": {
-    "label": "커리어와 글 다듬기",
+    "label": "일하는 방식 다듬기",
     "effects": {
      "topics": [
       "취업·커리어",
-      "글쓰기"
+      "글쓰기",
+      "시간·생산성"
      ]
     },
-    "next": "learn-career-field"
+    "next": "learn-craft"
    },
    "unsureNext": "learn-way"
   },
@@ -502,6 +585,55 @@
    },
    "unsureNext": "learn-way"
   },
+  "learn-craft": {
+   "id": "learn-craft",
+   "kind": "narrow",
+   "question": "어느 쪽을 다듬고 싶어요?",
+   "a": {
+    "label": "시간과 일하는 법",
+    "effects": {
+     "topics": [
+      "시간·생산성"
+     ]
+    },
+    "next": "learn-time"
+   },
+   "b": {
+    "label": "커리어와 글",
+    "effects": {
+     "topics": [
+      "취업·커리어",
+      "글쓰기"
+     ]
+    },
+    "next": "learn-career-field"
+   },
+   "unsureNext": "learn-way"
+  },
+  "learn-time": {
+   "id": "learn-time",
+   "kind": "narrow",
+   "question": "시간과 일, 어디가 궁금해요?",
+   "a": {
+    "label": "일 잘하는 법 콕",
+    "effects": {
+     "keywords": [
+      "일하는 법"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "b": {
+    "label": "시간·기록 두루",
+    "effects": {
+     "topics": [
+      "시간·생산성"
+     ]
+    },
+    "next": "learn-way"
+   },
+   "unsureNext": "learn-way"
+  },
   "learn-life": {
    "id": "learn-life",
    "kind": "narrow",
@@ -521,7 +653,6 @@
     "effects": {
      "topics": [
       "습관·집중",
-      "시간·생산성",
       "돈 관리·투자",
       "경제 상식"
      ]
@@ -535,14 +666,13 @@
    "kind": "narrow",
    "question": "어느 쪽을 바꾸고 싶어요?",
    "a": {
-    "label": "하루를 바꾸기",
+    "label": "습관과 집중",
     "effects": {
      "topics": [
-      "습관·집중",
-      "시간·생산성"
+      "습관·집중"
      ]
     },
-    "next": "learn-habit-field"
+    "next": "learn-habit"
    },
    "b": {
     "label": "돈과 경제",
@@ -1213,30 +1343,6 @@
    },
    "unsureNext": "learn-way"
   },
-  "learn-habit-field": {
-   "id": "learn-habit-field",
-   "kind": "narrow",
-   "question": "하루의 무엇을 바꿀까요?",
-   "a": {
-    "label": "습관과 집중",
-    "effects": {
-     "topics": [
-      "습관·집중"
-     ]
-    },
-    "next": "learn-habit"
-   },
-   "b": {
-    "label": "시간과 일",
-    "effects": {
-     "topics": [
-      "시간·생산성"
-     ]
-    },
-    "next": "learn-time"
-   },
-   "unsureNext": "learn-way"
-  },
   "learn-habit": {
    "id": "learn-habit",
    "kind": "narrow",
@@ -1280,30 +1386,6 @@
     "effects": {
      "keywords": [
       "집중력"
-     ]
-    },
-    "next": "learn-way"
-   },
-   "unsureNext": "learn-way"
-  },
-  "learn-time": {
-   "id": "learn-time",
-   "kind": "narrow",
-   "question": "시간과 일, 어디가 궁금해요?",
-   "a": {
-    "label": "일 잘하는 법 콕",
-    "effects": {
-     "keywords": [
-      "일하는 법"
-     ]
-    },
-    "next": "learn-way"
-   },
-   "b": {
-    "label": "시간·기록 두루",
-    "effects": {
-     "topics": [
-      "시간·생산성"
      ]
     },
     "next": "learn-way"
@@ -1930,50 +2012,14 @@
    "from": {
     "entry": "leaf",
     "genres": [
-     "SF·판타지",
-     "추리·스릴러"
+     "호러·괴담"
     ]
    },
    "to": {
     "entry": "leaf",
     "genres": [
      "에세이",
-     "시",
      "예술·여행"
-    ]
-   }
-  },
-  {
-   "from": {
-    "entry": "leaf",
-    "genres": [
-     "한국 소설",
-     "외국 소설"
-    ]
-   },
-   "to": {
-    "entry": "leaf",
-    "genres": [
-     "과학 교양",
-     "인문"
-    ]
-   }
-  },
-  {
-   "from": {
-    "entry": "leaf",
-    "genres": [
-     "한국 소설",
-     "외국 소설",
-     "SF·판타지",
-     "추리·스릴러"
-    ]
-   },
-   "to": {
-    "entry": "leaf",
-    "genres": [
-     "인문",
-     "과학 교양"
     ]
    }
   },
@@ -2024,46 +2070,14 @@
    "from": {
     "entry": "leaf",
     "genres": [
-     "에세이",
-     "예술·여행"
-    ]
-   },
-   "to": {
-    "entry": "leaf",
-    "genres": [
-     "SF·판타지",
-     "추리·스릴러"
-    ]
-   }
-  },
-  {
-   "from": {
-    "entry": "leaf",
-    "genres": [
-     "에세이",
-     "시",
-     "예술·여행"
-    ]
-   },
-   "to": {
-    "entry": "leaf",
-    "genres": [
-     "SF·판타지",
-     "추리·스릴러"
-    ]
-   }
-  },
-  {
-   "from": {
-    "entry": "leaf",
-    "genres": [
      "과학 교양"
     ]
    },
    "to": {
-    "entry": "target",
-    "topics": [
-     "마음 돌보기"
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "에세이"
     ]
    }
   },
@@ -2075,10 +2089,110 @@
     ]
    },
    "to": {
-    "entry": "target",
-    "topics": [
-     "데이터 분석",
-     "통계"
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지",
+     "추리·스릴러"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "한국 소설",
+     "외국 소설"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "과학 교양",
+     "인문"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "추리·스릴러",
+     "호러·괴담"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "에세이",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "역사",
+     "사회·시사"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지",
+     "호러·괴담"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "에세이",
+     "예술·여행"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지",
+     "추리·스릴러"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지",
+     "추리·스릴러",
+     "호러·괴담"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "에세이",
+     "시",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "에세이",
+     "시",
+     "예술·여행"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지",
+     "추리·스릴러"
     ]
    }
   },
@@ -2087,7 +2201,26 @@
     "entry": "leaf",
     "genres": [
      "인문",
-     "과학 교양"
+     "역사",
+     "사회·시사"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "SF·판타지",
+     "호러·괴담"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
+     "인문",
+     "과학 교양",
+     "역사",
+     "사회·시사"
     ]
    },
    "to": {
@@ -2103,11 +2236,34 @@
    "from": {
     "entry": "leaf",
     "genres": [
+     "한국 소설",
+     "외국 소설",
+     "SF·판타지",
+     "추리·스릴러",
+     "호러·괴담"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "인문",
+     "과학 교양",
+     "역사",
+     "사회·시사"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf",
+    "genres": [
      "에세이",
      "시",
      "인문",
      "과학 교양",
-     "예술·여행"
+     "예술·여행",
+     "역사",
+     "사회·시사"
     ]
    },
    "to": {
@@ -2116,7 +2272,25 @@
      "한국 소설",
      "외국 소설",
      "SF·판타지",
-     "추리·스릴러"
+     "추리·스릴러",
+     "호러·괴담"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "leaf"
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "인문",
+     "과학 교양",
+     "예술·여행",
+     "역사",
+     "사회·시사",
+     "호러·괴담"
     ]
    }
   },
@@ -2144,22 +2318,6 @@
    "to": {
     "entry": "leaf",
     "genres": [
-     "SF·판타지"
-    ]
-   }
-  },
-  {
-   "from": {
-    "entry": "target",
-    "topics": [
-     "마음 돌보기",
-     "대화·관계"
-    ]
-   },
-   "to": {
-    "entry": "leaf",
-    "genres": [
-     "과학 교양",
      "SF·판타지"
     ]
    }
@@ -2190,6 +2348,52 @@
     "entry": "leaf",
     "genres": [
      "과학 교양"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "시간·생산성"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "습관·집중"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "마음 돌보기",
+     "대화·관계"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "과학 교양",
+     "SF·판타지"
     ]
    }
   },
@@ -2247,6 +2451,58 @@
    "from": {
     "entry": "target",
     "topics": [
+     "돈 관리·투자",
+     "경제 상식"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "에세이"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "취업·커리어",
+     "글쓰기",
+     "시간·생산성"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "예술·여행",
+     "시",
+     "과학 교양"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "습관·집중",
+     "돈 관리·투자",
+     "경제 상식"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "시",
+     "에세이",
+     "예술·여행"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
      "데이터 분석",
      "통계",
      "AI 활용",
@@ -2266,80 +2522,7 @@
    "from": {
     "entry": "target",
     "topics": [
-     "데이터 분석",
-     "통계",
-     "AI 활용",
-     "업무 자동화",
-     "취업·커리어",
-     "글쓰기"
-    ]
-   },
-   "to": {
-    "entry": "leaf",
-    "genres": [
-     "인문",
-     "시",
-     "예술·여행"
-    ]
-   }
-  },
-  {
-   "from": {
-    "entry": "target",
-    "topics": [
      "습관·집중",
-     "시간·생산성"
-    ]
-   },
-   "to": {
-    "entry": "leaf",
-    "genres": [
-     "시",
-     "예술·여행"
-    ]
-   }
-  },
-  {
-   "from": {
-    "entry": "target",
-    "topics": [
-     "돈 관리·투자",
-     "경제 상식"
-    ]
-   },
-   "to": {
-    "entry": "leaf",
-    "genres": [
-     "시",
-     "에세이"
-    ]
-   }
-  },
-  {
-   "from": {
-    "entry": "target",
-    "topics": [
-     "습관·집중",
-     "시간·생산성",
-     "돈 관리·투자",
-     "경제 상식"
-    ]
-   },
-   "to": {
-    "entry": "leaf",
-    "genres": [
-     "시",
-     "에세이",
-     "예술·여행"
-    ]
-   }
-  },
-  {
-   "from": {
-    "entry": "target",
-    "topics": [
-     "습관·집중",
-     "시간·생산성",
      "돈 관리·투자",
      "경제 상식",
      "마음 돌보기",
@@ -2352,6 +2535,28 @@
      "과학 교양",
      "SF·판타지",
      "추리·스릴러"
+    ]
+   }
+  },
+  {
+   "from": {
+    "entry": "target",
+    "topics": [
+     "데이터 분석",
+     "통계",
+     "AI 활용",
+     "업무 자동화",
+     "취업·커리어",
+     "글쓰기",
+     "시간·생산성"
+    ]
+   },
+   "to": {
+    "entry": "leaf",
+    "genres": [
+     "인문",
+     "시",
+     "예술·여행"
     ]
    }
   }

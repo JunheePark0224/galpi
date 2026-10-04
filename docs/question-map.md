@@ -18,7 +18,7 @@
 - `far` 블록은 도전 길에서 쓰는 규칙으로, `from:`(지금 범위)과 `to:`(멀리 건너갈 범위)를 한 줄씩 쓴다.
 - `far` 규칙은 위에서부터 맞춰 보고 **첫 규칙이 이긴다 — 좁은 규칙을 위에** 쓴다. 위 규칙이 아래 규칙을 다 덮으면(아래 규칙이 영영 쓰이지 않으면) 검사가 실패한다.
 - 맞는 `far` 규칙이 없으면 반대 갈래 전체(이야기 ↔ 배우기)로 가고, 갈래를 고르지 않았으면(전체) 뒤집을 것이 없어 전체 그대로다.
-- 검사(`validateMap`)가 모든 `next`, 장르·주제·키워드 이름이 우리 데이터에 있는지 확인하고, 하나라도 틀리면 빌드가 실패한다.
+- 검사(`validateMap`)가 모든 `next`, 장르·주제·키워드 이름이 우리 데이터에 있는지(장르는 `MAP_GENRES` = 🍃 12개 + 🎯 주제 — 아직 책이 없는 장르도 된다) 확인하고, 하나라도 틀리면 빌드가 실패한다.
 
 ## 지도 v1 초안 (10-04, 사용자 검토 전)
 
@@ -29,9 +29,9 @@
 - **처음**: 평소 / 도전 → 이야기 / 배우기 (못 잡겠어요 = 섞어서 분량 질문 하나) → 갈래 초입 "떠오르는 게 있어요 / 기분 따라 갈래요"
 - **이야기 좁히기**: 책장(소설 / 진짜 세상) → 묶음 → 장르. 좁히기가 끝나거나 못 잡겠어요면 기분 질문 `story-temp`(온도) → `story-pull`(끌림) → `story-len`(분량)
 - **이야기 기분 따라**: `story-gain`(얻는 것) → `story-world`(세계) → 온도 → 끌림 → 분량 (다섯 개 — `balance-game.md` 1·2·3·4·9번 문장에서)
-- **배우기 좁히기**: 일을 더 잘하기 / 나를 더 잘 돌보기 → 분야 → 주제 → 키워드(셋 이상이면 두 단계). 끝나면 `learn-way`(방식: 개념 / 써먹기 → 실습 / 사례) → `learn-len`(분량)
-- **먼 곳 표**: 장르·주제 하나짜리 규칙이 위, 묶음 규칙이 아래
-- **아직 길이 없는 장르**: 역사 · 사회·시사 · 호러·괴담은 책이 0권이라 지금 검사(`validateMap`, 장르 목록 = 책에 있는 장르)를 통과하지 못한다. 아래 맨 끝 "대기 중인 길"에 그 길을 적어 두었다 — 장르 목록을 `LEAF_GENRES`로 넓히거나 첫 책이 들어오면 그대로 바꿔 넣는다
+- **배우기 좁히기**: 일을 더 잘하기(데이터·AI·커리어·글쓰기·시간) / 나를 더 잘 돌보기(습관·돈·경제·마음·관계) → 분야 → 주제 → 키워드(셋 이상이면 두 단계). 끝나면 `learn-way`(방식: 개념 / 써먹기 → 실습 / 사례) → `learn-len`(분량)
+- **먼 곳 표**: 장르·주제 하나짜리 규칙이 위, 묶음 규칙이 아래. **이야기 길은 늘 이야기 장르 안에서 뒤집는다**(10-04 사용자 결정 — 🍃 → 🎯 규칙 없음, 장르를 고르지 않은 이야기 길도 마지막 `entry=leaf` 규칙이 받는다). 배우기 → 이야기로 건너가는 것은 그대로
+- **모든 장르가 있다고 본다**(10-04 사용자 결정): 검사의 장르 목록은 `MAP_GENRES`(🍃 12개 + 🎯 주제) — 책이 0권인 역사·사회·시사·호러·괴담도 길이 있고, coverage에 0권으로 나온다(뽑기는 윗단계로 넓혀 채움)
 
 ### 처음
 
@@ -79,8 +79,8 @@ unsure: next=story-gain
 id: story-shelf
 kind: narrow
 question: 어떤 책장 앞에 서 볼까요?
-A: 소설 속으로 | genres=한국 소설,외국 소설,SF·판타지,추리·스릴러 | next=story-fiction
-B: 진짜 세상 이야기 | genres=에세이,시,인문,과학 교양,예술·여행 | next=story-nonfiction
+A: 소설 속으로 | genres=한국 소설,외국 소설,SF·판타지,추리·스릴러,호러·괴담 | next=story-fiction
+B: 진짜 세상 이야기 | genres=에세이,시,인문,과학 교양,예술·여행,역사,사회·시사 | next=story-nonfiction
 unsure: next=story-gain
 ```
 
@@ -89,7 +89,7 @@ id: story-fiction
 kind: narrow
 question: 소설이라면 어느 쪽이에요?
 A: 현실에 발 딛은 소설 | genres=한국 소설,외국 소설 | next=story-novel
-B: 장르의 짜릿함 | genres=SF·판타지,추리·스릴러 | next=story-genre
+B: 장르의 짜릿함 | genres=SF·판타지,추리·스릴러,호러·괴담 | next=story-genre
 unsure: next=story-temp
 ```
 
@@ -107,7 +107,16 @@ id: story-genre
 kind: narrow
 question: 어떤 짜릿함이 끌려요?
 A: 여기 없는 딴 세상 | genres=SF·판타지 | next=story-temp
-B: 범인을 쫓는 긴장감 | genres=추리·스릴러 | next=story-temp
+B: 숨죽이는 긴장감 | genres=추리·스릴러,호러·괴담 | next=story-thrill
+unsure: next=story-temp
+```
+
+```node
+id: story-thrill
+kind: narrow
+question: 무엇에 더 숨죽여요?
+A: 범인을 쫓는 추리 | genres=추리·스릴러 | next=story-temp
+B: 등골 서늘한 괴담 | genres=호러·괴담 | next=story-temp
 unsure: next=story-temp
 ```
 
@@ -116,7 +125,7 @@ id: story-nonfiction
 kind: narrow
 question: 진짜 세상의 어떤 글이 좋아요?
 A: 마음을 건드리는 글 | genres=에세이,시,예술·여행 | next=story-heart
-B: 세상을 알아 가는 글 | genres=인문,과학 교양 | next=story-know
+B: 세상을 알아 가는 글 | genres=인문,과학 교양,역사,사회·시사 | next=story-know
 unsure: next=story-temp
 ```
 
@@ -143,7 +152,25 @@ id: story-know
 kind: narrow
 question: 무엇을 알아 가고 싶어요?
 A: 우주와 생명의 원리 | genres=과학 교양 | next=story-temp
-B: 사람과 생각의 역사 | genres=인문 | next=story-temp
+B: 사람과 사회 이야기 | genres=인문,역사,사회·시사 | next=story-people
+unsure: next=story-temp
+```
+
+```node
+id: story-people
+kind: narrow
+question: 어느 쪽 이야기가 더 궁금해요?
+A: 생각하는 법, 인문 | genres=인문 | next=story-temp
+B: 지난 일과 지금 일 | genres=역사,사회·시사 | next=story-time
+unsure: next=story-temp
+```
+
+```node
+id: story-time
+kind: narrow
+question: 어느 시간이 더 궁금해요?
+A: 지나간 시간, 역사 | genres=역사 | next=story-temp
+B: 오늘의 사회 | genres=사회·시사 | next=story-temp
 unsure: next=story-temp
 ```
 
@@ -211,8 +238,8 @@ unsure: next=learn-way
 id: learn-area
 kind: narrow
 question: 어떤 걸 배우고 싶어요?
-A: 일을 더 잘하기 | topics=데이터 분석,통계,AI 활용,업무 자동화,취업·커리어,글쓰기 | next=learn-work
-B: 나를 더 잘 돌보기 | topics=습관·집중,시간·생산성,돈 관리·투자,경제 상식,마음 돌보기,대화·관계 | next=learn-life
+A: 일을 더 잘하기 | topics=데이터 분석,통계,AI 활용,업무 자동화,취업·커리어,글쓰기,시간·생산성 | next=learn-work
+B: 나를 더 잘 돌보기 | topics=습관·집중,돈 관리·투자,경제 상식,마음 돌보기,대화·관계 | next=learn-life
 unsure: next=learn-way
 ```
 
@@ -221,7 +248,7 @@ id: learn-work
 kind: narrow
 question: 일에서 무엇을 키우고 싶어요?
 A: 숫자·도구 다루기 | topics=데이터 분석,통계,AI 활용,업무 자동화 | next=learn-tools
-B: 커리어와 글 다듬기 | topics=취업·커리어,글쓰기 | next=learn-career-field
+B: 일하는 방식 다듬기 | topics=취업·커리어,글쓰기,시간·생산성 | next=learn-craft
 unsure: next=learn-way
 ```
 
@@ -235,11 +262,33 @@ unsure: next=learn-way
 ```
 
 ```node
+id: learn-craft
+kind: narrow
+question: 어느 쪽을 다듬고 싶어요?
+A: 시간과 일하는 법 | topics=시간·생산성 | next=learn-time
+B: 커리어와 글 | topics=취업·커리어,글쓰기 | next=learn-career-field
+unsure: next=learn-way
+```
+
+### 배우기 — 시간·생산성
+
+```node
+id: learn-time
+kind: narrow
+question: 시간과 일, 어디가 궁금해요?
+A: 일 잘하는 법 콕 | keywords=일하는 법 | next=learn-way
+B: 시간·기록 두루 | topics=시간·생산성 | next=learn-way
+unsure: next=learn-way
+```
+
+### 배우기 — 큰 갈래
+
+```node
 id: learn-life
 kind: narrow
 question: 무엇을 돌보고 싶어요?
 A: 마음과 관계 | topics=마음 돌보기,대화·관계 | next=learn-mind-field
-B: 하루와 살림 | topics=습관·집중,시간·생산성,돈 관리·투자,경제 상식 | next=learn-daily
+B: 하루와 살림 | topics=습관·집중,돈 관리·투자,경제 상식 | next=learn-daily
 unsure: next=learn-way
 ```
 
@@ -247,7 +296,7 @@ unsure: next=learn-way
 id: learn-daily
 kind: narrow
 question: 어느 쪽을 바꾸고 싶어요?
-A: 하루를 바꾸기 | topics=습관·집중,시간·생산성 | next=learn-habit-field
+A: 습관과 집중 | topics=습관·집중 | next=learn-habit
 B: 돈과 경제 | topics=돈 관리·투자,경제 상식 | next=learn-money-field
 unsure: next=learn-way
 ```
@@ -492,16 +541,7 @@ B: 일기·편지에 | keywords=일기·편지 | next=learn-way
 unsure: next=learn-way
 ```
 
-### 배우기 — 습관·자기계발
-
-```node
-id: learn-habit-field
-kind: narrow
-question: 하루의 무엇을 바꿀까요?
-A: 습관과 집중 | topics=습관·집중 | next=learn-habit
-B: 시간과 일 | topics=시간·생산성 | next=learn-time
-unsure: next=learn-way
-```
+### 배우기 — 습관·집중
 
 ```node
 id: learn-habit
@@ -518,15 +558,6 @@ kind: narrow
 question: 무엇부터 고칠까요?
 A: 좋은 습관 들이기 | keywords=습관 | next=learn-way
 B: 한 가지에 몰입 | keywords=집중력 | next=learn-way
-unsure: next=learn-way
-```
-
-```node
-id: learn-time
-kind: narrow
-question: 시간과 일, 어디가 궁금해요?
-A: 일 잘하는 법 콕 | keywords=일하는 법 | next=learn-way
-B: 시간·기록 두루 | topics=시간·생산성 | next=learn-way
 unsure: next=learn-way
 ```
 
@@ -770,235 +801,233 @@ from: entry=leaf | genres=추리·스릴러
 to: entry=leaf | genres=시,예술·여행
 ```
 
-3. 장르 소설 묶음 → 에세이·시·예술·여행
+3. 호러·괴담 → 에세이·예술·여행 (서늘한 딴 세상 → 따뜻한 현실)
 
 ```far
-from: entry=leaf | genres=SF·판타지,추리·스릴러
-to: entry=leaf | genres=에세이,시,예술·여행
+from: entry=leaf | genres=호러·괴담
+to: entry=leaf | genres=에세이,예술·여행
 ```
 
-4. 한국·외국 소설 → 과학 교양·인문 (사람 이야기 → 세상을 아는 글)
-
-```far
-from: entry=leaf | genres=한국 소설,외국 소설
-to: entry=leaf | genres=과학 교양,인문
-```
-
-5. 소설 전체 → 인문·과학 교양
-
-```far
-from: entry=leaf | genres=한국 소설,외국 소설,SF·판타지,추리·스릴러
-to: entry=leaf | genres=인문,과학 교양
-```
-
-6. 시 → 추리·스릴러·SF (문장 → 몰입)
+4. 시 → 추리·스릴러·SF (문장 → 몰입)
 
 ```far
 from: entry=leaf | genres=시
 to: entry=leaf | genres=추리·스릴러,SF·판타지
 ```
 
-7. 에세이 → SF·판타지 (현실 → 딴 세상, 설계 4절 예시의 반대 방향)
+5. 에세이 → SF·판타지 (현실 → 딴 세상)
 
 ```far
 from: entry=leaf | genres=에세이
 to: entry=leaf | genres=SF·판타지
 ```
 
-8. 예술·여행 → 추리·스릴러 (따뜻한 현실 → 서늘한 긴장)
+6. 예술·여행 → 추리·스릴러 (따뜻한 현실 → 서늘한 긴장)
 
 ```far
 from: entry=leaf | genres=예술·여행
 to: entry=leaf | genres=추리·스릴러
 ```
 
-9. 산문(에세이·예술·여행) → SF·추리
+7. 과학 교양 → 시·에세이 (바깥 세계의 원리 → 마음의 문장)
+
+```far
+from: entry=leaf | genres=과학 교양
+to: entry=leaf | genres=시,에세이
+```
+
+8. 인문 → SF·추리 (생각하는 글 → 빠져드는 이야기)
+
+```far
+from: entry=leaf | genres=인문
+to: entry=leaf | genres=SF·판타지,추리·스릴러
+```
+
+9. 한국·외국 소설 → 과학 교양·인문 (사람 이야기 → 세상을 아는 글)
+
+```far
+from: entry=leaf | genres=한국 소설,외국 소설
+to: entry=leaf | genres=과학 교양,인문
+```
+
+10. 숨죽이는 긴장(추리·호러) → 시·에세이·예술·여행
+
+```far
+from: entry=leaf | genres=추리·스릴러,호러·괴담
+to: entry=leaf | genres=시,에세이,예술·여행
+```
+
+11. 역사·사회·시사 → SF·호러 (실제 있었던 일 → 없는 세계)
+
+```far
+from: entry=leaf | genres=역사,사회·시사
+to: entry=leaf | genres=SF·판타지,호러·괴담
+```
+
+12. 산문(에세이·예술·여행) → SF·추리
 
 ```far
 from: entry=leaf | genres=에세이,예술·여행
 to: entry=leaf | genres=SF·판타지,추리·스릴러
 ```
 
-10. 마음을 건드리는 글 전체 → SF·추리
+13. 장르 소설 묶음 → 에세이·시·예술·여행
+
+```far
+from: entry=leaf | genres=SF·판타지,추리·스릴러,호러·괴담
+to: entry=leaf | genres=에세이,시,예술·여행
+```
+
+14. 마음을 건드리는 글 전체 → SF·추리
 
 ```far
 from: entry=leaf | genres=에세이,시,예술·여행
 to: entry=leaf | genres=SF·판타지,추리·스릴러
 ```
 
-11. 과학 교양 → 🎯 마음 돌보기 (설계 4절 예시의 반대 방향)
+15. 사람과 사회 이야기 → SF·호러
 
 ```far
-from: entry=leaf | genres=과학 교양
-to: entry=target | topics=마음 돌보기
+from: entry=leaf | genres=인문,역사,사회·시사
+to: entry=leaf | genres=SF·판타지,호러·괴담
 ```
 
-12. 인문 → 🎯 데이터 분석·통계 (생각의 역사 → 숫자로 따지기, 설계 4절 예시의 반대 방향)
+16. 세상을 알아 가는 글 전체 → 소설 (아는 글 → 빠지는 이야기)
 
 ```far
-from: entry=leaf | genres=인문
-to: entry=target | topics=데이터 분석,통계
-```
-
-13. 세상을 알아 가는 글 → 소설 (아는 글 → 빠지는 이야기)
-
-```far
-from: entry=leaf | genres=인문,과학 교양
+from: entry=leaf | genres=인문,과학 교양,역사,사회·시사
 to: entry=leaf | genres=한국 소설,외국 소설,SF·판타지
 ```
 
-14. 진짜 세상 이야기 전체 → 소설 전체
+17. 소설 전체 → 세상을 알아 가는 글
 
 ```far
-from: entry=leaf | genres=에세이,시,인문,과학 교양,예술·여행
-to: entry=leaf | genres=한국 소설,외국 소설,SF·판타지,추리·스릴러
+from: entry=leaf | genres=한국 소설,외국 소설,SF·판타지,추리·스릴러,호러·괴담
+to: entry=leaf | genres=인문,과학 교양,역사,사회·시사
 ```
 
-15. 마음 돌보기 → 과학 교양 (설계 4절 예시)
+18. 진짜 세상 이야기 전체 → 소설 전체
+
+```far
+from: entry=leaf | genres=에세이,시,인문,과학 교양,예술·여행,역사,사회·시사
+to: entry=leaf | genres=한국 소설,외국 소설,SF·판타지,추리·스릴러,호러·괴담
+```
+
+19. 장르를 고르지 않은 이야기(기분 따라·책장에서 못 잡겠어요) → 소설·에세이 밖의 장르 — 🍃 길이 🎯로 넘어가지 않게 하는 마지막 규칙
+
+```far
+from: entry=leaf
+to: entry=leaf | genres=시,인문,과학 교양,예술·여행,역사,사회·시사,호러·괴담
+```
+
+20. 마음 돌보기 → 과학 교양 (설계 4절 예시)
 
 ```far
 from: entry=target | topics=마음 돌보기
 to: entry=leaf | genres=과학 교양
 ```
 
-16. 대화·관계 → SF·판타지 (사람 사이의 말 → 낯선 세계)
+21. 대화·관계 → SF·판타지 (사람 사이의 말 → 낯선 세계)
 
 ```far
 from: entry=target | topics=대화·관계
 to: entry=leaf | genres=SF·판타지
 ```
 
-17. 마음과 관계 전체 → 과학 교양·SF
-
-```far
-from: entry=target | topics=마음 돌보기,대화·관계
-to: entry=leaf | genres=과학 교양,SF·판타지
-```
-
-18. 취업·커리어 → 시·예술·여행 (쓸모 → 쓸모를 묻지 않는 아름다움)
+22. 취업·커리어 → 시·예술·여행 (쓸모 → 쓸모를 묻지 않는 아름다움)
 
 ```far
 from: entry=target | topics=취업·커리어
 to: entry=leaf | genres=시,예술·여행
 ```
 
-19. 글쓰기 → 과학 교양 (문장 → 원리)
+23. 글쓰기 → 과학 교양 (문장 → 원리)
 
 ```far
 from: entry=target | topics=글쓰기
 to: entry=leaf | genres=과학 교양
 ```
 
-20. 커리어와 글 전체 → 예술·여행·과학 교양
+24. 시간·생산성 → 시·예술·여행 (효율 → 느긋하게 머물기)
+
+```far
+from: entry=target | topics=시간·생산성
+to: entry=leaf | genres=시,예술·여행
+```
+
+25. 습관·집중 → 시·예술·여행 (고치기 → 그냥 머물기)
+
+```far
+from: entry=target | topics=습관·집중
+to: entry=leaf | genres=시,예술·여행
+```
+
+26. 마음과 관계 전체 → 과학 교양·SF
+
+```far
+from: entry=target | topics=마음 돌보기,대화·관계
+to: entry=leaf | genres=과학 교양,SF·판타지
+```
+
+27. 커리어와 글 → 예술·여행·과학 교양
 
 ```far
 from: entry=target | topics=취업·커리어,글쓰기
 to: entry=leaf | genres=예술·여행,과학 교양
 ```
 
-21. 데이터·통계 → 시·인문·예술 (설계 4절 예시)
+28. 데이터·통계 → 시·인문·예술 (설계 4절 예시)
 
 ```far
 from: entry=target | topics=데이터 분석,통계
 to: entry=leaf | genres=시,인문,예술·여행
 ```
 
-22. AI·업무 자동화 → 인문·시·에세이 (기계의 말 → 사람의 글)
+29. AI·업무 자동화 → 인문·시·에세이 (기계의 말 → 사람의 글)
 
 ```far
 from: entry=target | topics=AI 활용,업무 자동화
 to: entry=leaf | genres=인문,시,에세이
 ```
 
-23. 숫자·도구 전체 → 인문·시·예술
-
-```far
-from: entry=target | topics=데이터 분석,통계,AI 활용,업무 자동화
-to: entry=leaf | genres=인문,시,예술·여행
-```
-
-24. 일을 더 잘하기 전체 → 인문·시·예술
-
-```far
-from: entry=target | topics=데이터 분석,통계,AI 활용,업무 자동화,취업·커리어,글쓰기
-to: entry=leaf | genres=인문,시,예술·여행
-```
-
-25. 습관·시간 → 시·예술·여행 (효율 → 느긋하게 머물기)
-
-```far
-from: entry=target | topics=습관·집중,시간·생산성
-to: entry=leaf | genres=시,예술·여행
-```
-
-26. 돈·경제 → 시·에세이 (값을 매기는 글 → 값을 매길 수 없는 글)
+30. 돈·경제 → 시·에세이 (값을 매기는 글 → 값을 매길 수 없는 글)
 
 ```far
 from: entry=target | topics=돈 관리·투자,경제 상식
 to: entry=leaf | genres=시,에세이
 ```
 
-27. 하루와 살림 전체 → 시·에세이·예술·여행
+31. 일하는 방식 다듬기 전체 → 예술·여행·시·과학 교양
 
 ```far
-from: entry=target | topics=습관·집중,시간·생산성,돈 관리·투자,경제 상식
+from: entry=target | topics=취업·커리어,글쓰기,시간·생산성
+to: entry=leaf | genres=예술·여행,시,과학 교양
+```
+
+32. 하루와 살림 전체 → 시·에세이·예술·여행
+
+```far
+from: entry=target | topics=습관·집중,돈 관리·투자,경제 상식
 to: entry=leaf | genres=시,에세이,예술·여행
 ```
 
-28. 나를 더 잘 돌보기 전체 → 과학 교양·SF·추리
+33. 숫자·도구 전체 → 인문·시·예술
 
 ```far
-from: entry=target | topics=습관·집중,시간·생산성,돈 관리·투자,경제 상식,마음 돌보기,대화·관계
+from: entry=target | topics=데이터 분석,통계,AI 활용,업무 자동화
+to: entry=leaf | genres=인문,시,예술·여행
+```
+
+34. 나를 더 잘 돌보기 전체 → 과학 교양·SF·추리
+
+```far
+from: entry=target | topics=습관·집중,돈 관리·투자,경제 상식,마음 돌보기,대화·관계
 to: entry=leaf | genres=과학 교양,SF·판타지,추리·스릴러
 ```
 
-### 대기 중인 길 — 역사 · 사회·시사 · 호러·괴담 (책 0권)
+35. 일을 더 잘하기 전체 → 인문·시·예술
 
-아래는 빌드에 들어가지 않는 메모다(`text` 펜스라 읽지 않음). 세 장르가 검사의 장르 목록에 들어오면(`LEAF_GENRES`를 쓰게 하거나 첫 책이 들어오면) 이 블록들을 `node`·`far`로 바꾸고 위의 같은 `id`를 대신한다.
-
-- `story-shelf` A에 `호러·괴담`, B에 `역사,사회·시사`를 더한다. `story-fiction` B에 `호러·괴담`, `story-nonfiction` B에 `역사,사회·시사`를 더한다
-- `story-genre` B → 새 질문 `story-thrill`, `story-know` B → 새 질문 `story-people` → `story-time`
-
-```text
-id: story-genre
-kind: narrow
-question: 어떤 짜릿함이 끌려요?
-A: 여기 없는 딴 세상 | genres=SF·판타지 | next=story-temp
-B: 숨죽이는 긴장감 | genres=추리·스릴러,호러·괴담 | next=story-thrill
-unsure: next=story-temp
-
-id: story-thrill
-kind: narrow
-question: 무엇에 더 숨죽여요?
-A: 범인을 쫓는 추리 | genres=추리·스릴러 | next=story-temp
-B: 등골 서늘한 괴담 | genres=호러·괴담 | next=story-temp
-unsure: next=story-temp
-
-id: story-know
-kind: narrow
-question: 무엇을 알아 가고 싶어요?
-A: 우주와 생명의 원리 | genres=과학 교양 | next=story-temp
-B: 사람과 사회 이야기 | genres=인문,역사,사회·시사 | next=story-people
-unsure: next=story-temp
-
-id: story-people
-kind: narrow
-question: 어느 쪽 이야기가 더 궁금해요?
-A: 생각하는 법, 인문 | genres=인문 | next=story-temp
-B: 지난 일과 지금 일 | genres=역사,사회·시사 | next=story-time
-unsure: next=story-temp
-
-id: story-time
-kind: narrow
-question: 어느 시간이 더 궁금해요?
-A: 지나간 시간, 역사 | genres=역사 | next=story-temp
-B: 오늘의 사회 | genres=사회·시사 | next=story-temp
-unsure: next=story-temp
-
-far (장르 하나짜리 규칙 자리에 — 묶음 규칙보다 위):
-from: entry=leaf | genres=호러·괴담            to: entry=leaf | genres=에세이,예술·여행
-from: entry=leaf | genres=추리·스릴러,호러·괴담  to: entry=leaf | genres=시,에세이,예술·여행
-from: entry=leaf | genres=역사,사회·시사        to: entry=leaf | genres=SF·판타지,호러·괴담
-from: entry=leaf | genres=인문,역사,사회·시사    to: entry=leaf | genres=SF·판타지,호러·괴담
-(묶음 규칙의 from에도 새 장르를 더한다: 장르 소설 묶음·소설 전체에 호러·괴담, 세상을 알아 가는 글·진짜 세상 이야기 전체에 역사·사회·시사)
+```far
+from: entry=target | topics=데이터 분석,통계,AI 활용,업무 자동화,취업·커리어,글쓰기,시간·생산성
+to: entry=leaf | genres=인문,시,예술·여행
 ```
