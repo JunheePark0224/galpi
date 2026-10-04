@@ -1,8 +1,23 @@
 # 인수인계 — 갈피 (Galpi)
 
-Last Updated: 2026-10-01 밤 (main `b54264c` 기준, 배포됨)
+Last Updated: 2026-10-04 (v2 계획 2 `feat/v2-screens` 병합 전 · 배포 중인 main은 `b54264c`, 아래 2절은 그 기준)
 
 새 세션은 이 문서 → `process.md` → `context.md` → `tasks.md` 순으로 읽는다.
+
+## 지금 상태
+
+- **v2 계획 2 완료 (`feat/v2-screens`, 병합 전)**: S-01 입구 하나 · S-02 갈림길(이전 질문, 진행 표시 없음) · S-04 당신이 고른 길 · 서버 뽑기 = 질문 지도 길 · taxonomy v1.0(E-32 `question_answered`, E-33 `question_back_clicked`, E-34 `path_completed`, 공통 `mode`, 🎯·밸런스 이벤트 6개 removed) · 처리방침 v2 · 사이트 Anthropic 0. 길 끝 157개 중 4권 미만 7개(`npm run map:coverage`). 스크린샷 `docs/mockups/2026-10-04-v2/`. **남은 일**: 사용자 확인 → 병합·배포(사용자) → 배포 뒤 Supabase `events`에 `screen_version`=v2와 `question_answered` 확인, Amplitude 대시보드에 FN-7 퍼널 → 계획 3(모자란 길 채우기).
+- **확인한 것 (10-04)**: 단위 870개 통과(`src/lib/recommend/**`·`src/lib/paths/**` 커버리지 임계 통과) · typecheck·lint·build 오류 0 (`/api/goal/classify` 라우트 없음) · 전체 E2E(`TRACK_STORE=off`) 134 passed · 18 skipped(휴대폰/노트북 한쪽 전용 테스트).
+- **계획 3 입력**: 길 끝 157개 중 4권 미만 **7개**. 책이 0권인 장르·주제도 지도에서 빼지 않는다.
+
+### 배포 체크리스트 (병합·배포는 사용자)
+
+1. 옛 번들 탭은 새로고침 전까지 `/api/track` 이벤트를 잃고(`mode` 없음) 뽑기가 400을 받는다. 배포 직후 이 탭의 이탈은 퍼널 이탈로 세지 않는다.
+2. 저장된 v5 흐름은 S-01부터 다시 시작한다.
+3. Vercel의 `ANTHROPIC_API_KEY`는 지워도 된다(사이트가 더 이상 읽지 않음). **GitHub Actions Secret(매일 책 파이프라인)은 그대로 둔다.**
+4. 배포 뒤 Supabase `events`에서 `screen_version`='v2', `question_answered`, `path_completed`, 공통 `mode`가 들어오는지 확인한다.
+5. Amplitude FN-7 퍼널을 E-32 → E-34 → E-05로 다시 만든다.
+6. v1과 v2 비교는 책갈피 단계 이후 이벤트만, `screen_version`으로 나눠서 한다.
 
 ## 1. 어디에 무엇이
 

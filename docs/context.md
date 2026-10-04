@@ -1,6 +1,6 @@
 # Context — 갈피 (Galpi)
 
-Last Updated: 2026-10-04 — v2 계획 2 (화면·이벤트·🎯 없애기)
+Last Updated: 2026-10-04 — v2 계획 2 완료 (화면·이벤트 v1.0·🎯 없애기, 병합 전)
 
 ## 상태
 배포 중(https://galpi-omega.vercel.app, main `b54264c`). 책 330권, 매일 책 파이프라인 검수 단계(D-C). 지금 상태·남은 일은 `HANDOFF.md`.
