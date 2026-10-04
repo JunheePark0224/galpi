@@ -1,7 +1,8 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { LibraryBookmark } from "@/lib/library/types";
-import type { Point } from "./useHold";
+
+export interface Point { x: number; y: number }
 
 /** Where a bookmark hangs or goes: a rod and its place among the rod's other bookmarks (0 = front). */
 export interface Place { shelfId: string; index: number }
@@ -43,13 +44,14 @@ function paint(ghost: HTMLElement | null, d: Live | null) {
 }
 
 /**
- * S-09 끌어서 옮기기 (PRD F-13, 10-04): after the hold, the bookmark follows the pointer (window listeners — the finger may
- * leave the bookmark) as a floating copy (`ghost`, moved by transform, not by React), the rod and place under it are
- * worked out from the rods' boxes, and the page / the row scroll by themselves near their edges. Release drops it there
- * (onDrop only when the place changed); outside every rod, Escape or a cancelled pointer put it back. Only the pointer
- * that held it drives it (a second finger is ignored). While dragging, a touch never pans the page: the non-passive
- * touchmove blocker lives as long as the library, because browsers decide at touchstart whether a touch's moves can be
- * cancelled — one added at hold time, mid-touch, would get uncancelable moves and the browser would pan and cancel.
+ * S-09 끌어서 옮기기 (PRD F-13, 10-04): in move mode, once a bookmark is picked up (usePickUp), it follows the pointer
+ * (window listeners — the finger may leave the bookmark) as a floating copy (`ghost`, moved by transform, not by React),
+ * the rod and place under it are worked out from the rods' boxes, and the page / the row scroll by themselves near their
+ * edges. Release drops it there (onDrop only when the place changed); outside every rod, Escape or a cancelled pointer
+ * put it back. Only the pointer that picked it up drives it (a second finger is ignored and cannot start another drag).
+ * While dragging, a touch never pans the page: the non-passive touchmove blocker lives as long as the library, because
+ * browsers decide at touchstart whether a touch's moves can be cancelled — one added mid-touch would get uncancelable
+ * moves and the browser would pan and cancel. (In move mode the bookmarks are also `touch-action: none`.)
  */
 export function useDrag(onDrop: (isbn: string, to: Place, from: Place) => void) {
   const [drag, setDrag] = useState<Dragging | null>(null);
@@ -71,7 +73,7 @@ export function useDrag(onDrop: (isbn: string, to: Place, from: Place) => void) 
   }, []);
 
   const start = useCallback((bookmark: LibraryBookmark, from: Place, point: Point, box: DOMRect, pointerId: number) => {
-    stop.current();
+    if (live.current) return;                     // one drag at a time: another finger cannot take over
     const d: Live = { bookmark, from, over: from, point, grab: { x: point.x - box.left, y: point.y - box.top }, pointerId };
     live.current = d;
     setDrag({ bookmark, from, over: from });
