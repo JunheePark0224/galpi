@@ -103,6 +103,7 @@ export function sendToAmplitude(name: EventName, props: Record<string, unknown>,
   try {
     const shared = common === null ? {} : {
       ...(common.entry === null ? {} : { entry: common.entry }),
+      ...(common.mode === null ? {} : { mode: common.mode }),
       round: common.round,
       screen_version: common.screen_version,
       device: common.device,

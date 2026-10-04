@@ -36,11 +36,16 @@ function ChoiceCard({ side, label, onChoose }: { side: "left" | "right"; label: 
 /**
  * S-02 (design 10절): one two-way question of the map — the balance-game cards, the hold button, [← 이전 질문] (C-23).
  * No path and no count while answering: S-04 shows them. Shows only; Flow sends the events. Flow remounts it per
- * question (key), so the tap guard and the hold start again.
+ * question (key), so the tap guard and the hold start again — and focus moves to the new question's heading (the card or
+ * button just pressed is gone), without a scroll jump.
  */
 export function Question({ node, onAnswer, onHoldCancel, onBack }: Props) {
   const shownAt = useRef(0);
-  useEffect(() => { shownAt.current = performance.now(); }, []);
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    shownAt.current = performance.now();
+    heading.current?.focus({ preventScroll: true });
+  }, []);
   const elapsed = () => Math.round(performance.now() - shownAt.current);
   const choose = (choice: "A" | "B") => {
     const ms = elapsed();
@@ -52,7 +57,7 @@ export function Question({ node, onAnswer, onHoldCancel, onBack }: Props) {
       <button type="button" className={styles.back} onClick={onBack}>
         <span aria-hidden="true">←</span> {BACK}
       </button>
-      <h1 id="question-text" className={styles.question}>{node.question}</h1>
+      <h1 id="question-text" ref={heading} tabIndex={-1} className={styles.question}>{node.question}</h1>
       <div className={styles.pair}>
         <ChoiceCard side="left" label={node.a.label} onChoose={() => choose("A")} />
         <span className={styles.vs} aria-hidden="true">vs</span>

@@ -8,6 +8,8 @@
 }
 .back:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
 .question { margin: 0 0 var(--space-3); font-size: 20px; line-height: 1.5; text-align: center; word-break: keep-all; }
+/* focused by script when a question appears (tabIndex -1, not a stop in the Tab order): no ring around a heading */
+.question:focus { outline: none; }
 /* C-07 (09-30): two bookmark-shaped cards, "vs" in a small seal between — about 150–160px each, so they fit a 375px phone. */
 .pair {
   display: grid; grid-template-columns: minmax(0, 160px) auto minmax(0, 160px);

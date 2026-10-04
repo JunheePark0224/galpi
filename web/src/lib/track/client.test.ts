@@ -19,15 +19,15 @@ describe("track", () => {
   it("posts the event with common props to /api/track", async () => {
     const send = vi.fn().mockReturnValue(true);
     Object.defineProperty(navigator, "sendBeacon", { value: send, configurable: true });
-    track("first_page_edited", { changed_items: ["len"] });
+    track("question_back_clicked", { node_id: "branch", depth: 2, source: "question" });
     expect(send).toHaveBeenCalledTimes(1);
     const [url, blob] = send.mock.calls[0];
     expect(url).toBe("/api/track");
     expect(blob).toBeInstanceOf(Blob);
     const text = await blob.text();
     const data = JSON.parse(text);
-    expect(data.name).toBe("first_page_edited");
-    expect(data.props).toEqual({ changed_items: ["len"] });
+    expect(data.name).toBe("question_back_clicked");
+    expect(data.props).toEqual({ node_id: "branch", depth: 2, source: "question" });
     expect(data.common.anon_id).toBeDefined();
   });
 
@@ -51,11 +51,11 @@ describe("track", () => {
 
   it("also hands the same event to Amplitude with the common props", () => {
     Object.defineProperty(navigator, "sendBeacon", { value: vi.fn().mockReturnValue(true), configurable: true });
-    track("chip_selected", { chip_type: "len", chip_value: "thin", is_edit: false });
+    track("path_completed", { scope_id: "all", depth: 3, unsure_count: 1 });
     expect(sendToAmplitude).toHaveBeenCalledTimes(1);
     const [name, props, common] = vi.mocked(sendToAmplitude).mock.calls[0];
-    expect(name).toBe("chip_selected");
-    expect(props).toEqual({ chip_type: "len", chip_value: "thin", is_edit: false });
+    expect(name).toBe("path_completed");
+    expect(props).toEqual({ scope_id: "all", depth: 3, unsure_count: 1 });
     expect(common?.anon_id).toMatch(/^[0-9a-f-]{36}$/);
   });
 
@@ -99,11 +99,11 @@ describe("track", () => {
     expect(next).toBe(ending + 1);
   });
 
-  it("keeps the round for every other event — an edit and its new draw stay in the same round", async () => {
+  it("keeps the round for every other event — going back and a new draw stay in the same round", async () => {
     const send = vi.fn().mockReturnValue(true);
     Object.defineProperty(navigator, "sendBeacon", { value: send, configurable: true });
-    track("goal_submitted", { topic: "통계", is_free_text: false, len: null, way: null, is_edit: true });
-    track("first_page_edited", { changed_items: ["len"] });
+    track("question_answered", { node_id: "start", kind: "narrow", choice: "A", depth: 1, position: 1, elapsed_ms: 10 });
+    track("path_completed", { scope_id: "all", depth: 3, unsure_count: 1 });
     track("bookmark_reacted", { book_id: "1", position: 1, reaction: "pass", pick_type: "random", one_liner_style: "summary" });
     expect(new Set(await postedRounds(send)).size).toBe(1);
   });
@@ -135,7 +135,7 @@ describe("track", () => {
 });
 
 describe("trackStored (taxonomy 2-7, v0.10 — E-31)", () => {
-  const common = { anon_id: "a", user_id: null, session_id: "s", round: 3, entry: null, screen_version: "v1",
+  const common = { anon_id: "a", user_id: null, session_id: "s", round: 3, entry: null, mode: null, screen_version: "v1",
     referrer: "", is_returning: false, device: "phone", is_in_app_browser: false } as const;
 
   beforeEach(() => { vi.mocked(sendToAmplitude).mockReset(); });

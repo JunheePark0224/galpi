@@ -8,8 +8,8 @@ describe("parseProps (server check against EVENT_SPEC)", () => {
   it("keeps every prop the spec defines, unchanged", () => {
     expect(parseProps("bookmark_reacted", reacted)).toEqual({ props: reacted, dropped: [] });
     expect(parseProps("entry_selected", {})).toEqual({ props: {}, dropped: [] });
-    const chip = { chip_type: "len", chip_value: "thin", is_edit: true };
-    expect(parseProps("chip_selected", chip)).toEqual({ props: chip, dropped: [] });
+    const answered = { node_id: "learn-area", kind: "narrow", choice: "unsure", depth: 4, position: 5, elapsed_ms: 1200 };
+    expect(parseProps("question_answered", answered)).toEqual({ props: answered, dropped: [] });
   });
 
   it("drops unknown keys, old names and inherited object keys, and lists them", () => {
@@ -27,16 +27,13 @@ describe("parseProps (server check against EVENT_SPEC)", () => {
   it.each([
     ["a value outside the enum", "bookmark_reacted", { reaction: "love" }],
     ["a number sent as a string", "bookmark_reacted", { position: "2" }],
-    ["a non-finite number", "balance_answered", { elapsed_ms: Number.POSITIVE_INFINITY }],
-    ["a boolean sent as a string", "chip_selected", { is_edit: "false" }],
-    ["null where the spec has no null", "goal_submitted", { topic: null }],
-    ["a string that is not an enum value", "goal_submitted", { len: 1 }],
+    ["a non-finite number", "question_answered", { elapsed_ms: Number.POSITIVE_INFINITY }],
+    ["a boolean sent as a string", "save_clicked", { is_logged_in: "false" }],
+    ["null where the spec has no null", "question_answered", { node_id: null }],
+    ["a value that is not an enum value", "question_answered", { kind: 1 }],
     ["an array for an object", "bookmark_shown", { art: ["fox"] }],
     ["null for an object", "bookmark_shown", { art: null }],
-    ["a string for a list", "first_page_edited", { changed_items: "len" }],
-    ["a list with a number in it", "free_goal_written", { keywords: ["SQL", 1] }],
-    ["a list with null in it", "first_page_edited", { changed_items: ["len", null] }],
-    ["a list longer than 20", "free_goal_written", { keywords: Array.from({ length: 21 }, () => "SQL") }],
+    ["a list for a string", "bookmark_moved", { book_id: ["9788998441012"] }],
   ])("drops %s", (_, name, raw) => {
     const { props, dropped } = parseProps(name as Parameters<typeof parseProps>[0], raw);
     expect(props).toEqual({});
@@ -44,17 +41,15 @@ describe("parseProps (server check against EVENT_SPEC)", () => {
   });
 
   it("accepts null where the spec allows it: enum with null, nullable string", () => {
-    expect(parseProps("balance_answered", { side: null }).props).toEqual({ side: null });
-    expect(parseProps("chip_selected", { chip_value: null }).props).toEqual({ chip_value: null });
     expect(parseProps("yes24_link_clicked", { book_id: null, source: "first_page", pick_type: null }))
       .toEqual({ props: { book_id: null, source: "first_page", pick_type: null }, dropped: [] });   // F-24: no book
-    expect(parseProps("free_goal_written", { missing_text: "가".repeat(30) }).props).toEqual({ missing_text: "가".repeat(20) });
     expect(parseProps("yes24_link_clicked", { pick_type: null }).props).toEqual({ pick_type: null });
   });
 
-  it("cuts goal_text to its 30 characters and other free strings to 200", () => {
-    const { props } = parseProps("free_goal_written", { goal_text: "가".repeat(40), topic: "x".repeat(300), keywords: ["y".repeat(300)] });
-    expect(props).toEqual({ goal_text: "가".repeat(30), topic: "x".repeat(200), keywords: ["y".repeat(200)] });
+  it("cuts feedback_text to its 500 characters and other free strings to 200", () => {
+    const { props } = parseProps("feedback_sent", { feedback_text: "가".repeat(600), text_length: 600 });
+    expect(props).toEqual({ feedback_text: "가".repeat(500), text_length: 600 });
+    expect(parseProps("path_completed", { scope_id: "x".repeat(300) }).props).toEqual({ scope_id: "x".repeat(200) });
   });
 
   it("keeps an object prop as sent (art is a fixed small shape, the body is already size-capped)", () => {
@@ -64,20 +59,9 @@ describe("parseProps (server check against EVENT_SPEC)", () => {
 });
 
 describe("forAmplitude (taxonomy 2-7: Supabase-only props stay out of the Amplitude copy)", () => {
-  it("leaves out goal_text and keeps topic, keywords, is_matched and method", () => {
-    const written = { goal_text: "SQL 공부", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" };
-    expect(forAmplitude("free_goal_written", written)).toEqual({ topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word" });
-    expect(written.goal_text).toBe("SQL 공부");   // the Supabase copy is a different object, untouched
-  });
-
   it("passes every other event's props through", () => {
     expect(forAmplitude("bookmark_reacted", reacted)).toEqual(reacted);
     expect(forAmplitude("site_visited", {})).toEqual({});
-  });
-
-  it("F-24: leaves out missing_text and keeps has_missing", () => {
-    const written = { goal_text: "주식 단타", topic: "돈 관리·투자", keywords: [], is_matched: true, method: "llm", has_missing: true, missing_text: "단타 매매" };
-    expect(forAmplitude("free_goal_written", written)).toEqual({ topic: "돈 관리·투자", keywords: [], is_matched: true, method: "llm", has_missing: true });
   });
 
   it("F-26: leaves out the 갈피 우체통 letter and keeps its length (E-31, v0.10)", () => {
@@ -85,8 +69,8 @@ describe("forAmplitude (taxonomy 2-7: Supabase-only props stay out of the Amplit
   });
 
   it("keeps only the keys the event's spec defines (allowlist): unknown keys never reach Amplitude", () => {
-    const sent = { topic: "데이터 분석", keywords: [], is_matched: false, method: "word", goal_text: "x", note: "free text", constructor: "c" };
-    expect(forAmplitude("free_goal_written", sent)).toEqual({ topic: "데이터 분석", keywords: [], is_matched: false, method: "word" });
+    const sent = { node_id: "start", kind: "narrow", choice: "A", depth: 1, position: 1, elapsed_ms: 5, note: "free text", constructor: "c" };
+    expect(forAmplitude("question_answered", sent)).toEqual({ node_id: "start", kind: "narrow", choice: "A", depth: 1, position: 1, elapsed_ms: 5 });
     expect(forAmplitude("entry_selected", { entry: "target", anything: 1 })).toEqual({});
   });
 });

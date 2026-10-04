@@ -50,6 +50,20 @@ describe("Question (S-02)", () => {
     expect(h.onAnswer).toHaveBeenCalledWith("unsure", expect.any(Number));
   });
 
+  it("moves focus to the question heading when a question appears, without scrolling to it", () => {
+    const focus = vi.spyOn(HTMLElement.prototype, "focus");
+    const h = handlers();
+    const { rerender } = render(<Question key="start" node={START} {...h} />);
+    const first = screen.getByRole("heading", { level: 1, name: START.question });
+    expect(first).toHaveAttribute("tabindex", "-1");
+    expect(document.activeElement).toBe(first);
+    expect(focus).toHaveBeenLastCalledWith({ preventScroll: true });
+    const branch = QUESTION_MAP.nodes.branch;
+    rerender(<Question key="branch" node={branch} {...h} />);           // Flow's new key per question shown
+    expect(document.activeElement).toBe(screen.getByRole("heading", { level: 1, name: branch.question }));
+    focus.mockRestore();
+  });
+
   it("offers [← 이전 질문] on every question, 44px tall by its class", () => {
     const h = handlers();
     render(<Question node={START} {...h} />);

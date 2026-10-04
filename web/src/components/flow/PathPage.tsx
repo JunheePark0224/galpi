@@ -8,7 +8,8 @@ export const MOOD_ANY = "기분은 갈피에게 맡겼어요";
 /**
  * S-04 right page (DESIGN C-10 v2, design 10절): "당신이 고른 길" — the narrowing answers in order, then the mood
  * answers. No book count: a short scope is widened quietly. The challenge route gets one line on top. `summary` is the
- * draw's `path`; null while the draw is on its way (only the notes show).
+ * draw's `path`; null while the draw is on its way (only the notes show). The notes share one live region that is always
+ * on the page, so a note that arrives with the draw is announced (a region added together with its text often is not).
  */
 export function PathPage({ summary, notices }: { summary: PathSummary | null; notices: readonly string[] }) {
   return (
@@ -30,7 +31,9 @@ export function PathPage({ summary, notices }: { summary: PathSummary | null; no
           </section>
         </>
       )}
-      {notices.map((n) => <p key={n} className={styles.note} role="status">{n}</p>)}
+      <div className={styles.notes} role="status">
+        {notices.map((n) => <p key={n} className={styles.note}>{n}</p>)}
+      </div>
     </div>
   );
 }

@@ -28,4 +28,13 @@ describe("PathPage (S-04 당신이 고른 길)", () => {
     expect(screen.queryByRole("region")).toBeNull();
     expect(screen.getByRole("status")).toHaveTextContent("조건에 딱 맞는 책은 여기까지예요");
   });
+
+  it("keeps one live status region on the page, there before any note, so a note that arrives later is announced", () => {
+    const { rerender } = render(<PathPage summary={null} notices={[]} />);
+    const live = screen.getByRole("status");
+    expect(live).toBeEmptyDOMElement();
+    rerender(<PathPage summary={{ crumbs: [], moods: [], mode: "normal" }} notices={["첫 번째 메모", "두 번째 메모"]} />);
+    expect(screen.getAllByRole("status")).toEqual([live]);
+    expect(live).toHaveTextContent("첫 번째 메모두 번째 메모");
+  });
 });

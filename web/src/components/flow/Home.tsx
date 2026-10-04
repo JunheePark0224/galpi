@@ -1,20 +1,17 @@
 import type { CSSProperties } from "react";
-import type { Entry } from "@/lib/recommend";
 import type { LibraryCount } from "@/lib/books/library";
 import { LogoMark } from "@/components/Logo";
 import { Mailbox } from "@/components/feedback/Mailbox";
 import styles from "./Home.module.css";
 
 /** library: F-23 count from the server (page.tsx), null until the first fill — then the cover keeps the logo. */
-interface Props { onStart: (entry: Entry) => void; library?: LibraryCount | null }
+interface Props { onStart: () => void; library?: LibraryCount | null }
 
 const books = (n: number) => `${n.toLocaleString("ko-KR")}권`;
 
-/** PRD F-01 wording. */
-const ENTRIES: readonly { entry: Entry; title: string; mark: string; desc: string }[] = [
-  { entry: "target", title: "알고 싶은 게 있어요", mark: "🎯", desc: "배우고 싶은 주제로, 아직 모르는 책 만나기" },
-  { entry: "leaf", title: "그냥 한 권 만나고 싶어요", mark: "🍃", desc: "밸런스 게임으로 내 취향에 맞는 한 권 만나기" },
-];
+/** PRD F-01 v2 wording (design 10절). */
+export const START_LABEL = "갈피 잡으러 가기";
+export const START_NOTE = "질문 몇 개면 한 권을 만나요";
 
 /**
  * P-01: a closed cloth book with two bookmarks peeking out. Decorative — the words are read from Home's hidden line.
@@ -59,15 +56,11 @@ export function Home({ onStart, library = null }: Props) {
         {news && <p className={styles.news} aria-hidden="true">{news}</p>}
       </section>
       <div className={styles.entries}>
-        {ENTRIES.map((e) => (
-          <button key={e.entry} type="button" className={styles.entry} onClick={() => onStart(e.entry)}>
-            <span className={styles.entryText}>
-              <span className={styles.entryTitle}>{e.title} <span aria-hidden="true">{e.mark}</span></span>
-              <span className={styles.entryDesc}>{e.desc}</span>
-            </span>
-            <span className={styles.go}><Arrow /></span>
-          </button>
-        ))}
+        <button type="button" className={styles.entry} onClick={onStart}>
+          <span className={styles.entryTitle}>{START_LABEL}</span>
+          <span className={styles.go}><Arrow /></span>
+        </button>
+        <p className={styles.entryNote}>{START_NOTE}</p>
       </div>
       <Mailbox />
     </div>

@@ -1,13 +1,13 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ACTIVE_VOCAB } from "@/lib/books/catalog";
 import type { FlowState } from "@/lib/flow/state";
+import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
 
 /**
  * The first visit event of a document must already carry the round and entry that document starts in. The real page is server
  * HTML (S-01) hydrated on the client: TrackVisit's effect runs in the hydration commit, before FlowRoot switches to Flow.
  */
 describe("site_visited on a fresh open vs a reload (hydrated TrackVisit + FlowRoot)", () => {
-  const midRound = { step: "bookmarks", entry: "leaf", choices: ["A", "B"], order: [0, 1, 2, 3, 4, 5, 6, 7, 8], seen: ["b1"] } as unknown as FlowState;
+  const midRound = { step: "bookmarks", answers: SQL_PATH, asked: SQL_PATH.length, seen: ["b1"] } as unknown as FlowState;
   let unmount: (() => void) | null = null;
 
   afterEach(() => {
@@ -20,9 +20,10 @@ describe("site_visited on a fresh open vs a reload (hydrated TrackVisit + FlowRo
   });
 
   async function openWith(navType: string) {
-    sessionStorage.setItem("galpi.flow", JSON.stringify({ v: 5, state: { ...midRound, status: "idle", draw: null } }));
+    sessionStorage.setItem("galpi.flow", JSON.stringify({ v: 6, state: { ...midRound, status: "idle", draw: null } }));
     sessionStorage.setItem("galpi.round", "1");
-    sessionStorage.setItem("galpi.entry", "leaf");
+    sessionStorage.setItem("galpi.entry", "target");
+    sessionStorage.setItem("galpi.mode", "normal");
     vi.spyOn(performance, "getEntriesByType").mockReturnValue([{ type: navType }] as unknown as PerformanceEntryList);
     Object.defineProperty(document, "wasDiscarded", { value: false, configurable: true });
     window.scrollTo = vi.fn();
@@ -38,7 +39,7 @@ describe("site_visited on a fresh open vs a reload (hydrated TrackVisit + FlowRo
       import("react"), import("react"), import("react-dom/server"), import("react-dom/client"),
       import("./TrackVisit"), import("./flow/FlowRoot"),
     ]);
-    const tree = createElement("div", null, createElement(TrackVisit), createElement(FlowRoot, { vocab: ACTIVE_VOCAB }));
+    const tree = createElement("div", null, createElement(TrackVisit), createElement(FlowRoot, {}));
     const host = document.createElement("div");
     host.innerHTML = renderToString(tree);
     document.body.append(host);
@@ -50,17 +51,17 @@ describe("site_visited on a fresh open vs a reload (hydrated TrackVisit + FlowRo
     return bodies.filter((b) => b.name === "site_visited");
   }
 
-  it("navigate: the visit is the new game's — round + 1, no entry — and S-01 is on screen", async () => {
+  it("navigate: the visit is the new game's — round + 1, no entry, no mode — and S-01 is on screen", async () => {
     const visits = await openWith("navigate");
     expect(visits).toHaveLength(1);
-    expect(visits[0].common).toMatchObject({ round: 2, entry: null });
-    expect(document.body.textContent).toContain("그냥 한 권 만나고 싶어요");
+    expect(visits[0].common).toMatchObject({ round: 2, entry: null, mode: null });
+    expect(document.body.textContent).toContain("갈피 잡으러 가기");
   });
 
-  it("reload: the visit keeps the round and the entry of the game that resumes", async () => {
+  it("reload: the visit keeps the round, the entry and the mode of the game that resumes", async () => {
     const visits = await openWith("reload");
     expect(visits).toHaveLength(1);
-    expect(visits[0].common).toMatchObject({ round: 1, entry: "leaf" });
-    expect(document.body.textContent).not.toContain("그냥 한 권 만나고 싶어요");
+    expect(visits[0].common).toMatchObject({ round: 1, entry: "target", mode: "normal" });
+    expect(document.body.textContent).not.toContain("갈피 잡으러 가기");
   });
 });
