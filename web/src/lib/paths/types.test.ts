@@ -16,9 +16,16 @@ describe("inScope", () => {
     expect(inScope(leaf, { ...ALL_SCOPE, topics: ["데이터 분석"] })).toBe(false);          // a 🍃 book has no topic
     expect(inScope(leaf, { ...ALL_SCOPE, genres: ["SF·판타지", "에세이"] })).toBe(true);
     expect(inScope(leaf, { ...ALL_SCOPE, entry: "target" })).toBe(false);
+    expect(inScope(leaf, { ...ALL_SCOPE, genres: ["에세이"] })).toBe(false);              // genre not in the list
+    expect(inScope(leaf, { ...ALL_SCOPE, keywords: ["SQL"] })).toBe(false);               // a 🍃 book has no keywords
+    expect(inScope(target, { ...ALL_SCOPE, topics: ["마음 돌보기"] })).toBe(false);
+    expect(inScope(target, { ...ALL_SCOPE, genres: [] })).toBe(false);                    // an empty list lets nothing in
   });
   it("keys a scope the same way whatever the order of its lists", () => {
     expect(scopeKey({ ...ALL_SCOPE, genres: ["시", "에세이"] })).toBe(scopeKey({ ...ALL_SCOPE, genres: ["에세이", "시"] }));
     expect(scopeKey(ALL_SCOPE)).toBe("all");
+    expect(scopeKey({ entry: "target", topics: ["데이터 분석"], keywords: ["엑셀", "SQL"], genres: null }))
+      .toBe("entry=target;topics=데이터 분석;keywords=SQL,엑셀");
+    expect(scopeKey({ ...ALL_SCOPE, genres: [] })).toBe("genres=");
   });
 });
