@@ -9,7 +9,7 @@ const hasAuthCookie = (req: Request): boolean => /(?:^|;\s*)sb-[^=;]*-auth-token
  * taxonomy 3-2 (v0.8): common.user_id is the logged-in person's Supabase id as this server verifies it from the session
  * cookie — whatever the browser wrote there is dropped, so nobody can file events under someone else's id.
  */
-async function verifiedUserId(req: Request): Promise<string | null> {
+export async function verifiedUserId(req: Request): Promise<string | null> {
   if (!hasAuthCookie(req)) return null;
   try {
     const client = await authClient();

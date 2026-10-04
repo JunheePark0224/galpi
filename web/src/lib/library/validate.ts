@@ -1,4 +1,4 @@
-import { ANIMALS, BACKGROUNDS, GROUND_PROPS, SKY_PROPS, type ArtCombo } from "@/lib/art/combine";
+import { ANIMALS, BACKGROUNDS, GROUND_PROPS, SKY_PROPS, isRare, type ArtCombo } from "@/lib/art/combine";
 import type { Reason } from "@/lib/recommend";
 
 /** PRD F-13: a rod's name, the person's own words — at most this many characters (DB check matches, 0003). */
@@ -10,13 +10,18 @@ const REASON_ITEM_MAX = 40;
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
 const oneOf = <T extends string>(list: readonly T[], v: unknown): v is T => typeof v === "string" && (list as readonly string[]).includes(v);
 
-/** The saved picture (D-05), rebuilt from known parts only — never the object the browser sent. */
+/**
+ * The saved picture (D-05), rebuilt from known parts only — never the object the browser sent. 도감 v1: the 한정판·초판본
+ * values are known parts too, and `rare` is worked out from the parts (an old picture saved before them stays valid — its
+ * parts are all 일반판 and its `rare` was false).
+ */
 export function parseArt(v: unknown): ArtCombo | null {
   if (!isRecord(v)) return null;
   const { animal, bg, sky, ground, rare } = v;
   if (!oneOf(ANIMALS, animal) || !oneOf(Object.keys(BACKGROUNDS) as (keyof typeof BACKGROUNDS)[], bg)
-    || !oneOf(SKY_PROPS, sky) || !oneOf(GROUND_PROPS, ground) || typeof rare !== "boolean") return null;
-  return { animal, bg, sky, ground, rare };
+    || !oneOf(SKY_PROPS, sky) || !oneOf(GROUND_PROPS, ground) || (rare !== undefined && typeof rare !== "boolean")) return null;
+  const parts = { animal, bg, sky, ground };
+  return { ...parts, rare: isRare(parts) };
 }
 
 /** 나온 이유 at the time of saving (S-06 back face): our label, a few short plain items. */

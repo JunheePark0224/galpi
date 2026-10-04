@@ -12,6 +12,17 @@ describe("parseArt — only picture parts we draw (DESIGN A-01~A-04)", () => {
       expect(parseArt(bad), JSON.stringify(bad)).toBeNull();
     }
   });
+  it("keeps a picture saved before 도감 v1 exactly as it was", () => {
+    const old = { animal: "whale", bg: "lavender", sky: "bigStar", ground: "none", rare: false };
+    expect(parseArt(old)).toEqual(old);
+  });
+  it("accepts the 한정판·초판본 parts and works `rare` out from the parts, whatever the browser said", () => {
+    const first = { animal: "bluedragon", bg: "galaxy", sky: "goldmoon", ground: "goldbook", rare: false };
+    expect(parseArt(first)).toEqual({ ...first, rare: true });
+    expect(parseArt({ animal: "cat", bg: "cherry", sky: "moon", ground: "grass" })).toEqual({ animal: "cat", bg: "cherry", sky: "moon", ground: "grass", rare: true });
+    expect(parseArt({ ...ART, ground: "firefly", rare: false })?.rare).toBe(true);
+    expect(parseArt({ ...ART, rare: true })?.rare).toBe(false);   // a claimed rare with common parts is not rare
+  });
 });
 
 describe("parseReason — the 나온 이유 shown on the back face", () => {

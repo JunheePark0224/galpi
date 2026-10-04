@@ -1,8 +1,11 @@
 "use client";
 import { useEffect, useReducer, useRef, useState } from "react";
 import { MotionConfig } from "motion/react";
+import { loadAccount } from "@/lib/account/store";
 import { newArtSeed } from "@/lib/art/combine";
 import { readyCover, waitForCover } from "@/lib/books/detailClient";
+import { reportMeeting } from "@/lib/collection/client";
+import type { FoundItem } from "@/lib/collection/types";
 import type { LibraryCount } from "@/lib/books/library";
 import { drawBody, requestDraw, toDrawView } from "@/lib/flow/api";
 import { completedProps, nextQuestion, pathCommon } from "@/lib/flow/path";
@@ -32,6 +35,7 @@ function syncCommon(answers: readonly Answer[]) {
 export function Flow({ library = null }: { library?: LibraryCount | null }) {
   const [state, dispatch] = useReducer(flowReducer, undefined, loadFlow);
   const [shownResult, setShownResult] = useState<string | null>(null);   // the S-06 book whose cover is ready to show
+  const [found, setFound] = useState<{ at: string; items: FoundItem[] } | null>(null);   // 도감 v1 badge, per bookmark
 
   useEffect(() => { saveFlow(state); }, [state]);
   useEffect(() => { window.scrollTo(0, 0); }, [state.step, state.result, state.answers.length]);
@@ -53,12 +57,30 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     return next;
   };
 
+  /**
+   * 도감 v1: a logged-in person met this bookmark — the server records its parts from the signed seed (never the picture
+   * itself) and says which were new: E-36 for each, and the badge while the same bookmark is still up. Logged out: nothing.
+   */
+  const meet = (s: FlowState) => {
+    setFound(null);                      // a new bookmark: an older badge never carries over (drawId restarts after [처음으로])
+    const ticket = s.draw?.ticket;
+    if (!ticket?.sig) return;
+    const at = `${s.drawId}:${s.index}:${s.draw?.picks[s.index]?.card.id}`;
+    void (async () => {
+      if ((await loadAccount()).status !== "in") return;
+      const items = await reportMeeting(ticket, s.index);
+      for (const item of items) track("collection_item_found", { part_kind: item.kind, part_value: item.value, tier: item.tier });
+      if (items.length > 0) setFound({ at, items });
+    })();
+  };
+
   const trackShown = (s: FlowState) => {
     const pick = s.draw?.picks[s.index];
     if (!pick) return;
     track("bookmark_shown", {
       book_id: pick.card.id, position: s.index + 1, one_liner_style: pick.card.oneLinerStyle, pick_type: pick.kind, art: pick.art,
     });
+    meet(s);
   };
 
   /** E-10: the 궁금해요 book now on S-06 — once per book and round (taxonomy v0.11). */
@@ -186,6 +208,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
           onRetry={() => act({ type: "retry" })}
           onReact={react}
           onHome={() => home("first_page")}
+          found={found?.at === `${state.drawId}:${state.index}:${state.draw?.picks[state.index]?.card.id}` ? found.items : null}
         />
       )}
       {resultPick && shownResult === resultPick.card.id && (

@@ -23,6 +23,9 @@ export default defineConfig({
       // P5: a made-up Supabase address turns the login place on; e2e/library.spec.ts answers the login and the
       // 내 책갈피 routes itself. No request reaches a real Supabase.
       NEXT_PUBLIC_SUPABASE_URL: "http://supabase.e2e.invalid", NEXT_PUBLIC_SUPABASE_ANON_KEY: "e2e-anon-not-a-key",
+      // 도감 v1: `next start` is production, so art tickets need a signing secret (a made-up one); and no service key —
+      // the server can never write a real 도감 from E2E (e2e/collection.spec.ts answers the 도감 routes itself).
+      COLLECTION_SIGNING_SECRET: "e2e-only-signing-secret-not-real", SUPABASE_SERVICE_ROLE_KEY: "",
     },
   },
   use: { baseURL: `http://localhost:${PORT}` },

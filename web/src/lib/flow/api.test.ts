@@ -2,6 +2,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PathDrawResponse } from "@/lib/books/types";
 import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
+import { artsForDraw } from "@/lib/art/combine";
 import { drawBody, requestDraw, toDrawView } from "./api";
 import { INITIAL } from "./state";
 
@@ -27,6 +28,16 @@ describe("flow api", () => {
     expect(new Set(view.picks.map((p) => p.art.animal)).size).toBe(5);
     expect(view.picks[1].reason).toEqual({ label: "나온 이유", items: ["이유 b"] });
     expect(view.path).toEqual(RES.path);
+  });
+
+  it("draws the pictures from the server's signed seed and keeps the ticket for the 도감 (v1)", () => {
+    const art = { seed: 4242, count: 5, iat: 100, sub: null, sig: "s".repeat(43) };
+    const view = toDrawView({ ...RES, art }, 9);
+    expect(view.picks.map((p) => p.art)).toEqual(artsForDraw(5, 4242));
+    expect(view.ticket).toEqual(art);
+    expect(toDrawView({ ...RES, art: { ...art, sig: null } }, 9).ticket).toBeNull();          // unsigned: shown, not recorded
+    expect(toDrawView({ ...RES, art: { ...art, count: 4 } }, 9).picks.map((p) => p.art)).toEqual(artsForDraw(5, 9));
+    expect(toDrawView(RES, 9).ticket).toBeNull();
   });
 
   it("posts JSON to /api/books/draw", async () => {
