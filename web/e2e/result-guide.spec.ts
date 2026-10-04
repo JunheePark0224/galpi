@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { reactToBookmarks, test } from "./helpers";
+import { reactToBookmarks, test, toBookmarks } from "./helpers";
 
 // C-21: the first S-06 book explains itself once per browser — the peeking bookmark, ‹ ›, 🔖 꽂기, [알겠어요] (10-02).
 const SHOTS = process.env.GUIDE_SHOTS;   // a folder: save screenshots there when set (manual design check)
@@ -10,12 +10,7 @@ async function toFirstResult(page: Page) {
   await page.route(/\/api\/books\/\d{13}$/, (route) => route.fulfill({
     json: { source: "yes24", cover: null, price: 14400, rating: 9.4, pages: 280, intro: "테스트를 위해 지어낸 소개예요.", link: "https://www.yes24.com/product/goods/1" },
   }));
-  await page.goto("/");
-  await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
-  await page.getByRole("button", { name: "데이터 분석", exact: true }).click();
-  await page.getByRole("button", { name: "책 펼치기" }).click();
-  await page.getByRole("button", { name: "책 펼치기" }).click();
-  await page.getByRole("button", { name: "다음 장" }).click();
+  await toBookmarks(page);
   await reactToBookmarks(page, ["궁금해요", "패스", "궁금해요", "패스", "패스"]);
   await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
 }

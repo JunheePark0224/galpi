@@ -103,4 +103,6 @@
 .hint { margin: 0; text-align: center; font-size: 13px; line-height: var(--hint-h, 20px); color: var(--ink-muted); translate: 0 var(--hint-pull); }
 .actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--space-3); }
 .actions > button { flex: 1 1 0; min-width: 120px; }
+/* S-04 [← 질문으로 돌아가기] is the longest label: one line, the button grows to it (a wrapped label made the row taller than the screen). */
+.actions > .back { min-width: max-content; white-space: nowrap; }
 .error { flex-basis: 100%; margin: 0; text-align: center; font-size: 13px; }

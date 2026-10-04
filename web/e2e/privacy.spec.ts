@@ -1,11 +1,11 @@
 import { expect } from "@playwright/test";
-import { test } from "./helpers";
+import { START, test } from "./helpers";
 
 test.use({ reducedMotion: "reduce" });
 
-test("🎯 input → 처리방침 link → /privacy → 처음으로", async ({ page }) => {
+test("S-02 → 처리방침 link → /privacy → 처음으로", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: /알고 싶은 게 있어요/ }).click();
+  await page.getByRole("button", { name: START }).click();
   await page.getByRole("link", { name: "처리방침" }).first().click();
 
   await expect(page).toHaveURL(/\/privacy$/);
@@ -19,9 +19,8 @@ test("🎯 input → 처리방침 link → /privacy → 처음으로", async ({ 
 
   await page.getByRole("link", { name: "처음으로" }).click();
   await expect(page).toHaveURL(/\/$/);
-  // 처음으로 is a fresh open: S-01, not the 🎯 input screen it left
-  await expect(page.getByRole("button", { name: /알고 싶은 게 있어요/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: /그냥 한 권 만나고 싶어요/ })).toBeVisible();
+  // 처음으로 is a fresh open: S-01, not the question it left
+  await expect(page.getByRole("button", { name: START })).toBeVisible();
 });
 
 test("a first visit straight to /privacy records nothing and creates no id", async ({ page }) => {
