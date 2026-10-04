@@ -25,6 +25,8 @@ export interface LibraryStore {
   /** false when this book is already saved (one bookmark per book). */
   insertSave(row: SaveRow): Promise<boolean>;
   deleteSave(isbn: string): Promise<boolean>;
+  /** Every bookmark of this person (S-09 [모두 제거]); the rods stay. How many rows went. */
+  deleteAllSaves(): Promise<number>;
   updateSave(isbn: string, change: { shelfId: string; position: number }): Promise<boolean>;
   /** null when that position is taken (two adds at once). */
   insertShelf(name: string, position: number): Promise<Shelf | null>;

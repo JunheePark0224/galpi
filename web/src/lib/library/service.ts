@@ -36,6 +36,14 @@ export async function removeBookmark(store: LibraryStore, isbn: string): Promise
   return (await store.deleteSave(isbn)) ? { ok: true } : { ok: false, error: "missing" };
 }
 
+/**
+ * S-09 [모두 제거] (10-04): every bookmark of the person in one statement; the rods and their names stay. `removed` counts
+ * the rows that went (also books no longer in the catalogue, which S-09 does not draw) — 0 when there were none.
+ */
+export async function removeAllBookmarks(store: LibraryStore): Promise<{ ok: true; removed: number }> {
+  return { ok: true, removed: await store.deleteAllSaves() };
+}
+
 /** A rod renumbered by a drag (only when no whole number is left between the new neighbours) is spaced this far apart. */
 export const POSITION_STEP = 1024;
 /** At most this many row writes at once while renumbering a rod. */

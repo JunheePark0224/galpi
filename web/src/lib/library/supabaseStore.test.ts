@@ -68,6 +68,15 @@ describe("supabaseStore — every statement filtered to the person (RLS says the
     expect(calls).toContain('update({"shelf_id":"t","position":-1})');
   });
 
+  it("takes every bookmark of the person in one statement and counts the rows; a failure throws its code", async () => {
+    const { db, calls } = fakeDb([{ data: [{ isbn: "1" }, { isbn: "2" }] }, { data: null }, { error: { code: "42501" } }]);
+    const store = supabaseStore(db, "u1");
+    expect(await store.deleteAllSaves()).toBe(2);
+    expect(calls).toEqual(["from(saves)", "delete()", 'eq("user_id","u1")', 'select("isbn")']);
+    expect(await store.deleteAllSaves()).toBe(0);
+    await expect(store.deleteAllSaves()).rejects.toThrow("library unsave all failed: 42501");
+  });
+
   it("lists the kept ISBNs for the header count", async () => {
     const { db, calls } = fakeDb([{ data: [{ isbn: "1" }, { isbn: "2" }] }]);
     expect(await savedIsbns(db, "u1")).toEqual(["1", "2"]);

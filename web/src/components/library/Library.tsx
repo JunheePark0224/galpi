@@ -11,6 +11,7 @@ import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { setUserId } from "@/lib/track/common";
 import { libraryGuide } from "@/lib/flow/firstGuide";
 import { BookmarkSheet, metLabel } from "./BookmarkSheet";
+import { CLEAR_ALL, ClearSheet } from "./ClearSheet";
 import { LibraryGuide } from "./LibraryGuide";
 import styles from "./Library.module.css";
 import { Shelf } from "./Shelf";
@@ -32,7 +33,8 @@ interface Open { bookmark: LibraryBookmark; shelfId: string }
  * [＋ 막대 추가], and a small [로그아웃] at the very bottom. Moving (10-04): [책갈피 옮기기] turns move mode on — every
  * bookmark can then be dragged to a place on any rod straight away, taps do nothing, and the rod buttons step aside —
  * until [완료], Escape (when no drag is live) or leaving the page. Or open a bookmark and use [다른 막대로 옮기기] (no
- * dragging needed). No toast for a move that worked (user, 10-04). Logged out, it offers the login instead.
+ * dragging needed). No toast for a move that worked (user, 10-04). [모두 제거] (시안 A, 10-04) sits beside [책갈피 옮기기]
+ * and asks once more in a sheet; the rods stay. Logged out, it offers the login instead.
  */
 export function Library() {
   const account = useAccount();
@@ -52,6 +54,20 @@ export function Library() {
   return <Rods />;
 }
 
+/** 16 px line icons before the two button labels (option A) — decoration only, the label says it. */
+const MoveIcon = () => (
+  <svg className={styles.icon} width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"
+    strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    <path d="M8 1.5v13M1.5 8h13M8 1.5 6 3.5M8 1.5l2 2M8 14.5l-2-2M8 14.5l2-2M1.5 8l2-2M1.5 8l2 2M14.5 8l-2-2M14.5 8l-2 2" />
+  </svg>
+);
+const TrashIcon = () => (
+  <svg className={styles.icon} width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"
+    strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    <path d="M2.5 4h11M6 4V2.5h4V4M3.8 4l.7 9.5h7l.7-9.5M6.5 6.5v4.5M9.5 6.5v4.5" />
+  </svg>
+);
+
 function Rods() {
   const lib = useLibrary();
   const [open, setOpen] = useState<Open | null>(null);
@@ -60,6 +76,7 @@ function Rods() {
   const [addBusy, setAddBusy] = useState(false);
   const [note, setNote] = useState<string | null>(null);
   const [moveMode, setMoveMode] = useState(false);
+  const [clearing, setClearing] = useState(false);
   // C-22: the first visit to 내 책갈피 shows a small example shelf once (per browser)
   const [guide, setGuide] = useState(() => !libraryGuide.hasSeen());
   // a move that worked says nothing (user, 10-04) — the rods already show it
@@ -140,12 +157,21 @@ function Rods() {
       <p className={styles.stat}>{`${view.count}개 · 동물 ${view.animals}종`}</p>
       {view.count === 0 && <p className={styles.quiet}>책을 만나 🔖 꽂기를 누르면 첫 막대에 걸려요.</p>}
       {view.count > 0 && (
-        <Button
-          variant={moving ? "primary" : "secondary"} className={styles.moveToggle}
-          onClick={() => { setAdding(false); setNewName(""); setMoveMode(!moving); }}
-        >
-          {moving ? MOVE_DONE : MOVE_MODE}
-        </Button>
+        <div className={styles.actions}>
+          <button
+            type="button" className={styles.moveToggle} data-moving={moving ? "" : undefined}
+            onClick={() => { setAdding(false); setNewName(""); setMoveMode(!moving); }}
+          >
+            {!moving && <MoveIcon />}
+            {moving ? MOVE_DONE : MOVE_MODE}
+          </button>
+          {!moving && (
+            <button type="button" className={styles.clearAll} onClick={() => setClearing(true)}>
+              <TrashIcon />
+              {CLEAR_ALL}
+            </button>
+          )}
+        </div>
       )}
       {moving && <p className={styles.hint}>{MOVE_HINT}</p>}
 
@@ -200,6 +226,7 @@ function Rods() {
           onClose={() => setOpen(null)}
         />
       )}
+      {clearing && <ClearSheet count={view.count} onClear={lib.clearAll} onClose={() => setClearing(false)} />}
     </div>
   );
 }

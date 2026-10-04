@@ -4,8 +4,34 @@
 .title { margin: var(--space-2) 0 0; font-size: 24px; line-height: 1.3; }
 .stat { margin: 0; font-size: 13px; color: var(--ink-soft); }
 .quiet { margin: var(--space-2) 0; font-size: 14px; color: var(--ink-soft); }
-/* [책갈피 옮기기] ↔ [완료] (C-05 pill, secondary ↔ primary) and the move-mode hint under it. */
-.moveToggle { align-self: flex-start; margin-top: var(--space-1); }
+/* 시안 A (10-04, 2026-10-04-v2/library-buttons-options.png): one row — [책갈피 옮기기] in the home start button's leather
+   (Home .entry without the sweeping light) and [모두 제거] on cream paper in the 한국 소설 red. In move mode the leather
+   button turns solid ink [완료] ("done") and [모두 제거] steps aside. Then the move-mode hint under the row. */
+.actions { display: flex; gap: 10px; margin-top: var(--space-1); }
+.moveToggle, .clearAll {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 48px; padding: 0 var(--space-3); border-radius: 12px;
+  font: inherit; font-family: var(--font-batang), serif; font-weight: 700; font-size: 15px; cursor: pointer;
+  transition: transform 120ms ease;
+}
+.moveToggle {
+  flex: 1.4 1 0; border: 0; color: var(--foil);
+  background: var(--leather-grain), var(--leather-sheen), var(--cloth);
+  box-shadow: inset 0 0 0 2px var(--cloth-edge), 0 12px 22px -12px rgba(43, 39, 36, 0.6);
+}
+.moveToggle::before { /* the stitched line, 5 px in */
+  content: ""; position: absolute; inset: 5px; border: 1px dashed var(--foil-line); border-radius: 8px; pointer-events: none;
+}
+.moveToggle:active { transform: translateY(1px); background: var(--leather-grain), var(--leather-sheen), var(--cloth-edge); }
+.moveToggle[data-moving] { background: var(--ink); color: var(--paper); box-shadow: 0 8px 16px -10px rgba(43, 39, 36, 0.6); }
+.moveToggle[data-moving]::before { border-color: rgba(250, 245, 234, 0.3); }
+.clearAll {
+  flex: 1 1 0; border: 1.5px solid rgba(169, 76, 96, 0.55); background: #fffdf8; color: var(--genre-korean-fiction);
+}
+.clearAll:active { transform: scale(0.98); }
+.moveToggle:focus-visible, .clearAll:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.icon { flex-shrink: 0; }
+@media (prefers-reduced-motion: reduce) { .moveToggle, .clearAll { transition: none; } }
 .hint { margin: 0; font-size: 13px; color: var(--ink-soft); }
 .error { width: 100%; margin: 0; font-size: 13px; color: var(--genre-korean-fiction); }
 
@@ -103,6 +129,9 @@
 .big > * { transform: scale(1.3); transform-origin: top left; }
 .sheetActions { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-2); }
 .confirm { margin: 0; font-size: 14px; text-align: center; }
+/* [모두 제거]'s confirm sheet: the warning line, then [모두 빼기] — the one danger pill, filled 한국 소설 red, white letters. */
+.clearBody { margin: var(--space-2) 0 var(--space-4); font-size: 14px; line-height: 1.6; color: var(--ink-soft); text-align: center; }
+.sheetActions .danger { border-color: var(--genre-korean-fiction); background: var(--genre-korean-fiction); color: #fff; }
 .pickList { display: flex; flex-direction: column; gap: var(--space-1); margin: var(--space-3) 0; padding: 0; list-style: none; }
 .pick {
   width: 100%; min-height: var(--touch); padding: 0 var(--space-3); border: 0; border-radius: 10px; background: var(--card-bg);
