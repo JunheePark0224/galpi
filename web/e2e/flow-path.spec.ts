@@ -34,6 +34,7 @@ test("SQL path: eleven questions, no path or count while answering, then 당신�
   await expect(page.getByRole("region", { name: "지나온 길" })).toContainText("DB에서 꺼내기");
   await expect(page.getByRole("region", { name: "기분" })).toContainText("바로 따라 해 보기");
   await expect(page.getByText(/\d+권/)).toHaveCount(0);                    // no book-count note (design 10절)
+  await expect(page.getByText("평소의 당신과 반대편에서 골랐어요")).toHaveCount(0);   // a normal path: no challenge line
   await shot(page, "s04-path");
   await page.getByRole("button", { name: "다음 장" }).click();
   await reactToBookmarks(page, ["패스", "패스", "패스", "패스", "패스"], 5);
@@ -120,26 +121,40 @@ test("[← 이전 질문] drops the last answer; on the first question it goes h
 
 test("S-04 [← 질문으로 돌아가기]: the same answer keeps the five books, another answer draws anew", async ({ page }) => {
   const { events } = await recordEvents(page);
-  let draws = 0;
-  await page.route("**/api/books/draw", (route) => { draws += 1; return route.continue(); });
+  const drawn: string[][] = [];                                             // each /api/books/draw answer's five book ids
+  await page.route("**/api/books/draw", async (route) => {
+    const res = await route.fetch();
+    const body = (await res.json()) as { picks: { card: { id: string } }[] };
+    drawn.push(body.picks.map((p) => p.card.id));
+    await route.fulfill({ response: res, json: body });
+  });
+  /** The five books S-04 now holds (the stored flow state). */
+  const shownIds = () => page.evaluate(() =>
+    (JSON.parse(sessionStorage.getItem("galpi.flow") ?? "{}").state?.draw?.picks ?? []).map((p: { card: { id: string } }) => p.card.id) as string[]);
   await page.goto("/");
   await page.getByRole("button", { name: START }).click();
   await answerPath(page, SQL_PATH);
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await expect(page.getByRole("button", { name: "다음 장" })).toBeEnabled();
+  expect(drawn).toHaveLength(1);
+  expect(drawn[0]).toHaveLength(5);
+  expect(await shownIds()).toEqual(drawn[0]);
 
   await page.getByRole("button", { name: "질문으로 돌아가기" }).click();
   await expect(heading(page, "learn-len")).toBeVisible();
   await answerPath(page, [{ node: "learn-len", choice: "A" }]);              // the same answer
   await expect(page.getByRole("heading", { name: "당신이 고른 길" })).toBeVisible();
   await expect(page.getByRole("button", { name: "다음 장" })).toBeEnabled();
-  expect(draws).toBe(1);
+  expect(drawn).toHaveLength(1);                                            // no new draw
+  expect(await shownIds()).toEqual(drawn[0]);                               // the same five books
 
   await page.getByRole("button", { name: "질문으로 돌아가기" }).click();
   await answerPath(page, [{ node: "learn-len", choice: "B" }]);              // another answer
   await expect(page.getByRole("region", { name: "기분" })).toContainText("깊게 파고들기");
   await expect(page.getByRole("button", { name: "다음 장" })).toBeEnabled();
-  expect(draws).toBe(2);
+  expect(drawn).toHaveLength(2);                                            // a new draw
+  expect(await shownIds()).toEqual(drawn[1]);
+  expect(drawn[1]).not.toEqual(drawn[0]);
 
   expect(named(events, "question_back_clicked").map((e) => e.props)).toEqual([
     { node_id: "learn-len", depth: 11, source: "first_page" }, { node_id: "learn-len", depth: 11, source: "first_page" },
