@@ -39,7 +39,8 @@ describe("pathEnds", () => {
 
   it("lists the challenge ends: far scopes, and the whole library stays whole", () => {
     const challenge = pathEnds(MAP).filter((e) => e.mode === "challenge").map((e) => e.scopeKey);
-    expect(challenge).toEqual(expect.arrayContaining(["all", "entry=leaf;genres=에세이", "entry=leaf", "entry=target"]));
+    expect(challenge).toEqual(expect.arrayContaining(["all", "entry=leaf;genres=에세이", "entry=leaf", "entry=leaf;genres=SF·판타지"]));
+    expect(challenge).not.toContain("entry=target");   // a story challenge never crosses to 배우기 (its random genre is drawn per draw)
     expect(new Set(challenge).size).toBe(challenge.length);
   });
 });

@@ -36,16 +36,33 @@ describe("pathSummary (S-04 당신이 고른 길)", () => {
     expect(() => pathSummary(MINI, [a("branch", "A")])).toThrow(PathError);
   });
 
-  it("on the real map: a mood choice that only leads on (실제로 써먹는 쪽) is not a mood", () => {
+  it("on the real map: a broad answer made finer by the next one (실제로 써먹는 쪽 → 바로 따라 해 보기) shows the finer one", () => {
     const real = [a("start", "A"), a("branch", "B"), a("learn-intro", "B"), a("learn-way", "B"), a("learn-way-use", "A"), a("learn-len", "unsure")];
     expect(pathSummary(QUESTION_MAP, real)).toEqual({ crumbs: ["뭔가 배우기"], moods: ["바로 따라 해 보기"], mode: "normal" });
+  });
+
+  it("on the real map: left broad (못 잡겠어요 next, or the next question passed over), the broad answer shows", () => {
+    const real = [a("start", "A"), a("branch", "B"), a("learn-intro", "B"), a("learn-way", "B"), a("learn-way-use", "unsure"), a("learn-len", "B")];
+    expect(pathSummary(QUESTION_MAP, real)).toEqual({ crumbs: ["뭔가 배우기"], moods: ["실제로 써먹는 쪽", "두툼한 책 한 권"], mode: "normal" });
+    expect(walkPath(QUESTION_MAP, SQL_PATH).skipped).toEqual(["learn-way-use"]);
+    expect(pathSummary(QUESTION_MAP, SQL_PATH).moods).toEqual(["실제로 써먹는 쪽", "가볍게 읽히는 얇은 책"]);
+  });
+
+  it("on the real map: two mood answers in a row on different axes both show", () => {
+    const real = [a("start", "A"), a("branch", "A"), a("story-intro", "B"), a("story-gain", "A"), a("story-world", "B"), a("story-temp", "unsure"), a("story-pull", "unsure"), a("story-len", "unsure")];
+    expect(pathSummary(QUESTION_MAP, real).moods).toEqual(["뭔가 하나 알게 된 나", "여기 없는 딴 세상"]);
+  });
+
+  it("never lists a question the walk passed over", () => {
+    const skipLen = { ...MINI, skip: new Set(["mood-len|normal|all"]) };
+    expect(pathSummary(skipLen, [a("start", "A"), a("branch", "unsure")])).toEqual({ crumbs: [], moods: [], mode: "normal" });
   });
 
   it("on the real map: the three test paths end, with the summaries S-04 shows", () => {
     for (const p of [SQL_PATH, MIXED_PATH, CHALLENGE_PATH]) expect(walkPath(QUESTION_MAP, p).next).toBeNull();
     expect(pathSummary(QUESTION_MAP, SQL_PATH)).toEqual({
       crumbs: ["뭔가 배우기", "일을 더 잘하기", "숫자·도구 다루기", "데이터 읽고 분석", "데이터 꺼내는 도구", "DB에서 꺼내기"],
-      moods: ["바로 따라 해 보기", "가볍게 한 권"], mode: "normal",
+      moods: ["실제로 써먹는 쪽", "가볍게 읽히는 얇은 책"], mode: "normal",
     });
     expect(pathSummary(QUESTION_MAP, MIXED_PATH)).toEqual({ crumbs: [], moods: ["가볍게 얇은 책"], mode: "normal" });
     expect(pathSummary(QUESTION_MAP, CHALLENGE_PATH)).toEqual({

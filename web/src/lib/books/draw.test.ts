@@ -24,7 +24,7 @@ describe("drawPath (v2: the answers of the question map)", () => {
     expect(res.widened).toBe(true);
     expect(res.path).toEqual({
       crumbs: ["뭔가 배우기", "일을 더 잘하기", "숫자·도구 다루기", "데이터 읽고 분석", "데이터 꺼내는 도구", "DB에서 꺼내기"],
-      moods: ["바로 따라 해 보기", "가볍게 한 권"], mode: "normal",
+      moods: ["실제로 써먹는 쪽", "가볍게 읽히는 얇은 책"], mode: "normal",
     });
     const sqlPick = res.picks.find((p) => sql.includes(p.card.id) && p.kind === "recommended");
     expect(sqlPick?.reason).toMatchObject({ label: "나온 이유", items: expect.arrayContaining(["데이터 분석", "SQL"]) });

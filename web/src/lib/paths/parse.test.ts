@@ -19,7 +19,14 @@ describe("parseQuestionMap", () => {
     expect(map.nodes["mood-temp"].a.effects).toEqual({ axes: { temp: 1 } });
     expect(map.nodes["mood-len"].b.effects).toEqual({ len: -1 });
     expect(map.nodes.start.b.effects).toEqual({ mode: "challenge" });
+    expect(map.nodes["mood-way"].a.effects).toEqual({ ways: ["개념"] });
     expect(map.far).toEqual([{ from: { entry: "target", topics: ["데이터 분석"] }, to: { entry: "leaf", genres: ["에세이"] } }]);
+  });
+
+  it("reads a way list (any of them gets the way points) and refuses a way we do not have", () => {
+    const node = (way: string) => `\`\`\`node\nid: w\nkind: mood\nquestion: q\nA: a | way=${way} | next=draw\nB: b | next=draw\nunsure: next=draw\n\`\`\``;
+    expect(parseQuestionMap(node("실습,사례")).nodes.w.a.effects).toEqual({ ways: ["실습", "사례"] });
+    expect(() => parseQuestionMap(node("실습,요약"))).toThrow(/w.*way=실습,요약/);
   });
 
   it("refuses a node with a missing line, an unknown effect, or a repeated id — naming the node", () => {
