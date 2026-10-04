@@ -79,14 +79,17 @@ describe("Library (S-09)", () => {
   };
   const dragTo = (x: number, y: number) => { act(() => { fireEvent.pointerMove(window, { clientX: x, clientY: y }); }); };
 
-  it("[책갈피 옮기기] turns move mode on: [완료] (primary), the hint, the rod buttons step aside; [완료] and Escape turn it off", async () => {
+  it("[책갈피 옮기기] turns move mode on: [완료] (ink), the hint, [모두 제거] and the rod buttons step aside; [완료] and Escape turn it off", async () => {
     await mount(IN);
     const toggle = await screen.findByRole("button", { name: "책갈피 옮기기" });
-    expect(toggle).toHaveAttribute("data-variant", "secondary");
+    expect(toggle).not.toHaveAttribute("data-moving");
+    expect(toggle.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
+    expect(screen.getByRole("button", { name: "모두 제거" })).toBeInTheDocument();
     expect(screen.queryByText("책갈피를 끌어서 원하는 자리에 놓으세요")).toBeNull();
     fireEvent.click(toggle);
     expect(toggle).toHaveTextContent("완료");
-    expect(toggle).toHaveAttribute("data-variant", "primary");
+    expect(toggle).toHaveAttribute("data-moving");
+    expect(screen.queryByRole("button", { name: "모두 제거" })).toBeNull();
     expect(screen.getByText("책갈피를 끌어서 원하는 자리에 놓으세요")).toBeInTheDocument();
     expect(document.querySelector("[data-move-mode]")).not.toBeNull();
     for (const name of ["막대 이름 고치기", "막대 치우기", "＋ 막대 추가"]) expect(screen.queryByRole("button", { name })).toBeNull();
@@ -95,17 +98,90 @@ describe("Library (S-09)", () => {
     expect(screen.queryByText("책갈피를 끌어서 원하는 자리에 놓으세요")).toBeNull();
     expect(screen.getAllByRole("button", { name: "막대 이름 고치기" })).toHaveLength(2);
     expect(screen.getByRole("button", { name: "＋ 막대 추가" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "모두 제거" })).toBeInTheDocument();
     await enterMode();
     fireEvent.keyDown(window, { key: "Escape" });
     expect(screen.getByRole("button", { name: "책갈피 옮기기" })).toBeInTheDocument();
     expect(document.querySelector("[data-move-mode]")).toBeNull();
   });
 
-  it("no bookmarks: no [책갈피 옮기기]", async () => {
+  it("no bookmarks: no [책갈피 옮기기] and no [모두 제거]", async () => {
     request.mockResolvedValue(ok({ count: 0, animals: 0, shelves: [{ ...VIEW.shelves[0], bookmarks: [] }] }));
     await mount({ ...IN, count: 0 });
     expect(await screen.findByText("0개 · 동물 0종")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "책갈피 옮기기" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "모두 제거" })).toBeNull();
+  });
+
+  const EMPTY: LibraryView = { count: 0, animals: 0, shelves: VIEW.shelves.map((s) => ({ ...s, bookmarks: [] })) };
+  const clearSheet = () => screen.getByRole("dialog", { name: "책갈피 2개를 모두 뺄까요?" });
+
+  it("[모두 제거] asks once more; [그대로 두기] closes the sheet and sends nothing", async () => {
+    await mount(IN);
+    fireEvent.click(await screen.findByRole("button", { name: "모두 제거" }));
+    const sheet = clearSheet();
+    expect(within(sheet).getByText(/빼면 되돌릴 수 없어요\. 다시 꽂으려면 책을 다시 만나야 해요\./)).toBeInTheDocument();
+    expect(within(sheet).getByText(/막대와 막대 이름은 그대로 남아요\./)).toBeInTheDocument();
+    expect(within(sheet).getByRole("button", { name: "모두 빼기" })).toHaveFocus();
+    const calls = request.mock.calls.length;
+    fireEvent.click(within(sheet).getByRole("button", { name: "그대로 두기" }));
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(request.mock.calls.length).toBe(calls);
+    expect(screen.getByRole("button", { name: "모순 책갈피" })).toBeInTheDocument();
+    expect(track).not.toHaveBeenCalledWith("library_cleared", expect.anything());
+  });
+
+  it("[모두 빼기] waits for the server, then the rods stay empty, the header count is 0 and E-35 goes (no E-16)", async () => {
+    const store = await mount(IN);
+    fireEvent.click(await screen.findByRole("button", { name: "모두 제거" }));
+    let answer!: (v: unknown) => void;
+    request.mockImplementationOnce(() => new Promise((r) => { answer = r; })).mockResolvedValueOnce(ok(EMPTY));
+    fireEvent.click(within(clearSheet()).getByRole("button", { name: "모두 빼기" }));
+    expect(request).toHaveBeenLastCalledWith("DELETE", "/api/library/saves/all", { all: true });
+    // not before the server says yes: the bookmarks are still there, and the button is held
+    expect(screen.getByRole("button", { name: "모순 책갈피" })).toBeInTheDocument();
+    expect(within(clearSheet()).getByRole("button", { name: "모두 빼기" })).toBeDisabled();
+    await act(async () => { answer(ok({ ok: true, removed: 2 })); });
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    expect(screen.getByText("0개 · 동물 0종")).toBeInTheDocument();
+    expect(screen.getAllByText("아직 비어 있어요")).toHaveLength(2);
+    expect(screen.getByRole("heading", { name: "읽을 책" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "모두 제거" })).toBeNull();
+    expect(store.accountSnapshot().count).toBe(0);
+    expect(track).toHaveBeenCalledWith("library_cleared", { removed_count: 2 });
+    expect(track).not.toHaveBeenCalledWith("book_unsaved", expect.anything());
+    expect(request).toHaveBeenLastCalledWith("GET", "/api/library");
+  });
+
+  it("[모두 빼기] pressed twice quickly sends once", async () => {
+    await mount(IN);
+    fireEvent.click(await screen.findByRole("button", { name: "모두 제거" }));
+    let answer!: (v: unknown) => void;
+    request.mockImplementationOnce(() => new Promise((r) => { answer = r; })).mockResolvedValueOnce(ok(EMPTY));
+    const button = within(clearSheet()).getByRole("button", { name: "모두 빼기" });
+    const before = request.mock.calls.length;
+    fireEvent.click(button);
+    fireEvent.click(button);
+    expect(request.mock.calls.length).toBe(before + 1);
+    await act(async () => { answer(ok({ ok: true, removed: 2 })); });
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    expect(track.mock.calls.filter(([name]) => name === "library_cleared")).toHaveLength(1);
+  });
+
+  it("[모두 빼기] refused: the sheet stays with the reason, nothing changes, no event — and it can be tried again", async () => {
+    const store = await mount(IN);
+    fireEvent.click(await screen.findByRole("button", { name: "모두 제거" }));
+    request.mockResolvedValueOnce({ ok: false, status: 500, body: null });
+    fireEvent.click(within(clearSheet()).getByRole("button", { name: "모두 빼기" }));
+    expect(await within(clearSheet()).findByRole("alert")).toHaveTextContent("모두 빼지 못했어요. 다시 해 주세요.");
+    expect(screen.getByRole("button", { name: "모순 책갈피" })).toBeInTheDocument();
+    expect(store.accountSnapshot().count).toBe(2);
+    expect(track).not.toHaveBeenCalledWith("library_cleared", expect.anything());
+    // a body without a number still counts what was drawn
+    request.mockResolvedValueOnce(ok({ ok: true })).mockResolvedValueOnce(ok(EMPTY));
+    fireEvent.click(within(clearSheet()).getByRole("button", { name: "모두 빼기" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    expect(track).toHaveBeenCalledWith("library_cleared", { removed_count: 2 });
   });
 
   it("outside move mode a press that moves (or is held) never drags — a tap opens the sheet", async () => {

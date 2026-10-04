@@ -75,6 +75,8 @@ export const EVENT_SPEC = {
     feedback_text: { type: "string", only: "supabase", max: FEEDBACK_MAX },
     text_length: { type: "number" },
   },
+  // v1.2: S-09 [모두 제거] after the server took them — one event, never E-16 per book
+  library_cleared: { removed_count: { type: "number" } },
 } as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
 
 type Spec = typeof EVENT_SPEC;

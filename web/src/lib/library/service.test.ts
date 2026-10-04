@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { BookCard } from "@/lib/books/types";
 import { memoryStore } from "./__fixtures__/memoryStore";
-import { addShelf, FIRST_SHELF_NAME, libraryView, MAX_SAVES, MAX_SHELVES, moveBookmark, POSITION_STEP, removeBookmark, removeShelf, renameShelf, saveBookmark } from "./service";
+import { addShelf, FIRST_SHELF_NAME, libraryView, MAX_SAVES, MAX_SHELVES, moveBookmark, POSITION_STEP, removeAllBookmarks, removeBookmark, removeShelf, renameShelf, saveBookmark } from "./service";
 import type { SaveRow } from "./types";
 
 const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false } as const;
@@ -180,6 +180,27 @@ describe("moving and removing bookmarks", () => {
     const store = memoryStore({ shelves: [{ id: "a", name: "첫", position: 0 }], saves: [{ ...input("9790000000001"), shelfId: "a", position: 0 }] });
     expect(await removeBookmark(store, "9790000000001")).toEqual({ ok: true });
     expect(await removeBookmark(store, "9790000000001")).toEqual({ ok: false, error: "missing" });
+  });
+});
+
+describe("removeAllBookmarks (S-09 [모두 제거])", () => {
+  it("takes every bookmark — also books no longer drawn — keeps the rods and their names, and counts what went", async () => {
+    const shelves = [{ id: "a", name: "첫", position: 0 }, { id: "b", name: "둘", position: 1 }];
+    const store = memoryStore({
+      shelves,
+      saves: [
+        { ...input("9790000000001"), shelfId: "a", position: 0 },
+        { ...input("9790000000002"), shelfId: "b", position: 0 },
+        { ...input("9790000000003"), shelfId: "b", position: 1 },
+      ],
+    });
+    expect(await removeAllBookmarks(store)).toEqual({ ok: true, removed: 3 });
+    expect(store.data.saves).toEqual([]);
+    expect(store.data.shelves).toEqual(shelves);
+    const view = await libraryView(store, card);
+    expect(view).toMatchObject({ count: 0, animals: 0 });
+    expect(view.shelves.map((s) => [s.name, s.bookmarks.length])).toEqual([["첫", 0], ["둘", 0]]);
+    expect(await removeAllBookmarks(store)).toEqual({ ok: true, removed: 0 });
   });
 });
 

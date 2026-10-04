@@ -14,7 +14,7 @@ export type MoveMethod = "drag" | "menu";
 /**
  * S-09's rods from /api/library, and the changes (each sent to the API, then the rods are read again — the server is the
  * one place that orders them). Events go only after a change succeeded: E-17 on the first load, E-16, E-29 (number of
- * rods — the name never), E-30. Renaming and removing a rod have no event (taxonomy v0.8).
+ * rods — the name never), E-30, E-35 ([모두 제거], v1.2). Renaming and removing a rod have no event (taxonomy v0.8).
  */
 export function useLibrary() {
   const [status, setStatus] = useState<LibraryStatus>("loading");
@@ -101,6 +101,19 @@ export function useLibrary() {
         track("book_unsaved", { book_id: isbn });
         addSavedCount(-1);
       }),
+    /**
+     * [모두 제거] (10-04): not at once like a single remove — a bulk loss shows only after the server took it. Then E-35
+     * (one event, no E-16 per book), the header count 0, and the rods read again (they stay, empty).
+     */
+    clearAll: async () => {
+      const answer = await libraryRequest("DELETE", "/api/library/saves/all", { all: true });
+      if (!answer.ok) return false;
+      const removed = (answer.body as { removed?: unknown } | null)?.removed;
+      track("library_cleared", { removed_count: typeof removed === "number" ? removed : (current.current?.count ?? 0) });
+      setSavedCount(0);
+      await reload();
+      return true;
+    },
     addShelf: (name: string) =>
       change("POST", "/api/library/shelves", { name }, () => track("shelf_created", { shelf_count: Math.max(shelfCount, 1) + 1 })),
     renameShelf: (id: string, name: string) => change("PATCH", "/api/library/shelves", { id, name }),

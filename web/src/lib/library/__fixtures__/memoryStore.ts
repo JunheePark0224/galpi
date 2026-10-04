@@ -26,6 +26,11 @@ export function memoryStore(init: { shelves?: Shelf[]; saves?: SaveRow[] } = {})
       data.saves = data.saves.filter((s) => s.isbn !== isbn);
       return data.saves.length < before;
     },
+    deleteAllSaves: async () => {
+      const removed = data.saves.length;
+      data.saves = [];
+      return removed;
+    },
     updateSave: async (isbn, change) => {
       if (!data.saves.some((s) => s.isbn === isbn)) return false;
       data.saves = data.saves.map((s) => (s.isbn === isbn ? { ...s, ...change } : s));
