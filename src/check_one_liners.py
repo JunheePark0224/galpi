@@ -25,6 +25,10 @@ OUT = ROOT / "data" / "processed" / "one_liners_checked.json"
 
 MIN_LEN, MAX_LEN = 12, 36
 HYPE_WORDS = ["최고", "필독", "반드시", "완벽", "인생책", "미친", "역대급", "무조건", "1위", "베스트셀러", "강력 추천", "꼭 읽어야"]
+# Plain words that only contain a hype word (10-03: "완벽주의" was read as "완벽"): taken out before the hype check.
+HYPE_OK = ["완벽주의", "최고경영자", "최고점", "최고치"]
+# A title this short is a common word ("생산성"), not a title to repeat (10-03): the title check needs at least this many.
+TITLE_MIN = 4
 STOP_TOKENS = {"있어요", "말해요", "때", "까요", "어떻게", "무엇이", "뭐가", "정말", "다를까요", "되면", "하는", "하고", "싶을", "해보는", "담았어요"}
 
 
@@ -50,11 +54,14 @@ def check_line(text: str, title: str, material: str) -> dict:
         issues.append(f"짧음({n}자)")
     if n > MAX_LEN:
         issues.append(f"김({n}자)")
-    hype = [w for w in HYPE_WORDS if w in text]
+    plain = text
+    for word in HYPE_OK:
+        plain = plain.replace(word, " ")
+    hype = [w for w in HYPE_WORDS if w in plain]
     if hype:
         issues.append("과장 표현: " + ", ".join(hype))
     title_core = re.split(r"[:=(]", title)[0].strip()
-    if title_core and title_core.replace(" ", "") in text.replace(" ", ""):
+    if len(title_core.replace(" ", "")) >= TITLE_MIN and title_core.replace(" ", "") in text.replace(" ", ""):
         issues.append("제목 반복")
     grounded = stem_overlap(text, material)
     if len(grounded) < 2:

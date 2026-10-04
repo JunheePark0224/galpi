@@ -185,14 +185,14 @@ input[type=text]{flex:1;min-width:240px}
 .picks button.chosen{background:var(--ok);border-color:var(--ok);color:#fff}
 @media(max-width:520px){.cmp{grid-template-columns:1fr}}"""
 
-COMMON = """const MIN=12, MAX=36, HYPE=["최고","필독","반드시","완벽","인생책","미친","역대급","무조건","1위","베스트셀러","강력 추천","꼭 읽어야"];
+COMMON = """const MIN=12, MAX=36, HYPE=["최고","필독","반드시","완벽","인생책","미친","역대급","무조건","1위","베스트셀러","강력 추천","꼭 읽어야"], HYPE_OK=["완벽주의","최고경영자","최고점","최고치"], TITLE_MIN=4;
 let st={}; try{st=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){st={}}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const len=s=>s.replace(/\\s/g,"").length;
 function baseIssues(s,title){const n=len(s),out=[];if(n<MIN)out.push("짧음");if(n>MAX)out.push("김");
- const h=HYPE.filter(w=>s.includes(w));if(h.length)out.push("과장: "+h.join(","));
- const core=title.split(/[:=(]/)[0].trim().replace(/\\s/g,"");if(core&&s.replace(/\\s/g,"").includes(core))out.push("제목 반복");
+ const plain=HYPE_OK.reduce((x,w)=>x.split(w).join(" "),s);const h=HYPE.filter(w=>plain.includes(w));if(h.length)out.push("과장: "+h.join(","));
+ const core=title.split(/[:=(]/)[0].trim().replace(/\\s/g,"");if(core.length>=TITLE_MIN&&s.replace(/\\s/g,"").includes(core))out.push("제목 반복");
 return out}"""
 
 
