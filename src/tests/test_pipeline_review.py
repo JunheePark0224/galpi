@@ -434,3 +434,38 @@ def test_review_apply_reads_the_excluded_names_from_the_vocab(files):
                                             ensure_ascii=False), encoding="utf-8")
     assert review.main(["2026-10-05", "--apply", str(tmp / "dl.json")]) == 0
     assert json.loads(path.read_text(encoding="utf-8"))["books"][0]["keyword_candidate"] is None
+
+
+def test_a_later_batch_has_its_own_page_its_own_agreement_row_and_its_own_sample(files):
+    tmp, first = files
+    later = {**doc_of(), "batch_id": "2026-10-05-2"}
+    (first.parent / "2026-10-05-2.json").write_text(json.dumps(later, ensure_ascii=False), encoding="utf-8")
+    assert review.main(["2026-10-05-2"]) == 0
+    html = (tmp / "pages" / "2026-10-05-2.html").read_text(encoding="utf-8")
+    assert '"galpi-pipeline-2026-10-05-2"' in html and not (tmp / "pages" / "2026-10-05.html").exists()
+    d = later["books"]
+    download = tmp / "dl2.json"
+    download.write_text(json.dumps({"answers": {"1": ans(d[0], way="실습")}}), encoding="utf-8")
+    assert review.main(["2026-10-05-2", "--apply", str(download)]) == 0
+    download.write_text(json.dumps({"answers": {"1": ans(d[0])}}), encoding="utf-8")
+    assert review.main(["2026-10-05", "--apply", str(download)]) == 0
+    rows = read_rows(tmp / "agreement.csv")
+    assert [(r["date"], r["batch"], r["way"]) for r in rows] == [("2026-10-05-2", "daily", "0.0"), ("2026-10-05", "daily", "100.0")]
+    assert json.loads(first.read_text(encoding="utf-8"))["books"][0]["way"] == "개념"   # the first batch's file is its own
+
+
+def test_the_trial_sample_is_seeded_by_the_batch_id_and_old_files_keep_theirs():
+    books = [target(str(i), auto="ai-agree", flags=[]) for i in range(40)]
+    old = {"date": "2026-10-05", "books": books}                                   # before 10-05: no batch_id
+    first = {**old, "batch_id": "2026-10-05"}
+    assert sample.trial_sample(old, 0.1) == sample.trial_sample(first, 0.1)          # a day's first batch: the same draw
+    draws = {sample.trial_sample({**old, "batch_id": f"2026-10-05-{n}"}, 0.1)[0] for n in range(2, 8)}
+    assert len(draws) > 1                                                            # later batches draw by their own id
+
+
+def test_graduation_reads_batches_of_one_day_in_order():
+    rows = [day("2026-10-06-10", **ALL_96, **SAMPLED), day("2026-10-06-9", **{**ALL_96, "world": 80}, **SAMPLED),
+            day("2026-10-06-2", **ALL_96, **SAMPLED), day("2026-10-06", **ALL_96, **SAMPLED)]
+    assert graduation(rows)["streak"] == 1                                           # -10 is the latest, -9 breaks the streak
+    rows[0], rows[1] = day("2026-10-06-10", **{**ALL_96, "world": 80}, **SAMPLED), day("2026-10-06-9", **ALL_96, **SAMPLED)
+    assert graduation(rows)["streak"] == 0
