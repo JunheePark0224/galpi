@@ -10,7 +10,10 @@ const SUPABASE = "http://supabase.e2e.invalid";
 const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false };
 
 interface Saved { isbn: string; shelfId: string; title: string }
-interface FakeLibrary { loggedIn: boolean; justLoggedIn?: string; shelves: { id: string; name: string; position: number }[]; saved: Saved[]; posts: unknown[]; moves?: unknown[] }
+interface FakeLibrary {
+  loggedIn: boolean; justLoggedIn?: string; shelves: { id: string; name: string; position: number }[]; saved: Saved[]; posts: unknown[]; moves?: unknown[];
+  clears?: unknown[];
+}
 
 const ROD_A = "11111111-1111-4111-8111-111111111111";
 const ROD_B = "22222222-2222-4222-8222-222222222222";
@@ -55,6 +58,12 @@ async function fakeAccount(page: Page, lib: FakeLibrary) {
     }
     if (method === "DELETE") lib.saved = lib.saved.filter((s) => s.isbn !== body.isbn);
     return route.fulfill({ json: { ok: true } });
+  });
+  await page.route("**/api/library/saves/all", (route) => {   // [모두 제거]: every bookmark, the rods stay
+    lib.clears?.push(route.request().postDataJSON());
+    const removed = lib.saved.length;
+    lib.saved = [];
+    return route.fulfill({ json: { ok: true, removed } });
   });
   await page.route("**/api/library/shelves", (route) => {
     const body = route.request().postDataJSON() as { name: string };
@@ -202,13 +211,14 @@ test("S-09: [책갈피 옮기기] → drag to a place on a rod → [완료]; mov
   await expect(page.getByRole("heading", { name: "마음에 남은" })).toHaveAttribute("data-amp-mask", "");
   await expect(bm("지어낸 첫째 책").getByText("2026. 10. 1. 만남")).toBeAttached();          // the met date on the small front too
 
-  // move mode on: [완료] (primary), the hint, the rod buttons step aside; a tap there opens nothing
+  // move mode on: [완료] (ink), the hint, [모두 제거] and the rod buttons step aside; a tap there opens nothing
   const toggle = page.getByRole("button", { name: "책갈피 옮기기" });
-  await expect(toggle).toHaveAttribute("data-variant", "secondary");
-  expect((await toggle.boundingBox())?.height).toBeGreaterThanOrEqual(44);
+  await expect(toggle).not.toHaveAttribute("data-moving");
+  expect((await toggle.boundingBox())?.height).toBeGreaterThanOrEqual(48);
   await toggle.click();
   const done = page.getByRole("button", { name: "완료" });
-  await expect(done).toHaveAttribute("data-variant", "primary");
+  await expect(done).toHaveAttribute("data-moving", "");
+  await expect(page.getByRole("button", { name: "모두 제거" })).toHaveCount(0);
   await expect(page.getByText(MOVE_HINT)).toBeVisible();
   await expect(page.getByRole("button", { name: "＋ 막대 추가" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "막대 이름 고치기" })).toHaveCount(0);
@@ -233,7 +243,8 @@ test("S-09: [책갈피 옮기기] → drag to a place on a rod → [완료]; mov
 
   // [완료]: back to normal
   await done.click();
-  await expect(page.getByRole("button", { name: "책갈피 옮기기" })).toHaveAttribute("data-variant", "secondary");
+  await expect(page.getByRole("button", { name: "책갈피 옮기기" })).not.toHaveAttribute("data-moving");
+  await expect(page.getByRole("button", { name: "모두 제거" })).toBeVisible();
   await expect(page.getByText(MOVE_HINT)).toHaveCount(0);
   await expect(page.getByRole("button", { name: "＋ 막대 추가" })).toBeVisible();
 
@@ -283,6 +294,60 @@ test("S-09: [책갈피 옮기기] → drag to a place on a rod → [완료]; mov
   await page.getByRole("button", { name: "로그아웃" }).click();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.getByRole("banner").getByRole("button", { name: "로그인" })).toBeVisible();
+});
+
+test("S-09 [모두 제거]: [그대로 두기] keeps all; [모두 빼기] empties every rod, the header says 0, one E-35 and no E-16", async ({ page }) => {
+  const lib: FakeLibrary = {
+    loggedIn: true,
+    shelves: [{ id: ROD_A, name: "읽을 책", position: 0 }, { id: ROD_B, name: "마음에 남은", position: 1 }],
+    saved: [
+      { isbn: "9790000000001", shelfId: ROD_A, title: "지어낸 첫째 책" }, { isbn: "9790000000002", shelfId: ROD_A, title: "지어낸 둘째 책" },
+      { isbn: "9790000000004", shelfId: ROD_B, title: "지어낸 넷째 책" },
+    ],
+    posts: [],
+    clears: [],
+  };
+  await fakeAccount(page, lib);
+  const { events } = await recordEvents(page);
+  await page.goto("/library");
+  await expect(page.getByText("3개 · 동물 1종")).toBeVisible();
+  await expect(page.getByRole("banner").getByRole("link", { name: "내 책갈피 3개" })).toBeVisible();
+
+  // the two buttons in one row, 48 px or more, [책갈피 옮기기] the wider
+  const move = page.getByRole("button", { name: "책갈피 옮기기" });
+  const clear = page.getByRole("button", { name: "모두 제거" });
+  const [mb, cb] = [await move.boundingBox(), await clear.boundingBox()];
+  if (!mb || !cb) throw new Error("no button box");
+  expect(Math.min(mb.height, cb.height)).toBeGreaterThanOrEqual(48);
+  expect(Math.abs(mb.y - cb.y)).toBeLessThan(1);
+  expect(mb.width).toBeGreaterThan(cb.width);
+
+  // [그대로 두기]: nothing sent, everything stays
+  await clear.click();
+  const sheet = page.getByRole("dialog", { name: "책갈피 3개를 모두 뺄까요?" });
+  await expect(sheet.getByText("막대와 막대 이름은 그대로 남아요.")).toBeVisible();
+  await sheet.getByRole("button", { name: "그대로 두기" }).click();
+  await expect(sheet).toHaveCount(0);
+  expect(lib.clears).toEqual([]);
+  await expect(page.getByText("3개 · 동물 1종")).toBeVisible();
+
+  // [모두 빼기]: the rods stay, empty; the header count follows
+  await clear.click();
+  await sheet.getByRole("button", { name: "모두 빼기" }).click();
+  await expect(sheet).toHaveCount(0);
+  expect(lib.clears).toEqual([{ all: true }]);
+  await expect(page.getByText("0개 · 동물 0종")).toBeVisible();
+  await expect(page.getByText("아직 비어 있어요")).toHaveCount(2);
+  await expect(page.getByRole("heading", { name: "읽을 책" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "마음에 남은" })).toBeVisible();
+  await expect(page.getByRole("banner").getByRole("link", { name: "내 책갈피 0개" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "모두 제거" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "책갈피 옮기기" })).toHaveCount(0);
+
+  await expect.poll(() => named(events, "library_cleared").map((e) => e.props)).toEqual([{ removed_count: 3 }]);
+  expect(named(events, "book_unsaved")).toEqual([]);
+  expect(JSON.stringify(events)).not.toContain("마음에 남은");
+  expect(specMismatches(events)).toEqual([]);
 });
 
 // Real touch in Chromium (CDP touch events on the phone project): the browser decides at touchstart whether the finger's
