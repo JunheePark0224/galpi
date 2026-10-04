@@ -1,5 +1,6 @@
 import type { ArtCombo } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
+import type { ArtTicket } from "@/lib/collection/types";
 import type { Answer, AnswerChoice, PathSummary } from "@/lib/paths";
 import type { Reason } from "@/lib/recommend";
 import { nextQuestion, sameAnswers } from "./path";
@@ -8,7 +9,8 @@ export type Step = "home" | "questions" | "book" | "first" | "bookmarks" | "resu
 export const STEPS: readonly Step[] = ["home", "questions", "book", "first", "bookmarks", "result", "end"];
 export type Reaction = "pass" | "curious";
 export interface PickView { card: BookCard; kind: "recommended" | "random"; art: ArtCombo; reason: Reason }
-export interface DrawView { picks: PickView[]; exhausted: boolean; path: PathSummary }
+/** ticket (도감 v1): the server's signed seed the pictures came from — null when unsigned (nothing is recorded). */
+export interface DrawView { picks: PickView[]; exhausted: boolean; path: PathSummary; ticket?: ArtTicket | null }
 export type DrawStatus = "idle" | "loading" | "ready" | "error";
 
 export interface FlowState {

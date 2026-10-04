@@ -6,11 +6,13 @@ import { Button } from "@/components/Button";
 import type { FlowState, Reaction } from "@/lib/flow/state";
 import { hasSeenFirstGuide, markFirstGuideSeen } from "@/lib/flow/firstGuide";
 import { BOOKMARK_AWAY, BOOKMARK_DOWN, BOOKMARK_RISE } from "@/lib/motion";
+import type { FoundItem } from "@/lib/collection/types";
 import { EXHAUSTED_NOTICE } from "@/lib/recommend";
 import { Book, RuledPage } from "./Book";
 import { CoverPeeks } from "./CoverPeeks";
 import { FirstGuide } from "./FirstGuide";
 import { FirstPageTitle } from "./FirstPage";
+import { FoundBadge } from "./FoundBadge";
 import { PathPage } from "./PathPage";
 import styles from "./BookScene.module.css";
 
@@ -37,13 +39,15 @@ interface Props {
   onRetry: () => void;
   onReact: (reaction: Reaction) => void;
   onHome: () => void;
+  /** 도감 v1: parts of the bookmark now shown that a logged-in person met for the first time ("처음 만난 …!"). */
+  found?: readonly FoundItem[] | null;
 }
 
 /**
  * S-03 · S-04 · S-05 share one book so the cover keeps its place between steps. The book fills the column; the bookmark
  * rises out of the gutter, centred between the two pages. Buttons sit below the book; the page count is the folio.
  */
-export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onHome }: Props) {
+export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onHome, found = null }: Props) {
   const [busy, setBusy] = useState(true);            // a bookmark is still moving: reactions wait (and frost stays off)
   const [last, setLast] = useState<Reaction>("pass");
   // C-20: the first bookmark of a browser's first round explains itself once (logged in or not)
@@ -89,8 +93,10 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
                 animate="shown"
                 exit="gone"
                 onAnimationComplete={(definition) => { if (definition === "shown") setBusy(false); }}
+                style={{ position: "relative" }}
               >
                 <div className={styles.scaled}><Bookmark card={pick.card} art={pick.art} moving={busy} /></div>
+                <FoundBadge items={found} />
               </motion.div>
             </AnimatePresence>
           </div>

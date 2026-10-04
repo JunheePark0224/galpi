@@ -9,14 +9,15 @@ describe("/privacy (S-10)", () => {
   beforeEach(() => localStorage.clear());
   afterEach(() => vi.unstubAllEnvs());
 
-  it("shows the title, the date and the nine collected items (v2: no written goal)", () => {
+  it("shows the title, the date and the ten collected items (v2: no written goal; 도감 v1 row)", () => {
     render(<PrivacyPage />);
     expect(screen.getByRole("heading", { level: 1, name: "개인정보 처리방침" })).toBeInTheDocument();
-    expect(screen.getByText(/2026-10-04/)).toBeInTheDocument();
+    expect(screen.getByText(/2026-10-05/)).toBeInTheDocument();
     expect(screen.getByText("갈피는 이름·전화번호를 받지 않아요.")).toBeInTheDocument();
     expect(screen.getByText(/이메일·닉네임은 로그인할 때 로그인 확인용으로 로그인 서비스에만 남고, 갈피는 쓰지 않아요\./)).toBeInTheDocument();
     const rows = within(screen.getByRole("table")).getAllByRole("row");
-    expect(rows).toHaveLength(10); // header + 9 (v2: the 🎯 written-goal row is gone)
+    expect(rows).toHaveLength(11); // header + 10 (v2: the 🎯 written-goal row is gone; 도감 v1 adds one)
+    expect(screen.getByText(/도감: 로그인했다면, 책장에서 만난 책갈피 그림의 동물·배경·소품과 각각 처음 만난 때와 그때의 그림/)).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "모으는 것" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "왜" })).toBeInTheDocument();
     expect(screen.getByText(ACTIONS)).toBeInTheDocument();

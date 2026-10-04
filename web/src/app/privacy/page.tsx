@@ -17,6 +17,7 @@ function Contact() {
  * S-10 (F-16): what is collected and where it goes — Amplitude, (P5, taxonomy 6-3d) login, the Google email kept by the
  * login service only, 내 책갈피, (F-26, taxonomy 6-3e) the 갈피 우체통 letter — Supabase only, a time-only notice email
  * through Resend. v2 (taxonomy 6-3f): no written goal, nothing to Anthropic; question answers instead of the balance game.
+ * 도감 v1 (taxonomy 6-3g): the picture parts a logged-in person met, when first, and the picture they were met in.
  */
 export default function PrivacyPage() {
   return (
@@ -59,6 +60,10 @@ export default function PrivacyPage() {
           <tr>
             <td>내 책갈피: 꽂은 책, 그때 책갈피 그림, 만난 날, 나온 이유, 막대와 막대 이름 (<strong>막대 이름은 직접 쓴 글이라 갈피의 데이터베이스에만 저장</strong>)</td>
             <td>내 책갈피를 다시 보여 주기 위해 — <strong>막대 이름에 이름·연락처는 적지 마세요</strong></td>
+          </tr>
+          <tr>
+            <td>도감: 로그인했다면, 책장에서 만난 책갈피 그림의 동물·배경·소품과 각각 처음 만난 때와 그때의 그림을 갈피의 데이터베이스에 저장해요 (어떤 책이었는지는 넣지 않아요)</td>
+            <td>만난 책갈피를 도감에 모아 보여 주기 위해</td>
           </tr>
           <tr>
             <td>갈피 우체통에 적은 글 (최대 500자)과 보낸 때 — 익명 번호 등 다른 기록과 같은 정보(로그인했다면 사용자 번호)와 함께 <strong>갈피의 데이터베이스(Supabase)에만 저장</strong>, Amplitude에는 글자 수만 보내요</td>
