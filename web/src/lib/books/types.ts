@@ -1,3 +1,4 @@
+import type { PathSummary } from "../paths/summary";
 import type { Reason } from "../recommend/reason";
 import type { AxisKey, DrawPick, Entry, Tag, Way } from "../recommend/types";
 
@@ -45,6 +46,14 @@ export interface DrawResponse {
   widened: boolean;
   found: number | null;
   keywords: string[];
+}
+
+/** POST /api/books/draw for a v2 path: the same cards, plus what S-04 "당신이 고른 길" shows. */
+export interface PathDrawResponse {
+  picks: CardPick[];
+  exhausted: boolean;
+  widened: boolean;
+  path: PathSummary;
 }
 
 export interface VocabTopic { keywords: Record<string, string>; terms: string[] }

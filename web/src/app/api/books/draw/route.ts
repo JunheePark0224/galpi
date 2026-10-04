@@ -1,6 +1,6 @@
 import vocab from "@/data/vocab.json";
 import { catalog } from "@/lib/books/catalog";
-import { drawLeaf, drawTarget } from "@/lib/books/draw";
+import { drawLeaf, drawPath, drawTarget } from "@/lib/books/draw";
 import { parseDrawRequest } from "@/lib/books/request";
 import { guardJson } from "@/lib/server/guard";
 import type { Vocab } from "@/lib/books/types";
@@ -19,8 +19,10 @@ export async function POST(request: Request): Promise<Response> {
   const rng = mulberry32(parsed.seed ?? crypto.getRandomValues(new Uint32Array(1))[0]);
   const seen = new Set(parsed.seen);
   const books = catalog();
-  const result = parsed.query.entry === "leaf"
-    ? drawLeaf(parsed.query.choices, seen, rng, books)
-    : drawTarget(parsed.query.answers, seen, rng, books);
+  const result = parsed.query.entry === "path"
+    ? drawPath(parsed.query.answers, seen, rng, books)
+    : parsed.query.entry === "leaf"
+      ? drawLeaf(parsed.query.choices, seen, rng, books)
+      : drawTarget(parsed.query.answers, seen, rng, books);
   return Response.json(result);
 }
