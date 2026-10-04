@@ -29,7 +29,7 @@
 /* DESIGN C-13 만난 날 (내 책갈피 only, 10-04 시안 A): under the one-liner, right above the stitch line; the free room
    (if any) goes above it. Its line is paid for like a third title line — tighter gaps and lines, no smaller text — so
    the longest one-liners keep all four lines at x1.15 text too (e2e/design.spec.ts). */
-.met { flex-shrink: 0; margin: auto 0 0; font-size: 12px; line-height: 1; color: var(--ink-muted); }
+.met { flex-shrink: 0; margin: auto 0 0; font-size: 12px; line-height: 1; color: var(--ink-muted); position: relative; top: -2px; }   /* drawn 2px up, off the stitch line, without taking room (the one-liner keeps 2px under it) */
 .met + span { margin-top: 0; }   /* the stitch line follows right under it */
 .card:has(> .met) { gap: 1px; }
 .card:has(> .met) > .title[data-lines="3"] { line-height: 1.1; }
