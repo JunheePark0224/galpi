@@ -24,6 +24,20 @@ describe("bookTitle", () => {
     expect(bookTitle("IT 비전공자를 위한 파이썬 업무 자동화 (RPA)")).toBe("『IT 비전공자를 위한 파이썬 업무 자동화 (RPA)』");
   });
 
+  it("keeps a one-character word on the same line as the next word", () => {
+    expect(bookTitle("존재의 세 가지 거짓말")).toBe("『존재의 세 가지 거짓말』");
+    expect(bookTitle("모두를 위한 R 데이터 분석 입문")).toBe("『모두를 위한 R 데이터 분석 입문』");
+  });
+
+  it("keeps a last one-character word with the word before it", () => {
+    expect(bookTitle("확률과 통계 편")).toBe("『확률과 통계 편』");
+  });
+
+  it("keeps a joining mark at the end of its line, with the word before it", () => {
+    expect(bookTitle("기자의 글쓰기 : 싸움의 정석 (원칙편)")).toBe("『기자의 글쓰기 : 싸움의 정석 (원칙편)』");
+    expect(bookTitle("세일즈 레터 & 카피라이팅")).toBe("『세일즈 레터 & 카피라이팅』");
+  });
+
   it("keeps the whole title when it is only a label", () => {
     expect(bookTitle("[예스리커버]")).toBe("『[예스리커버]』");
   });
