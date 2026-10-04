@@ -34,7 +34,7 @@ export function placeAt(root: ParentNode, at: Point, isbn: string): Place | null
 /** How far to scroll this frame for a point `inside` px into an edge band (0 = outside the band). */
 const speed = (inside: number) => (inside <= 0 ? 0 : Math.ceil(SPEED_PX * Math.min(inside, EDGE_PX) / EDGE_PX));
 
-interface Live { bookmark: LibraryBookmark; from: Place; over: Place | null; point: Point; grab: Point }
+interface Live { bookmark: LibraryBookmark; from: Place; over: Place | null; point: Point; grab: Point; pointerId: number }
 export interface Dragging { bookmark: LibraryBookmark; from: Place; over: Place | null }
 
 /** The floating copy sits where the bookmark was grabbed, under the pointer. */
@@ -46,10 +46,12 @@ function paint(ghost: HTMLElement | null, d: Live | null) {
  * S-09 끌어서 옮기기 (PRD F-13, 10-04): after the hold, the bookmark follows the pointer (window listeners — the finger may
  * leave the bookmark) as a floating copy (`ghost`, moved by transform, not by React), the rod and place under it are
  * worked out from the rods' boxes, and the page / the row scroll by themselves near their edges. Release drops it there
- * (onDrop only when the place changed); outside every rod, Escape or a cancelled pointer put it back. While dragging, a
- * touch never pans the page (non-passive touchmove).
+ * (onDrop only when the place changed); outside every rod, Escape or a cancelled pointer put it back. Only the pointer
+ * that held it drives it (a second finger is ignored). While dragging, a touch never pans the page: the non-passive
+ * touchmove blocker lives as long as the library, because browsers decide at touchstart whether a touch's moves can be
+ * cancelled — one added at hold time, mid-touch, would get uncancelable moves and the browser would pan and cancel.
  */
-export function useDrag(onDrop: (isbn: string, to: Place) => void) {
+export function useDrag(onDrop: (isbn: string, to: Place, from: Place) => void) {
   const [drag, setDrag] = useState<Dragging | null>(null);
   const live = useRef<Live | null>(null);
   const ghost = useRef<HTMLElement | null>(null);
@@ -57,15 +59,20 @@ export function useDrag(onDrop: (isbn: string, to: Place) => void) {
   const latest = useRef(onDrop);
   useEffect(() => { latest.current = onDrop; }, [onDrop]);
   useEffect(() => () => stop.current(), []);
+  useEffect(() => {
+    const noPan = (e: TouchEvent) => { if (live.current && e.cancelable) e.preventDefault(); };
+    document.addEventListener("touchmove", noPan, { passive: false });
+    return () => document.removeEventListener("touchmove", noPan);
+  }, []);
 
   const ghostRef = useCallback((el: HTMLElement | null) => {
     ghost.current = el;
     paint(el, live.current);
   }, []);
 
-  const start = useCallback((bookmark: LibraryBookmark, from: Place, point: Point, box: DOMRect) => {
+  const start = useCallback((bookmark: LibraryBookmark, from: Place, point: Point, box: DOMRect, pointerId: number) => {
     stop.current();
-    const d: Live = { bookmark, from, over: from, point, grab: { x: point.x - box.left, y: point.y - box.top } };
+    const d: Live = { bookmark, from, over: from, point, grab: { x: point.x - box.left, y: point.y - box.top }, pointerId };
     live.current = d;
     setDrag({ bookmark, from, over: from });
 
@@ -76,6 +83,7 @@ export function useDrag(onDrop: (isbn: string, to: Place) => void) {
       setDrag({ bookmark, from, over });
     };
     const move = (e: PointerEvent) => {
+      if (e.pointerId !== d.pointerId) return;
       d.point = { x: e.clientX, y: e.clientY };
       paint(ghost.current, d);
       place();
@@ -98,25 +106,22 @@ export function useDrag(onDrop: (isbn: string, to: Place) => void) {
     };
     const end = (drop: boolean) => {
       stop.current();
-      if (drop && d.over && !samePlace(d.over, d.from)) latest.current(bookmark.isbn, d.over);
+      if (drop && d.over && !samePlace(d.over, d.from)) latest.current(bookmark.isbn, d.over, d.from);
     };
-    const up = () => end(true);
-    const cancel = () => end(false);
+    const up = (e: PointerEvent) => { if (e.pointerId === d.pointerId) end(true); };
+    const cancel = (e: PointerEvent) => { if (e.pointerId === d.pointerId) end(false); };
     const key = (e: KeyboardEvent) => { if (e.key === "Escape") end(false); };
-    const noPan = (e: TouchEvent) => e.preventDefault();
 
     window.addEventListener("pointermove", move);
     window.addEventListener("pointerup", up);
     window.addEventListener("pointercancel", cancel);
     window.addEventListener("keydown", key);
-    document.addEventListener("touchmove", noPan, { passive: false });
     frame = requestAnimationFrame(scroll);
     stop.current = () => {
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerup", up);
       window.removeEventListener("pointercancel", cancel);
       window.removeEventListener("keydown", key);
-      document.removeEventListener("touchmove", noPan);
       cancelAnimationFrame(frame);
       stop.current = () => {};
       live.current = null;

@@ -77,6 +77,7 @@ export function useLibrary() {
         current.current = before;
         setView(before);
       }
+      void reload();                      // and then the server's order, in case it changed meanwhile
       return false;
     }
     after();

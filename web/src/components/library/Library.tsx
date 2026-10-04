@@ -5,6 +5,7 @@ import { Button } from "@/components/Button";
 import { loadAccount, openLoginSheet, signedOut, useAccount } from "@/lib/account/store";
 import { logout } from "@/lib/auth/browser";
 import type { LibraryBookmark } from "@/lib/library/types";
+import { toParticle } from "@/lib/library/particle";
 import { MAX_SHELVES } from "@/lib/library/service";
 import { SHELF_NAME_MAX } from "@/lib/library/validate";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
@@ -18,6 +19,9 @@ import { samePlace, useDrag } from "./useDrag";
 import { useLibrary } from "./useLibrary";
 
 const NOTE_MS = 4000;
+interface Note { text: string; name?: string; ok?: boolean }
+/** "'{name}'으로 옮겼어요" — the name is the person's words: masked text only. */
+const movedTo = (name: string): Note => ({ text: `${toParticle(name)} 옮겼어요`, name, ok: true });
 /** New copy (DESIGN C-17, 10-04): the toast while a bookmark is dragged. */
 export const DRAGGING = "놓을 자리로 끌어서 놓으세요";
 interface Open { bookmark: LibraryBookmark; shelfId: string }
@@ -51,13 +55,16 @@ function Rods() {
   const [adding, setAdding] = useState(false);
   const [newName, setNewName] = useState("");
   const [addBusy, setAddBusy] = useState(false);
-  const [note, setNote] = useState<{ text: string; name?: string } | null>(null);
+  const [note, setNote] = useState<Note | null>(null);
   // C-22: the first visit to 내 책갈피 shows a small example shelf once (per browser)
   const [guide, setGuide] = useState(() => !libraryGuide.hasSeen());
-  const { drag, start, ghostRef } = useDrag((isbn, to) => {
-    void lib.move(isbn, to.shelfId, "drag", to.index).then((ok) => setNote(ok
-      ? { text: "으로 옮겼어요", name: lib.view?.shelves.find((s) => s.id === to.shelfId)?.name ?? "" }
-      : { text: "옮기지 못했어요. 다시 해 주세요." }));
+  const { drag, start, ghostRef } = useDrag((isbn, to, from) => {
+    const name = lib.view?.shelves.find((s) => s.id === to.shelfId)?.name ?? "";
+    // a new place on its own rod says nothing (user, 10-04) — the row already shows it
+    void lib.move(isbn, to.shelfId, "drag", to.index).then((ok) => {
+      if (!ok) setNote({ text: "옮기지 못했어요. 다시 해 주세요." });
+      else if (to.shelfId !== from.shelfId) setNote(movedTo(name));
+    });
   });
   const closeGuide = () => {
     libraryGuide.markSeen();
@@ -132,7 +139,7 @@ function Rods() {
           dragged={drag?.bookmark.isbn ?? null}
           gap={drag?.over?.shelfId === shelf.id && !samePlace(drag.over, drag.from) ? drag.over.index : null}
           onOpen={(bookmark) => setOpen({ bookmark, shelfId: shelf.id })}
-          onHold={(bookmark, index, at, box) => start(bookmark, { shelfId: shelf.id, index }, at, box)}
+          onHold={(bookmark, index, at, box, pointerId) => start(bookmark, { shelfId: shelf.id, index }, at, box, pointerId)}
           onRename={(name) => lib.renameShelf(shelf.id, name)}
           onRemove={() => void lib.removeShelf(shelf.id)}
         />
@@ -164,7 +171,7 @@ function Rods() {
         </>
       )}
       {!drag && note && (
-        <p className={`${styles.toast} ${note.name ? styles.toastOk : ""}`} role="status">
+        <p className={`${styles.toast} ${note.ok ? styles.toastOk : ""}`} role="status">
           {note.name ? <><span data-amp-mask="">{`'${note.name}'`}</span>{note.text}</> : note.text}
         </p>
       )}
@@ -176,7 +183,7 @@ function Rods() {
           shelves={shelves}
           onMove={async (to) => {
             const ok = await lib.move(open.bookmark.isbn, to, "menu");
-            if (ok) setNote({ text: "으로 옮겼어요", name: nameOf(to) });
+            if (ok) setNote(movedTo(nameOf(to)));
             return ok;
           }}
           onRemove={() => lib.remove(open.bookmark.isbn)}

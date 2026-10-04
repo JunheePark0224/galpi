@@ -257,6 +257,59 @@ test("S-09: drag to a place on a rod, move by the sheet, add a rod, remove, log 
   await expect(page.getByRole("banner").getByRole("button", { name: "로그인" })).toBeVisible();
 });
 
+// Real touch in Chromium (CDP touch events on the phone project): the browser decides at touchstart whether the finger's
+// moves can be held back. If the page could still pan, it would send pointercancel mid-drag and nothing would move.
+test("S-09 on a touch screen: hold, then drag with the finger — the page does not take the touch over; a quick swipe is a scroll", async ({ page }, info) => {
+  test.skip(info.project.name !== "phone", "touch is emulated on the phone project only");
+  const lib: FakeLibrary = {
+    loggedIn: true,
+    shelves: [{ id: ROD_A, name: "읽을 책", position: 0 }, { id: ROD_B, name: "마음에 남은", position: 1 }],
+    saved: [
+      { isbn: "9790000000001", shelfId: ROD_A, title: "지어낸 첫째 책" }, { isbn: "9790000000002", shelfId: ROD_A, title: "지어낸 둘째 책" },
+      { isbn: "9790000000004", shelfId: ROD_B, title: "지어낸 넷째 책" },
+    ],
+    posts: [],
+    moves: [],
+  };
+  await fakeAccount(page, lib);
+  const { events } = await recordEvents(page);
+  const bm = (title: string) => page.getByRole("button", { name: `${title} 책갈피` });
+  await page.goto("/library");
+  await expect(page.getByText("3개 · 동물 1종")).toBeVisible();
+
+  const cdp = await page.context().newCDPSession(page);
+  const touch = (type: "touchStart" | "touchMove" | "touchEnd", x = 0, y = 0) =>
+    cdp.send("Input.dispatchTouchEvent", { type, touchPoints: type === "touchEnd" ? [] : [{ x, y }] });
+  const centre = async (title: string) => {
+    const box = await bm(title).boundingBox();
+    if (!box) throw new Error("no bookmark box");
+    return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+  };
+
+  // a quick swipe (no hold) is the browser's scroll, never a drag
+  const swipe = await centre("지어낸 둘째 책");
+  await touch("touchStart", swipe.x, swipe.y);
+  for (let i = 1; i <= 6; i++) await touch("touchMove", swipe.x - i * 10, swipe.y);
+  await touch("touchEnd");
+  await expect(page.getByRole("status").filter({ hasText: "놓을 자리로 끌어서 놓으세요" })).toHaveCount(0);
+
+  // hold 0.5 s, then drag down onto the other rod, after the one there
+  const from = await centre("지어낸 첫째 책");
+  const to = await after(bm("지어낸 넷째 책"));
+  const scrolled = await page.evaluate(() => window.scrollY);
+  await touch("touchStart", from.x, from.y);
+  await page.waitForTimeout(600);
+  await expect(page.getByRole("status").filter({ hasText: "놓을 자리로 끌어서 놓으세요" })).toBeVisible();
+  for (let i = 1; i <= 15; i++) await touch("touchMove", from.x + ((to.x - from.x) * i) / 15, from.y + ((to.y - from.y) * i) / 15);
+  await expect(page.getByRole("status").filter({ hasText: "놓을 자리로 끌어서 놓으세요" })).toBeVisible();   // no pointercancel
+  await touch("touchEnd");
+  await expect.poll(() => titlesOn(page, "마음에 남은")).toEqual(["지어낸 넷째 책 책갈피", "지어낸 첫째 책 책갈피"]);
+  expect(Math.abs((await page.evaluate(() => window.scrollY)) - scrolled)).toBeLessThan(60);   // only the edge auto-scroll, no pan
+  expect(lib.moves).toEqual([{ isbn: "9790000000001", shelfId: ROD_B, index: 1 }]);
+  await expect.poll(() => named(events, "bookmark_moved").map((e) => e.props)).toEqual([{ book_id: "9790000000001", method: "drag", is_same_shelf: false }]);
+  await expect(page.getByRole("dialog")).toHaveCount(0);                      // the lift-off is not a tap
+});
+
 test("S-09 first visit: the example-shelf guide opens once, [시작하기] closes it (C-22)", async ({ page }) => {
   const lib: FakeLibrary = { loggedIn: true, shelves: [{ id: ROD_A, name: "첫 막대", position: 0 }], saved: [], posts: [] };
   await fakeAccount(page, lib);

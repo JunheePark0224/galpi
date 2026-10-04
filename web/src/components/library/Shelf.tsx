@@ -15,7 +15,7 @@ interface Props {
   /** Where the dragged bookmark would land on this rod (a dashed gap), or null. */
   gap: number | null;
   onOpen: (bookmark: LibraryBookmark) => void;
-  onHold: (bookmark: LibraryBookmark, index: number, at: Point, box: DOMRect) => void;
+  onHold: (bookmark: LibraryBookmark, index: number, at: Point, box: DOMRect, pointerId: number) => void;
   onRename: (name: string) => Promise<boolean>;
   onRemove: () => void;
 }
@@ -47,7 +47,7 @@ export function Shelf({ shelf, dragged, gap, onOpen, onHold, onRename, onRemove 
   const hung = shelf.bookmarks.flatMap((b, i) => {
     const slot = (
       <li key={b.isbn} className={styles.slot} data-slot={b.isbn}>
-        <ShelfBookmark bookmark={b} lifted={dragged === b.isbn} onOpen={() => onOpen(b)} onHold={(at, box) => onHold(b, i, at, box)} />
+        <ShelfBookmark bookmark={b} lifted={dragged === b.isbn} onOpen={() => onOpen(b)} onHold={(at, box, pointerId) => onHold(b, i, at, box, pointerId)} />
       </li>
     );
     return gap !== null && b.isbn !== dragged && others.indexOf(b) === gap ? [gapSlot, slot] : [slot];
