@@ -39,5 +39,7 @@ export async function PATCH(request: Request): Promise<Response> {
   const shelfId = opened.body.shelfId;
   const index = indexOf(opened.body.index);
   if (!isbn || typeof shelfId !== "string" || !UUID.test(shelfId) || index === null) return badRequest();
-  return guarded(async () => reply(await moveBookmark(opened.store, isbn, shelfId, index)));
+  // the place counts the bookmarks S-09 draws: books still in the catalogue (as /api/library builds the rods)
+  const drawn = new Set(catalog().map((b) => b.isbn));
+  return guarded(async () => reply(await moveBookmark(opened.store, isbn, shelfId, index, (id) => drawn.has(id))));
 }

@@ -133,7 +133,10 @@ describe("useLibrary (S-09)", () => {
     let moving: Promise<boolean> = Promise.resolve(false);
     act(() => { moving = result.current.move("1", "b", "drag", 0); });
     expect(result.current.view?.shelves.map((s) => s.bookmarks.map((b) => b.isbn))).toEqual([[], ["1"]]);   // already moved
+    request.mockResolvedValueOnce(ok(VIEW));                                                       // the quiet re-read after it
+    const reads = request.mock.calls.filter(([m]) => m === "GET").length;
     await act(async () => { answer({ ok: false, status: 500, body: null }); await moving; });
+    await waitFor(() => expect(request.mock.calls.filter(([m]) => m === "GET")).toHaveLength(reads + 1));   // the server's order wins
     expect(result.current.view?.shelves.map((s) => s.bookmarks.map((b) => b.isbn))).toEqual([["1"], []]);   // back again
     expect(track).not.toHaveBeenCalledWith("bookmark_moved", expect.anything());
 

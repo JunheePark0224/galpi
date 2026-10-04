@@ -9,12 +9,12 @@ const SLOP_PX = 10;
 export interface Point { x: number; y: number }
 
 /**
- * Press and hold for HOLD_MS to pick a bookmark up (S-09 옮기기); onHold gets where the pointer is then, so the drag can
- * start from it. Taps stay taps; a finger that moves (the rod scrolls sideways — the browser's own scroll) or a cancelled
+ * Press and hold for HOLD_MS to pick a bookmark up (S-09 옮기기); onHold gets where the pointer is then and which pointer
+ * it is, so the drag can start from it and follow only that finger. Taps stay taps; a finger that moves (the rod scrolls sideways — the browser's own scroll) or a cancelled
  * pointer never holds. The click that the browser sends after a hold's release is reported by wasHold() so the caller can
  * skip it. No context menu while pressing.
  */
-export function useHold(onHold: (at: Point) => void) {
+export function useHold(onHold: (at: Point, pointerId: number) => void) {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const from = useRef<Point | null>(null);
   const at = useRef<Point>({ x: 0, y: 0 });
@@ -36,10 +36,11 @@ export function useHold(onHold: (at: Point) => void) {
       stop();
       from.current = { x: e.clientX, y: e.clientY };
       at.current = from.current;
+      const pointerId = e.pointerId;
       timer.current = setTimeout(() => {
         timer.current = null;
         held.current = true;
-        latest.current(at.current);
+        latest.current(at.current, pointerId);
       }, HOLD_MS);
     },
     onPointerMove: (e: PointerEvent<HTMLElement>) => {

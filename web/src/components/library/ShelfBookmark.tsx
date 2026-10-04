@@ -11,7 +11,7 @@ interface Props {
   /** Being dragged: this slot stays as a faded placeholder. */
   lifted: boolean;
   onOpen: () => void;
-  onHold: (at: Point, box: DOMRect) => void;
+  onHold: (at: Point, box: DOMRect, pointerId: number) => void;
 }
 
 /**
@@ -21,7 +21,7 @@ interface Props {
  */
 export function ShelfBookmark({ bookmark, lifted, onOpen, onHold }: Props) {
   const self = useRef<HTMLButtonElement>(null);
-  const hold = useHold((at) => { if (self.current) onHold(at, self.current.getBoundingClientRect()); });
+  const hold = useHold((at, pointerId) => { if (self.current) onHold(at, self.current.getBoundingClientRect(), pointerId); });
   return (
     <button
       ref={self}
@@ -30,7 +30,10 @@ export function ShelfBookmark({ bookmark, lifted, onOpen, onHold }: Props) {
       data-lifted={lifted ? "" : undefined}
       aria-label={`${bookmark.card.title} 책갈피`}
       {...hold.handlers}
-      onClick={() => { if (!hold.wasHold()) onOpen(); }}
+      onClick={(e) => {
+        const was = hold.wasHold();
+        if (!was || e.detail === 0) onOpen();     // a keyboard press (detail 0) always opens, even right after a drag
+      }}
     >
       <span className={styles.mini} aria-hidden="true">
         <Bookmark card={bookmark.card} art={bookmark.art} met={metLabel(bookmark.metOn)} moving />

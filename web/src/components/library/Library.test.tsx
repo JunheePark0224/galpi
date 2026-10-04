@@ -91,7 +91,7 @@ describe("Library (S-09)", () => {
     act(() => { fireEvent.pointerUp(window); });
     await waitFor(() => expect(request).toHaveBeenCalledWith("PATCH", "/api/library/saves", { isbn: "9788998441012", shelfId: "b", index: 0 }));
     expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "9788998441012", method: "drag", is_same_shelf: false });
-    expect(await screen.findByText("으로 옮겼어요", { exact: false })).toBeInTheDocument();
+    expect((await screen.findByText("'마음에 남은'")).parentElement).toHaveTextContent("'마음에 남은'으로 옮겼어요");
     fireEvent.click(moso);                                                              // the click after the drag is not a tap
     expect(screen.queryByRole("dialog")).toBeNull();
   });
@@ -109,6 +109,8 @@ describe("Library (S-09)", () => {
     act(() => { fireEvent.pointerUp(window); });
     await waitFor(() => expect(request).toHaveBeenCalledWith("PATCH", "/api/library/saves", { isbn: "9788998441012", shelfId: "a", index: 1 }));
     expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "9788998441012", method: "drag", is_same_shelf: true });
+    await waitFor(() => expect(request).toHaveBeenLastCalledWith("GET", "/api/library"));        // the quiet re-read
+    expect(screen.queryByRole("status")).toBeNull();                                         // a reorder says nothing
   });
 
   it("let go outside the rods, on its own place, with Escape or a cancelled pointer: nothing moves, no event", async () => {
@@ -131,18 +133,65 @@ describe("Library (S-09)", () => {
     expect(track).not.toHaveBeenCalledWith("bookmark_moved", expect.anything());
   });
 
-  it("a touch drag never pans the page; the listener goes when the drag ends", async () => {
+  it("a drag the server refuses goes back where it was, says so, and the rods are read again", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     layout();
     await mount(IN);
     await lift("모순 책갈피");
-    const pan = new Event("touchmove", { bubbles: true, cancelable: true });
-    document.dispatchEvent(pan);
-    expect(pan.defaultPrevented).toBe(true);
+    dragTo(150, 450);
+    request.mockResolvedValueOnce({ ok: false, status: 500, body: null }).mockResolvedValueOnce(ok(VIEW));
     act(() => { fireEvent.pointerUp(window); });
-    const after = new Event("touchmove", { bubbles: true, cancelable: true });
-    document.dispatchEvent(after);
-    expect(after.defaultPrevented).toBe(false);
+    expect(await screen.findByText("옮기지 못했어요. 다시 해 주세요.")).toBeInTheDocument();
+    expect(screen.getByRole("list", { name: "읽을 책" })).toContainElement(screen.getByRole("button", { name: "모순 책갈피" }));
+    await waitFor(() => expect(request).toHaveBeenLastCalledWith("GET", "/api/library"));
+    expect(track).not.toHaveBeenCalledWith("bookmark_moved", expect.anything());
+  });
+
+  it("blocks touch panning only while dragging, with a touchmove listener there from the start (cancelable from touchstart)", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    layout();
+    const add = vi.spyOn(document, "addEventListener");
+    await mount(IN);
+    expect(add).toHaveBeenCalledWith("touchmove", expect.any(Function), { passive: false });   // before any hold
+    const touch = (cancelable = true) => {
+      const e = new Event("touchmove", { bubbles: true, cancelable });
+      document.dispatchEvent(e);
+      return e.defaultPrevented;
+    };
+    expect(touch()).toBe(false);                                                 // a plain scroll stays a scroll
+    await lift("모순 책갈피");
+    expect(add.mock.calls.filter(([type]) => type === "touchmove")).toHaveLength(1);   // not added again mid-touch
+    expect(touch()).toBe(true);
+    expect(touch(false)).toBe(false);
+    act(() => { fireEvent.pointerUp(window); });
+    expect(touch()).toBe(false);
+  });
+
+  it("follows only the finger that held it: another pointer's moves and release are ignored", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    layout();
+    await mount(IN);
+    const moso = await screen.findByRole("button", { name: "모순 책갈피" });
+    fireEvent.pointerDown(moso, { clientX: 50, clientY: 100, pointerId: 3 });
+    act(() => { vi.advanceTimersByTime(500); });
+    act(() => { fireEvent.pointerMove(window, { clientX: 150, clientY: 450, pointerId: 4 }); });
+    expect(document.querySelectorAll('[data-rod="b"] li')).toHaveLength(0);       // no gap from the other finger
+    act(() => { fireEvent.pointerUp(window, { pointerId: 4 }); });
+    expect(moso).toHaveAttribute("data-lifted");                                 // still dragging
+    act(() => { fireEvent.pointerMove(window, { clientX: 150, clientY: 450, pointerId: 3 }); });
+    expect(document.querySelectorAll('[data-rod="b"] li')).toHaveLength(1);
+    act(() => { fireEvent.pointerCancel(window, { pointerId: 3 }); });
+    expect(moso).not.toHaveAttribute("data-lifted");
+  });
+
+  it("a keyboard press opens the sheet even right after a touch drag", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    layout();
+    await mount(IN);
+    const moso = await lift("모순 책갈피");
+    act(() => { fireEvent.pointerUp(window); });
+    fireEvent.click(moso, { detail: 0 });                                          // Enter / Space
+    expect(screen.getByRole("dialog", { name: "모순" })).toBeInTheDocument();
   });
 
   it("a tap opens the bookmark's front, large, with the day it was met; YES24 (E-18 library) and the menu move (E-30 menu)", async () => {
