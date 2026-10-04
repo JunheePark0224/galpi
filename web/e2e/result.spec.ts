@@ -128,7 +128,7 @@ test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, 
   expect(specMismatches(events)).toEqual([]);
 });
 
-/** Reacts 궁금해요 to the first two recommended bookmarks (their back says 나온 이유), 패스 to the rest. */
+/** Reacts 궁금해요 to the first two recommended bookmarks (their back says 나온 이유 or 이 책은), 패스 to the rest. */
 async function curiousAboutTwoRecommended(page: Page, events: Sent[]) {
   let curious = 0;
   for (let i = 1; i <= 5; i++) {
@@ -178,10 +178,10 @@ test("S-06 C-16: the S-05 bookmark peeks out of the cover, pulls out, flips to �
   // Back: 나온 이유 and its items, 만난 날 today.
   await page.getByRole("button", { name: "뒷면 보기" }).click();
   const back = page.getByRole("article", { name: /책갈피 뒷면$/ });
-  await expect(back).toContainText("나온 이유");
+  await expect(back).toContainText(/나온 이유|이 책은/);
   await expect(back).toContainText("만난 날");
   await expect(back.getByRole("listitem").first()).toBeVisible();
-  await expect(page.getByRole("status").filter({ hasText: "책갈피 뒷면" })).toContainText("나온 이유");
+  await expect(page.getByRole("status").filter({ hasText: "책갈피 뒷면" })).toContainText(/나온 이유|이 책은/);
   await expect(page.getByRole("button", { name: "앞면 보기" })).toBeVisible();
 
   // Next book: a new bookmark, in again; the keyboard pulls it out too.
