@@ -1,7 +1,8 @@
 // Run from web/:  npm run books:import
 // ../data/processed/books_v1.json (reviewed, D4) — or books_v1_draft.json (D3) until it exists —
 // + d1_selected.csv titles and authors + keyword_vocab.json  →  src/data/books.json, src/data/vocab.json,
-// src/data/library.json (books.json's size + the books each import day brought in, for F-23 오늘 +M — commit it with books.json).
+// src/data/library.json (books.json's size + the books each import day brought in, for F-23 오늘 +M — commit it with books.json),
+// src/data/mood-skips.json (the mood questions that cannot change the draw with these books — design 5-2, commit it too).
 // Then the picked books of ../data/processed/additions/*.json (file-name order) are appended after the 200 (D-C pilot,
 // 10-01) — the human review is already applied to those files by src/apply_review.py.
 // Only our own tags, one-liners, titles and authors: no YES24 text.
@@ -10,6 +11,8 @@ import path from "node:path";
 import { mergeAdditions } from "../src/lib/books/additions";
 import { kstDate, stampLibrary, type LibraryData } from "../src/lib/books/library";
 import { bibFromCsv, normalizeCatalog, normalizeVocab } from "../src/lib/books/normalize";
+import { toBook } from "../src/lib/books/toBook";
+import { moodSkips, type QuestionMap } from "../src/lib/paths";
 
 const processed = path.resolve(process.cwd(), "..", "data", "processed");
 const outDir = path.resolve(process.cwd(), "src", "data");
@@ -36,7 +39,10 @@ const prevIsbns = ((prevFile("books.json") ?? []) as { isbn: string }[]).map((b)
 const library = stampLibrary(prevFile("library.json") as LibraryData | null, prevIsbns, books.map((b) => b.isbn), kstDate(new Date()));
 write("books.json", books);
 write("library.json", library);
+const skips = moodSkips(readJson(path.join(outDir, "question-map.json")) as QuestionMap, books.map(toBook));
+write("mood-skips.json", skips);
 const leaf = books.filter((b) => b.entry === "leaf").length;
 console.log(`books.json: ${books.length} books (leaf ${leaf}, target ${books.length - leaf}) from ${path.basename(source)}`
   + ` + ${books.length - base.length} added (${addFiles.join(", ") || "no additions"})`);
 console.log(`library.json: ${library.total} books, added by day ${JSON.stringify(library.added)}`);
+console.log(`mood-skips.json: ${skips.length} places where a mood question is passed over`);

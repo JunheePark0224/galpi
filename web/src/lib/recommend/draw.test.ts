@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { drawBookmarks, weightedPick } from "./draw";
+import { drawBookmarks, sharesAuthor, weightedPick } from "./draw";
 import { LEAF_PARAMS, TARGET_PARAMS } from "./params";
 import { mulberry32 } from "./rng";
 import type { Book, LeafBook } from "./types";
@@ -36,6 +36,44 @@ describe("weightedPick", () => {
     const genres = got.map((c) => c.book.genre);
     expect(genres.filter((g) => g === "A").length).toBeLessThanOrEqual(2);
     expect(got).toHaveLength(4);
+  });
+});
+
+describe("one book per author (design 5-3) and per-entry cap", () => {
+  const by = (id: string, genre: string, authors?: string[]): LeafBook => ({ ...mk(id, genre, 1), ...(authors ? { authors } : {}) });
+
+  it("sharesAuthor: any shared name; a book without authors never shares", () => {
+    expect(sharesAuthor(by("a", "A", ["김초엽"]), by("b", "B", ["천선란", "김초엽"]))).toBe(true);
+    expect(sharesAuthor(by("a", "A", ["김초엽"]), by("b", "B", ["천선란"]))).toBe(false);
+    expect(sharesAuthor(by("a", "A"), by("b", "B", ["천선란"]))).toBe(false);
+  });
+
+  it("weightedPick passes over a second book of an author already picked", () => {
+    const cands = [by("a1", "A", ["갑"]), by("a2", "B", ["갑"]), by("b1", "C", ["을"]), by("c1", "D", ["병"])].map((book) => ({ book, score: 3 }));
+    for (let seed = 1; seed <= 30; seed++) {
+      const got = weightedPick(cands, 3, 0, mulberry32(seed), 99).map((c) => c.book.id);
+      expect(got).toHaveLength(3);
+      expect(got.filter((id) => id.startsWith("a"))).toHaveLength(1);
+    }
+  });
+
+  it("weightedPick keeps at most maxPerEntry of one entry", () => {
+    const target = (id: string): Book => ({ id, entry: "target", field: "f", topic: "t", genre: "t", pages: 300, way: "개념", keywords: [] });
+    const cands = [mk("l1", "A", 1), mk("l2", "B", 1), mk("l3", "C", 1), target("t1"), target("t2"), target("t3")].map((book) => ({ book, score: 1 }));
+    for (let seed = 1; seed <= 30; seed++) {
+      const got = weightedPick(cands, 4, 1, mulberry32(seed), 99, 2);
+      expect(got.filter((c) => c.book.entry === "leaf")).toHaveLength(2);
+      expect(got.filter((c) => c.book.entry === "target")).toHaveLength(2);
+    }
+  });
+
+  it("drawBookmarks: the 운명 1장 never repeats an author of the four", () => {
+    const books = [by("a1", "A", ["갑"]), by("b1", "B", ["을"]), by("c1", "C", ["병"]), by("d1", "D", ["정"]), by("x1", "X", ["갑"]), by("y1", "Y", ["무"])];
+    for (let seed = 1; seed <= 30; seed++) {
+      const res = drawBookmarks(books, { score: (b) => (["x1", "y1"].includes(b.id) ? null : 3), maxPossible: 3 },
+        opts({ rng: mulberry32(seed), inRandomPool: (b) => ["x1", "y1"].includes(b.id) }));
+      expect(res.picks.find((p) => p.kind === "random")?.book.id).toBe("y1");
+    }
   });
 });
 

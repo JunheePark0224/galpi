@@ -3,7 +3,8 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { parseQuestionMap } from "./parse";
 import { ALL_SCOPE, type Answer } from "./types";
-import { applyChallenge, PathError, walkPath } from "./walk";
+import { mulberry32 } from "@/lib/recommend";
+import { applyChallenge, PathError, skipKey, walkPath, WAY_AXIS } from "./walk";
 
 const MINI = readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/mini-map.md"), "utf8");
 const MAP = parseQuestionMap(MINI);
@@ -13,15 +14,17 @@ const SQL = [a("start", "A"), a("branch", "B"), a("learn-area", "A"), a("learn-d
 
 describe("walkPath", () => {
   it("starts at the start with the whole scope", () => {
-    expect(walkPath(MAP, [])).toMatchObject({ next: "start", scope: ALL_SCOPE, parentScope: ALL_SCOPE, mode: "normal", crumbs: [], depth: 0, unsure: 0 });
+    expect(walkPath(MAP, [])).toMatchObject({ next: "start", scope: ALL_SCOPE, levels: [ALL_SCOPE], mode: "normal", crumbs: [], depth: 0, unsure: 0, skipped: [] });
   });
 
-  it("follows the SQL path: narrows to the keyword, the parent is the topic, the mood is set, the path ends", () => {
+  it("follows the SQL path: narrows to the keyword, keeps every level narrowed through, the mood is set, the path ends", () => {
     const w = walkPath(MAP, SQL);
     expect(w.next).toBeNull();
     expect(w.scope).toEqual({ entry: "target", topics: ["데이터 분석"], keywords: ["SQL"], genres: null });
-    expect(w.parentScope).toEqual({ entry: "target", topics: ["데이터 분석"], keywords: null, genres: null });
-    expect(w.mood).toEqual({ axes: { temp: 0, pull: 0, gain: 0, world: 0 }, len: 1, way: "실습" });
+    expect(w.levels).toEqual([
+      ALL_SCOPE, { ...ALL_SCOPE, entry: "target" }, { ...ALL_SCOPE, entry: "target", topics: ["데이터 분석"] }, w.scope,
+    ]);
+    expect(w.mood).toEqual({ axes: { temp: 0, pull: 0, gain: 0, world: 0 }, len: 1, ways: ["실습"] });
     expect(w.crumbs).toEqual(["뭔가 배우기", "데이터를 다루기", "DB에서 꺼내기"]);
     expect(w.depth).toBe(6);
   });
@@ -30,7 +33,7 @@ describe("walkPath", () => {
     const w = walkPath(MAP, [a("start", "A"), a("branch", "B"), a("learn-area", "unsure")]);
     expect(w.next).toBe("mood-way");
     expect(w.scope).toEqual({ ...ALL_SCOPE, entry: "target" });
-    expect(w.parentScope).toEqual(ALL_SCOPE);
+    expect(w.levels).toEqual([ALL_SCOPE, w.scope]);
     expect(w.unsure).toBe(1);
     expect(w.crumbs).toEqual(["뭔가 배우기"]);
     expect(walkPath(MAP, SQL.slice(0, 3)).next).toBe("learn-data");
@@ -46,8 +49,24 @@ describe("walkPath", () => {
     expect(w.mode).toBe("challenge");
     const far = applyChallenge(MAP, w);
     expect(far.scope).toEqual({ entry: "leaf", topics: null, keywords: null, genres: ["에세이"] });
-    expect(far.parentScope).toEqual({ entry: "leaf", topics: null, keywords: null, genres: null });
-    expect(far.mood).toEqual(w.mood);
+    expect(far.levels).toEqual([ALL_SCOPE, { ...ALL_SCOPE, entry: "leaf" }, far.scope]);
+    expect(far.mood.len).toBe(w.mood.len);
+  });
+
+  it("challenge from 배우기 to 이야기: each way chosen leans its story axis (개념 → 알게 됨, 실습 → 현실, 사례 → 몰입)", () => {
+    expect(WAY_AXIS).toEqual({ 개념: ["gain", 1], 실습: ["world", 1], 사례: ["pull", -1] });
+    const route = (way: "A" | "B") => [a("start", "B"), a("branch", "B"), a("learn-area", "A"), a("learn-data", "A"), a("mood-way", way), a("mood-len", "A")];
+    expect(applyChallenge(MAP, walkPath(MAP, route("B"))).mood).toEqual({ axes: { temp: 0, pull: 0, gain: 0, world: 1 }, len: 1, ways: [] });
+    expect(applyChallenge(MAP, walkPath(MAP, route("A"))).mood.axes).toEqual({ temp: 0, pull: 0, gain: 1, world: 0 });
+    const both = { ...walkPath(MAP, route("A")), mood: { axes: { temp: 0, pull: 0, gain: 0, world: 0 }, len: 0 as const, ways: ["실습", "사례"] as const } };
+    expect(applyChallenge(MAP, both).mood.axes).toEqual({ temp: 0, pull: -1, gain: 0, world: 1 });
+  });
+
+  it("challenge to the far side's whole entry: one level under the library, nothing to lean for a story mood", () => {
+    const w = walkPath(MAP, [a("start", "B"), a("branch", "A"), a("story-world", "B"), a("mood-temp", "A"), a("mood-len", "A")]);
+    const far = applyChallenge(MAP, w);
+    expect(far.levels).toEqual([ALL_SCOPE, { ...ALL_SCOPE, entry: "target" }]);
+    expect(far.mood).toBe(w.mood);
   });
 
   it("challenge with no far rule for the scope: the other side whole (story ↔ learn)", () => {
@@ -55,10 +74,19 @@ describe("walkPath", () => {
     expect(applyChallenge(MAP, w).scope).toEqual({ ...ALL_SCOPE, entry: "target" });
   });
 
-  it("challenge with the whole library (no entry chosen): nothing to flip, the scope stays", () => {
+  it("challenge with the whole library (no entry chosen): no rng → the scope stays; the draw's rng → one side at random, by the seed", () => {
     const w = walkPath(MAP, [a("start", "B"), a("branch", "unsure"), a("mood-len", "A")]);
     expect(w.mode).toBe("challenge");
     expect(applyChallenge(MAP, w)).toBe(w);
+    const sides = new Set<string | null>();
+    for (let seed = 1; seed <= 20; seed++) {
+      const far = applyChallenge(MAP, w, mulberry32(seed));
+      expect(far.scope).toEqual({ ...ALL_SCOPE, entry: far.scope.entry });
+      expect(far.levels).toEqual([ALL_SCOPE, far.scope]);
+      expect(applyChallenge(MAP, w, mulberry32(seed)).scope).toEqual(far.scope);
+      sides.add(far.scope.entry);
+    }
+    expect(sides).toEqual(new Set(["leaf", "target"]));
   });
 
   it("challenge: the first far rule that matches wins", () => {
@@ -84,5 +112,37 @@ describe("walkPath", () => {
   it("leaves a normal path alone", () => {
     const w = walkPath(MAP, SQL);
     expect(applyChallenge(MAP, w)).toBe(w);
+  });
+});
+
+describe("walkPath with map.skip (design 5-2: mood questions that cannot change the draw)", () => {
+  const before = walkPath(MAP, SQL.slice(0, 4));                                    // standing before mood-way
+  const skipWay = { ...MAP, skip: new Set([skipKey(before)]) };
+
+  it("passes a listed mood question over as 'unsure': not asked, not counted, not in depth or unsure", () => {
+    const w = walkPath(skipWay, SQL.slice(0, 4));
+    expect(w.next).toBe("mood-len");
+    expect(w.skipped).toEqual(["mood-way"]);
+    expect(w).toMatchObject({ depth: 4, unsure: 0, mood: before.mood });
+    expect(walkPath(skipWay, [...SQL.slice(0, 4), a("mood-len", "B")])).toMatchObject({ next: null, depth: 5, skipped: ["mood-way"] });
+  });
+
+  it("refuses an answer to a question it passed over; one answer fewer (back) lands on the question shown before", () => {
+    expect(() => walkPath(skipWay, SQL)).toThrow(/expected an answer for "mood-len", got "mood-way"/);
+    expect(walkPath(skipWay, SQL.slice(0, 3)).next).toBe("learn-data");
+  });
+
+  it("is keyed by the question, the route and the levels: the same question elsewhere is still asked", () => {
+    expect(walkPath(skipWay, [a("start", "A"), a("branch", "B"), a("learn-area", "B")]).next).toBe("mood-way");
+    expect(walkPath(skipWay, [a("start", "B"), ...SQL.slice(1, 4)]).next).toBe("mood-way");
+    expect(skipKey(before)).toBe("mood-way|normal|all>entry=target>entry=target;topics=데이터 분석>entry=target;topics=데이터 분석;keywords=SQL");
+  });
+
+  it("passes over several in a row, up to the end of the path, and never a narrowing question", () => {
+    const end = walkPath(MAP, SQL.slice(0, 5));
+    const both = { ...MAP, skip: new Set([skipKey(before), skipKey(end), "learn-data|normal|all>entry=target>entry=target;topics=데이터 분석"]) };
+    const w = walkPath(both, SQL.slice(0, 4));
+    expect(w).toMatchObject({ next: null, skipped: ["mood-way", "mood-len"] });
+    expect(walkPath(both, SQL.slice(0, 3)).next).toBe("learn-data");
   });
 });

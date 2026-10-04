@@ -35,7 +35,7 @@ function parts(id: string, text: string, withNext: boolean): { label: string; ef
     else if (key === "genres") effects.genres = list(id, key, value);
     else if ((AXES as readonly string[]).includes(key)) effects.axes = { ...effects.axes, [key as AxisKey]: tag(id, key, value) };
     else if (key === "len") effects.len = tag(id, key, value);
-    else if (key === "way" && (WAYS as readonly string[]).includes(value)) effects.way = value as Way;
+    else if (key === "way" && list(id, key, value).every((w) => (WAYS as readonly string[]).includes(w))) effects.ways = list(id, key, value) as Way[];
     else if (key === "mode" && (value === "normal" || value === "challenge")) effects.mode = value;
     else throw new MapParseError(`node ${id}: unknown effect "${key}=${value}"`);
   }

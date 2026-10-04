@@ -123,7 +123,7 @@ test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, 
   expect(second.some((id) => first.includes(id))).toBe(false);                  // seen books stay out
   expect(named(events, "redraw_clicked").map((e) => [e.props, e.common.round, e.common.entry])).toEqual([[{ curious_count: 0 }, 1, "target"]]);
   expect(named(events, "book_opened").map((e) => e.common.round)).toEqual([1, 2]);
-  expect(named(events, "question_answered")).toHaveLength(11);                // the answers were not asked again
+  expect(named(events, "question_answered")).toHaveLength(SQL_PATH.length);   // the answers were not asked again
   expect(named(events, "result_viewed")[0]).toMatchObject({ props: { curious_count: 1 }, common: { round: 2 } });
   expect(specMismatches(events)).toEqual([]);
 });

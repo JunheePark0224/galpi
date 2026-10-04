@@ -4,10 +4,11 @@ export type Tag = -1 | 0 | 1;
 export type Way = "개념" | "실습" | "사례";
 export type Rng = () => number;
 
-export interface LeafBook { id: string; entry: "leaf"; genre: string; pages: number; axes: Record<AxisKey, Tag> }
+/** authors: the author names (books/normalize authorNames) — one draw shows one book per name (design 5-3). None = no limit. */
+export interface LeafBook { id: string; entry: "leaf"; genre: string; pages: number; axes: Record<AxisKey, Tag>; authors?: readonly string[] }
 export interface TargetBook {
   id: string; entry: "target"; field: string; topic: string; genre: string;
-  pages: number; way: Way; keywords: string[];
+  pages: number; way: Way; keywords: string[]; authors?: readonly string[];
 }
 export type Book = LeafBook | TargetBook;
 
