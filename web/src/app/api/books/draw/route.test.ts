@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { POST } from "./route";
+import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
 
 const NINE = ["A", "unsure", "B", "A", "A", "B", "B", "A", "A"];
 const ORIGIN = "http://x";
@@ -84,5 +85,19 @@ describe("POST /api/books/draw", () => {
   it("rejects a body over the size cap with 413", async () => {
     const seen = Array.from({ length: 2500 }, (_, i) => `id-${i}-padding`);
     expect((await POST(req({ entry: "leaf", choices: NINE, seen }))).status).toBe(413);
+  });
+
+  it("draws five bookmarks for a v2 path and returns the path S-04 shows", async () => {
+    const res = await POST(req({ answers: SQL_PATH, seen: [], seed: 7 }));
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.picks).toHaveLength(5);
+    expect(Object.keys(body).sort()).toEqual(["exhausted", "path", "picks", "widened"]);
+    expect(body.path.crumbs.at(-1)).toBe("DB에서 꺼내기");
+    expect(Object.keys(body.picks[0].card).sort()).toEqual(["author", "entry", "field", "genre", "id", "oneLiner", "oneLinerStyle", "title"]);
+  });
+
+  it("refuses an unfinished path with 400", async () => {
+    expect((await POST(req({ answers: SQL_PATH.slice(0, 3) }))).status).toBe(400);
   });
 });
