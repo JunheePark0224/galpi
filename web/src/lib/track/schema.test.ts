@@ -2,12 +2,13 @@ import { describe, expect, it } from "vitest";
 import { COMMON_KEYS, cutText, EVENT_NAMES, EVENT_SPEC, isEventName, isOwnRouteEvent, OWN_ROUTE_EVENTS, parseCommon, type PropsOf } from "./schema";
 
 describe("event schema", () => {
-  it("lists the 30 taxonomy events in PRD order (E-04 removed, E-31 last)", () => {
-    expect(EVENT_NAMES).toHaveLength(30);
-    expect(EVENT_NAMES[0]).toBe("site_visited");
-    expect(EVENT_NAMES[24]).toBe("goal_submitted");
-    expect(EVENT_NAMES.slice(25)).toEqual(["bookmark_pulled", "bookmark_flipped", "shelf_created", "bookmark_moved", "feedback_sent"]);   // v0.7 C-16, v0.8 P5 rods, v0.10 F-26
-    expect(EVENT_NAMES).not.toContain("visit");
+  it("lists the 27 live taxonomy events in PRD order (v1.0: six removed, E-32 · E-25 · E-33 · E-34 after E-02)", () => {
+    expect(EVENT_NAMES).toHaveLength(27);
+    expect(EVENT_NAMES.slice(0, 6)).toEqual(["site_visited", "entry_selected", "question_answered", "unsure_hold_cancelled", "question_back_clicked", "path_completed"]);
+    expect(EVENT_NAMES.slice(-5)).toEqual(["bookmark_pulled", "bookmark_flipped", "shelf_created", "bookmark_moved", "feedback_sent"]);
+    for (const gone of ["visit", "balance_answered", "chip_selected", "goal_submitted", "free_goal_written", "goal_coverage_checked", "first_page_edited"]) {
+      expect(EVENT_NAMES).not.toContain(gone);
+    }
   });
 
   it("accepts only known names, never inherited object keys", () => {
@@ -18,8 +19,7 @@ describe("event schema", () => {
     expect(isEventName(42)).toBe(false);
   });
 
-  it("marks goal_text Supabase only and prompt_version Amplitude only (taxonomy 2-7)", () => {
-    expect(EVENT_SPEC.free_goal_written.goal_text).toMatchObject({ only: "supabase", max: 30 });
+  it("marks feedback_text Supabase only and prompt_version Amplitude only (taxonomy 2-7)", () => {
     expect(EVENT_SPEC.site_visited.prompt_version).toMatchObject({ only: "amplitude" });
     expect(EVENT_SPEC.feedback_sent.feedback_text).toMatchObject({ only: "supabase", max: 500 });
   });
@@ -30,12 +30,12 @@ describe("event schema", () => {
     expect(isOwnRouteEvent("site_visited")).toBe(false);
   });
 
-  it("F-24: the missing phrase is Supabase only (≤20), its yes/no goes to both; E-18 from the first page has no book", () => {
-    expect(EVENT_SPEC.free_goal_written.missing_text).toMatchObject({ only: "supabase", max: 20, nullable: true });
-    expect(EVENT_SPEC.free_goal_written.has_missing).toEqual({ type: "boolean" });
-    expect(EVENT_SPEC.goal_coverage_checked.understood.type).toEqual(["keyword", "topic", "missing", "none", "nearest"]);
+  it("v1.0: the question events and the extra home source; old first_page values stay readable", () => {
+    expect(EVENT_SPEC.question_answered.kind.type).toEqual(["narrow", "mood"]);
+    expect(EVENT_SPEC.question_back_clicked.source.type).toEqual(["question", "first_page"]);
+    expect(EVENT_SPEC.home_clicked.source.type).toEqual(["first_page", "end", "question"]);
+    expect(EVENT_SPEC.path_completed.scope_id).toEqual({ type: "string" });
     expect(EVENT_SPEC.yes24_link_clicked.source.type).toContain("first_page");
-    expect(EVENT_SPEC.yes24_link_clicked.book_id).toMatchObject({ nullable: true });
     expect(EVENT_SPEC.entry_selected.source.type).toEqual(["home", "first_page"]);
   });
 
@@ -43,21 +43,19 @@ describe("event schema", () => {
     const shown: PropsOf<"bookmark_shown"> = {
       book_id: "9788998441012", position: 1, one_liner_style: "summary", pick_type: "random", art: { animal: "fox" },
     };
-    const goal: PropsOf<"free_goal_written"> = {
-      goal_text: "SQL", topic: "데이터 분석", keywords: ["SQL"], is_matched: true, method: "word", has_missing: false, missing_text: null,
-    };
+    const answered: PropsOf<"question_answered"> = { node_id: "start", kind: "narrow", choice: "unsure", depth: 1, position: 1, elapsed_ms: 900 };
     const visit: PropsOf<"site_visited"> = {};
     // @ts-expect-error — `kind` is the old name of pick_type (taxonomy 4-4)
     const old: PropsOf<"bookmark_reacted"> = { book_id: "1", position: 1, reaction: "pass", pick_type: "random", one_liner_style: "summary", kind: "random" };
     // @ts-expect-error — entry_selected has no `entry` of its own (props.entry was removed; the entry is common)
     const entry: PropsOf<"entry_selected"> = { source: "home", entry: "leaf" };
-    // @ts-expect-error — side is an enum: left, right or null
-    const side: PropsOf<"balance_answered"> = { question_no: 1, choice: "A", side: "middle", elapsed_ms: 1, is_edit: false };
-    expect([shown, goal, visit, old, entry, side]).toHaveLength(6);
+    // @ts-expect-error — kind is an enum: narrow or mood
+    const side: PropsOf<"question_answered"> = { node_id: "start", kind: "both", choice: "A", depth: 1, position: 1, elapsed_ms: 1 };
+    expect([shown, answered, visit, old, entry, side]).toHaveLength(6);
   });
 });
 
-const good = { anon_id: "a", user_id: null, session_id: "s", round: 1, entry: null, screen_version: "v1",
+const good = { anon_id: "a", user_id: null, session_id: "s", round: 1, entry: null, mode: null, screen_version: "v2",
   referrer: "", is_returning: false, device: "phone", is_in_app_browser: false };
 
 describe("parseCommon", () => {
@@ -69,7 +67,7 @@ describe("parseCommon", () => {
 
   it("accepts a complete common block and returns only the known keys", () => {
     expect(parseCommon(good)).toEqual(good);
-    expect(parseCommon({ ...good, entry: "leaf", user_id: "u1", round: 1000, device: "desktop" })).toMatchObject({ entry: "leaf", user_id: "u1" });
+    expect(parseCommon({ ...good, entry: "leaf", mode: "challenge", user_id: "u1", round: 1000, device: "desktop" })).toMatchObject({ entry: "leaf", mode: "challenge", user_id: "u1" });
     expect(parseCommon({ ...good, extra: "x" })).toEqual(good);
   });
 
@@ -98,6 +96,8 @@ describe("parseCommon", () => {
     ["round string", { round: "1" }],
     ["entry unknown", { entry: "shelf" }],
     ["entry undefined", { entry: undefined }],
+    ["mode unknown", { mode: "both" }],
+    ["mode undefined", { mode: undefined }],
     ["device tablet", { device: "tablet" }],
     ["is_returning string", { is_returning: "false" }],
     ["is_in_app_browser 0", { is_in_app_browser: 0 }],

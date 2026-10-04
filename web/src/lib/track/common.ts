@@ -5,9 +5,10 @@ const ANON = "galpi.anon";
 const SEEN = "galpi.seen";
 const SESSION = "galpi.session";
 const RETURNING = "galpi.returning";
-// entry and round live in sessionStorage: a reload in the same tab keeps them (the flow screen resumes too).
+// entry, mode and round live in sessionStorage: a reload in the same tab keeps them (the flow screen resumes too).
 const ENTRY = "galpi.entry";
 const ROUND = "galpi.round";
+const MODE = "galpi.mode";
 
 let userId: string | null = null;
 
@@ -80,6 +81,11 @@ function currentRound(): number {
   return Number.isInteger(n) && n >= 1 ? n : 1;
 }
 
+function currentMode(): CommonProps["mode"] {
+  const value = readSession(MODE);
+  return value === "normal" || value === "challenge" ? value : null;
+}
+
 export function detectDevice(ua: string): { device: "phone" | "desktop"; is_in_app_browser: boolean } {
   const phone = /Mobi|Android|iPhone|iPod/i.test(ua);
   const inApp = /KAKAOTALK|Instagram|FBAN|FBAV|NAVER\(inapp|Line\//i.test(ua);
@@ -95,6 +101,7 @@ export function readAnonId(): string | null {
 export function ensureAnonId(): string { return getOrCreate(store("local"), ANON).value; }
 
 export function setEntry(next: CommonProps["entry"]): void { writeSession(ENTRY, next ?? ""); }
+export function setMode(next: CommonProps["mode"]): void { writeSession(MODE, next ?? ""); }
 export function nextRound(): void { writeSession(ROUND, String(currentRound() + 1)); }
 export function setUserId(id: string | null): void { userId = id; }
 
@@ -123,6 +130,7 @@ export function commonProps(): CommonProps {
     session_id: sessionId.value,
     round: currentRound(),
     entry: currentEntry(),
+    mode: currentMode(),
     screen_version: SCREEN_VERSION,
     referrer: typeof document === "undefined" ? "" : cutText(document.referrer, MAX_REFERRER),
     is_returning: isReturning,

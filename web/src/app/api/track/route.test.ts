@@ -10,7 +10,7 @@ vi.mock("@/lib/auth/server", () => ({
 import { saveEvent } from "@/lib/track/store";
 import { POST } from "./route";
 
-const common = { anon_id: "a", user_id: null, session_id: "s", round: 1, entry: null, screen_version: "v1",
+const common = { anon_id: "a", user_id: null, session_id: "s", round: 1, entry: null, mode: null, screen_version: "v1",
   referrer: "", is_returning: false, device: "phone", is_in_app_browser: false };
 const ORIGIN = "http://x";
 /** The route flags dropped props on the server log; keep the test output quiet and read the calls instead. */
@@ -125,12 +125,12 @@ describe("POST /api/track", () => {
 
   it("keeps the event and strips NUL and lone surrogates that Postgres jsonb would refuse", async () => {
     const dirty = { ...common, referrer: "a\u0000b\ud800c" };
-    const props = { goal_text: "책\u0000 \udc00읽기", topic: "😀", keywords: ["x\ud83d"], is_matched: true, method: "word", "\u0000k": 1 };
-    const res = await POST(req({ name: "free_goal_written", props, common: dirty }));
+    const props = { node_id: "lea\u0000rn\udc00", kind: "narrow", choice: "A", depth: 1, position: 1, elapsed_ms: 5, "\u0000k": 1 };
+    const res = await POST(req({ name: "question_answered", props, common: dirty }));
     expect(res.status).toBe(202);
     expect(saveEvent).toHaveBeenCalledWith({
-      name: "free_goal_written",
-      props: { goal_text: "책 \ufffd읽기", topic: "😀", keywords: ["x\ufffd"], is_matched: true, method: "word" },
+      name: "question_answered",
+      props: { node_id: "learn\ufffd", kind: "narrow", choice: "A", depth: 1, position: 1, elapsed_ms: 5 },
       common: { ...common, referrer: "ab\ufffdc" },
     });
   });
@@ -149,10 +149,10 @@ describe("POST /api/track", () => {
     expect(JSON.stringify(warn.mock.calls)).not.toContain("개인 정보");
   });
 
-  it("keeps the goal text to 30 characters and logs nothing when every prop matches", async () => {
-    const props = { goal_text: "가".repeat(45), topic: "데이터 분석", keywords: [], is_matched: false, method: "word" };
-    expect((await POST(req({ name: "free_goal_written", props, common }))).status).toBe(202);
-    expect(vi.mocked(saveEvent).mock.calls[0][0].props.goal_text).toBe("가".repeat(30));
+  it("keeps a free string prop to 200 characters and logs nothing when every prop matches", async () => {
+    const props = { scope_id: "가".repeat(250), depth: 3, unsure_count: 0 };
+    expect((await POST(req({ name: "path_completed", props, common }))).status).toBe(202);
+    expect(vi.mocked(saveEvent).mock.calls[0][0].props.scope_id).toBe("가".repeat(200));
     expect(warn).not.toHaveBeenCalled();
   });
 

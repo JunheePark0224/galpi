@@ -13,7 +13,7 @@ import { notifyFeedback } from "@/lib/server/notify";
 import { saveEvent } from "@/lib/track/store";
 import { POST } from "./route";
 
-const common = { anon_id: "anon-1", user_id: null, session_id: "s", round: 2, entry: null, screen_version: "v1",
+const common = { anon_id: "anon-1", user_id: null, session_id: "s", round: 2, entry: null, mode: null, screen_version: "v1",
   referrer: "", is_returning: true, device: "phone", is_in_app_browser: false };
 const LETTER = "책갈피 고르는 게 재밌어요";
 let ip = 0;

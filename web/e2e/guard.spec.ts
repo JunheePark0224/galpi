@@ -1,7 +1,7 @@
 import { expect } from "@playwright/test";
 import { test } from "./helpers";
 
-const common = { anon_id: "e2e", user_id: null, session_id: "e2e", round: 1, entry: null, screen_version: "v1",
+const common = { anon_id: "e2e", user_id: null, session_id: "e2e", round: 1, entry: null, mode: null, screen_version: "v2",
   referrer: "", is_returning: false, device: "desktop", is_in_app_browser: false };
 const event = { name: "site_visited", props: {}, common };
 
