@@ -17,6 +17,7 @@
 | taxonomy v0.10 | 2026-10-02 | 갈피 우체통 (PRD F-26) `plans/2026-10-02-feedback-mailbox.md` | E-31 `feedback_sent` live, 동사 `sent`, 분류 `홈`, `feedback_text` Supabase only, Supabase 사본은 `/api/feedback`이 저장 (8절) |
 | taxonomy v1.0 | 2026-10-04 | v2 설계 `plans/2026-10-04-galpi-v2-paths-design.md` 6절 · 계획 2 | 갈림길 이벤트 E-32·E-33·E-34, E-25 속성 교체, 공통 `mode`·`entry`=갈래·`screen_version` v2, 🎯 입력·밸런스 이벤트 6개 `removed` (8절) |
 | taxonomy v1.1 | 2026-10-04 | 내 책갈피 끌어서 옮기기 `plans/2026-10-04-library-front-drag.md` | E-30 `method` "drag" 추가("hold"는 보내지 않음), `is_same_shelf` 추가, 같은 막대 안 순서 바꾸기도 남김 (8절) |
+| taxonomy v1.2 | 2026-10-04 | 내 책갈피 [모두 제거] (PRD F-13, 시안 `mockups/2026-10-04-v2/library-buttons-options.png` A) | E-35 `library_cleared`(`removed_count`) live, 동사 `cleared`, 모두 빼기는 E-16을 책마다 보내지 않음 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -106,6 +107,7 @@
 | `created` | 이용자가 새것을 만들었다 (내 책갈피 막대, v0.8) | click |
 | `moved` | 이용자가 자리를 옮겼다 (책갈피를 다른 막대로, v0.8 · 같은 막대 안 다른 자리로, v1.1) | click |
 | `sent` | 이용자가 쓴 글을 보냈고 서버가 저장했다 (갈피 우체통, v0.10) | click |
+| `cleared` | 이용자가 모두 비웠다 (내 책갈피 [모두 제거] → 확인, 서버가 지운 뒤, v1.2) | click |
 
 ### 2-3. 속성 이름
 
@@ -141,7 +143,7 @@
 | 결과 | S-06 | E-09, E-10, E-23, E-27, E-28, E-18 |
 | 보관 | S-06, S-09 | E-11, E-15, E-16 |
 | 로그인 | S-07 | E-12, E-13, E-14 |
-| 내 책갈피 | S-09 | E-17, E-29, E-30 |
+| 내 책갈피 | S-09 | E-17, E-29, E-30, E-35 (v1.2) |
 | 마무리 | S-08 (E-20은 S-04의 막다른 길에서도) | E-19, E-20 |
 | 홈 | S-01 (퍼널 밖 — 갈피 우체통, v0.10) | E-31 |
 | 공통 | — | 공통 속성 (csv의 `*` 줄) |
@@ -262,7 +264,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 ### 4-1. 한눈에 보기
 
-상태 (v1.0): live 27 · removed 6 · planned 0. v0.10: live 30 · planned-P4 0 · planned-P5 0 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned 없음(v0.8 — P5 이벤트 모두 live). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로. v0.10: 갈피 우체통(E-31) 추가 — 화면과 함께 live로
+상태 (v1.2): live 28 · removed 6 · planned 0. v1.0: live 27. v0.10: live 30 · planned-P4 0 · planned-P5 0 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned 없음(v0.8 — P5 이벤트 모두 live). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로. v0.10: 갈피 우체통(E-31) 추가 — 화면과 함께 live로. v1.2: 내 책갈피 [모두 제거](E-35) 추가 — 화면과 함께 live로
 
 | ID | 제안 이름 | 이전 이름 | 분류 | 트리거 | 상태 |
 |---|---|---|---|---|---|
@@ -296,11 +298,12 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-17 | `library_viewed` | 같음 | 내 책갈피 | view | live |
 | E-29 | `shelf_created` | (없음, v0.8) | 내 책갈피 | click | live |
 | E-30 | `bookmark_moved` | (없음, v0.8) | 내 책갈피 | click | live |
+| E-35 | `library_cleared` | (없음, v1.2) | 내 책갈피 | click | live |
 | E-19 | `redraw_clicked` | 같음 | 마무리 | click | live |
 | E-20 | `home_clicked` | 같음 | 마무리 | click | live |
 | E-31 | `feedback_sent` | (없음, v0.10) | 홈 | click | live |
 
-E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(27개 — `EVENT_NAMES`는 그 키, v1.0. `removed` 6개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
+E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(28개 — `EVENT_NAMES`는 그 키, v1.2 E-35 추가. `removed` 6개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
 
 ### 4-2. 이벤트별 상세
 
@@ -663,7 +666,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 보관 | click | live | 같음 |
 
-**언제**: S-09 내 책갈피에서 책갈피 뒷면의 [빼기]를 확인까지 누를 때  
+**언제**: S-09 내 책갈피에서 책갈피 뒷면의 [빼기]를 확인까지 누를 때. [모두 제거]로 한꺼번에 뺄 때는 보내지 않는다 — 그때는 E-35 하나만(v1.2)  
 **분석 질문**: Q-13
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -750,6 +753,19 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | `book_id` | 추가 | String | "9788998441012" | 책 ISBN-13 (books.isbn) |
 | `method` | v1.1: "drag" 추가 | String | "drag", "menu", "hold" | 옮긴 방법 — drag=끌어서 놓기(v1.1 — 10-04부터 [책갈피 옮기기] 모드에서, 꾹 누르기 없음), menu=시트 [다른 막대로 옮기기](맨 앞에 붙음), hold=꾹 눌러 집고 막대 누르기(v1.0까지 — v1.1부터 보내지 않음, 옛 탭·옛 기록용으로 스펙에 남김) |
 | `is_same_shelf` | 추가 (v1.1) | Boolean | TRUE, FALSE | 같은 막대 안에서 자리만 바꿨는지 (끌기로만 TRUE — 메뉴는 다른 막대만) |
+
+#### E-35 `library_cleared`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 내 책갈피 | click | live | 신규 (v1.2) |
+
+**언제**: S-09 [모두 제거] → 확인 시트 [모두 빼기]를 눌러 **서버가 지운 뒤**(2xx). [그대로 두기]·시트 닫기·실패는 남지 않음. 빠진 책마다 E-16 `book_unsaved`를 따로 보내지 않는다(한 번의 누름 = 한 이벤트, 2-1). 막대는 그대로 남고, 막대 이름·번호는 넣지 않는다  
+**분석 질문**: Q-13
+
+| 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
+|---|---|---|---|---|
+| `removed_count` | 추가 (v1.2) | Number | 3, 12 | 서버가 뺀 책갈피 수 (목록에서 빠져 화면에 안 보이던 책도 포함) |
 
 #### E-19 `redraw_clicked`
 
@@ -1131,6 +1147,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v0.12 | 2026-10-02 | Claude (사용자 결정) | 친구 5명 시험에서 꽂는 법을 아무도 못 찾음 → S-06 꽂기를 제목 옆 작은 잉크 알약 [🔖 꽂기]로, 늘 보이고 한 번에 꽂힘(PRD F-12, DESIGN C-16b). 책 아래 [내 책갈피에 꽂기]는 없앰, 주 버튼은 늘 [예스24에서 보기]. **E-11 `save_clicked`는 이제 E-27 `bookmark_pulled` 없이도 남는다** — 5-3 꺼냄율·뒷면율은 그대로지만 v0.12 전후의 "꺼냄 → 꽂기" 순서를 퍼널로 잇지 않는다(그 전에는 꽂으려면 꺼내야 했다). 마우스 hover(들림 + "눌러서 꺼내기")는 이벤트 없음. 처음 S-06 안내(C-21)도 이벤트 없음(C-20과 같음, 1-1). 이벤트 이름·속성·`schema.ts` 변경 없음, 모으는 정보 변화 없음 — `/privacy` 그대로(localStorage 열쇠 `galpi.hint.resultGuide` 하나 추가는 C-20과 같은 화면 설정) |
 | v1.0 | 2026-10-04 | Claude (v2 계획 2) | 갈피 v2(입구 하나, 둘 중 하나 고르는 갈림길). **새로**: E-32 `question_answered`(node_id·kind·choice·depth·position·elapsed_ms — E-24 대신, 이름을 바꿔 v1과 섞이지 않게), E-33 `question_back_clicked`(node_id·depth·source), E-34 `path_completed`(scope_id·depth·unsure_count), 공통 `mode`. **바꿈**: E-25 `unsure_hold_cancelled` 속성 question_no·position·is_edit → node_id·depth, 분류 갈림길. E-20 `source`에 "question"(첫 질문의 이전 질문 → 새 판, 3-1a). 공통 `entry` 뜻 = 갈래(값 그대로), `screen_version` v2. **없앰(`removed`, 줄은 기록으로)**: E-03 `chip_selected`, E-26 `goal_submitted`, E-21 `free_goal_written`, E-22 `goal_coverage_checked`, E-06 `first_page_edited`, E-24 `balance_answered`. E-02 `source`=first_page와 E-18 `source`=first_page 값은 더 나오지 않지만 v1 기록을 읽으려고 스펙에 남김. 처리방침 6-3f를 먼저. v1 기준점과는 책갈피 이후 이벤트(공통)로만 비교(설계 9절) |
 | v1.1 | 2026-10-04 | Claude (사용자 요청) | 내 책갈피(S-09)를 꾹 눌러 **끌어서** 다른 막대 어디든·같은 막대 안 다른 자리로 옮김(PRD F-13, `plans/2026-10-04-library-front-drag.md`). E-30 `bookmark_moved`: `method`에 "drag" 추가, "hold"(들고 → 막대 누르기)는 v1.1부터 보내지 않음 — 그 화면이 없어짐, 옛 탭과 v1.0까지의 기록을 읽으려고 스펙에 남김. 새 속성 `is_same_shelf`(Boolean — 2-3 규칙으로 `is_`, 계획서의 `same_shelf`). 같은 막대 안 순서 바꾸기도 남김, 제자리·막대 밖 놓기는 남지 않음. 놓인 자리 번호는 넣지 않음(답할 질문이 없음, 1-1). 모으는 정보 변화 없음 — `/privacy` 그대로 |
+| v1.2 | 2026-10-04 | Claude (사용자 요청) | 내 책갈피(S-09)에 [모두 제거] → 확인 시트 [모두 빼기](PRD F-13, 시안 `library-buttons-options.png` A). 새 E-35 `library_cleared`(`removed_count` Number — 서버가 지운 수)를 화면과 함께 `live`로, 동사 `cleared` 추가. 서버가 지운 것을 확인한 뒤에만 보낸다. 빠진 책마다 E-16 `book_unsaved`를 보내지 않는다(한 누름 = 한 이벤트 — 어떤 책이었는지는 그 전 E-15로 안다). 막대 이름·번호는 넣지 않음(6-1). 모으는 정보 변화 없음(지운 수뿐) — `/privacy`는 기록을 "누른 버튼"으로만 적고 이벤트를 하나하나 나열하지 않아 그대로 |
 
 ---
 

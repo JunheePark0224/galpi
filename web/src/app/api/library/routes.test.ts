@@ -32,6 +32,7 @@ const error = vi.spyOn(console, "error").mockImplementation(() => {});
 import { GET as me } from "../me/route";
 import { GET as library } from "./route";
 import { DELETE as unsave, PATCH as move, POST as save } from "./saves/route";
+import { DELETE as unsaveAll } from "./saves/all/route";
 import { DELETE as removeShelf, PATCH as renameShelf, POST as addShelf } from "./shelves/route";
 
 const ORIGIN = "http://x";
@@ -118,6 +119,36 @@ describe("내 책갈피 routes", () => {
     expect((await unsave(send("DELETE", "/api/library/saves", { isbn: BODY.isbn }))).status).toBe(200);
     expect((await unsave(send("DELETE", "/api/library/saves", { isbn: BODY.isbn }))).status).toBe(404);
     expect((await unsave(send("DELETE", "/api/library/saves", { isbn: "x" }))).status).toBe(400);
+  });
+
+  it("[모두 제거] takes every bookmark only for exactly { all: true } and keeps the rods", async () => {
+    const row = (isbn: string, shelfId: string, position: number) =>
+      ({ isbn, art: ART as never, reason: { label: "이 책은" as const, items: [] }, metOn: "2026-10-01", shelfId, position });
+    const shelves = [{ id: A, name: "첫", position: 0 }, { id: B, name: "둘", position: 1 }];
+    store = memoryStore({ shelves, saves: [row("9788998441012", A, 0), row("9790000000009", B, 0)] });
+    for (const body of [{}, { all: "true" }, { all: 1 }, { all: false }, { all: true, isbn: "9788998441012" }, [true], null]) {
+      expect((await unsaveAll(send("DELETE", "/api/library/saves/all", body))).status, JSON.stringify(body)).toBe(400);
+    }
+    // the single delete does not take { all: true } either
+    expect((await unsave(send("DELETE", "/api/library/saves", { all: true }))).status).toBe(400);
+    expect(store.data.saves).toHaveLength(2);
+    const res = await unsaveAll(send("DELETE", "/api/library/saves/all", { all: true }));
+    expect(res.status).toBe(200);
+    expect(res.headers.get("cache-control")).toBe("no-store");
+    expect(await res.json()).toEqual({ ok: true, removed: 2 });
+    expect(store.data.saves).toEqual([]);
+    expect(store.data.shelves).toEqual(shelves);
+    expect(await (await unsaveAll(send("DELETE", "/api/library/saves/all", { all: true }))).json()).toEqual({ ok: true, removed: 0 });
+    userId = null;
+    expect((await unsaveAll(send("DELETE", "/api/library/saves/all", { all: true }))).status).toBe(401);
+    const cross = new Request(`${ORIGIN}/api/library/saves/all`, { method: "DELETE", headers: { origin: "https://evil.example" }, body: JSON.stringify({ all: true }) });
+    expect((await unsaveAll(cross)).status).toBe(403);
+  });
+
+  it("[모두 제거] answers a database failure with a plain 500", async () => {
+    store.deleteAllSaves = async () => { throw new Error("library unsave all failed: 08006"); };
+    expect((await unsaveAll(send("DELETE", "/api/library/saves/all", { all: true }))).status).toBe(500);
+    expect(error).toHaveBeenCalledWith("library:", "library unsave all failed: 08006");
   });
 
   it("adds, renames and removes rods", async () => {
