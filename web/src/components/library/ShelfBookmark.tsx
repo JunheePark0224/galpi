@@ -4,24 +4,28 @@ import { Bookmark } from "@/components/Bookmark";
 import type { LibraryBookmark } from "@/lib/library/types";
 import { metLabel } from "./BookmarkSheet";
 import styles from "./Library.module.css";
-import { useHold, type Point } from "./useHold";
+import type { Point } from "./useDrag";
+import { usePickUp } from "./usePickUp";
 
 interface Props {
   bookmark: LibraryBookmark;
+  /** Move mode ([책갈피 옮기기], 10-04): a press that moves picks it up, a tap does nothing. */
+  moving: boolean;
   /** Being dragged: this slot stays as a faded placeholder. */
   lifted: boolean;
   onOpen: () => void;
-  onHold: (at: Point, box: DOMRect, pointerId: number) => void;
+  onPick: (at: Point, box: DOMRect, pointerId: number) => void;
 }
 
 /**
  * One bookmark hanging on a rod (C-17): the S-06 bookmark as it was kept, small, with the day it was met. Tap → its
- * front, large (BookmarkSheet); hold 0.5 s → it follows the finger to a new place (useDrag). The name says the book (our
- * catalogue's title), never the rod's name.
+ * front, large (BookmarkSheet). In move mode a tap does nothing and a press that moves 4 px picks it up (useDrag); a
+ * keyboard press (Enter / Space, `detail` 0) still opens it, so the sheet's [다른 막대로 옮기기] stays reachable. The name
+ * says the book (our catalogue's title), never the rod's name.
  */
-export function ShelfBookmark({ bookmark, lifted, onOpen, onHold }: Props) {
+export function ShelfBookmark({ bookmark, moving, lifted, onOpen, onPick }: Props) {
   const self = useRef<HTMLButtonElement>(null);
-  const hold = useHold((at, pointerId) => { if (self.current) onHold(at, self.current.getBoundingClientRect(), pointerId); });
+  const pick = usePickUp(moving, (at, pointerId) => { if (self.current) onPick(at, self.current.getBoundingClientRect(), pointerId); });
   return (
     <button
       ref={self}
@@ -29,11 +33,8 @@ export function ShelfBookmark({ bookmark, lifted, onOpen, onHold }: Props) {
       className={styles.hang}
       data-lifted={lifted ? "" : undefined}
       aria-label={`${bookmark.card.title} 책갈피`}
-      {...hold.handlers}
-      onClick={(e) => {
-        const was = hold.wasHold();
-        if (!was || e.detail === 0) onOpen();     // a keyboard press (detail 0) always opens, even right after a drag
-      }}
+      {...pick}
+      onClick={(e) => { if (!moving || e.detail === 0) onOpen(); }}
     >
       <span className={styles.mini} aria-hidden="true">
         <Bookmark card={bookmark.card} art={bookmark.art} met={metLabel(bookmark.metOn)} moving />

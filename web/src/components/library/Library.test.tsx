@@ -69,18 +69,88 @@ describe("Library (S-09)", () => {
     if (slot) return box(Array.from(slot.parentElement!.children).indexOf(slot) * 100, 0, 100, 200);
     return box(0, 0, 0, 0);
   });
-  const lift = async (name: string) => {
+  const enterMode = async () => { fireEvent.click(await screen.findByRole("button", { name: "책갈피 옮기기" })); };
+  /** Move mode: press and move 6 px — picked up at once, no hold. */
+  const lift = async (name: string, pointerId?: number) => {
     const el = await screen.findByRole("button", { name });
-    fireEvent.pointerDown(el, { clientX: 50, clientY: 100 });
-    act(() => { vi.advanceTimersByTime(500); });
+    fireEvent.pointerDown(el, { clientX: 50, clientY: 100, pointerId });
+    act(() => { fireEvent.pointerMove(window, { clientX: 56, clientY: 100, pointerId }); });
     return el;
   };
   const dragTo = (x: number, y: number) => { act(() => { fireEvent.pointerMove(window, { clientX: x, clientY: y }); }); };
 
-  it("hold, drag onto another rod and let go: a gap opens there, it moves to that place (E-30 drag)", async () => {
+  it("[책갈피 옮기기] turns move mode on: [완료] (primary), the hint, the rod buttons step aside; [완료] and Escape turn it off", async () => {
+    await mount(IN);
+    const toggle = await screen.findByRole("button", { name: "책갈피 옮기기" });
+    expect(toggle).toHaveAttribute("data-variant", "secondary");
+    expect(screen.queryByText("책갈피를 끌어서 원하는 자리에 놓으세요")).toBeNull();
+    fireEvent.click(toggle);
+    expect(toggle).toHaveTextContent("완료");
+    expect(toggle).toHaveAttribute("data-variant", "primary");
+    expect(screen.getByText("책갈피를 끌어서 원하는 자리에 놓으세요")).toBeInTheDocument();
+    expect(document.querySelector("[data-move-mode]")).not.toBeNull();
+    for (const name of ["막대 이름 고치기", "막대 치우기", "＋ 막대 추가"]) expect(screen.queryByRole("button", { name })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "완료" }));
+    expect(screen.getByRole("button", { name: "책갈피 옮기기" })).toBeInTheDocument();
+    expect(screen.queryByText("책갈피를 끌어서 원하는 자리에 놓으세요")).toBeNull();
+    expect(screen.getAllByRole("button", { name: "막대 이름 고치기" })).toHaveLength(2);
+    expect(screen.getByRole("button", { name: "＋ 막대 추가" })).toBeInTheDocument();
+    await enterMode();
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(screen.getByRole("button", { name: "책갈피 옮기기" })).toBeInTheDocument();
+    expect(document.querySelector("[data-move-mode]")).toBeNull();
+  });
+
+  it("no bookmarks: no [책갈피 옮기기]", async () => {
+    request.mockResolvedValue(ok({ count: 0, animals: 0, shelves: [{ ...VIEW.shelves[0], bookmarks: [] }] }));
+    await mount({ ...IN, count: 0 });
+    expect(await screen.findByText("0개 · 동물 0종")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "책갈피 옮기기" })).toBeNull();
+  });
+
+  it("outside move mode a press that moves (or is held) never drags — a tap opens the sheet", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     layout();
     await mount(IN);
+    const moso = await lift("모순 책갈피");
+    act(() => { vi.advanceTimersByTime(800); });
+    dragTo(150, 450);
+    expect(moso).not.toHaveAttribute("data-lifted");
+    expect(screen.queryByText("놓을 자리로 끌어서 놓으세요")).toBeNull();
+    fireEvent.pointerUp(window);
+    fireEvent.click(moso);
+    expect(screen.getByRole("dialog", { name: "모순" })).toBeInTheDocument();
+  });
+
+  it("in move mode a tap does nothing and a move under 4 px is still a tap; a keyboard press still opens the sheet", async () => {
+    layout();
+    await mount(IN);
+    await enterMode();
+    const moso = await screen.findByRole("button", { name: "모순 책갈피" });
+    fireEvent.pointerDown(moso, { clientX: 50, clientY: 100 });
+    act(() => { fireEvent.pointerMove(window, { clientX: 53, clientY: 101 }); });
+    expect(moso).not.toHaveAttribute("data-lifted");
+    fireEvent.pointerUp(window);
+    fireEvent.click(moso, { detail: 1 });
+    expect(screen.queryByRole("dialog")).toBeNull();
+    dragTo(150, 450);                                                                   // released: later moves do nothing
+    expect(moso).not.toHaveAttribute("data-lifted");
+    fireEvent.pointerDown(moso, { clientX: 50, clientY: 100, button: 2, pointerType: "mouse" });   // not the main button
+    dragTo(150, 450);
+    expect(moso).not.toHaveAttribute("data-lifted");
+    const menu = new MouseEvent("contextmenu", { bubbles: true, cancelable: true });
+    moso.dispatchEvent(menu);
+    expect(menu.defaultPrevented).toBe(true);                                          // no long-press menu in move mode
+    fireEvent.click(moso, { detail: 0 });                                              // Enter / Space
+    expect(screen.getByRole("dialog", { name: "모순" })).toBeInTheDocument();
+    fireEvent.keyDown(window, { key: "Escape" });                                       // the sheet's Escape, not the mode's
+    expect(screen.getByRole("button", { name: "완료" })).toBeInTheDocument();
+  });
+
+  it("move mode: drag onto another rod and let go — a gap opens there, it moves to that place (E-30 drag), no success toast", async () => {
+    layout();
+    await mount(IN);
+    await enterMode();
     const moso = await lift("모순 책갈피");
     expect(screen.getByRole("status")).toHaveTextContent("놓을 자리로 끌어서 놓으세요");
     expect(moso).toHaveAttribute("data-lifted");
@@ -91,15 +161,18 @@ describe("Library (S-09)", () => {
     act(() => { fireEvent.pointerUp(window); });
     await waitFor(() => expect(request).toHaveBeenCalledWith("PATCH", "/api/library/saves", { isbn: "9788998441012", shelfId: "b", index: 0 }));
     expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "9788998441012", method: "drag", is_same_shelf: false });
-    expect((await screen.findByText("'마음에 남은'")).parentElement).toHaveTextContent("'마음에 남은'으로 옮겼어요");
+    await waitFor(() => expect(request).toHaveBeenLastCalledWith("GET", "/api/library"));
+    expect(screen.queryByRole("status")).toBeNull();                                     // a move that worked says nothing
+    expect(screen.queryByText(/옮겼어요/)).toBeNull();
     fireEvent.click(moso);                                                              // the click after the drag is not a tap
     expect(screen.queryByRole("dialog")).toBeNull();
+    expect(screen.getByRole("button", { name: "완료" })).toBeInTheDocument();          // still in move mode
   });
 
   it("reorders within a rod (is_same_shelf), and the gap stays shut over its own place", async () => {
-    vi.useFakeTimers({ shouldAdvanceTime: true });
     layout();
     await mount(IN);
+    await enterMode();
     await lift("모순 책갈피");
     dragTo(60, 100);                                                                    // its own place: no gap
     expect(document.querySelectorAll('[data-rod="a"] li')).toHaveLength(2);
@@ -113,10 +186,10 @@ describe("Library (S-09)", () => {
     expect(screen.queryByRole("status")).toBeNull();                                         // a reorder says nothing
   });
 
-  it("let go outside the rods, on its own place, with Escape or a cancelled pointer: nothing moves, no event", async () => {
-    vi.useFakeTimers({ shouldAdvanceTime: true });
+  it("let go outside the rods, on its own place, with Escape or a cancelled pointer: nothing moves, no event, still in move mode", async () => {
     layout();
     await mount(IN);
+    await enterMode();
     const calls = request.mock.calls.length;
     for (const end of [
       () => { dragTo(150, 900); fireEvent.pointerUp(window); },
@@ -128,15 +201,16 @@ describe("Library (S-09)", () => {
       act(end);
       expect(moso).not.toHaveAttribute("data-lifted");
       expect(screen.queryByText("놓을 자리로 끌어서 놓으세요")).toBeNull();
+      expect(screen.getByRole("button", { name: "완료" })).toBeInTheDocument();       // Escape mid-drag only puts it back
     }
     expect(request.mock.calls.length).toBe(calls);
     expect(track).not.toHaveBeenCalledWith("bookmark_moved", expect.anything());
   });
 
   it("a drag the server refuses goes back where it was, says so, and the rods are read again", async () => {
-    vi.useFakeTimers({ shouldAdvanceTime: true });
     layout();
     await mount(IN);
+    await enterMode();
     await lift("모순 책갈피");
     dragTo(150, 450);
     request.mockResolvedValueOnce({ ok: false, status: 500, body: null }).mockResolvedValueOnce(ok(VIEW));
@@ -148,17 +222,18 @@ describe("Library (S-09)", () => {
   });
 
   it("blocks touch panning only while dragging, with a touchmove listener there from the start (cancelable from touchstart)", async () => {
-    vi.useFakeTimers({ shouldAdvanceTime: true });
     layout();
     const add = vi.spyOn(document, "addEventListener");
     await mount(IN);
-    expect(add).toHaveBeenCalledWith("touchmove", expect.any(Function), { passive: false });   // before any hold
+    expect(add).toHaveBeenCalledWith("touchmove", expect.any(Function), { passive: false });   // before any drag
     const touch = (cancelable = true) => {
       const e = new Event("touchmove", { bubbles: true, cancelable });
       document.dispatchEvent(e);
       return e.defaultPrevented;
     };
     expect(touch()).toBe(false);                                                 // a plain scroll stays a scroll
+    await enterMode();
+    expect(touch()).toBe(false);                                                 // move mode alone blocks nothing
     await lift("모순 책갈피");
     expect(add.mock.calls.filter(([type]) => type === "touchmove")).toHaveLength(1);   // not added again mid-touch
     expect(touch()).toBe(true);
@@ -167,13 +242,13 @@ describe("Library (S-09)", () => {
     expect(touch()).toBe(false);
   });
 
-  it("follows only the finger that held it: another pointer's moves and release are ignored", async () => {
-    vi.useFakeTimers({ shouldAdvanceTime: true });
+  it("follows only the finger that picked it up: another pointer's moves, release and pick-up are ignored", async () => {
     layout();
     await mount(IN);
-    const moso = await screen.findByRole("button", { name: "모순 책갈피" });
-    fireEvent.pointerDown(moso, { clientX: 50, clientY: 100, pointerId: 3 });
-    act(() => { vi.advanceTimersByTime(500); });
+    await enterMode();
+    const moso = await lift("모순 책갈피", 3);
+    const demian = await lift("데미안 책갈피", 4);                                  // a second finger cannot start another drag
+    expect(demian).not.toHaveAttribute("data-lifted");
     act(() => { fireEvent.pointerMove(window, { clientX: 150, clientY: 450, pointerId: 4 }); });
     expect(document.querySelectorAll('[data-rod="b"] li')).toHaveLength(0);       // no gap from the other finger
     act(() => { fireEvent.pointerUp(window, { pointerId: 4 }); });
@@ -182,16 +257,6 @@ describe("Library (S-09)", () => {
     expect(document.querySelectorAll('[data-rod="b"] li')).toHaveLength(1);
     act(() => { fireEvent.pointerCancel(window, { pointerId: 3 }); });
     expect(moso).not.toHaveAttribute("data-lifted");
-  });
-
-  it("a keyboard press opens the sheet even right after a touch drag", async () => {
-    vi.useFakeTimers({ shouldAdvanceTime: true });
-    layout();
-    await mount(IN);
-    const moso = await lift("모순 책갈피");
-    act(() => { fireEvent.pointerUp(window); });
-    fireEvent.click(moso, { detail: 0 });                                          // Enter / Space
-    expect(screen.getByRole("dialog", { name: "모순" })).toBeInTheDocument();
   });
 
   it("a tap opens the bookmark's front, large, with the day it was met; YES24 (E-18 library) and the menu move (E-30 menu)", async () => {
@@ -210,6 +275,7 @@ describe("Library (S-09)", () => {
     fireEvent.click(within(picker).getByRole("button", { name: "마음에 남은" }));
     await waitFor(() => expect(track).toHaveBeenCalledWith("bookmark_moved", { book_id: "9788998441012", method: "menu", is_same_shelf: false }));
     expect(screen.queryByRole("dialog")).toBeNull();
+    expect(screen.queryByText(/옮겼어요/)).toBeNull();                                  // no success toast (user, 10-04)
   });
 
   it("[빼기] asks once more, then removes (E-16)", async () => {

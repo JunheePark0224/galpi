@@ -4,12 +4,12 @@ import { Sheet } from "@/components/Sheet";
 import { ExampleShelf } from "./ExampleShelf";
 import styles from "./LibraryGuide.module.css";
 
-/** Copy of C-22 (10-02, user: show how the rods can be used, with the rod names from the user's own shelf as the example; third line 10-04 — drag). */
+/** Copy of C-22 (10-02, user: show how the rods can be used, with the rod names from the user's own shelf as the example; third line 10-04 — move mode). */
 export const LIBRARY_GUIDE_TITLE = "내 책갈피, 이렇게 써 보세요";
 export const LIBRARY_GUIDE_STEPS = [
   "＋ 막대 추가로 칸을 나눠요 (최대 5개)",
   "✎ 로 막대 이름을 정해요 — \"읽기 완료!\", \"서점 가서 볼 책\"처럼",
-  "책갈피를 꾹 눌러 끌면 원하는 자리로 옮겨져요",
+  "[책갈피 옮기기]를 누르고 끌어서 원하는 자리에 놓아요",
 ] as const;
 export const LIBRARY_GUIDE_OK = "시작하기";
 
