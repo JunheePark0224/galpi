@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { expect } from "@playwright/test";
 import { test } from "./helpers";
+import { bookTitle } from "../src/lib/books/title";
 
 test("design page shows tokens and buttons", async ({ page }) => {
   await page.goto("/design");
@@ -58,14 +59,16 @@ test("design page shows a bookmark with its reading label", async ({ page }) => 
   await expect(page.getByRole("article", { name: /천천히 걷는 아침/ })).toBeVisible();
 });
 
-// C-02 text room: every real book's title, author and one-liner must fit the 160 x 344 frame (title may clamp at 2 lines,
-// the author stays on one line, the one-liner may not be cut). The second run scales the name tag, title, author,
-// one-liner and "갈피" by 1.15 (Android large-text setting) and also requires the stitch line and "갈피" to sit above the
-// swallowtail notch (7% of the card height, cut into the bottom centre). The book scene scales the whole bookmark
-// uniformly (transform), which does not change this layout.
+// C-02 text room: every real book's whole title (in 『 』, edition labels dropped — bookTitle), author and one-liner must fit
+// the 160 x 344 frame. The title is fitted as fitTitle() does it: two lines stepping 1px down to 12px, then a third line at
+// 13 -> 12px (data-lines="3", tighter lines and gaps); at normal text no title may end in "…". The author stays on one line,
+// the one-liner may not be cut. The second run scales the name tag, title, author, one-liner and "갈피" by 1.15 (Android
+// large-text setting) and also requires the stitch line and "갈피" to sit above the swallowtail notch (7% of the card height,
+// cut into the bottom centre). The book scene scales the whole bookmark uniformly (transform), which does not change this layout.
 for (const scale of [1, 1.15]) {
   test(`every real book's title, author and one-liner fit the bookmark frame at text x${scale}`, async ({ page }) => {
-    const books = JSON.parse(readFileSync("src/data/books.json", "utf8")) as { isbn: string; title: string; author: string; one_liner: string }[];
+    const books = (JSON.parse(readFileSync("src/data/books.json", "utf8")) as { isbn: string; title: string; author: string; one_liner: string }[])
+      .map((b) => ({ ...b, shown: bookTitle(b.title) }));
     expect(books.length).toBeGreaterThanOrEqual(200); // 200 base + pilot additions (288 on 10-01)
     await page.goto("/design");
     await page.evaluate(() => document.fonts.ready);
@@ -80,12 +83,24 @@ for (const scale of [1, 1.15]) {
       const naturalWindow = win.getBoundingClientRect().width * 0.76;     // art viewBox is 100 x 76
       const found: string[] = [];
       for (const b of all) {
-        title.textContent = b.title;
+        title.textContent = b.shown;
+        title.style.fontSize = ""; delete title.dataset.lines;
+        const base = parseFloat(getComputedStyle(title).fontSize) * textScale, min = 12 * textScale;
+        const fits = () => title.scrollHeight <= title.clientHeight + 4;   // FIT_SLACK_PX
+        let fitted = false;                                                // the steps of fitTitle()
+        title.dataset.lines = "2";
+        for (let px = base; px >= min - 0.01 && !fitted; px -= 1) { title.style.fontSize = `${px}px`; fitted = fits(); }
+        if (!fitted) {
+          title.dataset.lines = "3";
+          for (let px = min + 1; px >= min - 0.01 && !fitted; px -= 1) { title.style.fontSize = `${px}px`; fitted = fits(); }
+        }
         author.textContent = b.author;
         line.textContent = b.one_liner;
         const why: string[] = [];
         if (line.scrollHeight > line.clientHeight + 1) why.push("one-liner is cut");
-        if (title.getBoundingClientRect().height > 2 * parseFloat(getComputedStyle(title).lineHeight) + 1) why.push("title over 2 lines");
+        if (title.getBoundingClientRect().height > 3 * parseFloat(getComputedStyle(title).lineHeight) + 1) why.push("title over 3 lines");
+        // at normal size every title shows whole; at x1.15 the very longest may end in "…"
+        if (textScale === 1 && !fitted) why.push("title is cut");
         if (author.getBoundingClientRect().height > parseFloat(getComputedStyle(author).lineHeight) + 1) why.push("author over 1 line");
         // at normal size every author fits whole; at x1.15 a very long single name may end in "…" (one line kept)
         if (textScale === 1 && author.scrollWidth > author.clientWidth + 1) why.push("author is cut");
@@ -97,7 +112,7 @@ for (const scale of [1, 1.15]) {
         if (why.length) found.push(`${b.isbn} ${b.title} / ${b.author}: ${why.join(", ")}`);
       }
       return found;
-    }, { all: books.map(({ isbn, title, author, one_liner }) => ({ isbn, title, author, one_liner })), textScale: scale });
+    }, { all: books.map(({ isbn, title, shown, author, one_liner }) => ({ isbn, title, shown, author, one_liner })), textScale: scale });
     expect(problems).toEqual([]);
   });
 }

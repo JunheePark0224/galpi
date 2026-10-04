@@ -20,9 +20,14 @@ describe("Bookmark", () => {
     expect(screen.getByRole("article", { name: "천천히 걷는 아침, 천아침, 오늘 아침은 몇 걸음이었을까요?, 에세이" })).toBeInTheDocument();
   });
 
+  it("writes the title inside 『 』", () => {
+    render(<Bookmark card={leaf} art={art} />);
+    expect(screen.getByText("『천천히 걷는 아침』").tagName).toBe("H3");
+  });
+
   it("shows the author small, right under the title (PRD F-08)", () => {
     render(<Bookmark card={leaf} art={art} />);
-    const title = screen.getByText("천천히 걷는 아침");
+    const title = screen.getByText("『천천히 걷는 아침』");
     expect(title.nextElementSibling).toHaveTextContent("천아침");
   });
 
@@ -31,7 +36,7 @@ describe("Bookmark", () => {
     const { container } = render(<Bookmark card={old} art={art} />);
     expect(screen.getByRole("article", { name: "천천히 걷는 아침, 오늘 아침은 몇 걸음이었을까요?, 에세이" })).toBeInTheDocument();
     expect(container.textContent).not.toContain("undefined");
-    expect(screen.getByText("천천히 걷는 아침").nextElementSibling).toHaveTextContent("오늘 아침은 몇 걸음이었을까요?");
+    expect(screen.getByText("『천천히 걷는 아침』").nextElementSibling).toHaveTextContent("오늘 아침은 몇 걸음이었을까요?");
   });
 
   it("treats an empty author the same way", () => {
