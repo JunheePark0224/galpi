@@ -1,3 +1,4 @@
+import type { ArtTicket } from "@/lib/collection/types";
 import type { PathSummary } from "../paths/summary";
 import type { Reason } from "../recommend/reason";
 import type { AxisKey, DrawPick, Entry, Tag, Way } from "../recommend/types";
@@ -41,6 +42,8 @@ export interface PathDrawResponse {
   exhausted: boolean;
   widened: boolean;
   path: PathSummary;
+  /** 도감 v1: the server's seed for this draw's pictures, signed (lib/collection/ticket). Absent from older answers. */
+  art?: ArtTicket;
 }
 
 export interface VocabTopic { keywords: Record<string, string>; terms: string[] }

@@ -17,12 +17,17 @@ export async function requestDraw(body: Record<string, unknown>): Promise<PathDr
   return (await res.json()) as PathDrawResponse;
 }
 
-/** Pictures are drawn in the browser, once per draw (PRD F-08: random each time; P5 saves the combo). */
-export function toDrawView(res: PathDrawResponse, artSeed: number): DrawView {
-  const arts = artsForDraw(res.picks.length, artSeed);
+/**
+ * Pictures, once per draw (PRD F-08: random each time; P5 saves the combo). 도감 v1: from the server's seed (`res.art`),
+ * so the server can work the same pictures out again; `fallbackSeed` only for an answer without one (nothing recorded).
+ */
+export function toDrawView(res: PathDrawResponse, fallbackSeed: number): DrawView {
+  const ticket = res.art && res.art.count === res.picks.length ? res.art : null;
+  const arts = artsForDraw(res.picks.length, ticket?.seed ?? fallbackSeed);
   return {
     picks: res.picks.map((p, i) => ({ card: p.card, kind: p.kind, art: arts[i], reason: p.reason })),
     exhausted: res.exhausted,
     path: res.path,
+    ticket: ticket?.sig ? ticket : null,
   };
 }

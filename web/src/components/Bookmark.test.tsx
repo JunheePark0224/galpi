@@ -56,7 +56,7 @@ describe("Bookmark", () => {
   it("draws the chosen animal inside its own arched window", () => {
     const { container } = render(<Bookmark card={leaf} art={art} />);
     expect(container.querySelector("image")?.getAttribute("href")).toBe("/animals/fox.svg");
-    expect(container.querySelector('[id="arch-9790000000008"]')).not.toBeNull();
+    expect(container.querySelector('clipPath[id^="arch-9790000000008-"]')).not.toBeNull();   // + useId (security fix round)
     expect(container.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
   });
 

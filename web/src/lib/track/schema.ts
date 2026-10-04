@@ -77,6 +77,13 @@ export const EVENT_SPEC = {
   },
   // v1.2: S-09 [모두 제거] after the server took them — one event, never E-16 per book
   library_cleared: { removed_count: { type: "number" } },
+  // v1.3 도감: a part the server recorded for the first time (logged in only), and opening the 도감
+  collection_item_found: {
+    part_kind: { type: ["animal", "bg", "sky", "ground"] },
+    part_value: { type: "string" },
+    tier: { type: ["common", "limited", "first_edition"] },
+  },
+  collection_viewed: { collected_count: { type: "number" }, is_logged_in: { type: "boolean" } },
 } as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
 
 type Spec = typeof EVENT_SPEC;
