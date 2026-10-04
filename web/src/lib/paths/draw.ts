@@ -15,6 +15,7 @@ export interface PathDraw extends DrawResult { scopeCount: number; widenedScope:
 const LEVEL_LEAD = 100;
 /** Design 5-4 (10-05): "섞어서" (no branch chosen) recommends two 🍃 and two 🎯 books. */
 const MIXED_PER_ENTRY = 2;
+const ENTRIES: readonly Entry[] = ["leaf", "target"];
 
 /** Design 5절-2: 🍃 by the axes + length (the balance-game rule), 🎯 by way (+2, any of the ways chosen) + length points. */
 export function moodScore(book: Book, mood: Mood): number {
@@ -73,6 +74,9 @@ export function drawForPath(books: Book[], map: QuestionMap, walked: Walked, opt
   const base = pool.entry === "target" ? TARGET_PARAMS : LEAF_PARAMS;
   const narrowed = w.scope.entry === "target" || w.scope.genres !== null;
   const max = maxPossible(pool.entry, w.mood);
+  const fateLevel = up[Math.min(Math.max(at, 1), up.length - 1)];
+  // 섞어서 (round 2): the 운명 1장's branch is 이야기 or 배우기 half and half (by the seed), not in proportion to book counts
+  const fateEntry = fateLevel.entry === null && ENTRIES.every((e) => unseen.some((b) => b.entry === e)) ? ENTRIES[opts.rng() < 0.5 ? 0 : 1] : null;
   const result = drawBookmarks(books, {
     score: (b) => (inScope(b, pool) ? moodScore(b, w.mood) + lead(b) : null),
     maxPossible: max,
@@ -82,7 +86,7 @@ export function drawForPath(books: Book[], map: QuestionMap, walked: Walked, opt
     maxPerEntry: pool.entry === null ? MIXED_PER_ENTRY : undefined,
     // 운명 1장 (5-4): one level up from the person's scope — or the level the four came from, when that is wider — and
     // never past the branch (at the branch: the branch itself; 섞어서: the whole library)
-    inRandomPool: (b) => inScope(b, up[Math.min(Math.max(at, 1), up.length - 1)]),
+    inRandomPool: (b) => inScope(b, fateLevel) && (fateEntry === null || b.entry === fateEntry),
   });
   if (!widenedScope) return { ...result, scopeCount, widenedScope, drawnFrom: w };
   const picks = result.picks.map((p) => ({ ...p, score: p.score - lead(p.book) }));
