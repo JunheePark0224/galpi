@@ -3,6 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { parseQuestionMap } from "./parse";
 import { ALL_SCOPE, type Answer } from "./types";
+import { LEAF_GENRES } from "@/lib/books/taxonomy";
 import { mulberry32 } from "@/lib/recommend";
 import { applyChallenge, PathError, skipKey, walkPath, WAY_AXIS } from "./walk";
 
@@ -62,16 +63,35 @@ describe("walkPath", () => {
     expect(applyChallenge(MAP, both).mood.axes).toEqual({ temp: 0, pull: -1, gain: 0, world: 1 });
   });
 
-  it("challenge to the far side's whole entry: one level under the library, nothing to lean for a story mood", () => {
-    const w = walkPath(MAP, [a("start", "B"), a("branch", "A"), a("story-world", "B"), a("mood-temp", "A"), a("mood-len", "A")]);
+  it("challenge from 배우기 with no far rule: the 이야기 entry whole, one level under the library", () => {
+    const w = walkPath(MAP, [a("start", "B"), a("branch", "B"), a("learn-area", "B"), a("mood-way", "unsure"), a("mood-len", "A")]);
     const far = applyChallenge(MAP, w);
-    expect(far.levels).toEqual([ALL_SCOPE, { ...ALL_SCOPE, entry: "target" }]);
-    expect(far.mood).toBe(w.mood);
+    expect(far.scope).toEqual({ ...ALL_SCOPE, entry: "leaf" });
+    expect(far.levels).toEqual([ALL_SCOPE, far.scope]);
   });
 
-  it("challenge with no far rule for the scope: the other side whole (story ↔ learn)", () => {
+  it("challenge from 이야기 with no far rule never leaves 이야기: one other story genre at random by the seed (0-book genres too)", () => {
     const w = walkPath(MAP, [a("start", "B"), a("branch", "A"), a("story-world", "B"), a("mood-temp", "A"), a("mood-len", "A")]);
-    expect(applyChallenge(MAP, w).scope).toEqual({ ...ALL_SCOPE, entry: "target" });
+    expect(applyChallenge(MAP, w)).toBe(w);                                          // no rng (skip table, E-34): as walked
+    const seen = new Set<string>();
+    for (let seed = 1; seed <= 300; seed++) {
+      const far = applyChallenge(MAP, w, mulberry32(seed));
+      expect(far.scope.entry).toBe("leaf");
+      expect(far.scope.genres).toHaveLength(1);
+      expect(far.scope.genres).not.toContain("SF·판타지");                           // not the genre already chosen
+      expect(far.levels).toEqual([ALL_SCOPE, { ...ALL_SCOPE, entry: "leaf" }, far.scope]);
+      expect(far.mood).toBe(w.mood);
+      expect(applyChallenge(MAP, w, mulberry32(seed)).scope).toEqual(far.scope);
+      seen.add(far.scope.genres![0]);
+    }
+    expect([...seen].sort()).toEqual(LEAF_GENRES.filter((g) => g !== "SF·판타지").sort());
+  });
+
+  it("challenge from 이야기 that already named every story genre: any story genre", () => {
+    const all = parseQuestionMap(MINI.replace("B: 딴 세상 | genres=SF·판타지", `B: 딴 세상 | genres=${LEAF_GENRES.join(",")}`));
+    const w = walkPath(all, [a("start", "B"), a("branch", "A"), a("story-world", "B"), a("mood-temp", "A"), a("mood-len", "A")]);
+    const far = applyChallenge(all, w, mulberry32(1));
+    expect(LEAF_GENRES).toContain(far.scope.genres![0]);
   });
 
   it("challenge with the whole library (no entry chosen): no rng → the scope stays; the draw's rng → one side at random, by the seed", () => {

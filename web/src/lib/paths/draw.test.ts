@@ -286,3 +286,38 @@ describe("drawForPath — 10-05 rules (design 5절)", () => {
     expect(shown("B", "real")).toBeGreaterThan(shown("A", "real") + 0.5);   // 실습 → 현실 (world +1)
   });
 });
+
+describe("drawForPath — round 2 (10-05)", () => {
+  const MIXED = [a("start", "A"), a("branch", "unsure"), a("mood-len", "unsure")];
+
+  it("섞어서: the 운명 1장 is 이야기 or 배우기 half and half, whatever the book counts", () => {
+    const books: Book[] = [
+      ...["e1", "e2", "e3"].map((id) => l(id, "에세이")), ...["k1", "k2"].map((id) => l(id, "한국 소설")),
+      ...Array.from({ length: 30 }, (_, i) => t(`x${i}`, [], "실습", 200, ["데이터 분석", "통계", "AI 활용", "습관·집중", "글쓰기"][i % 5])),
+    ];
+    let leaf = 0;
+    const N = 400;
+    for (let seed = 1; seed <= N; seed++) {
+      const fate = drawForPath(books, MAP, walkPath(MAP, MIXED), opts(seed)).picks.find((p) => p.kind === "random")!.book;
+      if (fate.entry === "leaf") leaf += 1;
+    }
+    expect(Math.abs(leaf / N - 0.5)).toBeLessThan(0.08);   // by book count it would be 1 leaf book left of 29 (≈ 3%)
+  });
+
+  it("섞어서 with only one entry's books left: the 운명 1장 comes from that one", () => {
+    const books: Book[] = ["a1", "a2", "a3", "a4", "a5", "a6"].map((id, i) => l(id, ["에세이", "시", "인문"][i % 3]));
+    for (let seed = 1; seed <= 20; seed++) {
+      expect(drawForPath(books, MAP, walkPath(MAP, MIXED), opts(seed)).picks.find((p) => p.kind === "random")?.book.entry).toBe("leaf");
+    }
+  });
+
+  it("도전 from 이야기 with no far rule: only 이야기 books, a random genre per seed, widening inside 이야기", () => {
+    const books: Book[] = [...["e1", "e2", "e3", "e4", "e5"].map((id) => l(id, "에세이")), ...BOOKS.filter((b) => b.entry === "target")];
+    const route = [a("start", "B"), a("branch", "A"), a("story-world", "B"), a("mood-temp", "unsure"), a("mood-len", "unsure")];
+    for (let seed = 1; seed <= 30; seed++) {
+      const d = drawForPath(books, MAP, walkPath(MAP, route), opts(seed));
+      expect(d.picks.every((p) => p.book.entry === "leaf")).toBe(true);
+      expect(d.drawnFrom.scope.genres).toHaveLength(1);
+    }
+  });
+});

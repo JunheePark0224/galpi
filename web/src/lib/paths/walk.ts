@@ -1,4 +1,5 @@
 import type { AxisKey, Entry, Rng, Way } from "@/lib/recommend";
+import { LEAF_GENRES } from "../books/taxonomy";
 import { ALL_SCOPE, NEUTRAL_MOOD, scopeKey, type Answer, type Effects, type FarRule, type Mood, type QuestionMap, type Scope } from "./types";
 
 export class PathError extends Error {}
@@ -103,10 +104,14 @@ function waysOnStoryAxes(m: Mood): Mood {
 }
 
 /**
- * Design 4절: the "what" flips (far scope), the "how" (mood) stays. The first far rule that matches wins; with no rule, the
- * other entry whole. The levels become the far side's entry, then the far scope — the 운명 1장 and any widening stay on the
- * far side. With no entry chosen (섞어서) there is no side to flip: given the draw's rng, one side is drawn at random
- * (reproducible by the seed); without it (the skip table, E-34 scope_id) the walked scope stays.
+ * Design 4절: the "what" flips (far scope), the "how" (mood) stays. The first far rule that matches wins. The levels become
+ * the far side's entry, then the far scope — the 운명 1장 and any widening stay on the far side. With no rule:
+ * - 배우기: the 이야기 entry whole;
+ * - 이야기 (10-05 round 2): never 배우기 — one 이야기 genre at random from all of LEAF_GENRES (0-book genres too, they widen),
+ *   other than the ones already chosen;
+ * - no entry (섞어서): one entry at random.
+ * The random picks use the draw's rng (reproducible by the seed); without it (the skip table, E-34 scope_id) the walked
+ * scope stays.
  */
 export function applyChallenge(map: QuestionMap, w: Walked, rng?: Rng): Walked {
   if (w.mode !== "challenge") return w;
@@ -117,8 +122,14 @@ export function applyChallenge(map: QuestionMap, w: Walked, rng?: Rng): Walked {
     const scope = { ...ALL_SCOPE, entry };
     return { ...w, scope, levels: [ALL_SCOPE, scope] };
   }
-  const other = w.scope.entry === "leaf" ? "target" : "leaf";
-  const scope: Scope = rule ? { ...ALL_SCOPE, ...rule.to } : { ...ALL_SCOPE, entry: other };
+  if (!rule && w.scope.entry === "leaf") {
+    if (!rng) return w;
+    const others = LEAF_GENRES.filter((g) => !w.scope.genres?.includes(g));
+    const genres = others.length ? others : [...LEAF_GENRES];
+    const scope: Scope = { ...ALL_SCOPE, entry: "leaf", genres: [genres[Math.floor(rng() * genres.length)]] };
+    return { ...w, scope, levels: [ALL_SCOPE, { ...ALL_SCOPE, entry: "leaf" }, scope] };
+  }
+  const scope: Scope = rule ? { ...ALL_SCOPE, ...rule.to } : { ...ALL_SCOPE, entry: "leaf" };
   const side: Scope = { ...ALL_SCOPE, entry: scope.entry };
   const levels = scopeKey(scope) === scopeKey(side) ? [ALL_SCOPE, side] : [ALL_SCOPE, side, scope];
   const crosses = w.scope.entry === "target" && scope.entry === "leaf";
