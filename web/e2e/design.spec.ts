@@ -58,7 +58,7 @@ test("design page shows a bookmark with its reading label", async ({ page }) => 
   await expect(page.getByRole("article", { name: /천천히 걷는 아침/ })).toBeVisible();
 });
 
-// C-02 text room: every real book's title, author and one-liner must fit the 160 x 344 frame (title may clamp at 2 lines,
+// C-02 text room: every real book's title, author and one-liner must fit the 160 x 344 frame (title in 『 』 may clamp at 2 lines,
 // the author stays on one line, the one-liner may not be cut). The second run scales the name tag, title, author,
 // one-liner and "갈피" by 1.15 (Android large-text setting) and also requires the stitch line and "갈피" to sit above the
 // swallowtail notch (7% of the card height, cut into the bottom centre). The book scene scales the whole bookmark
@@ -80,7 +80,7 @@ for (const scale of [1, 1.15]) {
       const naturalWindow = win.getBoundingClientRect().width * 0.76;     // art viewBox is 100 x 76
       const found: string[] = [];
       for (const b of all) {
-        title.textContent = b.title;
+        title.textContent = `『${b.title}』`;   // as bookTitle() writes it
         author.textContent = b.author;
         line.textContent = b.one_liner;
         const why: string[] = [];

@@ -1,8 +1,11 @@
-import type { CSSProperties } from "react";
+"use client";
+import { useRef, type CSSProperties } from "react";
 import type { ArtCombo } from "@/lib/art/combine";
 import { toneOf } from "@/lib/books/taxonomy";
+import { bookTitle } from "@/lib/books/title";
 import type { BookCard } from "@/lib/books/types";
 import { BookmarkArt } from "./BookmarkArt";
+import { useFitTitle } from "./fitTitle";
 import { GenreTag } from "./GenreTag";
 import frame from "./BookmarkFrame.module.css";
 import styles from "./Bookmark.module.css";
@@ -15,6 +18,8 @@ interface Props { card: BookCard; art: ArtCombo; moving?: boolean }
  */
 export function Bookmark({ card, art, moving = false }: Props) {
   const tone = toneOf(card);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  useFitTitle(titleRef, card.title);
   // Flows saved in sessionStorage before the author field existed have no author: leave the line and the label part out.
   return (
     <article
@@ -28,7 +33,7 @@ export function Bookmark({ card, art, moving = false }: Props) {
         <span className={frame.hole} />
         <div className={styles.window}><BookmarkArt art={art} clipId={`arch-${card.id}`} /></div>
         <GenreTag card={card} />
-        <h3 className={styles.title} data-part="title">{card.title}</h3>
+        <h3 ref={titleRef} className={styles.title} data-part="title">{bookTitle(card.title)}</h3>
         {card.author ? <p className={styles.author} data-part="author">{card.author}</p> : null}
         <p className={styles.line} data-part="line">{card.oneLiner}</p>
         <span className={frame.stitch} />
