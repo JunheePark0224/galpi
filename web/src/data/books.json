@@ -6489,5 +6489,315 @@
    "제미나이",
    "바이브 코딩"
   ]
+ },
+ {
+  "isbn": "9791158396596",
+  "title": "한 권으로 끝내는 실전 LLM 파인튜닝",
+  "author": "강다솔",
+  "pages": 476,
+  "one_liner": "트랜스포머 구조부터 PEFT와 서빙, 멀티모달 실습까지 직접 따라 하며 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "AI 활용",
+  "field": "AI·IT 활용",
+  "topic": "AI 활용",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "LLM 원리"
+  ]
+ },
+ {
+  "isbn": "9791169087599",
+  "title": "우울 덮기",
+  "author": "마거릿 로빈슨 러더퍼드",
+  "pages": 368,
+  "one_liner": "완벽주의 뒤에 숨은 우울을 알아보고 억눌러온 감정을 다루는 단계별 방법을 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "우울",
+   "감정 다루기"
+  ]
+ },
+ {
+  "isbn": "9791155501658",
+  "title": "말하기 능력을 키우는 발표의 기술",
+  "author": "김경훤 외",
+  "pages": 176,
+  "one_liner": "발표의 도입부터 종결까지 차근차근 익혀서 또렷하게 발표하는 힘을 길러요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "대화·관계",
+  "field": "마음·관계",
+  "topic": "대화·관계",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "발표"
+  ]
+ },
+ {
+  "isbn": "9791161690728",
+  "title": "적당한 거리 두기의 기술",
+  "author": "명대성",
+  "pages": 204,
+  "one_liner": "가까워도 멀어도 탈 나는 사이에서 선 긋고 어울리는 감을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "대화·관계",
+  "field": "마음·관계",
+  "topic": "대화·관계",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "거리 두기",
+   "호감·사회생활"
+  ]
+ },
+ {
+  "isbn": "9788931585933",
+  "title": "후니의 쉽게 쓴 직장생활 생존기",
+  "author": "진강훈",
+  "pages": 424,
+  "one_liner": "신입부터 팀장까지 직급별로 겪는 상사·동료 관계와 성과 전략을 배워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "취업·커리어",
+  "field": "일·커리어",
+  "topic": "취업·커리어",
+  "way": "사례",
+  "axes": null,
+  "keywords": [
+   "직장 생활"
+  ]
+ },
+ {
+  "isbn": "9791159715952",
+  "title": "나를 위한 최소한의 통계 바로 읽기",
+  "author": "앨버트 러더퍼드",
+  "pages": 168,
+  "one_liner": "숫자로 된 주장을 그대로 믿지 않고 통계를 따져 읽는 법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "통계",
+  "field": "데이터·통계",
+  "topic": "통계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "기초 통계",
+   "가설검정"
+  ]
+ },
+ {
+  "isbn": "9791175790452",
+  "title": "만들면서 배우는 AI 에이전트 개발 입문+실전",
+  "author": "박나연",
+  "pages": 652,
+  "one_liner": "랭그래프로 싱글·멀티 에이전트를 직접 구현하며 설계 감각을 키워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "AI 활용",
+  "field": "AI·IT 활용",
+  "topic": "AI 활용",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "AI 에이전트"
+  ]
+ },
+ {
+  "isbn": "9791194383116",
+  "title": "이게 되네? 챗GPT 미친 활용법 71제",
+  "author": "오힘찬",
+  "pages": 344,
+  "one_liner": "검색, 이미지·영상 만들기, 일정 관리까지 챗GPT 쓰는 법을 예제로 따라 해 봐요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "AI 활용",
+  "field": "AI·IT 활용",
+  "topic": "AI 활용",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "챗GPT",
+   "이미지·영상 생성"
+  ]
+ },
+ {
+  "isbn": "9791140720118",
+  "title": "요즘 일잘러를 위한 클로드 콘텐츠 자동화  with 코워크, 디자인, 코드",
+  "author": "성구",
+  "pages": 252,
+  "one_liner": "자료 조사부터 SNS 글, 카드뉴스까지 알아서 돌아가는 나만의 시스템을 만들어 봐요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "업무 자동화",
+  "field": "AI·IT 활용",
+  "topic": "업무 자동화",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "AI 업무 활용"
+  ]
+ },
+ {
+  "isbn": "9788960884618",
+  "title": "코파일럿+엑셀 업무자동화 정석",
+  "author": "권현욱",
+  "pages": 272,
+  "one_liner": "코파일럿에게 시켜서 엑셀 필터, 수식, 보고서 만드는 일을 빠르게 끝내는 법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "업무 자동화",
+  "field": "AI·IT 활용",
+  "topic": "업무 자동화",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "코파일럿·M365"
+  ]
+ },
+ {
+  "isbn": "9791130677491",
+  "title": "달리기의 뇌과학",
+  "author": "김대영",
+  "pages": 336,
+  "one_liner": "뇌가 운동을 피하는 원리를 알고 달리기를 꾸준히 이어 가는 방법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "습관",
+   "뇌과학"
+  ]
+ },
+ {
+  "isbn": "9791141189778",
+  "title": "도파민 과잉 시대, 당신의 뇌가 무너진다",
+  "author": "리처드 사이토윅",
+  "pages": 500,
+  "one_liner": "스마트폰에 흩어지는 주의력이 왜 무너지는지 뇌의 작동 방식으로 이해해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "집중력",
+   "뇌과학"
+  ]
+ },
+ {
+  "isbn": "9788956055008",
+  "title": "가장 뛰어난 중년의 뇌",
+  "author": "바버라 스트로치",
+  "pages": 332,
+  "one_liner": "나이 들며 뇌가 어떻게 달라지고 어떤 점이 오히려 강해지는지 알려 줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "뇌과학"
+  ]
+ },
+ {
+  "isbn": "9791194347255",
+  "title": "시간 디톡스",
+  "author": "요시타케 아사코",
+  "pages": 212,
+  "one_liner": "불필요한 시간을 버리고 맡기고 허무는 법으로 마음이 편한 하루를 되찾아요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "시간·생산성",
+  "field": "습관·자기계발",
+  "topic": "시간·생산성",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "일하는 법"
+  ]
+ },
+ {
+  "isbn": "9791167600936",
+  "title": "미친 효율로 합격하는 최고의 공부 전략법",
+  "author": "손민규",
+  "pages": 208,
+  "one_liner": "메타인지로 약점을 짚고 회독과 시간 기록으로 공부 효율을 높이는 방법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "시간·생산성",
+  "field": "습관·자기계발",
+  "topic": "시간·생산성",
+  "way": "실습",
+  "axes": null,
+  "keywords": []
+ },
+ {
+  "isbn": "9788965705048",
+  "title": "생산성",
+  "author": "이가 야스요",
+  "pages": 259,
+  "one_liner": "야근 대신 업무의 질과 빈 시간으로 조직의 생산성을 높이는 길을 짚어 줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "시간·생산성",
+  "field": "습관·자기계발",
+  "topic": "시간·생산성",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "일하는 법"
+  ]
+ },
+ {
+  "isbn": "9788974425678",
+  "title": "파이낸스 커리어 바이블",
+  "author": "이혁재 외",
+  "pages": 436,
+  "one_liner": "금융권 부서별 업무와 진로를 살펴보며 취업 준비의 방향을 잡아요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "취업·커리어",
+  "field": "일·커리어",
+  "topic": "취업·커리어",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "커리어 설계"
+  ]
+ },
+ {
+  "isbn": "9788967999568",
+  "title": "취업 바이블",
+  "author": "고요한, 강건욱",
+  "pages": 268,
+  "one_liner": "채용 흐름을 짚고 자기소개서 쓰는 법과 면접 답변 전략까지 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "취업·커리어",
+  "field": "일·커리어",
+  "topic": "취업·커리어",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "자소서·면접"
+  ]
  }
 ]
