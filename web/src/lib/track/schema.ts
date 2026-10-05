@@ -61,10 +61,12 @@ export const EVENT_SPEC = {
   result_viewed: { curious_count: CURIOUS_COUNT },
   result_book_viewed: { book_id: BOOK_ID, position: POSITION, pick_type: PICK_TYPE },
   save_clicked: { book_id: BOOK_ID, is_logged_in: { type: "boolean" } },
-  login_prompt_shown: { source: { type: ["save", "header"] } },
+  // v1.7: "library" = S-09 로그인 전 내 책갈피 [로그인하고 지키기]
+  login_prompt_shown: { source: { type: ["save", "header", "library"] } },
   login_started: { provider: PROVIDER },
   login_completed: { provider: PROVIDER, is_first_login: { type: "boolean" } },
-  book_saved: { book_id: BOOK_ID, is_auto_save: { type: "boolean" } },
+  // v1.7: storage — this browser (logged out) or the account; is_auto_save is always false from v1.7 (no auto keep)
+  book_saved: { book_id: BOOK_ID, is_auto_save: { type: "boolean" }, storage: { type: ["browser", "account"] } },
   book_unsaved: { book_id: BOOK_ID },
   library_viewed: { saved_count: { type: "number" } },
   yes24_link_clicked: {
@@ -101,6 +103,8 @@ export const EVENT_SPEC = {
     art: { type: "object" },
     is_reset: { type: "boolean" },
   },
+  // v1.7: the bookmarks kept in this browser before logging in, moved to the account — once per attempt
+  guest_saves_merged: { guest_count: { type: "number" }, merged_count: { type: "number" } },
 } as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
 
 type Spec = typeof EVENT_SPEC;

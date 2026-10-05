@@ -2,8 +2,7 @@
 import { useEffect, useState } from "react";
 import { loadAccount, takeJustLoggedIn } from "@/lib/account/store";
 import { LOGIN_PARAMS, loginMarkAtLoad } from "@/lib/auth/next";
-import { keepWaiting } from "@/lib/library/keep";
-import { clearPending } from "@/lib/library/pending";
+import { mergeGuestSaves } from "@/lib/library/merge";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
 import { setUserId } from "@/lib/track/common";
@@ -21,9 +20,10 @@ function clearMark(params: URLSearchParams): void {
 /**
  * On every page (layout, after the page itself so flow restore has read the mark — storage.settleOpen): asks who is
  * here and names the person for Amplitude (taxonomy 3-2 — or forgets them when nobody is logged in). After a real return
- * from /auth/callback — proven by the cookie /api/me hands over, not by the ?login= on the address — it sends E-14 once
- * and keeps the bookmark that waited for the login (F-12 자동 꽂기 — the page came back to that same book). A failed
- * login gets a note, and the bookmark that waited is dropped (it must not be kept by a later, unrelated login).
+ * from /auth/callback — proven by the cookie /api/me hands over, not by the ?login= on the address — it sends E-14 once.
+ * Whenever someone is logged in (v1.7), the bookmarks this browser kept before logging in move to the account
+ * (lib/library/merge — any left over from a failed try go on the next visit). A failed login gets a note; the bookmarks
+ * kept in this browser stay there.
  */
 export function LoginReturn() {
   const [failed, setFailed] = useState(false);
@@ -39,13 +39,9 @@ export function LoginReturn() {
       } else {
         setAmplitudeUser(null);
       }
-      if (login && account.status === "in") {
-        track("login_completed", { provider: login.provider, is_first_login: login.first });
-        void keepWaiting();
-      } else if (mark && account.status !== "in") {
-        clearPending();
-        setFailed(true);
-      }
+      if (login && account.status === "in") track("login_completed", { provider: login.provider, is_first_login: login.first });
+      if (account.status === "in") void mergeGuestSaves();
+      else if (mark) setFailed(true);
     });
   }, []);
 

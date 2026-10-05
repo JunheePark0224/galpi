@@ -4,6 +4,7 @@ import { addSavedCount, setSavedCount, signedOut } from "@/lib/account/store";
 import type { ArtCombo } from "@/lib/art/combine";
 import { libraryRequest } from "@/lib/library/client";
 import { decoratedProps } from "@/lib/library/decorate";
+import { onGuestMerged } from "@/lib/library/merge";
 import type { LibraryView } from "@/lib/library/types";
 import { artLocally, moveLocally, removeLocally } from "@/lib/library/view";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
@@ -53,6 +54,9 @@ export function useLibrary() {
     void (async () => { if (live) await reload(); })();
     return () => { live = false; };
   }, [reload]);
+
+  // v1.7: bookmarks kept in this browser before the login may arrive after the first read (LoginReturn moves them)
+  useEffect(() => onGuestMerged(() => { void reload(); }), [reload]);
 
   const change = useCallback(async (method: "POST" | "PATCH" | "DELETE", path: string, body: unknown, after?: (answer: unknown) => void) => {
     const answer = await libraryRequest(method, path, body);

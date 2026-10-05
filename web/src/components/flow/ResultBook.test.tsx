@@ -14,7 +14,7 @@ import { INTRO_HEADING, LAST_BOOK, NEXT_BOOK, NO_INTRO, ResultBook } from "./Res
 vi.mock("@/lib/track/client", () => ({ track: vi.fn() }));
 vi.mock("@/lib/books/detailClient", () => ({ loadDetail: vi.fn(), peekDetail: () => undefined }));
 const pressKeep = vi.fn();
-vi.mock("@/lib/library/keep", () => ({ pressKeep: (...a: unknown[]) => pressKeep(...a) }));
+vi.mock("@/lib/library/keep", () => ({ pressKeep: (...a: unknown[]) => pressKeep(...a), pressUnkeep: vi.fn() }));
 
 const ISBN = "9790000000001";
 const LONG = `${"가".repeat(80)}. ${"나".repeat(60)}. 셋째 문장.`;       // folds after the second sentence (120+ chars)
@@ -317,7 +317,7 @@ describe("ResultBook — the bookmark in the book (C-16)", () => {
   });
 });
 
-describe("ResultBook — [🔖 꽂기] and the S-06 guide (10-02, C-16b · C-21)", () => {
+describe("ResultBook — [🔖 내 책갈피에 저장] and the S-06 guide (C-16b v1.7 · C-21)", () => {
   beforeAll(async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => ({ enabled: true, loggedIn: true, id: "u1", count: 0 }) }));
     await act(async () => { await loadAccount(true); });
@@ -334,37 +334,40 @@ describe("ResultBook — [🔖 꽂기] and the S-06 guide (10-02, C-16b · C-21)
   const guide = () => screen.queryByRole("dialog", { name: "궁금해요 책 보는 법" });
   const pullButton = () => screen.getByRole("button", { name: PULL_OUT });
 
-  it("shows [🔖 꽂기] next to the title before any pull; one tap keeps, with the bookmark still in (no E-27)", async () => {
+  it("shows [🔖 내 책갈피에 저장] under the title and author, above YES24, before any pull; one tap saves (no E-27)", async () => {
     seen();
     show(DETAIL);
-    const keep = await screen.findByRole("button", { name: "내 책갈피에 꽂기" });
-    expect(keep).toHaveTextContent("🔖 꽂기");
-    expect(keep.closest("div")?.querySelector("h1")).toHaveTextContent("여름의 우편함");   // in the title row
+    const keep = await screen.findByRole("button", { name: "내 책갈피에 저장" });
+    expect(keep).toHaveTextContent("🔖 내 책갈피에 저장");
+    const author = screen.getAllByText("한여름").at(-1) as HTMLElement;              // the page's author line (the bookmark has one too)
+    const yes24 = screen.getByRole("link", { name: "예스24에서 보기 ↗" });
+    expect(author.compareDocumentPosition(keep) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();   // under the author
+    expect(keep.compareDocumentPosition(yes24) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();    // above YES24
     fireEvent.click(keep);
     expect(pressKeep).toHaveBeenCalledWith(
-      { isbn: ISBN, art: pick.art, reason: pick.reason, metOn: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/) }, true);
+      { isbn: ISBN, art: pick.art, reason: pick.reason, metOn: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/), card: pick.card }, true);
     expect(stage()).toHaveAttribute("data-pose", "in");
     expect(track).not.toHaveBeenCalledWith("bookmark_pulled", expect.anything());
     expect(screen.getByRole("link", { name: "예스24에서 보기 ↗" })).toHaveAttribute("data-variant", "primary");
   });
 
-  it("has one 꽂기 only — none under the book when it is pulled out — and YES24 stays the main button", async () => {
+  it("has one save button only — none under the book when it is pulled out, no 꽂기 pill — and YES24 stays the main button", async () => {
     seen();
     show(DETAIL);
-    await screen.findByRole("button", { name: "내 책갈피에 꽂기" });
+    await screen.findByRole("button", { name: "내 책갈피에 저장" });
     fireEvent.click(pullButton());
-    expect(screen.getAllByRole("button", { name: /꽂기/ })).toHaveLength(1);
+    expect(screen.getAllByRole("button", { name: /내 책갈피에 저장/ })).toHaveLength(1);
+    expect(screen.queryByRole("button", { name: /꽂기/ })).toBeNull();
     expect(screen.getByRole("link", { name: "예스24에서 보기 ↗" })).toHaveAttribute("data-variant", "primary");
   });
 
-  it("turns into 꽂았어요 ✓ with a way to 내 책갈피 once kept", async () => {
+  it("turns into the green ✓ 내 책갈피에 저장했어요 once saved", async () => {
     seen();
     show(DETAIL);
-    await screen.findByRole("button", { name: "내 책갈피에 꽂기" });
+    await screen.findByRole("button", { name: "내 책갈피에 저장" });
     act(() => setKeepState(ISBN, "saved"));
-    expect(screen.getByRole("status")).toHaveTextContent("꽂았어요 ✓");
-    expect(screen.getByRole("link", { name: "내 책갈피 보기" })).toHaveAttribute("href", "/library");
-    expect(screen.queryByRole("button", { name: "내 책갈피에 꽂기" })).toBeNull();
+    expect(screen.getByRole("button", { name: "내 책갈피에 저장했어요" })).toHaveTextContent("✓ 내 책갈피에 저장했어요");
+    expect(screen.queryByRole("button", { name: "내 책갈피에 저장" })).toBeNull();
   });
 
   it("explains the first S-06 book once: ① the peek, ② ‹ ›, ③ 꽂기, focus on [알겠어요]; remembered when closed", async () => {
