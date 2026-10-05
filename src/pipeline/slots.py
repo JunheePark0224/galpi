@@ -46,7 +46,10 @@ def slot_rule(name: str) -> dict:
 
 
 def keyword_rule(topic: str, keyword: str, pattern: str) -> dict:
-    """A topic's rule narrowed to one keyword: search the keyword's name, keep books whose title + intro opening match
-    the keyword's vocab pattern (case-insensitive, like the app's word matching). The topic's exclusions still apply."""
+    """A topic's rule narrowed to one keyword: the keyword's name searched first, then the topic's own categories and
+    searches, keeping books whose title + intro opening match the keyword's vocab pattern (case-insensitive, like the
+    app's word matching). The topic's exclusions still apply. 10-05: the name search alone found 0-5 new books for many
+    keywords (a two-word name like "ETF 펀드" is a narrow search); the topic's lists hold most of them."""
     base = slot_rule(topic)
-    return {**base, "cats": [], "q": [re.sub(r"·", " ", keyword)], "inc": f"(?i){pattern}", "title_only": False}
+    name = re.sub(r"·", " ", keyword)
+    return {**base, "q": [name, *(q for q in base["q"] if q != name)], "inc": f"(?i){pattern}", "title_only": False}

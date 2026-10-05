@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import collect_candidates  # noqa: E402
 from apply_review import FIELD_OF_TOPIC  # noqa: E402
 from pipeline.gaps import GENRES, PHASES  # noqa: E402
+from pipeline.slots import slot_rule  # noqa: E402
 from pipeline import run_daily  # noqa: E402
 from pipeline.config import load_config, parse_config  # noqa: E402
 from pipeline.candidates import Candidate  # noqa: E402
@@ -47,6 +48,7 @@ def day(tmp_path, monkeypatch):
         monkeypatch.setattr(run_daily, name, value)
     monkeypatch.setattr(collect_candidates, "RAW", raw)
     monkeypatch.setattr(collect_candidates, "get_json", lambda *a, **k: {"error": "offline in tests"})
+    monkeypatch.setattr(collect_candidates, "time", type("T", (), {"sleep": staticmethod(lambda s: None)}))
     return adds
 
 
@@ -197,7 +199,8 @@ def test_a_search_that_listed_nothing_is_not_a_yes24_failure(day, monkeypatch, t
     monkeypatch.setattr(collect_candidates, "get_json", lambda *a, **k: {"data": {"items": []}})
     monkeypatch.setattr(collect_candidates, "time", type("T", (), {"sleep": staticmethod(lambda s: None)}))
     s = run_daily.run("2026-10-05", CFG, ENV, FakeClient())
-    assert s["status"] == "no_candidates" and s["yes24_failures"] == 0 and s["yes24_empty"] == 1
+    lists = 1 + 2 * len(slot_rule("돈 관리·투자")["cats"]) + len(slot_rule("돈 관리·투자")["q"])  # 주식 search + topic lists
+    assert s["status"] == "no_candidates" and s["yes24_failures"] == 0 and s["yes24_empty"] == lists
 
 
 def test_a_candidate_without_author_or_pages_is_not_tagged_and_not_written(day):
@@ -239,7 +242,8 @@ def test_yes24_failing_ends_the_day(day, monkeypatch, tmp_path):
     monkeypatch.setattr(collect_candidates, "time", type("T", (), {"sleep": staticmethod(lambda s: None)}))
     client = FakeClient()
     s = run_daily.run("2026-10-05", CFG, ENV, client)
-    assert s["status"] == "yes24_failed" and s["yes24_failed_paths"] == ["/goods/itemList"]
+    assert s["status"] == "yes24_failed"
+    assert s["yes24_failed_paths"] == ["/category/bestseller", "/category/bestsellerSteady", "/goods/itemList"]  # paths only
     assert client.messages.calls == [] and not list(day.iterdir())
 
 

@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import collect_candidates  # noqa: E402
 from pipeline.candidates import Known, author_key, find, known_from  # noqa: E402
 from pipeline.gaps import Want  # noqa: E402
-from pipeline.slots import keyword_rule  # noqa: E402
+from pipeline.slots import keyword_rule, slot_rule  # noqa: E402
 from pipeline_fakes import write_cache, yes24_item  # noqa: E402
 
 ITEMS = [yes24_item("9790000000011", "처음 주식 공부", "김하나 저", 1),
@@ -30,7 +30,7 @@ def cache(tmp_path, monkeypatch):
     return tmp_path
 
 
-RULE = keyword_rule("돈 관리·투자", "주식", "주식|배당")
+RULE = {**keyword_rule("돈 관리·투자", "주식", "주식|배당"), "cats": [], "q": ["주식"]}  # the keyword search alone
 WANT = Want("target", "돈 관리·투자", 5, "주식")
 ENV = {"YES24_API_KEY": "not-real"}  # get_json is offline in these tests: a cache miss is a recorded failure
 
@@ -61,6 +61,13 @@ def test_known_grows_without_changing_the_old_value(cache):
 def test_author_key_reads_both_spellings():
     assert author_key("김승호 저") == author_key("김승호") == "김승호"
     assert author_key("천선란, 임솔아") == "천선란" and author_key("피터 브루스 외") == "피터 브루스"
+
+
+def test_a_keyword_reads_its_name_search_then_the_topic_lists():
+    rule = keyword_rule("돈 관리·투자", "주식", "주식|배당")
+    topic = slot_rule("돈 관리·투자")
+    assert rule["q"][0] == "주식" and rule["q"][1:] == [q for q in topic["q"] if q != "주식"] and rule["cats"] == topic["cats"]
+    assert rule["inc"] == "(?i)주식|배당" and rule["exc"] == topic["exc"]
 
 
 def test_a_failed_list_is_recorded_not_raised(tmp_path, monkeypatch):

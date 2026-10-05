@@ -72,7 +72,8 @@ def test_rules_keep_the_measured_filters():
     assert matches(slot_rule("돈 관리·투자"), item)
     assert not matches(slot_rule("돈 관리·투자"), {**item, "title": "주식 투자 기출문제집"})  # study books stay out
     word = keyword_rule("돈 관리·투자", "ETF·펀드", "ETF|펀드|인덱스")
-    assert word["q"] == ["ETF 펀드"] and word["cats"] == []
+    topic = slot_rule("돈 관리·투자")
+    assert word["q"] == ["ETF 펀드", *topic["q"]] and word["cats"] == topic["cats"]  # name first, then the topic's lists
     assert matches(word, {**item, "title": "처음 etf"}) and not matches(word, item)
 
 
