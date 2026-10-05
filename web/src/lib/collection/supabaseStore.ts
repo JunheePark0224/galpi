@@ -1,6 +1,6 @@
 import "server-only";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { partsOf, type ArtKind } from "@/lib/art/combine";
+import { collectibleParts, type ArtKind } from "@/lib/art/combine";
 import { parseArt } from "@/lib/library/validate";
 import { knownItems } from "./service";
 import { CollectionUnavailable, type CollectionItem, type CollectionStore } from "./types";
@@ -49,7 +49,7 @@ export function supabaseCollection(reader: SupabaseClient, write: SupabaseClient
       return knownItems(rows);
     },
     async record(art) {
-      const rows = partsOf(art).map((p) => ({ user_id: userId, kind: p.kind, value: p.value, first_art: art }));
+      const rows = collectibleParts(art).map((p) => ({ user_id: userId, kind: p.kind, value: p.value, first_art: art }));
       // insert … on conflict do nothing returning: only the parts met for the first time come back
       const { data, error } = await writeTo().upsert(rows, { onConflict: "user_id,kind,value", ignoreDuplicates: true }).select("kind, value");
       if (error) fail("record", error.code);

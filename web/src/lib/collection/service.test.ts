@@ -1,6 +1,9 @@
 // @vitest-environment node
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { artsForDraw, partsOf } from "@/lib/art/combine";
+import { artsForDraw, collectibleParts, partsOf } from "@/lib/art/combine";
+import type { PathDrawResponse } from "@/lib/books/types";
+import { toDrawView } from "@/lib/flow/api";
+import { mulberry32 } from "@/lib/recommend";
 import { memoryCollection } from "./__fixtures__/memoryStore";
 import { dexCounts, dexSections, knownItems, recordMeeting } from "./service";
 import type { CollectionItem } from "./types";
@@ -17,9 +20,28 @@ describe("도감 service", () => {
     const store = memoryCollection([item("animal", artsForDraw(5, 8)[1].animal)]);
     const found = await recordMeeting(store, { seed: 8, count: 5 }, 1);
     const art = artsForDraw(5, 8)[1];
-    expect(found.map((f) => `${f.kind}:${f.value}`)).toEqual(partsOf(art).slice(1).map((p) => `${p.kind}:${p.value}`));
+    expect(found.map((f) => `${f.kind}:${f.value}`)).toEqual(collectibleParts(art).slice(1).map((p) => `${p.kind}:${p.value}`));
     expect(found.every((f) => ["common", "limited", "first_edition"].includes(f.tier))).toBe(true);
     expect(await recordMeeting(store, { seed: 8, count: 5 }, 1)).toEqual([]);
+  });
+
+  it("never records, returns or counts the empty ground (10-05 fix)", async () => {
+    const seed = Array.from({ length: 500 }, (_, s) => s).find((s) => artsForDraw(1, s)[0].ground === "none")!;
+    const art = artsForDraw(1, seed)[0];
+    const store = memoryCollection();
+    const found = await recordMeeting(store, { seed, count: 1 }, 0);
+    expect(found.map((f) => f.kind)).toEqual(["animal", "bg", "sky"]);
+    expect(store.data.items.map((i) => i.kind)).toEqual(["animal", "bg", "sky"]);
+    expect(store.data.items.map((i) => i.firstArt)).toEqual([art, art, art]);
+    expect(partsOf(art)[3]).toEqual({ kind: "ground", value: "none" });
+    // a store that still answers "none" (a row from before the fix): not passed on, so no badge and no E-36
+    const old = { items: async () => [], record: async () => [{ kind: "ground" as const, value: "none" }], markSeen: async () => 0 };
+    expect(await recordMeeting(old, { seed, count: 1 }, 0)).toEqual([]);
+    // old "none" rows in production are ignored on read: not shown, not counted
+    const rows = [item("ground", "none"), item("ground", "grass")];
+    expect(knownItems(rows)).toEqual([item("ground", "grass")]);
+    expect(dexCounts(knownItems(rows)).prop).toEqual({ found: 1, total: 15 });
+    expect(dexSections("prop", rows).flatMap((s) => s.cells).some((c) => c.value === "none")).toBe(false);
   });
 
   it("drops a stored part that is no longer drawn", async () => {
@@ -34,9 +56,30 @@ describe("도감 service", () => {
     expect(animals.map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 7, 1], ["limited", 5, 0], ["first_edition", 4, 1]]);
     expect(animals[2].cells.find((c) => c.value === "bluedragon")?.met?.isNew).toBe(true);
     const props = dexSections("prop", items);
-    expect(props.map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 10, 0], ["limited", 4, 1], ["first_edition", 2, 1]]);
-    expect(props[0].cells.map((c) => c.kind)).toEqual([...Array(5).fill("sky"), ...Array(5).fill("ground")]);
-    expect(dexCounts(items)).toEqual({ animal: { found: 2, total: 16 }, bg: { found: 0, total: 11 }, prop: { found: 2, total: 16 } });
+    expect(props.map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 9, 0], ["limited", 4, 1], ["first_edition", 2, 1]]);
+    expect(props[0].cells.map((c) => c.kind)).toEqual([...Array(5).fill("sky"), ...Array(4).fill("ground")]);
+    expect(dexCounts(items)).toEqual({ animal: { found: 2, total: 16 }, bg: { found: 0, total: 11 }, prop: { found: 2, total: 15 } });
+  });
+
+  it("records exactly the picture the browser showed: toDrawView's art = recordMeeting's art, 200 seeds × every index", async () => {
+    const rng = mulberry32(20261005);
+    for (let n = 0; n < 200; n++) {
+      const seed = Math.floor(rng() * 2 ** 32);
+      const count = 1 + Math.floor(rng() * 10);
+      const res = {
+        picks: Array.from({ length: count }, (_, i) => ({ card: { id: `b${i}` }, kind: "match", reason: null })),
+        exhausted: false, widened: false, path: {}, art: { seed, count, iat: 1, sub: null, sig: "s" },
+      } as unknown as PathDrawResponse;
+      const view = toDrawView(res, seed + 1);                                      // the fallback seed is never used
+      expect(view.ticket?.seed).toBe(seed);
+      for (let index = 0; index < count; index++) {
+        const store = memoryCollection();
+        await recordMeeting(store, { seed, count }, index);
+        const shown = view.picks[index].art;
+        expect(store.data.items.map((i) => i.firstArt), `seed ${seed} index ${index}`).toEqual(collectibleParts(shown).map(() => shown));
+        expect(store.data.items.map((i) => `${i.kind}:${i.value}`)).toEqual(collectibleParts(shown).map((p) => `${p.kind}:${p.value}`));
+      }
+    }
   });
 });
 

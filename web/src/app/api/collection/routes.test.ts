@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { createHmac } from "node:crypto";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { artsForDraw, partsOf, tierOf } from "@/lib/art/combine";
+import { artsForDraw, collectibleParts, tierOf } from "@/lib/art/combine";
 import { memoryCollection } from "@/lib/collection/__fixtures__/memoryStore";
 import { CollectionUnavailable, type CollectionStore } from "@/lib/collection/types";
 
@@ -42,17 +42,17 @@ describe("도감 routes", () => {
   beforeEach(() => { store = memoryCollection(); });
   afterEach(() => { configured = true; userId = U1; writable = true; broken = null; vi.unstubAllEnvs(); vi.clearAllMocks(); });
 
-  it("records the shown bookmark's four parts, worked out from the signed seed, and says which were new", async () => {
+  it("records the shown bookmark's collectible parts, worked out from the signed seed, and says which were new", async () => {
     const ticket = issueTicket(5, { seed: 1234 });
     const res = await found(post("/api/collection/found", { ...ticket, index: 2 }));
     expect(res.status).toBe(200);
     const art = artsForDraw(5, 1234)[2];
     const body = await res.json();
-    expect(body.found).toEqual(partsOf(art).map((p) => ({ ...p, tier: tierOf(p.kind, p.value) })));
-    expect(store.data.items.map((i) => i.firstArt)).toEqual([art, art, art, art]);
+    expect(body.found).toEqual(collectibleParts(art).map((p) => ({ ...p, tier: tierOf(p.kind, p.value) })));
+    expect(store.data.items.map((i) => i.firstArt)).toEqual(collectibleParts(art).map(() => art));
     // the same bookmark again: nothing new, first meeting kept
     expect((await (await found(post("/api/collection/found", { ...ticket, index: 2 }))).json()).found).toEqual([]);
-    expect(store.data.items).toHaveLength(4);
+    expect(store.data.items).toHaveLength(collectibleParts(art).length);
   });
 
   it("rejects a tampered seed, count or index (403) and a malformed body (400) — before asking who is logged in", async () => {
@@ -102,10 +102,11 @@ describe("도감 routes", () => {
 
   it("lists the person's parts, and NEW goes once the 도감 was seen", async () => {
     await found(post("/api/collection/found", { ...issueTicket(5, { seed: 3 }), index: 0 }));
+    const parts = collectibleParts(artsForDraw(5, 3)[0]).length;
     const first = await (await list(get("/api/collection"))).json();
-    expect(first.items).toHaveLength(4);
+    expect(first.items).toHaveLength(parts);
     expect(first.items.every((i: { isNew: boolean }) => i.isNew)).toBe(true);
-    expect(await (await seen(post("/api/collection/seen"))).json()).toEqual({ ok: true, seen: 4 });
+    expect(await (await seen(post("/api/collection/seen"))).json()).toEqual({ ok: true, seen: parts });
     const after = await (await list(get("/api/collection"))).json();
     expect(after.items.some((i: { isNew: boolean }) => i.isNew)).toBe(false);
   });
@@ -139,7 +140,7 @@ describe("도감 routes", () => {
       expect((await found(post("/api/collection/found", { ...old, index: 0 }))).status).toBe(403);
       const future = issueTicket(5, { seed: 52, iat: nowSeconds() + 3600 });
       expect((await found(post("/api/collection/found", { ...future, index: 0 }))).status).toBe(403);
-      expect(store.data.items).toHaveLength(4);
+      expect(store.data.items).toHaveLength(collectibleParts(artsForDraw(5, 50)[0]).length);
     });
 
     it("refuses a ticket whose iat or sub was changed (403) or is malformed (400)", async () => {

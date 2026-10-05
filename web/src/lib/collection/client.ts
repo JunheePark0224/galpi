@@ -1,4 +1,4 @@
-import { ART_KINDS, tierOf, type ArtKind } from "@/lib/art/combine";
+import { ART_KINDS, isCollectible, tierOf, type ArtKind } from "@/lib/art/combine";
 import { libraryRequest } from "@/lib/library/client";
 import { parseArt } from "@/lib/library/validate";
 import { knownItems } from "./service";
@@ -6,12 +6,12 @@ import type { ArtTicket, CollectionItem, FoundItem } from "./types";
 
 const isKind = (v: unknown): v is ArtKind => typeof v === "string" && (ART_KINDS as readonly string[]).includes(v);
 
-/** The answer's new parts, kept only when they are parts we draw (the badge and E-36 trust nothing else). */
+/** The answer's new parts, kept only when they are parts we collect (the badge and E-36 trust nothing else — never "none"). */
 export function parseFound(body: unknown): FoundItem[] {
   const list = (body as { found?: unknown } | null)?.found;
   if (!Array.isArray(list)) return [];
   return list.flatMap((x: { kind?: unknown; value?: unknown }) => {
-    if (!isKind(x?.kind) || typeof x.value !== "string") return [];
+    if (!isKind(x?.kind) || typeof x.value !== "string" || !isCollectible(x.kind, x.value)) return [];
     const tier = tierOf(x.kind, x.value);
     return tier ? [{ kind: x.kind, value: x.value, tier }] : [];
   });

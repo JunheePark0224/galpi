@@ -3,8 +3,8 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
-  ANIMALS, ART_KINDS, BACKGROUNDS, GROUND_PROPS, KIND_TIERS, SKY_PROPS, TIERS, artFromSeed, artTier, artsForDraw, highestTier,
-  isRare, newArtSeed, partsOf, tierFor, tierOf, type Tier,
+  ANIMALS, ART_KINDS, BACKGROUNDS, DEX_TIERS, GROUND_PROPS, KIND_TIERS, SKY_PROPS, TIERS, artFromSeed, artTier, artsForDraw,
+  collectibleParts, highestTier, isCollectible, isRare, newArtSeed, partsOf, tierFor, tierOf, type Tier,
 } from "./combine";
 import { PART_NAMES } from "./names";
 
@@ -25,8 +25,22 @@ describe("bookmark art", () => {
     for (const kind of ART_KINDS) {
       const byTier = TIERS.flatMap((t) => KIND_TIERS[kind][t]);
       expect([...byTier].sort()).toEqual([...all[kind]].sort());
-      for (const v of byTier) expect(PART_NAMES[kind][v], `${kind} ${v}`).toBeTruthy();
+      for (const v of byTier) expect(Boolean(PART_NAMES[kind][v]), `${kind} ${v}`).toBe(isCollectible(kind, v));
     }
+  });
+
+  it("collects every part but the empty ground — 16 + 11 + 15 cells (10-05 fix)", () => {
+    expect(isCollectible("ground", "none")).toBe(false);
+    expect(isCollectible("ground", "grass")).toBe(true);
+    expect(isCollectible("sky", "none")).toBe(false);                        // not a sky value at all
+    expect(isCollectible("animal", "dragon")).toBe(false);
+    expect(DEX_TIERS.ground.common).toEqual(["grass", "flowers", "books", "mushroom"]);
+    expect(KIND_TIERS.ground.common).toContain("none");                       // still drawn
+    const cells = (kind: (typeof ART_KINDS)[number]) => TIERS.flatMap((t) => DEX_TIERS[kind][t]).length;
+    expect([cells("animal"), cells("bg"), cells("sky") + cells("ground")]).toEqual([16, 11, 15]);
+    const art = { animal: "cat", bg: "peach", sky: "moon", ground: "none" } as const;
+    expect(collectibleParts(art)).toEqual(partsOf(art).slice(0, 3));
+    expect(collectibleParts({ ...art, ground: "clover" })).toEqual(partsOf({ ...art, ground: "clover" }));
   });
 
   it("looks a part's tier up from its value", () => {

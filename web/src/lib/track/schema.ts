@@ -84,7 +84,7 @@ export const EVENT_SPEC = {
   // v1.3 도감: a part the server recorded for the first time (logged in only), and opening the 도감
   collection_item_found: {
     part_kind: { type: ["animal", "bg", "sky", "ground"] },
-    part_value: { type: "string" },
+    part_value: { type: "string" },   // a collectible value — never the empty ground "none" (taxonomy v1.4.1)
     tier: { type: ["common", "limited", "first_edition"] },
   },
   collection_viewed: { collected_count: { type: "number" }, is_logged_in: { type: "boolean" } },
