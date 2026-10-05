@@ -57,6 +57,19 @@ describe("useLibrary (S-09)", () => {
     expect(merged.size).toBe(0);
   });
 
+  it("the read started last wins: a slow first read answering after the merge reload does not undo it", async () => {
+    let answerFirst: (v: unknown) => void = () => {};
+    const MERGED: LibraryView = { ...VIEW, count: 3 };
+    request.mockImplementationOnce(() => new Promise((r) => { answerFirst = r; })).mockResolvedValueOnce(ok(MERGED));
+    const { result } = renderHook(() => useLibrary());
+    await act(async () => { merged.forEach((l) => l()); });
+    await waitFor(() => expect(result.current.view).toEqual(MERGED));
+    await act(async () => { answerFirst(ok(VIEW)); });
+    expect(result.current.view).toEqual(MERGED);
+    expect(setSavedCount.mock.calls).toEqual([[3]]);
+    expect(track).toHaveBeenCalledWith("library_viewed", { saved_count: 3 });
+  });
+
   it("says when it could not load, and when the login ran out", async () => {
     request.mockResolvedValueOnce({ ok: false, status: 500, body: null });
     const failed = renderHook(() => useLibrary());

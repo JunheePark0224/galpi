@@ -95,17 +95,30 @@ describe("KeepButton (S-06 [🔖 내 책갈피에 저장], C-16b v1.7)", () => {
     expect(pressUnkeep).toHaveBeenCalledWith(ISBN, false);
   });
 
-  it("says what went wrong: saving (pressed once), a failed save, 100 in this browser, a failed take-out", async () => {
+  it("says what went wrong: saving (pressed once), a failed save, a failed take-out", async () => {
     const { store } = await mount(IN);
     act(() => store.setKeepState(ISBN, "saving"));
     expect(keepButton()).toBeDisabled();
     act(() => store.setKeepState(ISBN, "failed"));
     expect(screen.getByRole("alert")).toHaveTextContent("저장하지 못했어요. 다시 눌러 주세요.");
-    act(() => store.setKeepState(ISBN, "full"));
-    expect(screen.getByRole("alert")).toHaveTextContent("임시 책갈피는 100개까지예요. 로그인하면 계속 모을 수 있어요");
     act(() => store.setKeepState(ISBN, "unkeepFailed"));
     expect(screen.getByRole("alert")).toHaveTextContent("빼지 못했어요. 다시 눌러 주세요.");
     expect(screen.getByRole("button", { name: "내 책갈피에 저장했어요" })).toBeEnabled();
+  });
+
+  it("100 in this browser: says so — and stops saying it once one is taken out", async () => {
+    const { store, guest } = await mount(OUT);
+    const other = (i: number) => `979000000${String(i).padStart(4, "0")}`;
+    act(() => {
+      for (let i = 0; i < guest.GUEST_MAX; i++) {
+        guest.addGuestSave({ isbn: other(i), art: pick.art, reason: pick.reason, metOn: "2026-10-05", card: { ...pick.card, id: other(i) } });
+      }
+      store.setKeepState(ISBN, "full");
+    });
+    expect(screen.getByRole("alert")).toHaveTextContent("임시 책갈피는 100개까지예요. 로그인하면 계속 모을 수 있어요");
+    act(() => { guest.removeGuestSave(other(0)); });
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(keepButton()).toBeEnabled();
   });
 
   it("flies a small copy of the bookmark from the cover to the header, then lets it go", async () => {

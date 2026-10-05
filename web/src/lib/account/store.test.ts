@@ -55,6 +55,23 @@ describe("account store (header, S-06 꽂기, S-09)", () => {
     stop();
   });
 
+  it("refreshes the count from /api/me (logged in only; a failed or logged-out answer changes nothing)", async () => {
+    const fetchMe = answer({ enabled: true, loggedIn: true, id: "u1", count: 3 });
+    vi.stubGlobal("fetch", fetchMe);
+    const { accountSnapshot, loadAccount, refreshSavedCount } = await load();
+    await loadAccount();
+    fetchMe.mockResolvedValueOnce({ ok: true, json: async () => ({ enabled: true, loggedIn: true, id: "u1", count: 7 }) });
+    await refreshSavedCount();
+    expect(accountSnapshot().count).toBe(7);
+    fetchMe.mockResolvedValueOnce({ ok: false, json: async () => ({}) });
+    await refreshSavedCount();
+    fetchMe.mockResolvedValueOnce({ ok: true, json: async () => ({ enabled: true, loggedIn: false, id: null, count: 0 }) });
+    await refreshSavedCount();
+    fetchMe.mockRejectedValueOnce(new Error("offline"));
+    await refreshSavedCount();
+    expect(accountSnapshot()).toEqual({ status: "in", id: "u1", count: 7 });
+  });
+
   it("counts the S-06 saves it was told about, for the header's +1", async () => {
     const { announceKept, keptSnapshot, subscribeAccount } = await load();
     const seen = vi.fn();

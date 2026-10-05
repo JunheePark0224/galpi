@@ -7,7 +7,7 @@ const setUserId = vi.fn();
 vi.mock("@/lib/track/client", () => ({ track: (...a: unknown[]) => track(...a) }));
 vi.mock("@/lib/track/amplitude", () => ({ setAmplitudeUser: (...a: unknown[]) => setAmplitudeUser(...a) }));
 vi.mock("@/lib/track/common", () => ({ setUserId: (...a: unknown[]) => setUserId(...a) }));
-const mergeGuestSaves = vi.fn().mockResolvedValue(undefined);
+const mergeGuestSaves = vi.fn().mockResolvedValue({ full: 0 });
 vi.mock("@/lib/library/merge", () => ({ mergeGuestSaves: (...a: unknown[]) => mergeGuestSaves(...a) }));
 
 const me = (body: unknown) => vi.fn().mockResolvedValue({ ok: true, json: async () => body });
@@ -68,5 +68,16 @@ describe("LoginReturn (E-14 once, then the address is clean)", () => {
     expect(track).not.toHaveBeenCalled();
     expect(screen.getAllByRole("status").at(-1)).toHaveTextContent("로그인하지 못했어요");
     expect(mergeGuestSaves).not.toHaveBeenCalled();
+  });
+
+  it("says once, for a while, how many could not move because 내 책갈피 is full", async () => {
+    mergeGuestSaves.mockResolvedValueOnce({ full: 2 });
+    await mount("/library", IN);
+    expect(await screen.findByRole("status")).toHaveTextContent("내 책갈피가 가득 차서 2권은 옮기지 못했어요");
+  });
+
+  it("says nothing when everything could move", async () => {
+    await mount("/library", IN);
+    expect(screen.queryByRole("status")).toBeNull();
   });
 });
