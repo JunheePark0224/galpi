@@ -15,7 +15,7 @@ vi.mock("@/lib/auth/server", () => ({
   },
   sessionUserId: async () => userId,
 }));
-import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
+import { CHALLENGE_PATH, SQL_PATH } from "@/lib/paths/__fixtures__/paths";
 
 const PATH = { answers: SQL_PATH };
 const ORIGIN = "http://x";
@@ -92,9 +92,15 @@ describe("POST /api/books/draw", () => {
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.picks).toHaveLength(5);
-    expect(Object.keys(body).sort()).toEqual(["art", "exhausted", "path", "picks", "widened"]);
+    expect(Object.keys(body).sort()).toEqual(["art", "challenge", "exhausted", "path", "picks", "widened"]);
     expect(body.path.crumbs.at(-1)).toBe("DB에서 꺼내기");
+    expect(body.challenge).toBeNull();
     expect(Object.keys(body.picks[0].card).sort()).toEqual(["author", "entry", "field", "genre", "id", "oneLiner", "oneLinerStyle", "title"]);
+  });
+
+  it("a challenge path carries where it moved from and to, by which far rule (10-05 v2)", async () => {
+    const body = await (await POST(req({ answers: CHALLENGE_PATH, seen: [], seed: 7 }))).json();
+    expect(body.challenge).toMatchObject({ from: ["SF·판타지"], to: ["에세이", "시"], rule: { n: 1 }, reasonDraft: null });
   });
 
   it("signs the pictures' seed for the 도감 (dev secret outside production)", async () => {

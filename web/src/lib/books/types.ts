@@ -1,5 +1,6 @@
 import type { ArtTicket } from "@/lib/collection/types";
 import type { PathSummary } from "../paths/summary";
+import type { Challenge } from "../paths/types";
 import type { Reason } from "../recommend/reason";
 import type { AxisKey, DrawPick, Entry, Tag, Way } from "../recommend/types";
 
@@ -42,6 +43,11 @@ export interface PathDrawResponse {
   exhausted: boolean;
   widened: boolean;
   path: PathSummary;
+  /**
+   * Challenge rules v2 (10-05): where a challenge draw moved from and to, by which far rule — null on the usual route. Its
+   * `reasonDraft` is a draft, data only: no screen shows it yet (the user polishes the lines after seeing real results).
+   */
+  challenge: Challenge | null;
   /** 도감 v1: the server's seed for this draw's pictures, signed (lib/collection/ticket). Absent from older answers. */
   art?: ArtTicket;
 }

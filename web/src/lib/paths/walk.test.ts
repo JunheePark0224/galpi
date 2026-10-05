@@ -1,17 +1,28 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { mulberry32, type Book, type LeafBook } from "@/lib/recommend";
+import { LEARN_CHALLENGE_GENRES, NO_CHOICE_LABEL } from "./challenge";
 import { parseQuestionMap } from "./parse";
 import { ALL_SCOPE, type Answer } from "./types";
-import { LEAF_GENRES } from "@/lib/books/taxonomy";
-import { mulberry32 } from "@/lib/recommend";
 import { applyChallenge, PathError, skipKey, walkPath, WAY_AXIS } from "./walk";
 
 const MINI = readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/mini-map.md"), "utf8");
 const MAP = parseQuestionMap(MINI);
-const FAR_SF = "```far\nfrom: entry=target\nto: entry=leaf | genres=SF·판타지\n```\n";
+const FAR_SF = "```far\nfrom: entry=target\nto: entry=leaf | genres=과학 교양\n```\n";
+/** The mini map with the two list rules of v2 (19 이야기 · 장르 없음, 36 배우기 · 주제 없음) as rules 2 and 3. */
+const LISTS = parseQuestionMap(`${MINI}\n${readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/list-rules.md"), "utf8")}`);
+const leaf = (genre: string, n: number): LeafBook[] =>
+  Array.from({ length: n }, (_, i) => ({ id: `${genre}${i}`, entry: "leaf", genre, pages: 250, axes: { temp: 0, pull: 0, gain: 0, world: 0 } }));
+/** 🍃 인문 5 · 과학 교양 6 · 역사 4 · 에세이 5 · 한국 소설 7 · 시 2, and 🎯 books whose genre reads 역사 (they never count for the 🍃 genre). */
+const BOOKS: Book[] = [
+  ...leaf("인문", 5), ...leaf("과학 교양", 6), ...leaf("역사", 4), ...leaf("에세이", 5), ...leaf("한국 소설", 7), ...leaf("시", 2),
+  ...Array.from({ length: 3 }, (_, i): Book => ({ id: `t${i}`, entry: "target", field: "f", topic: "역사", genre: "역사", pages: 200, way: "개념", keywords: [] })),
+];
+const draw = (seed: number) => ({ rng: mulberry32(seed), books: BOOKS });
 const a = (node: string, choice: Answer["choice"]): Answer => ({ node, choice });
 const SQL = [a("start", "A"), a("branch", "B"), a("learn-area", "A"), a("learn-data", "A"), a("mood-way", "B"), a("mood-len", "A")];
+const LEARN_NONE = [a("start", "B"), a("branch", "B"), a("learn-area", "unsure"), a("mood-way", "unsure"), a("mood-len", "A")];
 
 describe("walkPath", () => {
   it("starts at the start with the whole scope", () => {
@@ -45,13 +56,17 @@ describe("walkPath", () => {
     expect(() => walkPath(MAP, [...SQL, a("mood-len", "A")])).toThrow(/after the end/);
   });
 
-  it("challenge: swaps the scope for the far scope and keeps the mood", () => {
+  it("challenge: swaps the scope for the far scope, keeps the mood, and records where from and where to", () => {
     const w = walkPath(MAP, [a("start", "B"), ...SQL.slice(1)]);
     expect(w.mode).toBe("challenge");
     const far = applyChallenge(MAP, w);
-    expect(far.scope).toEqual({ entry: "leaf", topics: null, keywords: null, genres: ["에세이"] });
-    expect(far.levels).toEqual([ALL_SCOPE, { ...ALL_SCOPE, entry: "leaf" }, far.scope]);
+    expect(far.scope).toEqual({ entry: "leaf", topics: null, keywords: null, genres: ["인문"] });
+    // a 배우기 challenge widens only inside the learning genres, never to the whole 이야기 side
+    expect(far.levels).toEqual([ALL_SCOPE, { ...ALL_SCOPE, entry: "leaf", genres: [...LEARN_CHALLENGE_GENRES] }, far.scope]);
     expect(far.mood.len).toBe(w.mood.len);
+    expect(far.challenge).toEqual({ from: ["데이터 분석"], to: ["인문"], rule: { n: 1, title: "데이터 분석 → 인문" }, reasonDraft: "숫자에서 사람으로" });
+    expect(applyChallenge(MAP, walkPath(MAP, SQL))).toEqual(walkPath(MAP, SQL));                // not a challenge: as walked, no record
+    expect(walkPath(MAP, SQL).challenge).toBeUndefined();
   });
 
   it("challenge from 배우기 to 이야기: each way chosen leans its story axis (개념 → 알게 됨, 실습 → 현실, 사례 → 몰입)", () => {
@@ -63,64 +78,77 @@ describe("walkPath", () => {
     expect(applyChallenge(MAP, both).mood.axes).toEqual({ temp: 0, pull: -1, gain: 0, world: 1 });
   });
 
-  it("challenge from 배우기 with no far rule: the 이야기 entry whole, one level under the library", () => {
-    const w = walkPath(MAP, [a("start", "B"), a("branch", "B"), a("learn-area", "B"), a("mood-way", "unsure"), a("mood-len", "A")]);
-    const far = applyChallenge(MAP, w);
-    expect(far.scope).toEqual({ ...ALL_SCOPE, entry: "leaf" });
-    expect(far.levels).toEqual([ALL_SCOPE, far.scope]);
+  it("challenge with no matching far rule: the walk as it was — never the other branch (v2: no fallback)", () => {
+    const learn = walkPath(MAP, [a("start", "B"), a("branch", "B"), a("learn-area", "B"), a("mood-way", "unsure"), a("mood-len", "A")]);
+    expect(applyChallenge(MAP, learn, draw(1))).toBe(learn);
+    const story = walkPath(MAP, [a("start", "B"), a("branch", "A"), a("story-world", "B"), a("mood-temp", "A"), a("mood-len", "A")]);
+    for (let seed = 1; seed <= 50; seed++) expect(applyChallenge(MAP, story, draw(seed))).toBe(story);
+    const other = parseQuestionMap(MINI.replace("from: entry=target", "from: entry=leaf"));     // a rule naming another entry
+    const w = walkPath(other, [a("start", "B"), ...SQL.slice(1)]);
+    expect(applyChallenge(other, w, draw(1))).toBe(w);
   });
 
-  it("challenge from 이야기 with no far rule never leaves 이야기: one other story genre at random by the seed (0-book genres too)", () => {
-    const w = walkPath(MAP, [a("start", "B"), a("branch", "A"), a("story-world", "B"), a("mood-temp", "A"), a("mood-len", "A")]);
-    expect(applyChallenge(MAP, w)).toBe(w);                                          // no rng (skip table, E-34): as walked
-    const seen = new Set<string>();
-    for (let seed = 1; seed <= 300; seed++) {
-      const far = applyChallenge(MAP, w, mulberry32(seed));
-      expect(far.scope.entry).toBe("leaf");
+  it("list rule 36 (배우기 · 주제 없음): one genre with 5+ books, equal chance, by the seed — with provenance", () => {
+    const w = walkPath(LISTS, LEARN_NONE);
+    const whole = applyChallenge(LISTS, w);                                                    // no draw (skip table, E-34): the whole list
+    expect(whole.scope.genres).toEqual(["인문", "과학 교양", "역사"]);
+    expect(whole.levels).toEqual([ALL_SCOPE, { ...ALL_SCOPE, entry: "leaf", genres: [...LEARN_CHALLENGE_GENRES] }, whole.scope]);
+    const count = new Map<string, number>();
+    const N = 1000;
+    for (let seed = 1; seed <= N; seed++) {
+      const far = applyChallenge(LISTS, w, draw(seed));
       expect(far.scope.genres).toHaveLength(1);
-      expect(far.scope.genres).not.toContain("SF·판타지");                           // not the genre already chosen
-      expect(far.levels).toEqual([ALL_SCOPE, { ...ALL_SCOPE, entry: "leaf" }, far.scope]);
+      expect(applyChallenge(LISTS, w, draw(seed)).scope).toEqual(far.scope);                   // reproducible
+      expect(far.challenge).toEqual({
+        from: [NO_CHOICE_LABEL.target], to: far.scope.genres, rule: { n: 3, title: "배우기 · 주제 없음 → 목록" }, reasonDraft: "다른 분야로 한 발짝",
+      });
+      count.set(far.scope.genres![0], (count.get(far.scope.genres![0]) ?? 0) + 1);
+    }
+    expect([...count.keys()].sort()).toEqual(["과학 교양", "인문"]);                           // 역사 has 4 books: not a candidate
+    expect(Math.abs(count.get("인문")! / N - 0.5)).toBeLessThan(0.05);
+  });
+
+  it("list rule 19 (이야기 · 장르 없음): a story genre of the list with 5+ books, no reason written", () => {
+    const w = walkPath(LISTS, [a("start", "B"), a("branch", "A"), a("story-world", "unsure"), a("mood-temp", "A"), a("mood-len", "A")]);
+    const seen = new Set<string>();
+    for (let seed = 1; seed <= 200; seed++) {
+      const far = applyChallenge(LISTS, w, draw(seed));
+      expect(far.levels).toEqual([ALL_SCOPE, { ...ALL_SCOPE, entry: "leaf" }, far.scope]);   // a story challenge widens inside 이야기
       expect(far.mood).toBe(w.mood);
-      expect(applyChallenge(MAP, w, mulberry32(seed)).scope).toEqual(far.scope);
+      expect(far.challenge).toEqual({ from: [NO_CHOICE_LABEL.leaf], to: far.scope.genres, rule: { n: 2, title: "이야기 · 장르 없음 → 목록" }, reasonDraft: null });
       seen.add(far.scope.genres![0]);
     }
-    expect([...seen].sort()).toEqual(LEAF_GENRES.filter((g) => g !== "SF·판타지").sort());
+    expect([...seen].sort()).toEqual(["에세이", "한국 소설"]);                                 // 시 has 2 books
   });
 
-  it("challenge from 이야기 that already named every story genre: any story genre", () => {
-    const all = parseQuestionMap(MINI.replace("B: 딴 세상 | genres=SF·판타지", `B: 딴 세상 | genres=${LEAF_GENRES.join(",")}`));
-    const w = walkPath(all, [a("start", "B"), a("branch", "A"), a("story-world", "B"), a("mood-temp", "A"), a("mood-len", "A")]);
-    const far = applyChallenge(all, w, mulberry32(1));
-    expect(LEAF_GENRES).toContain(far.scope.genres![0]);
+  it("list rule: no genre of the list has 5 books → the whole list as one target", () => {
+    const w = walkPath(LISTS, LEARN_NONE);
+    const few = BOOKS.filter((b) => b.genre !== "인문" && b.genre !== "과학 교양");
+    expect(applyChallenge(LISTS, w, { rng: mulberry32(1), books: few }).scope.genres).toEqual(["인문", "과학 교양", "역사"]);
   });
 
-  it("challenge with the whole library (no entry chosen): no rng → the scope stays; the draw's rng → one side at random, by the seed", () => {
-    const w = walkPath(MAP, [a("start", "B"), a("branch", "unsure"), a("mood-len", "A")]);
+  it("challenge with the whole library (섞어서): no draw → as walked; with one → a branch by the seed, then that branch's list rule", () => {
+    const w = walkPath(LISTS, [a("start", "B"), a("branch", "unsure"), a("mood-len", "A")]);
     expect(w.mode).toBe("challenge");
-    expect(applyChallenge(MAP, w)).toBe(w);
-    const sides = new Set<string | null>();
-    for (let seed = 1; seed <= 20; seed++) {
-      const far = applyChallenge(MAP, w, mulberry32(seed));
-      expect(far.scope).toEqual({ ...ALL_SCOPE, entry: far.scope.entry });
-      expect(far.levels).toEqual([ALL_SCOPE, far.scope]);
-      expect(applyChallenge(MAP, w, mulberry32(seed)).scope).toEqual(far.scope);
-      sides.add(far.scope.entry);
+    expect(applyChallenge(LISTS, w)).toBe(w);
+    const rules = new Set<number>();
+    for (let seed = 1; seed <= 40; seed++) {
+      const far = applyChallenge(LISTS, w, draw(seed));
+      expect(far.scope.entry).toBe("leaf");
+      expect(far.challenge!.from).toEqual([NO_CHOICE_LABEL.mixed]);
+      expect(far.challenge!.rule.n === 2 ? ["에세이", "한국 소설"] : ["인문", "과학 교양"]).toContain(far.scope.genres![0]);
+      expect(applyChallenge(LISTS, w, draw(seed)).scope).toEqual(far.scope);
+      rules.add(far.challenge!.rule.n);
     }
-    expect(sides).toEqual(new Set(["leaf", "target"]));
+    expect(rules).toEqual(new Set([2, 3]));
   });
 
   it("challenge: the first far rule that matches wins", () => {
     const route = [a("start", "B"), ...SQL.slice(1)];
     const after = parseQuestionMap(`${MINI}\n${FAR_SF}`);
-    expect(applyChallenge(after, walkPath(after, route)).scope.genres).toEqual(["에세이"]);
-    const before = parseQuestionMap(MINI.replace("```far", `${FAR_SF}\n\`\`\`far`));
-    expect(applyChallenge(before, walkPath(before, route)).scope.genres).toEqual(["SF·판타지"]);
-  });
-
-  it("challenge: a rule naming another entry does not match", () => {
-    const other = parseQuestionMap(MINI.replace("from: entry=target", "from: entry=leaf"));
-    const w = walkPath(other, [a("start", "B"), ...SQL.slice(1)]);
-    expect(applyChallenge(other, w).scope).toEqual({ ...ALL_SCOPE, entry: "leaf" });
+    expect(applyChallenge(after, walkPath(after, route)).scope.genres).toEqual(["인문"]);
+    const before = parseQuestionMap(MINI.replace("1. 데이터 분석 → 인문\n\n```far", `${FAR_SF}\n\`\`\`far`));
+    expect(applyChallenge(before, walkPath(before, route)).scope.genres).toEqual(["과학 교양"]);
   });
 
   it("unsure at the first question keeps the usual mode", () => {

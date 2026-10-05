@@ -20,7 +20,7 @@ describe("parseQuestionMap", () => {
     expect(map.nodes["mood-len"].b.effects).toEqual({ len: -1 });
     expect(map.nodes.start.b.effects).toEqual({ mode: "challenge" });
     expect(map.nodes["mood-way"].a.effects).toEqual({ ways: ["개념"] });
-    expect(map.far).toEqual([{ from: { entry: "target", topics: ["데이터 분석"] }, to: { entry: "leaf", genres: ["에세이"] } }]);
+    expect(map.far).toEqual([{ from: { entry: "target", topics: ["데이터 분석"] }, to: { entry: "leaf", genres: ["인문"] }, title: "데이터 분석 → 인문", why: "숫자에서 사람으로" }]);
   });
 
   it("reads a way list (any of them gets the way points) and refuses a way we do not have", () => {
@@ -77,5 +77,19 @@ describe("parseQuestionMap", () => {
     expect(far("keywords=SQL", "genres=시")).toEqual({ from: { keywords: ["SQL"] }, to: { genres: ["시"] } });
     expect(() => far("len=+1", "entry=leaf")).toThrow(/far: from sets no scope/);
     expect(() => far("entry=leaf", "way=개념")).toThrow(/far: to sets no scope/);
+  });
+
+  it("v2 (10-05): reads a far rule's heading as its title, `pick: one` lists and the draft `why:` line", () => {
+    const block = (body: string, heading = "2. 배우기 · 주제 없음 → 목록") => `${MINI}\n${heading}\n\n\`\`\`far\nfrom: entry=target\n${body}\n\`\`\``;
+    const rule = parseQuestionMap(block("to: entry=leaf | genres=인문,과학 교양\npick: one\nwhy: 한 발짝")).far[1];
+    expect(rule).toEqual({
+      from: { entry: "target" }, to: { entry: "leaf", genres: ["인문", "과학 교양"] }, title: "배우기 · 주제 없음 → 목록", pick: "one", why: "한 발짝",
+    });
+    expect(parseQuestionMap(block("to: entry=leaf | genres=인문", "그냥 문단")).far[1]).toEqual({ from: { entry: "target" }, to: { entry: "leaf", genres: ["인문"] } });
+    expect(() => parseQuestionMap(block("to: entry=leaf | genres=인문", "3. 번호가 틀림"))).toThrow(/far 2: its heading is numbered 3/);
+    expect(() => parseQuestionMap(block("to: entry=leaf | genres=인문\npick: all"))).toThrow(/far 2: pick must be "one", got "all"/);
+    expect(() => parseQuestionMap(block("to: entry=leaf\npick: one"))).toThrow(/far 2: pick: one needs a genres list/);
+    expect(() => parseQuestionMap(block("to: entry=leaf | genres=인문\nwhy:"))).toThrow(/far 2: why is empty/);
+    expect(() => parseQuestionMap(block("to: entry=leaf | genres=인문\nreason: 오타"))).toThrow(/far 2: unknown line "reason:"/);
   });
 });
