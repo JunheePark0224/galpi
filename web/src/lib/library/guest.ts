@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 import { kstDate } from "@/lib/books/library";
 import type { BookCard } from "@/lib/books/types";
+import { parseFoundRequest, type FoundRequest } from "@/lib/collection/meeting";
 import type { SaveInput } from "./service";
 import { parseArt, parseMetOn, parseReason } from "./validate";
 
@@ -16,8 +17,12 @@ export const GUEST_MAX = 100;
 export const GUEST_TRIES = 3;
 const VERSION = 1;
 
-/** tries: visits whose move to the account failed so far (absent = none). */
-export interface GuestSave extends SaveInput { card: BookCard; tries?: number }
+/**
+ * tries: visits whose move to the account failed so far (absent = none). meeting (v1.7): the draw's signed ticket and the
+ * bookmark's place in it — a random number and the server's signature, nothing about the person — so the 도감 can record
+ * the bookmark's parts once it reaches the account (lib/library/merge). Absent when the draw was not signed.
+ */
+export interface GuestSave extends SaveInput { card: BookCard; tries?: number; meeting?: FoundRequest }
 /** blocked: this browser keeps nothing (private mode and the like) — the caller offers the login instead. */
 export type GuestAdd = "added" | "already" | "full" | "blocked";
 
@@ -45,7 +50,9 @@ function parseSave(v: unknown): GuestSave | null {
   const { tries } = v;
   if (tries !== undefined && !(typeof tries === "number" && Number.isInteger(tries) && tries >= 0)) return null;
   if (!art || !reason || !metOn || !card) return null;
-  return { isbn: v.isbn, art, reason, metOn, card, ...(tries === undefined ? {} : { tries }) };
+  // a broken ticket only loses the 도감 part: the bookmark itself still moves to the account
+  const meeting = v.meeting === undefined ? null : parseFoundRequest(v.meeting);
+  return { isbn: v.isbn, art, reason, metOn, card, ...(tries === undefined ? {} : { tries }), ...(meeting ? { meeting } : {}) };
 }
 
 function parse(raw: string | null): readonly GuestSave[] {

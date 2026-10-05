@@ -9,6 +9,7 @@ import { dexCounts, dexSections, knownItems, recordMeeting } from "./service";
 import type { CollectionItem } from "./types";
 
 vi.mock("server-only", () => ({}));
+import { isbnsOf } from "./__fixtures__/isbns";
 import { isFresh, issueTicket, MIN_SECRET_LENGTH, parseFoundRequest, signingSecret, TICKET_TTL_SECONDS, verifyTicket } from "./ticket";
 
 const ART = { animal: "otter", bg: "galaxy", sky: "moon", ground: "none", rare: true } as const;
@@ -35,7 +36,7 @@ describe("도감 service", () => {
     expect(store.data.items.map((i) => i.firstArt)).toEqual([art, art, art]);
     expect(partsOf(art)[3]).toEqual({ kind: "ground", value: "none" });
     // a store that still answers "none" (a row from before the fix): not passed on, so no badge and no E-36
-    const old = { items: async () => [], record: async () => [{ kind: "ground" as const, value: "none" }], markSeen: async () => 0 };
+    const old = { items: async () => [], record: async () => [{ kind: "ground" as const, value: "none" }], markSeen: async () => 0, claimKept: async () => true };
     expect(await recordMeeting(old, { seed, count: 1 }, 0)).toEqual([]);
     // old "none" rows in production are ignored on read: not shown, not counted
     const rows = [item("ground", "none"), item("ground", "grass")];
@@ -45,7 +46,7 @@ describe("도감 service", () => {
   });
 
   it("drops a stored part that is no longer drawn", async () => {
-    const store = { items: async () => [], record: async () => [{ kind: "animal" as const, value: "dragon" }], markSeen: async () => 0 };
+    const store = { items: async () => [], record: async () => [{ kind: "animal" as const, value: "dragon" }], markSeen: async () => 0, claimKept: async () => true };
     expect(await recordMeeting(store, { seed: 1, count: 1 }, 0)).toEqual([]);
     expect(knownItems([item("animal", "dragon"), item("bg", "galaxy")])).toEqual([item("bg", "galaxy")]);
   });
@@ -68,7 +69,7 @@ describe("도감 service", () => {
       const count = 1 + Math.floor(rng() * 10);
       const res = {
         picks: Array.from({ length: count }, (_, i) => ({ card: { id: `b${i}` }, kind: "match", reason: null })),
-        exhausted: false, widened: false, path: {}, art: { seed, count, iat: 1, sub: null, sig: "s" },
+        exhausted: false, widened: false, path: {}, art: { seed, count, iat: 1, sub: null, sig: "s", isbns: Array.from({ length: count }, (_, i) => `b${i}`) },
       } as unknown as PathDrawResponse;
       const view = toDrawView(res, seed + 1);                                      // the fallback seed is never used
       expect(view.ticket?.seed).toBe(seed);
@@ -88,13 +89,15 @@ describe("art tickets (server-signed seeds)", () => {
 
   it("verifies its own signature and rejects any change", () => {
     const secret = signingSecret()!;
-    const t = issueTicket(5, { seed: 4242, sub: "11111111-1111-4111-8111-111111111111" }) as ReturnType<typeof issueTicket> & { sig: string };
+    const t = issueTicket(isbnsOf(5), { seed: 4242, sub: "11111111-1111-4111-8111-111111111111" }) as ReturnType<typeof issueTicket> & { sig: string };
     expect(verifyTicket(t, secret)).toBe(true);
     expect(verifyTicket({ ...t, iat: t.iat - 1 }, secret)).toBe(false);
     expect(verifyTicket({ ...t, sub: null }, secret)).toBe(false);
     expect(verifyTicket({ ...t, sub: "22222222-2222-4222-8222-222222222222" }, secret)).toBe(false);
     expect(verifyTicket({ ...t, seed: 4243 }, secret)).toBe(false);
     expect(verifyTicket({ ...t, count: 4 }, secret)).toBe(false);
+    expect(verifyTicket({ ...t, isbns: isbnsOf(5, 1) }, secret)).toBe(false);                 // other books
+    expect(verifyTicket({ ...t, isbns: [...t.isbns].reverse() }, secret)).toBe(false);       // the same books, another order
     expect(verifyTicket({ ...t, sig: `${t.sig.slice(0, -1)}${t.sig.endsWith("A") ? "B" : "A"}` }, secret)).toBe(false);
     expect(verifyTicket({ ...t, sig: "short" }, secret)).toBe(false);
     expect(verifyTicket(t, "another secret")).toBe(false);
@@ -107,7 +110,7 @@ describe("art tickets (server-signed seeds)", () => {
     expect(signingSecret()).toMatch(/dev-only/);
     vi.stubEnv("NODE_ENV", "production");
     expect(signingSecret()).toBeNull();
-    expect(issueTicket(5).sig).toBeNull();
+    expect(issueTicket(isbnsOf(5)).sig).toBeNull();
   });
 
   it("fails closed in production with a secret shorter than 32 characters, saying so once in the log", () => {
@@ -135,24 +138,28 @@ describe("art tickets (server-signed seeds)", () => {
   });
 
   it("makes a fresh 32-bit seed for every draw", () => {
-    const a = issueTicket(5);
-    const b = issueTicket(5);
+    const a = issueTicket(isbnsOf(5));
+    const b = issueTicket(isbnsOf(5));
     expect(a.seed).not.toBe(b.seed);
     expect(Number.isInteger(a.seed) && a.seed >= 0 && a.seed < 2 ** 32).toBe(true);
   });
 
-  it("reads a found request strictly", () => {
+  it("reads a found request strictly (v3: the draw's books, one per bookmark)", () => {
     const sig = "a".repeat(43);
-    expect(parseFoundRequest({ seed: 1, count: 5, iat: 9, sig, index: 4 })).toEqual({ seed: 1, count: 5, iat: 9, sub: null, sig, index: 4 });
+    const isbns = isbnsOf(5);
+    const base = { seed: 1, count: 5, iat: 9, sig, isbns };
+    expect(parseFoundRequest({ ...base, index: 4 })).toEqual({ seed: 1, count: 5, iat: 9, sub: null, sig, isbns, index: 4 });
     const sub = "11111111-1111-4111-8111-111111111111";
-    expect(parseFoundRequest({ seed: 1, count: 5, iat: 9, sub, sig, index: 0 })?.sub).toBe(sub);
-    for (const bad of [null, [], { seed: 1, count: 5, sig, index: 0 }, { seed: 1, count: 5, iat: 1.5, sig, index: 0 },
-      { seed: 1, count: 5, iat: 9, sub: "nobody", sig, index: 0 }, { seed: 1, count: 5, iat: 9, sub: 5, sig, index: 0 }]) {
-      expect(parseFoundRequest(bad), JSON.stringify(bad)).toBeNull();
-    }
-    for (const bad of [{ iat: 9, seed: 1, count: 5, sig, index: 5 }, { iat: 9, seed: 1.5, count: 5, sig, index: 0 }, { iat: 9, seed: 1, count: 0, sig, index: 0 },
-      { iat: 9, seed: 1, count: 11, sig, index: 0 }, { iat: 9, seed: 1, count: 5, sig: "a".repeat(42), index: 0 }, { iat: 9, seed: 1, count: 5, sig: `${"a".repeat(42)}=`, index: 0 },
-      { iat: 9, seed: "1", count: 5, sig, index: 0 }]) {
+    expect(parseFoundRequest({ ...base, sub, index: 0 })?.sub).toBe(sub);
+    for (const bad of [null, [], { seed: 1, count: 5, sig, isbns, index: 0 }, { ...base, iat: 1.5, index: 0 },
+      { ...base, sub: "nobody", index: 0 }, { ...base, sub: 5, index: 0 },
+      { ...base, index: 5 }, { ...base, seed: 1.5, index: 0 }, { ...base, count: 0, isbns: [], index: 0 },
+      { ...base, count: 11, isbns: isbnsOf(11), index: 0 }, { ...base, sig: "a".repeat(42), index: 0 }, { ...base, sig: `${"a".repeat(42)}=`, index: 0 },
+      { ...base, seed: "1", index: 0 },
+      { ...base, isbns: undefined, index: 0 },                                   // a v2 ticket (no books)
+      { ...base, isbns: isbnsOf(4), index: 0 },                                  // fewer books than bookmarks
+      { ...base, isbns: [...isbnsOf(4), "123"], index: 0 },                      // not an ISBN-13
+      { ...base, isbns: "9790000000000", index: 0 }]) {
       expect(parseFoundRequest(bad), JSON.stringify(bad)).toBeNull();
     }
   });

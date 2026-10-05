@@ -137,4 +137,18 @@ describe("guest saves (로그인 전 내 책갈피, localStorage galpi.guestSave
     failGuestSaves([]);
     expect(guestSaves()).toHaveLength(1);
   });
+
+  it("keeps the draw's signed ticket and the bookmark's place in it, read with the 도감's rules (v1.7 — for the 도감 after a login)", () => {
+    const meeting = { seed: 1234, count: 5, iat: 1_790_000_000, sub: null, sig: "a".repeat(43), isbns: ["9790000000000", "9790000000001", "9790000000002", "9790000000003", "9790000000004"], index: 2 };
+    expect(addGuestSave({ ...save(ISBN), meeting })).toBe("added");
+    expect(guestSaves()[0].meeting).toEqual(meeting);
+    const stored = (m: unknown) => JSON.stringify({ v: 1, items: [{ ...save(ISBN), meeting: m }] });
+    localStorage.setItem(GUEST_KEY, stored({ ...meeting, sub: undefined }));
+    expect(guestSaves()[0].meeting).toEqual(meeting);                              // sub absent = a logged-out draw
+    // a broken ticket is dropped, the bookmark stays (it can still move to the account, just not into the 도감)
+    for (const bad of [{ ...meeting, index: 5 }, { ...meeting, sig: "short" }, { ...meeting, seed: -1 }, "x", null]) {
+      localStorage.setItem(GUEST_KEY, stored(bad));
+      expect(guestSaves().map((s) => [s.isbn, s.meeting]), JSON.stringify(bad)).toEqual([[ISBN, undefined]]);
+    }
+  });
 });

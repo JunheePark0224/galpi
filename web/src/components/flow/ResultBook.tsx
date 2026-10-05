@@ -4,6 +4,7 @@ import { Button, LinkButton } from "@/components/Button";
 import { GenreTag } from "@/components/GenreTag";
 import { yes24SearchUrl, type BookDetail } from "@/lib/books/detail";
 import { loadDetail, peekDetail } from "@/lib/books/detailClient";
+import type { FoundRequest } from "@/lib/collection/meeting";
 import type { PickView } from "@/lib/flow/state";
 import { truncateIntro } from "@/lib/recommend";
 import { track } from "@/lib/track/client";
@@ -24,7 +25,8 @@ const CREDIT = { yes24: "정보 제공: 예스24", kakao: "정보 제공: 카카
 /** C-21 waits for the page to settle (the 300ms `arrive`) before measuring what it lights. */
 const GUIDE_DELAY_MS = 400;
 
-interface Props { pick: PickView; position: number; total: number; onNext: () => void; onPrev?: () => void }
+/** meeting: the draw's signed ticket and this book's place in it (for the 도감 after a logged-out save, v1.7). */
+interface Props { pick: PickView; position: number; total: number; onNext: () => void; onPrev?: () => void; meeting?: FoundRequest }
 
 function facts(d: BookDetail | null): string[] {
   if (!d) return [];
@@ -45,7 +47,7 @@ function facts(d: BookDetail | null): string[] {
  * (C-16b), logged out too (into this browser). [예스24에서 보기] is always the one main button (C-11). ‹ › sit
  * either side of the cover. The first S-06 book of a browser explains itself once (C-21).
  */
-export function ResultBook({ pick, position, total, onNext, onPrev }: Props) {
+export function ResultBook({ pick, position, total, onNext, onPrev, meeting }: Props) {
   const { card, kind } = pick;
   const [detail, setDetail] = useState<BookDetail | null>(() => peekDetail(card.id) ?? null);   // ready before the screen (10-02)
   const [expanded, setExpanded] = useState(false);
@@ -124,7 +126,7 @@ export function ResultBook({ pick, position, total, onNext, onPrev }: Props) {
         <p className={styles.author}>{card.author}</p>
         {line.length > 0 && <p className={styles.facts}>{line.join(" · ")}</p>}
       </div>
-      <KeepButton pick={pick} />
+      <KeepButton pick={pick} meeting={meeting} />
 
       {detail === null ? (
         <div className={styles.skeleton} aria-hidden="true"><span /><span /><span /></div>

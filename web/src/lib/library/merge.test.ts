@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import type { GuestSave } from "./guest";
 
 const track = vi.fn();
 const request = vi.fn();
@@ -18,7 +19,7 @@ const failed = (status: number, error = "invalid") => ({ ok: false, status, body
 const ME = (count: number) => ({ ok: true, json: async () => ({ enabled: true, loggedIn: true, id: "u1", count }) });
 const LOCK_KEY = "galpi.guestMerge.lock";
 
-async function setup(kept: number | ReturnType<typeof save>[], count = 2) {
+async function setup(kept: number | GuestSave[], count = 2) {
   vi.resetModules();
   const fetchMe = vi.fn().mockResolvedValue(ME(count));
   vi.stubGlobal("fetch", fetchMe);
@@ -145,5 +146,80 @@ describe("merge (로그인 뒤 임시 책갈피를 계정으로, E-39)", () => {
     await merge.mergeGuestSaves(true);
     expect(request).toHaveBeenCalledTimes(1);
     expect(localStorage.getItem(LOCK_KEY)).toBeNull();
+  });
+
+  it("reports each bookmark that reached the account (new or already there) to the 도감 with its ticket — E-36 for new parts", async () => {
+    const meeting = (index: number) => ({ seed: 5, count: 5, iat: 1_790_000_000, sub: null, sig: "a".repeat(43), isbns: ["9790000000000", "9790000000001", "9790000000002", "9790000000003", "9790000000004"], index });
+    const { merge } = await setup([
+      { ...save(isbnAt(0)), meeting: meeting(0) },                                   // already in the account
+      { ...save(isbnAt(1)), meeting: meeting(1) },                                   // refused: not reported
+      save(isbnAt(2)),                                                                // kept before this fix: no ticket, nothing to prove
+      { ...save(isbnAt(3)), meeting: meeting(3) },
+    ]);
+    const answers: Record<string, unknown> = {
+      [isbnAt(3)]: saved(), [isbnAt(2)]: saved(), [isbnAt(1)]: failed(400), [isbnAt(0)]: saved(false),
+    };
+    request.mockImplementation(async (_m: string, path: string, body: { isbn: string; index?: number }) => {
+      if (path === "/api/library/saves") return answers[body.isbn];
+      return body.index === 3
+        ? { ok: true, status: 200, body: { ok: true, found: [{ kind: "animal", value: "fox" }, { kind: "ground", value: "none" }] } }
+        : { ok: false, status: 403, body: { error: "not your bookmark" } };          // a refusal is quiet
+    });
+    await merge.mergeGuestSaves(true);
+    const savesSent = request.mock.calls.filter(([, path]) => path === "/api/library/saves").map(([, , body]) => body as { isbn: string; ticket?: unknown });
+    expect(savesSent.map((b) => [b.isbn, b.ticket])).toEqual([
+      [isbnAt(3), meeting(3)], [isbnAt(2), undefined], [isbnAt(1), meeting(1)], [isbnAt(0), meeting(0)],
+    ]);
+    const reports = request.mock.calls.filter(([, path]) => path === "/api/collection/found").map(([, , body]) => body);
+    expect(reports).toEqual([
+      { ...meeting(3), isbn: isbnAt(3), kept: true },
+      { ...meeting(0), isbn: isbnAt(0), kept: true },
+    ]);
+    expect(track.mock.calls).toEqual([
+      ["collection_item_found", { part_kind: "animal", part_value: "fox", tier: "common" }],
+      ["guest_saves_merged", { guest_count: 4, merged_count: 2 }],
+    ]);
+  });
+
+  describe("the 도감 report waits in this browser until the server answers it for good (v1.7.1)", () => {
+    const meeting = (index: number) => ({ seed: 6, count: 5, iat: 1_790_000_000, sub: null, sig: "a".repeat(43), isbns: ["9790000000000", "9790000000001", "9790000000002", "9790000000003", "9790000000004"], index });
+    const foundCalls = () => request.mock.calls.filter(([, path]) => path === "/api/collection/found");
+
+    it("a failed report (server, network) stays and is tried on the next visit without saving the book again; then it leaves", async () => {
+      const { merge, guest } = await setup([{ ...save(isbnAt(0)), meeting: meeting(0) }]);
+      const pending = await import("./dexPending");
+      request.mockImplementation(async (_m: string, path: string) =>
+        (path === "/api/library/saves" ? { ...saved(), body: { ok: true, saved: true, found: [{ kind: "animal", value: "owl" }] } } : failed(503)));
+      await merge.mergeGuestSaves(true);
+      expect(guest.guestSaves()).toEqual([]);
+      expect(pending.pendingDex().map((e) => [e.isbn, e.tries])).toEqual([[isbnAt(0), 1]]);
+      expect(track).toHaveBeenCalledWith("collection_item_found", { part_kind: "animal", part_value: "owl", tier: "common" });   // from the save
+      request.mockClear();
+      track.mockClear();
+      request.mockResolvedValue({ ok: true, status: 200, body: { ok: true, found: [] } });
+      await merge.mergeGuestSaves(false);                                            // a later visit, nothing left to save
+      expect(request.mock.calls.map(([, path]) => path)).toEqual(["/api/collection/found"]);
+      expect(pending.pendingDex()).toEqual([]);
+      expect(track).not.toHaveBeenCalled();                                          // no E-39 for a report alone
+    });
+
+    it("a definite refusal (4xx) lets the report go; repeated failures stop after three visits; a run-out session leaves it untouched", async () => {
+      const { merge } = await setup([{ ...save(isbnAt(0)), meeting: meeting(0) }, { ...save(isbnAt(1)), meeting: meeting(1) }]);
+      const pending = await import("./dexPending");
+      request.mockImplementation(async (_m: string, path: string, body: { index?: number }) => {
+        if (path === "/api/library/saves") return saved();
+        return body.index === 1 ? failed(403, "not recorded") : failed(0);
+      });
+      await merge.mergeGuestSaves(true);
+      expect(pending.pendingDex().map((e) => [e.isbn, e.tries])).toEqual([[isbnAt(0), 1]]);
+      await merge.mergeGuestSaves(false);
+      await merge.mergeGuestSaves(false);
+      expect(pending.pendingDex()).toEqual([]);
+      expect(foundCalls()).toHaveLength(4);
+      pending.addPendingDex([{ meeting: meeting(2), isbn: "9790000000002" }]);
+      request.mockResolvedValue(failed(401));
+      await merge.mergeGuestSaves(false);
+      expect(pending.pendingDex().map((e) => e.tries)).toEqual([undefined]);
+    });
   });
 });

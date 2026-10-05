@@ -1,12 +1,18 @@
 import { addSavedCount, announceKept, openLoginSheet, setKeepState, signedOut } from "@/lib/account/store";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
+import { parseFound } from "@/lib/collection/client";
 import { libraryRequest } from "./client";
 import { addGuestSave, removeGuestSave, type GuestSave } from "./guest";
+import type { FoundRequest } from "@/lib/collection/meeting";
 import type { SaveInput } from "./service";
 
-/** What the account gets: the bookmark without the card (the server has the catalogue). */
-export const saveInput = ({ isbn, art, reason, metOn }: SaveInput): SaveInput => ({ isbn, art, reason, metOn });
+/**
+ * What the account gets: the bookmark without the card (the server has the catalogue), and the draw's signed ticket with
+ * the bookmark's place when there is one (v1.7.1 — the server stores the picture worked out from it, never the sent art).
+ */
+export const saveInput = ({ isbn, art, reason, metOn, meeting }: SaveInput & { meeting?: FoundRequest }): SaveInput & { ticket?: FoundRequest } =>
+  ({ isbn, art, reason, metOn, ...(meeting ? { ticket: meeting } : {}) });
 
 /**
  * F-12 저장 in the browser, outside React (v1.7, plans/2026-10-05-guest-keep.md): the button only shows the book's keep
@@ -33,6 +39,12 @@ export async function keepBookmark(item: GuestSave): Promise<void> {
     track("book_saved", { book_id: item.isbn, is_auto_save: false, storage: "account" });
     addSavedCount(1);
   }
+  trackFound(answer.body);
+}
+
+/** E-36 for each 도감 part a save brought in (a logged-out draw's bookmark — the server records it with the save). */
+export function trackFound(body: unknown): void {
+  for (const part of parseFound(body)) track("collection_item_found", { part_kind: part.kind, part_value: part.value, tier: part.tier });
 }
 
 /** Logged out: into this browser's list. true when it is new there. 100 already = "full"; storage blocked = the login sheet. */
