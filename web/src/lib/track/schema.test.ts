@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { COMMON_KEYS, cutText, EVENT_NAMES, EVENT_SPEC, isEventName, isOwnRouteEvent, OWN_ROUTE_EVENTS, parseCommon, type PropsOf } from "./schema";
+import { COMMON_KEYS, cutText, EVENT_NAMES, EVENT_SPEC, isEventName, isOwnRouteEvent, OWN_ROUTE_EVENTS, parseCommon, referrerHost, type PropsOf } from "./schema";
 
 describe("event schema", () => {
-  it("lists the 28 live taxonomy events in PRD order (v1.0: six removed, E-32 · E-25 · E-33 · E-34 after E-02; v1.2: E-35 last)", () => {
-    expect(EVENT_NAMES).toHaveLength(28);
+  it("lists the 30 live taxonomy events in PRD order (v1.0: six removed, E-32 · E-25 · E-33 · E-34 after E-02; v1.2: E-35; v1.3: E-36 · E-37 last)", () => {
+    expect(EVENT_NAMES).toHaveLength(30);
     expect(EVENT_NAMES.slice(0, 6)).toEqual(["site_visited", "entry_selected", "question_answered", "unsure_hold_cancelled", "question_back_clicked", "path_completed"]);
-    expect(EVENT_NAMES.slice(-6)).toEqual(["bookmark_pulled", "bookmark_flipped", "shelf_created", "bookmark_moved", "feedback_sent", "library_cleared"]);
+    expect(EVENT_NAMES.slice(-8)).toEqual(["bookmark_pulled", "bookmark_flipped", "shelf_created", "bookmark_moved", "feedback_sent", "library_cleared", "collection_item_found", "collection_viewed"]);
     for (const gone of ["visit", "balance_answered", "chip_selected", "goal_submitted", "free_goal_written", "goal_coverage_checked", "first_page_edited"]) {
       expect(EVENT_NAMES).not.toContain(gone);
     }
@@ -42,16 +42,19 @@ describe("event schema", () => {
   it("types the props of each event from the spec (checked by tsc)", () => {
     const shown: PropsOf<"bookmark_shown"> = {
       book_id: "9788998441012", position: 1, one_liner_style: "summary", pick_type: "random", art: { animal: "fox" },
+      challenge_rule: 19, challenge_genre: "과학 교양",
     };
     const answered: PropsOf<"question_answered"> = { node_id: "start", kind: "narrow", choice: "unsure", depth: 1, position: 1, elapsed_ms: 900 };
-    const visit: PropsOf<"site_visited"> = {};
+    const visit: PropsOf<"site_visited"> = { utm_source: "threads", utm_medium: "social", utm_campaign: null };
+    // @ts-expect-error — the visit always carries the three utm tags (null when the address had none, taxonomy v1.4)
+    const bare: PropsOf<"site_visited"> = {};
     // @ts-expect-error — `kind` is the old name of pick_type (taxonomy 4-4)
     const old: PropsOf<"bookmark_reacted"> = { book_id: "1", position: 1, reaction: "pass", pick_type: "random", one_liner_style: "summary", kind: "random" };
     // @ts-expect-error — entry_selected has no `entry` of its own (props.entry was removed; the entry is common)
     const entry: PropsOf<"entry_selected"> = { source: "home", entry: "leaf" };
     // @ts-expect-error — kind is an enum: narrow or mood
     const side: PropsOf<"question_answered"> = { node_id: "start", kind: "both", choice: "A", depth: 1, position: 1, elapsed_ms: 1 };
-    expect([shown, answered, visit, old, entry, side]).toHaveLength(6);
+    expect([shown, answered, visit, bare, old, entry, side]).toHaveLength(7);
   });
 });
 
@@ -103,10 +106,6 @@ describe("parseCommon", () => {
     ["is_in_app_browser 0", { is_in_app_browser: 0 }],
   ])("rejects %s", (_, patch) => expect(parseCommon({ ...good, ...patch })).toBeNull());
 
-  it("cuts a referrer over 500 characters instead of rejecting it (ids stay strict)", () => {
-    expect(parseCommon({ ...good, referrer: "x".repeat(900) })?.referrer).toBe("x".repeat(500));
-  });
-
   it.each([
     ["499 + emoji (cut lands inside the pair)", "x".repeat(499) + "😀", "x".repeat(499)],
     ["498 + emoji (pair ends exactly at 500)", "x".repeat(498) + "😀", "x".repeat(498) + "😀"],
@@ -114,10 +113,25 @@ describe("parseCommon", () => {
     ["501 plain", "x".repeat(501), "x".repeat(500)],
   ])("never leaves half an emoji when cutting: %s", (_, input, expected) => {
     expect(cutText(input, 500)).toBe(expected);
+  });
+
+  it.each([
+    ["a search address", "https://www.Google.com/search?q=%EB%82%B4+%EC%9D%B4%EB%A6%84", "www.google.com"],
+    ["the Instagram link shim", "https://l.instagram.com/?u=https%3A%2F%2Fgalpi.example%2F&e=AT0", "l.instagram.com"],
+    ["a port and a path", "http://localhost:3217/privacy#top", "localhost"],
+    ["an app referrer", "android-app://com.linkedin.android/", "com.linkedin.android"],
+    ["a host already cut", "lnkd.in", "lnkd.in"],
+    ["empty (in-app browsers, typed address)", "", ""],
+    ["about:blank", "about:blank", ""],
+    ["an IPv6 literal", "http://[::1]/", ""],
+    ["junk", "not a url at all", ""],
+    ["a host over 253 characters", "a".repeat(254), ""],
+  ])("keeps only the referrer's host (taxonomy v1.4): %s", (_, input, expected) => {
+    expect(referrerHost(input)).toBe(expected);
     expect(parseCommon({ ...good, referrer: input })?.referrer).toBe(expected);
   });
 
   it("accepts the limits themselves", () => {
-    expect(parseCommon({ ...good, anon_id: "x".repeat(200), referrer: "y".repeat(500), round: 0 })).not.toBeNull();
+    expect(parseCommon({ ...good, anon_id: "x".repeat(200), referrer: "y".repeat(253), round: 0 })?.referrer).toBe("y".repeat(253));
   });
 });

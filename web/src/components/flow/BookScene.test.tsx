@@ -20,6 +20,14 @@ const first: FlowState = { ...INITIAL, step: "first", answers: SQL_PATH, drawnFo
 const handlers = () => ({ onOpen: vi.fn(), onBack: vi.fn(), onNext: vi.fn(), onRetry: vi.fn(), onReact: vi.fn(), onHome: vi.fn() });
 
 describe("BookScene", () => {
+  it("S-05 (도감 v1): the 처음 만난 badge sits on the bookmark when parts were new, a quiet empty status otherwise", () => {
+    const shown: FlowState = { ...first, step: "bookmarks", index: 0 };
+    const { rerender } = render(<BookScene state={shown} {...handlers()} />);
+    expect(screen.getByRole("status")).toBeEmptyDOMElement();
+    rerender(<BookScene state={shown} {...handlers()} found={[{ kind: "animal", value: "redpanda", tier: "limited" }]} />);
+    expect(screen.getByRole("status")).toHaveTextContent("처음 만난 한정판 레서판다!");
+  });
+
   it("S-03: the closed book is the thing to press", () => {
     const h = handlers();
     render(<BookScene state={{ ...first, step: "book", opened: false, status: "loading", draw: null }} {...h} />);

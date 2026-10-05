@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Bookmark } from "@/components/Bookmark";
 import { Button } from "@/components/Button";
 import { loadAccount, openLoginSheet, signedOut, useAccount } from "@/lib/account/store";
@@ -12,6 +12,7 @@ import { setUserId } from "@/lib/track/common";
 import { libraryGuide } from "@/lib/flow/firstGuide";
 import { BookmarkSheet, metLabel } from "./BookmarkSheet";
 import { CLEAR_ALL, ClearSheet } from "./ClearSheet";
+import { Dex, LoggedOutDex } from "./Dex";
 import { LibraryGuide } from "./LibraryGuide";
 import styles from "./Library.module.css";
 import { Shelf } from "./Shelf";
@@ -43,15 +44,39 @@ export function Library() {
   if (account.status === "unknown") return <p className={styles.quiet} aria-busy="true">불러오는 중…</p>;
   if (account.status === "off") return <p className={styles.quiet}>아직 로그인을 열지 않았어요.</p>;
   if (account.status === "out") {
+    // 도감 v1 시안 ②: before a login, the 도감 (all silhouettes) and the login instead of the rods
     return (
       <div className={styles.page}>
-        <h1 className={styles.title}>내 책갈피</h1>
-        <p className={styles.quiet}>로그인하면 S-06에서 꽂은 책갈피가 여기에 모여요.</p>
-        <Button onClick={() => openLoginSheet("header")}>로그인</Button>
+        <h1 className={styles.title}>도감</h1>
+        <LoggedOutDex />
       </div>
     );
   }
-  return <Rods />;
+  return <LoggedIn />;
+}
+
+type View = "rods" | "dex";
+/** 도감 v1 시안 ①: [막대 | 도감] at the top of 내 책갈피 — two buttons, the shown one pressed. */
+function ViewSwitch({ view, onView }: { view: View; onView: (v: View) => void }) {
+  return (
+    <div className={styles.switch} role="group" aria-label="내 책갈피 보기">
+      <button type="button" className={styles.switchButton} aria-pressed={view === "rods"} onClick={() => onView("rods")}>막대</button>
+      <button type="button" className={styles.switchButton} aria-pressed={view === "dex"} onClick={() => onView("dex")}>도감</button>
+    </div>
+  );
+}
+
+function LoggedIn() {
+  const [view, setView] = useState<View>("rods");
+  const toggle = <ViewSwitch view={view} onView={setView} />;
+  if (view === "rods") return <Rods toggle={toggle} />;
+  return (
+    <div className={styles.page}>
+      <h1 className={styles.title}>내 책갈피</h1>
+      {toggle}
+      <Dex />
+    </div>
+  );
 }
 
 /** 16 px line icons before the two button labels (option A) — decoration only, the label says it. */
@@ -68,7 +93,8 @@ const TrashIcon = () => (
   </svg>
 );
 
-function Rods() {
+/** `toggle`: the [막대 | 도감] switch, under the title (hidden in move mode — a calm screen, only moving). */
+function Rods({ toggle }: { toggle?: ReactNode }) {
   const lib = useLibrary();
   const [open, setOpen] = useState<Open | null>(null);
   const [adding, setAdding] = useState(false);
@@ -124,6 +150,8 @@ function Rods() {
   if (lib.status === "error" || !lib.view) {
     return (
       <div className={styles.page}>
+        <h1 className={styles.title}>내 책갈피</h1>
+        {toggle}
         <p className={styles.quiet}>내 책갈피를 불러오지 못했어요.</p>
         <Button variant="secondary" onClick={() => void lib.reload()}>다시 불러오기</Button>
       </div>
@@ -163,6 +191,7 @@ function Rods() {
     <div className={styles.page} data-move-mode={moving ? "" : undefined} data-dragging={drag ? "" : undefined}>
       {guide && !open && <LibraryGuide onClose={closeGuide} />}
       <h1 ref={title} tabIndex={-1} className={styles.title}>내 책갈피</h1>
+      {!moving && toggle}
       <p className={styles.stat}>{`${view.count}개 · 동물 ${view.animals}종`}</p>
       {view.count === 0 && <p className={styles.quiet}>책을 만나 🔖 꽂기를 누르면 첫 막대에 걸려요.</p>}
       {view.count > 0 && (

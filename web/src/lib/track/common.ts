@@ -1,6 +1,6 @@
-import { cutText, SCREEN_VERSION, type CommonProps } from "./schema";
+import { campaignFrom, parseCampaign, type Campaign } from "./campaign";
+import { referrerHost, SCREEN_VERSION, type CommonProps } from "./schema";
 
-const MAX_REFERRER = 500;   // the server cuts at the same length
 const ANON = "galpi.anon";
 const SEEN = "galpi.seen";
 const SESSION = "galpi.session";
@@ -9,6 +9,8 @@ const RETURNING = "galpi.returning";
 const ENTRY = "galpi.entry";
 const ROUND = "galpi.round";
 const MODE = "galpi.mode";
+// first-touch link tags (taxonomy v1.4 E-01): read from the first address of the session, kept like the session id.
+const CAMPAIGN = "galpi.campaign";
 
 let userId: string | null = null;
 
@@ -88,7 +90,8 @@ function currentMode(): CommonProps["mode"] {
 
 export function detectDevice(ua: string): { device: "phone" | "desktop"; is_in_app_browser: boolean } {
   const phone = /Mobi|Android|iPhone|iPod/i.test(ua);
-  const inApp = /KAKAOTALK|Instagram|FBAN|FBAV|NAVER\(inapp|Line\//i.test(ua);
+  // Threads' in-app browser says "Barcelona" (its code name), LinkedIn's "LinkedInApp" (taxonomy v1.4).
+  const inApp = /KAKAOTALK|Instagram|Barcelona|LinkedInApp|FBAN|FBAV|NAVER\(inapp|Line\//i.test(ua);
   return { device: phone ? "phone" : "desktop", is_in_app_browser: inApp };
 }
 
@@ -99,6 +102,18 @@ export function readAnonId(): string | null {
 
 /** The id this browser already has, or a new one (stored like commonProps would). Starts no session. Amplitude's device id. */
 export function ensureAnonId(): string { return getOrCreate(store("local"), ANON).value; }
+
+/**
+ * taxonomy v1.4 E-01: the utm tags of the session's first address (first touch). The first call in a tab reads the address
+ * and stores the result — also when it has no tags, so a later tagged address in the same session does not replace it.
+ */
+export function campaignAtLanding(): Campaign {
+  const stored = readSession(CAMPAIGN);
+  if (stored !== undefined) return parseCampaign(stored);
+  const found = campaignFrom(typeof window === "undefined" ? "" : window.location.search);
+  writeSession(CAMPAIGN, JSON.stringify(found));
+  return found;
+}
 
 export function setEntry(next: CommonProps["entry"]): void { writeSession(ENTRY, next ?? ""); }
 export function setMode(next: CommonProps["mode"]): void { writeSession(MODE, next ?? ""); }
@@ -132,7 +147,7 @@ export function commonProps(): CommonProps {
     entry: currentEntry(),
     mode: currentMode(),
     screen_version: SCREEN_VERSION,
-    referrer: typeof document === "undefined" ? "" : cutText(document.referrer, MAX_REFERRER),
+    referrer: typeof document === "undefined" ? "" : referrerHost(document.referrer),
     is_returning: isReturning,
     ...detectDevice(typeof navigator === "undefined" ? "" : navigator.userAgent),
   };

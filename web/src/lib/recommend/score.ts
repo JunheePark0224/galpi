@@ -11,10 +11,12 @@ export function maxPossibleLeaf(a: LeafAnswers): number {
   return AXES.reduce((sum, axis) => sum + Math.abs(a[axis]), Math.abs(a.len));
 }
 
+/** 🎯 length points, on the one page rule (lengthTag): thin chosen → thin +2, thick −1; thick chosen → thick +1. */
 export function lengthPoints(pages: number, len: TargetAnswers["len"]): number {
-  if (len === 1) return pages <= 250 ? 2 : pages >= 400 ? -1 : 0;   // 얇게
-  if (len === -1) return pages >= 300 ? 1 : 0;                        // 두꺼워도 좋아요
-  return 0;                                                            // 보통 / 고르지 않음
+  const tag = lengthTag(pages);
+  if (len === 1) return tag === 1 ? 2 : tag === -1 ? -1 : 0;   // 얇은 책
+  if (len === -1) return tag === -1 ? 1 : 0;                    // 두툼한 책
+  return 0;                                                      // 고르지 않음
 }
 
 export function targetScore(b: TargetBook, a: TargetAnswers): number | null {

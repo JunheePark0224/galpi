@@ -1,0 +1,28 @@
+/* 도감 v1 시안 ③ — "처음 만난 여우 · 한정판 무지개!" on the bookmark's window, small, then gone (about 2.5 s). 일반판 smaller and quieter;
+   한정판 the tier pill blue, 초판본 the gold pill (rare-art.html .t2 / .t3). Above the arch, below the string's knot. */
+.region {
+  position: absolute; top: calc(30px * var(--bm-scale, 1)); left: 0; right: 0; z-index: 4;
+  display: flex; justify-content: center; pointer-events: none;
+}
+.badge {
+  margin: 0; padding: 4px 12px; border-radius: var(--radius-pill); white-space: nowrap;
+  /* wider than the bookmark is fine (no shrinking to it); foundLabel keeps it short, the cap is only a guard on a 320px phone */
+  flex-shrink: 0; max-width: calc(100vw - 32px); overflow: hidden; text-overflow: ellipsis;
+  font-family: var(--font-batang), serif; font-weight: 700; font-size: 13px; line-height: 1.3;
+  background: rgba(250, 245, 234, 0.95); color: var(--ink); box-shadow: 0 4px 10px -4px rgba(43, 39, 36, 0.35);
+  animation: found 2.6s ease forwards;
+}
+.badge[data-tier="common"] {
+  padding: 2px 9px; font-family: inherit; font-weight: 400; font-size: 11px;
+  background: rgba(250, 245, 234, 0.85); color: var(--ink-soft); box-shadow: none;
+}
+.badge[data-tier="limited"] { background: #DDE7F3; color: #2D4E6E; }
+.badge[data-tier="first_edition"] { background: linear-gradient(90deg, #E9CF86, #F6E7B8, #E2B64A); color: #5A3420; }
+@keyframes found {
+  0% { opacity: 0; transform: translateY(4px); }
+  12% { opacity: 1; transform: none; }
+  72% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .badge { animation-name: foundStill; } }
+@keyframes foundStill { 0% { opacity: 0; } 8% { opacity: 1; } 72% { opacity: 1; } 100% { opacity: 0; } }
