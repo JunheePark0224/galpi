@@ -5,14 +5,15 @@ import { ExampleShelf } from "@/components/library/ExampleShelf";
 import { closeLoginSheet, useLoginSheet, type LoginSource } from "@/lib/account/store";
 import { startLogin } from "@/lib/auth/browser";
 import type { Provider } from "@/lib/auth/next";
-import { clearPending } from "@/lib/library/pending";
 import { track } from "@/lib/track/client";
 import styles from "./LoginSheet.module.css";
 
 // 10-02 (5-friend test: "what does keeping give me?"): the sheet shows the payoff first — an example 내 책갈피 and three lines.
+// v1.7 (wording B, 저장): save opens it only where this browser keeps nothing; library = S-09's [로그인하고 지키기].
 const TITLE: Record<LoginSource, string> = {
-  save: "꽂은 책갈피는 내 책갈피에 이렇게 모여요",
+  save: "저장한 책갈피는 내 책갈피에 이렇게 모여요",
   header: "로그인하고 내 책갈피를 모아 보세요",
+  library: "로그인하고 내 책갈피를 지켜요",
 };
 export const LOGIN_BENEFITS = ["다시 보고 싶을 때 바로 꺼내 봐요", "막대로 나눠 정리해요", "휴대폰·PC 어디서나 이어져요"] as const;
 export const LOGIN_NOTE =
@@ -55,12 +56,7 @@ function LoginChoices({ source }: { source: LoginSource }) {
 
   useEffect(() => { track("login_prompt_shown", { source }); }, [source]);
 
-  // Closed without logging in: the bookmark that waited for this login is let go, so a later login from the header
-  // does not keep a book the person walked away from.
-  const close = () => {
-    if (source === "save") clearPending();
-    closeLoginSheet();
-  };
+  const close = () => closeLoginSheet();
 
   const login = async (provider: Provider) => {
     setFailed(false);

@@ -52,6 +52,43 @@ describe("Library (S-09)", () => {
     expect(track).toHaveBeenCalledWith("collection_viewed", { collected_count: 0, is_logged_in: false });
   });
 
+  it("logged out with bookmarks kept in this browser: 내 책갈피 with the note, the rod to look at, 빼기 — then the 도감 (v1.7)", async () => {
+    localStorage.setItem("galpi.guestSaves", JSON.stringify({ v: 1, items: [bm("9788998441012", "모순"), bm("9788937460449", "데미안")] }));
+    const store = await mount({ enabled: true, loggedIn: false, id: null, count: 0 });
+    expect(screen.getByRole("heading", { level: 1, name: "내 책갈피" })).toBeInTheDocument();
+    expect(screen.getByText("지금은 이 브라우저에만 저장돼 있어요")).toBeInTheDocument();
+    expect(screen.getByText("로그인하면 사라지지 않고 휴대폰·PC 어디서나 이어져요. 막대로 정리하고, 도감을 모으고, 책갈피를 꾸밀 수도 있어요.")).toBeInTheDocument();
+    expect(screen.getByText("브라우저 기록을 지우면 임시 책갈피도 사라져요")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "도감" })).toBeInTheDocument();
+    expect(screen.getByText("동물 0 / 16 · 배경 0 / 11 · 소품 0 / 15")).toBeInTheDocument();
+    // the first rod, newest first — no renaming, moving, clearing or adding rods before a login
+    const rod = screen.getByRole("list", { name: "첫 막대" });
+    expect(within(rod).getAllByRole("button").map((b) => b.getAttribute("aria-label"))).toEqual(["모순 책갈피", "데미안 책갈피"]);
+    for (const name of ["막대 이름 고치기", "책갈피 옮기기", "모두 제거", "＋ 막대 추가", "로그아웃"]) expect(screen.queryByRole("button", { name })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "로그인하고 지키기" }));
+    expect(store.loginSheetSnapshot()).toEqual({ source: "library" });
+    act(() => store.closeLoginSheet());
+
+    // the front, large: YES24 and 빼기 only
+    fireEvent.click(screen.getByRole("button", { name: "모순 책갈피" }));
+    const sheet = screen.getByRole("dialog", { name: "모순" });
+    expect(within(sheet).getByRole("link", { name: /예스24에서 보기/ })).toBeInTheDocument();
+    expect(within(sheet).queryByRole("button", { name: /꾸미기|옮기기/ })).toBeNull();
+    fireEvent.click(within(sheet).getByRole("button", { name: "빼기" }));
+    await act(async () => { fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "빼기" })); });
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(screen.queryByRole("button", { name: "모순 책갈피" })).toBeNull();
+    expect(track).toHaveBeenCalledWith("book_unsaved", { book_id: "9788998441012" });
+    expect(request).not.toHaveBeenCalled();
+
+    // the last one out: the logged-out page as before
+    fireEvent.click(screen.getByRole("button", { name: "데미안 책갈피" }));
+    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "빼기" }));
+    await act(async () => { fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "빼기" })); });
+    expect(screen.getByRole("heading", { level: 1, name: "도감" })).toBeInTheDocument();
+    expect(localStorage.getItem("galpi.guestSaves")).toBeNull();
+  });
+
   it("[막대 | 도감] switches between the rods and the 도감 (도감 v1 시안 ①)", async () => {
     const OTTER = { kind: "animal", value: "otter", firstMetAt: "2026-10-05T00:00:00Z", firstArt: { animal: "otter", bg: "peach", sky: "moon", ground: "none", rare: true }, isNew: true };
     request.mockImplementation(async (_m: string, path: string) => (path === "/api/collection" ? ok({ items: [OTTER] }) : ok(VIEW)));

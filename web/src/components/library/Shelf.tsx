@@ -12,6 +12,8 @@ interface Props {
   shelf: LibraryShelf;
   /** Move mode (10-04): the bookmarks can be picked up; renaming and clearing the rod are hidden. */
   moving: boolean;
+  /** 로그인 전 내 책갈피 (v1.7): a rod to look at only — no renaming (rods are the account's). */
+  fixed?: boolean;
   /** The bookmark being dragged (its slot stays faded), if any. */
   dragged: string | null;
   /** Where the dragged bookmark would land on this rod (a dashed gap), or null. */
@@ -28,7 +30,7 @@ interface Props {
  * dashed gap opens where it would land (`data-rod` / `data-slot` are what useDrag measures). In move mode the ✎ and
  * [막대 치우기] are hidden (a calm screen — only moving).
  */
-export function Shelf({ shelf, moving, dragged, gap, onOpen, onPick, onRename, onRemove }: Props) {
+export function Shelf({ shelf, moving, fixed = false, dragged, gap, onOpen, onPick, onRename, onRemove }: Props) {
   const nameId = useId();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(shelf.name);
@@ -72,7 +74,7 @@ export function Shelf({ shelf, moving, dragged, gap, onOpen, onPick, onRename, o
       ) : (
         <div className={styles.shelfHead}>
           <h2 id={nameId} className={styles.shelfName} data-amp-mask="">{shelf.name}</h2>
-          {!moving && <button type="button" className={styles.iconButton} aria-label="막대 이름 고치기" onClick={() => { setDraft(shelf.name); setEditing(true); }}>✎</button>}
+          {!moving && !fixed && <button type="button" className={styles.iconButton} aria-label="막대 이름 고치기" onClick={() => { setDraft(shelf.name); setEditing(true); }}>✎</button>}
         </div>
       )}
       <div className={styles.rod} aria-hidden="true" />

@@ -2,14 +2,16 @@
 import { useEffect, useState } from "react";
 import { loadAccount, takeJustLoggedIn } from "@/lib/account/store";
 import { LOGIN_PARAMS, loginMarkAtLoad } from "@/lib/auth/next";
-import { keepWaiting } from "@/lib/library/keep";
-import { clearPending } from "@/lib/library/pending";
+import { mergeGuestSaves } from "@/lib/library/merge";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
 import { setUserId } from "@/lib/track/common";
 import styles from "./LoginReturn.module.css";
 
 const NOTICE_MS = 5000;
+const LOGIN_FAILED = "로그인하지 못했어요. 다시 한 번 해 주세요.";
+/** v1.7: bookmarks from this browser that the account had no room for (MAX_SAVES) — said once, they are let go. */
+const fullNote = (n: number) => `내 책갈피가 가득 차서 ${n}권은 옮기지 못했어요`;
 
 /** The login mark off the address (kept history state and hash), so a reload does not count the login twice. */
 function clearMark(params: URLSearchParams): void {
@@ -21,12 +23,13 @@ function clearMark(params: URLSearchParams): void {
 /**
  * On every page (layout, after the page itself so flow restore has read the mark — storage.settleOpen): asks who is
  * here and names the person for Amplitude (taxonomy 3-2 — or forgets them when nobody is logged in). After a real return
- * from /auth/callback — proven by the cookie /api/me hands over, not by the ?login= on the address — it sends E-14 once
- * and keeps the bookmark that waited for the login (F-12 자동 꽂기 — the page came back to that same book). A failed
- * login gets a note, and the bookmark that waited is dropped (it must not be kept by a later, unrelated login).
+ * from /auth/callback — proven by the cookie /api/me hands over, not by the ?login= on the address — it sends E-14 once.
+ * Whenever someone is logged in (v1.7), the bookmarks this browser kept before logging in move to the account
+ * (lib/library/merge — any left over from a failed try go on the next visit). A failed login gets a note; the bookmarks
+ * kept in this browser stay there. If the account had no room for some, it says how many, once.
  */
 export function LoginReturn() {
-  const [failed, setFailed] = useState(false);
+  const [note, setNote] = useState<string | null>(null);
 
   useEffect(() => {
     const mark = loginMarkAtLoad();
@@ -39,21 +42,18 @@ export function LoginReturn() {
       } else {
         setAmplitudeUser(null);
       }
-      if (login && account.status === "in") {
-        track("login_completed", { provider: login.provider, is_first_login: login.first });
-        void keepWaiting();
-      } else if (mark && account.status !== "in") {
-        clearPending();
-        setFailed(true);
-      }
+      if (login && account.status === "in") track("login_completed", { provider: login.provider, is_first_login: login.first });
+      if (account.status === "in") {
+        void mergeGuestSaves(login !== null).then(({ full }) => { if (full > 0) setNote(fullNote(full)); });
+      } else if (mark) setNote(LOGIN_FAILED);
     });
   }, []);
 
   useEffect(() => {
-    if (!failed) return;
-    const timer = setTimeout(() => setFailed(false), NOTICE_MS);
+    if (!note) return;
+    const timer = setTimeout(() => setNote(null), NOTICE_MS);
     return () => clearTimeout(timer);
-  }, [failed]);
+  }, [note]);
 
-  return failed ? <p role="status" className={styles.notice}>로그인하지 못했어요. 다시 한 번 해 주세요.</p> : null;
+  return note ? <p role="status" className={styles.notice}>{note}</p> : null;
 }

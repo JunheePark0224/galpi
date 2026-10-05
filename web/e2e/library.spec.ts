@@ -98,48 +98,113 @@ async function toFirstResult(page: Page) {
   await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
 }
 
-test("logged out: 🔖 꽂기 (no pull first) → login sheet → Kakao → back on the same book, kept by itself (E-11·12·13·14·15)", async ({ page }) => {
+const SAVE = "내 책갈피에 저장";
+const SAVED = "내 책갈피에 저장했어요";
+const SHOTS = process.env.KEEP_SHOTS;   // a folder: save 375px screenshots there when set (manual design check)
+
+test("logged out: 저장 keeps it in this browser — header 내 책갈피 1 → /library shows it with the note → 빼기 (E-11·15·16)", async ({ page }) => {
+  const lib: FakeLibrary = { loggedIn: false, shelves: [], saved: [], posts: [] };
+  await fakeAccount(page, lib);
+  await mockBooks(page);
+  const { events } = await recordEvents(page);
+  if (SHOTS) await page.setViewportSize({ width: 375, height: 812 });
+
+  await page.goto("/");
+  await expect(page.getByRole("banner").getByRole("button", { name: "로그인" })).toBeVisible();   // header (F-11)
+  await toFirstResult(page);
+  const title = await page.locator("#result-title").innerText();
+  if (SHOTS) await page.screenshot({ path: `${SHOTS}/s06-before.png`, fullPage: true });
+
+  // v1.7: one press saves — no login sheet; the bookmark stays in, YES24 stays the one main button
+  await expect(page.getByRole("link", { name: /예스24에서 보기/ })).toHaveAttribute("data-variant", "primary");
+  await page.getByRole("button", { name: SAVE }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: SAVED })).toBeVisible();
+  await expect(page.getByRole("status").filter({ hasText: "내 책갈피에 저장했어요 · 보러 가기 →" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "책갈피 꺼내기" })).toHaveAttribute("aria-expanded", "false");
+  const header = page.getByRole("banner").getByRole("link", { name: "내 책갈피 1개" });
+  await expect(header).toBeVisible();
+  // the toast sits under the header link it points to, and never over the S-06 buttons (YES24 stays reachable)
+  const toastBox = (await page.getByRole("status").filter({ hasText: "보러 가기" }).boundingBox())!;
+  const headerBox = (await header.boundingBox())!;
+  expect(toastBox.y).toBeGreaterThanOrEqual(headerBox.y + headerBox.height - 1);
+  for (const target of [page.getByRole("button", { name: "다음 책" }), page.getByRole("link", { name: /예스24에서 보기/ }), page.getByRole("button", { name: SAVED })]) {
+    const b = (await target.boundingBox())!;
+    expect(toastBox.y + toastBox.height <= b.y || b.y + b.height <= toastBox.y).toBe(true);
+  }
+  if (SHOTS) await page.screenshot({ path: `${SHOTS}/s06-after.png`, fullPage: true });
+  expect(lib.posts).toEqual([]);                                                                   // nothing sent
+
+  // 내 책갈피 before a login: the note, the bookmark on the first rod, the logged-out 도감 below
+  await header.click();
+  await expect(page).toHaveURL(/\/library$/);
+  await expect(page.getByRole("heading", { level: 1, name: "내 책갈피" })).toBeVisible();
+  await expect(page.getByText("지금은 이 브라우저에만 저장돼 있어요")).toBeVisible();
+  await expect(page.getByRole("button", { name: "로그인하고 지키기" })).toBeVisible();
+  await expect(page.getByText("브라우저 기록을 지우면 임시 책갈피도 사라져요")).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "도감" })).toBeVisible();
+  const bookmark = page.getByRole("list", { name: "첫 막대" }).getByRole("button", { name: `${title} 책갈피` });
+  await expect(bookmark).toBeVisible();
+  await expect(page.getByRole("button", { name: "막대 이름 고치기" })).toHaveCount(0);
+  if (SHOTS) await page.screenshot({ path: `${SHOTS}/s09-guest.png`, fullPage: true });
+
+  // the front, large: YES24 and 빼기 only → out, the header back to [로그인], the page as before
+  await bookmark.click();
+  const sheet = page.getByRole("dialog", { name: title });
+  await expect(sheet.getByRole("link", { name: /예스24에서 보기/ })).toBeVisible();
+  await expect(sheet.getByRole("button", { name: /꾸미기|옮기기/ })).toHaveCount(0);
+  await sheet.getByRole("button", { name: "빼기" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "빼기" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 1, name: "도감" })).toBeVisible();
+  await expect(page.getByRole("banner").getByRole("button", { name: "로그인" })).toBeVisible();
+  expect(await page.evaluate(() => window.localStorage.getItem("galpi.guestSaves"))).toBeNull();
+
+  const bookId = named(events, "save_clicked")[0]?.props.book_id;
+  expect(named(events, "save_clicked").map((e) => e.props)).toEqual([{ book_id: bookId, is_logged_in: false }]);
+  expect(named(events, "book_saved").map((e) => e.props)).toEqual([{ book_id: bookId, is_auto_save: false, storage: "browser" }]);
+  expect(named(events, "login_prompt_shown")).toEqual([]);
+  await expect.poll(() => named(events, "book_unsaved").map((e) => e.props)).toEqual([{ book_id: bookId }]);
+  expect(specMismatches(events)).toEqual([]);
+});
+
+test("logged out: saved in this browser → [로그인하고 지키기] → Kakao → moved to the account once (E-12 library · 13 · 14 · 39)", async ({ page }) => {
   const lib: FakeLibrary = { loggedIn: false, shelves: [], saved: [], posts: [] };
   await fakeAccount(page, lib);
   await mockBooks(page);
   const { events } = await recordEvents(page);
 
   await page.goto("/");
-  await expect(page.getByRole("banner").getByRole("button", { name: "로그인" })).toBeVisible();   // header (F-11)
   await toFirstResult(page);
-  const title = await page.locator("#result-title").innerText();
+  await page.getByRole("button", { name: SAVE }).click();
+  await page.getByRole("button", { name: "다음 책" }).click();
+  await expect(page.getByText("궁금해요 2 / 2")).toBeVisible();
+  await page.getByRole("button", { name: SAVE }).click();
+  await expect(page.getByRole("banner").getByRole("link", { name: "내 책갈피 2개" })).toBeVisible();
 
-  // 10-02: the pill next to the title keeps straight away — the bookmark stays in, YES24 stays the one main button
-  await expect(page.getByRole("button", { name: "책갈피 꺼내기" })).toHaveAttribute("aria-expanded", "false");
-  await expect(page.getByRole("link", { name: /예스24에서 보기/ })).toHaveAttribute("data-variant", "primary");
-  await page.getByRole("button", { name: "내 책갈피에 꽂기" }).click();
-
-  const sheet = page.getByRole("dialog", { name: "꽂은 책갈피는 내 책갈피에 이렇게 모여요" });
+  await page.goto("/library");
+  await page.getByRole("button", { name: "로그인하고 지키기" }).click();
+  const sheet = page.getByRole("dialog", { name: "로그인하고 내 책갈피를 지켜요" });
   await expect(sheet.getByRole("link", { name: "개인정보 처리방침" })).toHaveAttribute("href", "/privacy");   // PHASES P5
-  if (process.env.GUIDE_SHOTS) await page.screenshot({ path: `${process.env.GUIDE_SHOTS}/login-sheet.png` });
   await sheet.getByRole("button", { name: "카카오로 계속하기" }).click();
 
-  // back from the login: the same S-06 book, kept without another press (its bookmark in, as it was left)
-  await expect(page.getByRole("status").filter({ hasText: "꽂았어요 ✓" })).toBeVisible();
-  await expect(page.locator("#result-title")).toHaveText(title);
-  await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
-  await expect(page.getByRole("button", { name: "책갈피 꺼내기" })).toHaveAttribute("aria-expanded", "false");
-  await expect(page.getByRole("link", { name: /예스24에서 보기/ })).toHaveAttribute("data-variant", "primary");
+  // back from the login on 내 책갈피: both bookmarks in the account, the rods drawn from it, this browser emptied
+  await expect(page.getByRole("button", { name: "책갈피 옮기기" })).toBeVisible();
+  await expect(page.getByText("2개 · 동물 1종")).toBeVisible();
+  await expect(page.getByRole("banner").getByRole("link", { name: "내 책갈피 2개" })).toBeVisible();
   expect(new URL(page.url()).search).toBe("");                                                   // the login mark is gone
-  await expect(page.getByRole("banner").getByRole("link", { name: "내 책갈피 1개" })).toBeVisible();
-  expect(lib.posts).toHaveLength(1);
+  expect(lib.posts).toHaveLength(2);
+  expect(await page.evaluate(() => window.localStorage.getItem("galpi.guestSaves"))).toBeNull();
 
-  await expect.poll(() => named(events, "book_saved").length).toBe(1);
-  const bookId = named(events, "save_clicked")[0]?.props.book_id;
-  expect(named(events, "save_clicked").map((e) => e.props)).toEqual([{ book_id: bookId, is_logged_in: false }]);
-  expect(named(events, "login_prompt_shown").map((e) => e.props)).toEqual([{ source: "save" }]);
+  await expect.poll(() => named(events, "guest_saves_merged").map((e) => e.props)).toEqual([{ guest_count: 2, merged_count: 2 }]);
+  expect(named(events, "book_saved").map((e) => e.props.storage)).toEqual(["browser", "browser"]);   // no E-15 again on the move
+  expect(named(events, "login_prompt_shown").map((e) => e.props)).toEqual([{ source: "library" }]);
   expect(named(events, "login_started").map((e) => e.props)).toEqual([{ provider: "kakao" }]);
   expect(named(events, "login_completed").map((e) => e.props)).toEqual([{ provider: "kakao", is_first_login: true }]);
-  expect(named(events, "book_saved").map((e) => e.props)).toEqual([{ book_id: bookId, is_auto_save: true }]);
   expect(specMismatches(events)).toEqual([]);
 });
 
-test("logged in: 🔖 꽂기 keeps at once, no pull first (E-11 → E-15, no E-27)", async ({ page }) => {
+test("logged in: 저장 keeps at once, no pull first (E-11 → E-15 account, no E-27); pressed again it comes out (E-16)", async ({ page }) => {
   const lib: FakeLibrary = { loggedIn: true, shelves: [], saved: [], posts: [] };
   await fakeAccount(page, lib);
   await mockBooks(page);
@@ -147,13 +212,22 @@ test("logged in: 🔖 꽂기 keeps at once, no pull first (E-11 → E-15, no E-2
   await page.goto("/");
   await expect(page.getByRole("banner").getByRole("link", { name: "내 책갈피 0개" })).toBeVisible();
   await toFirstResult(page);
-  await page.getByRole("button", { name: "내 책갈피에 꽂기" }).click();
-  await expect(page.getByRole("status").filter({ hasText: "꽂았어요 ✓" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "내 책갈피 보기" })).toHaveAttribute("href", "/library");
-  await expect.poll(() => named(events, "book_saved").map((e) => e.props.is_auto_save)).toEqual([false]);
+  await page.getByRole("button", { name: SAVE }).click();
+  await expect(page.getByRole("button", { name: SAVED })).toBeVisible();
+  await expect(page.getByRole("link", { name: "보러 가기 →" })).toHaveAttribute("href", "/library");
+  await expect(page.getByRole("banner").getByRole("link", { name: "내 책갈피 1개" })).toBeVisible();
+  await expect.poll(() => named(events, "book_saved").map((e) => e.props)).toEqual([
+    { book_id: named(events, "save_clicked")[0]?.props.book_id, is_auto_save: false, storage: "account" },
+  ]);
   expect(named(events, "save_clicked").map((e) => e.props.is_logged_in)).toEqual([true]);
   expect(named(events, "login_prompt_shown")).toEqual([]);
   expect(named(events, "bookmark_pulled")).toEqual([]);                          // keeping no longer needs pulling out
+
+  await page.getByRole("button", { name: SAVED }).click();
+  await expect(page.getByRole("button", { name: SAVE })).toBeVisible();
+  await expect(page.getByRole("banner").getByRole("link", { name: "내 책갈피 0개" })).toBeVisible();
+  await expect.poll(() => named(events, "book_unsaved").length).toBe(1);
+  expect(lib.saved).toEqual([]);
   expect(specMismatches(events)).toEqual([]);
 });
 

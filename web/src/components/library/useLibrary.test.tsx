@@ -16,6 +16,8 @@ vi.mock("@/lib/account/store", () => ({
   signedOut: () => signedOut(),
 }));
 vi.mock("@/lib/track/amplitude", () => ({ setAmplitudeUser: (...a: unknown[]) => setAmplitudeUser(...a) }));
+const merged = new Set<() => void>();
+vi.mock("@/lib/library/merge", () => ({ onGuestMerged: (l: () => void) => { merged.add(l); return () => merged.delete(l); } }));
 import { useLibrary } from "./useLibrary";
 
 const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false } as const;
@@ -42,6 +44,30 @@ describe("useLibrary (S-09)", () => {
     expect(setSavedCount).toHaveBeenCalledWith(1);
     await act(async () => { await result.current.reload(); });
     expect(track.mock.calls.filter(([n]) => n === "library_viewed")).toHaveLength(1);
+  });
+
+  it("reads the rods again when this browser's bookmarks arrived in the account (v1.7), until it is gone", async () => {
+    request.mockResolvedValue(ok(VIEW));
+    const { result, unmount } = renderHook(() => useLibrary());
+    await waitFor(() => expect(result.current.status).toBe("ready"));
+    expect(merged.size).toBe(1);
+    await act(async () => { merged.forEach((l) => l()); });
+    expect(request.mock.calls.filter(([m]) => m === "GET")).toHaveLength(2);
+    unmount();
+    expect(merged.size).toBe(0);
+  });
+
+  it("the read started last wins: a slow first read answering after the merge reload does not undo it", async () => {
+    let answerFirst: (v: unknown) => void = () => {};
+    const MERGED: LibraryView = { ...VIEW, count: 3 };
+    request.mockImplementationOnce(() => new Promise((r) => { answerFirst = r; })).mockResolvedValueOnce(ok(MERGED));
+    const { result } = renderHook(() => useLibrary());
+    await act(async () => { merged.forEach((l) => l()); });
+    await waitFor(() => expect(result.current.view).toEqual(MERGED));
+    await act(async () => { answerFirst(ok(VIEW)); });
+    expect(result.current.view).toEqual(MERGED);
+    expect(setSavedCount.mock.calls).toEqual([[3]]);
+    expect(track).toHaveBeenCalledWith("library_viewed", { saved_count: 3 });
   });
 
   it("says when it could not load, and when the login ran out", async () => {
