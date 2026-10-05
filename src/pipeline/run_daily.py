@@ -19,7 +19,9 @@ missing key, YES24 failed, the run stopped before any book was finished, or cand
 YES24 text (intro, TOC) lives on the Candidate in memory and goes to the tagger only; the additions file, the summary and
 stdout carry our tags and counts. Do not set ANTHROPIC_LOG=debug (the SDK would log request bodies with YES24 text).
 Files are keyed by the batch id: additions/<id>.json, and the summary in data/pipeline/runs/<id>.json (git-ignored) and stdout.
-Candidates skip every ISBN in books.json and in every additions file — earlier batches of the same day included.
+Candidates skip every ISBN in books.json and in every additions file — earlier batches of the same day included — except
+the requeued ones (data/pipeline/requeue.json, pipeline/requeue.py): they come first, as their new entry and slot, take
+their place in the day's count, and leave the file once tagged (the workflow commits it with the additions file).
 A local run reuses the YES24 lists cached under data/raw/yes24/ (kept forever; only new searches are fetched), so its candidate
 pool can differ from the fresh one CI builds.
 """
@@ -34,7 +36,8 @@ import collect_candidates
 from apply_review import FIELD_OF_TOPIC
 from compare_apis import load_env
 
-from . import ADDITIONS, BOOKS, KST, RUNS, VOCAB
+from . import ADDITIONS, BOOKS, KST, REQUEUE, RUNS, VOCAB
+from . import requeue
 from .batch import BatchError, parse as parse_batch
 from .candidates import Candidate, find, known_from, yes24_env
 from .checks import decide, disagreements, rule_issues
@@ -111,14 +114,18 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
     """One batch (`batch` = the day, or `<day>-N` for a later run that day)."""
     date = parse_batch(batch)[0]
     books, vocab, additions = load_state()
-    wants = plan_day(books, topic_lists(vocab), cfg.daily_count, phase=cfg.target_phase)
-    summary = {"date": date, "batch": batch, "model": cfg.model, "second_model": cfg.second_model,
-               "target_phase": cfg.target_phase, "wanted": sum(w.n for w in wants),
-               "slots": [f"{w.slot}{'/' + w.keyword if w.keyword else ''} {w.n}" for w in wants]}
-    if not wants:
-        return summary | {"status": "full"}
     fails_before = len(collect_candidates.FAILURES)
-    cands = gather(env, wants, vocab, known_from(books, additions))
+    queued = requeue.load(REQUEUE)
+    back, waiting = requeue.candidates(env, queued, vocab) if queued else ([], {})
+    wants = plan_day(books, topic_lists(vocab), max(cfg.daily_count - len(back), 0), phase=cfg.target_phase)
+    summary = {"date": date, "batch": batch, "model": cfg.model, "second_model": cfg.second_model,
+               "target_phase": cfg.target_phase, "wanted": sum(w.n for w in wants) + len(back),
+               "slots": [f"{c.slot} (다시 태그) 1" for c in back]
+               + [f"{w.slot}{'/' + w.keyword if w.keyword else ''} {w.n}" for w in wants],
+               **({"requeue_waiting": waiting} if waiting else {})}
+    if not wants and not back:
+        return summary | {"status": "full"}
+    cands = back + gather(env, wants, vocab, known_from(books, additions).plus(back))
     new_fails = collect_candidates.FAILURES[fails_before:]
     yes24_fail = [f.split(" -> ")[0] for f in new_fails if not f.endswith(EMPTY_RESULT)]  # paths only, never the answer
     summary |= {"candidates": len(cands), "yes24_failures": len(yes24_fail), "yes24_failed_paths": sorted(set(yes24_fail)),
@@ -155,6 +162,10 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
     if not recs:
         return summary | {"status": "anthropic_failed" if stopped else "no_books"}
     write_doc(ADDITIONS / f"{batch}.json", additions_doc(date, cfg.model, cfg.second_model, recs, batch))
+    done = {r["isbn"] for r in recs} & {c.isbn for c in back}
+    if done:  # tagged as the other entry: the row has done its job (a book whose tagging failed waits for the next batch)
+        requeue.save(REQUEUE, requeue.without(requeue.load(REQUEUE), done))
+        summary |= {"requeued": sorted(done)}
     return summary | {"status": "partial" if stopped else "ok", "file": f"data/processed/additions/{batch}.json"}
 
 

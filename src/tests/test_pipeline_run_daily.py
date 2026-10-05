@@ -44,6 +44,7 @@ def day(tmp_path, monkeypatch):
     (tmp_path / "vocab.json").write_text(json.dumps({"돈 관리·투자": {"kept": {"주식": {"pattern": "주식|배당"}}}}),
                                          encoding="utf-8")
     for name, value in (("BOOKS", tmp_path / "books.json"), ("VOCAB", tmp_path / "vocab.json"), ("ADDITIONS", adds),
+                        ("REQUEUE", tmp_path / "requeue.json"),
                         ("RUNS", tmp_path / "runs")):
         monkeypatch.setattr(run_daily, name, value)
     monkeypatch.setattr(collect_candidates, "RAW", raw)

@@ -22,6 +22,7 @@ import re
 import subprocess
 import sys
 from collections import Counter
+from datetime import datetime
 from pathlib import Path
 
 from apply_review import ReviewError, unwrap
@@ -30,7 +31,8 @@ from build_d4_review import AXIS_LABELS, WAY_LABELS
 from build_pilot_review import keyword_definitions, yes24_text
 from collect_candidates import detail
 
-from . import ADDITIONS, AGREEMENT, VOCAB
+from . import ADDITIONS, AGREEMENT, KST, REQUEUE, VOCAB
+from . import requeue
 from .agreement import apply_answers, screened, stats_row
 from .agreement_log import MAX_SAMPLE_CHANGED, MIN_SAMPLE, STREAK, below, graduation, read_rows, upsert, write_rows
 from .candidates import yes24_env
@@ -143,7 +145,29 @@ def apply(name: str, batch: str, picked: list[tuple[Path, dict, list[str]]], dow
         total["auto_agreed"] = 0  # a sample row counts only what the person looked at
     row = stats_row(name, batch, total)
     write_rows(AGREEMENT, upsert(read_rows(AGREEMENT), row))
+    record_requeue(name, picked)
     return row, total, refused
+
+
+def record_requeue(name: str, picked: list[tuple[Path, dict, list[str]]]) -> list[dict]:
+    """Rows for data/pipeline/requeue.json: every book of these files now stored with `requeued_to` (pipeline/requeue.py).
+    Read back from the files just written, so applying the same download again changes nothing."""
+    today = datetime.now(KST).date().isoformat()
+    new = []
+    for path, _, isbns in picked:
+        doc = json.loads(path.read_text(encoding="utf-8"))
+        new += [{"isbn": b["isbn"], "to_entry": b["requeued_to"]["entry"], "to_slot": b["requeued_to"]["slot"],
+                 "from_batch": doc.get("batch_id") or doc.get("date") or name, "date": today}
+                for b in doc["books"] if b["isbn"] in isbns and isinstance(b.get("requeued_to"), dict)]
+    rows = requeue.load(REQUEUE)
+    known = {r["isbn"]: r for r in rows}
+    fresh = [r for r in new if {k: v for k, v in known.get(r["isbn"], {}).items() if k != "date"}
+             != {k: v for k, v in r.items() if k != "date"}]
+    if fresh:
+        requeue.save(REQUEUE, requeue.added(rows, fresh))
+        for r in fresh:
+            print(f"REQUEUE {r['isbn']}: next batch tags it as {r['to_entry']} {r['to_slot'] or '(topic by the pipeline)'}")
+    return fresh
 
 
 def main(argv: list[str] | None = None) -> int:
