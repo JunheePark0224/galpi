@@ -53,6 +53,7 @@ test("SQL path: ten questions (써먹는 쪽 is not split: no 사례 SQL book), 
     common: { entry: "target", mode: "normal" },
   });
   expect(named(events, "bookmark_shown")[0].common).toMatchObject({ entry: "target", mode: "normal" });
+  expect(named(events, "bookmark_shown")[0].props).toMatchObject({ challenge_rule: null, challenge_genre: null });   // taxonomy v1.5
   expect(specMismatches(events)).toEqual([]);
 });
 
@@ -85,6 +86,10 @@ test("challenge route: the far side's books, the one-line note on the first page
   expect(named(events, "path_completed")[0]).toMatchObject({
     props: { scope_id: "entry=leaf;genres=시,에세이", depth: 9, unsure_count: 1 }, common: { entry: "leaf", mode: "challenge" },
   });
+  // taxonomy v1.5: the rule and the far genre come from the draw response, on the first bookmark of the draw
+  const { challenge_rule: rule, challenge_genre: genre } = named(events, "bookmark_shown")[0].props;
+  expect(typeof rule).toBe("number");
+  expect(typeof genre).toBe("string");
   expect(specMismatches(events)).toEqual([]);
 });
 

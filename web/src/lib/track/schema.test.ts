@@ -42,6 +42,7 @@ describe("event schema", () => {
   it("types the props of each event from the spec (checked by tsc)", () => {
     const shown: PropsOf<"bookmark_shown"> = {
       book_id: "9788998441012", position: 1, one_liner_style: "summary", pick_type: "random", art: { animal: "fox" },
+      challenge_rule: 19, challenge_genre: "과학 교양",
     };
     const answered: PropsOf<"question_answered"> = { node_id: "start", kind: "narrow", choice: "unsure", depth: 1, position: 1, elapsed_ms: 900 };
     const visit: PropsOf<"site_visited"> = { utm_source: "threads", utm_medium: "social", utm_campaign: null };

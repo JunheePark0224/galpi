@@ -95,7 +95,7 @@ describe("track", () => {
     const send = vi.fn().mockReturnValue(true);
     Object.defineProperty(navigator, "sendBeacon", { value: send, configurable: true });
     track("redraw_clicked", { curious_count: 0 });
-    track("bookmark_shown", { book_id: "9788998441012", position: 1, one_liner_style: "question", pick_type: "recommended", art: {} });
+    track("bookmark_shown", { book_id: "9788998441012", position: 1, one_liner_style: "question", pick_type: "recommended", art: {}, challenge_rule: null, challenge_genre: null });
     const [ending, next] = await postedRounds(send);
     expect(next).toBe(ending + 1);
   });

@@ -56,6 +56,12 @@ describe("parseProps (server check against EVENT_SPEC)", () => {
     const art = { animal: "fox", bg: "peach", sky: "moon", ground: "grass", rare: false };
     expect(parseProps("bookmark_shown", { art }).props).toEqual({ art });
   });
+
+  it("keeps the E-07 challenge props, null included (taxonomy v1.5: null off the challenge route)", () => {
+    expect(parseProps("bookmark_shown", { challenge_rule: 19, challenge_genre: "과학 교양" }).props).toEqual({ challenge_rule: 19, challenge_genre: "과학 교양" });
+    expect(parseProps("bookmark_shown", { challenge_rule: null, challenge_genre: null }).props).toEqual({ challenge_rule: null, challenge_genre: null });
+    expect(parseProps("bookmark_shown", { challenge_rule: "19", challenge_genre: 3 }).dropped).toEqual(["challenge_rule", "challenge_genre"]);
+  });
 });
 
 describe("forAmplitude (taxonomy 2-7: Supabase-only props stay out of the Amplitude copy)", () => {
