@@ -3,20 +3,23 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { newArtSeed } from "@/lib/art/combine";
 import type { ArtTicket } from "./types";
 
+export { MAX_TICKET_PICKS, parseFoundRequest, type FoundRequest } from "./meeting";
+
 /** Server-only signing secret for art tickets (docs/deploy.md 3절 — the user sets it on Vercel). */
 export const SECRET_ENV = "COLLECTION_SIGNING_SECRET";
 /** Outside production only (dev, tests): a fixed, obviously fake secret so the 도감 works locally without setup. */
 const DEV_ONLY_SECRET = "galpi-dev-only-collection-secret-not-for-production";
 /** A production secret shorter than this is refused (fail closed) — HMAC is only as strong as its key. */
 export const MIN_SECRET_LENGTH = 32;
-/** A draw has five bookmarks; the cap only bounds what a ticket may claim. */
-export const MAX_TICKET_PICKS = 10;
 /** A ticket is good for 2 hours after its draw: long enough for a slow round, too short to trade "dex kits". */
 export const TICKET_TTL_SECONDS = 2 * 60 * 60;
+/**
+ * v1.7: a bookmark saved before logging in reaches the 도감 only when its bookmarks move to the account, which may be days
+ * later — good for 7 days, and only with the person's own saved bookmark of that very picture (found route, `kept`).
+ */
+export const GUEST_KEEP_TTL_SECONDS = 7 * 24 * 60 * 60;
 /** Server clocks may differ a little between instances. */
 const CLOCK_SKEW_SECONDS = 300;
-const MAX_SEED = 2 ** 32 - 1;
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 let warned = false;
 /**
@@ -57,22 +60,7 @@ export function verifyTicket(ticket: { seed: number; count: number; iat: number;
   return got.length === expected.length && timingSafeEqual(got, expected);
 }
 
-/** Issued within the last TICKET_TTL_SECONDS (and not from the future beyond clock skew). */
-export function isFresh(iat: number, now: number = nowSeconds()): boolean {
-  return iat <= now + CLOCK_SKEW_SECONDS && now - iat <= TICKET_TTL_SECONDS;
-}
-
-const isInt = (v: unknown, min: number, max: number): v is number => typeof v === "number" && Number.isInteger(v) && v >= min && v <= max;
-
-export interface FoundRequest { seed: number; count: number; iat: number; sub: string | null; sig: string; index: number }
-
-/** POST /api/collection/found body: { seed, count, iat, sub, sig, index } — which bookmark of which signed draw was shown. */
-export function parseFoundRequest(body: unknown): FoundRequest | null {
-  if (typeof body !== "object" || body === null || Array.isArray(body)) return null;
-  const { seed, count, iat, sub, sig, index } = body as Record<string, unknown>;
-  if (!isInt(seed, 0, MAX_SEED) || !isInt(count, 1, MAX_TICKET_PICKS) || !isInt(index, 0, MAX_TICKET_PICKS - 1) || index >= count) return null;
-  if (!isInt(iat, 0, MAX_SEED)) return null;
-  if (sub !== null && sub !== undefined && (typeof sub !== "string" || !UUID.test(sub))) return null;
-  if (typeof sig !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(sig)) return null;
-  return { seed, count, iat, sub: sub ?? null, sig, index };
+/** Issued within the last `ttl` seconds — TICKET_TTL_SECONDS unless said (and not from the future beyond clock skew). */
+export function isFresh(iat: number, now: number = nowSeconds(), ttl: number = TICKET_TTL_SECONDS): boolean {
+  return iat <= now + CLOCK_SKEW_SECONDS && now - iat <= ttl;
 }

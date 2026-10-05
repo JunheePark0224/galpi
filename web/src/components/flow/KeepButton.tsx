@@ -2,6 +2,7 @@
 import { useEffect, useId, useState } from "react";
 import { useAccount, useKeepState, type KeepState } from "@/lib/account/store";
 import { kstDate } from "@/lib/books/library";
+import type { FoundRequest } from "@/lib/collection/meeting";
 import type { PickView } from "@/lib/flow/state";
 import { GUEST_MAX, useGuestSaves } from "@/lib/library/guest";
 import { pressKeep, pressUnkeep } from "@/lib/library/keep";
@@ -35,9 +36,10 @@ function flightPath(): FlightPath | null {
  * [예스24에서 보기] (still the one main button). Logged in or not, one press saves (lib/library/keep — logged out, into this
  * browser); then it turns green "✓ 내 책갈피에 저장했어요" and a second press takes it out (E-16). A new save flies a small
  * copy of the bookmark to the header (not with reduced motion), and a toast offers 내 책갈피 for 4 s. Hidden while nobody
- * has answered who is here, and when login is not set up on this site.
+ * has answered who is here, and when login is not set up on this site. `meeting`: the draw's signed ticket and this
+ * book's place in it — kept with a logged-out save so the 도감 can record it after the login (v1.7).
  */
-export function KeepButton({ pick }: { pick: PickView }) {
+export function KeepButton({ pick, meeting }: { pick: PickView; meeting?: FoundRequest }) {
   const account = useAccount();
   const state = useKeepState(pick.card.id);
   const guest = useGuestSaves();
@@ -62,7 +64,7 @@ export function KeepButton({ pick }: { pick: PickView }) {
       void pressUnkeep(isbn, loggedIn);
       return;
     }
-    const shown = pressKeep({ isbn, art: pick.art, reason: pick.reason, metOn: kstDate(new Date()), card: pick.card }, loggedIn);
+    const shown = pressKeep({ isbn, art: pick.art, reason: pick.reason, metOn: kstDate(new Date()), card: pick.card, ...(meeting ? { meeting } : {}) }, loggedIn);
     if (!shown) return;
     setFlight(flightPath());
     setToast((n) => n + 1);
