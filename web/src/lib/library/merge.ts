@@ -1,8 +1,9 @@
 import { refreshSavedCount, setKeepState, signedOut } from "@/lib/account/store";
+import { reportKeptMeeting } from "@/lib/collection/client";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
 import { libraryRequest, type LibraryAnswer } from "./client";
-import { dropGuestSaves, failGuestSaves, guestSaves } from "./guest";
+import { dropGuestSaves, failGuestSaves, guestSaves, type GuestSave } from "./guest";
 import { saveInput } from "./keep";
 
 /** full: bookmarks let go because the account already holds MAX_SAVES — the person is told once (LoginReturn). */
@@ -64,6 +65,12 @@ async function underLock(run: () => Promise<MergeResult>): Promise<MergeResult> 
 /** Worth trying again on a later visit: offline, a timeout, too many requests, or a server failure. */
 const retryable = ({ status }: LibraryAnswer) => status === 0 || status === 408 || status === 429 || status >= 500;
 
+/** The 도감 hears about a bookmark that reached the account (its ticket proves the picture): E-36 for each new part. */
+async function meet(meeting: NonNullable<GuestSave["meeting"]>, isbn: string): Promise<void> {
+  const found = await reportKeptMeeting(meeting, isbn);
+  for (const item of found) track("collection_item_found", { part_kind: item.kind, part_value: item.value, tier: item.tier });
+}
+
 let running: Promise<MergeResult> | null = null;
 
 /**
@@ -74,6 +81,8 @@ let running: Promise<MergeResult> | null = null;
  * is tried again on the next visit, at most GUEST_TRIES times. The header count is then read from the server (never
  * added up here — a library read may have set it meanwhile). E-39 once: on the first try right after a login
  * (`afterLogin` — E-14 in this page load), or whenever a book was added; a quiet retry that adds nothing sends nothing.
+ * Each bookmark that reached the account and carries its draw's ticket is reported to the 도감 (v1.7 — E-36 for new parts;
+ * one kept before that has no ticket and is not recorded: nothing proves its picture).
  * No E-15 per book. Called twice at once it runs once, and only one tab of this browser runs it.
  */
 export function mergeGuestSaves(afterLogin: boolean): Promise<MergeResult> {
@@ -100,6 +109,7 @@ async function merge(afterLogin: boolean): Promise<MergeResult> {
       moved.push(item.isbn);
       setKeepState(item.isbn, "saved");
       if (body.saved === true) merged += 1;
+      if (item.meeting) await meet(item.meeting, item.isbn);
     } else if (answer.ok || retryable(answer)) {
       retry.push(item.isbn);
     } else {

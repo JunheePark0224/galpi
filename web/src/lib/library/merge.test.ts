@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import type { GuestSave } from "./guest";
 
 const track = vi.fn();
 const request = vi.fn();
@@ -18,7 +19,7 @@ const failed = (status: number, error = "invalid") => ({ ok: false, status, body
 const ME = (count: number) => ({ ok: true, json: async () => ({ enabled: true, loggedIn: true, id: "u1", count }) });
 const LOCK_KEY = "galpi.guestMerge.lock";
 
-async function setup(kept: number | ReturnType<typeof save>[], count = 2) {
+async function setup(kept: number | GuestSave[], count = 2) {
   vi.resetModules();
   const fetchMe = vi.fn().mockResolvedValue(ME(count));
   vi.stubGlobal("fetch", fetchMe);
@@ -145,5 +146,34 @@ describe("merge (로그인 뒤 임시 책갈피를 계정으로, E-39)", () => {
     await merge.mergeGuestSaves(true);
     expect(request).toHaveBeenCalledTimes(1);
     expect(localStorage.getItem(LOCK_KEY)).toBeNull();
+  });
+
+  it("reports each bookmark that reached the account (new or already there) to the 도감 with its ticket — E-36 for new parts", async () => {
+    const meeting = (index: number) => ({ seed: 5, count: 5, iat: 1_790_000_000, sub: null, sig: "a".repeat(43), index });
+    const { merge } = await setup([
+      { ...save(isbnAt(0)), meeting: meeting(0) },                                   // already in the account
+      { ...save(isbnAt(1)), meeting: meeting(1) },                                   // refused: not reported
+      save(isbnAt(2)),                                                                // kept before this fix: no ticket, nothing to prove
+      { ...save(isbnAt(3)), meeting: meeting(3) },
+    ]);
+    const answers: Record<string, unknown> = {
+      [isbnAt(3)]: saved(), [isbnAt(2)]: saved(), [isbnAt(1)]: failed(400), [isbnAt(0)]: saved(false),
+    };
+    request.mockImplementation(async (_m: string, path: string, body: { isbn: string; index?: number }) => {
+      if (path === "/api/library/saves") return answers[body.isbn];
+      return body.index === 3
+        ? { ok: true, status: 200, body: { ok: true, found: [{ kind: "animal", value: "fox" }, { kind: "ground", value: "none" }] } }
+        : { ok: false, status: 403, body: { error: "not your bookmark" } };          // a refusal is quiet
+    });
+    await merge.mergeGuestSaves(true);
+    const reports = request.mock.calls.filter(([, path]) => path === "/api/collection/found").map(([, , body]) => body);
+    expect(reports).toEqual([
+      { ...meeting(3), isbn: isbnAt(3), kept: true },
+      { ...meeting(0), isbn: isbnAt(0), kept: true },
+    ]);
+    expect(track.mock.calls).toEqual([
+      ["collection_item_found", { part_kind: "animal", part_value: "fox", tier: "common" }],
+      ["guest_saves_merged", { guest_count: 4, merged_count: 2 }],
+    ]);
   });
 });

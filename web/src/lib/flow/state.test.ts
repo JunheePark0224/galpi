@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
-import { INITIAL, curiousPicks, flowReducer, type DrawView, type FlowAction, type FlowState } from "./state";
+import { INITIAL, curiousPicks, flowReducer, meetingOf, type DrawView, type FlowAction, type FlowState } from "./state";
 
 const art = { animal: "cat", bg: "peach", sky: "moon", ground: "none", rare: false } as const;
 const view = (n: number): DrawView => ({
@@ -129,5 +129,24 @@ describe("flowReducer (v2 questions)", () => {
   it("[처음으로] keeps only the books already shown", () => {
     const marks = flowReducer(opened(), { type: "next" });
     expect(flowReducer(marks, { type: "home" })).toEqual({ ...INITIAL, seen: ["b0"] });
+  });
+});
+
+describe("meetingOf (v1.7: which signed bookmark an S-06 save is, for the 도감 after a login)", () => {
+  const ticket = { seed: 99, count: 3, iat: 1_790_000_000, sub: null, sig: "s".repeat(43) };
+  const base = view(1);
+  const pick = (id: string) => ({ ...base.picks[0], card: { ...base.picks[0].card, id } });
+  const draw: DrawView = { ...base, picks: [pick("a"), pick("b"), pick("c")], ticket };
+
+  it("is the draw's ticket and the pick's place in the draw", () => {
+    expect(meetingOf(draw, draw.picks[2])).toEqual({ ...ticket, sig: ticket.sig, index: 2 });
+  });
+
+  it("is nothing without a signed ticket, or for a pick not in this draw", () => {
+    expect(meetingOf({ ...draw, ticket: null }, draw.picks[0])).toBeUndefined();
+    expect(meetingOf({ ...draw, ticket: { ...ticket, sig: null } }, draw.picks[0])).toBeUndefined();
+    expect(meetingOf(draw, pick("z"))).toBeUndefined();
+    expect(meetingOf(null, draw.picks[0])).toBeUndefined();
+    expect(meetingOf(draw, undefined)).toBeUndefined();
   });
 });

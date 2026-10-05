@@ -1,6 +1,7 @@
 import { ART_KINDS, isCollectible, tierOf, type ArtKind } from "@/lib/art/combine";
 import { libraryRequest } from "@/lib/library/client";
 import { parseArt } from "@/lib/library/validate";
+import type { FoundRequest } from "./meeting";
 import { knownItems } from "./service";
 import type { ArtTicket, CollectionItem, FoundItem } from "./types";
 
@@ -22,6 +23,16 @@ export async function reportMeeting(ticket: ArtTicket, index: number): Promise<F
   if (!ticket.sig) return [];
   const { seed, count, iat, sub, sig } = ticket;
   const answer = await libraryRequest("POST", "/api/collection/found", { seed, count, iat, sub, sig, index });
+  return answer.ok ? parseFound(answer.body) : [];
+}
+
+/**
+ * v1.7: a bookmark saved before logging in has just reached the account (lib/library/merge) — the 도감 records it now,
+ * from its draw's ticket. The server takes it only for a logged-out draw of the last 7 days whose picture is that very
+ * saved bookmark of this person (`kept`, `isbn`). The new parts, or [] (refused, offline, off).
+ */
+export async function reportKeptMeeting(meeting: FoundRequest, isbn: string): Promise<FoundItem[]> {
+  const answer = await libraryRequest("POST", "/api/collection/found", { ...meeting, isbn, kept: true });
   return answer.ok ? parseFound(answer.body) : [];
 }
 

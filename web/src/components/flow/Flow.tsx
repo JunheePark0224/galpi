@@ -9,7 +9,7 @@ import type { FoundItem } from "@/lib/collection/types";
 import type { LibraryCount } from "@/lib/books/library";
 import { drawBody, requestDraw, toDrawView } from "@/lib/flow/api";
 import { challengeProps, completedProps, nextQuestion, pathCommon } from "@/lib/flow/path";
-import { curiousPicks, flowReducer, type FlowAction, type FlowState, type Reaction } from "@/lib/flow/state";
+import { curiousPicks, flowReducer, meetingOf, type FlowAction, type FlowState, type Reaction } from "@/lib/flow/state";
 import { loadFlow, saveFlow } from "@/lib/flow/storage";
 import type { Answer, AnswerChoice } from "@/lib/paths";
 import { setEntry, setMode } from "@/lib/track/common";
@@ -212,7 +212,10 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
         />
       )}
       {resultPick && shownResult === resultPick.card.id && (
-        <ResultBook key={resultPick.card.id} pick={resultPick} position={state.result + 1} total={curious.length} onNext={nextResult} onPrev={prevResult} />
+        <ResultBook
+          key={resultPick.card.id} pick={resultPick} position={state.result + 1} total={curious.length} onNext={nextResult} onPrev={prevResult}
+          meeting={meetingOf(state.draw, resultPick)}
+        />
       )}
       {resultPick && shownResult !== resultPick.card.id && <ResultLoading />}
       {state.step === "end" && <EndScreen onRedraw={redraw} onHome={() => home("end")} />}

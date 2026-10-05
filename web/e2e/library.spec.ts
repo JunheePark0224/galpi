@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from "@playwright/test";
+import { PART_NAMES } from "../src/lib/art/names";
 import { answerToClosedBook, named, reactToBookmarks, recordEvents, specMismatches, test } from "./helpers";
 
 // P5 (PRD F-11·F-12·F-13). No real Kakao / Google: the build has a made-up Supabase address (playwright.config), the
@@ -168,11 +169,25 @@ test("logged out: 저장 keeps it in this browser — header 내 책갈피 1 →
   expect(specMismatches(events)).toEqual([]);
 });
 
-test("logged out: saved in this browser → [로그인하고 지키기] → Kakao → moved to the account once (E-12 library · 13 · 14 · 39)", async ({ page }) => {
+test("logged out: saved in this browser → [로그인하고 지키기] → Kakao → moved to the account once, into the 도감 too (E-12 library · 13 · 14 · 36 · 39)", async ({ page }) => {
   const lib: FakeLibrary = { loggedIn: false, shelves: [], saved: [], posts: [] };
   await fakeAccount(page, lib);
   await mockBooks(page);
   const { events } = await recordEvents(page);
+  // the 도감 routes (no real Supabase): /found records the kept bookmark's animal, as the server would from its ticket
+  const kept: Record<string, { art: { animal: string }; meeting: Record<string, unknown> }> = {};
+  const reports: Record<string, unknown>[] = [];
+  const dex: { kind: string; value: string; firstMetAt: string; firstArt: object; isNew: boolean }[] = [];
+  await page.route("**/api/collection/found", (route) => {
+    const body = route.request().postDataJSON() as { isbn: string };
+    reports.push(body);
+    const art = kept[body.isbn]?.art as { animal: string; bg: string; sky: string; ground: string; rare: boolean };
+    const fresh = !!art && !dex.some((d) => d.value === art.animal);
+    if (fresh) dex.push({ kind: "animal", value: art.animal, firstMetAt: "2026-10-05T01:00:00.000Z", firstArt: art, isNew: true });
+    return route.fulfill({ json: { ok: true, found: fresh ? [{ kind: "animal", value: art.animal }] : [] } });
+  });
+  await page.route("**/api/collection", (route) => route.fulfill({ json: { items: dex } }));
+  await page.route("**/api/collection/seen", (route) => route.fulfill({ json: { ok: true, cleared: 0 } }));
 
   await page.goto("/");
   await toFirstResult(page);
@@ -183,6 +198,12 @@ test("logged out: saved in this browser → [로그인하고 지키기] → Kaka
   await expect(page.getByRole("banner").getByRole("link", { name: "내 책갈피 2개" })).toBeVisible();
 
   await page.goto("/library");
+  // each saved bookmark keeps its draw's signed ticket (a logged-out draw) and its place in it
+  const stored = await page.evaluate(() => JSON.parse(window.localStorage.getItem("galpi.guestSaves") ?? "null"));
+  for (const item of stored.items) {
+    expect(item.meeting).toEqual(expect.objectContaining({ sub: null, sig: expect.stringMatching(/^[A-Za-z0-9_-]{43}$/) }));
+    kept[item.isbn] = { art: item.art, meeting: item.meeting };
+  }
   await page.getByRole("button", { name: "로그인하고 지키기" }).click();
   const sheet = page.getByRole("dialog", { name: "로그인하고 내 책갈피를 지켜요" });
   await expect(sheet.getByRole("link", { name: "개인정보 처리방침" })).toHaveAttribute("href", "/privacy");   // PHASES P5
@@ -197,6 +218,12 @@ test("logged out: saved in this browser → [로그인하고 지키기] → Kaka
   expect(await page.evaluate(() => window.localStorage.getItem("galpi.guestSaves"))).toBeNull();
 
   await expect.poll(() => named(events, "guest_saves_merged").map((e) => e.props)).toEqual([{ guest_count: 2, merged_count: 2 }]);
+  // …and into the 도감: each reported with its ticket, the bookmark's isbn and `kept`; E-36 for the new animal
+  expect(reports).toEqual(Object.entries(kept).reverse().map(([isbn, k]) => ({ ...k.meeting, isbn, kept: true })));
+  const animal = Object.values(kept).at(-1)!.art.animal;
+  expect(named(events, "collection_item_found").map((e) => e.props.part_value)).toContain(animal);
+  await page.getByRole("button", { name: "도감" }).click();
+  await expect(page.getByText(PART_NAMES.animal[animal], { exact: true })).toBeVisible();
   expect(named(events, "book_saved").map((e) => e.props.storage)).toEqual(["browser", "browser"]);   // no E-15 again on the move
   expect(named(events, "login_prompt_shown").map((e) => e.props)).toEqual([{ source: "library" }]);
   expect(named(events, "login_started").map((e) => e.props)).toEqual([{ provider: "kakao" }]);
