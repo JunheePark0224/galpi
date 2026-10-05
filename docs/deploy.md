@@ -47,6 +47,8 @@ Last Updated: 2026-09-30
   - `create extension`에서 권한 오류가 나면 Database → Extensions → pg_cron을 켠 뒤 다시 실행
 - [ ] `select * from cron.job;`에 `galpi-events-retention`이 보인다
 - [ ] (도감 v1) SQL Editor에서 `web/supabase/migrations/0004_collection.sql` 실행 → 이어서 `web/supabase/checks/collection_rls.sql` 실행, 마지막 "RLS CHECK RESULT" 상자의 줄이 모두 `ok`
+- [ ] (꾸미기) `0005_original_art.sql` 실행 → `web/supabase/checks/decorate_rls.sql`, 줄이 모두 `ok`
+- [ ] (꾸미기 보안, 0005 다음) `0006_art_guard.sql` 실행 → `web/supabase/checks/art_guard.sql`, 11줄이 모두 `ok`
 
 ## 5. 배포 후 확인 (Production URL에서, 휴대폰으로도)
 
