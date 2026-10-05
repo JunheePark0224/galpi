@@ -243,8 +243,16 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/180468863"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/180468863",
+   "draft": {
+    "topic": "업무 자동화",
+    "keywords": [],
+    "way": "실습",
+    "one_liner": "노드를 이어 붙여 메일·일정 알림 같은 반복 업무를 코딩 없이 자동으로 돌려요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791163036661",
@@ -293,7 +301,7 @@
     "AI 업무 활용"
    ],
    "way": "실습",
-   "keyword_candidate": "구글 시트 자동화",
+   "keyword_candidate": null,
    "one_liner_style": "summary",
    "one_liner": "제미나이와 앱스 스크립트로 유튜브 데이터를 모아 보는 나만의 분석 시트를 만들어 봐요",
    "evidence": "스프레드시트·API 자동화 시트를 따라 만드는 실습서",
@@ -311,8 +319,18 @@
     "confidence"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/189823964"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/189823964",
+   "draft": {
+    "topic": "업무 자동화",
+    "keywords": [
+     "AI 업무 활용"
+    ],
+    "way": "실습",
+    "one_liner": "제미나이와 앱스 스크립트로 유튜브 데이터를 모아 보는 나만의 분석 시트를 만들어 봐요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788931480030",
@@ -390,11 +408,10 @@
    "author": "베르너 티키 퀴스텐마허 저/한윤진 역/김대수 감수",
    "pages": 384,
    "entry": "target",
-   "topic": "습관·집중",
-   "field": "습관·자기계발",
+   "topic": "마음 돌보기",
+   "field": "마음·관계",
    "keywords": [
-    "뇌과학",
-    "집중력"
+    "감정 다루기"
    ],
    "keywords_regex": [
     "습관",
@@ -421,8 +438,19 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/141745286"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/141745286",
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "뇌과학",
+     "집중력"
+    ],
+    "way": "개념",
+    "one_liner": "감정을 담당하는 뇌의 작동 방식을 알면 집중과 행동을 다루기 쉬워져요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788963221908",
@@ -492,7 +520,18 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/194751777",
-   "auto": "ai-agree"
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "뇌과학",
+     "집중력"
+    ],
+    "way": "개념",
+    "one_liner": "산만함이 의지 탓이 아니라 뇌가 작동하는 방식 때문임을 이해하게 돼요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9788931558210",
@@ -527,8 +566,18 @@
     "fits"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/114915169"
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/114915169",
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념",
+    "one_liner": "뇌의 구조와 기능, 창의성이 생기는 원리를 짧은 에피소드로 이해해요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791187809418",
@@ -546,7 +595,7 @@
     "뇌과학"
    ],
    "way": "실습",
-   "keyword_candidate": null,
+   "keyword_candidate": "독서법",
    "one_liner_style": "summary",
    "one_liner": "뇌신경이 연결되는 원리로 짧은 시간에 책을 읽고 정리하는 단계별 독서법을 익혀요",
    "evidence": "뇌 원리로 독서법을 설명하고 단계별 읽기를 제시",
@@ -564,8 +613,18 @@
     "confidence"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/105760711"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/105760711",
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "실습",
+    "one_liner": "뇌신경이 연결되는 원리로 짧은 시간에 책을 읽고 정리하는 단계별 독서법을 익혀요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791197459566",
@@ -741,7 +800,7 @@
    "way": "실습",
    "keyword_candidate": null,
    "one_liner_style": "summary",
-   "one_liner": "개발자 이력서와 포트폴리오 쓰는 법부터 면접 답변 준비까지 이직 과정을 따라가 볼 수 있어요",
+   "one_liner": "개발자 이력서·포트폴리오부터 면접 답변까지 이직 준비를 따라가요",
    "evidence": "서류·면접 준비와 이직 전략이 중심인 방법서",
    "confidence": 0.86,
    "fits": true,
@@ -758,8 +817,19 @@
    "issues": [
     "김(38자)"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/144553215"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/144553215",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "자소서·면접",
+     "이직·퇴사"
+    ],
+    "way": "실습",
+    "one_liner": "개발자 이력서와 포트폴리오 쓰는 법부터 면접 답변 준비까지 이직 과정을 따라가 볼 수 있어요",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791141619992",
@@ -769,7 +839,7 @@
    "entry": "leaf",
    "genre": "한국 소설",
    "axes": {
-    "temp": 0,
+    "temp": -1,
     "pull": 1,
     "gain": -1,
     "world": 1
@@ -796,8 +866,20 @@
    "issues": [
     "근거 김(31자)"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/196183375"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196183375",
+   "draft": {
+    "genre": "한국 소설",
+    "axes": {
+     "temp": 0,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "정교한 문체로 삶과 내일을 다시 바라보게 하는 소설집일까요?",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788937473401",
@@ -808,7 +890,7 @@
    "genre": "한국 소설",
    "axes": {
     "temp": -1,
-    "pull": 0,
+    "pull": -1,
     "gain": -1,
     "world": 1
    },
@@ -833,8 +915,20 @@
    "issues": [
     "근거 약함(겹치는 단어 1개)"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/116586303"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/116586303",
+   "draft": {
+    "genre": "한국 소설",
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "첫사랑이 물살처럼 어디로 흘러가는지 따라가 볼래요?",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791141617226",
@@ -868,8 +962,20 @@
     "pull"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/191550933"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/191550933",
+   "draft": {
+    "genre": "한국 소설",
+    "axes": {
+     "temp": 0,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "서로 다른 두 자매가 삶의 저녁에 맞는 첫 순간들을 따라가 볼까요?",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788998441074",
@@ -972,8 +1078,20 @@
     "gain"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/196262364"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196262364",
+   "draft": {
+    "genre": "외국 소설",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": 0,
+     "world": 0
+    },
+    "one_liner": "정체 모를 환자 X의 삶을 세 사람이 각자 상상으로 쫓아가면 어떨까요?",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788937434488",
@@ -1042,8 +1160,20 @@
     "world"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/176787"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/176787",
+   "draft": {
+    "genre": "외국 소설",
+    "axes": {
+     "temp": 0,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "알에서 나오려 애쓰던 소년은 어떤 어른이 될까요?",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788937464720",
@@ -1056,10 +1186,10 @@
     "temp": 1,
     "pull": 0,
     "gain": -1,
-    "world": 0
+    "world": 1
    },
    "one_liner_style": "question",
-   "one_liner": "사랑으로 사는 삶의 이치를 쉬운 말로 들려주는 이야기 모음이에요.",
+   "one_liner": "사람을 끝내 살게 하는 건 결국 사랑일까요?",
    "evidence": "러시아 거장의 우화풍 단편, 마음에 남는 깨달음 중심",
    "confidence": 0.6,
    "fits": true,
@@ -1080,8 +1210,20 @@
    "issues": [
     "질문형인데 ?로 끝나지 않음"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/164707039"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/164707039",
+   "draft": {
+    "genre": "외국 소설",
+    "axes": {
+     "temp": 1,
+     "pull": 0,
+     "gain": -1,
+     "world": 0
+    },
+    "one_liner": "사랑으로 사는 삶의 이치를 쉬운 말로 들려주는 이야기 모음이에요.",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791170875673",
@@ -1117,8 +1259,20 @@
     "confidence"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/196262367"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196262367",
+   "draft": {
+    "genre": "외국 소설",
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": 0,
+     "world": 1
+    },
+    "one_liner": "평범하다 믿은 한 사람의 삶이 자서전 속에서 어떻게 달라질까요?",
+    "status": "review"
+   },
+   "reviewed": true
   }
  ]
 }
