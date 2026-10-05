@@ -50,7 +50,7 @@ describe("0007 collection_kept_claims", () => {
   });
 
   it("keeps the earlier check scripts working: they save bookmarks as the server (service role)", () => {
-    for (const name of ["p5_rls", "decorate_rls"]) {
+    for (const name of ["p5_rls", "decorate_rls", "art_guard"]) {
       const check = read("checks", name);
       const inserts = [...check.matchAll(/insert into public\.saves/g)].length;
       const asServer = [...check.matchAll(/set local role service_role;[^;\n]*\n\s*insert into public\.saves/g)].length;
