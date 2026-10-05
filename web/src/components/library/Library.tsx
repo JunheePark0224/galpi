@@ -256,11 +256,12 @@ function Rods({ toggle }: { toggle?: ReactNode }) {
 
       {open && (
         <BookmarkSheet
-          bookmark={open.bookmark}
+          bookmark={shelves.flatMap((s) => s.bookmarks).find((b) => b.isbn === open.bookmark.isbn) ?? open.bookmark}
           shelfId={open.shelfId}
           shelves={shelves}
           onMove={(to) => lib.move(open.bookmark.isbn, to, "menu")}
           onRemove={() => lib.remove(open.bookmark.isbn)}
+          onDecorate={(art) => lib.decorate(open.bookmark.isbn, art)}
           onClose={() => setOpen(null)}
         />
       )}

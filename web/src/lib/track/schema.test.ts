@@ -2,10 +2,10 @@ import { describe, expect, it } from "vitest";
 import { COMMON_KEYS, cutText, EVENT_NAMES, EVENT_SPEC, isEventName, isOwnRouteEvent, OWN_ROUTE_EVENTS, parseCommon, referrerHost, type PropsOf } from "./schema";
 
 describe("event schema", () => {
-  it("lists the 30 live taxonomy events in PRD order (v1.0: six removed, E-32 · E-25 · E-33 · E-34 after E-02; v1.2: E-35; v1.3: E-36 · E-37 last)", () => {
-    expect(EVENT_NAMES).toHaveLength(30);
+  it("lists the 31 live taxonomy events in PRD order (v1.0: six removed, E-32 · E-25 · E-33 · E-34 after E-02; v1.2: E-35; v1.3: E-36 · E-37; v1.6: E-38 last)", () => {
+    expect(EVENT_NAMES).toHaveLength(31);
     expect(EVENT_NAMES.slice(0, 6)).toEqual(["site_visited", "entry_selected", "question_answered", "unsure_hold_cancelled", "question_back_clicked", "path_completed"]);
-    expect(EVENT_NAMES.slice(-8)).toEqual(["bookmark_pulled", "bookmark_flipped", "shelf_created", "bookmark_moved", "feedback_sent", "library_cleared", "collection_item_found", "collection_viewed"]);
+    expect(EVENT_NAMES.slice(-9)).toEqual(["bookmark_pulled", "bookmark_flipped", "shelf_created", "bookmark_moved", "feedback_sent", "library_cleared", "collection_item_found", "collection_viewed", "bookmark_decorated"]);
     for (const gone of ["visit", "balance_answered", "chip_selected", "goal_submitted", "free_goal_written", "goal_coverage_checked", "first_page_edited"]) {
       expect(EVENT_NAMES).not.toContain(gone);
     }
@@ -54,7 +54,13 @@ describe("event schema", () => {
     const entry: PropsOf<"entry_selected"> = { source: "home", entry: "leaf" };
     // @ts-expect-error — kind is an enum: narrow or mood
     const side: PropsOf<"question_answered"> = { node_id: "start", kind: "both", choice: "A", depth: 1, position: 1, elapsed_ms: 1 };
-    expect([shown, answered, visit, bare, old, entry, side]).toHaveLength(7);
+    const decorated: PropsOf<"bookmark_decorated"> = {
+      book_id: "9788998441012", parts_changed: ["animal", "ground"], tiers_changed: ["limited", "common"],
+      art: { animal: "otter", bg: "night", sky: "moon", ground: "none", rare: true }, is_reset: false,
+    };
+    // @ts-expect-error — parts_changed is a list of the four part kinds (E-38, v1.6)
+    const oneKind: PropsOf<"bookmark_decorated"> = { book_id: "1", parts_changed: "animal", tiers_changed: [], art: {}, is_reset: false };
+    expect([shown, answered, visit, bare, old, entry, side, decorated, oneKind]).toHaveLength(9);
   });
 });
 

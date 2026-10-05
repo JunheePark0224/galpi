@@ -11,7 +11,8 @@ export const MAX_SAVES = 500;
 /** The first rod's name until the person renames it. */
 export const FIRST_SHELF_NAME = "첫 막대";
 
-export type LibraryError = "full" | "invalid" | "missing" | "first" | "not_empty";
+/** forbidden: 꾸미기 with a part the person does not have; unavailable: 꾸미기 before 0005 (no first picture to keep). */
+export type LibraryError = "full" | "invalid" | "missing" | "first" | "not_empty" | "forbidden" | "unavailable";
 type Result<T = object> = ({ ok: true } & T) | { ok: false; error: LibraryError };
 
 /** In front of the rod: one less than the smallest position on it. */
@@ -132,7 +133,7 @@ export async function libraryView(store: LibraryStore, cardOf: (isbn: string) =>
     ...shelf,
     bookmarks: saves.filter((s) => s.shelfId === shelf.id).flatMap((s) => {
       const card = cardOf(s.isbn);
-      return card ? [{ isbn: s.isbn, art: s.art, reason: s.reason, metOn: s.metOn, card }] : [];
+      return card ? [{ isbn: s.isbn, art: s.art, originalArt: s.originalArt ?? null, reason: s.reason, metOn: s.metOn, card }] : [];
     }),
   }));
   const all = view.flatMap((s) => s.bookmarks);

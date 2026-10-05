@@ -1,9 +1,11 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { addSavedCount, setSavedCount, signedOut } from "@/lib/account/store";
+import type { ArtCombo } from "@/lib/art/combine";
 import { libraryRequest } from "@/lib/library/client";
+import { decoratedProps } from "@/lib/library/decorate";
 import type { LibraryView } from "@/lib/library/types";
-import { moveLocally, removeLocally } from "@/lib/library/view";
+import { artLocally, moveLocally, removeLocally } from "@/lib/library/view";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
 
@@ -14,7 +16,8 @@ export type MoveMethod = "drag" | "menu";
 /**
  * S-09's rods from /api/library, and the changes (each sent to the API, then the rods are read again — the server is the
  * one place that orders them). Events go only after a change succeeded: E-17 on the first load, E-16, E-29 (number of
- * rods — the name never), E-30, E-35 ([모두 제거], v1.2). Renaming and removing a rod have no event (taxonomy v0.8).
+ * rods — the name never), E-30, E-35 ([모두 제거], v1.2), E-38 (꾸미기, v1.6). Renaming and removing a rod have no event
+ * (taxonomy v0.8).
  */
 export function useLibrary() {
   const [status, setStatus] = useState<LibraryStatus>("loading");
@@ -64,14 +67,16 @@ export function useLibrary() {
    * the server is told; if it says no, the rods go back as they were and the caller says so. The rods are read again
    * quietly afterwards so the server's order wins.
    */
-  const atOnce = useCallback(async (next: (v: LibraryView) => LibraryView, method: "PATCH" | "DELETE", body: unknown, after: () => void) => {
+  const atOnce = useCallback(async (
+    next: (v: LibraryView) => LibraryView, method: "PATCH" | "DELETE", body: unknown, after: () => void, path = "/api/library/saves",
+  ) => {
     const before = current.current;
     if (before) {
       const drawn = next(before);
       current.current = drawn;
       setView(drawn);
     }
-    const answer = await libraryRequest(method, "/api/library/saves", body);
+    const answer = await libraryRequest(method, path, body);
     if (!answer.ok) {
       if (before) {
         current.current = before;
@@ -95,6 +100,17 @@ export function useLibrary() {
       const sameShelf = !!view?.shelves.find((s) => s.id === shelfId)?.bookmarks.some((b) => b.isbn === isbn);
       return atOnce((v) => moveLocally(v, isbn, shelfId, index), "PATCH", index === undefined ? { isbn, shelfId } : { isbn, shelfId, index },
         () => track("bookmark_moved", { book_id: isbn, method, is_same_shelf: sameShelf }));
+    },
+    /**
+     * 꾸미기 (v1.6): the new picture on the rod and in the sheet at once, then the server (which checks every part against the
+     * 도감); refused = the picture goes back. E-38 after the server saved it. [처음 그림으로] sends the first picture.
+     */
+    decorate: (isbn: string, art: ArtCombo) => {
+      const bookmark = view?.shelves.flatMap((s) => s.bookmarks).find((b) => b.isbn === isbn);
+      if (!bookmark?.originalArt) return Promise.resolve(false);
+      const { art: before, originalArt } = bookmark;
+      return atOnce((v) => artLocally(v, isbn, art), "PATCH", { isbn, art },
+        () => track("bookmark_decorated", decoratedProps(isbn, before, art, originalArt)), "/api/library/saves/art");
     },
     remove: (isbn: string) =>
       atOnce((v) => removeLocally(v, isbn), "DELETE", { isbn }, () => {
