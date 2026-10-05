@@ -20,7 +20,7 @@ from check_one_liners import check_line
 
 from .agreement_log import LEAF_FIELDS, TARGET_FIELDS
 from .checks import AUTO
-from .gaps import GENRE_TARGET
+from .gaps import GENRES
 from .keyword_candidates import clean as clean_candidate
 from .prompt import AXES
 
@@ -29,7 +29,7 @@ NO_LINE = "(한 줄 없음)"  # a book that is dropped / held needs no line, but
 
 
 def checked_leaf(isbn: str, ans: dict) -> dict:
-    if ans.get("genre") not in GENRE_TARGET:
+    if ans.get("genre") not in GENRES:
         raise ReviewError(f"{isbn}: unknown genre {ans.get('genre')}")
     axes = ans.get("axes") if isinstance(ans.get("axes"), dict) else {}
     if any(axes.get(a) not in (-1, 0, 1) or isinstance(axes.get(a), bool) for a in AXES):

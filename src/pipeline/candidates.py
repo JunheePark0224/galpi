@@ -15,7 +15,7 @@ import re
 from collections import Counter
 from dataclasses import dataclass, field
 
-from collect_candidates import (MAX_DEPTH, MAX_PER_AUTHOR, candidates_for, detail, first_author, interleave,
+from collect_candidates import (MAX_DEPTH, MAX_PER_AUTHOR, candidates_for, detail, first_author, has_more, interleave,
                                 norm_title, usable)
 from compare_apis import load_env
 from pick_pilot import clean
@@ -81,8 +81,10 @@ def pages_of(d: dict) -> int:
 
 def find(env: dict, want: Want, rule: dict, known: Known) -> list[Candidate]:
     """Up to want.n usable candidates for one slot, in D1 rank order. The lists are read one depth at a time
-    (collect_candidates.CAT_PAGES / SEARCH_PAGES): a deeper page is fetched only when the shallower ones did not give
-    want.n usable books, and never past a list's end. Detail calls stay at most DETAIL_TRIES × want.n over all depths."""
+    (collect_candidates.CAT_PAGES / SEARCH_PAGES, at most category pages 1-5 and search pages 1-3): a deeper depth is read
+    only when the shallower ones did not give want.n usable books and some list still has pages left (has_more), and
+    never past a list's end. Within a depth the order is D1's (interleave), books already seen at a shallower depth are
+    skipped. Detail calls stay at most DETAIL_TRIES × want.n over all depths."""
     out: list[Candidate] = []
     authors = Counter(known.authors)
     seen: set[str] = set()
@@ -114,6 +116,6 @@ def find(env: dict, want: Want, rule: dict, known: Known) -> list[Candidate]:
             titles.add(norm_title(c["title"]))
             if who:
                 authors[who] += 1
-        if len(out) >= want.n or tries >= DETAIL_TRIES * want.n:
+        if len(out) >= want.n or tries >= DETAIL_TRIES * want.n or not has_more(rule, depth):
             break
     return out
