@@ -49,6 +49,8 @@ Last Updated: 2026-09-30
 - [ ] (도감 v1) SQL Editor에서 `web/supabase/migrations/0004_collection.sql` 실행 → 이어서 `web/supabase/checks/collection_rls.sql` 실행, 마지막 "RLS CHECK RESULT" 상자의 줄이 모두 `ok`
 - [ ] (v1.7.1 로그인 전 저장 → 도감, `fix/guest-dex`) **배포한 뒤** `web/supabase/migrations/0007_kept_claims.sql`을 (다시) 실행 — 사람이 자기 세션으로 책갈피를 넣는 권한(`saves_own_insert`)을 없애고 서버만 넣게 한다(다시 실행해도 안전). 그다음 `web/supabase/checks/p5_rls.sql` · `decorate_rls.sql` · `kept_claims_rls.sql`을 각각 실행, "RLS CHECK RESULT" 상자의 줄이 모두 `ok`(kept_claims는 K1~K15). 번호 0006은 `fix/art-guard`의 것 — 그 브랜치의 `checks/art_guard.sql`도 책갈피를 서버 역할로 넣도록 고쳐야 0007 뒤에 통과한다
 - [ ] **Vercel Production에 `SUPABASE_SERVICE_ROLE_KEY`가 있어야 저장이 된다** (v1.7.1 — 책갈피는 서버가 service role로 넣는다). 없으면 [내 책갈피에 저장]이 503(실패로 닫힘, "저장하지 못했어요"), 도감 기록도 꺼진다. 키 값은 화면·로그에 쓰지 않는다
+- [ ] (꾸미기) `0005_original_art.sql` 실행 → `web/supabase/checks/decorate_rls.sql`, 줄이 모두 `ok`
+- [ ] (꾸미기 보안, 0005 다음) `0006_art_guard.sql` 실행 → `web/supabase/checks/art_guard.sql`, 11줄이 모두 `ok`
 
 ## 5. 배포 후 확인 (Production URL에서, 휴대폰으로도)
 

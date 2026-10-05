@@ -13,6 +13,9 @@ insert into rls_result select 'O1 every bookmark has original_art', not exists (
 insert into auth.users (id, aud, role) values
   ('00000000-0000-4000-8000-0000000000e1', 'authenticated', 'authenticated'),
   ('00000000-0000-4000-8000-0000000000f2', 'authenticated', 'authenticated');
+-- E has met the otter (the server's write): after 0006 the database, too, lets a bookmark use only collected parts.
+insert into public.collection (user_id, kind, value, first_art) values
+  ('00000000-0000-4000-8000-0000000000e1', 'animal', 'otter', '{"animal":"otter","bg":"peach","sky":"moon","ground":"none","rare":true}');
 
 -- ── Person E keeps a bookmark (the app does not send original_art; one sent anyway is ignored) ──────────────────
 set local role authenticated;
