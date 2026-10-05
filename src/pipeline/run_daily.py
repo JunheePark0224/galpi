@@ -31,6 +31,7 @@ from collections import Counter
 from datetime import datetime
 
 import collect_candidates
+from apply_review import FIELD_OF_TOPIC
 from compare_apis import load_env
 
 from . import ADDITIONS, BOOKS, KST, RUNS, VOCAB
@@ -57,6 +58,14 @@ def load_state() -> tuple[list[dict], dict, list[dict]]:
     return books, vocab, additions
 
 
+def topic_lists(vocab: dict) -> dict[str, list[str]]:
+    """Every 🎯 topic → its closed keyword list. The topics are the app vocab's (keyword_vocab.json → web vocab.json), in
+    its order; a topic the pipeline already knows (apply_review.FIELD_OF_TOPIC, 10-05: 마케팅·브랜딩 · 리더십 · 건강·운동 ·
+    요리·살림) but the vocab does not have yet follows with no keywords, so its books are still filled (topic target only)."""
+    out = {t: list(v.get("kept", {})) for t, v in vocab.items()}
+    return out | {t: [] for t in FIELD_OF_TOPIC if t not in out}
+
+
 def gather(env: dict, wants, vocab: dict, known) -> list[Candidate]:
     out: list[Candidate] = []
     for w in wants:
@@ -78,12 +87,12 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     """(record or None, reason). Pass A tags, pass B checks blind; token use goes to `ledger`. Raises TaggerStop."""
     if not cand.author.strip() or cand.pages <= 0:  # find() never offers one; a book that import would reject costs nothing
         return None, "incomplete_candidate"
-    kept = vocab[cand.slot]["kept"] if cand.entry == "target" else {}
+    kept = vocab.get(cand.slot, {}).get("kept", {}) if cand.entry == "target" else {}  # a new topic may have no list yet
     names, hints = list(kept), keyword_hints(cand, kept) if kept else []
     user = user_message(cand.entry, cand.slot, cand.title, cand.intro, cand.toc, hints)
     raw_a, used, why = call(client, cfg.model, prompts["tag"], user, schema(cand.entry, "tag", names), breaker, "A")
     _spend(ledger, cfg.model, used)
-    left_out = excluded_names(vocab[cand.slot]) if cand.entry == "target" else []
+    left_out = excluded_names(vocab.get(cand.slot, {})) if cand.entry == "target" else []
     a = parse(raw_a, cand.entry, "tag", names, cand.slot, left_out) if raw_a else None
     if a is None:
         return None, why if raw_a is None else "invalid_answer"
@@ -102,9 +111,9 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
     """One batch (`batch` = the day, or `<day>-N` for a later run that day)."""
     date = parse_batch(batch)[0]
     books, vocab, additions = load_state()
-    kept = {t: list(v.get("kept", {})) for t, v in vocab.items()}
-    wants = plan_day(books, kept, cfg.daily_count)
-    summary = {"date": date, "batch": batch, "model": cfg.model, "second_model": cfg.second_model, "wanted": sum(w.n for w in wants),
+    wants = plan_day(books, topic_lists(vocab), cfg.daily_count, phase=cfg.target_phase)
+    summary = {"date": date, "batch": batch, "model": cfg.model, "second_model": cfg.second_model,
+               "target_phase": cfg.target_phase, "wanted": sum(w.n for w in wants),
                "slots": [f"{w.slot}{'/' + w.keyword if w.keyword else ''} {w.n}" for w in wants]}
     if not wants:
         return summary | {"status": "full"}

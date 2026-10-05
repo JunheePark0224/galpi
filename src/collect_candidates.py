@@ -120,16 +120,19 @@ def cached_get(env: dict, path: str, cache: Path) -> dict:
 
 PAGE_SIZE = 100
 # depth 1 is D1's reach (category pages 1-2, search page 1); the daily pipeline goes one depth deeper only when a slot's
-# earlier pages did not give enough usable candidates (pipeline/candidates.find, 10-05). Index = depth - 1.
+# earlier pages did not give enough usable candidates and a list still has pages left (pipeline/candidates.find, 10-05).
+# Index = depth - 1. The deepest read is category pages 1-5 and search pages 1-3.
 CAT_PAGES = (2, 3, 4, 5)
 SEARCH_PAGES = (1, 2, 3, 3)
 MAX_DEPTH = len(CAT_PAGES)
+_MORE: dict[str, bool] = {}  # a list (its first page's cache file) → it may go on past the last page read
 
 
 def paged(env: dict, path_of, cache_of, pages: int) -> list[tuple[int, dict]]:
-    """(page, item) rows of pages 1..`pages` of one list; stops at the list's end (totalCount, or a short page), so a
-    page past the end is never asked for. `path_of(page)` / `cache_of(page)`: the page's API path and cache file."""
-    rows = []
+    """(page, item) rows of pages 1..`pages` of one list; stops at the list's end (totalCount, a short page, or a page
+    that failed or listed nothing), so a page past the end is never asked for. `path_of(page)` / `cache_of(page)`: the
+    page's API path and cache file. Whether the list may go on is kept for has_more()."""
+    rows, more = [], True
     for page in range(1, pages + 1):
         resp = cached_get(env, path_of(page), cache_of(page))
         data = resp.get("data") or {}
@@ -137,8 +140,31 @@ def paged(env: dict, path_of, cache_of, pages: int) -> list[tuple[int, dict]]:
         rows += [(page, it) for it in items]
         total = data.get("totalCount")
         if len(items) < PAGE_SIZE or (isinstance(total, int) and page * PAGE_SIZE >= total):
+            more = False
             break
+    _MORE[str(cache_of(1))] = more
     return rows
+
+
+def _cat_cache(cat: str, ep: str, page: int) -> Path:
+    return RAW / "lists" / f"{cat}_{ep}_{page}.json"
+
+
+def _search_cache(q: str, page: int) -> Path:
+    s = slug(q)
+    return RAW / "lists" / (f"search_{s}.json" if page == 1 else f"search_{s}_p{page}.json")
+
+
+def has_more(slot: dict, depth: int) -> bool:
+    """Would reading the slot `depth + 1` deep ask for any page not read at `depth`? Only a list that came back full at
+    `depth` and gets more pages one depth deeper counts (read after list_items(env, slot, depth))."""
+    if depth >= MAX_DEPTH:
+        return False
+    cats = CAT_PAGES[depth] > CAT_PAGES[depth - 1] and any(
+        _MORE.get(str(_cat_cache(c, ep, 1))) for c in slot["cats"] for ep in ("bestsellerSteady", "bestseller"))
+    search = SEARCH_PAGES[depth] > SEARCH_PAGES[depth - 1] and any(
+        _MORE.get(str(_search_cache(q, 1))) for q in slot["q"])
+    return cats or search
 
 
 def list_items(env: dict, slot: dict, depth: int = 1) -> list[dict]:
@@ -149,13 +175,13 @@ def list_items(env: dict, slot: dict, depth: int = 1) -> list[dict]:
     for cat in slot["cats"]:
         for ep, src in (("bestsellerSteady", "steady"), ("bestseller", "best")):
             path = lambda p, c=cat, e=ep: f"/category/{e}?categoryId={c}&page={p}&pageSize={PAGE_SIZE}"  # noqa: E731
-            cache = lambda p, c=cat, e=ep: RAW / "lists" / f"{c}_{e}_{p}.json"  # noqa: E731
+            cache = lambda p, c=cat, e=ep: _cat_cache(c, e, p)  # noqa: E731
             for page, it in paged(env, path, cache, CAT_PAGES[depth - 1]):
                 rows.append({"item": it, "source": src, "rank": (page - 1) * PAGE_SIZE + it.get("sortOrder", 999)})
     for q in slot["q"]:
         path = lambda p, q=q: "/goods/itemList?" + urllib.parse.urlencode(  # noqa: E731
             {"query": q, "page": p, "pageSize": PAGE_SIZE})
-        cache = lambda p, s=slug(q): RAW / "lists" / (f"search_{s}.json" if p == 1 else f"search_{s}_p{p}.json")  # noqa: E731
+        cache = lambda p, q=q: _search_cache(q, p)  # noqa: E731
         for page, it in paged(env, path, cache, SEARCH_PAGES[depth - 1]):
             rows.append({"item": it, "source": "search", "rank": (page - 1) * PAGE_SIZE + it.get("sortOrder", 999)})
     return rows
@@ -193,6 +219,8 @@ def matches(slot: dict, it: dict) -> bool:
     text = title if slot.get("title_only") else f"{title} {intro_of(it)[:300]}"
     if slot.get("exc_title") and re.search(slot["exc_title"], title):
         return False
+    if slot.get("exc_publisher") and re.search(slot["exc_publisher"], it.get("publisher") or ""):
+        return False  # 10-05: 로맨스 leaves genre romance paperback lines out by publisher
     return bool(re.search(slot["inc"], text)) and not re.search(slot["exc"], text)
 
 

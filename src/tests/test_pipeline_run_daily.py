@@ -10,6 +10,8 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import collect_candidates  # noqa: E402
+from apply_review import FIELD_OF_TOPIC  # noqa: E402
+from pipeline.gaps import GENRES, PHASES  # noqa: E402
 from pipeline import run_daily  # noqa: E402
 from pipeline.config import load_config, parse_config  # noqa: E402
 from pipeline.candidates import Candidate  # noqa: E402
@@ -19,9 +21,9 @@ from pipeline_fakes import (INTRO, TOC, FakeClient, agreeing, check_answer, kind
                             write_cache, yes24_item)
 
 CFG = parse_config({"daily_count": 4, "auto_merge": False, "sample_rate": 0.1, "model": "claude-haiku-4-5",
-                    "second_model": "claude-haiku-4-5"})
+                    "second_model": "claude-haiku-4-5", "target_phase": "launch"})
 MIXED_CFG = parse_config({"daily_count": 4, "auto_merge": False, "sample_rate": 0.1, "model": "claude-sonnet-5-5",
-                          "second_model": "claude-haiku-4-5"})
+                          "second_model": "claude-haiku-4-5", "target_phase": "launch"})
 ITEMS = [yes24_item(f"97900000000{i}", t, f"저자{i} 저", i) for i, t in
          enumerate(["처음 주식 공부", "주식 배당 입문", "주식 투자 수업", "주식 마음 공부", "주식 다섯째 책"], start=11)]
 ENV = {"YES24_API_KEY": "not-real"}
@@ -37,7 +39,7 @@ def day(tmp_path, monkeypatch):
     raw, adds = tmp_path / "raw", tmp_path / "additions"
     adds.mkdir()
     write_cache(raw, {"주식": ITEMS}, ITEMS)
-    (tmp_path / "books.json").write_text("[]", encoding="utf-8")
+    (tmp_path / "books.json").write_text(json.dumps(full_but_one_keyword()), encoding="utf-8")
     (tmp_path / "vocab.json").write_text(json.dumps({"돈 관리·투자": {"kept": {"주식": {"pattern": "주식|배당"}}}}),
                                          encoding="utf-8")
     for name, value in (("BOOKS", tmp_path / "books.json"), ("VOCAB", tmp_path / "vocab.json"), ("ADDITIONS", adds),
@@ -46,6 +48,14 @@ def day(tmp_path, monkeypatch):
     monkeypatch.setattr(collect_candidates, "RAW", raw)
     monkeypatch.setattr(collect_candidates, "get_json", lambda *a, **k: {"error": "offline in tests"})
     return adds
+
+
+def full_but_one_keyword() -> list[dict]:
+    """Every genre and topic at its launch target; 돈 관리·투자 has no 주식 book yet — the one gap (keyword 주식, 5)."""
+    target = PHASES["launch"]
+    books = [{"entry": "leaf", "genre": g} for g in GENRES for _ in range(target.genre)]
+    books += [{"entry": "target", "topic": t, "keywords": []} for t in FIELD_OF_TOPIC for _ in range(target.topic)]
+    return [{**b, "isbn": f"x{i}", "title": f"있는 책 {i}", "author": f"저자 {i}"} for i, b in enumerate(books)]
 
 
 def mixed(kwargs):
@@ -96,7 +106,7 @@ def test_a_copied_field_never_reaches_the_file(day):
 
 
 def test_nothing_to_fill_costs_nothing(day, monkeypatch):
-    monkeypatch.setattr(run_daily, "plan_day", lambda *a: [])
+    monkeypatch.setattr(run_daily, "plan_day", lambda *a, **k: [])
     client = FakeClient()
     assert run_daily.run("2026-10-05", CFG, ENV, client)["status"] == "full" and client.messages.calls == []
 
@@ -248,7 +258,7 @@ def test_main_runs_a_day_and_prints_no_key_or_book_text(day, monkeypatch, capsys
     monkeypatch.setattr(run_daily, "anthropic_key", lambda: "sk-test-secret-value")
     monkeypatch.setattr(run_daily, "load_config", lambda count=None: parse_config(
         {"daily_count": count or 4, "auto_merge": False, "sample_rate": 0.1, "model": "claude-haiku-4-5",
-         "second_model": "claude-haiku-4-5"}))
+         "second_model": "claude-haiku-4-5", "target_phase": "launch"}))
     seen = {}
     monkeypatch.setattr(anthropic, "Anthropic", lambda **kw: seen.update(kw) or FakeClient())
     assert run_daily.main(["--date", "2026-10-05", "--count", "3"]) == 0

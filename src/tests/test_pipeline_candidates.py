@@ -1,5 +1,6 @@
 """Pipeline: candidates from a fake YES24 cache (src/pipeline/candidates.py) — no key, no network."""
 import sys
+import urllib.parse
 from pathlib import Path
 
 import pytest
@@ -85,3 +86,70 @@ def test_a_candidate_without_author_or_pages_is_never_offered(cache):
     details = [{**i, "pages": "쪽수 미상" if i["isbn13"].endswith("23") else 200} for i in items]
     write_cache(cache, {"주식": items}, details)
     assert [c.isbn for c in find(ENV, WANT, RULE, Known(frozenset(), frozenset(), {}))] == ["9790000000024"]
+
+
+def paging_yes24(tmp_path, monkeypatch, search_pages: int, cat_pages: int = 0):
+    """A fake YES24: search "주식" has `search_pages` full pages of 100, category "C1" lists have `cat_pages`; every
+    item is a usable 주식 book. Returns the list of (kind, page) requested."""
+    asked = []
+
+    def items(prefix: str, page: int, n: int) -> list[dict]:
+        return [yes24_item(f"979{prefix}{page:02d}{i:04d}", f"주식 책 {prefix}{page}번 {i}호", f"저자{prefix}{page}_{i} 저", i + 1)
+                for i in range(n)]
+
+    def get_json(url, headers=None, secret=""):
+        q = dict(urllib.parse.parse_qsl(urllib.parse.urlsplit(url).query))
+        if "itemDetail" in url:
+            return {"data": {"items": [{**yes24_item(q["query"], "x"), "starScore": 9, "pages": 200}]}}
+        page = int(q["page"])
+        if "itemList" in url:
+            asked.append(("search", page))
+            return {"data": {"items": items("11", page, 100) if page <= search_pages else [], "totalCount": 100 * search_pages}}
+        asked.append((url.split("/category/")[1].split("?")[0], page))
+        return {"data": {"items": items("2" + str(len(url) % 10), page, 100) if page <= cat_pages else [],
+                         "totalCount": 100 * cat_pages}}
+
+    monkeypatch.setattr(collect_candidates, "RAW", tmp_path)
+    monkeypatch.setattr(collect_candidates, "get_json", get_json)
+    monkeypatch.setattr(collect_candidates, "time", type("T", (), {"sleep": staticmethod(lambda s: None)}))
+    return asked
+
+
+def test_list_items_reads_category_pages_1_to_5_and_search_pages_1_to_3_at_most(tmp_path, monkeypatch):
+    asked = paging_yes24(tmp_path, monkeypatch, search_pages=9, cat_pages=9)
+    rule = {**RULE, "cats": ["C1"]}
+    collect_candidates.list_items(ENV, rule, 1)
+    assert sorted(asked) == [("bestseller", 1), ("bestseller", 2), ("bestsellerSteady", 1), ("bestsellerSteady", 2),
+                             ("search", 1)]
+    asked.clear()
+    rows = collect_candidates.list_items(ENV, rule, collect_candidates.MAX_DEPTH)
+    assert sorted(set(asked)) == sorted({("bestseller", p) for p in range(3, 6)} | {("bestsellerSteady", p) for p in range(3, 6)}
+                                        | {("search", 2), ("search", 3)})  # pages 1-2 / 1 came from the cache
+    assert max(r["rank"] for r in rows if r["source"] == "search") <= 300
+    with pytest.raises(ValueError):
+        collect_candidates.list_items(ENV, rule, collect_candidates.MAX_DEPTH + 1)
+
+
+def test_find_goes_deeper_only_when_the_first_pages_are_not_enough(tmp_path, monkeypatch):
+    asked = paging_yes24(tmp_path, monkeypatch, search_pages=3)
+    find(ENV, Want("target", "돈 관리·투자", 5, "주식"), RULE, Known(frozenset(), frozenset(), {}))
+    assert asked == [("search", 1)]                                      # page 1 had enough: page 2 never asked
+    known = known_from([{"isbn": f"97911{1:02d}{i:04d}", "title": f"주식 책 111번 {i}호", "author": "a"} for i in range(100)], [])
+    out = find(ENV, Want("target", "돈 관리·투자", 3, "주식"), RULE, known)
+    assert len(out) == 3 and asked == [("search", 1), ("search", 2)]     # page 1 all ours → page 2, not page 3
+
+
+def test_find_stops_at_the_end_of_every_list(tmp_path, monkeypatch):
+    asked = paging_yes24(tmp_path, monkeypatch, search_pages=1)
+    known = known_from([{"isbn": f"97911{1:02d}{i:04d}", "title": f"주식 책 111번 {i}호", "author": "a"} for i in range(100)], [])
+    assert find(ENV, Want("target", "돈 관리·투자", 3, "주식"), RULE, known) == []
+    assert asked == [("search", 1)]                                      # totalCount 100: no page 2, no deeper depth
+    assert not collect_candidates.has_more(RULE, 1)
+
+
+def test_find_keeps_detail_calls_bounded_over_all_depths(tmp_path, monkeypatch):
+    paging_yes24(tmp_path, monkeypatch, search_pages=3)
+    calls = []
+    monkeypatch.setattr("pipeline.candidates.detail", lambda env, isbn: calls.append(isbn) or {})  # never usable
+    assert find(ENV, Want("target", "돈 관리·투자", 4, "주식"), RULE, Known(frozenset(), frozenset(), {})) == []
+    assert len(calls) == 3 * 4                                           # DETAIL_TRIES × wanted

@@ -186,7 +186,8 @@ def files(tmp_path, monkeypatch):
     monkeypatch.setattr(review, "keyword_definitions", lambda: {})
     monkeypatch.setattr(review, "yes24_env", lambda: {})
     monkeypatch.setattr(review, "load_config", lambda: parse_config(
-        {"daily_count": 5, "auto_merge": False, "sample_rate": 0.5, "model": "claude-haiku-4-5", "second_model": "claude-haiku-4-5"}))
+        {"daily_count": 5, "auto_merge": False, "sample_rate": 0.5, "model": "claude-haiku-4-5", "second_model": "claude-haiku-4-5",
+         "target_phase": "launch"}))
     (tmp_path / "detail").mkdir()
     for isbn in "1234":
         item = {"contentDetail": {"bookIntroduction": INTRO, "tableOfContents": TOC}}
