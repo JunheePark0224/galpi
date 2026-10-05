@@ -14,7 +14,9 @@ describe("mapVocabulary", () => {
   it("checks against every genre we define — all 12 🍃 genres and the 🎯 topics — not only the ones with books", () => {
     expect(MAP_GENRES).toEqual([...LEAF_GENRES, ...TOPICS]);
     expect(mapVocabulary(VOCAB).genres).toEqual(MAP_GENRES);
-    expect((books as { genre: string }[]).some((b) => b.genre === "호러·괴담")).toBe(false);
+    // not only the ones with books: every defined genre is in, whatever the catalogue holds today (it grows every day)
+    const withBooks = new Set((books as { genre: string }[]).map((b) => b.genre));
+    expect(MAP_GENRES.filter((g) => !withBooks.has(g)).every((g) => mapVocabulary(VOCAB).genres.includes(g))).toBe(true);
   });
   it("lets a map name a genre with no books yet", () => {
     const map = parseQuestionMap("```node\nid: s\nkind: narrow\nquestion: q\nA: 괴담 | entry=leaf | genres=호러·괴담 | next=draw\nB: 역사 | entry=leaf | genres=역사 | next=draw\nunsure: next=draw\n```");
