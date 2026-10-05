@@ -7,7 +7,7 @@ export const GLYPH_PI = "M41.8 26.6Q41.4 26.6 41 26.6Q40.6 26.6 40.1 26.3Q39.9 2
 export const BOOK_ICON = "M88 -14H67a4 4 0 0 0 0 8h21zM69.5 -9.5H88";
 export const RIBBON = "M77 -6v8l2 -1.6 2 1.6v-8";
 const VIEW = { x: 0, y: -16, w: 90, h: 55 };
-const ICON_VIEW = { x: 64, y: -16, w: 26, h: 20 };
+const ICON_VIEW = { x: 61.5, y: -16, w: 28.5, h: 20 };  // the spine curves out to x 63 (+ half the stroke) — x 64 cut it (10-05)
 
 function BookWithRibbon() {
   return (
