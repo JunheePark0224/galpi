@@ -8,7 +8,7 @@ vi.mock("@/lib/track/client", () => ({ track: (...a: unknown[]) => track(...a) }
 vi.mock("@/lib/track/amplitude", () => ({ setAmplitudeUser: (...a: unknown[]) => setAmplitudeUser(...a) }));
 vi.mock("@/lib/track/common", () => ({ setUserId: (...a: unknown[]) => setUserId(...a) }));
 const mergeGuestSaves = vi.fn().mockResolvedValue(undefined);
-vi.mock("@/lib/library/merge", () => ({ mergeGuestSaves: () => mergeGuestSaves() }));
+vi.mock("@/lib/library/merge", () => ({ mergeGuestSaves: (...a: unknown[]) => mergeGuestSaves(...a) }));
 
 const me = (body: unknown) => vi.fn().mockResolvedValue({ ok: true, json: async () => body });
 const IN = { enabled: true, loggedIn: true, id: "u1", count: 0, login: null };
@@ -34,7 +34,7 @@ describe("LoginReturn (E-14 once, then the address is clean)", () => {
     expect(track).toHaveBeenCalledWith("login_completed", { provider: "kakao", is_first_login: true });
     expect(setUserId).toHaveBeenCalledWith("u1");
     expect(setAmplitudeUser).toHaveBeenCalledWith("u1", "kakao");
-    expect(mergeGuestSaves).toHaveBeenCalledTimes(1);
+    expect(mergeGuestSaves).toHaveBeenCalledWith(true);                      // right after the login: E-39 even with 0
     expect(window.location.pathname + window.location.search + window.location.hash).toBe("/?y=2#top");
     expect(window.history.state).toEqual({ keep: 1 });
     expect(fetchMe).toHaveBeenCalledTimes(1);
@@ -56,7 +56,7 @@ describe("LoginReturn (E-14 once, then the address is clean)", () => {
     await mount("/library", IN);
     expect(track).not.toHaveBeenCalled();
     expect(setAmplitudeUser).toHaveBeenCalledWith("u1", undefined);
-    expect(mergeGuestSaves).toHaveBeenCalledTimes(1);
+    expect(mergeGuestSaves).toHaveBeenCalledWith(false);                     // a quiet retry
     expect(window.location.search).toBe("");
   });
 

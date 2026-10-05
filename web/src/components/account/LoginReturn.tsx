@@ -40,7 +40,7 @@ export function LoginReturn() {
         setAmplitudeUser(null);
       }
       if (login && account.status === "in") track("login_completed", { provider: login.provider, is_first_login: login.first });
-      if (account.status === "in") void mergeGuestSaves();
+      if (account.status === "in") void mergeGuestSaves(login !== null);
       else if (mark) setFailed(true);
     });
   }, []);

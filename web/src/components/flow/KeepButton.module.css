@@ -23,9 +23,10 @@
 .error { margin: 0; text-align: center; font-size: 13px; color: var(--genre-korean-fiction); }
 @media (prefers-reduced-motion: reduce) { .button { transition: none; } }
 
-/* "내 책갈피에 저장했어요 · 보러 가기 →" — the ink toast of S-09 (Library.module.css .toast), 4 s. */
+/* "내 책갈피에 저장했어요 · 보러 가기 →" — the ink toast of S-09 (Library.module.css .toast), 4 s — at the top, just under
+   the header's 내 책갈피 it points to, so it never covers the S-06 buttons (the main [예스24에서 보기] stays reachable). */
 .toast {
-  position: fixed; left: 50%; bottom: calc(var(--space-4) + env(safe-area-inset-bottom)); z-index: 40; transform: translateX(-50%);
+  position: fixed; left: 50%; top: calc(var(--header-h) + env(safe-area-inset-top) + var(--space-1)); z-index: 40; transform: translateX(-50%);
   width: calc(100% - 2 * var(--space-4)); max-width: calc(var(--column) - 2 * var(--space-4)); margin: 0; padding: var(--space-1) var(--space-4);
   border-radius: var(--radius-card); background: var(--ink); color: var(--paper); font-size: 13px; text-align: center;
 }
