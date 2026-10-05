@@ -252,6 +252,9 @@ EXISTING_TOPICS = {
 }
 
 # 🍃 candidates. kdc: class_no prefixes for 20s loan share; cats: YES24 categories; sort: goodsSortNm rule.
+# Self-publishing and print-on-demand imprints (10-05): 부크크(BOOKK), 작가와, 좋은땅, 교보 퍼플(e퍼플), 지식과감성#, 북랩,
+# 바른북스, 하움출판사, 렛츠북, 책과나무, 밥북 — each seen as a `publisher` value in the cached YES24 lists.
+SELF_PUBLISHED = r"부크크|BOOKK|작가와(?!비평)|좋은땅|e ?퍼플|^퍼플$|지식과감성|북랩|바른북스|하움|렛츠북|책과나무|밥북"
 GENRES: dict[str, dict] = {
     "역사": {"kdc": ("90", "91", "92", "93", "94", "95", "96", "97"), "sort": r"역사|인문",
            "cats": ["001001010002", "001001010012", "001001010008", "001001010005"],
@@ -274,13 +277,15 @@ GENRES: dict[str, dict] = {
     "고전 문학": {"kdc": (), "sort": r"소설|시|희곡", "cats": ["001001046013"],
                "exc": r"수능|교과서|논술|초등|청소년|만화", "boundary": "외국 소설 · 한국 소설",
                "axes": "여운 · 문장 · 현실"},
-    "호러·괴담": {"kdc": (), "sort": r"소설", "cats": ["001001046011"],
+    "호러·괴담": {"kdc": (), "sort": r"소설", "cats": ["001001046011", "001001046011002"],  # + 장르소설 > 호러 (10-05, list titles)
                "inc": r"공포|호러|괴담|괴이|기담|귀신|좀비|저주|오컬트|괴물|유령|악령",
                "exc": r"추리 ?소설 ?(?:작법|쓰기)", "boundary": "추리·스릴러 · SF·판타지",
                "q": ["공포 소설", "호러 소설", "괴담", "K-호러", "오컬트 소설"],
                "axes": "여운(서늘함) · 몰입 · 딴 세상"},
     "로맨스": {"kdc": (), "sort": r"소설",  # 10-05 slot: 사랑·연애 관계가 이야기의 중심 줄기인 소설 (한국·외국)
-             "cats": ["001001046011007"],  # 장르소설 > 로맨스 (verified 10-05 from list titles)
+             # 장르소설 > 로맨스 (verified 10-05 from list titles), then 한국 / 영미 / 일본 소설 (10-05 user: love stories outside
+             # the genre shelf) — the love words, the web-novel words, later volumes and the publishers below apply to all
+             "cats": ["001001046011007", "001001046001", "001001046002", "001001046003"],
              "q": ["사랑 소설", "로맨스 소설", "연애 소설"],
              "inc": r"사랑|연애|로맨스|연인|첫사랑|짝사랑|이별|러브|결혼|고백|설렘",
              # 웹소설·로맨스 판타지, 19금, 소설 쓰기 책 (title + intro opening)
@@ -291,7 +296,10 @@ GENRES: dict[str, dict] = {
              "exc_title": FICTION_GUIDE + r"|[Vv][Oo][Ll]\.? ?(?:[2-9]|1\d)|외전|下|하권|(?<![0-9])[2-9]부(?![가-힣])|시즌 ?[2-9]",
              # genre romance paperback lines (publishers seen in the 로맨스 category lists, 10-05)
              "exc_publisher": r"파란|청어람|디앤씨|D&C|연담|해피북스투유|YOUNGCOM|영컴|블라썸|가연|로코코|봄미디어|마루출판|다향|베아트리체|"
-                              r"테라스북|위시북스|에이템포|필프리미엄|퀸즈셀렉션|위치북|마카롱|FEEL|어나더|문페이스|폭스코너|고즈넉|피치에이",
+                              r"테라스북|위시북스|에이템포|필프리미엄|퀸즈셀렉션|위치북|마카롱|FEEL|어나더|문페이스|폭스코너|고즈넉|피치에이|"
+                              # self-publishing / POD imprints (10-05 user; names as YES24 lists them, seen in the cached
+                              # lists — BOOKK(부크크) 7, 북랩 1, 지식과감성# 1 in the 로맨스 pool). Not 작가와비평 / 퍼플카우…
+                              + SELF_PUBLISHED,
              "boundary": "한국 소설 · 외국 소설 (사랑이 중심이면 로맨스)",
              "axes": "따뜻함/여운 · 마음 · 몰입"},
     "신화·전설": {"kdc": ("21",), "sort": r"인문|종교|소설", "cats": ["001001019006"],
