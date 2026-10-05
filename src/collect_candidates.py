@@ -118,21 +118,46 @@ def cached_get(env: dict, path: str, cache: Path) -> dict:
     return resp
 
 
-def list_items(env: dict, slot: dict) -> list[dict]:
-    """(item, source, rank) rows from category lists and searches."""
+PAGE_SIZE = 100
+# depth 1 is D1's reach (category pages 1-2, search page 1); the daily pipeline goes one depth deeper only when a slot's
+# earlier pages did not give enough usable candidates (pipeline/candidates.find, 10-05). Index = depth - 1.
+CAT_PAGES = (2, 3, 4, 5)
+SEARCH_PAGES = (1, 2, 3, 3)
+MAX_DEPTH = len(CAT_PAGES)
+
+
+def paged(env: dict, path_of, cache_of, pages: int) -> list[tuple[int, dict]]:
+    """(page, item) rows of pages 1..`pages` of one list; stops at the list's end (totalCount, or a short page), so a
+    page past the end is never asked for. `path_of(page)` / `cache_of(page)`: the page's API path and cache file."""
+    rows = []
+    for page in range(1, pages + 1):
+        resp = cached_get(env, path_of(page), cache_of(page))
+        data = resp.get("data") or {}
+        items = data.get("items") or []
+        rows += [(page, it) for it in items]
+        total = data.get("totalCount")
+        if len(items) < PAGE_SIZE or (isinstance(total, int) and page * PAGE_SIZE >= total):
+            break
+    return rows
+
+
+def list_items(env: dict, slot: dict, depth: int = 1) -> list[dict]:
+    """(item, source, rank) rows from category lists and searches, read `depth` deep (CAT_PAGES / SEARCH_PAGES)."""
+    if not 1 <= depth <= MAX_DEPTH:
+        raise ValueError(f"depth must be 1..{MAX_DEPTH}")
     rows = []
     for cat in slot["cats"]:
         for ep, src in (("bestsellerSteady", "steady"), ("bestseller", "best")):
-            for page in (1, 2):
-                path = f"/category/{ep}?categoryId={cat}&page={page}&pageSize=100"
-                resp = cached_get(env, path, RAW / "lists" / f"{cat}_{ep}_{page}.json")
-                for it in (resp.get("data") or {}).get("items") or []:
-                    rows.append({"item": it, "source": src, "rank": (page - 1) * 100 + it.get("sortOrder", 999)})
+            path = lambda p, c=cat, e=ep: f"/category/{e}?categoryId={c}&page={p}&pageSize={PAGE_SIZE}"  # noqa: E731
+            cache = lambda p, c=cat, e=ep: RAW / "lists" / f"{c}_{e}_{p}.json"  # noqa: E731
+            for page, it in paged(env, path, cache, CAT_PAGES[depth - 1]):
+                rows.append({"item": it, "source": src, "rank": (page - 1) * PAGE_SIZE + it.get("sortOrder", 999)})
     for q in slot["q"]:
-        path = "/goods/itemList?" + urllib.parse.urlencode({"query": q, "page": 1, "pageSize": 100})
-        resp = cached_get(env, path, RAW / "lists" / f"search_{slug(q)}.json")
-        for it in (resp.get("data") or {}).get("items") or []:
-            rows.append({"item": it, "source": "search", "rank": it.get("sortOrder", 999)})
+        path = lambda p, q=q: "/goods/itemList?" + urllib.parse.urlencode(  # noqa: E731
+            {"query": q, "page": p, "pageSize": PAGE_SIZE})
+        cache = lambda p, s=slug(q): RAW / "lists" / (f"search_{s}.json" if p == 1 else f"search_{s}_p{p}.json")  # noqa: E731
+        for page, it in paged(env, path, cache, SEARCH_PAGES[depth - 1]):
+            rows.append({"item": it, "source": "search", "rank": (page - 1) * PAGE_SIZE + it.get("sortOrder", 999)})
     return rows
 
 
@@ -171,11 +196,11 @@ def matches(slot: dict, it: dict) -> bool:
     return bool(re.search(slot["inc"], text)) and not re.search(slot["exc"], text)
 
 
-def candidates_for(env: dict, name: str, slot: dict,
-                   excluded: dict[str, str]) -> tuple[list[dict], list[dict]]:
-    """(kept candidates in rank order, curation-excluded candidates)."""
+def candidates_for(env: dict, name: str, slot: dict, excluded: dict[str, str],
+                   depth: int = 1) -> tuple[list[dict], list[dict]]:
+    """(kept candidates in rank order, curation-excluded candidates), lists read `depth` deep."""
     best: dict[str, dict] = {}
-    for row in list_items(env, slot):
+    for row in list_items(env, slot, depth):
         it = row["item"]
         isbn = it.get("isbn13")
         if not isbn or not is_book(it) or len(intro_of(it)) < 100 or not matches(slot, it):
