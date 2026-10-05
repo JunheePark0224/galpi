@@ -149,7 +149,7 @@ describe("merge (로그인 뒤 임시 책갈피를 계정으로, E-39)", () => {
   });
 
   it("reports each bookmark that reached the account (new or already there) to the 도감 with its ticket — E-36 for new parts", async () => {
-    const meeting = (index: number) => ({ seed: 5, count: 5, iat: 1_790_000_000, sub: null, sig: "a".repeat(43), index });
+    const meeting = (index: number) => ({ seed: 5, count: 5, iat: 1_790_000_000, sub: null, sig: "a".repeat(43), isbns: ["9790000000000", "9790000000001", "9790000000002", "9790000000003", "9790000000004"], index });
     const { merge } = await setup([
       { ...save(isbnAt(0)), meeting: meeting(0) },                                   // already in the account
       { ...save(isbnAt(1)), meeting: meeting(1) },                                   // refused: not reported
@@ -166,6 +166,10 @@ describe("merge (로그인 뒤 임시 책갈피를 계정으로, E-39)", () => {
         : { ok: false, status: 403, body: { error: "not your bookmark" } };          // a refusal is quiet
     });
     await merge.mergeGuestSaves(true);
+    const savesSent = request.mock.calls.filter(([, path]) => path === "/api/library/saves").map(([, , body]) => body as { isbn: string; ticket?: unknown });
+    expect(savesSent.map((b) => [b.isbn, b.ticket])).toEqual([
+      [isbnAt(3), meeting(3)], [isbnAt(2), undefined], [isbnAt(1), meeting(1)], [isbnAt(0), meeting(0)],
+    ]);
     const reports = request.mock.calls.filter(([, path]) => path === "/api/collection/found").map(([, , body]) => body);
     expect(reports).toEqual([
       { ...meeting(3), isbn: isbnAt(3), kept: true },

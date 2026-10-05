@@ -180,7 +180,9 @@ test("the server records nothing for a tampered ticket (403) and asks a login fo
 
   const found = (body: object) => request.post("/api/collection/found", { headers, data: body });
   expect((await found({ ...art, seed: (art.seed + 1) % 2 ** 32, index: 0 })).status()).toBe(403);
-  expect((await found({ ...art, count: 6, index: 5 })).status()).toBe(403);
+  expect((await found({ ...art, count: 6, isbns: [...art.isbns, "9790000000099"], index: 5 })).status()).toBe(403);
+  expect((await found({ ...art, isbns: [...art.isbns].reverse(), index: 0 })).status()).toBe(403);   // v3: the draw's books are signed
+  expect((await found({ ...art, count: 6, index: 5 })).status()).toBe(400);                          // a book short
   expect((await found({ ...art, iat: art.iat - 3 * 60 * 60, index: 0 })).status()).toBe(403);          // re-dated
   expect((await found({ ...art, sub: "11111111-1111-4111-8111-111111111111", index: 0 })).status()).toBe(403);   // re-bound
   expect((await found({ ...art, index: 7 })).status()).toBe(400);

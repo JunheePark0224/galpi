@@ -2,6 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { memoryStore } from "@/lib/library/__fixtures__/memoryStore";
 import type { LibraryStore } from "@/lib/library/types";
+import { artsForDraw } from "@/lib/art/combine";
+import { CollectionUnavailable } from "@/lib/collection/types";
 
 vi.mock("server-only", () => ({}));
 let configured = true;
@@ -27,8 +29,22 @@ vi.mock("@/lib/books/catalog", () => ({
   catalog: () => [{ isbn: "9788998441012", entry: "leaf", title: "모순", author: "양귀자", genre: "한국 소설", field: null, one_liner: "한 줄", one_liner_style: "question" }],
   toCard: (b: { isbn: string; title: string }) => ({ id: b.isbn, title: b.title }),
 }));
+// 0007 claims, shared by everyone in a test (the collection store is only used for claims here)
+let claims: Map<string, string>;
+let claimsMissing = false;
+vi.mock("@/lib/collection/supabaseStore", () => ({
+  supabaseCollection: (_r: unknown, _w: unknown, uid: string) => ({
+    claimKept: async ({ seed, iat, index }: { seed: number; iat: number; index: number }) => {
+      if (claimsMissing) throw new CollectionUnavailable();
+      const key = `${seed}:${iat}:${index}`;
+      if (!claims.has(key)) claims.set(key, uid);
+      return claims.get(key) === uid;
+    },
+  }),
+}));
 const error = vi.spyOn(console, "error").mockImplementation(() => {});
 
+import { issueTicket } from "@/lib/collection/ticket";
 import { GET as me } from "../me/route";
 import { GET as library } from "./route";
 import { DELETE as unsave, PATCH as move, POST as save } from "./saves/route";
@@ -48,8 +64,8 @@ const A = "11111111-1111-4111-8111-111111111111";
 const B = "22222222-2222-4222-8222-222222222222";
 
 describe("내 책갈피 routes", () => {
-  beforeEach(() => { store = memoryStore(); });
-  afterEach(() => { configured = true; userId = "u1"; vi.clearAllMocks(); });
+  beforeEach(() => { store = memoryStore(); claims = new Map(); });
+  afterEach(() => { configured = true; userId = "u1"; claimsMissing = false; vi.unstubAllEnvs(); vi.clearAllMocks(); });
 
   it("/api/me says whether someone is logged in and how many bookmarks — and that login is off without config", async () => {
     expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: true, loggedIn: true, id: "u1", count: 0, login: null });
@@ -86,8 +102,91 @@ describe("내 책갈피 routes", () => {
     expect(await res.json()).toMatchObject({ ok: true, saved: true });
     const view = await (await library(get("/api/library"))).json();
     expect(view.count).toBe(1);
-    expect(view.shelves[0].bookmarks[0]).toMatchObject({ isbn: "9788998441012", art: ART, metOn: "2026-09-30", card: { title: "모순" } });
+    expect(view.shelves[0].bookmarks[0]).toMatchObject({ isbn: "9788998441012", metOn: "2026-09-30", card: { title: "모순" } });
     expect((await me(get("/api/me"))).status).toBe(200);
+  });
+
+  describe("the picture is the server's (v1.7.1 security review) — the art the browser sends is never stored while signing is on", () => {
+    const ISBN = "9788998441012";
+    const DRAW = ["9788937460449", ISBN, "9790000000000", "9790000000001", "9790000000002"];   // ISBN is bookmark 1
+    const proof = (opts: { sub?: string | null; iat?: number; seed?: number } = {}) => ({ ...issueTicket(DRAW, { seed: 777, iat: 1_790_000_000, ...opts }), index: 1 });
+    const DRAWN = artsForDraw(5, 777)[1];
+    const savedArt = () => store.data.saves[0]?.art;
+    const notDrawn = { ...ART, animal: DRAWN.animal === "fox" ? "owl" : "fox" };
+
+    it("with the draw's ticket: the bookmark's own picture from the seed, whatever art was sent — a logged-in draw of this person, any age", async () => {
+      userId = A;
+      const res = await save(send("POST", "/api/library/saves", { ...BODY, art: notDrawn, ticket: proof({ sub: A, iat: 1 }) }));
+      expect(res.status).toBe(200);
+      expect(savedArt()).toEqual(DRAWN);
+      expect(claims.size).toBe(0);                                                // a logged-in draw needs no claim
+    });
+
+    it("a logged-out draw: claimed by this person (once — the same person again is fine)", async () => {
+      userId = A;
+      await save(send("POST", "/api/library/saves", { ...BODY, art: notDrawn, ticket: proof() }));
+      expect(savedArt()).toEqual(DRAWN);
+      expect([...claims.values()]).toEqual([A]);
+      store = memoryStore();
+      await save(send("POST", "/api/library/saves", { ...BODY, ticket: proof() }));
+      expect(savedArt()).toEqual(DRAWN);
+    });
+
+    it("a proof that does not hold keeps the bookmark but with a picture the server chose: another's claim, another book, another person's draw, a forged signature", async () => {
+      userId = B;
+      claims.set("777:" + proof().iat + ":1", A);                                  // A claimed this bookmark already
+      const cases = [
+        { ticket: proof() },
+        { ticket: { ...proof({ sub: B }), index: 0 } },                             // bookmark 0 is another book
+        { ticket: proof({ sub: A }) },                                              // A's logged-in draw
+        { ticket: { ...proof({ sub: B }), sig: "A".repeat(43) } },
+      ];
+      for (const extra of cases) {
+        store = memoryStore();
+        const res = await save(send("POST", "/api/library/saves", { ...BODY, art: DRAWN, ...extra }));
+        expect(res.status, JSON.stringify(extra)).toBe(200);
+        expect(store.data.saves).toHaveLength(1);
+        expect(savedArt(), JSON.stringify(extra)).not.toBe(undefined);
+      }
+      // over many tries the server's own picture is not the claimed one every time (it is random, not the sent art)
+      const pictures = new Set<string>();
+      for (let i = 0; i < 20; i++) {
+        store = memoryStore();
+        await save(send("POST", "/api/library/saves", { ...BODY, art: DRAWN, ticket: proof() }));
+        pictures.add(JSON.stringify(savedArt()));
+      }
+      expect(pictures.size).toBeGreaterThan(1);
+    });
+
+    it("no ticket (a guest bookmark kept before this fix): a picture the server chose", async () => {
+      const pictures = new Set<string>();
+      for (let i = 0; i < 20; i++) {
+        store = memoryStore();
+        await save(send("POST", "/api/library/saves", BODY));
+        pictures.add(JSON.stringify(savedArt()));
+      }
+      expect(pictures.size).toBeGreaterThan(1);
+    });
+
+    it("0007 not applied yet: a verified logged-out draw still gets its own picture (nothing to claim with)", async () => {
+      claimsMissing = true;
+      await save(send("POST", "/api/library/saves", { ...BODY, ticket: proof() }));
+      expect(savedArt()).toEqual(DRAWN);
+    });
+
+    it("a broken ticket is a broken body (400)", async () => {
+      for (const ticket of [{ ...proof(), isbns: undefined }, { ...proof(), index: 9 }, "x"]) {
+        expect((await save(send("POST", "/api/library/saves", { ...BODY, ticket }))).status, JSON.stringify(ticket)).toBe(400);
+      }
+      expect(store.data.saves).toHaveLength(0);
+    });
+
+    it("signing off (production without the secret): the sent picture, as before", async () => {
+      vi.stubEnv("NODE_ENV", "production");
+      vi.stubEnv("COLLECTION_SIGNING_SECRET", "");
+      await save(send("POST", "/api/library/saves", { ...BODY, ticket: proof() }));
+      expect(savedArt()).toEqual(ART);
+    });
   });
 
   it("refuses books outside the catalogue, made-up pictures, future dates and broken bodies", async () => {

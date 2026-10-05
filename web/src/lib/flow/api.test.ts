@@ -39,12 +39,16 @@ describe("flow api", () => {
   });
 
   it("draws the pictures from the server's signed seed and keeps the ticket for the 도감 (v1)", () => {
-    const art = { seed: 4242, count: 5, iat: 100, sub: null, sig: "s".repeat(43) };
+    const art = { seed: 4242, count: 5, iat: 100, sub: null, sig: "s".repeat(43), isbns: ["a", "b", "c", "d", "e"] };
     const view = toDrawView({ ...RES, art }, 9);
     expect(view.picks.map((p) => p.art)).toEqual(artsForDraw(5, 4242));
     expect(view.ticket).toEqual(art);
     expect(toDrawView({ ...RES, art: { ...art, sig: null } }, 9).ticket).toBeNull();          // unsigned: shown, not recorded
     expect(toDrawView({ ...RES, art: { ...art, count: 4 } }, 9).picks.map((p) => p.art)).toEqual(artsForDraw(5, 9));
+    // v3: a ticket naming other books (or in another order) is not this draw's: shown from the fallback, never recorded
+    expect(toDrawView({ ...RES, art: { ...art, isbns: ["a", "b", "c", "e", "d"] } }, 9).ticket).toBeNull();
+    expect(toDrawView({ ...RES, art: { ...art, isbns: ["a", "b", "c", "d"] } }, 9).ticket).toBeNull();
+    expect(toDrawView({ ...RES, art: { ...art, isbns: undefined } as never }, 9).ticket).toBeNull();
     expect(toDrawView(RES, 9).ticket).toBeNull();
   });
 
