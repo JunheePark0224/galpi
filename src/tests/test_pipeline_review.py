@@ -181,6 +181,7 @@ def files(tmp_path, monkeypatch):
     (tmp_path / "vocab.json").write_text(json.dumps(VOCAB), encoding="utf-8")
     for mod, name, value in ((review, "ADDITIONS", adds), (sample, "ADDITIONS", adds), (review, "VOCAB", tmp_path / "vocab.json"),
                              (review, "AGREEMENT", tmp_path / "agreement.csv"), (review, "PAGES", tmp_path / "pages"),
+                             (review, "REQUEUE", tmp_path / "requeue.json"),
                              (build_pilot_review, "DETAIL", tmp_path / "detail")):
         monkeypatch.setattr(mod, name, value)
     monkeypatch.setattr(review, "keyword_definitions", lambda: {})
