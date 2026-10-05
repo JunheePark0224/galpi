@@ -21,6 +21,7 @@
 | taxonomy v1.3 | 2026-10-05 | 도감 v1 (PRD F-21, `plans/2026-10-05-collection-dex.md`) | E-36 `collection_item_found`·E-37 `collection_viewed` live, 동사 `found`, 분류 `도감`, E-07 `art.rare`의 뜻, 처리방침 6-3g (8절) |
 | taxonomy v1.5 | 2026-10-05 | 도전 규칙 v2 출처 기록 (`plans/2026-10-05-challenge-rules.md`, `launch-attribution.md` 4절) | E-07 `bookmark_shown`에 `challenge_rule`·`challenge_genre`(도전이 아니면 null) 추가, E-34는 그대로 (8절) |
 | taxonomy v1.4.1 | 2026-10-05 | 도감 v1 표시 수정 (`context.md` 10-05) | E-36은 땅 소품 "없음"(`none`)에 보내지 않음, E-37 `collected_count` 최대 42 (8절) |
+| taxonomy v1.6 | 2026-10-05 | 책갈피 꾸미기 (PRD F-13·F-21, `plans/2026-10-05-decorate.md`) | E-38 `bookmark_decorated` live, 동사 `decorated`, 처리방침 6-3i (8절) |
 | taxonomy v1.4 | 2026-10-05 | 공개 홍보(10-07) 유입 채널 구분 (`launch-plan.md` 4절, `launch-attribution.md`) | E-01 `utm_source`·`utm_medium`·`utm_campaign`(세션 첫 주소, Supabase only), 공통 `referrer`는 호스트만, `is_in_app_browser`에 스레드·링크드인, 처리방침 6-3h (3-1b, 8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
@@ -113,6 +114,7 @@
 | `sent` | 이용자가 쓴 글을 보냈고 서버가 저장했다 (갈피 우체통, v0.10) | click |
 | `cleared` | 이용자가 모두 비웠다 (내 책갈피 [모두 제거] → 확인, 서버가 지운 뒤, v1.2) | click |
 | `found` | 처음 만났다 — 서버가 새 항목으로 기록한 뒤 (도감, v1.3) | system |
+| `decorated` | 이용자가 꾸몄다 — 책갈피 그림을 바꿔 서버가 저장한 뒤 (책갈피 꾸미기, v1.6) | click |
 
 ### 2-3. 속성 이름
 
@@ -148,7 +150,7 @@
 | 결과 | S-06 | E-09, E-10, E-23, E-27, E-28, E-18 |
 | 보관 | S-06, S-09 | E-11, E-15, E-16 |
 | 로그인 | S-07 | E-12, E-13, E-14 |
-| 내 책갈피 | S-09 | E-17, E-29, E-30, E-35 (v1.2) |
+| 내 책갈피 | S-09 | E-17, E-29, E-30, E-35 (v1.2), E-38 (v1.6) |
 | 도감 | S-05(처음 만남)·S-09(도감 보기) | E-36, E-37 (v1.3) |
 | 마무리 | S-08 (E-20은 S-04의 막다른 길에서도) | E-19, E-20 |
 | 홈 | S-01 (퍼널 밖 — 갈피 우체통, v0.10) | E-31 |
@@ -287,7 +289,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 ### 4-1. 한눈에 보기
 
-상태 (v1.3): live 30 · removed 6 · planned 0. v1.2: live 28. v1.0: live 27. v0.10: live 30 · planned-P4 0 · planned-P5 0 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned 없음(v0.8 — P5 이벤트 모두 live). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로. v0.10: 갈피 우체통(E-31) 추가 — 화면과 함께 live로. v1.2: 내 책갈피 [모두 제거](E-35) 추가 — 화면과 함께 live로
+상태 (v1.6): live 31 · removed 6 · planned 0. v1.3: live 30. v1.2: live 28. v1.0: live 27. v0.10: live 30 · planned-P4 0 · planned-P5 0 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned 없음(v0.8 — P5 이벤트 모두 live). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로. v0.10: 갈피 우체통(E-31) 추가 — 화면과 함께 live로. v1.2: 내 책갈피 [모두 제거](E-35) 추가 — 화면과 함께 live로
 
 | ID | 제안 이름 | 이전 이름 | 분류 | 트리거 | 상태 |
 |---|---|---|---|---|---|
@@ -322,13 +324,14 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-29 | `shelf_created` | (없음, v0.8) | 내 책갈피 | click | live |
 | E-30 | `bookmark_moved` | (없음, v0.8) | 내 책갈피 | click | live |
 | E-35 | `library_cleared` | (없음, v1.2) | 내 책갈피 | click | live |
+| E-38 | `bookmark_decorated` | (없음, v1.6) | 내 책갈피 | click | live |
 | E-36 | `collection_item_found` | (없음, v1.3) | 도감 | system | live |
 | E-37 | `collection_viewed` | (없음, v1.3) | 도감 | view | live |
 | E-19 | `redraw_clicked` | 같음 | 마무리 | click | live |
 | E-20 | `home_clicked` | 같음 | 마무리 | click | live |
 | E-31 | `feedback_sent` | (없음, v0.10) | 홈 | click | live |
 
-E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(30개 — `EVENT_NAMES`는 그 키, v1.2 E-35 추가, v1.3 E-36·E-37 추가. `removed` 6개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
+E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(31개 — `EVENT_NAMES`는 그 키, v1.2 E-35 추가, v1.3 E-36·E-37 추가, v1.6 E-38 추가. `removed` 6개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
 
 ### 4-2. 이벤트별 상세
 
@@ -797,6 +800,23 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|---|
 | `removed_count` | 추가 (v1.2) | Number | 3, 12 | 서버가 뺀 책갈피 수 (목록에서 빠져 화면에 안 보이던 책도 포함) |
 
+#### E-38 `bookmark_decorated`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 내 책갈피 | click | live | 신규 (v1.6) |
+
+**언제**: S-09 책갈피 시트 [🎨 꾸미기] → 편집기에서 [이대로 꽂기]를 눌러 **서버가 새 그림을 저장한 뒤**(2xx). [처음 그림으로]로 처음 꽂은 그림을 고른 뒤 꽂아도 같은 이벤트(`is_reset` TRUE). 편집기를 닫기·저장 실패·거절(도감에 없는 부분, 403)은 남지 않음. 고르기만 하고 꽂지 않은 부분은 남지 않는다(한 번의 꽂기 = 한 이벤트, 2-1). 책 제목·막대 이름은 넣지 않는다  
+**분석 질문**: 꾸미기율(5-3) — 도감을 모은 사람이 그것을 내 책갈피에 쓰는지, 어느 부분·등급을 고르는지(희귀를 모으는 이유가 되는지), 꾸민 사람이 더 자주 돌아오는지
+
+| 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
+|---|---|---|---|---|
+| `book_id` | 추가 (v1.6) | String | "9788998441012" | 책 ISBN-13 (books.isbn) |
+| `parts_changed` | 추가 (v1.6) | String[] | "animal", "bg", "sky", "ground" | 바꾼 부분 — 저장 전 그림과 값이 다른 부분만, 그림 순서(animal → bg → sky → ground). `part_kind`(E-36)와 같은 값 |
+| `tiers_changed` | 추가 (v1.6) | String[] | "common", "limited", "first_edition" | 바꾼 부분의 새 등급 — `parts_changed`와 같은 순서·같은 길이(땅 "없음"은 common). 값은 E-36 `tier`와 같음 |
+| `art` | 추가 (v1.6) | Object | {"animal": "otter", "bg": "galaxy", "sky": "moon", "ground": "none", "rare": true} | 저장한 새 그림 — E-07 `art`와 같은 모양·같은 뜻(중첩 객체 예외, 2-3). 새 값은 여기서, 등급은 `tiers_changed`에서 본다. `rare`는 서버처럼 부분에서 다시 계산 |
+| `is_reset` | 추가 (v1.6) | Boolean | TRUE, FALSE | 저장한 그림이 처음 꽂은 그림과 같은지 ([처음 그림으로]로 되돌린 저장이면 TRUE) |
+
 #### E-36 `collection_item_found`
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
@@ -994,7 +1014,7 @@ FN-2의 셋째 단계(`goal_submitted`)는 v0.3(2026-10-01)부터 쌓인다. 그
 | 책갈피 꺼냄율 | `bookmark_pulled` / `result_book_viewed` (책 단위, 중복 제거, v0.7부터) | pick_type, position | Q-11 |
 | 뒷면율 | `bookmark_flipped` / `bookmark_pulled` (책 단위, 중복 제거) | pick_type | Q-11 |
 | 보관 → 로그인율 | FN-5 단계별 전환 | provider, is_in_app_browser | Q-12, Q-14 |
-| 꾸미기율 (v0.8) | 내 책갈피를 연 사람 중 `shelf_created` 또는 `bookmark_moved`가 있는 사람 비율, 그 사람들과 아닌 사람들의 재방문 `library_viewed` 수 | method | Q-13 |
+| 꾸미기율 (v0.8 · v1.6) | 내 책갈피를 연 사람 중 `shelf_created` 또는 `bookmark_moved`(v1.6부터 `bookmark_decorated`도 — 따로도 본다)가 있는 사람 비율, 그 사람들과 아닌 사람들의 재방문 `library_viewed` 수 | method | Q-13 |
 | 질문별 못 잡겠어요·되돌리기 (v1.0) | node_id별 `question_answered` choice=unsure 비율, `question_back_clicked` 수 / 그 질문의 답 수, `unsure_hold_cancelled` 수 / 답 수 | node_id, kind | 설계 6절 ① |
 | 좁힌 깊이별 반응 (v1.0) | 판의 `path_completed.depth`·scope_id별 궁금해요율·5장 완주율 | mode | 설계 6절 ②·④·⑤ |
 
@@ -1094,6 +1114,10 @@ P4의 `/api/goal/classify`가 직접 쓴 글(≤30자)을 Anthropic API로 보�
 ### 6-3h. 처리방침 변경 — 유입 채널 (v1.4)
 
 7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고쳤다(갱신일 그대로 2026-10-05). ① 표의 기기 행: "들어온 곳(이전 페이지 주소)" → "들어온 곳(이전 사이트의 이름만 — 예: instagram.com, 주소 전체는 저장하지 않아요)" ② 새 행 — "홍보 링크로 들어왔다면 그 링크에 붙은 표시 (어디에 올린 어떤 홍보인지 — 예: threads, social, launch_1007). 읽은 뒤 주소창에서 지워요" / 왜 "어느 홍보로 몇 명이 왔는지 세기 위해". Amplitude가 모으는 페이지 주소(광고 태그 포함)는 원래 행 그대로.
+
+### 6-3i. 처리방침 변경 — 책갈피 꾸미기 (v1.6)
+
+새로 모으는 개인 정보는 없다 — 이미 저장하던 "그때 책갈피 그림"(saves.art)을 이용자가 자기 도감 안의 부분으로 바꿀 수 있게 되고, 처음 그림은 `original_art`(0005)에 그대로 남는다. 다만 표의 내 책갈피 행이 "그때 책갈피 그림"만 말하면 꾸민 뒤에는 틀린 말이 되므로 "그때 책갈피 그림(도감에 모은 것으로 꾸몄다면 꾸민 그림도)"으로 고쳤다(갱신일 그대로 2026-10-05). E-38에는 책 ID·부분·등급·그림만(개인 정보 없음 — 기록은 "누른 버튼"으로 이미 적혀 있다).
 
 ### 6-4. 보관
 
@@ -1221,6 +1245,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v1.3 | 2026-10-05 | Claude (도감 v1 구현) | 도감 v1(PRD F-21, `plans/2026-10-05-collection-dex.md`). 새 E-36 `collection_item_found`(`part_kind`·`part_value`·`tier` — 서버가 새로 기록한 부분마다, 로그인한 사람만)·E-37 `collection_viewed`(`collected_count`·`is_logged_in`)를 화면과 함께 `live`로. 동사 `found`, 분류 `도감`. 이름 규칙 2-3 때문에 계획서의 `kind`·`value`·`found_count` 대신 `part_kind`·`part_value`·`collected_count`(`kind`는 E-32의 질문 종류, `found_count`는 옛 E-22의 책 수와 뜻이 다름). E-07 `art`: 값에 한정판·초판본이 더해지고 `rare`의 뜻을 정함(넷 중 하나라도 한정판 이상). 처리방침 6-3g 먼저(갱신일 2026-10-05) |
 | v1.4.1 | 2026-10-05 | Claude (도감 표시 수정, 사용자 승인) | 땅 소품 "없음"(`none`)은 그림에는 그대로 나오지만 도감의 부분이 아니다 — 서버가 기록하지 않고, 브라우저는 응답에 있어도 버리므로 E-36 `collection_item_found`가 `part_value` "none"으로 나가지 않는다. 운영 DB의 옛 "none" 줄은 읽을 때 무시(지우지 않음)하므로 E-37 `collected_count`도 세지 않는다(최대 43 → 42). 이벤트 이름·속성·타입·`schema.ts` 허용 값 변경 없음(`part_value`는 원래 자유 문자열 — 값 목록에 "none"이 없었다), 모으는 정보 변화 없음 |
 | v1.5 | 2026-10-05 | Claude (사용자 승인) | 도전 규칙 v2의 출처 기록. E-07 `bookmark_shown`에 `challenge_rule`(Number, 1~36 또는 null)·`challenge_genre`(String 또는 null) 추가. **E-07에 둔 까닭**: ① E-34 `path_completed`는 마지막 답과 함께 브라우저에서 바로 나가는데, 섞어서 + 도전과 목록 규칙(19·36)의 규칙·장르는 서버 씨앗이 뽑기 응답에서 정해 그때는 알 수 없다 — 응답을 기다리면 E-34가 늦어지고 뽑기 실패 때 사라진다 ② 응답이 온 뒤 처음 나는 이벤트가 E-07이고, 저장(E-15 `book_saved`)과 `book_id`·`anon_id`로 이어져 "어느 도전이 저장으로 이어졌나"를 바로 묻는다(`launch-attribution.md` 4절) ③ 새 이벤트(b안)는 한 순간에 이벤트 둘이라 2-1과 어긋난다. 도전이 아니면 둘 다 null(속성을 빼지 않음). 개인 정보 아님(규칙 번호·장르 이름뿐) — `/privacy` 그대로. E-34 속성 변경 없음(`scope_id`는 목록 규칙에서 목록 전체 키 — 뽑힌 장르는 E-07에서 본다) |
+| v1.6 | 2026-10-05 | Claude (사용자 요청) | 책갈피 꾸미기(PRD F-13·F-21, `plans/2026-10-05-decorate.md`, 시안 `mockups/2026-10-05-decorate/flow.png`·`button-options.png` C). 새 E-38 `bookmark_decorated`(`book_id`·`parts_changed` String[]·`tiers_changed` String[]·`art` Object·`is_reset` Boolean)를 화면과 함께 `live`로, 동사 `decorated` 추가. 서버가 저장한 뒤(2xx)에만. 이름: 부분은 E-36 `part_kind`가 String(배열 아님)이라 같은 이름을 배열로 쓰지 못해(2-3 한 이름 = 한 타입) `parts_changed`, 등급도 같은 까닭으로 `tier` 대신 `tiers_changed`. 새 값은 E-07과 같은 `art`(새 그림 전체)로 — 부분마다 `animal_value` 같은 속성 8개를 두지 않음. 개인 정보 변화 없음 — `/privacy`의 내 책갈피 행 문구만 꾸민 그림을 말하게(6-3i) |
 | v1.4 | 2026-10-05 | Claude (공개 준비) | 공개 홍보(10-07)의 유입 채널을 Supabase 원본에서도 가른다(3-1b). E-01 `site_visited`에 `utm_source`·`utm_medium`·`utm_campaign`(String 또는 null, ≤40, **Supabase only**) — 세션 첫 주소에서 한 번 읽어 sessionStorage에 두고(첫 접촉), `[a-z0-9_-]` 밖은 null, Amplitude가 주소를 읽은 뒤 주소창에서 `utm_*`를 지움. 공통 속성이 아니라 E-01 속성인 이유는 1-2 속성 상속 원칙과 행 크기. 공통 `referrer`는 이름 그대로 **호스트만**(6-2 검토 메모 — 브라우저·서버 `referrerHost`, 그 전 기록은 주소 전체). `is_in_app_browser`가 스레드(`Barcelona`)·링크드인(`LinkedInApp`) 앱 안 브라우저도 TRUE로(그 전 기록은 FALSE). 처리방침 6-3h 먼저(갱신일 그대로). 분석 SQL은 `launch-attribution.md`. 새 이벤트 없음 |
 
 ---

@@ -18,7 +18,7 @@ export function memoryStore(init: { shelves?: Shelf[]; saves?: SaveRow[] } = {})
     },
     insertSave: async (row) => {
       if (data.saves.some((s) => s.isbn === row.isbn)) return false;
-      data.saves = [...data.saves, row];
+      data.saves = [...data.saves, { ...row, originalArt: row.art }];   // 0005's trigger: the first picture is the kept one
       return true;
     },
     deleteSave: async (isbn) => {
@@ -34,6 +34,11 @@ export function memoryStore(init: { shelves?: Shelf[]; saves?: SaveRow[] } = {})
     updateSave: async (isbn, change) => {
       if (!data.saves.some((s) => s.isbn === isbn)) return false;
       data.saves = data.saves.map((s) => (s.isbn === isbn ? { ...s, ...change } : s));
+      return true;
+    },
+    updateArt: async (isbn, art) => {
+      if (!data.saves.some((s) => s.isbn === isbn)) return false;
+      data.saves = data.saves.map((s) => (s.isbn === isbn ? { ...s, art } : s));
       return true;
     },
     insertShelf: async (name, position) => {

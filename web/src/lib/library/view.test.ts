@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { LibraryView } from "./types";
-import { moveLocally, removeLocally } from "./view";
+import { artLocally, moveLocally, removeLocally } from "./view";
 
 const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false } as const;
 const bm = (isbn: string, animal: "fox" | "owl" = "fox") => ({
@@ -53,5 +53,15 @@ describe("removeLocally", () => {
     expect(next.shelves[0].bookmarks.map((b) => b.isbn)).toEqual(["1"]);
     expect(next).toMatchObject({ count: 2, animals: 1 });
     expect(removeLocally(VIEW, "9")).toBe(VIEW);
+  });
+});
+
+describe("artLocally — 꾸미기 shows before the server answers", () => {
+  it("gives the bookmark its new picture and counts the animals again; the old view is untouched", () => {
+    const next = artLocally(VIEW, "2", { ...ART, animal: "fox" });
+    expect(next.shelves[0].bookmarks[1].art.animal).toBe("fox");
+    expect(next.animals).toBe(1);                                                  // fox · fox · fox
+    expect(VIEW.shelves[0].bookmarks[1].art.animal).toBe("owl");
+    expect(artLocally(VIEW, "9", ART)).toBe(VIEW);
   });
 });

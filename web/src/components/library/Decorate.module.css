@@ -1,0 +1,50 @@
+/* C-26 책갈피 꾸미기 (PRD F-13·F-21, 시안 docs/mockups/2026-10-05-decorate/flow.png ②). */
+.editor { display: flex; flex-direction: column; gap: var(--space-2); }
+.preview { display: flex; justify-content: center; margin: var(--space-2) 0; }
+.quiet { margin: var(--space-2) 0; font-size: 14px; color: var(--ink-soft); }
+
+/* [동물 | 배경 | 하늘 소품 | 땅 소품]: the 도감's pills (C-25), four in one row on a 320px phone. */
+.tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: var(--space-1) 0; }
+.tab {
+  min-height: var(--touch); padding: 0 4px; border: 1px solid var(--paper-line); border-radius: var(--radius-pill);
+  background: #fffdf8; color: var(--ink); font: inherit; font-size: 14px; white-space: nowrap; cursor: pointer;
+}
+.tab[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.tab:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+
+.section { margin-top: var(--space-1); }
+.tier { margin: 0 0 var(--space-2); font-size: 14px; font-weight: 400; color: var(--ink-soft); }
+.tier[data-tier="first_edition"] { color: #94681C; font-weight: 700; }   /* gold letters, 4.6 : 1 on paper (C-25) */
+.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+
+/* A cell: a white tile (≥ 44px) with the part's arch window; the chosen one outlined in ink, a 초판본 one in gold. */
+.cell {
+  display: block; width: 100%; min-height: var(--touch); padding: 6px; border: 1px solid var(--paper-line); border-radius: 12px;
+  background: #fffdf8; cursor: pointer;
+}
+.cell[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+.cell:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.cell:disabled { background: #EFE4CC; border-color: transparent; cursor: not-allowed; }
+.win {
+  position: relative; display: block; width: 100%; aspect-ratio: 100 / 76; border-radius: 999px 999px 4px 4px; overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(43, 39, 36, 0.12);
+}
+.win[data-tier="first_edition"] { box-shadow: 0 0 0 2px #D9B65A, 0 0 8px rgba(217, 182, 90, 0.55); }
+.win[data-locked] { display: flex; align-items: center; justify-content: center; box-shadow: none; }
+/* the dex silhouette (C-25): the shape alone, drawn flat */
+.shape { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: brightness(0); opacity: 0.12; pointer-events: none; }
+img.shape { inset: auto; left: 22.5%; top: 15.8%; width: 55%; height: auto; }
+.lock { position: relative; font-size: 16px; opacity: 0.7; }
+.noneName {
+  position: absolute; inset: auto 0 6% 0; font-size: 11px; color: var(--ink-soft); text-align: center;
+}
+
+/* [처음 그림으로] [이대로 꽂기]: stays at the bottom of the sheet while the parts scroll. */
+.footer {
+  position: sticky; bottom: calc(-1 * (var(--space-5) + env(safe-area-inset-bottom))); z-index: 1;
+  display: flex; flex-direction: column; gap: var(--space-1);
+  margin: var(--space-2) calc(-1 * var(--space-5)) calc(-1 * (var(--space-5) + env(safe-area-inset-bottom)));
+  padding: var(--space-3) var(--space-5) calc(var(--space-3) + env(safe-area-inset-bottom));
+  background: var(--paper); box-shadow: 0 -6px 12px -8px rgba(43, 39, 36, 0.25);
+}
+.footerRow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }

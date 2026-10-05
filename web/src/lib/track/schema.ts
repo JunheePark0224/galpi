@@ -93,6 +93,14 @@ export const EVENT_SPEC = {
     tier: { type: ["common", "limited", "first_edition"] },
   },
   collection_viewed: { collected_count: { type: "number" }, is_logged_in: { type: "boolean" } },
+  // v1.6 책갈피 꾸미기: a new picture the server saved — which parts changed, their new tiers, the new picture, back to the first?
+  bookmark_decorated: {
+    book_id: BOOK_ID,
+    parts_changed: { type: ["animal", "bg", "sky", "ground"], array: true },
+    tiers_changed: { type: ["common", "limited", "first_edition"], array: true },
+    art: { type: "object" },
+    is_reset: { type: "boolean" },
+  },
 } as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
 
 type Spec = typeof EVENT_SPEC;
