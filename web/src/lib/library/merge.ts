@@ -19,14 +19,16 @@ let running: Promise<void> | null = null;
  * After a login is confirmed (LoginReturn, any page): the bookmarks kept in this browser go to the account one by one —
  * oldest first, so the newest ends at the front of the first rod as it would have. Each that the server took (a book
  * already there included) leaves this browser; the rest wait for the next visit. The header counts the new ones. E-39
- * once per attempt; no E-15 per book (each was logged when it was kept). Called twice at once, it runs once.
+ * once: on the first try right after a login (`afterLogin` — E-14 in this page load), or whenever a book was added; a
+ * quiet retry on a later visit that adds nothing sends nothing. No E-15 per book (each was logged when it was kept).
+ * Called twice at once, it runs once.
  */
-export function mergeGuestSaves(): Promise<void> {
-  running ??= merge().finally(() => { running = null; });
+export function mergeGuestSaves(afterLogin: boolean): Promise<void> {
+  running ??= merge(afterLogin).finally(() => { running = null; });
   return running;
 }
 
-async function merge(): Promise<void> {
+async function merge(afterLogin: boolean): Promise<void> {
   const items = guestSaves();
   if (items.length === 0) return;
   const moved: string[] = [];
@@ -46,6 +48,6 @@ async function merge(): Promise<void> {
   }
   dropGuestSaves(moved);
   addSavedCount(merged);
-  track("guest_saves_merged", { guest_count: items.length, merged_count: merged });
+  if (afterLogin || merged > 0) track("guest_saves_merged", { guest_count: items.length, merged_count: merged });
   if (moved.length > 0) listeners.forEach((l) => l());
 }

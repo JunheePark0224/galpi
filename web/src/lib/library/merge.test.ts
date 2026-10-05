@@ -27,7 +27,7 @@ describe("merge (로그인 뒤 임시 책갈피를 계정으로, E-39)", () => {
 
   it("does nothing when this browser kept nothing", async () => {
     const { merge } = await setup(0);
-    await merge.mergeGuestSaves();
+    await merge.mergeGuestSaves(true);
     expect(request).not.toHaveBeenCalled();
     expect(track).not.toHaveBeenCalled();
   });
@@ -40,7 +40,7 @@ describe("merge (로그인 뒤 임시 책갈피를 계정으로, E-39)", () => {
       .mockResolvedValueOnce({ ok: true, status: 200, body: { ok: true, saved: true } });
     const heard = vi.fn();
     merge.onGuestMerged(heard);
-    await merge.mergeGuestSaves();
+    await merge.mergeGuestSaves(false);
     expect(posted()).toEqual([isbnAt(0), isbnAt(1), isbnAt(2)]);
     expect(request.mock.calls[0]).toEqual(["POST", "/api/library/saves", { isbn: isbnAt(0), art: save("").art, reason: save("").reason, metOn: "2026-10-01" }]);
     expect(guest.guestSaves()).toEqual([]);
@@ -56,7 +56,7 @@ describe("merge (로그인 뒤 임시 책갈피를 계정으로, E-39)", () => {
       .mockResolvedValueOnce({ ok: true, status: 200, body: { ok: true, saved: true } })
       .mockResolvedValueOnce({ ok: false, status: 409, body: { ok: false, error: "full" } })
       .mockResolvedValueOnce({ ok: true, status: 200, body: null });
-    await Promise.all([merge.mergeGuestSaves(), merge.mergeGuestSaves()]);
+    await Promise.all([merge.mergeGuestSaves(false), merge.mergeGuestSaves(false)]);
     expect(request).toHaveBeenCalledTimes(3);
     expect(guest.guestSaves().map((s) => s.isbn)).toEqual([isbnAt(2), isbnAt(1)]);
     expect(track.mock.calls).toEqual([["guest_saves_merged", { guest_count: 3, merged_count: 1 }]]);
@@ -70,7 +70,7 @@ describe("merge (로그인 뒤 임시 책갈피를 계정으로, E-39)", () => {
     request
       .mockResolvedValueOnce({ ok: true, status: 200, body: { ok: true, saved: true } })
       .mockResolvedValueOnce({ ok: false, status: 401, body: null });
-    await merge.mergeGuestSaves();
+    await merge.mergeGuestSaves(false);
     expect(request).toHaveBeenCalledTimes(2);
     expect(guest.guestSaves().map((s) => s.isbn)).toEqual([isbnAt(2), isbnAt(1)]);
     expect(store.accountSnapshot().status).toBe("out");
@@ -78,13 +78,23 @@ describe("merge (로그인 뒤 임시 책갈피를 계정으로, E-39)", () => {
     expect(heard).not.toHaveBeenCalled();
   });
 
-  it("nothing went through: nothing to tell the library", async () => {
+  it("nothing went through right after a login: E-39 with 0, nothing to tell the library", async () => {
     const { merge } = await setup(1);
     const heard = vi.fn();
     merge.onGuestMerged(heard);
     request.mockResolvedValueOnce({ ok: false, status: 0, body: null });
-    await merge.mergeGuestSaves();
+    await merge.mergeGuestSaves(true);
     expect(heard).not.toHaveBeenCalled();
     expect(track.mock.calls).toEqual([["guest_saves_merged", { guest_count: 1, merged_count: 0 }]]);
+  });
+
+  it("a quiet retry on a later visit that adds nothing sends no E-39 (failed, or only books already there)", async () => {
+    const { merge, guest } = await setup(2);
+    request
+      .mockResolvedValueOnce({ ok: false, status: 500, body: null })
+      .mockResolvedValueOnce({ ok: true, status: 200, body: { ok: true, saved: false } });
+    await merge.mergeGuestSaves(false);
+    expect(track).not.toHaveBeenCalled();
+    expect(guest.guestSaves().map((s) => s.isbn)).toEqual([isbnAt(0)]);          // the one already there left this browser
   });
 });

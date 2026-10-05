@@ -124,6 +124,14 @@ test("logged out: 저장 keeps it in this browser — header 내 책갈피 1 →
   await expect(page.getByRole("button", { name: "책갈피 꺼내기" })).toHaveAttribute("aria-expanded", "false");
   const header = page.getByRole("banner").getByRole("link", { name: "내 책갈피 1개" });
   await expect(header).toBeVisible();
+  // the toast sits under the header link it points to, and never over the S-06 buttons (YES24 stays reachable)
+  const toastBox = (await page.getByRole("status").filter({ hasText: "보러 가기" }).boundingBox())!;
+  const headerBox = (await header.boundingBox())!;
+  expect(toastBox.y).toBeGreaterThanOrEqual(headerBox.y + headerBox.height - 1);
+  for (const target of [page.getByRole("button", { name: "다음 책" }), page.getByRole("link", { name: /예스24에서 보기/ }), page.getByRole("button", { name: SAVED })]) {
+    const b = (await target.boundingBox())!;
+    expect(toastBox.y + toastBox.height <= b.y || b.y + b.height <= toastBox.y).toBe(true);
+  }
   if (SHOTS) await page.screenshot({ path: `${SHOTS}/s06-after.png`, fullPage: true });
   expect(lib.posts).toEqual([]);                                                                   // nothing sent
 
