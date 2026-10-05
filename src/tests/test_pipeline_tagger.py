@@ -293,8 +293,11 @@ def test_the_tagger_knows_romance_and_the_four_new_topics_from_the_same_docs_and
     twelve keywords with their definitions all come from book-pool.md 1-3 · target-chips.md 2-1 · keyword_vocab.json."""
     p = system_prompt(VOC, "tag")
     assert "로맨스 ↔ 한국 소설·외국 소설" in p and "웹소설·장르 로맨스 문고·19금" in p
+    # 10-05 user: content genres before origin, the 중심 줄기, and the order when truly half and half
+    assert "내용 장르(SF·판타지 · 추리·스릴러 · 호러·괴담 · 로맨스) ↔ 한국 소설·외국 소설" in p
+    assert "SF·판타지 → 추리·스릴러 → 호러·괴담 → 로맨스 → 한국·외국 소설" in p and "이 책을 한 줄로 소개할 때" in p
     for topic in ("마케팅·브랜딩", "리더십", "건강·운동", "요리·살림"):
-        assert f"- {topic}:" in p and f"| {topic} (10-05 초안)" in p
+        assert f"- {topic}:" in p and f"| {topic} (10-05 사용자 확정)" in p
     assert "  - 브랜딩 — 상품·서비스·조직이 기억되는" in p and "  - 잠·회복 — 잘 자고" in p and "  - 집밥 — 집에서" in p
     assert "의학 전문서·질병 치료서·다이어트 비법서" in p
 
