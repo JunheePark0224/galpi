@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { BookmarkArt, PartShape } from "@/components/BookmarkArt";
 import { Button } from "@/components/Button";
 import { openLoginSheet, signedOut } from "@/lib/account/store";
+import type { ArtCombo, ArtKind, Background } from "@/lib/art/combine";
 import { TIER_NAMES, partName } from "@/lib/art/names";
 import { loadCollection, markCollectionSeen, type CollectionLoad } from "@/lib/collection/client";
 import { DEX_TABS, dexCounts, dexSections, type DexCell, type DexTab } from "@/lib/collection/service";
@@ -21,13 +22,40 @@ export const ODDS_NOTE = "책과는 상관없이 뽑혀요. 돈으로 뽑는 기
 export const LOGGED_OUT_TITLE = "로그인하면 만난 책갈피가 도감에 모여요";
 export const LOGIN_TO_COLLECT = "로그인하고 모으기";
 
+/** The common stages a prop is drawn on alone: white sky props show on the night sky, ground props on the peach hill. */
+const SKY_STAGE: Background = "night";
+const GROUND_STAGE: Background = "peach";
+/** Fireflies glow: they keep the night. */
+const NIGHT_GROUND = new Set(["firefly"]);
+
+/**
+ * What a met cell draws (10-05 fix — it drew the whole first picture, so the 배경·소품 tabs were full of animals): an animal
+ * on the background it was first met on; a background alone (its sky and hill); a prop alone on a common stage.
+ */
+export function cellPicture(cell: DexCell, first: ArtCombo): { art: ArtCombo; parts: readonly ArtKind[] } {
+  switch (cell.kind) {
+    case "animal":
+      return { art: first, parts: ["animal"] };
+    case "bg":
+      return { art: { ...first, bg: cell.value as Background }, parts: ["bg"] };
+    case "sky":
+      return { art: { ...first, bg: SKY_STAGE, sky: cell.value as ArtCombo["sky"] }, parts: ["sky"] };
+    case "ground":
+      return {
+        art: { ...first, bg: NIGHT_GROUND.has(cell.value) ? SKY_STAGE : GROUND_STAGE, ground: cell.value as ArtCombo["ground"] },
+        parts: ["ground"],
+      };
+  }
+}
+
 function Cell({ cell }: { cell: DexCell }) {
   const { met } = cell;
   if (met) {
+    const picture = cellPicture(cell, met.firstArt);
     return (
       <li className={styles.cell}>
         <span className={styles.win} data-tier={cell.tier}>
-          <BookmarkArt art={met.firstArt} clipId={`dex-${cell.kind}-${cell.value}`} fx="light" />
+          <BookmarkArt art={picture.art} parts={picture.parts} clipId={`dex-${cell.kind}-${cell.value}`} fx="light" />
           {met.isNew && <span className={styles.new}>NEW</span>}
         </span>
         <span className={styles.name}>{partName(cell.kind, cell.value)}</span>

@@ -73,6 +73,21 @@ const TIER_OF: ReadonlyMap<string, Tier> = new Map(
   ART_KINDS.flatMap((kind) => TIERS.flatMap((tier) => KIND_TIERS[kind][tier].map((value) => [`${kind}:${value}`, tier] as const))),
 );
 
+/**
+ * The ground with nothing on it ("none") is drawn (일반판) but is not a part to collect: never recorded, shown, counted or
+ * sent as E-36 (10-05 fix — it was counted as a 소품). Old rows with it are dropped on read (knownItems).
+ */
+export const EMPTY_GROUND = "none";
+export function isCollectible(kind: ArtKind, value: string): boolean {
+  return !(kind === "ground" && value === EMPTY_GROUND) && TIER_OF.has(`${kind}:${value}`);
+}
+
+/** The 도감's cells: KIND_TIERS without the empty ground. 동물 16 · 배경 11 · 소품 15 (하늘 8 + 땅 7). */
+export const DEX_TIERS: { readonly [K in ArtKind]: Record<Tier, readonly string[]> } = {
+  ...KIND_TIERS,
+  ground: { ...KIND_TIERS.ground, common: KIND_TIERS.ground.common.filter((v) => v !== EMPTY_GROUND) },
+};
+
 /** The tier of one part, or null for a value that is not in the lists. */
 export function tierOf(kind: ArtKind, value: string): Tier | null {
   return TIER_OF.get(`${kind}:${value}`) ?? null;
@@ -83,10 +98,16 @@ export function partsOf(art: Pick<ArtCombo, ArtKind>): { kind: ArtKind; value: s
   return ART_KINDS.map((kind) => ({ kind, value: art[kind] }));
 }
 
-const RANK: Record<Tier, number> = { common: 0, limited: 1, first_edition: 2 };
+/** The parts of a picture that go into the 도감 (the empty ground left out). */
+export function collectibleParts(art: Pick<ArtCombo, ArtKind>): { kind: ArtKind; value: string }[] {
+  return partsOf(art).filter((p) => isCollectible(p.kind, p.value));
+}
+
+/** 일반판 0 < 한정판 1 < 초판본 2. */
+export const TIER_RANK: Readonly<Record<Tier, number>> = { common: 0, limited: 1, first_edition: 2 };
 /** The highest tier among the parts (what decides the window's gold rim). */
 export function highestTier(tiers: readonly Tier[]): Tier {
-  return tiers.reduce<Tier>((best, t) => (RANK[t] > RANK[best] ? t : best), "common");
+  return tiers.reduce<Tier>((best, t) => (TIER_RANK[t] > TIER_RANK[best] ? t : best), "common");
 }
 export function artTier(art: Pick<ArtCombo, ArtKind>): Tier {
   return highestTier(partsOf(art).map((p) => tierOf(p.kind, p.value) ?? "common"));

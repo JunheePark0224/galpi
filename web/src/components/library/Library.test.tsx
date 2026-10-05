@@ -43,7 +43,7 @@ describe("Library (S-09)", () => {
     const store = await mount({ enabled: true, loggedIn: false, id: null, count: 0 });
     expect(screen.getByRole("heading", { level: 1, name: "도감" })).toBeInTheDocument();
     expect(screen.getByText("로그인하면 만난 책갈피가 도감에 모여요")).toBeInTheDocument();
-    expect(screen.getByText("동물 0 / 16 · 배경 0 / 11 · 소품 0 / 16")).toBeInTheDocument();
+    expect(screen.getByText("동물 0 / 16 · 배경 0 / 11 · 소품 0 / 15")).toBeInTheDocument();
     expect(screen.getAllByText("아직 만나지 않은 동물")).toHaveLength(16);
     expect(screen.queryByRole("group", { name: "내 책갈피 보기" })).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "로그인하고 모으기" }));
@@ -60,7 +60,7 @@ describe("Library (S-09)", () => {
     expect(rods).toHaveAttribute("aria-pressed", "true");
     fireEvent.click(screen.getByRole("button", { name: "도감" }));
     expect(screen.getByRole("button", { name: "도감" })).toHaveAttribute("aria-pressed", "true");
-    expect(await screen.findByText("동물 1 / 16 · 배경 0 / 11 · 소품 0 / 16")).toBeInTheDocument();
+    expect(await screen.findByText("동물 1 / 16 · 배경 0 / 11 · 소품 0 / 15")).toBeInTheDocument();
     expect(screen.getByText("수달")).toBeInTheDocument();
     expect(screen.queryByText("2개 · 동물 1종")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "막대" }));

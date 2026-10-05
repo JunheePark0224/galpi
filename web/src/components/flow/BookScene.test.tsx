@@ -25,7 +25,7 @@ describe("BookScene", () => {
     const { rerender } = render(<BookScene state={shown} {...handlers()} />);
     expect(screen.getByRole("status")).toBeEmptyDOMElement();
     rerender(<BookScene state={shown} {...handlers()} found={[{ kind: "animal", value: "redpanda", tier: "limited" }]} />);
-    expect(screen.getByRole("status")).toHaveTextContent("한정판 · 처음 만난 동물!");
+    expect(screen.getByRole("status")).toHaveTextContent("처음 만난 한정판 레서판다!");
   });
 
   it("S-03: the closed book is the thing to press", () => {

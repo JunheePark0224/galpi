@@ -33,6 +33,7 @@ describe("supabaseCollection — reads with the session, writes with the server'
       { kind: "animal", value: "otter", first_met_at: "2026-10-05T01:00:00Z", first_art: ART, is_new: true },
       { kind: "animal", value: "dragon", first_met_at: "2026-10-05T01:00:00Z", first_art: ART, is_new: false },
       { kind: "bg", value: "peach", first_met_at: "2026-10-05T01:00:00Z", first_art: { broken: true }, is_new: false },
+      { kind: "ground", value: "none", first_met_at: "2026-10-05T01:00:00Z", first_art: ART, is_new: true },   // before the 10-05 fix
     ] }]);
     expect(await supabaseCollection(db, null, "u1").items()).toEqual([
       { kind: "animal", value: "otter", firstMetAt: "2026-10-05T01:00:00Z", firstArt: ART, isNew: true },
@@ -40,11 +41,11 @@ describe("supabaseCollection — reads with the session, writes with the server'
     expect(calls).toEqual(["from(collection)", 'select("kind, value, first_met_at, first_art, is_new")', 'eq("user_id","u1")', 'order("first_met_at")']);
   });
 
-  it("records the four parts with insert-or-nothing and returns only the new ones", async () => {
+  it("records the collectible parts (never the empty ground) with insert-or-nothing and returns only the new ones", async () => {
     const reader = fakeDb([]);
     const { db: writer, calls } = fakeDb([{ data: [{ kind: "animal", value: "otter" }] }]);
     expect(await supabaseCollection(reader.db, writer, "u1").record(ART as never)).toEqual([{ kind: "animal", value: "otter" }]);
-    const rows = ["animal:otter", "bg:peach", "sky:moon", "ground:none"].map((p) => {
+    const rows = ["animal:otter", "bg:peach", "sky:moon"].map((p) => {
       const [kind, value] = p.split(":");
       return { user_id: "u1", kind, value, first_art: ART };
     });

@@ -4,10 +4,12 @@ import { named, recordEvents, specMismatches, test, toBookmarks } from "./helper
 
 // 도감 v1 (PRD F-21, plans/2026-10-05-collection-dex.md). No real Supabase: /api/me and the 도감 routes are answered here
 // as in library.spec.ts — except the last test, which asks the real server to check a real (and a tampered) ticket.
-// DEX_SHOTS=<folder> also saves the 375-wide phone screenshots of the plan (impl-*.png).
+// DEX_SHOTS=<folder> also saves the 375-wide phone screenshots of the plan (impl-*.png, and the 10-05 fix's fix-*.png).
 const SHOTS = process.env.DEX_SHOTS;
 /** A draw seed whose first picture is 초판본 (주작 · 은하수 · 무지개 · 버섯) — lib/art/combine artsForDraw(5, 7349)[0]. */
 const FIRST_EDITION_SEED = 7349;
+/** A common fox with a 한정판 rainbow (여우 · 라벤더 · 무지개 · 풀) — artsForDraw(5, 22)[0]: the user's 10-05 case. */
+const FOX_RAINBOW_SEED = 22;
 
 const OTTER = { animal: "otter", bg: "leaf", sky: "cloud", ground: "grass", rare: true };
 const TIGER = { animal: "whitetiger", bg: "night", sky: "moon", ground: "grass", rare: true };
@@ -16,7 +18,9 @@ const ITEMS = [
   row("animal", "cat", { ...OTTER, animal: "cat", rare: false }), row("animal", "fox", { ...OTTER, animal: "fox", rare: false }),
   row("animal", "owl", { ...OTTER, animal: "owl", bg: "night", rare: false }), row("animal", "otter", OTTER, true),
   row("animal", "whitetiger", TIGER, true), row("bg", "leaf", OTTER), row("bg", "night", TIGER), row("sky", "cloud", OTTER),
-  row("ground", "grass", OTTER),
+  row("ground", "grass", OTTER), row("bg", "galaxy", { ...TIGER, bg: "galaxy" }), row("sky", "rainbow", { ...TIGER, sky: "rainbow" }),
+  row("ground", "goldbook", { ...TIGER, ground: "goldbook" }),
+  row("ground", "none", OTTER, true),                                       // recorded before the 10-05 fix: never shown or counted
 ];
 
 async function phone(page: Page) {
@@ -37,7 +41,7 @@ test("logged out: the 도감 shows every cell as a silhouette and asks for a log
   await page.goto("/library");
   await expect(page.getByRole("heading", { level: 1, name: "도감" })).toBeVisible();
   await expect(page.getByText("로그인하면 만난 책갈피가 도감에 모여요")).toBeVisible();
-  await expect(page.getByText("동물 0 / 16 · 배경 0 / 11 · 소품 0 / 16")).toBeVisible();
+  await expect(page.getByText("동물 0 / 16 · 배경 0 / 11 · 소품 0 / 15")).toBeVisible();
   await expect(page.getByText("아직 만나지 않은 동물")).toHaveCount(16);
   await expect(page.getByText("책과는 상관없이 뽑혀요. 돈으로 뽑는 기능은 없어요.")).toBeAttached();
   if (SHOTS) await page.screenshot({ path: `${SHOTS}/impl-dex-loggedout.png` });
@@ -67,7 +71,7 @@ test("logged in: [막대 | 도감] opens the 도감 — counts, tiers, NEW once,
   await expect(page.getByRole("heading", { level: 1, name: "내 책갈피" })).toBeVisible();
   await expect(page.getByRole("button", { name: "막대", exact: true })).toHaveAttribute("aria-pressed", "true");
   await page.getByRole("button", { name: "도감", exact: true }).click();
-  await expect(page.getByText("동물 5 / 16 · 배경 2 / 11 · 소품 2 / 16")).toBeVisible();
+  await expect(page.getByText("동물 5 / 16 · 배경 3 / 11 · 소품 4 / 15")).toBeVisible();
   const first = page.getByRole("region", { name: "동물 초판본" });
   await expect(first.getByRole("heading")).toHaveText(/초판본\s*1 \/ 4/);
   await expect(first.getByText("백호")).toBeVisible();
@@ -75,48 +79,70 @@ test("logged in: [막대 | 도감] opens the 도감 — counts, tiers, NEW once,
   await expect(page.getByRole("region", { name: "동물 한정판" }).getByText("수달")).toBeVisible();
   await expect(page.getByRole("region", { name: "동물 일반판" }).getByText("아직 만나지 않은 동물")).toHaveCount(4);
   await expect.poll(() => seen).toEqual(["POST"]);
-  await expect.poll(() => named(events, "collection_viewed").map((e) => e.props)).toEqual([{ collected_count: 9, is_logged_in: true }]);
+  await expect.poll(() => named(events, "collection_viewed").map((e) => e.props)).toEqual([{ collected_count: 12, is_logged_in: true }]);
   if (SHOTS) await page.screenshot({ path: `${SHOTS}/impl-dex.png` });
+
+  // 10-05 fix: a background cell draws its sky and hill only, a prop cell the prop alone — no animals on these tabs
+  await page.getByRole("button", { name: "배경", exact: true }).click();
+  await expect(page.getByRole("region", { name: "배경 초판본" }).getByText("은하수")).toBeVisible();
+  await expect(page.locator("section svg[data-tier]")).toHaveCount(3);
+  await expect(page.locator("section svg image")).toHaveCount(0);
+  if (SHOTS) await page.screenshot({ path: `${SHOTS}/fix-dex-bg.png` });
 
   await page.getByRole("button", { name: "소품", exact: true }).click();
   await expect(page.getByRole("button", { name: "소품", exact: true })).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByRole("region", { name: "소품 일반판" }).getByText("구름")).toBeVisible();
+  await expect(page.getByRole("region", { name: "소품 일반판" }).getByRole("listitem")).toHaveCount(9);   // 하늘 5 + 땅 4, no "none"
+  await expect(page.locator("section svg[data-tier]")).toHaveCount(4);
+  await expect(page.locator("section svg image")).toHaveCount(0);
+  if (SHOTS) {
+    await page.getByRole("region", { name: "소품 한정판" }).scrollIntoViewIfNeeded();
+    await page.screenshot({ path: `${SHOTS}/fix-dex-props.png` });
+  }
   await page.getByRole("button", { name: "막대", exact: true }).click();
   await expect(page.getByText("0개 · 동물 0종")).toBeVisible();
   expect(specMismatches(events)).toEqual([]);
 });
 
-test("logged in on S-05: the shown bookmark is reported with its signed ticket, the badge shows, then fades (E-36)", async ({ page }) => {
+test("logged in on S-05: the shown bookmark is reported with its signed ticket, the badge names each new part, then fades (E-36)", async ({ page }) => {
   await phone(page);
   await account(page, true);
   let ticket: { seed: number; count: number; iat: number; sub: string | null; sig: string } | null = null;
   await page.route("**/api/books/draw", async (route) => {
     const res = await route.fetch();
     const body = await res.json();
-    // the 초판본 seed, so the picture matches the parts this mock calls new (the found route below is mocked too)
-    ticket = { ...body.art, seed: FIRST_EDITION_SEED };
+    // the fox-and-rainbow seed, so the picture matches the parts this mock calls new (the found route below is mocked too)
+    ticket = { ...body.art, seed: FOX_RAINBOW_SEED };
     await route.fulfill({ response: res, json: { ...body, art: ticket } });
   });
   const reports: { seed: number; count: number; iat: number; sub: string | null; sig: string; index: number }[] = [];
   await page.route("**/api/collection/found", (route) => {
     reports.push(route.request().postDataJSON());
-    const found = reports.length === 1 ? [{ kind: "animal", value: "redbird" }, { kind: "sky", value: "rainbow" }] : [];
+    // an older server's "none" is dropped by the browser: no badge word, no E-36 for it
+    const found = reports.length === 1 ? [{ kind: "animal", value: "fox" }, { kind: "sky", value: "rainbow" }, { kind: "ground", value: "none" }] : [];
     return route.fulfill({ json: { ok: true, found } });
   });
   const { events } = await recordEvents(page);
 
   await toBookmarks(page);
-  const badge = page.getByText("초판본 · 처음 만난 동물·소품!");
+  // 10-05 fix: the common fox is not called 한정판 — only the rainbow is; the colour follows the rarest part
+  const badge = page.getByText("처음 만난 한정판 무지개 · 여우!");
   await expect(badge).toBeVisible();
+  await expect(badge).toHaveAttribute("data-tier", "limited");
+  const box = (await badge.boundingBox())!;
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width).toBeLessThanOrEqual(page.viewportSize()!.width);    // one line, inside the screen
+  expect(box.height).toBeLessThan(30);
+  expect(await badge.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);   // never cut off with "…"
   if (SHOTS) {
     await page.waitForTimeout(500);                                         // fully in (it fades in for 0.3 s)
-    await page.screenshot({ path: `${SHOTS}/impl-badge.png` });
+    await page.screenshot({ path: `${SHOTS}/fix-badge.png` });
   }
   await expect(badge).toBeHidden({ timeout: 5000 });                       // about 2.5 s, then gone
   expect(ticket).not.toBeNull();
   expect(reports[0]).toEqual({ ...ticket!, count: 5, index: 0 });
   await expect.poll(() => named(events, "collection_item_found").map((e) => e.props)).toEqual([
-    { part_kind: "animal", part_value: "redbird", tier: "first_edition" },
+    { part_kind: "animal", part_value: "fox", tier: "common" },
     { part_kind: "sky", part_value: "rainbow", tier: "limited" },
   ]);
 
