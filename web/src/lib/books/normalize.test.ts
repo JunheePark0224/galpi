@@ -41,6 +41,15 @@ describe("normalizeBook", () => {
     });
   });
 
+  it("accepts 로맨스 and the four 10-05 topics, which take the 일·커리어 and 습관·자기계발 fields", () => {
+    expect(normalizeBook({ ...leafRow, slot: "로맨스" }, BIB)).toMatchObject({ entry: "leaf", genre: "로맨스", field: null });
+    for (const [topic, field, keyword] of [
+      ["마케팅·브랜딩", "일·커리어", "브랜딩"], ["리더십", "일·커리어", "피드백·코칭"], ["건강·운동", "습관·자기계발", "잠·회복"], ["요리·살림", "습관·자기계발", "집밥"],
+    ]) {
+      expect(normalizeBook({ ...targetRow, slot: topic, field: undefined, genre: undefined, keywords: [keyword] }, BIB)).toMatchObject({ topic, genre: topic, field, keywords: [keyword] });
+    }
+  });
+
   it("accepts Korean one-liner style names", () => {
     expect(normalizeBook({ ...targetRow, one_liner_style: "요약형" }, BIB).one_liner_style).toBe("summary");
   });

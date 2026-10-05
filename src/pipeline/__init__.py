@@ -19,5 +19,6 @@ ADDITIONS = ROOT / "data" / "processed" / "additions"
 PIPELINE = ROOT / "data" / "pipeline"
 CONFIG = PIPELINE / "config.json"
 AGREEMENT = PIPELINE / "agreement.csv"
+REQUEUE = PIPELINE / "requeue.json"  # books going back in as the other entry (pipeline/requeue.py)
 RUNS = PIPELINE / "runs"
 KST = timezone(timedelta(hours=9))  # the day of a run is the Korean day (Actions runs at 06:00 KST)

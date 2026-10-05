@@ -30,6 +30,15 @@ def test_the_reference_is_read_from_the_docs():
     assert "one_liner" in p and "one_liner" not in system_prompt(VOC, "check")
 
 
+def test_the_world_rule_and_its_two_examples_reach_the_prompt():
+    """10-05: a realistic novel is 현실 even when philosophical; 0 only when real and unreal are truly mixed."""
+    p = system_prompt(VOC, "tag")
+    assert "카렐 차페크 『평범한 인생』" in p and "톨스토이 우화" in p
+    assert "문학적·철학적이라는 이유만으로 0을 주지 않는다" in p and "world는 표의 중간(0) 조건일 때만" in p
+    assert "이야기가 없는 책은" not in p
+    assert "카렐 차페크" in system_prompt(VOC, "check")  # the blind second pass reads the same row
+
+
 def _docs_copy(tmp_path, cut: str = "") -> Path:
     for name in ("balance-game.md", "book-pool.md", "target-chips.md"):
         text = (DOCS / name).read_text(encoding="utf-8")
@@ -277,3 +286,18 @@ def test_names_the_list_left_out_on_purpose_are_not_candidates():
         got = parse(tag_answer("target", new_keyword=name), "target", "tag", ["SQL"], topic="데이터 분석", excluded=["R", "시각화"])
         assert got["keyword_candidate"] is None
     assert parse(tag_answer("target", new_keyword="R"), "target", "tag", ["SQL"], topic="데이터 분석")["keyword_candidate"] == "R"
+
+
+def test_the_tagger_knows_romance_and_the_four_new_topics_from_the_same_docs_and_vocab_the_app_reads():
+    """10-05 (docs/plans/2026-10-05-new-genres.md, drafts): the genre boundary, the topic definitions and boundaries and the
+    twelve keywords with their definitions all come from book-pool.md 1-3 · target-chips.md 2-1 · keyword_vocab.json."""
+    p = system_prompt(VOC, "tag")
+    assert "로맨스 ↔ 한국 소설·외국 소설" in p and "웹소설·장르 로맨스 문고·19금" in p
+    # 10-05 user: content genres before origin, the 중심 줄기, and the order when truly half and half
+    assert "내용 장르(SF·판타지 · 추리·스릴러 · 호러·괴담 · 로맨스) ↔ 한국 소설·외국 소설" in p
+    assert "SF·판타지 → 추리·스릴러 → 호러·괴담 → 로맨스 → 한국·외국 소설" in p and "이 책을 한 줄로 소개할 때" in p
+    for topic in ("마케팅·브랜딩", "리더십", "건강·운동", "요리·살림"):
+        assert f"- {topic}:" in p and f"| {topic} (10-05 사용자 확정)" in p
+    assert "  - 브랜딩 — 상품·서비스·조직이 기억되는" in p and "  - 잠·회복 — 잘 자고" in p and "  - 집밥 — 집에서" in p
+    assert "의학 전문서·질병 치료서·다이어트 비법서" in p
+

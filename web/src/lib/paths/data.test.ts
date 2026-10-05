@@ -34,17 +34,34 @@ describe("src/data/question-map.json", () => {
 
 describe("far rules (challenge rules v2, 10-05)", () => {
   const far = (built as QuestionMap).far;
-  it("are numbered and titled in the document; the moving reasons (drafts) are written for the 배우기 rules 20-36 only", () => {
-    expect(far).toHaveLength(36);
+  const rule = (n: number) => far.find((r) => r.n === n)!;
+  it("are numbered and titled in the document; the moving reasons (drafts) are written for the 배우기 rules and 로맨스 (37) only", () => {
+    expect(far).toHaveLength(43);
+    expect(far.map((r) => r.n!).sort((a, b) => a - b)).toEqual(Array.from({ length: 43 }, (_, i) => i + 1));
     expect(far.every((r) => typeof r.title === "string" && r.title.length > 0)).toBe(true);
-    expect(far.slice(0, 19).every((r) => r.why === undefined)).toBe(true);
-    expect(far.slice(19).every((r) => r.from.entry === "target" && typeof r.why === "string")).toBe(true);
+    const story = far.filter((r) => r.from.entry === "leaf");
+    expect(story.filter((r) => r.why !== undefined).map((r) => r.n)).toEqual([37]);
+    expect(far.filter((r) => r.from.entry === "target").every((r) => typeof r.why === "string")).toBe(true);
+    expect(story.map((r) => r.n)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 37, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]);
+  });
+  it("10-05: rules 37-43 (로맨스 and the four new topics) sit above the group rules they are narrower than", () => {
+    const at = (n: number) => far.findIndex((r) => r.n === n);
+    expect(rule(37)).toMatchObject({ from: { entry: "leaf", genres: ["로맨스"] }, to: { entry: "leaf", genres: ["SF·판타지", "역사"] } });
+    expect(rule(17).from.genres).toContain("로맨스");
+    for (const n of [38, 39, 40, 41]) expect(at(n)).toBeLessThan(at(26));
+    for (const n of [42, 43]) expect(at(n)).toBeLessThan(at(31));
+    expect(rule(31).from.topics).toEqual(expect.arrayContaining(["마케팅·브랜딩", "리더십"]));
+    expect(rule(35).from.topics).toEqual(expect.arrayContaining(["마케팅·브랜딩", "리더십"]));
+    expect(rule(32).from.topics).toEqual(expect.arrayContaining(["건강·운동", "요리·살림"]));
+    expect(rule(34).from.topics).toEqual(expect.arrayContaining(["건강·운동", "요리·살림"]));
   });
   it("19 and 36 are the challenge lists the user approved, and catch every 이야기 / 배우기 scope (no fallback to the other branch)", () => {
-    expect(far[18]).toMatchObject({ from: { entry: "leaf" }, to: { entry: "leaf", genres: ["시", "인문", "과학 교양", "예술·여행", "역사", "사회·시사", "호러·괴담"] }, pick: "one" });
-    expect(far[35]).toMatchObject({ from: { entry: "target" }, to: { entry: "leaf", genres: ["과학 교양", "인문", "역사", "예술·여행", "사회·시사"] }, pick: "one" });
-    expect(far[18].from).toEqual({ entry: "leaf" });
-    expect(far[35].from).toEqual({ entry: "target" });
+    expect(rule(19)).toMatchObject({ from: { entry: "leaf" }, to: { entry: "leaf", genres: ["시", "인문", "과학 교양", "예술·여행", "역사", "사회·시사", "호러·괴담"] }, pick: "one" });
+    expect(rule(36)).toMatchObject({ from: { entry: "target" }, to: { entry: "leaf", genres: ["과학 교양", "인문", "역사", "예술·여행", "사회·시사"] }, pick: "one" });
+    expect(rule(19).from).toEqual({ entry: "leaf" });
+    expect(rule(36).from).toEqual({ entry: "target" });
+    expect(far.findIndex((r) => r.n === 19)).toBe(far.findLastIndex((r) => r.from.entry === "leaf"));
+    expect(far.at(-1)!.n).toBe(36);
     for (const end of pathEnds(QUESTION_MAP).filter((e) => e.mode === "challenge")) {
       const w = walkPath(QUESTION_MAP, end.example);
       if (w.scope.entry !== null) expect(applyChallenge(QUESTION_MAP, w).challenge, end.scopeKey).toBeDefined();

@@ -2,16 +2,18 @@
 
 daily_count  books to add per day (D-C 50, then 30)          auto_merge  false: a person reviews the PR / true: merge
 sample_rate  share of a week's additions sampled after graduation   model / second_model  tagger (pass A) / checker (pass B)
+target_phase "launch" (before the 1,000-book launch) or "grow" (after it): which targets gaps.py fills up to (10-05)
 """
 import json
 from dataclasses import dataclass, replace
 from pathlib import Path
 
 from . import CONFIG
+from .gaps import PHASES
 
 MODELS = ("claude-haiku-4-5", "claude-sonnet-5-5")
 MAX_DAILY = 100
-KEYS = ("daily_count", "auto_merge", "sample_rate", "model", "second_model")
+KEYS = ("daily_count", "auto_merge", "sample_rate", "model", "second_model", "target_phase")
 
 
 class ConfigError(ValueError):
@@ -25,6 +27,7 @@ class Config:
     sample_rate: float
     model: str
     second_model: str
+    target_phase: str
 
 
 def _count(value: object) -> int:
@@ -47,7 +50,10 @@ def parse_config(raw: object) -> Config:
     for key in ("model", "second_model"):
         if raw[key] not in MODELS:
             raise ConfigError(f"{key} must be one of {MODELS}")
-    return Config(_count(raw["daily_count"]), raw["auto_merge"], float(rate), raw["model"], raw["second_model"])
+    if raw["target_phase"] not in PHASES:
+        raise ConfigError(f"target_phase must be one of {tuple(PHASES)}")
+    return Config(_count(raw["daily_count"]), raw["auto_merge"], float(rate), raw["model"], raw["second_model"],
+                  raw["target_phase"])
 
 
 def load_config(path: Path = CONFIG, count: int | None = None) -> Config:

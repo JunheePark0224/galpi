@@ -63,14 +63,15 @@ Last Updated: 2026-10-04 (v2 계획 2 `feat/v2-screens` 병합 전 · 배포 중
 ## 3. 매일 할 일 (D-C — 검수하며 자동 병합 졸업까지)
 
 1. 아침 PR `books/<날짜>` 확인 (실패하면 PR 없이 Actions 기록에 이유만)
-2. PR 브랜치에서 `PYTHONIOENCODING=utf-8 python -m src.pipeline.review <날짜>` → `data/processed/check/`에 검수 페이지 → 사용자가 검수하고 내려받기
+2. PR 브랜치에서 `PYTHONIOENCODING=utf-8 python -m src.pipeline.review <날짜>` → 검수 페이지는 **늘 본 폴더(main 체크아웃) `Galpi/data/processed/check/pipeline/<날짜>.html`** — worktree(`.worktrees/<이름>`) 안에서 돌려도 같은 곳(10-05, 찍히는 절대 경로 확인) → 사용자가 검수하고 내려받기 (`--apply`는 내려받은 파일이 어디 있든 경로만 주면 된다)
+   - 검수 페이지 결정에 **"다른 갈래로 (다시 태그)"**(10-05): 🎯로 왔지만 🍃 장르 책이면(예: 『뇌』 모기 겐이치로 → 과학 교양) 이걸 고르고 🍃 장르를 고른다. 🍃 책이면 🎯 주제를 고르거나 "AI가 정해요"(파이프라인이 우리 규칙으로 가장 맞는 주제를 고름). `--apply`가 그 책을 books.json에 넣지 않고(`dropped` + `requeued_to`) `data/pipeline/requeue.json`에 적는다 → 다음 묶음이 그 책을 맨 먼저 새 갈래로 태그하고(그날 권수에 포함) 줄을 지운다. 빼기와 달리 책을 잃지 않는다
 3. `python -m src.pipeline.review <날짜> --apply <내려받은 파일>` → `cd web && npm run books:import` → `npm test` → PR 브랜치에 커밋 → **병합·배포는 사용자 허락 후**
 4. 졸업 기준 (`docs/deploy.md` 7절): ① 연속 3회 모든 항목 95%+ — **현재 1/3** ② 그 3회 일치 책 표본 10권 이상·바뀐 책 5% 이하 — **현재 표본 3권, 바뀜 0**. 둘 다 넘으면 사용자에게 물어본 뒤 `data/pipeline/config.json` `auto_merge: true`
 5. 일치율 기록: `data/pipeline/agreement.csv`
 
 ### 여러 번 돌리기 (10-06 공개 준비)
 
-하루에 묶음(batch)을 여러 번 돌려 책을 376권 → 1,000권으로 늘린다(묶음당 100권, 7~9번). 첫 묶음은 그대로 `<날짜>`, 같은 날 다음 묶음은 `<날짜>-2`, `-3` … — 브랜치 `books/<묶음>`, 파일 `data/processed/additions/<묶음>.json`, 검수 명령, `agreement.csv`의 `date` 칸(`batch`는 그대로 `daily`)이 모두 이 이름을 쓴다. 책의 날짜(`date`)는 달력 날짜 그대로.
+하루에 묶음(batch)을 여러 번 돌려 책을 376권 → 1,000권으로 늘린다(묶음당 100권, 7~9번). 묶음 100권은 **가장 모자란 칸부터 칸당 10권 → 약 10칸**(장르 · 주제 · 키워드, `book-pool.md` 1-2c). 목표는 `data/pipeline/config.json` **`target_phase`**: 지금 `"launch"`(장르 45 · 주제 26 · 키워드 5), 공개 뒤 사용자 승인으로 `"grow"`(100 · 60 · 15). 모든 칸이 목표에 닿으면 그 뒤 실행은 아무것도 넣지 않는다. 첫 묶음은 그대로 `<날짜>`, 같은 날 다음 묶음은 `<날짜>-2`, `-3` … — 브랜치 `books/<묶음>`, 파일 `data/processed/additions/<묶음>.json`, 검수 명령, `agreement.csv`의 `date` 칸(`batch`는 그대로 `daily`)이 모두 이 이름을 쓴다. 책의 날짜(`date`)는 달력 날짜 그대로.
 
 1. 실행 (열린 `books/` PR이 없을 때만 돈다 — 있으면 API 호출 없이 쉰다):
    `gh workflow run daily-books.yml -f next_batch=true -f count=100 -f dry_run=false`

@@ -6,7 +6,9 @@ copy) and the D4 page's axis labels (build_d4_review.AXIS_LABELS). Same download
 side — 🎯 keywords and way, 🍃 the four axes — with [AI-1이 맞아요] / [AI-2가 맞아요] (copy that opinion into the form,
 confirm, and a "doesn't fit" opinion moves the book out), and the editable form: 🎯 topic · keyword chips (closed list) ·
 way · a keyword candidate (a short name missing from the list, 12 characters — pipeline/keyword_candidates.py), 🍃 genre · four axes as three-way choices (the D4 wording), the one-liner with a live rule check, and a decision
-(넣기 / 대기 / 빼기). Progress stays in this browser (localStorage).
+(넣기 / 대기 / 빼기 / 다른 갈래로 — a 🎯 book that is really a 🍃 genre book, or the other way round, goes back in as
+the other entry: 🎯 → 🍃 asks for the genre, 🍃 → 🎯 may name a topic or leave it to the pipeline; pipeline/requeue.py).
+Progress stays in this browser (localStorage).
 """
 from build_pilot_review import COMMON, STYLE
 
@@ -42,7 +44,7 @@ __COMMON__
 const TOPICS=Object.keys(KW);
 const FLAG={fits:"두 AI 중 하나가 이 칸에 안 맞을 수 있다고 봐요",keywords:"키워드가 달라요",way:"읽는 방식이 달라요",temp:"온도가 달라요",
  pull:"끌림이 달라요",gain:"얻는 것이 달라요",world:"세계가 달라요",confidence:"AI-1 확신이 낮아요"};
-const STATUS=[["picked","넣기"],["reserve","대기"],["dropped","빼기"]];
+const STATUS=[["picked","넣기"],["reserve","대기"],["dropped","빼기"],["requeue","다른 갈래로 (다시 태그)"]];
 const SAMPLE_WHY="표본 — 두 AI가 같게 봤어요. 사람이 한 번 확인해 두 AI가 같아도 틀리는지 재요";
 const side=(k,v)=>{const a=AXES.find(x=>x[0]===k);return v>0?a[2]:v<0?a[4]:a[3]};
 const base=b=>b.entry==="target"?{topic:b.topic,keywords:[...(b.keywords||[])],way:b.way,keyword_candidate:b.keyword_candidate||""}:{genre:b.genre,axes:{...b.axes}};
@@ -80,23 +82,31 @@ function card(b){const c=cur(b), why=[...(b.flags||[]).map(f=>FLAG[f]||f),...(b.
   ${fields(b,c)}<div class="row"><span class="lab">한 줄</span><input type="text" data-act="line" value="${esc(c.one_liner)}"></div>
   <div class="row"><span class="cnt ${li.length?"bad":""}">${len(c.one_liner)}자 ${li.join(" · ")}</span></div>
   <div class="row"><span class="lab">결정</span><select data-act="status">${STATUS.map(([v,l])=>`<option value="${v}" ${v===c.status?"selected":""}>${l}</option>`).join("")}</select>
-  <button class="ok" data-act="ok">${c.ok?"확인함 ✓":"맞아요"}</button></div></div>`}
+  <button class="ok" data-act="ok">${c.ok?"확인함 ✓":"맞아요"}</button></div>${requeueRow(b,c)}</div>`}
+function requeueRow(b,c){if(c.status!=="requeue")return "";
+ if(b.entry==="target")return `<div class="row"><span class="lab">🍃 장르</span><select data-act="to_slot"><option value="">장르를 골라 주세요</option>${GENRES.map(g=>`<option ${g===c.to_slot?"selected":""}>${esc(g)}</option>`).join("")}</select>
+  <span class="cnt">이 책을 🍃 이야기 책으로 다시 태그해요 (다음 묶음)</span></div>`;
+ return `<div class="row"><span class="lab">🎯 주제</span><select data-act="to_slot"><option value="">AI가 정해요</option>${TOPICS.map(t=>`<option ${t===c.to_slot?"selected":""}>${esc(t)}</option>`).join("")}</select>
+  <span class="cnt">이 책을 🎯 배우기 책으로 다시 태그해요 (다음 묶음)</span></div>`}
 function render(){
  const open=[...document.querySelectorAll("details[open]")].map(d=>(d.closest(".card")||{}).id+"|"+d.className);
  document.getElementById("app").innerHTML=BOOKS.map(card).join("");
  document.querySelectorAll("details").forEach(d=>{if(open.includes((d.closest(".card")||{}).id+"|"+d.className))d.open=true});
  document.getElementById("prog").textContent=`확인 ${BOOKS.filter(b=>cur(b).ok).length}/${BOOKS.length}`}
 const bookOf=e=>{const el=e.target.closest(".card");return el&&BOOKS.find(x=>"b"+x.isbn===el.id)};
+const toEntry=b=>b.entry==="target"?"leaf":"target";
 const fromAi=(b,n)=>{const o=n===1?b:b.second||{};
  return {...(b.entry==="target"?{keywords:[...(o.keywords||[])],way:o.way}:{axes:{...o.axes}}),status:o.fits===false?"dropped":cur(b).status}};  // never promotes a held book: the decision stays as it is
 document.addEventListener("click",e=>{const b=bookOf(e); if(!b)return; const c=cur(b), k=e.target.dataset.kw, act=e.target.dataset.act;
  if(k!==undefined){put(b,{keywords:c.keywords.includes(k)?c.keywords.filter(x=>x!==k):[...c.keywords,k].slice(0,5)});return}
  if(act==="pick1"||act==="pick2"){st[b.isbn]={...c,...fromAi(b,act==="pick1"?1:2),ok:true,pick:act==="pick1"?"ai1":"ai2"};save();render();return}
- if(act==="ok"){st[b.isbn]={...c,ok:true};save();render()}});
+ if(act==="ok"){if(c.status==="requeue"&&b.entry==="target"&&!c.to_slot){alert("어느 🍃 장르 책인지 골라 주세요");return}
+  st[b.isbn]={...c,ok:true};save();render()}});
 document.addEventListener("change",e=>{const b=bookOf(e); if(!b)return; const act=e.target.dataset.act, axis=e.target.dataset.axis, v=e.target.value;
  if(axis){put(b,{axes:{...cur(b).axes,[axis]:Number(v)}});return}
  if(act==="topic")put(b,{topic:v,keywords:[]}); if(act==="way")put(b,{way:v}); if(act==="genre")put(b,{genre:v});
- if(act==="status")put(b,{status:v})});  // the one-liner is stored by the input handler (a re-render here would swallow the next click)
+ if(act==="status")put(b,v==="requeue"?{status:v,to_entry:toEntry(b),to_slot:cur(b).to_slot||""}:{status:v});
+ if(act==="to_slot")put(b,{to_slot:v})});  // the one-liner is stored by the input handler (a re-render here would swallow the next click)
 document.addEventListener("input",e=>{if(e.target.dataset.act==="cand"){const b=bookOf(e), el=e.target.closest(".card");
   st[b.isbn]={...cur(b),keyword_candidate:e.target.value,ok:false,pick:null};save();
   el.classList.remove("done"); const ok=el.querySelector(".ok"); if(ok)ok.textContent="맞아요"; return}

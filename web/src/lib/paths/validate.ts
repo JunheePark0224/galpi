@@ -75,11 +75,13 @@ export function validateMap(map: QuestionMap, vocab: Vocabulary): string[] {
   walk(map.start, [], null);
   for (const id of Object.keys(nodes)) if (!reached.has(id)) errors.push(`${id}: not reachable from the start`);
 
+  const num = (r: FarRule, j: number) => r.n ?? j + 1;
   map.far.forEach((r, j) => {
-    errors.push(...tagErrors(`far ${j + 1} from:`, r.from as Effects, vocab, null), ...tagErrors(`far ${j + 1} to:`, r.to as Effects, vocab, null));
+    const where = `far ${num(r, j)}`;
+    errors.push(...tagErrors(`${where} from:`, r.from as Effects, vocab, null), ...tagErrors(`${where} to:`, r.to as Effects, vocab, null));
     const i = map.far.findIndex((earlier, k) => k < j && covers(earlier.from, r.from));
-    if (i >= 0) errors.push(`far ${j + 1} is shadowed by far ${i + 1}`);
-    errors.push(...learnErrors(`far ${j + 1}`, r));
+    if (i >= 0) errors.push(`${where} is shadowed by far ${num(map.far[i], i)}`);
+    errors.push(...learnErrors(where, r));
   });
   return [...new Set(errors)];
 }

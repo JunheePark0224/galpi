@@ -556,7 +556,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | `one_liner_style` | 같음 | String | "summary", "question" | 첫인상 한 줄 말투 — 🎯 요약형, 🍃 질문형(좋은 질문이 없으면 요약형) |
 | `pick_type` | `kind` → `pick_type` | String | "recommended", "random" | 추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음) |
 | `art` | 같음 | Object | {"animal": "fox", "bg": "peach", "sky": "moon", "ground": "grass", "rare": false} | 책갈피 그림 조합 {animal, bg, sky, ground, rare} — 중첩 객체 예외 — D-05 보관 그림과 같은 모양. Amplitude에서는 art.animal처럼 펼쳐짐. v1.3: 값에 한정판·초판본(예: "otter", "galaxy", "goldmoon")이 더해짐, `rare` = 넷 중 하나라도 한정판 이상(그 전 기록은 모두 false). 부분별 등급은 값에서 찾는다(`tierOf`) |
-| `challenge_rule` | 추가 (v1.5) | Number | null, 1, 19, 36 | 이 판에 적용된 도전 규칙 번호(`question-map.md`의 `N.` 줄, 1~36). 도전이 아니거나 규칙이 맞지 않아 그대로 뽑은 판은 null. 같은 판의 모든 책갈피 장이 같은 값 — 서버가 뽑기 응답에 싣는 `challenge.rule.n`. E-34가 아니라 여기에 둔 까닭은 8절 v1.5 |
+| `challenge_rule` | 추가 (v1.5) | Number | null, 1, 19, 36 | 이 판에 적용된 도전 규칙 번호(`question-map.md`의 `N.` 줄, 1~43 — 10-05에 로맨스·새 주제 넷의 37~43이 더해짐. 번호는 규칙에 붙어 다녀 이미 남은 값의 뜻은 그대로). 도전이 아니거나 규칙이 맞지 않아 그대로 뽑은 판은 null. 같은 판의 모든 책갈피 장이 같은 값 — 서버가 뽑기 응답에 싣는 `challenge.rule.n`. E-34가 아니라 여기에 둔 까닭은 8절 v1.5 |
 | `challenge_genre` | 추가 (v1.5) | String | null, "인문", "인문,역사" | 도전 규칙이 보낸 먼 쪽 장르 — 목록 규칙(19·36)은 서버가 씨앗으로 뽑은 한 장르, 그 밖의 규칙은 규칙에 적힌 장르를 적힌 순서대로 쉼표(`,`)로 이은 것(`challenge.to`). 도전이 아니면 null. 시스템 키(책 표 장르 이름, 2-4 예외 1) |
 
 #### E-08 `bookmark_reacted`
