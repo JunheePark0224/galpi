@@ -12,11 +12,14 @@ Shown: books a person must look at — the two passes disagreed or pass A was un
 trial a fixed `sample_rate` share of them (sample.trial_sample, seeded by the batch id) is shown too ("표본") BY DEFAULT, so
 the agreement figures also say how often an agreed book was still wrong; `--no-sample` turns that off. The page shows YES24
 intro/TOC from the local cache (fetched with the local .env key when missing), so it is written under data/processed/check/
-(git-ignored) and never committed. Applying the same download again changes nothing (any book of the day may be answered).
+(git-ignored) and never committed — always the MAIN checkout's data/processed/check/pipeline/, also when the command runs
+inside a worktree (.worktrees/<name>), so the user finds every page in one place (10-05). `--apply` takes a download path
+from anywhere. Applying the same download again changes nothing (any book of the day may be answered).
 """
 import argparse
 import json
 import re
+import subprocess
 import sys
 from collections import Counter
 from pathlib import Path
@@ -37,7 +40,23 @@ from .keyword_candidates import excluded_names
 from .review_page import TEMPLATE
 from .sample import daily_docs, sample_books, trial_sample
 
-PAGES = OUT_DIR / "pipeline"
+
+
+def main_checkout(root: Path = OUT_DIR.parents[2], git=subprocess.run) -> Path:
+    """The main checkout's root: the parent of `git rev-parse --git-common-dir` (in a worktree that is the main repo's .git;
+    in the main checkout, its own .git). `root` itself when git is missing or fails."""
+    try:
+        res = git(["git", "-C", str(root), "rev-parse", "--git-common-dir"], capture_output=True, text=True, timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        return root
+    common = (res.stdout or "").strip()
+    if res.returncode != 0 or not common:
+        return root
+    path = Path(common)
+    return (path if path.is_absolute() else root / path).resolve().parent
+
+
+PAGES = main_checkout() / OUT_DIR.relative_to(OUT_DIR.parents[2]) / "pipeline"
 KEEP = ("isbn", "title", "author", "pages", "link", "entry", "topic", "keywords", "way", "genre", "axes", "one_liner",
         "evidence", "confidence", "fits", "second", "flags", "issues", "status", "keyword_candidate")
 
