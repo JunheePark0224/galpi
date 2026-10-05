@@ -7,7 +7,10 @@ import { parseQuestionMap } from "./parse";
 import { ALL_SCOPE, NEUTRAL_MOOD, type Answer } from "./types";
 import { walkPath } from "./walk";
 
-const MAP = parseQuestionMap(readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/mini-map.md"), "utf8"));
+const MINI = readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/mini-map.md"), "utf8");
+const MAP = parseQuestionMap(MINI);
+/** + the v2 list rules: 2 이야기 · 장르 없음 → 에세이·한국 소설·시, 3 배우기 · 주제 없음 → 인문·과학 교양·역사 (pick: one). */
+const LISTS = parseQuestionMap(`${MINI}\n${readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/list-rules.md"), "utf8")}`);
 const a = (node: string, choice: Answer["choice"]): Answer => ({ node, choice });
 const SQL = [a("start", "A"), a("branch", "B"), a("learn-area", "A"), a("learn-data", "A"), a("mood-way", "B"), a("mood-len", "A")];
 
@@ -18,7 +21,7 @@ const l = (id: string, genre: string): LeafBook => ({ id, entry: "leaf", genre, 
 const BOOKS: Book[] = [
   t("sql1", ["SQL"]), t("sql2", ["SQL"]), t("sql3", ["SQL"], "개념"), t("sql4", ["SQL"], "실습", 450), t("sql5", ["SQL"]),
   t("xl1", ["엑셀"]), t("xl2", ["엑셀"]), t("mind1", ["우울"], "개념", 200, "마음 돌보기"),
-  l("e1", "에세이"), l("e2", "에세이"), l("e3", "에세이"), l("e4", "에세이"), l("e5", "에세이"),
+  l("e1", "인문"), l("e2", "인문"), l("e3", "인문"), l("e4", "인문"), l("e5", "인문"),
 ];
 const opts = (seed = 1, seen: string[] = []) => ({ seen: new Set(seen), rng: mulberry32(seed) });
 
@@ -130,11 +133,11 @@ describe("drawForPath", () => {
     expect(d.exhausted).toBe(false);
   });
 
-  it("challenge: a 데이터 분석 answer draws from the far side (에세이), keeping the mood", () => {
+  it("challenge: a 데이터 분석 answer draws from the far side (인문), keeping the mood", () => {
     const d = drawForPath(BOOKS, MAP, walkPath(MAP, [a("start", "B"), ...SQL.slice(1)]), opts());
     const rec = d.picks.filter((p) => p.kind === "recommended");
     expect(rec).toHaveLength(4);
-    expect(rec.every((p) => p.book.entry === "leaf" && p.book.genre === "에세이")).toBe(true);
+    expect(rec.every((p) => p.book.entry === "leaf" && p.book.genre === "인문")).toBe(true);
     expect(d.picks.filter((p) => p.kind === "random")).toHaveLength(1);
   });
 
@@ -254,22 +257,8 @@ describe("drawForPath — 10-05 rules (design 5절)", () => {
     }
   });
 
-  it("도전 + 섞어서: one side at random by the seed, reproducible, not the usual mixed draw", () => {
-    const books: Book[] = [...["e1", "e2", "e3", "e4", "e5"].map((id) => l(id, "에세이")), ...["x1", "x2", "x3", "x4", "x5"].map((id) => t(id, ["SQL"]))];
-    const route = [a("start", "B"), a("branch", "unsure"), a("mood-len", "unsure")];
-    const sides = new Set<string>();
-    for (let seed = 1; seed <= 20; seed++) {
-      const d = drawForPath(books, MAP, walkPath(MAP, route), opts(seed));
-      const side = d.drawnFrom.scope.entry!;
-      expect(d.picks.every((p) => p.book.entry === side)).toBe(true);
-      expect(drawForPath(books, MAP, walkPath(MAP, route), opts(seed)).picks.map((p) => p.book.id)).toEqual(d.picks.map((p) => p.book.id));
-      sides.add(side);
-    }
-    expect(sides).toEqual(new Set(["leaf", "target"]));
-  });
-
   it("도전 from 배우기: the way answer scores on the far side's story axes", () => {
-    const essay = (id: string, axes: LeafBook["axes"]): LeafBook => ({ id, entry: "leaf", genre: "에세이", pages: 320, axes });
+    const essay = (id: string, axes: LeafBook["axes"]): LeafBook => ({ id, entry: "leaf", genre: "인문", pages: 320, axes });
     const books: Book[] = [
       ...BOOKS.filter((b) => b.entry === "target"),
       essay("know1", { temp: 0, pull: 0, gain: 1, world: 0 }), essay("know2", { temp: 0, pull: 0, gain: 1, world: 0 }),
@@ -310,14 +299,76 @@ describe("drawForPath — round 2 (10-05)", () => {
       expect(drawForPath(books, MAP, walkPath(MAP, MIXED), opts(seed)).picks.find((p) => p.kind === "random")?.book.entry).toBe("leaf");
     }
   });
+});
 
-  it("도전 from 이야기 with no far rule: only 이야기 books, a random genre per seed, widening inside 이야기", () => {
-    const books: Book[] = [...["e1", "e2", "e3", "e4", "e5"].map((id) => l(id, "에세이")), ...BOOKS.filter((b) => b.entry === "target")];
-    const route = [a("start", "B"), a("branch", "A"), a("story-world", "B"), a("mood-temp", "unsure"), a("mood-len", "unsure")];
-    for (let seed = 1; seed <= 30; seed++) {
-      const d = drawForPath(books, MAP, walkPath(MAP, route), opts(seed));
-      expect(d.picks.every((p) => p.book.entry === "leaf")).toBe(true);
-      expect(d.drawnFrom.scope.genres).toHaveLength(1);
+describe("drawForPath — challenge rules v2 (10-05)", () => {
+  /** 🍃 인문 5 · 과학 교양 5 · 역사 4 · 에세이 5 · 한국 소설 6 · 시 2 · SF 6, and the 🎯 books. */
+  const many = (genre: string, n: number) => Array.from({ length: n }, (_, i) => l(`${genre}${i}`, genre));
+  const books: Book[] = [
+    ...many("인문", 5), ...many("과학 교양", 5), ...many("역사", 4), ...many("에세이", 5), ...many("한국 소설", 6), ...many("시", 2), ...many("SF·판타지", 6),
+    ...BOOKS.filter((b) => b.entry === "target"),
+  ];
+  const LEARN_NONE = [a("start", "B"), a("branch", "B"), a("learn-area", "unsure"), a("mood-way", "unsure"), a("mood-len", "unsure")];
+  const STORY_NONE = [a("start", "B"), a("branch", "A"), a("story-world", "unsure"), a("mood-temp", "unsure"), a("mood-len", "unsure")];
+  const MIXED_CHALLENGE = [a("start", "B"), a("branch", "unsure"), a("mood-len", "unsure")];
+
+  it("배우기 · 주제 없음: one list genre with 5+ books per seed, the four from it, every book (운명 1장 too) a learning genre", () => {
+    const seen = new Set<string>();
+    for (let seed = 1; seed <= 60; seed++) {
+      const d = drawForPath(books, LISTS, walkPath(LISTS, LEARN_NONE), opts(seed));
+      const [genre] = d.drawnFrom.scope.genres!;
+      expect(["인문", "과학 교양"]).toContain(genre);
+      expect(d.picks.filter((p) => p.kind === "recommended").every((p) => p.book.genre === genre)).toBe(true);
+      expect(d.picks.every((p) => p.book.entry === "leaf" && ["인문", "과학 교양", "역사"].includes(p.book.genre))).toBe(true);
+      expect(d.drawnFrom.challenge).toMatchObject({ from: ["배우기 · 주제 없음"], to: [genre], rule: { n: 3 } });
+      expect(drawForPath(books, LISTS, walkPath(LISTS, LEARN_NONE), opts(seed)).picks).toEqual(d.picks);   // same seed, same draw
+      seen.add(genre);
     }
+    expect(seen).toEqual(new Set(["인문", "과학 교양"]));
+  });
+
+  it("a 배우기 challenge widens inside the learning genres only, never to 이야기 as a whole", () => {
+    const thin: Book[] = [...many("인문", 2), ...many("과학 교양", 3), ...many("에세이", 9), ...many("SF·판타지", 9), ...BOOKS.filter((b) => b.entry === "target")];
+    const route = [a("start", "B"), ...SQL.slice(1)];                                                  // rule 1: 데이터 분석 → 인문
+    for (let seed = 1; seed <= 30; seed++) {
+      const d = drawForPath(thin, MAP, walkPath(MAP, route), opts(seed));
+      expect(d.widenedScope).toBe(true);
+      expect(d.picks.every((p) => ["인문", "과학 교양"].includes(p.book.genre))).toBe(true);
+    }
+  });
+
+  it("이야기 · 장르 없음: one story genre of the list with 5+ books, only 이야기 books, never the other branch", () => {
+    const seen = new Set<string>();
+    for (let seed = 1; seed <= 60; seed++) {
+      const d = drawForPath(books, LISTS, walkPath(LISTS, STORY_NONE), opts(seed));
+      seen.add(d.drawnFrom.scope.genres![0]);
+      expect(d.picks.every((p) => p.book.entry === "leaf")).toBe(true);
+      expect(d.drawnFrom.challenge).toMatchObject({ from: ["이야기 · 장르 없음"], rule: { n: 2, title: "이야기 · 장르 없음 → 목록" }, reasonDraft: null });
+    }
+    expect(seen).toEqual(new Set(["에세이", "한국 소설"]));
+  });
+
+  it("no far rule (SF chosen, no SF rule in this map): the person's own scope — no fallback to the other branch", () => {
+    const route = [a("start", "B"), a("branch", "A"), a("story-world", "B"), a("mood-temp", "unsure"), a("mood-len", "unsure")];
+    for (let seed = 1; seed <= 20; seed++) {
+      const d = drawForPath(books, MAP, walkPath(MAP, route), opts(seed));
+      expect(d.drawnFrom.scope.genres).toEqual(["SF·판타지"]);
+      expect(d.drawnFrom.challenge).toBeUndefined();
+      expect(d.picks.every((p) => p.book.entry === "leaf")).toBe(true);
+    }
+  });
+
+  it("도전 + 섞어서: a branch by the seed, then its list rule — reproducible, never the 🎯 books", () => {
+    const rules = new Set<number>();
+    for (let seed = 1; seed <= 40; seed++) {
+      const d = drawForPath(books, LISTS, walkPath(LISTS, MIXED_CHALLENGE), opts(seed));
+      const c = d.drawnFrom.challenge!;
+      expect(c.from).toEqual(["섞어서"]);
+      expect(c.rule.n === 2 ? ["에세이", "한국 소설"] : ["인문", "과학 교양"]).toEqual(expect.arrayContaining(c.to));
+      expect(d.picks.every((p) => p.book.entry === "leaf")).toBe(true);
+      expect(drawForPath(books, LISTS, walkPath(LISTS, MIXED_CHALLENGE), opts(seed)).picks).toEqual(d.picks);
+      rules.add(c.rule.n);
+    }
+    expect(rules).toEqual(new Set([2, 3]));
   });
 });

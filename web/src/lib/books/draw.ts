@@ -17,5 +17,6 @@ export function drawPath(answers: Answer[], seen: ReadonlySet<string>, rng: Rng,
     exhausted: res.exhausted,
     widened: res.widened || res.widenedScope,
     path: pathSummary(map, answers),
+    challenge: res.drawnFrom.challenge ?? null,
   };
 }

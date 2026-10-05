@@ -26,8 +26,21 @@ export interface QNode {
   unsureNext: string;
 }
 
-/** Challenge route (design 4절): a scope the person's answers point to → the far scope to draw from instead. */
-export interface FarRule { from: Partial<Scope>; to: Partial<Scope> }
+/**
+ * Challenge route (design 4절): a scope the person's answers point to → the far scope to draw from instead. Its number is
+ * its place in the map (1-based). title: the "N. …" line above the block. pick "one" (10-05 v2): `to.genres` is a list —
+ * the draw takes one genre of it (walk.ts applyChallenge). why: the human-written "이동의 뜻" — a draft, data only, not
+ * shown on any screen yet.
+ */
+export interface FarRule { from: Partial<Scope>; to: Partial<Scope>; title?: string; pick?: "one"; why?: string }
+
+/**
+ * Where a challenge draw came from and went (10-05 v2) — on the walk applyChallenge returns and in the draw response.
+ * from: the person's own scope (genres or topics, or "이야기 · 장르 없음" / "배우기 · 주제 없음" / "섞어서");
+ * to: the far genres (for a list rule, the one picked); rule: the far rule's number and title;
+ * reasonDraft: the rule's `why:` line — a draft for the result screen later, never shown yet (null where none is written).
+ */
+export interface Challenge { from: string[]; to: string[]; rule: { n: number; title: string | null }; reasonDraft: string | null }
 
 /**
  * skip: mood questions that cannot change the draw where they would be asked (skip.ts — moodSkips over books.json, built
