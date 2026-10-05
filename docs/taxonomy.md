@@ -19,6 +19,7 @@
 | taxonomy v1.1 | 2026-10-04 | 내 책갈피 끌어서 옮기기 `plans/2026-10-04-library-front-drag.md` | E-30 `method` "drag" 추가("hold"는 보내지 않음), `is_same_shelf` 추가, 같은 막대 안 순서 바꾸기도 남김 (8절) |
 | taxonomy v1.2 | 2026-10-04 | 내 책갈피 [모두 제거] (PRD F-13, 시안 `mockups/2026-10-04-v2/library-buttons-options.png` A) | E-35 `library_cleared`(`removed_count`) live, 동사 `cleared`, 모두 빼기는 E-16을 책마다 보내지 않음 (8절) |
 | taxonomy v1.3 | 2026-10-05 | 도감 v1 (PRD F-21, `plans/2026-10-05-collection-dex.md`) | E-36 `collection_item_found`·E-37 `collection_viewed` live, 동사 `found`, 분류 `도감`, E-07 `art.rare`의 뜻, 처리방침 6-3g (8절) |
+| taxonomy v1.5 | 2026-10-05 | 도전 규칙 v2 출처 기록 (`plans/2026-10-05-challenge-rules.md`, `launch-attribution.md` 4절) | E-07 `bookmark_shown`에 `challenge_rule`·`challenge_genre`(도전이 아니면 null) 추가, E-34는 그대로 (8절) |
 | taxonomy v1.4.1 | 2026-10-05 | 도감 v1 표시 수정 (`context.md` 10-05) | E-36은 땅 소품 "없음"(`none`)에 보내지 않음, E-37 `collected_count` 최대 42 (8절) |
 | taxonomy v1.4 | 2026-10-05 | 공개 홍보(10-07) 유입 채널 구분 (`launch-plan.md` 4절, `launch-attribution.md`) | E-01 `utm_source`·`utm_medium`·`utm_campaign`(세션 첫 주소, Supabase only), 공통 `referrer`는 호스트만, `is_in_app_browser`에 스레드·링크드인, 처리방침 6-3h (3-1b, 8절) |
 
@@ -555,6 +556,8 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | `one_liner_style` | 같음 | String | "summary", "question" | 첫인상 한 줄 말투 — 🎯 요약형, 🍃 질문형(좋은 질문이 없으면 요약형) |
 | `pick_type` | `kind` → `pick_type` | String | "recommended", "random" | 추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음) |
 | `art` | 같음 | Object | {"animal": "fox", "bg": "peach", "sky": "moon", "ground": "grass", "rare": false} | 책갈피 그림 조합 {animal, bg, sky, ground, rare} — 중첩 객체 예외 — D-05 보관 그림과 같은 모양. Amplitude에서는 art.animal처럼 펼쳐짐. v1.3: 값에 한정판·초판본(예: "otter", "galaxy", "goldmoon")이 더해짐, `rare` = 넷 중 하나라도 한정판 이상(그 전 기록은 모두 false). 부분별 등급은 값에서 찾는다(`tierOf`) |
+| `challenge_rule` | 추가 (v1.5) | Number | null, 1, 19, 36 | 이 판에 적용된 도전 규칙 번호(`question-map.md`의 `N.` 줄, 1~36). 도전이 아니거나 규칙이 맞지 않아 그대로 뽑은 판은 null. 같은 판의 모든 책갈피 장이 같은 값 — 서버가 뽑기 응답에 싣는 `challenge.rule.n`. E-34가 아니라 여기에 둔 까닭은 8절 v1.5 |
+| `challenge_genre` | 추가 (v1.5) | String | null, "인문", "인문,역사" | 도전 규칙이 보낸 먼 쪽 장르 — 목록 규칙(19·36)은 서버가 씨앗으로 뽑은 한 장르, 그 밖의 규칙은 규칙에 적힌 장르를 적힌 순서대로 쉼표(`,`)로 이은 것(`challenge.to`). 도전이 아니면 null. 시스템 키(책 표 장르 이름, 2-4 예외 1) |
 
 #### E-08 `bookmark_reacted`
 
@@ -1217,6 +1220,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v1.2 | 2026-10-04 | Claude (사용자 요청) | 내 책갈피(S-09)에 [모두 제거] → 확인 시트 [모두 빼기](PRD F-13, 시안 `library-buttons-options.png` A). 새 E-35 `library_cleared`(`removed_count` Number — 서버가 지운 수)를 화면과 함께 `live`로, 동사 `cleared` 추가. 서버가 지운 것을 확인한 뒤에만 보낸다. 빠진 책마다 E-16 `book_unsaved`를 보내지 않는다(한 누름 = 한 이벤트 — 어떤 책이었는지는 그 전 E-15로 안다). 막대 이름·번호는 넣지 않음(6-1). 모으는 정보 변화 없음(지운 수뿐) — `/privacy`는 기록을 "누른 버튼"으로만 적고 이벤트를 하나하나 나열하지 않아 그대로 |
 | v1.3 | 2026-10-05 | Claude (도감 v1 구현) | 도감 v1(PRD F-21, `plans/2026-10-05-collection-dex.md`). 새 E-36 `collection_item_found`(`part_kind`·`part_value`·`tier` — 서버가 새로 기록한 부분마다, 로그인한 사람만)·E-37 `collection_viewed`(`collected_count`·`is_logged_in`)를 화면과 함께 `live`로. 동사 `found`, 분류 `도감`. 이름 규칙 2-3 때문에 계획서의 `kind`·`value`·`found_count` 대신 `part_kind`·`part_value`·`collected_count`(`kind`는 E-32의 질문 종류, `found_count`는 옛 E-22의 책 수와 뜻이 다름). E-07 `art`: 값에 한정판·초판본이 더해지고 `rare`의 뜻을 정함(넷 중 하나라도 한정판 이상). 처리방침 6-3g 먼저(갱신일 2026-10-05) |
 | v1.4.1 | 2026-10-05 | Claude (도감 표시 수정, 사용자 승인) | 땅 소품 "없음"(`none`)은 그림에는 그대로 나오지만 도감의 부분이 아니다 — 서버가 기록하지 않고, 브라우저는 응답에 있어도 버리므로 E-36 `collection_item_found`가 `part_value` "none"으로 나가지 않는다. 운영 DB의 옛 "none" 줄은 읽을 때 무시(지우지 않음)하므로 E-37 `collected_count`도 세지 않는다(최대 43 → 42). 이벤트 이름·속성·타입·`schema.ts` 허용 값 변경 없음(`part_value`는 원래 자유 문자열 — 값 목록에 "none"이 없었다), 모으는 정보 변화 없음 |
+| v1.5 | 2026-10-05 | Claude (사용자 승인) | 도전 규칙 v2의 출처 기록. E-07 `bookmark_shown`에 `challenge_rule`(Number, 1~36 또는 null)·`challenge_genre`(String 또는 null) 추가. **E-07에 둔 까닭**: ① E-34 `path_completed`는 마지막 답과 함께 브라우저에서 바로 나가는데, 섞어서 + 도전과 목록 규칙(19·36)의 규칙·장르는 서버 씨앗이 뽑기 응답에서 정해 그때는 알 수 없다 — 응답을 기다리면 E-34가 늦어지고 뽑기 실패 때 사라진다 ② 응답이 온 뒤 처음 나는 이벤트가 E-07이고, 저장(E-15 `book_saved`)과 `book_id`·`anon_id`로 이어져 "어느 도전이 저장으로 이어졌나"를 바로 묻는다(`launch-attribution.md` 4절) ③ 새 이벤트(b안)는 한 순간에 이벤트 둘이라 2-1과 어긋난다. 도전이 아니면 둘 다 null(속성을 빼지 않음). 개인 정보 아님(규칙 번호·장르 이름뿐) — `/privacy` 그대로. E-34 속성 변경 없음(`scope_id`는 목록 규칙에서 목록 전체 키 — 뽑힌 장르는 E-07에서 본다) |
 | v1.4 | 2026-10-05 | Claude (공개 준비) | 공개 홍보(10-07)의 유입 채널을 Supabase 원본에서도 가른다(3-1b). E-01 `site_visited`에 `utm_source`·`utm_medium`·`utm_campaign`(String 또는 null, ≤40, **Supabase only**) — 세션 첫 주소에서 한 번 읽어 sessionStorage에 두고(첫 접촉), `[a-z0-9_-]` 밖은 null, Amplitude가 주소를 읽은 뒤 주소창에서 `utm_*`를 지움. 공통 속성이 아니라 E-01 속성인 이유는 1-2 속성 상속 원칙과 행 크기. 공통 `referrer`는 이름 그대로 **호스트만**(6-2 검토 메모 — 브라우저·서버 `referrerHost`, 그 전 기록은 주소 전체). `is_in_app_browser`가 스레드(`Barcelona`)·링크드인(`LinkedInApp`) 앱 안 브라우저도 TRUE로(그 전 기록은 FALSE). 처리방침 6-3h 먼저(갱신일 그대로). 분석 SQL은 `launch-attribution.md`. 새 이벤트 없음 |
 
 ---
