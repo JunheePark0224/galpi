@@ -1,10 +1,17 @@
 # 인수인계 — 갈피 (Galpi)
 
-Last Updated: 2026-10-04 (v2 계획 2 `feat/v2-screens` 병합 전 · 배포 중인 main은 `b54264c`, 아래 2절은 그 기준)
+Last Updated: 2026-10-05 (책갈피 꾸미기 `feat/decorate` 병합 전 — 아래 "책갈피 꾸미기". 그 밖의 줄은 10-04 기준)
 
 새 세션은 이 문서 → `process.md` → `context.md` → `tasks.md` 순으로 읽는다.
 
 ## 지금 상태
+
+- **책갈피 꾸미기 (`feat/decorate`, `.worktrees/decorate`, 병합 전, 10-05)**: S-09 시트 버튼 시안 C([예스24] → [🎨 꾸미기][↔ 옮기기] → [빼기]), [꾸미기] 편집기(내 도감에 있는 부분으로만 그림 바꾸기, [처음 그림으로]·[이대로 꽂기]), 서버 `PATCH /api/library/saves/art`(도감 확인, 아니면 403), taxonomy v1.6(E-38). 계획 `plans/2026-10-05-decorate.md`, 스크린샷 `mockups/2026-10-05-decorate/impl-*.png`.
+  **사용자가 할 일 (병합·배포 전, 0004 다음, 순서대로)**:
+  1. Supabase 대시보드 → SQL Editor → New query에 `web/supabase/migrations/0005_original_art.sql` 전체를 붙여 **Run** (한 번만). "Success. No rows returned"가 나오면 됨. 기존 책갈피는 모두 지금 그림이 "처음 그림"이 된다.
+  2. 새 query에 `web/supabase/checks/decorate_rls.sql` 전체를 붙여 Run → 빨간 오류 상자 "RLS CHECK RESULT" 안 8줄이 모두 `ok`인지 확인(이 오류는 정상 — 시험 데이터를 되돌리는 장치). `FAILED`나 다른 오류면 그 글을 Claude에게.
+  3. 병합·배포 → 로그인해 /library에서 책갈피를 눌러 [꾸미기] → 도감에 있는 동물로 바꿔 [이대로 꽂기] → 막대 위 책갈피가 바뀌는지, `select isbn, art->>'animal', original_art->>'animal' from saves order by created_at desc limit 3;`에서 처음 그림이 그대로인지.
+  - 0005를 적용하기 전에 배포해도 사이트는 그대로 돈다: 시트에 [꾸미기]가 나오지 않을 뿐(서버도 503).
 
 - **도감 표시 수정 (`fix/dex-display`, `.worktrees/dex-fix`, 병합 전, 10-05)**: 배지가 부분마다 이름·등급, 도감 칸은 그 부분만, 땅 "없음"은 모으지 않음(소품 15, 운영의 옛 "none" 줄은 읽을 때 무시 — 마이그레이션 없음). 설계 8절, taxonomy v1.4.1.
 - **도감 v1 (`feat/collection-dex`, `.worktrees/dex`, 병합 전, 10-05)**: 한정판·초판본 그림(동물 16·배경 11·소품 16 → 모으는 소품은 15, 부분마다 90/9/1), 초판본 효과, S-09 [막대 | 도감], S-05 "처음 만난 …!" 배지, 서버 서명 seed로 기록, taxonomy v1.3(E-36·E-37), 처리방침 갱신일 10-05. 설계는 `plans/2026-10-05-collection-dex.md` "설계 (구현)". 스크린샷 `mockups/2026-10-05-dex/impl-*.png`.

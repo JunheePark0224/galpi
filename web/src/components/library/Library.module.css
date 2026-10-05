@@ -14,15 +14,15 @@
   font: inherit; font-family: var(--font-batang), serif; font-weight: 700; font-size: 15px; cursor: pointer;
   transition: transform 120ms ease;
 }
-.moveToggle {
+.moveToggle, .decorate {
   flex: 1.4 1 0; border: 0; color: var(--foil);
   background: var(--leather-grain), var(--leather-sheen), var(--cloth);
   box-shadow: inset 0 0 0 2px var(--cloth-edge), 0 12px 22px -12px rgba(43, 39, 36, 0.6);
 }
-.moveToggle::before { /* the stitched line, 5 px in */
+.moveToggle::before, .decorate::before { /* the stitched line, 5 px in */
   content: ""; position: absolute; inset: 5px; border: 1px dashed var(--foil-line); border-radius: 8px; pointer-events: none;
 }
-.moveToggle:active { transform: translateY(1px); background: var(--leather-grain), var(--leather-sheen), var(--cloth-edge); }
+.moveToggle:active, .decorate:active { transform: translateY(1px); background: var(--leather-grain), var(--leather-sheen), var(--cloth-edge); }
 .moveToggle[data-moving] { background: var(--ink); color: var(--paper); box-shadow: 0 8px 16px -10px rgba(43, 39, 36, 0.6); }
 .moveToggle[data-moving]::before { border-color: rgba(250, 245, 234, 0.3); }
 .clearAll {
@@ -128,6 +128,25 @@
 .big { width: 208px; height: 481px; }
 .big > * { transform: scale(1.3); transform-origin: top left; }
 .sheetActions { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-2); }
+/* 시안 C (10-05, mockups/2026-10-05-decorate/button-options.png): under [예스24에서 보기] one row of two equal buttons —
+   [🎨 꾸미기] in [책갈피 옮기기]'s leather (C-17 시안 A) and [↔ 옮기기] (C-05 보조); one of them alone takes the row. */
+.sheetRow { display: grid; grid-auto-columns: minmax(0, 1fr); grid-auto-flow: column; gap: 10px; }
+.decorate {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 48px; padding: 0 var(--space-3); border-radius: 12px;
+  font: inherit; font-family: var(--font-batang), serif; font-weight: 700; font-size: 15px; cursor: pointer;
+  transition: transform 120ms ease;
+}
+.decorate:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.sheetMove { min-height: 48px; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.glyph { flex-shrink: 0; }
+.unsave { align-self: center; }
+/* "새 그림으로 꽂았어요" (flow.png ③): an ink note under the buttons for a moment; the empty region is there already. */
+.sheetNote { margin: 0; min-height: 0; font-size: 13px; text-align: center; }
+.sheetNote[data-shown] {
+  margin-top: var(--space-2); padding: var(--space-2) var(--space-4); border-radius: var(--radius-card); background: var(--ink); color: var(--paper);
+}
+@media (prefers-reduced-motion: reduce) { .decorate { transition: none; } }
 .confirm { margin: 0; font-size: 14px; text-align: center; }
 /* [모두 제거]'s confirm sheet: the warning line, then [모두 빼기] — the one danger pill, filled 한국 소설 red, white letters. */
 .clearBody { margin: var(--space-2) 0 var(--space-4); font-size: 14px; line-height: 1.6; color: var(--ink-soft); text-align: center; }
