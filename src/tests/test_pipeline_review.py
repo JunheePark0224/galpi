@@ -469,3 +469,16 @@ def test_graduation_reads_batches_of_one_day_in_order():
     assert graduation(rows)["streak"] == 1                                           # -10 is the latest, -9 breaks the streak
     rows[0], rows[1] = day("2026-10-06-10", **{**ALL_96, "world": 80}, **SAMPLED), day("2026-10-06-9", **ALL_96, **SAMPLED)
     assert graduation(rows)["streak"] == 0
+
+
+def test_review_pages_go_to_the_main_checkout_even_from_a_worktree(tmp_path):
+    main, wt = tmp_path / "Galpi", tmp_path / "Galpi" / ".worktrees" / "x"
+    wt.mkdir(parents=True)
+    fake = lambda out, code=0: (lambda *a, **k: subprocess.CompletedProcess(a[0], code, stdout=out, stderr=""))  # noqa: E731
+    assert review.main_checkout(wt, fake(str(main / ".git") + "\n")) == main.resolve()   # worktree: absolute common dir
+    assert review.main_checkout(main, fake(".git\n")) == main.resolve()                  # main checkout: relative ".git"
+
+    def broken(*a, **k):
+        raise FileNotFoundError("no git")
+    assert review.main_checkout(wt, broken) == wt and review.main_checkout(wt, fake("", 128)) == wt  # fall back
+    assert review.PAGES.parts[-4:] == ("data", "processed", "check", "pipeline")

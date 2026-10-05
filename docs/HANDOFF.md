@@ -63,7 +63,7 @@ Last Updated: 2026-10-04 (v2 계획 2 `feat/v2-screens` 병합 전 · 배포 중
 ## 3. 매일 할 일 (D-C — 검수하며 자동 병합 졸업까지)
 
 1. 아침 PR `books/<날짜>` 확인 (실패하면 PR 없이 Actions 기록에 이유만)
-2. PR 브랜치에서 `PYTHONIOENCODING=utf-8 python -m src.pipeline.review <날짜>` → `data/processed/check/`에 검수 페이지 → 사용자가 검수하고 내려받기
+2. PR 브랜치에서 `PYTHONIOENCODING=utf-8 python -m src.pipeline.review <날짜>` → 검수 페이지는 **늘 본 폴더(main 체크아웃) `Galpi/data/processed/check/pipeline/<날짜>.html`** — worktree(`.worktrees/<이름>`) 안에서 돌려도 같은 곳(10-05, 찍히는 절대 경로 확인) → 사용자가 검수하고 내려받기 (`--apply`는 내려받은 파일이 어디 있든 경로만 주면 된다)
 3. `python -m src.pipeline.review <날짜> --apply <내려받은 파일>` → `cd web && npm run books:import` → `npm test` → PR 브랜치에 커밋 → **병합·배포는 사용자 허락 후**
 4. 졸업 기준 (`docs/deploy.md` 7절): ① 연속 3회 모든 항목 95%+ — **현재 1/3** ② 그 3회 일치 책 표본 10권 이상·바뀐 책 5% 이하 — **현재 표본 3권, 바뀜 0**. 둘 다 넘으면 사용자에게 물어본 뒤 `data/pipeline/config.json` `auto_merge: true`
 5. 일치율 기록: `data/pipeline/agreement.csv`
