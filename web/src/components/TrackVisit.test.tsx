@@ -65,3 +65,48 @@ describe("site_visited on a fresh open vs a reload (hydrated TrackVisit + FlowRo
     expect(document.body.textContent).not.toContain("갈피 잡으러 가기");
   });
 });
+
+describe("site_visited carries the first-touch utm tags, then they leave the address (taxonomy v1.4)", () => {
+  afterEach(() => {
+    Reflect.deleteProperty(navigator, "sendBeacon");
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+    sessionStorage.clear();
+    window.history.replaceState(null, "", "/");
+  });
+
+  it("sends the cleaned tags as the visit's props and takes them off the address (Amplitude off: at once)", async () => {
+    vi.stubEnv("NEXT_PUBLIC_AMPLITUDE_API_KEY", "");
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    window.history.replaceState({ keep: 1 }, "", "/?utm_source=LinkedIn&utm_medium=social&utm_campaign=launch_1007&utm_content=a&x=1#top");
+    const sent: Blob[] = [];
+    Object.defineProperty(navigator, "sendBeacon", {
+      value: (_url: string, data: Blob) => { sent.push(data); return true; }, configurable: true,
+    });
+    vi.resetModules();
+    const [{ render }, { TrackVisit }] = await Promise.all([import("@testing-library/react"), import("./TrackVisit")]);
+    const view = render(<TrackVisit />);
+    const bodies = await Promise.all(sent.map(async (b) => JSON.parse(await b.text()) as { name: string; props: Record<string, unknown> }));
+    const visits = bodies.filter((b) => b.name === "site_visited");
+    expect(visits).toHaveLength(1);
+    expect(visits[0].props).toEqual({ utm_source: "linkedin", utm_medium: "social", utm_campaign: "launch_1007" });
+    expect(window.location.pathname + window.location.search + window.location.hash).toBe("/?x=1#top");
+    expect(window.history.state).toEqual({ keep: 1 });
+    view.unmount();
+  });
+
+  it("sends three nulls for an untagged visit", async () => {
+    vi.stubEnv("NEXT_PUBLIC_AMPLITUDE_API_KEY", "");
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const sent: Blob[] = [];
+    Object.defineProperty(navigator, "sendBeacon", {
+      value: (_url: string, data: Blob) => { sent.push(data); return true; }, configurable: true,
+    });
+    vi.resetModules();
+    const [{ render }, { TrackVisit }] = await Promise.all([import("@testing-library/react"), import("./TrackVisit")]);
+    const view = render(<TrackVisit />);
+    const body = JSON.parse(await sent[0].text()) as { props: Record<string, unknown> };
+    expect(body.props).toEqual({ utm_source: null, utm_medium: null, utm_campaign: null });
+    view.unmount();
+  });
+});

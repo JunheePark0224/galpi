@@ -28,10 +28,14 @@ const CURIOUS_COUNT = { type: "number" } as const;
 const PROVIDER = { type: ["kakao", "google"] } as const;
 /** E-31: the longest 갈피 우체통 letter (UTF-16 units, after trimming) — the textarea, /api/feedback and the spec share it. */
 export const FEEDBACK_MAX = 500;
+/** E-01 (v1.4): the longest utm value kept — the browser turns anything longer (or with other characters) into null. */
+export const UTM_MAX = 40;
+/** E-01 (v1.4): a link tag from the address of the visit that started the session (first touch), Supabase only. */
+const UTM = { type: "string", nullable: true, only: "supabase", max: UTM_MAX } as const;
 
 /** Every live and planned event (taxonomy 4-1), in PRD order. Props are the event's own; common props are separate. */
 export const EVENT_SPEC = {
-  site_visited: { prompt_version: { type: "string", only: "amplitude" } },
+  site_visited: { prompt_version: { type: "string", only: "amplitude" }, utm_source: UTM, utm_medium: UTM, utm_campaign: UTM },
   entry_selected: { source: { type: ["home", "first_page"] } },
   question_answered: {
     node_id: NODE_ID,
@@ -146,8 +150,27 @@ export const COMMON_KEYS = [
 export const SCREEN_VERSION = "v2";
 
 const MAX_ID = 200;
-const MAX_REFERRER = 500;
 const MAX_ROUND = 1000;
+/** Longest DNS name. */
+const MAX_HOST = 253;
+const HOST = /^[a-z0-9-]+(\.[a-z0-9-]+)*$/;
+
+/**
+ * taxonomy v1.4 (6-2): `referrer` keeps the host only (`l.instagram.com`), never the path or query — a search address can
+ * carry personal words. Accepts a full URL (document.referrer, or an older page still open) or a host already cut; anything
+ * else (about:blank, an IP in brackets, junk) is "" like an empty referrer.
+ */
+export function referrerHost(raw: string): string {
+  if (raw === "") return "";
+  let host: string;
+  try {
+    host = new URL(raw).hostname;
+  } catch {
+    host = raw.trim();
+  }
+  host = host.toLowerCase();
+  return host.length <= MAX_HOST && HOST.test(host) ? host : "";
+}
 
 /** Cuts to at most `max` UTF-16 units without leaving half of an emoji (a trailing high surrogate is dropped). */
 export function cutText(s: string, max: number): string {
@@ -170,8 +193,8 @@ export function parseCommon(x: unknown): CommonProps | null {
   if (mode !== null && mode !== "normal" && mode !== "challenge") return null;
   if (device !== "phone" && device !== "desktop") return null;
   if (typeof is_returning !== "boolean" || typeof is_in_app_browser !== "boolean") return null;
-  // referrer comes from the visitor's browser and may be a long URL: keep the event, cut the value.
+  // referrer comes from the visitor's browser: keep the event, keep the host only (an older page may still send a full URL).
   return {
-    anon_id, user_id, session_id, round, entry, mode, screen_version, referrer: cutText(referrer, MAX_REFERRER), is_returning, device, is_in_app_browser,
+    anon_id, user_id, session_id, round, entry, mode, screen_version, referrer: referrerHost(referrer), is_returning, device, is_in_app_browser,
   };
 }

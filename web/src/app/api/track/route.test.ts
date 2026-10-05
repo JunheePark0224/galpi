@@ -98,19 +98,24 @@ describe("POST /api/track", () => {
     expect(saveEvent).not.toHaveBeenCalled();
   });
 
-  it("keeps the event when the referrer is longer than 500 characters, storing it cut", async () => {
-    const res = await POST(req({ name: "site_visited", props: {}, common: { ...common, referrer: "https://s.example/?q=" + "x".repeat(900) } }));
+  it("keeps the event and stores only the referrer's host when an older page sends a full address (taxonomy v1.4)", async () => {
+    const res = await POST(req({ name: "site_visited", props: {}, common: { ...common, referrer: "https://S.example/search?q=" + "x".repeat(900) } }));
     expect(res.status).toBe(202);
-    const stored = vi.mocked(saveEvent).mock.calls[0][0];
-    expect(stored.common.referrer).toHaveLength(500);
+    expect(vi.mocked(saveEvent).mock.calls[0][0].common.referrer).toBe("s.example");
   });
 
-  it("keeps the event when the referrer cut falls inside an emoji, and stores no lone surrogate", async () => {
+  it("keeps the event and stores an empty referrer when it is not an address or a host", async () => {
     const res = await POST(req({ name: "site_visited", props: {}, common: { ...common, referrer: "x".repeat(499) + "😀" } }));
     expect(res.status).toBe(202);
-    const referrer = vi.mocked(saveEvent).mock.calls[0][0].common.referrer as string;
-    expect(referrer).toBe("x".repeat(499));
-    expect(referrer.isWellFormed()).toBe(true);
+    expect(vi.mocked(saveEvent).mock.calls[0][0].common.referrer).toBe("");
+  });
+
+  it("stores the visit's utm tags, cut to 40 characters", async () => {
+    const props = { utm_source: "threads", utm_medium: "social", utm_campaign: "c".repeat(60) };
+    expect((await POST(req({ name: "site_visited", props, common }))).status).toBe(202);
+    expect(saveEvent).toHaveBeenCalledWith({
+      name: "site_visited", props: { utm_source: "threads", utm_medium: "social", utm_campaign: "c".repeat(40) }, common,
+    });
   });
 
   it("answers 400, not 500, for absurdly deep nesting that fits in the size cap", async () => {
@@ -124,14 +129,14 @@ describe("POST /api/track", () => {
   });
 
   it("keeps the event and strips NUL and lone surrogates that Postgres jsonb would refuse", async () => {
-    const dirty = { ...common, referrer: "a\u0000b\ud800c" };
+    const dirty = { ...common, anon_id: "a\u0000b\ud800c" };
     const props = { node_id: "lea\u0000rn\udc00", kind: "narrow", choice: "A", depth: 1, position: 1, elapsed_ms: 5, "\u0000k": 1 };
     const res = await POST(req({ name: "question_answered", props, common: dirty }));
     expect(res.status).toBe(202);
     expect(saveEvent).toHaveBeenCalledWith({
       name: "question_answered",
       props: { node_id: "learn\ufffd", kind: "narrow", choice: "A", depth: 1, position: 1, elapsed_ms: 5 },
-      common: { ...common, referrer: "ab\ufffdc" },
+      common: { ...common, anon_id: "ab\ufffdc" },
     });
   });
 
