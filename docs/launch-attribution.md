@@ -98,6 +98,41 @@ order by sessions desc;
 
 신뢰구간은 노트북에서 채널별 `(reached_result, sessions)`로 Wilson 구간을 붙인다(taxonomy 5-3 보고 방식).
 
+## 4. 도전 규칙별 저장 — 어느 도전이 저장으로 이어졌나 (taxonomy v1.5)
+
+도전 규칙 번호(`challenge_rule`)와 먼 쪽 장르(`challenge_genre`)는 E-07 `bookmark_shown`의 `props`에 있다(도전이 아니면 둘 다 null).
+E-34 `path_completed`에 없는 까닭: 섞어서 + 도전과 목록 규칙(19·36)은 규칙·장르를 서버 씨앗이 뽑기 응답에서 정한다(taxonomy 8절 v1.5).
+저장(E-15 `book_saved`)은 로그인한 사람만 남는다. 책갈피를 본 장 → 저장은 `anon_id` + `book_id`로 잇는다.
+
+```sql
+-- 규칙(·장르)별: 본 책갈피 수, 저장된 책 수, 저장률. 일반 판(challenge_rule is null)이 비교 기준
+with shown as (
+  select common->>'anon_id' as anon, props->>'book_id' as book_id,
+         (props->>'challenge_rule')::int as rule, props->>'challenge_genre' as genre
+  from events
+  where name = 'bookmark_shown' and common->>'screen_version' = 'v2'
+    and created_at >= timestamptz '2026-10-07 00:00+09'   -- v1.5 배포 시각으로 바꾼다
+),
+saved as (
+  select distinct common->>'anon_id' as anon, props->>'book_id' as book_id
+  from events
+  where name = 'book_saved' and created_at >= timestamptz '2026-10-07 00:00+09'
+),
+select coalesce(s.rule::text, 'normal') as rule, s.genre,
+       count(*)                                  as shown,
+       count(sv.book_id)                         as saved,
+       round(count(sv.book_id)::numeric / count(*), 3) as save_rate
+from shown s
+left join saved sv on sv.anon = s.anon and sv.book_id = s.book_id
+group by 1, 2
+order by shown desc;
+```
+
+- 같은 책이 한 사람에게 여러 장 보일 수 있다(다시 뽑기) — 정확히 세려면 `shown`을 `(anon, book_id, rule)`로 `distinct`한 뒤 센다.
+- 분모에 로그인하지 않은 사람의 장도 들어가 저장률이 낮게 나온다. 로그인한 사람만 보려면 `shown`의 `where`에 `and common->>'user_id' is not null`을 더한다.
+- 비율은 차이의 크기 + 신뢰구간(Wilson)으로 본다 — 규칙마다 장 수가 작다(CLAUDE.md 원칙 5). 규칙 19·36의 `challenge_genre`는 한 장르, 그 밖의 규칙은 쉼표로 이은 여러 장르(`인문,역사`)다.
+- v1.5 전 기록은 속성이 없어 일반 판(null)과 섞인다 — 위의 시각 조건으로 v1.5 배포 뒤만 본다.
+
 ## Amplitude와 비교할 때
 
 Amplitude는 같은 표시를 주소에서 스스로 읽어 유저 속성(`utm_source`, `initial_utm_source` …)으로 가진다(우리 `utm_*` 이벤트 속성은 Amplitude로 보내지 않는다 — taxonomy 2-7). Amplitude 세션은 30분 규칙이라 세션 수는 다를 수 있다. 다르면 이 SQL(원본 Supabase)을 기준으로 한다.

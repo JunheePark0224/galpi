@@ -8,7 +8,7 @@ import { reportMeeting } from "@/lib/collection/client";
 import type { FoundItem } from "@/lib/collection/types";
 import type { LibraryCount } from "@/lib/books/library";
 import { drawBody, requestDraw, toDrawView } from "@/lib/flow/api";
-import { completedProps, nextQuestion, pathCommon } from "@/lib/flow/path";
+import { challengeProps, completedProps, nextQuestion, pathCommon } from "@/lib/flow/path";
 import { curiousPicks, flowReducer, type FlowAction, type FlowState, type Reaction } from "@/lib/flow/state";
 import { loadFlow, saveFlow } from "@/lib/flow/storage";
 import type { Answer, AnswerChoice } from "@/lib/paths";
@@ -78,7 +78,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     const pick = s.draw?.picks[s.index];
     if (!pick) return;
     track("bookmark_shown", {
-      book_id: pick.card.id, position: s.index + 1, one_liner_style: pick.card.oneLinerStyle, pick_type: pick.kind, art: pick.art,
+      book_id: pick.card.id, position: s.index + 1, one_liner_style: pick.card.oneLinerStyle, pick_type: pick.kind, art: pick.art, ...challengeProps(s.draw?.challenge),
     });
     meet(s);
   };

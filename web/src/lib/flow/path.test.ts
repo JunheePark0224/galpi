@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { CHALLENGE_PATH, MIXED_PATH, SQL_PATH } from "@/lib/paths/__fixtures__/paths";
-import { completedProps, isPath, nextQuestion, pathCommon, sameAnswers } from "./path";
+import { challengeProps, completedProps, isPath, nextQuestion, pathCommon, sameAnswers } from "./path";
 
 describe("flow path helpers (the real question map)", () => {
   it("asks the start question first and nothing after a finished path", () => {
@@ -44,5 +44,15 @@ describe("flow path helpers (the real question map)", () => {
     expect(completedProps(SQL_PATH)).toEqual({ scope_id: "entry=target;topics=데이터 분석;keywords=SQL", depth: 10, unsure_count: 0 });
     expect(completedProps(MIXED_PATH)).toEqual({ scope_id: "all", depth: 3, unsure_count: 1 });
     expect(completedProps(CHALLENGE_PATH)).toEqual({ scope_id: "entry=leaf;genres=시,에세이", depth: 9, unsure_count: 1 });
+  });
+
+  it("builds the E-07 challenge props from the draw's challenge (taxonomy v1.5): null, null off the challenge route", () => {
+    expect(challengeProps(null)).toEqual({ challenge_rule: null, challenge_genre: null });
+    expect(challengeProps(undefined)).toEqual({ challenge_rule: null, challenge_genre: null });
+    const list = { from: ["이야기 · 장르 없음"], to: ["과학 교양"], rule: { n: 19, title: "이야기 · 장르 없음 → 도전 목록" }, reasonDraft: null };
+    expect(challengeProps(list)).toEqual({ challenge_rule: 19, challenge_genre: "과학 교양" });
+    const fixed = { from: ["돈 관리·투자"], to: ["인문", "역사"], rule: { n: 30, title: null }, reasonDraft: "x" };
+    expect(challengeProps(fixed)).toEqual({ challenge_rule: 30, challenge_genre: "인문,역사" });
+    expect(challengeProps({ ...fixed, to: [] })).toEqual({ challenge_rule: 30, challenge_genre: null });
   });
 });

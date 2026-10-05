@@ -1,4 +1,4 @@
-import { applyChallenge, QUESTION_MAP, scopeKey, walkPath, type Answer, type QNode, type QuestionMap } from "@/lib/paths";
+import { applyChallenge, QUESTION_MAP, scopeKey, walkPath, type Answer, type Challenge, type QNode, type QuestionMap } from "@/lib/paths";
 import type { Entry } from "@/lib/recommend";
 
 /** The question to ask after these answers, or null once the path is finished. Throws PathError off the map. */
@@ -35,4 +35,13 @@ export function pathCommon(answers: readonly Answer[], map: QuestionMap = QUESTI
 export function completedProps(answers: readonly Answer[], map: QuestionMap = QUESTION_MAP): { scope_id: string; depth: number; unsure_count: number } {
   const w = walkPath(map, [...answers]);
   return { scope_id: scopeKey(applyChallenge(map, w).scope), depth: w.depth, unsure_count: w.unsure };
+}
+
+/**
+ * E-07 bookmark_shown (taxonomy v1.5): which challenge rule the draw used and the far genre(s) it moved to — from the draw
+ * response, since the server's seed decides both for 섞어서 and the list rules. null, null off the challenge route.
+ */
+export function challengeProps(challenge: Challenge | null | undefined): { challenge_rule: number | null; challenge_genre: string | null } {
+  if (!challenge) return { challenge_rule: null, challenge_genre: null };
+  return { challenge_rule: challenge.rule.n, challenge_genre: challenge.to.length > 0 ? challenge.to.join(",") : null };
 }
