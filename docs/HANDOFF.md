@@ -70,7 +70,7 @@ Last Updated: 2026-10-04 (v2 계획 2 `feat/v2-screens` 병합 전 · 배포 중
 
 ### 여러 번 돌리기 (10-06 공개 준비)
 
-하루에 묶음(batch)을 여러 번 돌려 책을 376권 → 1,000권으로 늘린다(묶음당 100권, 7~9번). 첫 묶음은 그대로 `<날짜>`, 같은 날 다음 묶음은 `<날짜>-2`, `-3` … — 브랜치 `books/<묶음>`, 파일 `data/processed/additions/<묶음>.json`, 검수 명령, `agreement.csv`의 `date` 칸(`batch`는 그대로 `daily`)이 모두 이 이름을 쓴다. 책의 날짜(`date`)는 달력 날짜 그대로.
+하루에 묶음(batch)을 여러 번 돌려 책을 376권 → 1,000권으로 늘린다(묶음당 100권, 7~9번). 묶음 100권은 **가장 모자란 칸부터 칸당 10권 → 약 10칸**(장르 · 주제 · 키워드, `book-pool.md` 1-2c). 목표는 `data/pipeline/config.json` **`target_phase`**: 지금 `"launch"`(장르 45 · 주제 26 · 키워드 5), 공개 뒤 사용자 승인으로 `"grow"`(100 · 60 · 15). 모든 칸이 목표에 닿으면 그 뒤 실행은 아무것도 넣지 않는다. 첫 묶음은 그대로 `<날짜>`, 같은 날 다음 묶음은 `<날짜>-2`, `-3` … — 브랜치 `books/<묶음>`, 파일 `data/processed/additions/<묶음>.json`, 검수 명령, `agreement.csv`의 `date` 칸(`batch`는 그대로 `daily`)이 모두 이 이름을 쓴다. 책의 날짜(`date`)는 달력 날짜 그대로.
 
 1. 실행 (열린 `books/` PR이 없을 때만 돈다 — 있으면 API 호출 없이 쉰다):
    `gh workflow run daily-books.yml -f next_batch=true -f count=100 -f dry_run=false`
