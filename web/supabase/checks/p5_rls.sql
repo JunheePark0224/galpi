@@ -2,6 +2,8 @@
 -- Two made-up people are created inside a transaction, act as each other, and vanish again: the script always ends
 -- with an error box titled "RLS CHECK RESULT" (that error is what undoes everything). Read the lines in it —
 -- every line must end in "ok". Any "FAILED" = stop and fix 0003.
+-- Since 0007 bookmarks are saved by the server only (service role — the picture is the server's): the script saves them
+-- that way, and B13 checks that a person can no longer insert one with their own session.
 -- If a different error appears instead, the check did not run to the end: send that message to Claude.
 
 begin;
@@ -21,8 +23,10 @@ insert into public.profiles (user_id, provider) values ('00000000-0000-4000-8000
 insert into public.shelves (id, user_id, name, position) values
   ('00000000-0000-4000-8000-00000000a5a5', '00000000-0000-4000-8000-0000000000a1', '첫 막대', 0),
   ('00000000-0000-4000-8000-00000000a6a6', '00000000-0000-4000-8000-0000000000a1', '둘째', 1);
+set local role service_role;                          -- the server saves A's bookmark (0007)
 insert into public.saves (user_id, isbn, art, shelf_id, position, reason, met_on)
   values ('00000000-0000-4000-8000-0000000000a1', '9788998441012', '{}', '00000000-0000-4000-8000-00000000a5a5', 0, '{}', '2026-10-01');
+set local role authenticated;
 insert into rls_result select 'A1 sees own bookmark', count(*) = 1 from public.saves;
 insert into rls_result select 'A2 sees own two rods', count(*) = 2 from public.shelves;
 
@@ -73,8 +77,18 @@ end $$;
 insert into public.profiles (user_id, provider) values ('00000000-0000-4000-8000-0000000000b2', 'google');
 insert into public.shelves (id, user_id, name, position)
   values ('00000000-0000-4000-8000-00000000b5b5', '00000000-0000-4000-8000-0000000000b2', '첫 막대', 0);
+do $$
+begin
+  insert into public.saves (user_id, isbn, art, shelf_id, position, reason, met_on)
+    values ('00000000-0000-4000-8000-0000000000b2', '9788998441098', '{}', '00000000-0000-4000-8000-00000000b5b5', 0, '{}', '2026-10-01');
+  insert into rls_result values ('B13 cannot save a bookmark with own session (server only, 0007)', false);
+exception when insufficient_privilege then
+  insert into rls_result values ('B13 cannot save a bookmark with own session (server only, 0007)', true);
+end $$;
+set local role service_role;                          -- the server saves B's bookmark
 insert into public.saves (user_id, isbn, art, shelf_id, position, reason, met_on)
   values ('00000000-0000-4000-8000-0000000000b2', '9788998441012', '{}', '00000000-0000-4000-8000-00000000b5b5', 0, '{}', '2026-10-01');
+set local role authenticated;
 insert into rls_result select 'B8 can keep own bookmark', count(*) = 1 from public.saves;
 
 do $$
@@ -93,7 +107,9 @@ begin
     insert into rls_result values ('B10 cannot write a bookmark as A', true);
   end;
   -- Hanging a bookmark on A's rod is caught by the (shelf_id, user_id) key, which is checked at commit: force it now.
+  -- (Since 0007 only the server inserts bookmarks — even it cannot hang B's on A's rod.)
   begin
+    set local role service_role;
     insert into public.saves (user_id, isbn, art, shelf_id, position, reason, met_on)
       values ('00000000-0000-4000-8000-0000000000b2', '9788998441013', '{}', '00000000-0000-4000-8000-00000000a5a5', 0, '{}', '2026-10-01');
     set constraints public.saves_shelf_fkey immediate;
@@ -101,6 +117,7 @@ begin
   exception when foreign_key_violation then
     insert into rls_result values ('B11 cannot use A''s rod', true);
   end;
+  set local role authenticated;
   begin
     update public.saves set shelf_id = '00000000-0000-4000-8000-00000000a6a6' where user_id = '00000000-0000-4000-8000-0000000000b2';
     set constraints public.saves_shelf_fkey immediate;

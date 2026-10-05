@@ -1,6 +1,7 @@
 import { addSavedCount, announceKept, openLoginSheet, setKeepState, signedOut } from "@/lib/account/store";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
+import { parseFound } from "@/lib/collection/client";
 import { libraryRequest } from "./client";
 import { addGuestSave, removeGuestSave, type GuestSave } from "./guest";
 import type { FoundRequest } from "@/lib/collection/meeting";
@@ -38,6 +39,12 @@ export async function keepBookmark(item: GuestSave): Promise<void> {
     track("book_saved", { book_id: item.isbn, is_auto_save: false, storage: "account" });
     addSavedCount(1);
   }
+  trackFound(answer.body);
+}
+
+/** E-36 for each 도감 part a save brought in (a logged-out draw's bookmark — the server records it with the save). */
+export function trackFound(body: unknown): void {
+  for (const part of parseFound(body)) track("collection_item_found", { part_kind: part.kind, part_value: part.value, tier: part.tier });
 }
 
 /** Logged out: into this browser's list. true when it is new there. 100 already = "full"; storage blocked = the login sheet. */

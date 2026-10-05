@@ -1,5 +1,6 @@
 import "server-only";
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { serviceClient } from "@/lib/server/serviceClient";
 import { collectibleParts, type ArtKind } from "@/lib/art/combine";
 import { parseArt } from "@/lib/library/validate";
 import { knownItems } from "./service";
@@ -13,18 +14,11 @@ const fail = (what: string, code: string | undefined): never => {
   throw new Error(`collection ${what} failed: ${code ?? "unknown"}`);
 };
 
-let writer: SupabaseClient | null | undefined;
 /**
  * The server's own client (service role) — the only one that may write the 도감 (0004 grants people select only), so a
  * part can be recorded only after the server re-worked the picture from a signed seed. null without the service key.
  */
-export function collectionWriter(): SupabaseClient | null {
-  if (writer !== undefined) return writer;
-  const url = (process.env.SUPABASE_URL ?? "").trim();
-  const key = (process.env.SUPABASE_SERVICE_ROLE_KEY ?? "").trim();
-  writer = url && key ? createClient(url, key, { auth: { persistSession: false } }) : null;
-  return writer;
-}
+export const collectionWriter = (): SupabaseClient | null => serviceClient();
 
 interface Row { kind: ArtKind; value: string; first_met_at: string; first_art: unknown; is_new: boolean }
 

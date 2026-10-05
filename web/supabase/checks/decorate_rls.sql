@@ -19,6 +19,7 @@ set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-0000000000e1","role":"authenticated"}', true);
 insert into public.shelves (id, user_id, name, position) values
   ('00000000-0000-4000-8000-00000000e5e5', '00000000-0000-4000-8000-0000000000e1', '첫 막대', 0);
+set local role service_role;                          -- bookmarks are saved by the server only (0007)
 insert into public.saves (user_id, isbn, art, original_art, shelf_id, position, reason, met_on) values
   ('00000000-0000-4000-8000-0000000000e1', '9788998441012', '{"animal":"fox","bg":"peach","sky":"moon","ground":"none","rare":false}',
    '{"animal":"bluedragon"}', '00000000-0000-4000-8000-00000000e5e5', 0, '{}', '2026-10-05');
@@ -27,6 +28,7 @@ insert into public.saves (user_id, isbn, art, shelf_id, position, reason, met_on
    '00000000-0000-4000-8000-00000000e5e5', 1, '{}', '2026-10-05');
 insert into rls_result select 'E1 a new bookmark keeps its art as original_art',
   count(*) = 2 and bool_and(original_art = art) from public.saves;
+set local role authenticated;
 
 -- Decorating: art changes, original_art stays — also when an update tries to set it.
 update public.saves set art = '{"animal":"otter","bg":"peach","sky":"moon","ground":"none","rare":true}' where isbn = '9788998441012';
