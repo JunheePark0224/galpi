@@ -20,7 +20,7 @@ describe("parseQuestionMap", () => {
     expect(map.nodes["mood-len"].b.effects).toEqual({ len: -1 });
     expect(map.nodes.start.b.effects).toEqual({ mode: "challenge" });
     expect(map.nodes["mood-way"].a.effects).toEqual({ ways: ["개념"] });
-    expect(map.far).toEqual([{ from: { entry: "target", topics: ["데이터 분석"] }, to: { entry: "leaf", genres: ["인문"] }, title: "데이터 분석 → 인문", why: "숫자에서 사람으로" }]);
+    expect(map.far).toEqual([{ from: { entry: "target", topics: ["데이터 분석"] }, to: { entry: "leaf", genres: ["인문"] }, n: 1, title: "데이터 분석 → 인문", why: "숫자에서 사람으로" }]);
   });
 
   it("reads a way list (any of them gets the way points) and refuses a way we do not have", () => {
@@ -79,14 +79,19 @@ describe("parseQuestionMap", () => {
     expect(() => far("entry=leaf", "way=개념")).toThrow(/far: to sets no scope/);
   });
 
-  it("v2 (10-05): reads a far rule's heading as its title, `pick: one` lists and the draft `why:` line", () => {
+  it("v2 (10-05): reads a far rule's heading as its number and title, `pick: one` lists and the draft `why:` line", () => {
     const block = (body: string, heading = "2. 배우기 · 주제 없음 → 목록") => `${MINI}\n${heading}\n\n\`\`\`far\nfrom: entry=target\n${body}\n\`\`\``;
     const rule = parseQuestionMap(block("to: entry=leaf | genres=인문,과학 교양\npick: one\nwhy: 한 발짝")).far[1];
     expect(rule).toEqual({
-      from: { entry: "target" }, to: { entry: "leaf", genres: ["인문", "과학 교양"] }, title: "배우기 · 주제 없음 → 목록", pick: "one", why: "한 발짝",
+      from: { entry: "target" }, to: { entry: "leaf", genres: ["인문", "과학 교양"] }, n: 2, title: "배우기 · 주제 없음 → 목록", pick: "one", why: "한 발짝",
     });
     expect(parseQuestionMap(block("to: entry=leaf | genres=인문", "그냥 문단")).far[1]).toEqual({ from: { entry: "target" }, to: { entry: "leaf", genres: ["인문"] } });
-    expect(() => parseQuestionMap(block("to: entry=leaf | genres=인문", "3. 번호가 틀림"))).toThrow(/far 2: its heading is numbered 3/);
+    // 10-05: a number stays with its rule — a newer rule may sit above older ones (its place is its priority), never reuse one
+    expect(parseQuestionMap(block("to: entry=leaf | genres=인문", "37. 새 규칙")).far[1]).toMatchObject({ n: 37, title: "새 규칙" });
+    expect(() => parseQuestionMap(block("to: entry=leaf | genres=인문", "1. 번호가 겹침"))).toThrow(/far 1: the number 1 is used twice/);
+    const second = "\n2. 자리 번호와 겹침\n\n```far\nfrom: entry=leaf\nto: entry=leaf | genres=시\n```";
+    expect(() => parseQuestionMap(`${block("to: entry=leaf | genres=인문", "그냥 문단")}${second}`))
+      .toThrow(/far 2: the number 2 is used twice/);
     expect(() => parseQuestionMap(block("to: entry=leaf | genres=인문\npick: all"))).toThrow(/far 2: pick must be "one", got "all"/);
     expect(() => parseQuestionMap(block("to: entry=leaf\npick: one"))).toThrow(/far 2: pick: one needs a genres list/);
     expect(() => parseQuestionMap(block("to: entry=leaf | genres=인문\nwhy:"))).toThrow(/far 2: why is empty/);
