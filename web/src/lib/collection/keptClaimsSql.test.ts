@@ -38,10 +38,32 @@ describe("0007 collection_kept_claims", () => {
     expect(text).toMatch(/for insert to authenticated with check \(user_id = \(select auth\.uid\(\)\)\)/);
   });
 
+  it("takes bookmark inserts away from people: only the server (service role) saves, everything else stays theirs", () => {
+    const text = sql();
+    expect(text).toMatch(/drop policy if exists saves_own_insert on public\.saves;/);
+    expect(text).toMatch(/revoke insert on public\.saves from authenticated;/);
+    expect(text).toMatch(/grant select, insert on public\.saves to service_role;/);
+    expect(text).not.toMatch(/saves_own_(select|update|delete)/);           // reading, moving, decorating, removing: untouched
+    // the server inserts with the service-role client, never the person's session
+    const library = readFileSync(path.resolve(process.cwd(), "src/lib/library/supabaseStore.ts"), "utf8");
+    expect(library).toMatch(/const inserted = \(\) => \{[\s\S]*?writer\.from\("saves"\)/);
+  });
+
+  it("keeps the earlier check scripts working: they save bookmarks as the server (service role)", () => {
+    for (const name of ["p5_rls", "decorate_rls"]) {
+      const check = read("checks", name);
+      const inserts = [...check.matchAll(/insert into public\.saves/g)].length;
+      const asServer = [...check.matchAll(/set local role service_role;[^;\n]*\n\s*insert into public\.saves/g)].length;
+      expect(asServer, name).toBeGreaterThan(0);
+      expect(inserts, name).toBeGreaterThanOrEqual(asServer);
+    }
+    expect(read("checks", "p5_rls")).toContain("B13 cannot save a bookmark with own session");
+  });
+
   it("has an RLS check script in the usual style, covering every rule", () => {
     const check = read("checks", "kept_claims_rls");
     expect(check).toContain("RLS CHECK RESULT");
     expect([...check.matchAll(/insert into rls_result (?:values \('|select ')(K\d+) /g)].map((m) => m[1]).filter((k, i, all) => all.indexOf(k) === i))
-      .toEqual(["K1", "K2", "K3", "K4", "K5", "K6", "K7", "K8", "K9", "K10"]);
+      .toEqual(["K1", "K2", "K3", "K4", "K5", "K6", "K7", "K8", "K11", "K12", "K13", "K14", "K15", "K9", "K10"]);
   });
 });

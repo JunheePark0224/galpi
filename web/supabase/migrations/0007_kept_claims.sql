@@ -3,8 +3,15 @@
 -- saved book. This table makes that a one-time claim: each bookmark of a draw (seed, iat, idx) can be claimed by ONE
 -- person, so a shared ticket can never fill many 도감s. The route inserts with the person's own session; a second claim of
 -- the same bookmark is a unique violation (409 for someone else, fine for the same person — they can see their own row).
--- Run this in the Supabase SQL Editor once, after 0004. Then run supabase/checks/kept_claims_rls.sql (every line "ok").
--- Until it is applied, the kept path answers 503 and the rest of the site works as before.
+--
+-- Bookmarks are saved by the server only (security re-review): 0003's saves_own_insert let a person insert a row with the
+-- anon key and their session — any picture, which 0005 then keeps as its first picture. From here on the server inserts
+-- saves with the service role, user_id from the verified session and the picture worked out from the draw's signed ticket
+-- (lib/library/savedArt). Reading, moving, decorating (0006 guards the art) and removing stay with the person's session.
+--
+-- Run this in the Supabase SQL Editor once, after 0003·0004·0005. Then run, each as its own query, supabase/checks/
+-- p5_rls.sql, decorate_rls.sql and kept_claims_rls.sql (every line "ok"). Safe to run again.
+-- The site needs SUPABASE_SERVICE_ROLE_KEY on the server for saving (without it a save answers 503 — fail closed).
 
 begin;
 
@@ -31,5 +38,10 @@ create policy kept_claims_own_select on public.collection_kept_claims
 drop policy if exists kept_claims_own_insert on public.collection_kept_claims;
 create policy kept_claims_own_insert on public.collection_kept_claims
   for insert to authenticated with check (user_id = (select auth.uid()));
+
+-- saves: no direct inserts with a person's session — the server (service role) saves bookmarks.
+drop policy if exists saves_own_insert on public.saves;
+revoke insert on public.saves from authenticated;
+grant select, insert on public.saves to service_role;
 
 commit;

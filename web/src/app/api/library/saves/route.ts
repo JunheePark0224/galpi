@@ -26,7 +26,9 @@ export async function POST(request: Request): Promise<Response> {
   return guarded(async () => {
     const picture = await savedArt(art, body.ticket, isbn, opened);
     if (!picture) return badRequest();
-    return reply(await saveBookmark(opened.store, { isbn, art: picture, reason, metOn }));
+    const result = await saveBookmark(opened.store, { isbn, art: picture.art, reason, metOn });
+    // `found`: 도감 parts a logged-out draw's bookmark brought in just now (the browser sends E-36 for them)
+    return reply(result.ok ? { ...result, found: picture.found } : result);
   });
 }
 

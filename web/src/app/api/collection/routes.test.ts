@@ -177,12 +177,34 @@ describe("도감 routes", () => {
       expect(store.data.items).toHaveLength(0);
     });
 
-    it("refuses another person's ticket and a logged-out one (403 — those reach the 도감 only through `kept`), takes the person's own", async () => {
+    it("refuses another person's ticket (403), takes the person's own", async () => {
       const theirs = issueTicket(isbnsOf(5), { seed: 70, sub: U2 });
       expect((await found(post("/api/collection/found", { ...theirs, index: 0 }))).status).toBe(403);
-      expect((await found(post("/api/collection/found", { ...issueTicket(isbnsOf(5), { seed: 71, sub: null }), index: 0 }))).status).toBe(403);
       expect(store.data.items).toHaveLength(0);
       expect((await found(post("/api/collection/found", { ...issueTicket(isbnsOf(5), { seed: 70, sub: U1 }), index: 0 }))).status).toBe(200);
+    });
+
+    it("a draw started logged out and seen after logging in: recorded for the first person to claim each bookmark, once", async () => {
+      const open = issueTicket(isbnsOf(5), { seed: 71, sub: null });
+      expect((await found(post("/api/collection/found", { ...open, index: 0 }))).status).toBe(200);
+      expect(store.data.items.length).toBeGreaterThan(0);
+      expect((await found(post("/api/collection/found", { ...open, index: 0 }))).status).toBe(200);     // the same person again
+      userId = U2;
+      const refused = await found(post("/api/collection/found", { ...open, index: 0 }));             // someone else: nothing
+      expect(refused.status).toBe(403);
+      expect(await refused.json()).toEqual({ error: "not recorded" });
+      expect(storeU2.data.items).toHaveLength(0);
+      expect((await found(post("/api/collection/found", { ...open, index: 1 }))).status).toBe(200);     // another bookmark is free
+      // still only for 2 hours on this path
+      const old = issueTicket(isbnsOf(5), { seed: 72, sub: null, iat: nowSeconds() - TICKET_TTL_SECONDS - 60 });
+      expect((await found(post("/api/collection/found", { ...old, index: 0 }))).status).toBe(403);
+    });
+
+    it("records nothing for a logged-out draw while the claims table (0007) is missing (503), the person's own draws still work", async () => {
+      claimsMissing = true;
+      expect((await found(post("/api/collection/found", { ...issueTicket(isbnsOf(5), { seed: 73, sub: null }), index: 0 }))).status).toBe(503);
+      expect(store.data.items).toHaveLength(0);
+      expect((await found(post("/api/collection/found", { ...issueTicket(isbnsOf(5), { seed: 73, sub: U1 }), index: 0 }))).status).toBe(200);
     });
 
     it("no longer accepts a v2 ticket (signed without the draw's books)", async () => {
@@ -225,12 +247,16 @@ describe("도감 routes", () => {
       expect((await found(kept(ticket()))).status).toBe(200);
     });
 
-    it("one person per bookmark: a shared ticket claimed by someone else is 409; the same person again is fine", async () => {
+    it("one person per bookmark: a shared ticket claimed by someone else is refused like any other (no oracle); the same person again is fine", async () => {
       keep();
       expect((await found(kept(ticket()))).status).toBe(200);
       expect((await found(kept(ticket()))).status).toBe(200);                   // a retry by the same person
       userId = U2;                                                              // another account saved the same book, same art
-      expect((await found(kept(ticket()))).status).toBe(409);
+      const claimed = await found(kept(ticket()));
+      saves.data.saves = [];
+      const notSaved = await found(kept(ticket()));
+      expect([claimed.status, await claimed.json()]).toEqual([403, { error: "not recorded" }]);
+      expect([notSaved.status, await notSaved.json()]).toEqual([403, { error: "not recorded" }]);
       expect(storeU2.data.items).toHaveLength(0);
     });
 

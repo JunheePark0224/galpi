@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 vi.mock("server-only", () => ({}));
-import { savedIsbns, supabaseStore } from "./supabaseStore";
+import { LibraryWriteOff, savedIsbns, supabaseStore } from "./supabaseStore";
 
 type Result = { data?: unknown; error?: { code: string } | null; count?: number };
 
@@ -69,7 +69,7 @@ describe("supabaseStore — every statement filtered to the person (RLS says the
     const dup = { error: { code: "23505" } };
     const fk = { error: { code: "23503" } };
     const { db } = fakeDb([dup, dup, fk, fk, { error: { code: "42501" } }]);
-    const store = supabaseStore(db, "u1");
+    const store = supabaseStore(db, "u1", db);
     const row = { isbn: "9788998441012", art: {} as never, reason: { label: "이 책은" as const, items: [] }, metOn: "2026-10-01", shelfId: "s", position: 0 };
     expect(await store.insertSave(row)).toBe(false);
     expect(await store.insertShelf("x", 1)).toBeNull();
@@ -78,9 +78,21 @@ describe("supabaseStore — every statement filtered to the person (RLS says the
     await expect(store.renameShelf("s", "x")).rejects.toThrow("library rename shelf failed: 42501");
   });
 
+  it("saves a bookmark with the server's client only, user_id from the session; without it the save fails closed (0007)", async () => {
+    const session = fakeDb([]);
+    const server = fakeDb([{}]);
+    const row = { isbn: "9788998441012", art: {} as never, reason: { label: "이 책은" as const, items: [] }, metOn: "2026-10-01", shelfId: "s", position: 0 };
+    expect(await supabaseStore(session.db, "u1", server.db).insertSave(row)).toBe(true);
+    expect(session.calls).toEqual([]);
+    expect(server.calls[0]).toBe("from(saves)");
+    expect(server.calls[1]).toMatch(/^insert\(\{"user_id":"u1",/);
+    await expect(supabaseStore(session.db, "u1").insertSave(row)).rejects.toBeInstanceOf(LibraryWriteOff);
+    expect(session.calls).toEqual([]);
+  });
+
   it("reports whether a change touched a row", async () => {
     const { db, calls } = fakeDb([{ data: [{ isbn: "1" }] }, { data: [] }, { data: [{ id: "s" }] }, { data: [{ id: "s" }] }, {}, { data: { id: "n", name: "x", position: 2 } }]);
-    const store = supabaseStore(db, "u1");
+    const store = supabaseStore(db, "u1", db);
     expect(await store.deleteSave("9788998441012")).toBe(true);
     expect(await store.updateSave("9788998441012", { shelfId: "t", position: -1 })).toBe(false);
     expect(await store.renameShelf("s", "새 이름")).toBe(true);

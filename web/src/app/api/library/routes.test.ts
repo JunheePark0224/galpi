@@ -1,8 +1,8 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { memoryStore } from "@/lib/library/__fixtures__/memoryStore";
-import type { LibraryStore } from "@/lib/library/types";
-import { artsForDraw } from "@/lib/art/combine";
+import { LibraryWriteOff, type LibraryStore } from "@/lib/library/types";
+import { artsForDraw, collectibleParts, tierOf } from "@/lib/art/combine";
 import { CollectionUnavailable } from "@/lib/collection/types";
 
 vi.mock("server-only", () => ({}));
@@ -32,13 +32,21 @@ vi.mock("@/lib/books/catalog", () => ({
 // 0007 claims, shared by everyone in a test (the collection store is only used for claims here)
 let claims: Map<string, string>;
 let claimsMissing = false;
+let dexWriter = true;
+let recorded: { uid: string; art: unknown }[];
 vi.mock("@/lib/collection/supabaseStore", () => ({
-  supabaseCollection: (_r: unknown, _w: unknown, uid: string) => ({
+  collectionWriter: () => (dexWriter ? {} : null),
+  supabaseCollection: (_r: unknown, w: unknown, uid: string) => ({
     claimKept: async ({ seed, iat, index }: { seed: number; iat: number; index: number }) => {
       if (claimsMissing) throw new CollectionUnavailable();
       const key = `${seed}:${iat}:${index}`;
       if (!claims.has(key)) claims.set(key, uid);
       return claims.get(key) === uid;
+    },
+    record: async (art: Parameters<typeof collectibleParts>[0]) => {
+      if (!w) throw new Error("collection writes are off");
+      recorded.push({ uid, art });
+      return collectibleParts(art);
     },
   }),
 }));
@@ -64,8 +72,8 @@ const A = "11111111-1111-4111-8111-111111111111";
 const B = "22222222-2222-4222-8222-222222222222";
 
 describe("내 책갈피 routes", () => {
-  beforeEach(() => { store = memoryStore(); claims = new Map(); });
-  afterEach(() => { configured = true; userId = "u1"; claimsMissing = false; vi.unstubAllEnvs(); vi.clearAllMocks(); });
+  beforeEach(() => { store = memoryStore(); claims = new Map(); recorded = []; });
+  afterEach(() => { configured = true; userId = "u1"; claimsMissing = false; dexWriter = true; vi.unstubAllEnvs(); vi.clearAllMocks(); });
 
   it("/api/me says whether someone is logged in and how many bookmarks — and that login is off without config", async () => {
     expect(await (await me(get("/api/me"))).json()).toEqual({ enabled: true, loggedIn: true, id: "u1", count: 0, login: null });
@@ -122,11 +130,13 @@ describe("내 책갈피 routes", () => {
       expect(claims.size).toBe(0);                                                // a logged-in draw needs no claim
     });
 
-    it("a logged-out draw: claimed by this person (once — the same person again is fine)", async () => {
+    it("a logged-out draw: claimed by this person (once — the same person again is fine), its parts recorded and returned for E-36", async () => {
       userId = A;
-      await save(send("POST", "/api/library/saves", { ...BODY, art: notDrawn, ticket: proof() }));
+      const res = await save(send("POST", "/api/library/saves", { ...BODY, art: notDrawn, ticket: proof() }));
       expect(savedArt()).toEqual(DRAWN);
       expect([...claims.values()]).toEqual([A]);
+      expect(recorded).toEqual([{ uid: A, art: DRAWN }]);
+      expect((await res.json()).found).toEqual(collectibleParts(DRAWN).map((p) => ({ ...p, tier: tierOf(p.kind, p.value) })));
       store = memoryStore();
       await save(send("POST", "/api/library/saves", { ...BODY, ticket: proof() }));
       expect(savedArt()).toEqual(DRAWN);
@@ -168,10 +178,24 @@ describe("내 책갈피 routes", () => {
       expect(pictures.size).toBeGreaterThan(1);
     });
 
-    it("0007 not applied yet: a verified logged-out draw still gets its own picture (nothing to claim with)", async () => {
+    it("0007 not applied yet: a verified logged-out draw still gets its own picture, but nothing goes into the 도감", async () => {
       claimsMissing = true;
+      const res = await save(send("POST", "/api/library/saves", { ...BODY, ticket: proof() }));
+      expect(savedArt()).toEqual(DRAWN);
+      expect(recorded).toEqual([]);
+      expect((await res.json()).found).toEqual([]);
+    });
+
+    it("no 도감 writer (no service key): the picture is still the drawn one, nothing recorded; a logged-in draw records nothing here", async () => {
+      dexWriter = false;
       await save(send("POST", "/api/library/saves", { ...BODY, ticket: proof() }));
       expect(savedArt()).toEqual(DRAWN);
+      dexWriter = true;
+      store = memoryStore();
+      userId = A;
+      const res = await save(send("POST", "/api/library/saves", { ...BODY, ticket: proof({ sub: A }) }));
+      expect(recorded).toEqual([]);                                             // S-05 recorded the person's own draws
+      expect((await res.json()).found).toEqual([]);
     });
 
     it("a broken ticket is a broken body (400)", async () => {
@@ -187,6 +211,14 @@ describe("내 책갈피 routes", () => {
       await save(send("POST", "/api/library/saves", { ...BODY, ticket: proof() }));
       expect(savedArt()).toEqual(ART);
     });
+  });
+
+  it("fails closed when the server cannot save bookmarks (no service key, 0007): 503, nothing saved", async () => {
+    const real = store.insertSave;
+    store.insertSave = async () => { throw new LibraryWriteOff(); };
+    expect((await save(send("POST", "/api/library/saves", BODY))).status).toBe(503);
+    store.insertSave = real;
+    expect(store.data.saves).toHaveLength(0);
   });
 
   it("refuses books outside the catalogue, made-up pictures, future dates and broken bodies", async () => {

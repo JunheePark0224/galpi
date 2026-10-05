@@ -42,3 +42,11 @@ export interface LibraryStore {
   renameShelf(id: string, name: string): Promise<boolean>;
   deleteShelf(id: string): Promise<boolean>;
 }
+
+/** The server cannot save bookmarks: no service-role key (0007 — people may no longer insert saves themselves). 503. */
+export class LibraryWriteOff extends Error {
+  constructor() {
+    super("library saves are off");
+    this.name = "LibraryWriteOff";
+  }
+}

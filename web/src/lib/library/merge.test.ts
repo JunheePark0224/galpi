@@ -180,4 +180,46 @@ describe("merge (로그인 뒤 임시 책갈피를 계정으로, E-39)", () => {
       ["guest_saves_merged", { guest_count: 4, merged_count: 2 }],
     ]);
   });
+
+  describe("the 도감 report waits in this browser until the server answers it for good (v1.7.1)", () => {
+    const meeting = (index: number) => ({ seed: 6, count: 5, iat: 1_790_000_000, sub: null, sig: "a".repeat(43), isbns: ["9790000000000", "9790000000001", "9790000000002", "9790000000003", "9790000000004"], index });
+    const foundCalls = () => request.mock.calls.filter(([, path]) => path === "/api/collection/found");
+
+    it("a failed report (server, network) stays and is tried on the next visit without saving the book again; then it leaves", async () => {
+      const { merge, guest } = await setup([{ ...save(isbnAt(0)), meeting: meeting(0) }]);
+      const pending = await import("./dexPending");
+      request.mockImplementation(async (_m: string, path: string) =>
+        (path === "/api/library/saves" ? { ...saved(), body: { ok: true, saved: true, found: [{ kind: "animal", value: "owl" }] } } : failed(503)));
+      await merge.mergeGuestSaves(true);
+      expect(guest.guestSaves()).toEqual([]);
+      expect(pending.pendingDex().map((e) => [e.isbn, e.tries])).toEqual([[isbnAt(0), 1]]);
+      expect(track).toHaveBeenCalledWith("collection_item_found", { part_kind: "animal", part_value: "owl", tier: "common" });   // from the save
+      request.mockClear();
+      track.mockClear();
+      request.mockResolvedValue({ ok: true, status: 200, body: { ok: true, found: [] } });
+      await merge.mergeGuestSaves(false);                                            // a later visit, nothing left to save
+      expect(request.mock.calls.map(([, path]) => path)).toEqual(["/api/collection/found"]);
+      expect(pending.pendingDex()).toEqual([]);
+      expect(track).not.toHaveBeenCalled();                                          // no E-39 for a report alone
+    });
+
+    it("a definite refusal (4xx) lets the report go; repeated failures stop after three visits; a run-out session leaves it untouched", async () => {
+      const { merge } = await setup([{ ...save(isbnAt(0)), meeting: meeting(0) }, { ...save(isbnAt(1)), meeting: meeting(1) }]);
+      const pending = await import("./dexPending");
+      request.mockImplementation(async (_m: string, path: string, body: { index?: number }) => {
+        if (path === "/api/library/saves") return saved();
+        return body.index === 1 ? failed(403, "not recorded") : failed(0);
+      });
+      await merge.mergeGuestSaves(true);
+      expect(pending.pendingDex().map((e) => [e.isbn, e.tries])).toEqual([[isbnAt(0), 1]]);
+      await merge.mergeGuestSaves(false);
+      await merge.mergeGuestSaves(false);
+      expect(pending.pendingDex()).toEqual([]);
+      expect(foundCalls()).toHaveLength(4);
+      pending.addPendingDex([{ meeting: meeting(2), isbn: "9790000000002" }]);
+      request.mockResolvedValue(failed(401));
+      await merge.mergeGuestSaves(false);
+      expect(pending.pendingDex().map((e) => e.tries)).toEqual([undefined]);
+    });
+  });
 });
