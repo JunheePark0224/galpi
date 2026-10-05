@@ -1,8 +1,9 @@
 import type { Entry, Way } from "../recommend/types";
 
 /**
- * docs/plans/2026-09-30-d3-tags.md — topic → field, in topic order. For 🎯 books genre === topic. The last six came with D-A
- * (10-01, docs/target-chips.md 2절).
+ * docs/plans/2026-09-30-d3-tags.md — topic → field, in topic order. For 🎯 books genre === topic. Six came with D-A
+ * (10-01, docs/target-chips.md 2절); the last four (10-05, docs/plans/2026-10-05-new-genres.md — definitions are drafts the
+ * user has yet to confirm) share the 일·커리어 and 습관·자기계발 colours, so there is no new field.
  */
 export const FIELD_OF_TOPIC = {
   "데이터 분석": "데이터·통계",
@@ -17,6 +18,10 @@ export const FIELD_OF_TOPIC = {
   "대화·관계": "마음·관계",
   "취업·커리어": "일·커리어",
   글쓰기: "일·커리어",
+  "마케팅·브랜딩": "일·커리어",
+  리더십: "일·커리어",
+  "건강·운동": "습관·자기계발",
+  "요리·살림": "습관·자기계발",
 } as const;
 export type Topic = keyof typeof FIELD_OF_TOPIC;
 export type Field = (typeof FIELD_OF_TOPIC)[Topic];
@@ -35,10 +40,12 @@ export const TOPIC_CHIPS: readonly { topic: Topic; label: string }[] = [
   { topic: "시간·생산성", label: "시간·생산성" },
 ];
 
-/** docs/book-pool.md 1절. The last three came with D-A (10-01) and have no books until the pipeline adds them — a genre with
- * no books is simply never drawn (draws score every 🍃 book; nothing loops over this list). */
+/** docs/book-pool.md 1절. 역사·사회·시사·호러·괴담 came with D-A (10-01), 로맨스 on 10-05 (docs/plans/2026-10-05-new-genres.md,
+ * definition a draft) — they have no books until the pipeline adds them, and a genre with no books is simply never drawn
+ * (draws score every 🍃 book; nothing loops over this list). */
 export const LEAF_GENRES = [
   "한국 소설", "외국 소설", "SF·판타지", "추리·스릴러", "에세이", "시", "인문", "과학 교양", "예술·여행", "역사", "사회·시사", "호러·괴담",
+  "로맨스",
 ] as const;
 export type LeafGenre = (typeof LEAF_GENRES)[number];
 
@@ -51,7 +58,7 @@ const GENRE_TONE: Record<LeafGenre, string> = {
   "한국 소설": "--genre-korean-fiction", "외국 소설": "--genre-world-fiction", "SF·판타지": "--genre-sf-fantasy",
   "추리·스릴러": "--genre-mystery", 에세이: "--genre-essay", 시: "--genre-poetry", 인문: "--genre-humanities",
   "과학 교양": "--genre-science", "예술·여행": "--genre-art-travel", 역사: "--genre-history", "사회·시사": "--genre-society",
-  "호러·괴담": "--genre-horror",
+  "호러·괴담": "--genre-horror", 로맨스: "--genre-romance",
 };
 const FIELD_TONE: Record<Field, string> = {
   "데이터·통계": "--field-data", "AI·IT 활용": "--field-ai", "습관·자기계발": "--field-habit",

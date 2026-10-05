@@ -66,13 +66,15 @@ describe("drawPath — challenge provenance (rules v2, 10-05)", () => {
     for (let w = walkPath(QUESTION_MAP, out); w.next !== null; w = walkPath(QUESTION_MAP, out)) out.push({ node: w.next, choice: "unsure" });
     return out;
   };
-  const MONEY = finish(["start", "B"], ["branch", "B"], ["learn-intro", "A"], ["learn-area", "B"], ["learn-life", "B"], ["learn-daily", "B"], ["learn-money-field", "unsure"]);
+  const MONEY = finish(["start", "B"], ["branch", "B"], ["learn-intro", "A"], ["learn-area", "B"], ["learn-life", "B"], ["learn-daily-body", "B"], ["learn-daily", "B"], ["learn-money-field", "unsure"]);
   const LEARN_NONE = finish(["start", "B"], ["branch", "B"], ["learn-intro", "B"]);
   const STORY_NONE = finish(["start", "B"], ["branch", "A"], ["story-intro", "B"]);
   const catalogue = catalogueJson as unknown as CatalogBook[];   // today's catalogue: the 5-book threshold needs real counts
+  /** A far rule by its number (10-05: numbers stay with their rules; 37-43 sit above older ones). */
+  const rule = (n: number) => QUESTION_MAP.far.find((r) => r.n === n)!;
 
   it("a catalogue with no list genre of 5 books (the sample): the whole list as the target", () => {
-    expect(drawPath(LEARN_NONE, none, mulberry32(11), BOOKS).challenge!.to).toEqual(QUESTION_MAP.far[35].to.genres);
+    expect(drawPath(LEARN_NONE, none, mulberry32(11), BOOKS).challenge!.to).toEqual(rule(36).to.genres);
   });
 
   it("the usual route: challenge null", () => {
@@ -100,13 +102,40 @@ describe("drawPath — challenge provenance (rules v2, 10-05)", () => {
   it("rule 19: 이야기 · 장르 없음 → one list genre, no reason written yet", () => {
     const res = drawPath(STORY_NONE, none, mulberry32(5), catalogue);
     expect(res.challenge).toMatchObject({ from: ["이야기 · 장르 없음"], rule: { n: 19 }, reasonDraft: null });
-    expect(QUESTION_MAP.far[18].to.genres).toContain(res.challenge!.to[0]);
+    expect(rule(19).to.genres).toContain(res.challenge!.to[0]);
     expect(res.picks.every((p) => p.card.entry === "leaf")).toBe(true);
+  });
+
+  it("10-05: rule 37 (로맨스) and the new topics' rules 38-43 win over the older group rules below them, by their own numbers", () => {
+    const romance = finish(["start", "B"], ["branch", "A"], ["story-intro", "A"], ["story-shelf", "A"], ["story-fiction", "A"], ["story-real", "A"]);
+    expect(drawPath(romance, none, mulberry32(3), catalogue).challenge).toMatchObject({
+      from: ["로맨스"], to: ["SF·판타지", "역사"], rule: { n: 37 }, reasonDraft: "두 사람의 이야기에서 더 큰 세계와 시간으로",
+    });
+    const realNovel = finish(["start", "B"], ["branch", "A"], ["story-intro", "A"], ["story-shelf", "A"], ["story-fiction", "A"]);
+    expect(drawPath(realNovel, none, mulberry32(3), catalogue).challenge).toMatchObject({ from: ["한국 소설", "외국 소설", "로맨스"], rule: { n: 17 } });
+    const into: [string, Answer["choice"]][] = [["start", "B"], ["branch", "B"], ["learn-intro", "A"]];
+    const brand = finish(...into, ["learn-area", "A"], ["learn-work", "B"], ["learn-craft-people", "B"], ["learn-reach", "A"], ["learn-market", "A"], ["learn-market-make", "A"]);
+    expect(walkPath(QUESTION_MAP, brand).scope).toMatchObject({ topics: ["마케팅·브랜딩"], keywords: ["브랜딩"] });
+    expect(drawPath(brand, none, mulberry32(3), catalogue).challenge).toMatchObject({ from: ["마케팅·브랜딩"], to: ["예술·여행", "인문"], rule: { n: 38 } });
+    const reach = finish(...into, ["learn-area", "A"], ["learn-work", "B"], ["learn-craft-people", "B"]);
+    expect(drawPath(reach, none, mulberry32(3), catalogue).challenge).toMatchObject({ to: ["인문", "역사"], rule: { n: 42, title: "함께 움직이기 → 인문·역사" } });
+    const people = finish(...into, ["learn-area", "A"], ["learn-work", "B"]);
+    expect(drawPath(people, none, mulberry32(3), catalogue).challenge).toMatchObject({ rule: { n: 31, title: "일하는 방식과 사람 전체 → 예술·여행·과학 교양" } });
+    const body = finish(...into, ["learn-area", "B"], ["learn-life", "B"], ["learn-daily-body", "A"]);
+    const res = drawPath(body, none, mulberry32(3), catalogue);
+    expect(res.challenge).toMatchObject({ from: ["건강·운동", "요리·살림"], to: ["과학 교양", "예술·여행"], rule: { n: 43 } });
+    expect(res.picks.every((p) => p.card.entry === "leaf" && LEARN_CHALLENGE_GENRES.includes(p.card.genre))).toBe(true);
+    for (const [topicChoice, n] of [["A", 40], ["B", 41]] as const) {
+      const one = finish(...into, ["learn-area", "B"], ["learn-life", "B"], ["learn-daily-body", "A"], ["learn-body", topicChoice]);
+      expect(drawPath(one, none, mulberry32(3), catalogue).challenge!.rule.n).toBe(n);
+    }
+    const lead = finish(...into, ["learn-area", "A"], ["learn-work", "B"], ["learn-craft-people", "B"], ["learn-reach", "B"]);
+    expect(drawPath(lead, none, mulberry32(3), catalogue).challenge).toMatchObject({ from: ["리더십"], to: ["역사", "인문"], rule: { n: 39 } });
   });
 
   it("rule 1 (SF chosen): the story rule's title, no reason", () => {
     expect(drawPath(CHALLENGE_PATH, none, mulberry32(3), catalogue).challenge).toEqual({
-      from: ["SF·판타지"], to: ["에세이", "시"], rule: { n: 1, title: QUESTION_MAP.far[0].title }, reasonDraft: null,
+      from: ["SF·판타지"], to: ["에세이", "시"], rule: { n: 1, title: rule(1).title }, reasonDraft: null,
     });
   });
 });

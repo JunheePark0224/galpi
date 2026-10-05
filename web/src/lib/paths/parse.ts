@@ -85,16 +85,14 @@ function scopeOf(side: "from" | "to", text: string): Partial<Scope> {
 const FAR_KEYS = ["from", "to", "pick", "why"];
 const HEADING = /^(\d+)\.\s+(.+)$/;
 
-/** The "N. title" line right above a far block (optional), its number checked against the rule's place. */
-function headingOf(before: string, n: number): string | undefined {
+/** The "N. title" line right above a far block (optional). */
+function headingOf(before: string): { n: number; title: string } | undefined {
   const last = before.split(/\r?\n/).map((l) => l.trim()).filter(Boolean).at(-1);
   const m = last?.match(HEADING);
-  if (!m) return undefined;
-  if (Number(m[1]) !== n) throw new MapParseError(`far ${n}: its heading is numbered ${m[1]} — far rules are numbered 1, 2, 3 … in order`);
-  return m[2];
+  return m ? { n: Number(m[1]), title: m[2] } : undefined;
 }
 
-function farRule(lines: Map<string, string>, n: number, title: string | undefined): FarRule {
+function farRule(lines: Map<string, string>, n: number, heading: { n: number; title: string } | undefined): FarRule {
   const where = `far ${n}`;
   const extra = [...lines.keys()].find((k) => !FAR_KEYS.includes(k));
   if (extra) throw new MapParseError(`${where}: unknown line "${extra}:"`);
@@ -106,7 +104,7 @@ function farRule(lines: Map<string, string>, n: number, title: string | undefine
   if (pick && !to.genres) throw new MapParseError(`${where}: pick: one needs a genres list in to:`);
   return {
     from: scopeOf("from", field("far", lines, "from")), to,
-    ...(title ? { title } : {}), ...(pick ? { pick } : {}), ...(why ? { why } : {}),
+    ...(heading ? { n: heading.n, title: heading.title } : {}), ...(pick ? { pick } : {}), ...(why ? { why } : {}),
   };
 }
 
@@ -121,7 +119,10 @@ export function parseQuestionMap(markdown: string): QuestionMap {
     const { lines, twice } = linesOf(m[2]);
     if (m[1] === "far") {
       once("far", twice);
-      far.push(farRule(lines, far.length + 1, headingOf(before, far.length + 1)));
+      const heading = headingOf(before);
+      const n = heading?.n ?? far.length + 1;
+      if (far.some((r, i) => (r.n ?? i + 1) === n)) throw new MapParseError(`far ${n}: the number ${n} is used twice — each far rule keeps its own number`);
+      far.push(farRule(lines, n, heading));
       continue;
     }
     const id = field("?", lines, "id");
