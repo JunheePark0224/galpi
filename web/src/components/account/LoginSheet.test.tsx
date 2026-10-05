@@ -17,10 +17,10 @@ describe("LoginSheet (S-07, C-12)", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 
-  it("opens from 꽂기 with its own title, Kakao above Google, a privacy link, and sends E-12 once", () => {
+  it("opens from 저장 (a browser that keeps nothing) with its own title, Kakao above Google, a privacy link, and sends E-12 once", () => {
     render(<LoginSheet />);
     act(() => openLoginSheet("save"));
-    const dialog = screen.getByRole("dialog", { name: "꽂은 책갈피는 내 책갈피에 이렇게 모여요" });
+    const dialog = screen.getByRole("dialog", { name: "저장한 책갈피는 내 책갈피에 이렇게 모여요" });
     expect(dialog).toHaveAttribute("aria-modal", "true");
     const buttons = screen.getAllByRole("button");
     expect(buttons.map((b) => b.textContent)).toEqual(["카카오로 계속하기", "Google로 계속하기", "닫기"]);
@@ -40,6 +40,13 @@ describe("LoginSheet (S-07, C-12)", () => {
     expect(screen.getByRole("dialog", { name: "로그인하고 내 책갈피를 모아 보세요" })).toBeInTheDocument();
     expect(screen.getByText(/갈피는 이름·연락처를 쓰지 않아요/)).toBeInTheDocument();
     expect(track).toHaveBeenCalledWith("login_prompt_shown", { source: "header" });
+  });
+
+  it("from S-09's [로그인하고 지키기] it says the bookmarks will be kept safe (E-12 library, v1.7)", () => {
+    render(<LoginSheet />);
+    act(() => openLoginSheet("library"));
+    expect(screen.getByRole("dialog", { name: "로그인하고 내 책갈피를 지켜요" })).toBeInTheDocument();
+    expect(track).toHaveBeenCalledWith("login_prompt_shown", { source: "library" });
   });
 
   it("sends E-13 then leaves for the provider, coming back to this very page", async () => {

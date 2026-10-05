@@ -16,7 +16,7 @@ describe("/privacy (S-10)", () => {
     expect(screen.getByText("갈피는 이름·전화번호를 받지 않아요.")).toBeInTheDocument();
     expect(screen.getByText(/이메일·닉네임은 로그인할 때 로그인 확인용으로 로그인 서비스에만 남고, 갈피는 쓰지 않아요\./)).toBeInTheDocument();
     const rows = within(screen.getByRole("table")).getAllByRole("row");
-    expect(rows).toHaveLength(12); // header + 11 (v2: the 🎯 written-goal row is gone; 도감 v1 adds one; taxonomy v1.4 the link tags)
+    expect(rows).toHaveLength(13); // header + 12 (v2: the 🎯 written-goal row is gone; 도감 v1 adds one; taxonomy v1.4 the link tags; v1.7 로그인 전 저장)
     expect(screen.getByText(/도감: 로그인했다면, 책을 넘기며 만난 책갈피 그림의 동물·배경·소품과 각각 처음 만난 때와 그때의 그림/)).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "모으는 것" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "왜" })).toBeInTheDocument();
@@ -28,6 +28,12 @@ describe("/privacy (S-10)", () => {
     expect(screen.getByText("같은 사람이 다시 왔는지 세기 위해")).toBeInTheDocument();
     expect(screen.getByText("추천이 잘 맞는지 분석하기 위해")).toBeInTheDocument();
     expect(screen.getByText("화면이 잘 동작하는지 확인하기 위해")).toBeInTheDocument();
+  });
+
+  it("says bookmarks kept before logging in stay in this browser until the login moves them (taxonomy v1.7, 6-3j)", () => {
+    render(<PrivacyPage />);
+    expect(screen.getByText("로그인 전에 저장한 책갈피(책 번호·책갈피 그림·나온 이유·만난 날)는 이 브라우저에만 저장돼요. 화면에 그리려고 그 책의 정보(제목·저자·장르·한 줄)도 함께 둬요. 로그인하면 계정으로 옮기고 브라우저에서 지워요. 브라우저 기록을 지우면 함께 사라져요.")).toBeInTheDocument();
+    expect(screen.getByText("로그인하지 않아도 책갈피를 모아 두었다가 로그인하면 이어 주기 위해")).toBeInTheDocument();
   });
 
   it("lists what Amplitude collects on its own and the sampled screen recording with masked inputs", () => {

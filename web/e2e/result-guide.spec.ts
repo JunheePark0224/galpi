@@ -1,7 +1,7 @@
 import { expect, type Page } from "@playwright/test";
 import { reactToBookmarks, test, toBookmarks } from "./helpers";
 
-// C-21: the first S-06 book explains itself once per browser — the peeking bookmark, ‹ ›, 🔖 꽂기, [알겠어요] (10-02).
+// C-21: the first S-06 book explains itself once per browser — the peeking bookmark, ‹ ›, 🔖 내 책갈피에 저장, [알겠어요] (10-02, v1.7).
 const SHOTS = process.env.GUIDE_SHOTS;   // a folder: save screenshots there when set (manual design check)
 
 async function toFirstResult(page: Page) {
@@ -15,10 +15,10 @@ async function toFirstResult(page: Page) {
   await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
 }
 const guide = (page: Page) => page.getByRole("dialog", { name: "궁금해요 책 보는 법" });
-const WORDS = ["① 책갈피를 누르면 꺼내져요 · 뒷면에 나온 이유", "② ‹ › 로 앞뒤 책을 봐요", "③ 🔖 꽂기로 내 책갈피에 모아 둬요"];
+const WORDS = ["① 책갈피를 누르면 꺼내져요 · 뒷면에 나온 이유", "② ‹ › 로 앞뒤 책을 봐요", "③ 🔖 내 책갈피에 저장해 두면 나중에 다시 볼 수 있어요"];
 
 for (const [w, h] of [[375, 667], [320, 568], [1280, 800]] as const) {
-  test(`${w}×${h}: the S-06 guide lights the bookmark, ‹ › and 🔖 꽂기 with its words on screen, once`, async ({ page }, info) => {
+  test(`${w}×${h}: the S-06 guide lights the bookmark, ‹ › and the save button with its words on screen, once`, async ({ page }, info) => {
     test.skip(w === 1280 && info.project.name !== "laptop", "a desktop window");
     test.skip(w !== 1280 && info.project.name !== "phone", "a phone window");
     await page.setViewportSize({ width: w, height: h });
