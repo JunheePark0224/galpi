@@ -1,4 +1,4 @@
-import { partsOf } from "@/lib/art/combine";
+import { collectibleParts } from "@/lib/art/combine";
 import type { CollectionItem, CollectionStore } from "../types";
 
 /** In-memory CollectionStore for tests: one person's 도감, same rules as the table (one row per kind + value). */
@@ -8,7 +8,7 @@ export function memoryCollection(init: CollectionItem[] = [], now = () => "2026-
     data,
     items: async () => [...data.items],
     record: async (art) => {
-      const fresh = partsOf(art).filter((p) => !data.items.some((i) => i.kind === p.kind && i.value === p.value));
+      const fresh = collectibleParts(art).filter((p) => !data.items.some((i) => i.kind === p.kind && i.value === p.value));
       data.items = [...data.items, ...fresh.map((p) => ({ ...p, firstMetAt: now(), firstArt: art, isNew: true }))];
       return fresh;
     },

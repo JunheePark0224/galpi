@@ -16,15 +16,12 @@ export const PART_NAMES: { readonly [K in ArtKind]: Readonly<Record<string, stri
     rainbow: "무지개", shooting: "별똥별", goldmoon: "금빛 초승달",
   },
   ground: {
-    grass: "풀", flowers: "꽃", books: "책 더미", mushroom: "버섯", none: "빈 언덕",
+    grass: "풀", flowers: "꽃", books: "책 더미", mushroom: "버섯",
     clover: "네잎클로버", firefly: "반딧불", goldbook: "금장 고서",
   },
 };
 
 export const TIER_NAMES: Readonly<Record<Tier, string>> = { common: "일반판", limited: "한정판", first_edition: "초판본" };
-
-/** The badge's word for a kind (sky and ground props are both 소품). */
-export const KIND_WORDS: Readonly<Record<ArtKind, string>> = { animal: "동물", bg: "배경", sky: "소품", ground: "소품" };
 
 export function partName(kind: ArtKind, value: string): string {
   return PART_NAMES[kind][value] ?? value;

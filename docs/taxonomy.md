@@ -19,6 +19,7 @@
 | taxonomy v1.1 | 2026-10-04 | 내 책갈피 끌어서 옮기기 `plans/2026-10-04-library-front-drag.md` | E-30 `method` "drag" 추가("hold"는 보내지 않음), `is_same_shelf` 추가, 같은 막대 안 순서 바꾸기도 남김 (8절) |
 | taxonomy v1.2 | 2026-10-04 | 내 책갈피 [모두 제거] (PRD F-13, 시안 `mockups/2026-10-04-v2/library-buttons-options.png` A) | E-35 `library_cleared`(`removed_count`) live, 동사 `cleared`, 모두 빼기는 E-16을 책마다 보내지 않음 (8절) |
 | taxonomy v1.3 | 2026-10-05 | 도감 v1 (PRD F-21, `plans/2026-10-05-collection-dex.md`) | E-36 `collection_item_found`·E-37 `collection_viewed` live, 동사 `found`, 분류 `도감`, E-07 `art.rare`의 뜻, 처리방침 6-3g (8절) |
+| taxonomy v1.4.1 | 2026-10-05 | 도감 v1 표시 수정 (`context.md` 10-05) | E-36은 땅 소품 "없음"(`none`)에 보내지 않음, E-37 `collected_count` 최대 42 (8절) |
 | taxonomy v1.4 | 2026-10-05 | 공개 홍보(10-07) 유입 채널 구분 (`launch-plan.md` 4절, `launch-attribution.md`) | E-01 `utm_source`·`utm_medium`·`utm_campaign`(세션 첫 주소, Supabase only), 공통 `referrer`는 호스트만, `is_in_app_browser`에 스레드·링크드인, 처리방침 6-3h (3-1b, 8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
@@ -799,7 +800,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 도감 | system | live | 신규 (v1.3) |
 
-**언제**: 로그인한 사람에게 S-05 책갈피가 보이고(E-07과 같은 순간), 서버가 그 그림의 부분을 도감에 **처음** 기록했을 때 — 새 부분마다 한 번(한 책갈피에서 동물과 배경이 처음이면 둘). 서버가 서명된 뽑기 seed로 그림을 다시 계산해 기록하므로 브라우저가 꾸민 그림은 남지 않는다. 로그인 전·이미 만난 부분·기록 실패는 남지 않음. 책 ID는 넣지 않는다(그림은 책과 무관하게 뽑힌다, 원칙 2)  
+**언제**: 로그인한 사람에게 S-05 책갈피가 보이고(E-07과 같은 순간), 서버가 그 그림의 부분을 도감에 **처음** 기록했을 때 — 새 부분마다 한 번(한 책갈피에서 동물과 배경이 처음이면 둘). 서버가 서명된 뽑기 seed로 그림을 다시 계산해 기록하므로 브라우저가 꾸민 그림은 남지 않는다. 로그인 전·이미 만난 부분·기록 실패는 남지 않음. 땅 소품 "없음"(`none`, 땅에 아무것도 없음)은 모으는 부분이 아니라 기록하지도 보내지도 않는다(v1.4.1 — 그 전 기록에는 `part_value` "none"이 있을 수 있어 분석에서 뺀다). 책 ID는 넣지 않는다(그림은 책과 무관하게 뽑힌다, 원칙 2)  
 **분석 질문**: 도감 — 희귀(한정판·초판본)를 만난 사람이 더 자주 돌아오는지(재방문·다시 뽑기와 이어 봄). 꽂기(E-15)와는 떨어져 있다(launch-plan 3절)
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -819,7 +820,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `collected_count` | 추가 (v1.3) | Number | 0, 9, 30 | 도감에 모은 항목 수(동물·배경·소품 합, 최대 43). 로그인 전은 0 |
+| `collected_count` | 추가 (v1.3) | Number | 0, 9, 30 | 도감에 모은 항목 수(동물·배경·소품 합, 최대 42 — v1.4.1부터 땅 "없음"은 세지 않음). 로그인 전은 0 |
 | `is_logged_in` | 추가 (v1.3) | Boolean | TRUE, FALSE | 열 때 로그인 상태였는지 |
 
 #### E-19 `redraw_clicked`
@@ -1215,6 +1216,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v1.1 | 2026-10-04 | Claude (사용자 요청) | 내 책갈피(S-09)를 꾹 눌러 **끌어서** 다른 막대 어디든·같은 막대 안 다른 자리로 옮김(PRD F-13, `plans/2026-10-04-library-front-drag.md`). E-30 `bookmark_moved`: `method`에 "drag" 추가, "hold"(들고 → 막대 누르기)는 v1.1부터 보내지 않음 — 그 화면이 없어짐, 옛 탭과 v1.0까지의 기록을 읽으려고 스펙에 남김. 새 속성 `is_same_shelf`(Boolean — 2-3 규칙으로 `is_`, 계획서의 `same_shelf`). 같은 막대 안 순서 바꾸기도 남김, 제자리·막대 밖 놓기는 남지 않음. 놓인 자리 번호는 넣지 않음(답할 질문이 없음, 1-1). 모으는 정보 변화 없음 — `/privacy` 그대로 |
 | v1.2 | 2026-10-04 | Claude (사용자 요청) | 내 책갈피(S-09)에 [모두 제거] → 확인 시트 [모두 빼기](PRD F-13, 시안 `library-buttons-options.png` A). 새 E-35 `library_cleared`(`removed_count` Number — 서버가 지운 수)를 화면과 함께 `live`로, 동사 `cleared` 추가. 서버가 지운 것을 확인한 뒤에만 보낸다. 빠진 책마다 E-16 `book_unsaved`를 보내지 않는다(한 누름 = 한 이벤트 — 어떤 책이었는지는 그 전 E-15로 안다). 막대 이름·번호는 넣지 않음(6-1). 모으는 정보 변화 없음(지운 수뿐) — `/privacy`는 기록을 "누른 버튼"으로만 적고 이벤트를 하나하나 나열하지 않아 그대로 |
 | v1.3 | 2026-10-05 | Claude (도감 v1 구현) | 도감 v1(PRD F-21, `plans/2026-10-05-collection-dex.md`). 새 E-36 `collection_item_found`(`part_kind`·`part_value`·`tier` — 서버가 새로 기록한 부분마다, 로그인한 사람만)·E-37 `collection_viewed`(`collected_count`·`is_logged_in`)를 화면과 함께 `live`로. 동사 `found`, 분류 `도감`. 이름 규칙 2-3 때문에 계획서의 `kind`·`value`·`found_count` 대신 `part_kind`·`part_value`·`collected_count`(`kind`는 E-32의 질문 종류, `found_count`는 옛 E-22의 책 수와 뜻이 다름). E-07 `art`: 값에 한정판·초판본이 더해지고 `rare`의 뜻을 정함(넷 중 하나라도 한정판 이상). 처리방침 6-3g 먼저(갱신일 2026-10-05) |
+| v1.4.1 | 2026-10-05 | Claude (도감 표시 수정, 사용자 승인) | 땅 소품 "없음"(`none`)은 그림에는 그대로 나오지만 도감의 부분이 아니다 — 서버가 기록하지 않고, 브라우저는 응답에 있어도 버리므로 E-36 `collection_item_found`가 `part_value` "none"으로 나가지 않는다. 운영 DB의 옛 "none" 줄은 읽을 때 무시(지우지 않음)하므로 E-37 `collected_count`도 세지 않는다(최대 43 → 42). 이벤트 이름·속성·타입·`schema.ts` 허용 값 변경 없음(`part_value`는 원래 자유 문자열 — 값 목록에 "none"이 없었다), 모으는 정보 변화 없음 |
 | v1.4 | 2026-10-05 | Claude (공개 준비) | 공개 홍보(10-07)의 유입 채널을 Supabase 원본에서도 가른다(3-1b). E-01 `site_visited`에 `utm_source`·`utm_medium`·`utm_campaign`(String 또는 null, ≤40, **Supabase only**) — 세션 첫 주소에서 한 번 읽어 sessionStorage에 두고(첫 접촉), `[a-z0-9_-]` 밖은 null, Amplitude가 주소를 읽은 뒤 주소창에서 `utm_*`를 지움. 공통 속성이 아니라 E-01 속성인 이유는 1-2 속성 상속 원칙과 행 크기. 공통 `referrer`는 이름 그대로 **호스트만**(6-2 검토 메모 — 브라우저·서버 `referrerHost`, 그 전 기록은 주소 전체). `is_in_app_browser`가 스레드(`Barcelona`)·링크드인(`LinkedInApp`) 앱 안 브라우저도 TRUE로(그 전 기록은 FALSE). 처리방침 6-3h 먼저(갱신일 그대로). 분석 SQL은 `launch-attribution.md`. 새 이벤트 없음 |
 
 ---
