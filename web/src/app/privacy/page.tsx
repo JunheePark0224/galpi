@@ -18,6 +18,7 @@ function Contact() {
  * login service only, 내 책갈피, (F-26, taxonomy 6-3e) the 갈피 우체통 letter — Supabase only, a time-only notice email
  * through Resend. v2 (taxonomy 6-3f): no written goal, nothing to Anthropic; question answers instead of the balance game.
  * 도감 v1 (taxonomy 6-3g): the picture parts a logged-in person met, when first, and the picture they were met in.
+ * v1.7 (taxonomy 6-3j): bookmarks kept before logging in live in this browser only, until the login moves them.
  */
 export default function PrivacyPage() {
   return (
@@ -64,6 +65,10 @@ export default function PrivacyPage() {
           <tr>
             <td>내 책갈피: 꽂은 책, 그때 책갈피 그림(도감에 모은 것으로 꾸몄다면 꾸민 그림도), 만난 날, 나온 이유, 막대와 막대 이름 (<strong>막대 이름은 직접 쓴 글이라 갈피의 데이터베이스에만 저장</strong>)</td>
             <td>내 책갈피를 다시 보여 주기 위해 — <strong>막대 이름에 이름·연락처는 적지 마세요</strong></td>
+          </tr>
+          <tr>
+            <td>로그인 전에 저장한 책갈피(책 번호·책갈피 그림·나온 이유·만난 날)는 이 브라우저에만 저장돼요. 로그인하면 계정으로 옮기고 브라우저에서 지워요. 브라우저 기록을 지우면 함께 사라져요.</td>
+            <td>로그인하지 않아도 책갈피를 모아 두었다가 로그인하면 이어 주기 위해</td>
           </tr>
           <tr>
             <td>도감: 로그인했다면, 책을 넘기며 만난 책갈피 그림의 동물·배경·소품과 각각 처음 만난 때와 그때의 그림을 갈피의 데이터베이스에 저장해요 (어떤 책이었는지는 넣지 않아요)</td>

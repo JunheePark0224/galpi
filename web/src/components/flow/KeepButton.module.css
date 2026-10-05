@@ -1,19 +1,40 @@
-/* C-16b (10-02): [🔖 꽂기] next to the S-06 title — a small ink pill, 44px tall to touch (the face is smaller). */
-.pill {
-  display: inline-flex; align-items: center; min-height: var(--touch); min-width: var(--touch); padding: 0; border: 0;
-  background: none; font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent;
+/* C-16b (v1.7, 10-05 — 시안 ①): [🔖 내 책갈피에 저장] under the S-06 title and author, the whole width — the leather of
+   S-09 [책갈피 옮기기] (C-17 시안 A): cloth with grain and sheen, gold-foil letters, a 2px cloth-edge line inside, 12px
+   corners, the stitched line 5px in. Saved: green (the success colour) "✓ 내 책갈피에 저장했어요". Never the main button. */
+.keep { align-self: stretch; display: flex; flex-direction: column; gap: var(--space-1); }
+.button {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  width: 100%; min-height: 56px; padding: var(--space-2) var(--space-4); border: 0; border-radius: 12px;
+  color: var(--foil); font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  background: var(--leather-grain), var(--leather-sheen), var(--cloth);
+  box-shadow: inset 0 0 0 2px var(--cloth-edge), 0 12px 22px -12px rgba(43, 39, 36, 0.6);
+  transition: transform 120ms ease;
 }
-.face {
-  padding: 5px 12px; border-radius: var(--radius-pill); background: var(--ink); color: var(--paper);
-  font-size: 13px; line-height: 1.4; white-space: nowrap;
+.button::before { /* the stitched line, 5 px in */
+  content: ""; position: absolute; inset: 5px; border: 1px dashed var(--foil-line); border-radius: 8px; pointer-events: none;
 }
-.pill:hover .face { background: var(--ink-soft); }
-.pill:disabled { cursor: default; }
-.pill:disabled .face { opacity: 0.6; }
-.pill:focus-visible { outline: none; }
-.pill:focus-visible .face { outline: 3px solid var(--field-data); outline-offset: 2px; }
-/* The error takes its own line under the title row. */
-.error { flex-basis: 100%; margin: 0; text-align: center; font-size: 13px; color: var(--genre-korean-fiction); }
-.kept { display: inline-flex; align-items: center; gap: 4px; min-height: var(--touch); margin: 0; font-size: 13px; color: var(--genre-essay); white-space: nowrap; }
-.link { display: inline-flex; align-items: center; min-height: var(--touch); color: var(--ink); text-underline-offset: 3px; }
-.link:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.button:active { transform: translateY(1px); background: var(--leather-grain), var(--leather-sheen), var(--cloth-edge); }
+.button[data-saved] { background: var(--genre-essay); color: var(--paper); box-shadow: 0 8px 16px -10px rgba(43, 39, 36, 0.6); }
+.button[data-saved]::before { border-color: rgba(250, 245, 234, 0.35); }
+.button:disabled { cursor: default; opacity: 0.7; }
+.button:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.main { font-family: var(--font-batang), serif; font-weight: 700; font-size: 16px; line-height: 1.4; }
+.hint { font-size: 12px; line-height: 1.4; opacity: 0.85; }
+.error { margin: 0; text-align: center; font-size: 13px; color: var(--genre-korean-fiction); }
+@media (prefers-reduced-motion: reduce) { .button { transition: none; } }
+
+/* "내 책갈피에 저장했어요 · 보러 가기 →" — the ink toast of S-09 (Library.module.css .toast), 4 s. */
+.toast {
+  position: fixed; left: 50%; bottom: calc(var(--space-4) + env(safe-area-inset-bottom)); z-index: 40; transform: translateX(-50%);
+  width: calc(100% - 2 * var(--space-4)); max-width: calc(var(--column) - 2 * var(--space-4)); margin: 0; padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-card); background: var(--ink); color: var(--paper); font-size: 13px; text-align: center;
+}
+.toastLink {
+  display: inline-flex; align-items: center; min-height: var(--touch); color: var(--paper); font-weight: 700;
+  text-underline-offset: 3px;
+}
+.toastLink:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+
+/* The copy that flies to the header (KeepFlight): a whole C-02 drawn small, from its top-left corner. */
+.flight { position: fixed; z-index: 60; pointer-events: none; will-change: transform; }
+.flightBody { transform-origin: top left; transform: scale(0.42); will-change: transform; }

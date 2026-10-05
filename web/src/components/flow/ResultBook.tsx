@@ -40,8 +40,9 @@ function facts(d: BookDetail | null): string[] {
  * (folded) → buttons → credit.
  * No 나온 이유 line (10-01, user): 🎯 mostly repeats the chosen topic. `pick.reason` is on the bookmark's back instead.
  * The parent keys it by book, so every book starts folded, loading and with its bookmark in.
- * 10-02 (5-friend test — nobody found how to keep): [🔖 꽂기] sits next to the title at all times and keeps in one tap
- * (C-16b); pulling the bookmark out only shows its back. [예스24에서 보기] is always the one main button (C-11). ‹ › sit
+ * 10-02 (5-friend test — nobody found how to keep): keeping is one tap at all times; pulling the bookmark out only shows
+ * its back. v1.7 (10-05, friend test — "why keep?"): the wide leather [🔖 내 책갈피에 저장] under the title and author
+ * (C-16b), logged out too (into this browser). [예스24에서 보기] is always the one main button (C-11). ‹ › sit
  * either side of the cover. The first S-06 book of a browser explains itself once (C-21).
  */
 export function ResultBook({ pick, position, total, onNext, onPrev }: Props) {
@@ -119,13 +120,11 @@ export function ResultBook({ pick, position, total, onNext, onPrev }: Props) {
 
       <div className={styles.head}>
         <GenreTag card={card} />
-        <div className={styles.titleRow}>
-          <h1 id="result-title" className={styles.title}>{card.title}</h1>
-          <KeepButton pick={pick} />
-        </div>
+        <h1 id="result-title" className={styles.title}>{card.title}</h1>
         <p className={styles.author}>{card.author}</p>
         {line.length > 0 && <p className={styles.facts}>{line.join(" · ")}</p>}
       </div>
+      <KeepButton pick={pick} />
 
       {detail === null ? (
         <div className={styles.skeleton} aria-hidden="true"><span /><span /><span /></div>

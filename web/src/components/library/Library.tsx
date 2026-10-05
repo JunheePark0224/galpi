@@ -4,6 +4,7 @@ import { Bookmark } from "@/components/Bookmark";
 import { Button } from "@/components/Button";
 import { loadAccount, openLoginSheet, signedOut, useAccount } from "@/lib/account/store";
 import { logout } from "@/lib/auth/browser";
+import { useGuestSaves } from "@/lib/library/guest";
 import type { LibraryBookmark } from "@/lib/library/types";
 import { MAX_SHELVES } from "@/lib/library/service";
 import { SHELF_NAME_MAX } from "@/lib/library/validate";
@@ -13,6 +14,7 @@ import { libraryGuide } from "@/lib/flow/firstGuide";
 import { BookmarkSheet, metLabel } from "./BookmarkSheet";
 import { CLEAR_ALL, ClearSheet } from "./ClearSheet";
 import { Dex, LoggedOutDex } from "./Dex";
+import { GuestLibrary } from "./GuestLibrary";
 import { LibraryGuide } from "./LibraryGuide";
 import styles from "./Library.module.css";
 import { Shelf } from "./Shelf";
@@ -35,7 +37,8 @@ interface Open { bookmark: LibraryBookmark; shelfId: string }
  * bookmark can then be dragged to a place on any rod straight away, taps do nothing, and the rod buttons step aside —
  * until [완료], Escape (when no drag is live) or leaving the page. Or open a bookmark and use [다른 막대로 옮기기] (no
  * dragging needed). No toast for a move that worked (user, 10-04). [모두 제거] (시안 A, 10-04) sits beside [책갈피 옮기기]
- * and asks once more in a sheet; the rods stay. Logged out, it offers the login instead.
+ * and asks once more in a sheet; the rods stay. Logged out, it offers the login instead — and since v1.7, when this browser
+ * keeps bookmarks, shows them first (GuestLibrary).
  */
 export function Library() {
   const account = useAccount();
@@ -43,16 +46,20 @@ export function Library() {
 
   if (account.status === "unknown") return <p className={styles.quiet} aria-busy="true">불러오는 중…</p>;
   if (account.status === "off") return <p className={styles.quiet}>아직 로그인을 열지 않았어요.</p>;
-  if (account.status === "out") {
-    // 도감 v1 시안 ②: before a login, the 도감 (all silhouettes) and the login instead of the rods
-    return (
-      <div className={styles.page}>
-        <h1 className={styles.title}>도감</h1>
-        <LoggedOutDex />
-      </div>
-    );
-  }
+  if (account.status === "out") return <LoggedOut />;
   return <LoggedIn />;
+}
+
+function LoggedOut() {
+  const guest = useGuestSaves();
+  if (guest.length > 0) return <GuestLibrary saves={guest} />;
+  // 도감 v1 시안 ②: before a login, the 도감 (all silhouettes) and the login instead of the rods
+  return (
+    <div className={styles.page}>
+      <h1 className={styles.title}>도감</h1>
+      <LoggedOutDex />
+    </div>
+  );
 }
 
 type View = "rods" | "dex";
@@ -193,7 +200,7 @@ function Rods({ toggle }: { toggle?: ReactNode }) {
       <h1 ref={title} tabIndex={-1} className={styles.title}>내 책갈피</h1>
       {!moving && toggle}
       <p className={styles.stat}>{`${view.count}개 · 동물 ${view.animals}종`}</p>
-      {view.count === 0 && <p className={styles.quiet}>책을 만나 🔖 꽂기를 누르면 첫 막대에 걸려요.</p>}
+      {view.count === 0 && <p className={styles.quiet}>책을 만나 🔖 내 책갈피에 저장을 누르면 첫 막대에 걸려요.</p>}
       {view.count > 0 && (
         <div className={styles.actions}>
           <button

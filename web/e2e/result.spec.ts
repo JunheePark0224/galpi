@@ -171,9 +171,9 @@ test("S-06 C-16: the S-05 bookmark peeks out of the cover, pulls out, flips to �
   const mark = (await stage.locator("[data-pull]").boundingBox())!;
   const cover = (await page.locator("[data-pose] > div").last().boundingBox())!;
   expect(mark.y + mark.height).toBeLessThanOrEqual(cover.y + cover.height + 1);
-  // 10-02 (C-16b): out or in, YES24 stays the one main button; the only 꽂기 is the pill by the title (login is on in E2E)
+  // C-16b (10-02, v1.7): out or in, YES24 stays the one main button; one save button, under the title (login is on in E2E)
   await expect(page.getByRole("link", { name: "예스24에서 보기 ↗" })).toHaveAttribute("data-variant", "primary");
-  await expect(page.getByRole("button", { name: /꽂기/ })).toHaveCount(1);
+  await expect(page.getByRole("button", { name: /내 책갈피에 저장/ })).toHaveCount(1);
 
   // Back: 나온 이유 and its items, 만난 날 today.
   await page.getByRole("button", { name: "뒷면 보기" }).click();
@@ -203,7 +203,7 @@ test("S-06 C-16: the S-05 bookmark peeks out of the cover, pulls out, flips to �
 });
 
 for (const width of [320, 360, 412]) {
-  test(`S-06 C-16 at ${width}px: nothing runs off the side, the bookmark stays in the cover, ‹ › and 🔖 꽂기 fit`, async ({ page }) => {
+  test(`S-06 C-16 at ${width}px: nothing runs off the side, the bookmark stays in the cover, ‹ › and the save button fit`, async ({ page }) => {
     await page.setViewportSize({ width, height: 800 });
     const { events } = await recordEvents(page);
     await mockBooks(page);
@@ -227,8 +227,9 @@ for (const width of [320, 360, 412]) {
       expect(t.y).toBeGreaterThan(peek.y + peek.height);                          // below the peek
       expect(Math.abs(t.y + t.height / 2 - (c.y + c.height / 2))).toBeLessThanOrEqual(1);   // centred on the cover
     }
-    const keep = (await page.getByRole("button", { name: "내 책갈피에 꽂기" }).boundingBox())!;
-    expect(keep.height).toBeGreaterThanOrEqual(44);
+    const keep = (await page.getByRole("button", { name: "내 책갈피에 저장" }).boundingBox())!;
+    expect(keep.height).toBeGreaterThanOrEqual(48);
+    expect(keep.x).toBeGreaterThanOrEqual(0);
     expect(keep.x + keep.width).toBeLessThanOrEqual(width);
     const bottom = async () => {
       const [b, c] = [(await pull.boundingBox())!, (await cover.boundingBox())!];

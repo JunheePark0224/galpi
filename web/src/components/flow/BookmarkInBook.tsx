@@ -28,7 +28,7 @@ interface Props { pick: PickView; position: number; children: ReactNode }
  * C-16 on S-06: the bookmark this book was met with on S-05 (`pick.art`) sticks out of the cover by its top quarter (string
  * + the top of the arch window). Tap it (or drag it up with a mouse or pen) → `bookmark-pull` lifts it out and lays it in
  * front of the book; while it lies over the cover its film is opaque (T-03 exception). Tap again → back in. Out, it can be
- * turned over to its back (C-13: 나온 이유 + 만난 날). Keeping it is the [🔖 꽂기] next to the title (C-16b, 10-02) —
+ * turned over to its back (C-13: 나온 이유 + 만난 날). Keeping it is [🔖 내 책갈피에 저장] under the title (C-16b, v1.7) —
  * pulling out is not needed first. With a mouse or pen, hovering the peek lifts it a few px and shows "눌러서 꺼내기"
  * (CSS only). Touch is tap only: a finger swipe on the peek scrolls the page like anywhere else.
  */

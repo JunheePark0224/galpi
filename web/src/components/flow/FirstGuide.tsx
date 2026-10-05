@@ -13,7 +13,8 @@ export const GUIDE_OK = "알겠어요";
 /** Copy of C-21 (10-02, user — 5-friend test: testers could not find how to keep a bookmark on S-06). */
 export const RESULT_GUIDE_TITLE = "궁금해요 책 보는 법";
 export const RESULT_GUIDE_PULL = "책갈피를 누르면 꺼내져요 · 뒷면에 나온 이유";
-export const RESULT_GUIDE_KEEP = "🔖 꽂기로 내 책갈피에 모아 둬요";
+/** v1.7 (10-05, wording B): the step names the saving button as it now reads. */
+export const RESULT_GUIDE_KEEP = "🔖 내 책갈피에 저장해 두면 나중에 다시 볼 수 있어요";
 export const RESULT_GUIDE_TURN = "‹ › 로 앞뒤 책을 봐요";
 
 const PAD = 6;     // room around each lit part
@@ -59,6 +60,15 @@ function measure(scope: HTMLElement | null, steps: readonly GuideStep[]): Box[] 
   return boxes;
 }
 
+/**
+ * v1.7: on a short phone the lowest lit part (S-06 [🔖 내 책갈피에 저장], under the title) can sit below the screen. The page
+ * scrolls just enough for it to show — the save button is the point of step ③ — before the parts are measured.
+ */
+function bringLowestIntoView(boxes: readonly Box[]): void {
+  const bottom = Math.max(...boxes.map((b) => b.bottom)) + PAD + EDGE;
+  if (bottom > window.innerHeight) window.scrollBy({ top: bottom - window.innerHeight, behavior: "instant" });
+}
+
 interface GuideProps { scope: RefObject<HTMLElement | null>; title: string; steps: readonly GuideStep[]; onDone: () => void }
 
 /**
@@ -76,7 +86,9 @@ export function Guide({ scope, title, steps, onDone }: GuideProps) {
   // The parts are measured on the next frame (the page has just settled) and again on every resize.
   useEffect(() => {
     const update = () => {
-      setBoxes(measure(scope.current, steps));
+      const first = measure(scope.current, steps);
+      if (first) bringLowestIntoView(first);
+      setBoxes(first && measure(scope.current, steps));
       setSize({ w: window.innerWidth, h: window.innerHeight });
     };
     const frame = requestAnimationFrame(update);
@@ -89,15 +101,17 @@ export function Guide({ scope, title, steps, onDone }: GuideProps) {
   const shown = boxes !== null;
   useEffect(() => { if (shown) ok.current?.focus(); }, [shown]);
 
-  // Words are centred on their part; a part near the side (S-06's 꽂기 pill, right of the title) would push them off
-  // the screen, so they slide back inside the gutter before they are painted.
+  // Words are centred on their part; a part near the side would push them off the screen, so they slide back inside the
+  // gutter before they are painted — and below the top edge, when the page scrolled to show the lowest part (v1.7).
   useLayoutEffect(() => {
     for (const el of words.current) {
       if (!el) continue;
       el.style.marginLeft = "0px";
+      el.style.marginTop = "0px";
       const r = el.getBoundingClientRect();
       const shift = r.left < EDGE ? EDGE - r.left : r.right > size.w - EDGE ? size.w - EDGE - r.right : 0;
       el.style.marginLeft = `${shift}px`;
+      if (r.top < EDGE) el.style.marginTop = `${EDGE - r.top}px`;
     }
   }, [boxes, size]);
 
@@ -154,8 +168,8 @@ export function FirstGuide({ scope, onDone }: { scope: RefObject<HTMLElement | n
 }
 
 /**
- * C-21 on S-06: the peeking bookmark, the ‹ › arrows beside the cover, the 🔖 꽂기 pill — numbered top to bottom, the
- * way the eye reads them. With one book there are no arrows, and without login on this site no pill: those steps drop.
+ * C-21 on S-06: the peeking bookmark, the ‹ › arrows beside the cover, [🔖 내 책갈피에 저장] — numbered top to bottom, the
+ * way the eye reads them. With one book there are no arrows, and without login on this site no save button: those steps drop.
  * [알겠어요] comes with the last step.
  */
 const RESULT_PULL: GuideStep = { parts: ["peek"], words: RESULT_GUIDE_PULL, place: "above" };

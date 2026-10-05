@@ -22,6 +22,7 @@
 | taxonomy v1.5 | 2026-10-05 | 도전 규칙 v2 출처 기록 (`plans/2026-10-05-challenge-rules.md`, `launch-attribution.md` 4절) | E-07 `bookmark_shown`에 `challenge_rule`·`challenge_genre`(도전이 아니면 null) 추가, E-34는 그대로 (8절) |
 | taxonomy v1.4.1 | 2026-10-05 | 도감 v1 표시 수정 (`context.md` 10-05) | E-36은 땅 소품 "없음"(`none`)에 보내지 않음, E-37 `collected_count` 최대 42 (8절) |
 | taxonomy v1.6 | 2026-10-05 | 책갈피 꾸미기 (PRD F-13·F-21, `plans/2026-10-05-decorate.md`) | E-38 `bookmark_decorated` live, 동사 `decorated`, 처리방침 6-3i (8절) |
+| taxonomy v1.7 | 2026-10-05 | 로그인 없이 저장 + "내 책갈피에 저장" (PRD F-12·F-13, `plans/2026-10-05-guest-keep.md`) | E-39 `guest_saves_merged` live, 동사 `merged`, E-15 `storage`, E-12 `source` "library", FN-5 새 단계, 처리방침 6-3j (8절) |
 | taxonomy v1.4 | 2026-10-05 | 공개 홍보(10-07) 유입 채널 구분 (`launch-plan.md` 4절, `launch-attribution.md`) | E-01 `utm_source`·`utm_medium`·`utm_campaign`(세션 첫 주소, Supabase only), 공통 `referrer`는 호스트만, `is_in_app_browser`에 스레드·링크드인, 처리방침 6-3h (3-1b, 8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
@@ -50,7 +51,7 @@
 | Q-09 | **밸런스 게임 검증** — 질문별 "갈피를 못 잡겠어요" 비율, 망설임(뗀 횟수), 같은 축 두 질문 일치율, 질문별 효과(답 = 책 태그일 때 궁금해요가 더 많은가), 몇 번째 질문에서 그만두나, 답하는 시간 | balance-game 4절 ⓪~③ |
 | Q-10 | **🎯 입력 검증** — 보기 vs 직접 쓰기 비율과 각각의 궁금해요, 찾은 책 0 / 1~3 / 4+ 별 궁금해요·이탈, 못 찾은 요청 목록, 요청 적중률(키워드에 연결된 비율) | target-chips 2·6절, PHASES P8 |
 | Q-11 | **결과 화면** — 궁금해요 → 예스24 클릭 비율, [더 보기] 비율(추천/무작위), 책 속 책갈피를 꺼내 보는 비율과 뒷면(나온 이유)까지 보는 비율(추천/무작위, v0.7) | proposal 4-4, PRD F-09·F-12, PHASES P8 |
-| Q-12 | **보관 → 로그인** — 보관 → 로그인 창 → 로그인 완료 → 자동 보관 비율, 카카오·구글 비율 | PRD 4절 "새로 볼 수 있는 것", PHASES P8 |
+| Q-12 | **보관 → 로그인** — 보관 → 로그인 창 → 로그인 완료 → 자동 보관 비율, 카카오·구글 비율. v1.7부터: 로그인 없이 브라우저에 저장한 사람 중 로그인해 계정으로 옮기는 비율 | PRD 4절 "새로 볼 수 있는 것", PHASES P8 |
 | Q-13 | **재방문·내 책갈피** — 재방문 후 내 책갈피를 여는 비율. 막대를 만들고 책갈피를 옮기는(꾸미는) 사람이 내 책갈피를 더 자주 여나, 옮기기를 꾹 누르기와 뒷면 메뉴 중 어느 쪽으로 하나 (v0.8) | PRD 4절, F-13 |
 | Q-14 | **기기** — 휴대폰/데스크톱, 앱 안 브라우저 비율, 앱 안 브라우저에서 구글 로그인 실패 | context 09-29(모바일 우선), PRD F-20 |
 | Q-15 | **2단계 전후 비교** — 고친 것 하나의 전후 차이(효과 크기 + 신뢰구간), 유입 경로별로 나눠 보기 | proposal 4-4, PHASES P9 |
@@ -115,6 +116,7 @@
 | `cleared` | 이용자가 모두 비웠다 (내 책갈피 [모두 제거] → 확인, 서버가 지운 뒤, v1.2) | click |
 | `found` | 처음 만났다 — 서버가 새 항목으로 기록한 뒤 (도감, v1.3) | system |
 | `decorated` | 이용자가 꾸몄다 — 책갈피 그림을 바꿔 서버가 저장한 뒤 (책갈피 꾸미기, v1.6) | click |
+| `merged` | 따로 있던 것을 합쳤다 — 로그인 전 브라우저에 저장한 책갈피를 계정으로 옮긴 뒤 (v1.7) | system |
 
 ### 2-3. 속성 이름
 
@@ -148,7 +150,7 @@
 | 책펼치기 | S-03, S-04 | E-05, E-06 |
 | 책갈피 | S-05 | E-07, E-08 |
 | 결과 | S-06 | E-09, E-10, E-23, E-27, E-28, E-18 |
-| 보관 | S-06, S-09 | E-11, E-15, E-16 |
+| 보관 | S-06, S-09 (E-39는 로그인 뒤 어느 화면이든) | E-11, E-15, E-16, E-39 (v1.7) |
 | 로그인 | S-07 | E-12, E-13, E-14 |
 | 내 책갈피 | S-09 | E-17, E-29, E-30, E-35 (v1.2), E-38 (v1.6) |
 | 도감 | S-05(처음 만남)·S-09(도감 보기) | E-36, E-37 (v1.3) |
@@ -289,7 +291,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 
 ### 4-1. 한눈에 보기
 
-상태 (v1.6): live 31 · removed 6 · planned 0. v1.3: live 30. v1.2: live 28. v1.0: live 27. v0.10: live 30 · planned-P4 0 · planned-P5 0 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned 없음(v0.8 — P5 이벤트 모두 live). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로. v0.10: 갈피 우체통(E-31) 추가 — 화면과 함께 live로. v1.2: 내 책갈피 [모두 제거](E-35) 추가 — 화면과 함께 live로
+상태 (v1.7): live 32 · removed 6 · planned 0. v1.6: live 31. v1.3: live 30. v1.2: live 28. v1.0: live 27. v0.10: live 30 · planned-P4 0 · planned-P5 0 · planned-taxonomy 0. P4(결과·서버)는 S-06·S-08의 이벤트를 화면과 함께 심는다 — 남는 planned 없음(v0.8 — P5 이벤트 모두 live). v0.7: S-06 책 속 책갈피(C-16)의 E-27·E-28을 화면과 함께 심음. v0.8: P5 막대(E-29·E-30) 추가 — 화면과 함께 live로. v0.10: 갈피 우체통(E-31) 추가 — 화면과 함께 live로. v1.2: 내 책갈피 [모두 제거](E-35) 추가 — 화면과 함께 live로
 
 | ID | 제안 이름 | 이전 이름 | 분류 | 트리거 | 상태 |
 |---|---|---|---|---|---|
@@ -317,6 +319,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-11 | `save_clicked` | 같음 | 보관 | click | live |
 | E-15 | `book_saved` | 같음 | 보관 | system | live |
 | E-16 | `book_unsaved` | 같음 | 보관 | click | live |
+| E-39 | `guest_saves_merged` | (없음, v1.7) | 보관 | system | live |
 | E-12 | `login_prompt_shown` | 같음 | 로그인 | view | live |
 | E-13 | `login_started` | 같음 | 로그인 | click | live |
 | E-14 | `login_completed` | 같음 | 로그인 | system | live |
@@ -331,7 +334,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-20 | `home_clicked` | 같음 | 마무리 | click | live |
 | E-31 | `feedback_sent` | (없음, v0.10) | 홈 | click | live |
 
-E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(31개 — `EVENT_NAMES`는 그 키, v1.2 E-35 추가, v1.3 E-36·E-37 추가, v1.6 E-38 추가. `removed` 6개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
+E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(32개 — `EVENT_NAMES`는 그 키, v1.2 E-35 추가, v1.3 E-36·E-37 추가, v1.6 E-38 추가, v1.7 E-39 추가. `removed` 6개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
 
 ### 4-2. 이벤트별 상세
 
@@ -671,7 +674,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 보관 | click | live | 같음 |
 
-**언제**: S-06 제목 옆 [🔖 꽂기](접근 이름 "내 책갈피에 꽂기")를 누를 때 — v0.12부터 책갈피를 꺼내지 않아도 된다(그 전에는 꺼낸 책갈피 아래 버튼). 로그인 전이면 이어서 E-12. 이름의 "save"는 그대로  
+**언제**: S-06 제목·저자 아래 가죽 버튼 [🔖 내 책갈피에 저장]을 누를 때(v1.7 — 그 전 v0.12~v1.6은 제목 옆 [🔖 꽂기], 그 전에는 꺼낸 책갈피 아래 버튼). 저장된 뒤 다시 눌러 빼는 것은 E-11이 아니라 E-16. v1.7부터 로그인 전이면 이 브라우저에 저장(E-15 `storage`="browser") — 로그인 창(E-12)은 브라우저가 저장을 막을 때만(사생활 모드 등). 이름의 "save"는 그대로  
 **분석 질문**: Q-12
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
@@ -685,13 +688,14 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 보관 | system | live | 같음 |
 
-**언제**: 꽂기가 저장에 성공했을 때 — 로그인 상태에서 바로, 또는 로그인 직후 누르던 책 자동 꽂기(같은 책 화면으로 돌아온 뒤). 새 책갈피는 첫 막대 맨 앞  
+**언제**: 저장이 성공했을 때 — 새 책갈피일 때만(이미 있던 책은 남지 않음). 로그인 상태면 서버가 저장한 뒤(새 책갈피는 첫 막대 맨 앞, `storage`="account"), v1.7부터 로그인 전이면 이 브라우저에 저장한 뒤(`storage`="browser"). 로그인 뒤 브라우저 책갈피를 계정으로 옮길 때는 책마다 다시 남기지 않는다 — E-39 하나. ~~로그인 직후 누르던 책 자동 꽂기~~(v1.7 없앰)  
 **분석 질문**: Q-12
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `book_id` | 같음 | String | "9788998441012" | 책 ISBN-13 (books.isbn) |
-| `is_auto_save` | 같음 | Boolean | TRUE, FALSE | 로그인 직후 자동 보관인지 |
+| `is_auto_save` | 같음 (v1.7부터 늘 FALSE) | Boolean | TRUE, FALSE | 로그인 직후 자동 보관인지 — v1.7에서 자동 꽂기가 없어져 늘 FALSE(그 전 기록을 읽으려고 남김) |
+| `storage` | 추가 (v1.7) | String | "browser", "account" | 어디에 저장했는지 — browser=로그인 전 이 브라우저(localStorage), account=로그인한 계정 |
 
 #### E-16 `book_unsaved`
 
@@ -699,12 +703,26 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 보관 | click | live | 같음 |
 
-**언제**: S-09 내 책갈피에서 책갈피 뒷면의 [빼기]를 확인까지 누를 때. [모두 제거]로 한꺼번에 뺄 때는 보내지 않는다 — 그때는 E-35 하나만(v1.2)  
+**언제**: S-09 내 책갈피에서 책갈피 시트의 [빼기]를 확인까지 누를 때, v1.7부터 S-06에서 저장한 버튼 [✓ 내 책갈피에 저장했어요]를 다시 누를 때도. 로그인 전이면 이 브라우저에서 뺄 때(S-06 다시 누르기·S-09 로그인 전 [빼기]) — 로그인 상태면 서버가 뺀 뒤. [모두 제거]로 한꺼번에 뺄 때는 보내지 않는다 — 그때는 E-35 하나만(v1.2)  
 **분석 질문**: Q-13
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `book_id` | 같음 | String | "9788998441012" | 책 ISBN-13 (books.isbn) |
+
+#### E-39 `guest_saves_merged`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 보관 | system | live | 신규 (v1.7) |
+
+**언제**: 로그인이 확인된 화면에서(LoginReturn — 로그인에서 돌아온 직후, 또는 그 뒤 어느 방문이든) 이 브라우저에 로그인 전 책갈피가 있으면 하나씩 계정으로 보낸 뒤 **한 번**. 성공한 것(이미 계정에 있던 책 포함)은 브라우저에서 지우고, 실패한 것은 남겨 다음 방문에 다시 — 그때 이 이벤트가 또 남는다. 책마다 E-15를 다시 남기지 않는다(저장할 때 이미 남김)  
+**분석 질문**: Q-12 — 로그인 없이 저장한 사람이 로그인해 책갈피를 지키는지(FN-5)
+
+| 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
+|---|---|---|---|---|
+| `guest_count` | 추가 (v1.7) | Number | 1, 3, 12 | 옮기려 한 브라우저 책갈피 수 (최대 100) |
+| `merged_count` | 추가 (v1.7) | Number | 0, 3, 12 | 그중 계정에 새로 들어간 수 (이미 있던 책·실패는 빼고 — 헤더 숫자가 이만큼 늘어남) |
 
 #### E-12 `login_prompt_shown`
 
@@ -717,7 +735,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `source` | 같음 | String | "save", "header" | 어디서 열렸는지 — save=[내 책갈피에 꽂기], header=우측 위 [로그인] (로그인 안 된 채 연 S-09의 [로그인]도 header) |
+| `source` | 같음 (v1.7: "library" 추가) | String | "save", "header", "library" | 어디서 열렸는지 — save=S-06 저장(v1.7부터는 브라우저가 저장을 막을 때만), header=우측 위 [로그인] (로그인 안 된 채 연 S-09의 [로그인]·도감 [로그인하고 모으기]도 header), library=S-09 로그인 전 내 책갈피의 [로그인하고 지키기](v1.7) |
 
 #### E-13 `login_started`
 
@@ -986,8 +1004,10 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | FN-7 | 메인 v2 (v1.0) | `site_visited` → `entry_selected` → `question_answered`(depth=1) → `path_completed` → `book_opened` → `bookmark_shown`(1) → `bookmark_reacted`(5) → `result_viewed` → `yes24_link_clicked`(result) | 세션 | 설계 6절 |
 | FN-3 | 책갈피 잔존 | `bookmark_shown` position 1 → 2 → 3 → 4 → 5 → `bookmark_reacted`(5) | 판 | Q-02 |
 | FN-4 | 결과 → 예스24 | `result_viewed` → `result_book_viewed` → `description_expanded` → `yes24_link_clicked`(result) | 판 | Q-11 |
-| FN-5 | 보관 → 로그인 | `save_clicked`(is_logged_in=false) → `login_prompt_shown`(source=save) → `login_started` → `login_completed` → `book_saved`(is_auto_save=true) | 사람 | Q-12 |
+| FN-5 | 보관 → 로그인 (v1.7) | `save_clicked`(is_logged_in=false) → `book_saved`(storage=browser) → `login_prompt_shown` → `login_started` → `login_completed` → `guest_saves_merged` | 사람 | Q-12 |
 | FN-6 | 재방문 → 내 책갈피 | `site_visited`(is_returning=true, 로그인한 사람) → `library_viewed` | 세션 | Q-13 |
+
+FN-5는 v1.7(2026-10-05)부터 이 모양이다. 그 전에는 `save_clicked`(is_logged_in=false) → `login_prompt_shown`(source=save) → `login_started` → `login_completed` → `book_saved`(is_auto_save=true) — 로그인 전 저장이 없었으므로 두 기간을 한 퍼널로 잇지 않는다. 셋째 단계 `login_prompt_shown`은 source를 가리지 않는다(S-09 [로그인하고 지키기]=library, 헤더=header, 저장소가 막힌 브라우저=save).
 
 FN-2의 셋째 단계(`goal_submitted`)는 v0.3(2026-10-01)부터 쌓인다. 그 전 데이터에는 🎯 입력 완료를 잴 수 없다(칩 누름 `chip_selected`는 완료가 아니다).
 
@@ -1119,6 +1139,10 @@ P4의 `/api/goal/classify`가 직접 쓴 글(≤30자)을 Anthropic API로 보�
 
 새로 모으는 개인 정보는 없다 — 이미 저장하던 "그때 책갈피 그림"(saves.art)을 이용자가 자기 도감 안의 부분으로 바꿀 수 있게 되고, 처음 그림은 `original_art`(0005)에 그대로 남는다. 다만 표의 내 책갈피 행이 "그때 책갈피 그림"만 말하면 꾸민 뒤에는 틀린 말이 되므로 "그때 책갈피 그림(도감에 모은 것으로 꾸몄다면 꾸민 그림도)"으로 고쳤다(갱신일 그대로 2026-10-05). E-38에는 책 ID·부분·등급·그림만(개인 정보 없음 — 기록은 "누른 버튼"으로 이미 적혀 있다).
 
+### 6-3j. 처리방침 변경 — 로그인 없이 저장 (v1.7)
+
+7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고쳤다(갱신일 그대로 2026-10-05). 표에 새 행 — "로그인 전에 저장한 책갈피(책 번호·책갈피 그림·나온 이유·만난 날)는 이 브라우저에만 저장돼요. 로그인하면 계정으로 옮기고 브라우저에서 지워요. 브라우저 기록을 지우면 함께 사라져요." / 왜 "로그인하지 않아도 책갈피를 모아 두었다가 로그인하면 이어 주기 위해". 저장은 `localStorage` `galpi.guestSaves` 하나(`{ v: 1, items }`, 최대 100권) — 화면에 그리려고 그 책의 우리 목록 카드(제목·저자·장르·우리 한 줄)도 함께 두지만, 책 번호에서 나오는 공개 목록 정보라 개인 정보가 아니다. 서버로 새로 보내는 정보는 없다 — 로그인 뒤 옮기는 것은 로그인 상태 저장(`POST /api/library/saves`)과 같은 정보이고, E-39에는 수 둘만.
+
 ### 6-4. 보관
 
 Supabase 기록은 1년 뒤 자동 삭제(`0002_retention.sql`). Amplitude에 전달된 기록은 Amplitude가 따로 보관하고 삭제 요청 때 함께 지운다(처리방침 그대로).
@@ -1246,6 +1270,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v1.4.1 | 2026-10-05 | Claude (도감 표시 수정, 사용자 승인) | 땅 소품 "없음"(`none`)은 그림에는 그대로 나오지만 도감의 부분이 아니다 — 서버가 기록하지 않고, 브라우저는 응답에 있어도 버리므로 E-36 `collection_item_found`가 `part_value` "none"으로 나가지 않는다. 운영 DB의 옛 "none" 줄은 읽을 때 무시(지우지 않음)하므로 E-37 `collected_count`도 세지 않는다(최대 43 → 42). 이벤트 이름·속성·타입·`schema.ts` 허용 값 변경 없음(`part_value`는 원래 자유 문자열 — 값 목록에 "none"이 없었다), 모으는 정보 변화 없음 |
 | v1.5 | 2026-10-05 | Claude (사용자 승인) | 도전 규칙 v2의 출처 기록. E-07 `bookmark_shown`에 `challenge_rule`(Number, 1~36 또는 null)·`challenge_genre`(String 또는 null) 추가. **E-07에 둔 까닭**: ① E-34 `path_completed`는 마지막 답과 함께 브라우저에서 바로 나가는데, 섞어서 + 도전과 목록 규칙(19·36)의 규칙·장르는 서버 씨앗이 뽑기 응답에서 정해 그때는 알 수 없다 — 응답을 기다리면 E-34가 늦어지고 뽑기 실패 때 사라진다 ② 응답이 온 뒤 처음 나는 이벤트가 E-07이고, 저장(E-15 `book_saved`)과 `book_id`·`anon_id`로 이어져 "어느 도전이 저장으로 이어졌나"를 바로 묻는다(`launch-attribution.md` 4절) ③ 새 이벤트(b안)는 한 순간에 이벤트 둘이라 2-1과 어긋난다. 도전이 아니면 둘 다 null(속성을 빼지 않음). 개인 정보 아님(규칙 번호·장르 이름뿐) — `/privacy` 그대로. E-34 속성 변경 없음(`scope_id`는 목록 규칙에서 목록 전체 키 — 뽑힌 장르는 E-07에서 본다) |
 | v1.6 | 2026-10-05 | Claude (사용자 요청) | 책갈피 꾸미기(PRD F-13·F-21, `plans/2026-10-05-decorate.md`, 시안 `mockups/2026-10-05-decorate/flow.png`·`button-options.png` C). 새 E-38 `bookmark_decorated`(`book_id`·`parts_changed` String[]·`tiers_changed` String[]·`art` Object·`is_reset` Boolean)를 화면과 함께 `live`로, 동사 `decorated` 추가. 서버가 저장한 뒤(2xx)에만. 이름: 부분은 E-36 `part_kind`가 String(배열 아님)이라 같은 이름을 배열로 쓰지 못해(2-3 한 이름 = 한 타입) `parts_changed`, 등급도 같은 까닭으로 `tier` 대신 `tiers_changed`. 새 값은 E-07과 같은 `art`(새 그림 전체)로 — 부분마다 `animal_value` 같은 속성 8개를 두지 않음. 개인 정보 변화 없음 — `/privacy`의 내 책갈피 행 문구만 꾸민 그림을 말하게(6-3i) |
+| v1.7 | 2026-10-05 | Claude (사용자 결정) | 로그인 없이 저장 + 문구 "내 책갈피에 저장"(PRD F-12·F-13·S-06·S-09, `plans/2026-10-05-guest-keep.md` — 친구 시험: "왜 꽂아야 하는지 와닿지 않는다"). 새 E-39 `guest_saves_merged`(`guest_count`·`merged_count` Number)를 화면과 함께 `live`로, 동사 `merged` 추가. 이름: 계획서의 `count`·`merged`는 2-3(개수는 `_count`, 한 이름 = 한 뜻)에 맞춰 `guest_count`·`merged_count`로. E-15 `book_saved`에 `storage`("browser"/"account") 추가, `is_auto_save`는 늘 FALSE(로그인 뒤 자동 꽂기가 없어지고 옮기기는 E-39 하나 — 책마다 E-15를 다시 남기지 않음). E-12 `source`에 "library"(S-09 로그인 전 [로그인하고 지키기]). E-11 버튼이 제목 옆 [🔖 꽂기] → 제목·저자 아래 [🔖 내 책갈피에 저장], E-16은 S-06 다시 누르기·로그인 전 빼기도. FN-5 새 단계(5-2). 처리방침 6-3j 먼저 |
 | v1.4 | 2026-10-05 | Claude (공개 준비) | 공개 홍보(10-07)의 유입 채널을 Supabase 원본에서도 가른다(3-1b). E-01 `site_visited`에 `utm_source`·`utm_medium`·`utm_campaign`(String 또는 null, ≤40, **Supabase only**) — 세션 첫 주소에서 한 번 읽어 sessionStorage에 두고(첫 접촉), `[a-z0-9_-]` 밖은 null, Amplitude가 주소를 읽은 뒤 주소창에서 `utm_*`를 지움. 공통 속성이 아니라 E-01 속성인 이유는 1-2 속성 상속 원칙과 행 크기. 공통 `referrer`는 이름 그대로 **호스트만**(6-2 검토 메모 — 브라우저·서버 `referrerHost`, 그 전 기록은 주소 전체). `is_in_app_browser`가 스레드(`Barcelona`)·링크드인(`LinkedInApp`) 앱 안 브라우저도 TRUE로(그 전 기록은 FALSE). 처리방침 6-3h 먼저(갱신일 그대로). 분석 SQL은 `launch-attribution.md`. 새 이벤트 없음 |
 
 ---
