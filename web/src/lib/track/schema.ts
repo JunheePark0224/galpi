@@ -49,7 +49,12 @@ export const EVENT_SPEC = {
   question_back_clicked: { node_id: NODE_ID, depth: DEPTH, source: { type: ["question", "first_page"] } },
   path_completed: { scope_id: { type: "string" }, depth: DEPTH, unsure_count: { type: "number" } },
   book_opened: {},
-  bookmark_shown: { book_id: BOOK_ID, position: POSITION, one_liner_style: ONE_LINER_STYLE, pick_type: PICK_TYPE, art: { type: "object" } },
+  // v1.5: the draw's challenge provenance rides on the first event that follows the server's answer (null off the challenge route)
+  bookmark_shown: {
+    book_id: BOOK_ID, position: POSITION, one_liner_style: ONE_LINER_STYLE, pick_type: PICK_TYPE, art: { type: "object" },
+    challenge_rule: { type: "number", nullable: true },
+    challenge_genre: { type: "string", nullable: true },
+  },
   bookmark_reacted: {
     book_id: BOOK_ID, position: POSITION, reaction: { type: ["pass", "curious"] }, pick_type: PICK_TYPE, one_liner_style: ONE_LINER_STYLE,
   },

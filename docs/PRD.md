@@ -116,7 +116,7 @@
 | E-04 | ~~`situation_written`~~ | 삭제 (09-29, F-04와 함께) | — |
 | E-05 | `book_opened` | — | F-06 |
 | E-06 | ~~`first_page_edited`~~ | 삭제 (taxonomy v1.0, 10-04) | F-07 |
-| E-07 | `bookmark_shown` | 책 ID, 몇 번째 장, 한 줄 말투(요약형/질문형), **추천/무작위**, 그림 조합 | F-08 |
+| E-07 | `bookmark_shown` | 책 ID, 몇 번째 장, 한 줄 말투(요약형/질문형), **추천/무작위**, 그림 조합, 도전 규칙 번호·먼 쪽 장르(도전이 아니면 없음, taxonomy v1.5) | F-08 |
 | E-08 | `bookmark_reacted` | 책 ID, 몇 번째 장, 패스/궁금해요, **추천/무작위**, 한 줄 말투(요약형/질문형) | F-08 |
 | E-09 | `result_viewed` | 궁금해요 개수 | F-09 |
 | E-10 | `result_book_viewed` | 책 ID, 몇 번째 책, **추천/무작위** | F-09 |
