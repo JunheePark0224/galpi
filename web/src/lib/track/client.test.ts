@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { sendToAmplitude } from "./amplitude";
+import { NO_CAMPAIGN } from "./campaign";
 import { track, trackStored } from "./client";
 import { ROUND_ENDING_EVENTS } from "./schema";
 
@@ -33,7 +34,7 @@ describe("track", () => {
 
   it("never throws when sending fails", () => {
     Object.defineProperty(navigator, "sendBeacon", { value: () => { throw new Error("offline"); }, configurable: true });
-    expect(() => track("site_visited", {})).not.toThrow();
+    expect(() => track("site_visited", NO_CAMPAIGN)).not.toThrow();
   });
 
   it("falls back to fetch when sendBeacon returns false", () => {
@@ -41,7 +42,7 @@ describe("track", () => {
     const fetchMock = vi.fn().mockResolvedValue({ ok: true });
     Object.defineProperty(navigator, "sendBeacon", { value: send, configurable: true });
     vi.stubGlobal("fetch", fetchMock);
-    track("site_visited", {});
+    track("site_visited", NO_CAMPAIGN);
     expect(send).toHaveBeenCalledTimes(1);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, opts] = fetchMock.mock.calls[0];
@@ -63,13 +64,13 @@ describe("track", () => {
     const send = vi.fn().mockReturnValue(true);
     Object.defineProperty(navigator, "sendBeacon", { value: send, configurable: true });
     vi.mocked(sendToAmplitude).mockImplementation(() => { throw new Error("amplitude down"); });
-    expect(() => track("site_visited", {})).not.toThrow();
+    expect(() => track("site_visited", NO_CAMPAIGN)).not.toThrow();
     expect(send).toHaveBeenCalledTimes(1);
   });
 
   it("still sends to Amplitude when the Supabase path fails", () => {
     Object.defineProperty(navigator, "sendBeacon", { value: () => { throw new Error("offline"); }, configurable: true });
-    track("site_visited", {});
+    track("site_visited", NO_CAMPAIGN);
     expect(sendToAmplitude).toHaveBeenCalledTimes(1);
   });
 

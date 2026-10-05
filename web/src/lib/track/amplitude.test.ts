@@ -362,3 +362,60 @@ describe("setAmplitudeUser (taxonomy 3-2, v0.8)", () => {
     expect(() => setAmplitudeUser("22222222-2222-4222-8222-222222222222", "kakao")).not.toThrow();
   });
 });
+
+describe("afterAmplitudeRead (taxonomy v1.4 — the utm tags leave the address only after Amplitude read them)", () => {
+  it("runs at once when Amplitude is off (no key)", async () => {
+    vi.stubEnv(KEY_NAME, "");
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { afterAmplitudeRead } = await load();
+    const fn = vi.fn();
+    afterAmplitudeRead(fn);
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  it("with a key, waits until init has finished, then runs once; later calls run at once", async () => {
+    vi.stubEnv(KEY_NAME, FAKE_KEY);
+    let finish!: () => void;
+    sdk.initAll.mockReturnValue(new Promise<void>((r) => { finish = r; }));
+    idleNow();
+    const { afterAmplitudeRead, startAmplitude } = await load();
+    const fn = vi.fn();
+    afterAmplitudeRead(fn);          // before the SDK was even asked for (TrackVisit's effect can run first)
+    startAmplitude();
+    await ready();
+    await pause();
+    expect(fn).not.toHaveBeenCalled();
+    finish();
+    await vi.waitFor(() => expect(fn).toHaveBeenCalledTimes(1));
+    const later = vi.fn();
+    afterAmplitudeRead(later);
+    expect(later).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  it("still runs when init fails, and one failing callback does not stop the next", async () => {
+    vi.stubEnv(KEY_NAME, FAKE_KEY);
+    sdk.initAll.mockRejectedValue(new Error("blocked"));
+    idleNow();
+    const { afterAmplitudeRead, startAmplitude } = await load();
+    const next = vi.fn();
+    afterAmplitudeRead(() => { throw new Error("x"); });
+    afterAmplitudeRead(next);
+    startAmplitude();
+    await vi.waitFor(() => expect(next).toHaveBeenCalledTimes(1));
+  });
+
+  it("never hands the Supabase-only utm tags to Amplitude", async () => {
+    vi.stubEnv(KEY_NAME, FAKE_KEY);
+    idleNow();
+    const { sendToAmplitude, startAmplitude } = await load();
+    startAmplitude();
+    await ready();
+    sendToAmplitude("site_visited", { utm_source: "threads", utm_medium: "social", utm_campaign: "launch_1007" }, common);
+    const props = sdk.track.mock.calls[0][1] as Record<string, unknown>;
+    expect(props).not.toHaveProperty("utm_source");
+    expect(props).not.toHaveProperty("utm_medium");
+    expect(props).not.toHaveProperty("utm_campaign");
+    expect(props.prompt_version).toBe("BA400.4");
+  });
+});

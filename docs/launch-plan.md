@@ -54,6 +54,12 @@
 - [ ] 휴대폰 실제 점검: 카톡·인스타·스레드 앱 안 브라우저, 작은 폰(320px — S-04 배치), 로그인(카카오·구글) → 꽂기 → 내 책갈피
 - [ ] 링크 미리보기 카드 · 파비콘
 - [ ] 유입 채널: 홍보 링크에 `utm_source` (linkedin·threads·instagram). 첫 방문 기록에 남는지 확인
+  - [x] 코드: E-01 `site_visited`에 `utm_source`·`utm_medium`·`utm_campaign` (세션 첫 주소, Supabase에만), 읽은 뒤 주소창에서 지움, `referrer`는 호스트만 (taxonomy v1.4 3-1b, `feat/launch-prep`, 10-05)
+  - [ ] 사용자: 채널마다 **아래 링크 하나씩만** 올린다 (홈 주소여야 E-01이 남는다. 도메인을 연결하면 `galpi-omega.vercel.app`만 새 도메인으로 바꾸고 `?` 뒤는 그대로)
+    - 링크드인: `https://galpi-omega.vercel.app/?utm_source=linkedin&utm_medium=social&utm_campaign=launch_1007`
+    - 스레드: `https://galpi-omega.vercel.app/?utm_source=threads&utm_medium=social&utm_campaign=launch_1007`
+    - 인스타그램 (프로필 링크·스토리 링크 스티커): `https://galpi-omega.vercel.app/?utm_source=instagram&utm_medium=social&utm_campaign=launch_1007`
+  - [ ] 공개 뒤 확인: 링크 하나를 휴대폰으로 열고 주소창에서 `utm_`이 사라지는지, Supabase `events`의 `site_visited.props.utm_source`가 채워지는지. 분석 SQL은 `launch-attribution.md`
 - [ ] 갑자기 몰릴 때: Supabase·Vercel 무료 한도, 오류를 알아챌 방법
 - [ ] 처리방침·"예스24와 무관한 개인 프로젝트" 표기 최종 확인
 
