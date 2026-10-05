@@ -52,6 +52,7 @@
 
 - [ ] 처음부터 끝까지 직접 한 바퀴 (사용자) → 어색한 곳 목록
 - [ ] 휴대폰 실제 점검: 카톡·인스타·스레드 앱 안 브라우저, 작은 폰(320px — S-04 배치), 로그인(카카오·구글) → 꽂기 → 내 책갈피
+  - [x] 자동 점검 (Chromium, UA 7종 × 5크기): `launch-sweep.md` — 320px S-04·처리방침 링크 고침. 남은 결정: S-06 주 버튼이 작은 화면에서 첫 화면 밖, 앱 안 브라우저의 구글 로그인(PRD F-20), iOS 길게 누름은 실기기로
 - [ ] 링크 미리보기 카드 · 파비콘
 - [ ] 유입 채널: 홍보 링크에 `utm_source` (linkedin·threads·instagram). 첫 방문 기록에 남는지 확인
   - [x] 코드: E-01 `site_visited`에 `utm_source`·`utm_medium`·`utm_campaign` (세션 첫 주소, Supabase에만), 읽은 뒤 주소창에서 지움, `referrer`는 호스트만 (taxonomy v1.4 3-1b, `feat/launch-prep`, 10-05)

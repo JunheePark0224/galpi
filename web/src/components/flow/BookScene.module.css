@@ -105,4 +105,9 @@
 .actions > button { flex: 1 1 0; min-width: 120px; }
 /* S-04 [← 질문으로 돌아가기] is the longest label: one line, the button grows to it (a wrapped label made the row taller than the screen). */
 .actions > .back { min-width: max-content; white-space: nowrap; }
+/* 320px wide (launch sweep 10-05): the back label (≈ 173px) + 12px gap + a 120px [다음 장] is wider than the 288px row, so
+   [다음 장] wrapped to a second row below the fold. A smaller floor keeps both on one row (still ≥ 44px to touch). */
+@media (max-width: 359px) {
+  .actions > button { min-width: 88px; }
+}
 .error { flex-basis: 100%; margin: 0; text-align: center; font-size: 13px; }
