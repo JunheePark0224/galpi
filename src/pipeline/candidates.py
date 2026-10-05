@@ -1,7 +1,8 @@
 """Today's candidates for one wanted slot (design 2-1 "candidates").
 
 D1 rules, reused from collect_candidates: general books only, intro >= 100 chars, the slot's title/intro rule, rank order
-alternating steady / best / search, other editions within the slot out, detail with rating · pages · TOC · intro. On top:
+alternating steady / best / search (deeper list pages only when a slot runs dry, 10-05), other editions within
+the slot out, detail with rating · pages · TOC · intro. On top:
 what is already ours — ISBNs in books.json or in any additions file (reserve and dropped too: never offered twice),
 titles in books.json (other editions), at most MAX_PER_AUTHOR books per author (book-pool 1절).
 
@@ -14,8 +15,8 @@ import re
 from collections import Counter
 from dataclasses import dataclass, field
 
-from collect_candidates import (MAX_PER_AUTHOR, candidates_for, detail, first_author, interleave, norm_title,
-                                usable)
+from collect_candidates import (MAX_DEPTH, MAX_PER_AUTHOR, candidates_for, detail, first_author, interleave,
+                                norm_title, usable)
 from compare_apis import load_env
 from pick_pilot import clean
 
@@ -79,29 +80,40 @@ def pages_of(d: dict) -> int:
 
 
 def find(env: dict, want: Want, rule: dict, known: Known) -> list[Candidate]:
-    """Up to want.n usable candidates for one slot, in D1 rank order."""
-    kept, _ = candidates_for(env, want.slot, rule, {})
+    """Up to want.n usable candidates for one slot, in D1 rank order. The lists are read one depth at a time
+    (collect_candidates.CAT_PAGES / SEARCH_PAGES): a deeper page is fetched only when the shallower ones did not give
+    want.n usable books, and never past a list's end. Detail calls stay at most DETAIL_TRIES × want.n over all depths."""
     out: list[Candidate] = []
     authors = Counter(known.authors)
+    seen: set[str] = set()
+    titles = set(known.titles)  # a deeper depth can keep another edition of a title already offered
     tries = 0
-    for c in interleave(kept):
+    for depth in range(1, MAX_DEPTH + 1):
+        kept, _ = candidates_for(env, want.slot, rule, {}, depth)
+        for c in interleave(kept):
+            if len(out) >= want.n or tries >= DETAIL_TRIES * want.n:
+                return out
+            if c["isbn"] in seen:
+                continue
+            seen.add(c["isbn"])
+            if c["isbn"] in known.isbns or norm_title(c["title"]) in titles:
+                continue
+            if not (c.get("author") or "").strip():  # an added book needs an author: books:import fails on it, every day
+                continue
+            who = author_key(c["author"])
+            if who and authors[who] >= MAX_PER_AUTHOR:
+                continue
+            tries += 1
+            d = detail(env, c["isbn"])
+            if not usable(d) or pages_of(d) <= 0:  # no page count: normalizeBook rejects the book, every day
+                continue
+            cd = d.get("contentDetail") or {}
+            out.append(Candidate(want.entry, want.slot, c["isbn"], c["title"], c.get("author") or "", pages_of(d),
+                                 d.get("link") or "", clean(cd.get("bookIntroduction") or "", INTRO_MAX),
+                                 clean(cd.get("tableOfContents") or "", TOC_MAX)))
+            titles.add(norm_title(c["title"]))
+            if who:
+                authors[who] += 1
         if len(out) >= want.n or tries >= DETAIL_TRIES * want.n:
             break
-        if c["isbn"] in known.isbns or norm_title(c["title"]) in known.titles:
-            continue
-        if not (c.get("author") or "").strip():  # an added book needs an author: books:import fails on it, every day
-            continue
-        who = author_key(c["author"])
-        if who and authors[who] >= MAX_PER_AUTHOR:
-            continue
-        tries += 1
-        d = detail(env, c["isbn"])
-        if not usable(d) or pages_of(d) <= 0:  # no page count: normalizeBook rejects the book, every day
-            continue
-        cd = d.get("contentDetail") or {}
-        out.append(Candidate(want.entry, want.slot, c["isbn"], c["title"], c.get("author") or "", pages_of(d),
-                             d.get("link") or "", clean(cd.get("bookIntroduction") or "", INTRO_MAX),
-                             clean(cd.get("tableOfContents") or "", TOC_MAX)))
-        if who:
-            authors[who] += 1
     return out
