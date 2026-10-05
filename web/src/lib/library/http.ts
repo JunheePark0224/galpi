@@ -40,7 +40,7 @@ export async function openLibrary(request: Request, route: string, withBody: boo
   return { store: supabaseStore(db, userId), db, userId, body };
 }
 
-const STATUS: Record<LibraryError, number> = { invalid: 400, missing: 404, full: 409, first: 409, not_empty: 409 };
+const STATUS: Record<LibraryError, number> = { invalid: 400, missing: 404, full: 409, first: 409, not_empty: 409, forbidden: 403, unavailable: 503 };
 
 /** A service result as the response: 200 with the extra fields, or the error with its status. */
 export function reply(result: { ok: true } | { ok: false; error: LibraryError }, status = 200): Response {

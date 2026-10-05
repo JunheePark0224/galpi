@@ -1,3 +1,4 @@
+import type { ArtCombo } from "@/lib/art/combine";
 import type { LibraryShelf, LibraryView } from "./types";
 
 const counted = (shelves: LibraryShelf[]): LibraryView => {
@@ -31,4 +32,10 @@ export function moveLocally(view: LibraryView, isbn: string, shelfId: string, in
 export function removeLocally(view: LibraryView, isbn: string): LibraryView {
   if (!view.shelves.some((s) => s.bookmarks.some((b) => b.isbn === isbn))) return view;
   return counted(view.shelves.map((s) => ({ ...s, bookmarks: s.bookmarks.filter((b) => b.isbn !== isbn) })));
+}
+
+/** 꾸미기 at once: the bookmark's new picture on its rod (and in the open sheet), counts again (동물 M종 may change). */
+export function artLocally(view: LibraryView, isbn: string, art: ArtCombo): LibraryView {
+  if (!view.shelves.some((s) => s.bookmarks.some((b) => b.isbn === isbn))) return view;
+  return counted(view.shelves.map((s) => ({ ...s, bookmarks: s.bookmarks.map((b) => (b.isbn === isbn ? { ...b, art } : b)) })));
 }

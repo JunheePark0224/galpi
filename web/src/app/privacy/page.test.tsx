@@ -112,7 +112,7 @@ describe("/privacy (S-10)", () => {
 
   it("lists 내 책갈피 with the rod names kept only in Galpi's database", () => {
     render(<PrivacyPage />);
-    expect(screen.getByText(/내 책갈피: 꽂은 책, 그때 책갈피 그림, 만난 날, 나온 이유, 막대와 막대 이름/)).toBeInTheDocument();
+    expect(screen.getByText(/내 책갈피: 꽂은 책, 그때 책갈피 그림\(도감에 모은 것으로 꾸몄다면 꾸민 그림도\), 만난 날, 나온 이유, 막대와 막대 이름/)).toBeInTheDocument();
     expect(screen.getByText("막대 이름은 직접 쓴 글이라 갈피의 데이터베이스에만 저장")).toBeInTheDocument();
     expect(screen.getByText(/내 책갈피, 도감과 로그인 정보는 탈퇴를 요청할 때까지 보관해요/)).toBeInTheDocument();
     expect(screen.queryByText(/내 책갈피와 로그인 정보는/)).toBeNull();   // 도감 is kept until account deletion too, not one year

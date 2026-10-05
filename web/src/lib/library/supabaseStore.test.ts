@@ -29,11 +29,34 @@ describe("supabaseStore — every statement filtered to the person (RLS says the
     const { db, calls } = fakeDb([{ data: [{ id: "s", name: "첫", position: 0 }] }, { data: [ROW] }]);
     const store = supabaseStore(db, "u1");
     expect(await store.shelves()).toEqual([{ id: "s", name: "첫", position: 0 }]);
-    expect(await store.saves()).toEqual([{ isbn: ROW.isbn, art: {}, reason: ROW.reason, metOn: "2026-10-01", shelfId: "s", position: 0 }]);
+    expect(await store.saves()).toEqual([{ isbn: ROW.isbn, art: {}, reason: ROW.reason, metOn: "2026-10-01", shelfId: "s", position: 0, originalArt: null }]);
     expect(calls).toEqual([
       "from(shelves)", 'select("id, name, position")', 'eq("user_id","u1")', 'order("position")',
-      "from(saves)", 'select("isbn, art, reason, met_on, shelf_id, position")', 'eq("user_id","u1")', 'order("position")', 'order("created_at")',
+      "from(saves)", 'select("isbn, art, reason, met_on, shelf_id, position, original_art")', 'eq("user_id","u1")', 'order("position")', 'order("created_at")',
     ]);
+  });
+
+  it("reads the first picture (0005), and without the column (0005 not applied) the rods still load — originalArt null", async () => {
+    const first = { animal: "fox" };
+    const withColumn = fakeDb([{ data: [{ ...ROW, original_art: first }] }]);
+    expect((await supabaseStore(withColumn.db, "u1").saves())[0].originalArt).toEqual(first);
+    const { db, calls } = fakeDb([{ error: { code: "42703" } }, { data: [ROW] }]);
+    expect((await supabaseStore(db, "u1").saves())[0].originalArt).toBeNull();
+    expect(calls.filter((c) => c.startsWith("select"))).toEqual([
+      'select("isbn, art, reason, met_on, shelf_id, position, original_art")', 'select("isbn, art, reason, met_on, shelf_id, position")',
+    ]);
+    const broken = fakeDb([{ error: { code: "42501" } }]);
+    await expect(supabaseStore(broken.db, "u1").saves()).rejects.toThrow("library saves failed: 42501");
+  });
+
+  it("꾸미기 writes art only (never original_art), for this person's book", async () => {
+    const art = { animal: "otter", bg: "peach", sky: "moon", ground: "none", rare: true } as const;
+    const { db, calls } = fakeDb([{ data: [{ isbn: "9788998441012" }] }, { data: [] }, { error: { code: "42501" } }]);
+    const store = supabaseStore(db, "u1");
+    expect(await store.updateArt("9788998441012", art)).toBe(true);
+    expect(calls).toEqual(["from(saves)", `update(${JSON.stringify({ art })})`, 'eq("user_id","u1")', 'eq("isbn","9788998441012")', 'select("isbn")']);
+    expect(await store.updateArt("9788998441029", art)).toBe(false);
+    await expect(store.updateArt("9788998441012", art)).rejects.toThrow("library decorate failed: 42501");
   });
 
   it("makes the first rod with insert-or-nothing, then reads it", async () => {
