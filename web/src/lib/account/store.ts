@@ -74,6 +74,21 @@ export function setSavedCount(count: number): void {
   if (account.status === "in") set({ ...account, count });
 }
 
+/**
+ * The header count as the server has it now (after bookmarks moved from this browser, v1.7) — not added up here, so a
+ * library read that lands in between cannot make it count twice. Only a logged-in answer changes it.
+ */
+export async function refreshSavedCount(): Promise<void> {
+  try {
+    const res = await fetch("/api/me", { cache: "no-store", credentials: "same-origin" });
+    if (!res.ok) return;
+    const me = (await res.json()) as { loggedIn?: unknown; count?: unknown };
+    if (me.loggedIn === true && typeof me.count === "number") setSavedCount(me.count);
+  } catch {
+    // offline: the count stays; the next read of 내 책갈피 sets it
+  }
+}
+
 /** One more (or fewer) bookmark, counted on the latest state — not on a value a component read earlier. */
 export function addSavedCount(delta: number): void {
   if (account.status === "in") set({ ...account, count: Math.max(0, account.count + delta) });

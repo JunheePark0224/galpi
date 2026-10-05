@@ -27,8 +27,13 @@ export function useLibrary() {
   const current = useRef<LibraryView | null>(null);
   useEffect(() => { current.current = view; }, [view]);
 
+  // Reads can overlap (the first read and the one after this browser's bookmarks moved, v1.7): the one started last wins
+  const latest = useRef(0);
+
   const reload = useCallback(async () => {
+    const seq = ++latest.current;
     const answer = await libraryRequest("GET", "/api/library");
+    if (seq !== latest.current) return;
     if (answer.status === 401) {          // the session ran out: the header and Amplitude follow
       setStatus("login");
       signedOut();

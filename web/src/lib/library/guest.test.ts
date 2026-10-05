@@ -2,7 +2,8 @@ import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
-  addGuestSave, dropGuestSaves, GUEST_KEY, GUEST_MAX, guestSaves, removeGuestSave, subscribeGuest, useGuestSaves, type GuestSave,
+  addGuestSave, dropGuestSaves, failGuestSaves, GUEST_KEY, GUEST_MAX, GUEST_TRIES, guestSaves, removeGuestSave, subscribeGuest, useGuestSaves,
+  type GuestSave,
 } from "./guest";
 
 const card = (isbn: string) => ({
@@ -85,6 +86,10 @@ describe("guest saves (로그인 전 내 책갈피, localStorage galpi.guestSave
       { ...save(isbnAt(2)), art: { animal: "dragon" } },
       { ...save(isbnAt(3)), reason: { label: "<b>", items: [] } },
       { ...save(isbnAt(4)), metOn: 5 },
+      { ...save(isbnAt(12)), metOn: "2026-13-40" },                                  // not a calendar date
+      { ...save(isbnAt(13)), metOn: "2999-01-01" },                                  // after today
+      { ...save(isbnAt(14)), tries: -1 },
+      { ...save(isbnAt(15)), tries: 1.5 },
       { ...save(isbnAt(5)), card: { ...card(isbnAt(5)), id: ISBN } },               // a card of another book
       { ...save(isbnAt(6)), card: { ...card(isbnAt(6)), entry: "x" } },
       { ...save(isbnAt(7)), card: { ...card(isbnAt(7)), field: 3 } },
@@ -117,5 +122,19 @@ describe("guest saves (로그인 전 내 책갈피, localStorage galpi.guestSave
     addGuestSave(save(ISBN));
     const Count = () => createElement("span", null, useGuestSaves().length);
     expect(renderToString(createElement(Count))).toBe("<span>0</span>");
+  });
+
+  it("counts failed moves per bookmark and lets one go after GUEST_TRIES visits", () => {
+    addGuestSave(save(ISBN));
+    addGuestSave(save(isbnAt(1)));
+    expect(GUEST_TRIES).toBe(3);
+    failGuestSaves([ISBN]);
+    failGuestSaves([ISBN, isbnAt(9)]);
+    expect(guestSaves().find((s) => s.isbn === ISBN)?.tries).toBe(2);
+    expect(guestSaves().find((s) => s.isbn === isbnAt(1))?.tries).toBeUndefined();
+    failGuestSaves([ISBN]);
+    expect(guestSaves().map((s) => s.isbn)).toEqual([isbnAt(1)]);
+    failGuestSaves([]);
+    expect(guestSaves()).toHaveLength(1);
   });
 });

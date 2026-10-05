@@ -1,7 +1,8 @@
 import { useSyncExternalStore } from "react";
+import { kstDate } from "@/lib/books/library";
 import type { BookCard } from "@/lib/books/types";
 import type { SaveInput } from "./service";
-import { parseArt, parseReason } from "./validate";
+import { parseArt, parseMetOn, parseReason } from "./validate";
 
 /**
  * 로그인 전 내 책갈피 (F-12, 10-05 — plans/2026-10-05-guest-keep.md): bookmarks kept before logging in, in this browser
@@ -11,9 +12,12 @@ import { parseArt, parseReason } from "./validate";
  */
 export const GUEST_KEY = "galpi.guestSaves";
 export const GUEST_MAX = 100;
+/** A bookmark whose move to the account failed (server or network) on this many visits is let go. */
+export const GUEST_TRIES = 3;
 const VERSION = 1;
 
-export interface GuestSave extends SaveInput { card: BookCard }
+/** tries: visits whose move to the account failed so far (absent = none). */
+export interface GuestSave extends SaveInput { card: BookCard; tries?: number }
 /** blocked: this browser keeps nothing (private mode and the like) — the caller offers the login instead. */
 export type GuestAdd = "added" | "already" | "full" | "blocked";
 
@@ -33,11 +37,15 @@ function parseCard(v: unknown, isbn: string): BookCard | null {
 }
 
 function parseSave(v: unknown): GuestSave | null {
-  if (!isRecord(v) || typeof v.isbn !== "string" || typeof v.metOn !== "string") return null;
+  if (!isRecord(v) || typeof v.isbn !== "string") return null;
   const art = parseArt(v.art);
   const reason = parseReason(v.reason);
+  const metOn = parseMetOn(v.metOn, kstDate(new Date()));      // the server's rule: a real date, not after today (KST)
   const card = parseCard(v.card, v.isbn);
-  return art && reason && card ? { isbn: v.isbn, art, reason, metOn: v.metOn, card } : null;
+  const { tries } = v;
+  if (tries !== undefined && !(typeof tries === "number" && Number.isInteger(tries) && tries >= 0)) return null;
+  if (!art || !reason || !metOn || !card) return null;
+  return { isbn: v.isbn, art, reason, metOn, card, ...(tries === undefined ? {} : { tries }) };
 }
 
 function parse(raw: string | null): readonly GuestSave[] {
@@ -101,6 +109,15 @@ export function dropGuestSaves(isbns: readonly string[]): void {
   const items = guestSaves();
   const rest = items.filter((s) => !isbns.includes(s.isbn));
   if (rest.length !== items.length) write(rest);
+}
+
+/** A failed move for these (a server or network failure): one more try counted; at GUEST_TRIES the bookmark is let go. */
+export function failGuestSaves(isbns: readonly string[]): void {
+  if (isbns.length === 0) return;
+  const next = guestSaves()
+    .map((s) => (isbns.includes(s.isbn) ? { ...s, tries: (s.tries ?? 0) + 1 } : s))
+    .filter((s) => (s.tries ?? 0) < GUEST_TRIES);
+  write(next);
 }
 
 /** Changes here, and in another tab of this browser (the `storage` event). */

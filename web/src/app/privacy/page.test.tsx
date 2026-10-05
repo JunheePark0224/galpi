@@ -32,7 +32,7 @@ describe("/privacy (S-10)", () => {
 
   it("says bookmarks kept before logging in stay in this browser until the login moves them (taxonomy v1.7, 6-3j)", () => {
     render(<PrivacyPage />);
-    expect(screen.getByText("로그인 전에 저장한 책갈피(책 번호·책갈피 그림·나온 이유·만난 날)는 이 브라우저에만 저장돼요. 로그인하면 계정으로 옮기고 브라우저에서 지워요. 브라우저 기록을 지우면 함께 사라져요.")).toBeInTheDocument();
+    expect(screen.getByText("로그인 전에 저장한 책갈피(책 번호·책갈피 그림·나온 이유·만난 날)는 이 브라우저에만 저장돼요. 화면에 그리려고 그 책의 정보(제목·저자·장르·한 줄)도 함께 둬요. 로그인하면 계정으로 옮기고 브라우저에서 지워요. 브라우저 기록을 지우면 함께 사라져요.")).toBeInTheDocument();
     expect(screen.getByText("로그인하지 않아도 책갈피를 모아 두었다가 로그인하면 이어 주기 위해")).toBeInTheDocument();
   });
 

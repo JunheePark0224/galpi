@@ -3,7 +3,7 @@ import { useEffect, useId, useState } from "react";
 import { useAccount, useKeepState, type KeepState } from "@/lib/account/store";
 import { kstDate } from "@/lib/books/library";
 import type { PickView } from "@/lib/flow/state";
-import { useGuestSaves } from "@/lib/library/guest";
+import { GUEST_MAX, useGuestSaves } from "@/lib/library/guest";
 import { pressKeep, pressUnkeep } from "@/lib/library/keep";
 import { KeepFlight, type FlightPath } from "./KeepFlight";
 import styles from "./KeepButton.module.css";
@@ -68,7 +68,9 @@ export function KeepButton({ pick }: { pick: PickView }) {
     setToast((n) => n + 1);
   };
 
-  const problem = state ? NOTES[state] : undefined;
+  // "100개까지" holds only while this browser really is full (a bookmark taken out on S-09 or in another tab frees a place)
+  const stillFull = !loggedIn && guest.length >= GUEST_MAX;
+  const problem = state && (state !== "full" || stillFull) ? NOTES[state] : undefined;
 
   return (
     <div className={styles.keep}>
