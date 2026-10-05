@@ -71,11 +71,38 @@ describe("BookmarkArt (C-03, 도감 v1)", () => {
     }
   });
 
+  it("draws only the listed parts on the background's sky and hill; the tier and effects follow them (도감 칸)", () => {
+    const { container, rerender } = render(<BookmarkArt art={FIRST} clipId="p" parts={["bg"]} />);
+    let svg = container.querySelector("svg")!;
+    expect(svg.querySelector("image")).toBeNull();
+    expect(svg.querySelector("rect")).toHaveAttribute("fill", "#141936");                  // galaxy sky
+    expect(svg).toHaveAttribute("data-tier", "first_edition");
+    expect(svg.querySelectorAll("circle[style*='animation-delay']")).toHaveLength(7);         // the galaxy's dust only
+    expect(svg.querySelectorAll("path[style*='animation-delay']")).toHaveLength(0);           // no animal or prop sparkles
+
+    rerender(<BookmarkArt art={{ ...FIRST, bg: "night" }} clipId="p" parts={["sky"]} />);
+    svg = container.querySelector("svg")!;
+    expect(svg.querySelector("image")).toBeNull();
+    expect(svg.querySelector("g[transform^='translate(50 ']")).not.toBeNull();             // the lone prop, centred
+    expect(svg.querySelectorAll("path[style*='animation-delay']")).toHaveLength(2);           // goldmoon's two sparkles
+    expect(svg).toHaveAttribute("data-tier", "first_edition");
+
+    rerender(<BookmarkArt art={{ ...FIRST, sky: "moon" }} clipId="p" parts={["animal"]} />);
+    svg = container.querySelector("svg")!;
+    expect(svg.querySelector("image")).toHaveAttribute("href", "/animals/bluedragon.svg");
+    expect(svg.querySelector("g[transform^='translate(50 ']")).toBeNull();
+    expect(svg.querySelectorAll("path[style*='animation-delay']")).toHaveLength(4);           // the animal's four
+
+    rerender(<BookmarkArt art={{ ...COMMON, bg: "galaxy" }} clipId="p" parts={["animal"]} fx="light" />);
+    expect(container.querySelector("svg")).toHaveAttribute("data-tier", "common");           // a gold background is not the cat's
+  });
+
   it("draws a part's silhouette shape for the 도감 (animals as the image, props as their shape, none for backgrounds)", () => {
     const { container, rerender } = render(<PartShape kind="animal" value="otter" />);
     expect(container.querySelector("img")).toHaveAttribute("src", "/animals/otter.svg");
     rerender(<PartShape kind="sky" value="goldmoon" />);
     expect(container.querySelector("svg circle")).not.toBeNull();
+    expect(container.querySelector("svg g[transform]")).not.toBeNull();                       // as its met cell: centred
     rerender(<PartShape kind="ground" value="clover" />);
     expect(container.querySelector("svg circle")).not.toBeNull();
     rerender(<PartShape kind="ground" value="none" />);

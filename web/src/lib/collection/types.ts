@@ -19,7 +19,7 @@ export interface CollectionItem { kind: ArtKind; value: string; firstMetAt: stri
  */
 export interface CollectionStore {
   items(): Promise<CollectionItem[]>;
-  /** Records the picture's four parts; the ones already met stay as they were. Returns the parts that were new. */
+  /** Records the picture's collectible parts (not the empty ground); the ones already met stay as they were. Returns the new ones. */
   record(art: ArtCombo): Promise<{ kind: ArtKind; value: string }[]>;
   /** Clears NEW on every row (the 도감 was seen). How many rows changed. */
   markSeen(): Promise<number>;

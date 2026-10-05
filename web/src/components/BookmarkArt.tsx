@@ -1,5 +1,7 @@
 import { useId } from "react";
-import { BACKGROUNDS, artTier, tierOf, type ArtCombo, type Background, type GroundProp, type SkyProp } from "@/lib/art/combine";
+import {
+  ART_KINDS, BACKGROUNDS, highestTier, tierOf, type ArtCombo, type ArtKind, type Background, type GroundProp, type SkyProp,
+} from "@/lib/art/combine";
 import styles from "./BookmarkArt.module.css";
 
 // Window: 100 × 76, arch radius = half the width (DESIGN 4절). Hill surface sits near y = 52–55.
@@ -167,18 +169,40 @@ function PropSparkles({ kind }: { kind: string }) {
 }
 
 /**
+ * A prop drawn alone (도감 소품 칸, its silhouette) is moved to the middle and enlarged: [centre x, centre y, scale] of
+ * where it sits in the full picture. Props spread over the window (stars, grass, flowers, fireflies) stay nearly as they are.
+ */
+const PROP_FOCUS: Readonly<Record<string, readonly [number, number, number]>> = {
+  moon: [75, 22, 1.6], cloud: [71, 23, 1.6], stars: [53, 21, 1.2], birds: [73, 19.5, 1.6], bigStar: [74, 22, 1.5],
+  rainbow: [74, 25, 1.4], shooting: [68, 18.5, 1.4], goldmoon: [75, 22, 1.5],
+  grass: [50, 52, 1], flowers: [50, 51, 1], books: [85.5, 49.5, 1.6], mushroom: [14.5, 51, 1.6], clover: [16.3, 49, 1.6],
+  firefly: [50, 40, 1], goldbook: [84.5, 50.5, 1.5],
+};
+export function propFocus(value: string): string | undefined {
+  const f = PROP_FOCUS[value];
+  return f ? `translate(50 ${f[1]}) scale(${f[2]}) translate(${-f[0]} ${-f[1]})` : undefined;
+}
+
+/**
  * C-03 — sky, one sky prop, hill, the animal at 55% sitting on the hill, one ground prop. Decorative only.
  * 초판본 parts (도감 v1, rare-art.html · first-edition-effects.gif): a gold rim on the window and a light sweep now and then;
  * an animal gets a breathing aura + four sparkles, a background gold dust, a prop a glow + two sparkles. `fx="light"`
  * (a moving or small bookmark — T-03, the rods, the 도감) and prefers-reduced-motion keep the rim and a still aura only.
  * Ids (clip, gradients) are `clipId` + this instance's useId(): the same book drawn twice on one page (a rod and its
  * sheet, the drag copy) never shares a clip or gradient.
+ * `parts` (도감 칸, 10-05): which parts are shown — the sky and hill of `art.bg` are always the stage; the animal and the
+ * props only when listed. The tier (rim, `data-tier`) and the 초판본 effects follow the listed parts only. One prop alone is
+ * centred and enlarged (PROP_FOCUS).
  */
-export function BookmarkArt({ art, clipId: base, fx = "full" }: { art: ArtCombo; clipId: string; fx?: "full" | "light" }) {
+export function BookmarkArt({ art, clipId: base, fx = "full", parts = ART_KINDS }: {
+  art: ArtCombo; clipId: string; fx?: "full" | "light"; parts?: readonly ArtKind[];
+}) {
   const clipId = `${base}-${useId().replace(/[^A-Za-z0-9_-]/g, "")}`;
   const bg = BACKGROUNDS[art.bg] ?? BACKGROUNDS.peach;
-  const first = (kind: "animal" | "bg" | "sky" | "ground") => tierOf(kind, art[kind]) === "first_edition";
-  const tier = artTier(art);
+  const shows = (kind: ArtKind) => parts.includes(kind);
+  const first = (kind: ArtKind) => shows(kind) && tierOf(kind, art[kind]) === "first_edition";
+  const tier = highestTier(parts.map((kind) => tierOf(kind, art[kind]) ?? "common"));
+  const lone = parts.length === 1 && (parts[0] === "sky" || parts[0] === "ground") ? propFocus(art[parts[0]]) : undefined;
   const golden = tier === "first_edition";
   const full = fx === "full";
   const sun = `${clipId}-sun`;
@@ -210,16 +234,28 @@ export function BookmarkArt({ art, clipId: base, fx = "full" }: { art: ArtCombo;
             {DUST.map(([x, y], i) => <circle key={i} className={styles.dust} style={{ animationDelay: `${i * 0.45}s` }} cx={x} cy={y} r={i % 2 ? 0.9 : 1.2} />)}
           </g>
         )}
-        {first("sky") && <PropAura kind={art.sky} aura={aura} />}
-        <Sky kind={art.sky} sky={bg.sky} />
-        {full && first("sky") && <PropSparkles kind={art.sky} />}
+        {shows("sky") && (
+          <g transform={lone}>
+            {first("sky") && <PropAura kind={art.sky} aura={aura} />}
+            <Sky kind={art.sky} sky={bg.sky} />
+            {full && first("sky") && <PropSparkles kind={art.sky} />}
+          </g>
+        )}
         <path d={HILL} fill={bg.hill} />
-        {first("animal") && <circle className={styles.aura} cx="50" cy="40" r="27" fill={`url(#${aura})`} />}
-        <image href={`/animals/${art.animal}.svg`} x="22.5" y="12" width="55" height="55" />
-        {full && first("animal") && <Sparkles points={ANIMAL_SPARKS} />}
-        {first("ground") && <PropAura kind={art.ground} aura={aura} />}
-        <Ground kind={art.ground} />
-        {full && first("ground") && <PropSparkles kind={art.ground} />}
+        {shows("animal") && (
+          <>
+            {first("animal") && <circle className={styles.aura} cx="50" cy="40" r="27" fill={`url(#${aura})`} />}
+            <image href={`/animals/${art.animal}.svg`} x="22.5" y="12" width="55" height="55" />
+            {full && first("animal") && <Sparkles points={ANIMAL_SPARKS} />}
+          </>
+        )}
+        {shows("ground") && (
+          <g transform={lone}>
+            {first("ground") && <PropAura kind={art.ground} aura={aura} />}
+            <Ground kind={art.ground} />
+            {full && first("ground") && <PropSparkles kind={art.ground} />}
+          </g>
+        )}
         {full && golden && (
           <g transform="skewX(-20)"><rect className={styles.sweep} x="-30" y="-10" width="16" height="100" fill="#FFF6D6" opacity="0.35" /></g>
         )}
@@ -235,8 +271,8 @@ export function BookmarkArt({ art, clipId: base, fx = "full" }: { art: ArtCombo;
 }
 
 /**
- * 도감 못 만난 칸 (시안 ①②): the part's shape alone, drawn flat by the cell's CSS (a silhouette). Backgrounds have no
- * shape of their own — only the "?" shows. Decorative.
+ * 도감 못 만난 칸 (시안 ①②): the part's shape alone, drawn flat by the cell's CSS (a silhouette) — a prop centred and
+ * enlarged as its met cell draws it. Backgrounds have no shape of their own — a plain arch and the "?". Decorative.
  */
 export function PartShape({ kind, value, className }: { kind: "animal" | "bg" | "sky" | "ground"; value: string; className?: string }) {
   if (kind === "animal") {
@@ -246,7 +282,9 @@ export function PartShape({ kind, value, className }: { kind: "animal" | "bg" | 
   if (kind === "bg" || value === "none") return null;
   return (
     <svg className={className} viewBox="0 0 100 76" aria-hidden="true" focusable="false">
-      {kind === "sky" ? <Sky kind={value as SkyProp} sky="#000" /> : <Ground kind={value as GroundProp} />}
+      <g transform={propFocus(value)}>
+        {kind === "sky" ? <Sky kind={value as SkyProp} sky="#000" /> : <Ground kind={value as GroundProp} />}
+      </g>
     </svg>
   );
 }

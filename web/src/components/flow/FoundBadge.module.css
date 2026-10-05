@@ -1,4 +1,4 @@
-/* 도감 v1 시안 ③ — "처음 만난 동물!" on the bookmark's window, small, then gone (about 2.5 s). 일반판 smaller and quieter;
+/* 도감 v1 시안 ③ — "처음 만난 여우 · 한정판 무지개!" on the bookmark's window, small, then gone (about 2.5 s). 일반판 smaller and quieter;
    한정판 the tier pill blue, 초판본 the gold pill (rare-art.html .t2 / .t3). Above the arch, below the string's knot. */
 .region {
   position: absolute; top: calc(30px * var(--bm-scale, 1)); left: 0; right: 0; z-index: 4;
@@ -6,6 +6,8 @@
 }
 .badge {
   margin: 0; padding: 4px 12px; border-radius: var(--radius-pill); white-space: nowrap;
+  /* wider than the bookmark is fine (no shrinking to it); foundLabel keeps it short, the cap is only a guard on a 320px phone */
+  flex-shrink: 0; max-width: calc(100vw - 32px); overflow: hidden; text-overflow: ellipsis;
   font-family: var(--font-batang), serif; font-weight: 700; font-size: 13px; line-height: 1.3;
   background: rgba(250, 245, 234, 0.95); color: var(--ink); box-shadow: 0 4px 10px -4px rgba(43, 39, 36, 0.35);
   animation: found 2.6s ease forwards;
