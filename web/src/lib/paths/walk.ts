@@ -134,5 +134,5 @@ export function applyChallenge(map: QuestionMap, w: Walked, draw?: ChallengeDraw
   const levels = [ALL_SCOPE, side, scope].filter((s, i, all) => i === 0 || scopeKey(s) !== scopeKey(all[i - 1]));
   const crosses = learn && scope.entry === "leaf";
   const branch = w.scope.entry ?? "mixed";
-  return { ...w, scope, levels, mood: crosses ? waysOnStoryAxes(w.mood) : w.mood, challenge: challengeOf(w.scope, branch, n + 1, rule, scope) };
+  return { ...w, scope, levels, mood: crosses ? waysOnStoryAxes(w.mood) : w.mood, challenge: challengeOf(w.scope, branch, rule.n ?? n + 1, rule, scope) };
 }

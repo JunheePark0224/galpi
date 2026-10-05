@@ -28,6 +28,7 @@ colors:
   genre-history: "#8E3A3A"
   genre-society: "#5E6A2B"
   genre-horror: "#6B2F5B"
+  genre-romance: "#B81D55"
   field-data: "#3A6684"
   field-ai: "#5E55A0"
   field-habit: "#9E6232"
@@ -193,6 +194,9 @@ components:
     textColor: "{colors.white}"
   chip-genre-horror:
     backgroundColor: "{colors.genre-horror}"
+    textColor: "{colors.white}"
+  chip-genre-romance:
+    backgroundColor: "{colors.genre-romance}"
     textColor: "{colors.white}"
   chip-field-data:
     backgroundColor: "{colors.field-data}"

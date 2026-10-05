@@ -24,14 +24,19 @@ describe("app book data", () => {
     expect(target.filter((b) => b.keywords.includes("SQL"))).toHaveLength(2);
   });
 
-  it("vocab.json covers all twelve topics: the 19 keywords of v1.1 left after 마음·회복 moved out + 엑셀·파이썬·데이터 리터러시 back in 데이터 분석 and LLM 원리 in AI 활용 (10-02), and the 33 D-A drafts (target-chips 2-1)", () => {
+  it("vocab.json covers all sixteen topics: the 19 keywords of v1.1 left after 마음·회복 moved out + 엑셀·파이썬·데이터 리터러시 back in 데이터 분석 and LLM 원리 in AI 활용 (10-02), the 33 D-A drafts and the 12 drafts of 10-05 (target-chips 2-1)", () => {
     expect(Object.keys(vocab)).toEqual([...TOPICS]);
     const count = (topics: readonly string[]) =>
       topics.reduce((n, t) => n + Object.keys((vocab as Vocab)[t].keywords).length, 0);
     expect(count(TOPICS.slice(0, 6))).toBe(23);
     expect(Object.keys(vocab["AI 활용"].keywords)).toContain("LLM 원리");
     expect(Object.keys(vocab["데이터 분석"].keywords)).toEqual(["SQL", "엑셀", "파이썬", "데이터 리터러시"]);
-    expect(count(TOPICS.slice(6))).toBe(33);
+    expect(count(TOPICS.slice(6, 12))).toBe(33);
+    expect(count(TOPICS.slice(12))).toBe(12);
+    expect(Object.keys(vocab["마케팅·브랜딩"].keywords)).toEqual(["브랜딩", "콘텐츠 마케팅", "고객 이해"]);
+    expect(Object.keys(vocab["리더십"].keywords)).toEqual(["팀 이끌기", "피드백·코칭", "조직 문화"]);
+    expect(Object.keys(vocab["건강·운동"].keywords)).toEqual(["운동 습관", "달리기·근력", "잠·회복"]);
+    expect(Object.keys(vocab["요리·살림"].keywords)).toEqual(["집밥", "정리·미니멀", "살림 기술"]);
     expect(Object.keys(vocab["돈 관리·투자"].keywords)).toEqual(["재테크 기초", "주식", "ETF·펀드", "부동산·청약", "연금·노후", "돈의 심리"]);
   });
 });
