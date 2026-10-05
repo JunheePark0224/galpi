@@ -16,6 +16,8 @@ missing key, YES24 failed, the run stopped before any book was finished, or cand
   STOP_LIMIT times in a row (tagger.Breaker, one streak per pass) → the run stops there; the books finished before it are
   written as `partial`, and if there are none it is `anthropic_failed` with no file
   nothing to fill → `full`, zero API calls
+A pass-A one-liner that breaks the form / length / hype / title rules is asked for once more from the same model
+(pipeline/one_liner.py); the summary's `one_liner_retries` counts them and their cost (also in `usage` / `cost_usd`).
 YES24 text (intro, TOC) lives on the Candidate in memory and goes to the tagger only; the additions file, the summary and
 stdout carry our tags and counts. Do not set ANTHROPIC_LOG=debug (the SDK would log request bodies with YES24 text).
 Files are keyed by the batch id: additions/<id>.json, and the summary in data/pipeline/runs/<id>.json (git-ignored) and stdout.
@@ -45,6 +47,7 @@ from .config import Config, load_config
 from .gaps import plan_day
 from .keyword_candidates import excluded_names
 from .merge import additions_doc, keyword_hints, record, write_doc
+from .one_liner import RetryLog, retry as retry_one_liner
 from .prompt import schema, system_prompt, user_message
 from .slots import keyword_rule, slot_rule
 from .tagger import Breaker, TaggerStop, Usage, call, parse
@@ -86,8 +89,9 @@ def _spend(ledger: dict, model: str, used: Usage) -> None:
 
 
 def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, breaker: Breaker,
-            ledger: dict) -> tuple[dict | None, str]:
-    """(record or None, reason). Pass A tags, pass B checks blind; token use goes to `ledger`. Raises TaggerStop."""
+            ledger: dict, retries: RetryLog | None = None) -> tuple[dict | None, str]:
+    """(record or None, reason). Pass A tags (a one-liner that breaks a rule is asked for once more — one_liner.py), pass B
+    checks blind (it writes no one-liner); token use goes to `ledger`, retries also to `retries`. Raises TaggerStop."""
     if not cand.author.strip() or cand.pages <= 0:  # find() never offers one; a book that import would reject costs nothing
         return None, "incomplete_candidate"
     kept = vocab.get(cand.slot, {}).get("kept", {}) if cand.entry == "target" else {}  # a new topic may have no list yet
@@ -99,6 +103,10 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     a = parse(raw_a, cand.entry, "tag", names, cand.slot, left_out) if raw_a else None
     if a is None:
         return None, why if raw_a is None else "invalid_answer"
+    a, used, outcome = retry_one_liner(client, cfg.model, prompts["tag"], user, cand.entry, raw_a, a, cand.title, breaker)
+    _spend(ledger, cfg.model, used)
+    if retries is not None:
+        retries.note(cfg.model, used, outcome)
     raw_b, used, why = call(client, cfg.second_model, prompts["check"], user, schema(cand.entry, "check", names), breaker, "B")
     _spend(ledger, cfg.second_model, used)
     b = parse(raw_b, cand.entry, "check", names) if raw_b else None
@@ -133,10 +141,10 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
     if not cands:
         return summary | {"status": "yes24_failed" if yes24_fail else "no_candidates"}
     prompts = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}
-    recs, reasons, ledger, stopped, breaker, tried = [], Counter(), {}, None, Breaker(), 0
+    recs, reasons, ledger, stopped, breaker, tried, retries = [], Counter(), {}, None, Breaker(), 0, RetryLog()
     for cand in cands:
         try:
-            rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger)
+            rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger, retries)
         except TaggerStop as err:
             stopped = str(err)
             break
@@ -157,6 +165,7 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
                 "dropped": status["dropped"],
                 "auto_agreed": sum(r.get("auto") == "ai-agree" for r in recs),
                 "flagged": sum(bool(r["flags"]) and r["status"] != "dropped" for r in recs),
+                "one_liner_retries": retries.summary(),
                 "usage": {m: u.__dict__ for m, u in ledger.items()},
                 "cost_usd": round(sum(u.cost(m) for m, u in ledger.items()), 4)}
     if not recs:

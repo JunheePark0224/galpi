@@ -484,3 +484,21 @@ def test_review_pages_go_to_the_main_checkout_even_from_a_worktree(tmp_path):
         raise FileNotFoundError("no git")
     assert review.main_checkout(wt, broken) == wt and review.main_checkout(wt, fake("", 128)) == wt  # fall back
     assert review.PAGES.parts[-4:] == ("data", "processed", "check", "pipeline")
+
+
+def _world_row() -> str:
+    from pipeline import ROOT
+    text = (ROOT / "docs" / "balance-game.md").read_text(encoding="utf-8")
+    rows = [line for line in text.splitlines() if line.startswith("| 세계 |")]
+    assert len(rows) == 1
+    return rows[0]
+
+
+def test_the_world_hint_on_the_review_pages_follows_the_balance_game_rule():
+    """10-05: the dropped "이야기가 없는 책은 중간" hint is gone, and the hint's rule words are the source row's."""
+    from build_d4_review import AXIS_LABELS
+    hint, row = dict((a[0], a[5]) for a in AXIS_LABELS)["world"], _world_row()
+    assert "이야기가 없는" not in hint and "이야기가 없는" not in row
+    for word in ("소설", "철학적이거나 실험적이어도", "비소설", "사람·삶·사회", "정말 섞", "사람도 세계도 없는"):
+        assert word in hint and word in row, word
+    assert "평범한 인생" in row and "톨스토이 우화" in row

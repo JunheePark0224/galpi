@@ -62,13 +62,16 @@ def full_but_one_keyword() -> list[dict]:
 
 
 def mixed(kwargs):
-    """Book 2: the second pass reads the way differently. Book 3: pass A writes a one-liner that breaks the rules."""
+    """Book 2: the second pass reads the way differently. Book 3: pass A writes a one-liner that breaks the rules, and its
+    retry still does."""
     entry, kind = kind_of(kwargs)
     text = kwargs["messages"][0]["content"]
     if "주식 배당 입문" in text and kind == "check":
         return message({"fits": True, "keywords": ["주식"], "way": "실습", "why": "따라 하기 중심"})
     if "주식 투자 수업" in text and kind == "tag":
         return message(tag_answer(entry, one_liner="짧아요"))
+    if "주식 투자 수업" in text and kind == "fix":
+        return message({"one_liner": "조금 길어졌어요"})
     return agreeing(kwargs)
 
 
@@ -77,7 +80,9 @@ def test_a_day_writes_our_tags_and_a_summary(day):
     s = run_daily.run("2026-10-05", CFG, ENV, client)
     assert s["status"] == "ok" and s["wanted"] == 4 and s["slots"] == ["돈 관리·투자/주식 4"] and s["candidates"] == 4
     assert (s["picked"], s["review"], s["reserve"], s["dropped"], s["auto_agreed"], s["flagged"]) == (2, 1, 1, 0, 2, 1)
-    assert s["usage"]["claude-haiku-4-5"]["calls"] == 8 and s["cost_usd"] > 0
+    assert s["usage"]["claude-haiku-4-5"]["calls"] == 9 and s["cost_usd"] > 0  # 4 books × 2 passes + 1 retry
+    assert {k: s["one_liner_retries"][k] for k in ("tried", "fixed", "still_failing", "call_failed")} ==         {"tried": 1, "fixed": 0, "still_failing": 1, "call_failed": 0}
+    assert s["one_liner_retries"]["usage"]["claude-haiku-4-5"]["calls"] == 1 and 0 < s["one_liner_retries"]["cost_usd"] < s["cost_usd"]
     doc = json.loads((day / "2026-10-05.json").read_text(encoding="utf-8"))
     by = {b["title"]: b for b in doc["books"]}
     assert by["처음 주식 공부"]["auto"] == "ai-agree" and by["주식 배당 입문"]["flags"] == ["way"]

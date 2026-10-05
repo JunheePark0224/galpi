@@ -30,6 +30,15 @@ def test_the_reference_is_read_from_the_docs():
     assert "one_liner" in p and "one_liner" not in system_prompt(VOC, "check")
 
 
+def test_the_world_rule_and_its_two_examples_reach_the_prompt():
+    """10-05: a realistic novel is 현실 even when philosophical; 0 only when real and unreal are truly mixed."""
+    p = system_prompt(VOC, "tag")
+    assert "카렐 차페크 『평범한 인생』" in p and "톨스토이 우화" in p
+    assert "문학적·철학적이라는 이유만으로 0을 주지 않는다" in p and "world는 표의 중간(0) 조건일 때만" in p
+    assert "이야기가 없는 책은" not in p
+    assert "카렐 차페크" in system_prompt(VOC, "check")  # the blind second pass reads the same row
+
+
 def _docs_copy(tmp_path, cut: str = "") -> Path:
     for name in ("balance-game.md", "book-pool.md", "target-chips.md"):
         text = (DOCS / name).read_text(encoding="utf-8")
