@@ -23,6 +23,13 @@
 @media (min-height: 780px) {
   .row { font-size: 14px; }
 }
+/* Short screens (launch sweep 10-05): a 320 × 568 phone, or a 375 × 667 one inside an app's browser (≈ 559 tall), gets a
+   ≈ 300px book, and a ten-question path (8 rows) ran 64px past the page — the last mood line hidden in the page's scroll.
+   Tighter rows keep it on the page; the page still scrolls if a path is ever longer. */
+@media (max-height: 600px) {
+  .page { gap: var(--space-2); padding-top: var(--space-3); padding-bottom: var(--space-3); }
+  .row { padding: 2px 0; }
+}
 /* T-04b desktop: the pages are about 400px wide — the words grow with them. Only where the scene left the 430px column
    (the same :has() test as BookScene.module.css): a browser without :has() keeps the phone sizes. */
 @supports selector(:has(*)) {
