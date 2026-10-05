@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from apply_review import FIELD_OF_TOPIC  # noqa: E402
 from collect_candidates import matches  # noqa: E402
+from pipeline import VOCAB  # noqa: E402
 from pipeline.config import ConfigError, load_config, parse_config  # noqa: E402
 from pipeline.gaps import GENRES, PHASES, Want, gaps, plan_day, tally, targets_of  # noqa: E402
 from pipeline.run_daily import topic_lists  # noqa: E402
@@ -96,9 +97,38 @@ def book(title: str, sort: str, intro: str = "", publisher: str = "출판사") -
     ("밤의 연인", "수위 높은 19금 로맨스", "모모", False),                             # 19금
     ("로맨스 소설 쓰기", "사랑 이야기를 쓰는 법", "모모", False),                       # a writing guide
     ("우주의 끝", "행성 탐사대의 모험", "모모", False),                                  # no love at the centre
+    ("그해 여름의 사랑", "첫사랑의 기억", "BOOKK(부크크)", False),                      # self-published (10-05)
+    ("너에게 닿기를", "두 사람의 사랑", "지식과감성#", False),
+    ("바다의 연인", "사랑과 이별", "북랩", False),
+    ("우리의 고백", "늦은 사랑", "작가와", False),
+    ("연애의 기억", "사랑 이야기", "작가와비평", True),                                   # a press, not 작가와
 ])
 def test_romance_rule_keeps_love_stories_and_leaves_genre_lines_out(title, intro, publisher, ok):
     assert matches(slot_rule("로맨스"), book(title, NOVEL, intro, publisher)) is ok
+
+
+def test_romance_also_reads_the_korean_english_and_japanese_novel_shelves_and_horror_its_own_shelf():
+    """10-05 user: love stories outside the genre-romance shelf (한국 / 영미 / 일본 소설, ids from categories.json) with the
+    same love words and exclusions; 호러·괴담 adds the 장르소설 > 호러 shelf (id checked against its list titles)."""
+    assert slot_rule("로맨스")["cats"] == ["001001046011007", "001001046001", "001001046002", "001001046003"]
+    assert "001001046011002" in slot_rule("호러·괴담")["cats"]
+    assert not matches(slot_rule("로맨스"), book("영원의 겨울", NOVEL, "사랑하는 사람을 잃은 뒤", "e퍼플"))
+
+
+@pytest.mark.parametrize("topic, keyword, text, ok", [
+    ("데이터 분석", "데이터 리터러시", "데이터 해석학 입문", True),
+    ("데이터 분석", "데이터 리터러시", "숫자 감각을 기르는 법", True),
+    ("데이터 분석", "데이터 리터러시", "파이썬 데이터 분석", False),
+    ("건강·운동", "운동 습관", "하루 7분 운동으로 시작하는 홈 트레이닝", True),
+    ("건강·운동", "운동 습관", "운동을 꾸준히 이어 가는 법", True),
+    ("건강·운동", "운동 습관", "마음 근육을 키우는 심리 스트레칭", False),  # stretching alone is not the habit
+])
+def test_widened_keyword_patterns(topic, keyword, text, ok):
+    """10-05: 데이터 리터러시 and 운동 습관 had too few candidates to reach 5 books; the patterns were widened (60% rule
+    checked: 데이터 리터러시 matches 4 of 21 데이터 분석 books)."""
+    vocab = json.loads(VOCAB.read_text(encoding="utf-8"))
+    pattern = vocab[topic]["kept"][keyword]["pattern"]
+    assert bool(re.search(pattern, text, re.I)) is ok
 
 
 @pytest.mark.parametrize("slot, title, sort, ok", [
