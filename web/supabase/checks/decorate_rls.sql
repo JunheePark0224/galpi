@@ -5,7 +5,7 @@
 begin;
 
 create temp table rls_result (check_name text, ok boolean);
-grant all on rls_result to authenticated, anon;
+grant all on rls_result to authenticated, anon, service_role;
 
 -- The backfill: every bookmark kept before 0005 has its first picture.
 insert into rls_result select 'O1 every bookmark has original_art', not exists (select 1 from public.saves where original_art is null);

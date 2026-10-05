@@ -5,7 +5,7 @@
 begin;
 
 create temp table rls_result (check_name text, ok boolean);
-grant all on rls_result to authenticated, anon;
+grant all on rls_result to authenticated, anon, service_role;
 
 insert into auth.users (id, aud, role) values
   ('00000000-0000-4000-8000-0000000000a7', 'authenticated', 'authenticated'),
@@ -38,9 +38,11 @@ end $$;
 
 insert into public.shelves (id, user_id, name, position) values
   ('00000000-0000-4000-8000-00000000a7a7', '00000000-0000-4000-8000-0000000000a7', '첫 막대', 0);
+set local role service_role;                          -- bookmarks are saved by the server only (0007)
 insert into public.saves (user_id, isbn, art, shelf_id, position, reason, met_on) values
   ('00000000-0000-4000-8000-0000000000a7', '9788998441012', '{"animal":"fox","bg":"peach","sky":"moon","ground":"grass","rare":false}',
    '00000000-0000-4000-8000-00000000a7a7', 0, '{}', '2026-10-05');
+set local role authenticated;
 
 -- Allowed: a part in H's collection; rare is worked out again (sent false, otter is 한정판) and extra keys are dropped.
 update public.saves set art = '{"animal":"otter","bg":"peach","sky":"moon","ground":"grass","rare":false,"x":1}'
