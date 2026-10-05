@@ -6799,5 +6799,375 @@
   "keywords": [
    "자소서·면접"
   ]
+ },
+ {
+  "isbn": "9791129708328",
+  "title": "회사는 엑셀을 가르쳐주지 않아요",
+  "author": "쏘피",
+  "pages": 340,
+  "one_liner": "실무에서 자주 쓰는 함수와 피벗, 차트만 골라 바로 따라 해요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "데이터 분석",
+  "field": "데이터·통계",
+  "topic": "데이터 분석",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "엑셀"
+  ]
+ },
+ {
+  "isbn": "9788966264629",
+  "title": "기초부터 다지는 통계학 교과서 with 파이썬",
+  "author": "트레버 헤이스티 외",
+  "pages": 760,
+  "one_liner": "선형회귀부터 분류, 딥러닝까지 통계적 학습 기법을 파이썬 실습과 함께 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "통계",
+  "field": "데이터·통계",
+  "topic": "통계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "회귀분석"
+  ]
+ },
+ {
+  "isbn": "9791158742553",
+  "title": "확률로 바라본 수학적 일상",
+  "author": "장톈룽",
+  "pages": 320,
+  "one_liner": "확률의 역설과 베이즈, 엔트로피를 거쳐 인공지능이 생각하는 원리까지 이해해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "통계",
+  "field": "데이터·통계",
+  "topic": "통계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "확률"
+  ]
+ },
+ {
+  "isbn": "9791194383499",
+  "title": "n8n 업무 자동화 일잘러 되기",
+  "author": "메이허, 에디 유",
+  "pages": 424,
+  "one_liner": "노드를 이어 붙여 메일·일정 알림 같은 반복 업무를 코딩 없이 자동으로 돌려요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "업무 자동화",
+  "field": "AI·IT 활용",
+  "topic": "업무 자동화",
+  "way": "실습",
+  "axes": null,
+  "keywords": []
+ },
+ {
+  "isbn": "9791124516218",
+  "title": "유튜브 AI 비서 고용하기 제미나이 X 노트북LM X 구글 스프레드시트",
+  "author": "조현정",
+  "pages": 224,
+  "one_liner": "제미나이와 앱스 스크립트로 유튜브 데이터 분석 시트를 만들어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "업무 자동화",
+  "field": "AI·IT 활용",
+  "topic": "업무 자동화",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "AI 업무 활용"
+  ]
+ },
+ {
+  "isbn": "9788931480030",
+  "title": "시민 개발자의 시대, 생성형 AI 업무 자동화",
+  "author": "김우현",
+  "pages": 400,
+  "one_liner": "코딩을 몰라도 AI에게 질문해 반복되는 사무 업무를 줄이는 방법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "업무 자동화",
+  "field": "AI·IT 활용",
+  "topic": "업무 자동화",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "AI 업무 활용"
+  ]
+ },
+ {
+  "isbn": "9791198721846",
+  "title": "생각에 지친 뇌를 구하는 감정 사용법",
+  "author": "베르너 티키 퀴스텐마허",
+  "pages": 384,
+  "one_liner": "감정을 담당하는 뇌의 작동 방식을 알면 집중과 행동을 다루기 쉬워져요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "감정 다루기"
+  ]
+ },
+ {
+  "isbn": "9791191462470",
+  "title": "당신의 집중력은 잘못이 없다",
+  "author": "반건호",
+  "pages": 336,
+  "one_liner": "산만함이 의지 탓이 아니라 뇌가 작동하는 방식 때문임을 이해하게 돼요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "뇌과학",
+   "집중력"
+  ]
+ },
+ {
+  "isbn": "9791187809418",
+  "title": "뇌신경 의사, 책을 읽다",
+  "author": "신동선",
+  "pages": 248,
+  "one_liner": "뇌신경이 연결되는 원리로 짧은 시간에 책을 읽고 정리하는 단계별 독서법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "뇌과학"
+  ]
+ },
+ {
+  "isbn": "9791169213677",
+  "title": "개발자 기술 면접 노트",
+  "author": "이남희",
+  "pages": 352,
+  "one_liner": "개발자 이력서·포트폴리오부터 면접 답변까지 이직 준비를 따라가요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "취업·커리어",
+  "field": "일·커리어",
+  "topic": "취업·커리어",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "자소서·면접",
+   "이직·퇴사"
+  ]
+ },
+ {
+  "isbn": "9791141619992",
+  "title": "눈 내리는 삼일포",
+  "author": "김연수",
+  "pages": 296,
+  "one_liner": "정교한 문체로 삶과 내일을 다시 바라보게 하는 소설집일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937473401",
+  "title": "급류",
+  "author": "정대건",
+  "pages": 300,
+  "one_liner": "첫사랑이 물살처럼 어디로 흘러가는지 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791141617226",
+  "title": "시간의 감촉",
+  "author": "은희경",
+  "pages": 384,
+  "one_liner": "서로 다른 두 자매가 삶의 저녁에 맞는 첫 순간들을 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": 0,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788998441074",
+  "title": "나는 소망한다 내게 금지된 것을",
+  "author": "양귀자",
+  "pages": 368,
+  "one_liner": "납치와 감금이라는 위험한 관계 속에서 두 사람은 무엇을 마주하게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791168343887",
+  "title": "주와 연 (한정판 레드 에디션)",
+  "author": "청예",
+  "pages": 300,
+  "one_liner": "죽음과 환생을 따라가며 삶이 형벌인지 되묻게 되는 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 0,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791170875666",
+  "title": "별똥별",
+  "author": "카렐 차페크",
+  "pages": 276,
+  "one_liner": "정체 모를 환자 X의 삶을 세 사람이 각자 상상으로 쫓아가면 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 0,
+   "world": 0
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937434488",
+  "title": "노르웨이의 숲",
+  "author": "무라카미 하루키",
+  "pages": 572,
+  "one_liner": "청춘의 상실과 기억을 예민하고 섬세하게 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 0,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937460449",
+  "title": "데미안",
+  "author": "헤르만 헤세",
+  "pages": 239,
+  "one_liner": "알에서 나오려 애쓰던 소년은 어떤 어른이 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937464720",
+  "title": "사람은 무엇으로 사는가",
+  "author": "레프 톨스토이",
+  "pages": 384,
+  "one_liner": "사람을 끝내 살게 하는 건 결국 사랑일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 0,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791170875673",
+  "title": "평범한 인생",
+  "author": "카렐 차페크",
+  "pages": 256,
+  "one_liner": "평범하다 믿은 한 사람의 삶이 자서전 속에서 어떻게 달라질까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 0,
+   "gain": 0,
+   "world": 1
+  },
+  "keywords": []
  }
 ]

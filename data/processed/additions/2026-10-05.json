@@ -1,0 +1,1278 @@
+{
+ "date": "2026-10-05",
+ "batch_id": "2026-10-05",
+ "batch": "daily",
+ "reviewed": false,
+ "model": "claude-sonnet-5-5",
+ "second_model": "claude-sonnet-5-5",
+ "note": "Daily pipeline: pass A (model) tags, pass B (second_model) checks blind. Our tags only — no YES24 intro/TOC. auto=ai-agree: both passes agreed, accepted without human review (not in the agreement figures).",
+ "books": [
+  {
+   "isbn": "9791129708328",
+   "title": "회사는 엑셀을 가르쳐주지 않아요",
+   "author": "쏘피(박성희) 저",
+   "pages": 340,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [
+    "엑셀"
+   ],
+   "keywords_regex": [
+    "엑셀"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "one_liner_style": "summary",
+   "one_liner": "실무에서 자주 쓰는 함수와 피벗, 차트만 골라 바로 따라 해요.",
+   "evidence": "엑셀 함수·피벗·차트 실무 활용법 중심",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "엑셀"
+    ],
+    "way": "실습",
+    "why": "엑셀 함수·피벗·차트로 데이터를 정리·분석하는 실무서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/112941801",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791162245651",
+   "title": "혼자 공부하는 파이썬",
+   "author": "윤인성 저",
+   "pages": 552,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [],
+   "keywords_regex": [
+    "파이썬"
+   ],
+   "way": "실습",
+   "keyword_candidate": "파이썬 입문",
+   "one_liner_style": "summary",
+   "one_liner": "변수, 조건문, 자료형을 차근차근 따라 하며 코딩 기초 문법을 익혀요",
+   "evidence": "문법 입문서라 데이터 분석이 아님",
+   "confidence": 0.9,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "파이썬 문법 입문서이며 데이터 분석이 중심이 아님"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/109625396"
+  },
+  {
+   "isbn": "9791198324207",
+   "title": "확진 후 회복자들의 사회적 거리두기",
+   "author": "이민수 저",
+   "pages": 408,
+   "entry": "target",
+   "topic": "대화·관계",
+   "field": "마음·관계",
+   "keywords": [],
+   "keywords_regex": [
+    "거리 두기"
+   ],
+   "way": "사례",
+   "keyword_candidate": null,
+   "one_liner_style": "summary",
+   "one_liner": "코로나 격리 뒤 어색한 점심으로 이어지는 짧은 소설들을 만나요",
+   "evidence": "사진소설집, 대인관계 방법서가 아닌 소설",
+   "confidence": 0.96,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "사례",
+    "why": "사진소설집(문학)이라 대화·관계 방법서가 아님"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/120533606"
+  },
+  {
+   "isbn": "9791165920395",
+   "title": "선형대수와 통계학으로 배우는 머신러닝 with 파이썬",
+   "author": "장철원 저",
+   "pages": 624,
+   "entry": "target",
+   "topic": "통계",
+   "field": "데이터·통계",
+   "keywords": [],
+   "keywords_regex": [
+    "기초 통계",
+    "확률"
+   ],
+   "way": "개념",
+   "keyword_candidate": "머신러닝",
+   "one_liner_style": "summary",
+   "one_liner": "머신러닝 밑바탕인 선형대수와 확률 분포를 수식으로 이해하고 파이썬으로 실습해요",
+   "evidence": "통계는 일부, 머신러닝이 중심이라 통계 주제 전체에는 안 맞음",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "개념",
+    "why": "머신러닝·선형대수가 중심, 통계는 일부 배경 이론"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [
+    "근거 김(34자)"
+   ],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/97032765"
+  },
+  {
+   "isbn": "9788966264629",
+   "title": "기초부터 다지는 통계학 교과서 with 파이썬",
+   "author": "트레버 헤이스티,로버트 팁시라니,조너선 테일러,개러스 제임스,다니엘라 위튼 공저/송영숙,유현조 공역",
+   "pages": 760,
+   "entry": "target",
+   "topic": "통계",
+   "field": "데이터·통계",
+   "keywords": [
+    "회귀분석"
+   ],
+   "keywords_regex": [
+    "회귀분석",
+    "가설검정"
+   ],
+   "way": "개념",
+   "keyword_candidate": "통계적 학습",
+   "one_liner_style": "summary",
+   "one_liner": "선형회귀부터 분류, 딥러닝까지 통계적 학습 기법을 파이썬 실습과 함께 익혀요",
+   "evidence": "선형·로지스틱 회귀 비중 큼, 모델링 전반 설명",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "회귀분석"
+    ],
+    "way": "개념",
+    "why": "통계 학습 모형·회귀를 다루는 통계 교재라 주제에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/140042388",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791158742553",
+   "title": "확률로 바라본 수학적 일상",
+   "author": "장톈룽 저/홍민경 역/김지혜 감수",
+   "pages": 320,
+   "entry": "target",
+   "topic": "통계",
+   "field": "데이터·통계",
+   "keywords": [
+    "확률"
+   ],
+   "keywords_regex": [
+    "확률"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "one_liner_style": "summary",
+   "one_liner": "확률의 역설과 베이즈, 엔트로피를 거쳐 인공지능이 생각하는 원리까지 이해해요",
+   "evidence": "확률론과 베이즈 원리를 이해시키는 책",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "확률"
+    ],
+    "way": "개념",
+    "why": "확률 개념과 원리를 이해시키는 책이라 통계 주제에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/149238591",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791194383499",
+   "title": "n8n 업무 자동화 일잘러 되기",
+   "author": "메이허,에디 유 저",
+   "pages": 424,
+   "entry": "target",
+   "topic": "업무 자동화",
+   "field": "AI·IT 활용",
+   "keywords": [],
+   "keywords_regex": [
+    "AI 업무 활용"
+   ],
+   "way": "실습",
+   "keyword_candidate": "n8n",
+   "one_liner_style": "summary",
+   "one_liner": "노드를 이어 붙여 메일·일정 알림 같은 반복 업무를 코딩 없이 자동으로 돌려요",
+   "evidence": "n8n 노드로 워크플로 만드는 단계별 실습서",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "AI 업무 활용"
+    ],
+    "way": "실습",
+    "why": "n8n으로 반복 업무를 자동화하는 실습서"
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/180468863",
+   "draft": {
+    "topic": "업무 자동화",
+    "keywords": [],
+    "way": "실습",
+    "one_liner": "노드를 이어 붙여 메일·일정 알림 같은 반복 업무를 코딩 없이 자동으로 돌려요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791163036661",
+   "title": "된다! 7일 구글 스프레드시트",
+   "author": "이지현 저",
+   "pages": 336,
+   "entry": "target",
+   "topic": "업무 자동화",
+   "field": "AI·IT 활용",
+   "keywords": [],
+   "keywords_regex": [],
+   "way": "실습",
+   "keyword_candidate": "스프레드시트",
+   "one_liner_style": "summary",
+   "one_liner": "구글 드라이브 공유부터 함수, 협업 기능까지 스프레드시트 쓰는 법을 차근차근 익혀요",
+   "evidence": "스프레드시트 기초 사용법과 함수 중심이라 자동화와 거리 있음",
+   "confidence": 0.72,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "스프레드시트 기능·분석 입문서, 반복업무 자동화 아님"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [
+    "근거 김(33자)"
+   ],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/140407763"
+  },
+  {
+   "isbn": "9791124516218",
+   "title": "유튜브 AI 비서 고용하기 제미나이 X 노트북LM X 구글 스프레드시트",
+   "author": "조현정 저",
+   "pages": 224,
+   "entry": "target",
+   "topic": "업무 자동화",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "AI 업무 활용"
+   ],
+   "keywords_regex": [
+    "AI 업무 활용"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "one_liner_style": "summary",
+   "one_liner": "제미나이와 앱스 스크립트로 유튜브 데이터 분석 시트를 만들어요",
+   "evidence": "스프레드시트·API 자동화 시트를 따라 만드는 실습서",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "AI 업무 활용"
+    ],
+    "way": "실습",
+    "why": "제미나이·앱스 스크립트로 유튜브 분석을 자동화하는 실습"
+   },
+   "flags": [
+    "confidence"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/189823964",
+   "draft": {
+    "topic": "업무 자동화",
+    "keywords": [
+     "AI 업무 활용"
+    ],
+    "way": "실습",
+    "one_liner": "제미나이와 앱스 스크립트로 유튜브 데이터 분석 시트를 만들어요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9788931480030",
+   "title": "시민 개발자의 시대, 생성형 AI 업무 자동화",
+   "author": "김우현(비현코) 저",
+   "pages": 400,
+   "entry": "target",
+   "topic": "업무 자동화",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "AI 업무 활용"
+   ],
+   "keywords_regex": [
+    "AI 업무 활용"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "one_liner_style": "summary",
+   "one_liner": "코딩을 몰라도 AI에게 질문해 반복되는 사무 업무를 줄이는 방법을 익혀요.",
+   "evidence": "생성형 AI로 코드 만들어 반복 업무 줄임",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "AI 업무 활용"
+    ],
+    "way": "실습",
+    "why": "생성형 AI로 코드를 만들어 반복 업무를 자동화하는 책"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/146965812",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791158395209",
+   "title": "AI 코딩 어시스턴트 깃허브 코파일럿 제대로 활용하기",
+   "author": "레오 포터,다니엘 진가로 공저/김연지 역",
+   "pages": 360,
+   "entry": "target",
+   "topic": "업무 자동화",
+   "field": "AI·IT 활용",
+   "keywords": [],
+   "keywords_regex": [
+    "파이썬 자동화",
+    "코파일럿·M365"
+   ],
+   "way": "실습",
+   "keyword_candidate": "바이브 코딩",
+   "one_liner_style": "summary",
+   "one_liner": "",
+   "evidence": "AI 코딩 도구로 프로그램 만들기라 바이브 코딩 성격",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "깃허브 코파일럿으로 코딩 배우기, 반복 업무 자동화가 "
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [
+    "한 줄이 책소개를 베낌"
+   ],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/126516854"
+  },
+  {
+   "isbn": "9791198721846",
+   "title": "생각에 지친 뇌를 구하는 감정 사용법",
+   "author": "베르너 티키 퀴스텐마허 저/한윤진 역/김대수 감수",
+   "pages": 384,
+   "entry": "target",
+   "topic": "마음 돌보기",
+   "field": "마음·관계",
+   "keywords": [
+    "감정 다루기"
+   ],
+   "keywords_regex": [
+    "습관",
+    "집중력",
+    "뇌과학"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "one_liner_style": "summary",
+   "one_liner": "감정을 담당하는 뇌의 작동 방식을 알면 집중과 행동을 다루기 쉬워져요",
+   "evidence": "뇌과학으로 감정·집중·습관을 다룸",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념",
+    "why": "감정·행복 전반을 다루는 뇌과학서, 습관·집중은 일부 "
+   },
+   "flags": [
+    "fits",
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/141745286",
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "뇌과학",
+     "집중력"
+    ],
+    "way": "개념",
+    "one_liner": "감정을 담당하는 뇌의 작동 방식을 알면 집중과 행동을 다루기 쉬워져요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9788963221908",
+   "title": "뇌가 섹시해지는 책",
+   "author": "도미니크 오브라이언 저/김지원 역 ",
+   "pages": 224,
+   "entry": "target",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
+   "keywords": [],
+   "keywords_regex": [
+    "집중력"
+   ],
+   "way": "실습",
+   "keyword_candidate": "기억력",
+   "one_liner_style": "summary",
+   "one_liner": "기억력 챔피언의 훈련법을 따라 하며 외우는 기술을 익혀요",
+   "evidence": "기억술 훈련서라 습관·집중과는 주제가 다름",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "습관·집중이 아닌 기억력 암기 기술서"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/113850919"
+  },
+  {
+   "isbn": "9791191462470",
+   "title": "당신의 집중력은 잘못이 없다",
+   "author": "반건호 저",
+   "pages": 336,
+   "entry": "target",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
+   "keywords": [
+    "뇌과학",
+    "집중력"
+   ],
+   "keywords_regex": [
+    "집중력",
+    "뇌과학"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "one_liner_style": "summary",
+   "one_liner": "산만함이 의지 탓이 아니라 뇌가 작동하는 방식 때문임을 이해하게 돼요",
+   "evidence": "성인 ADHD와 뇌 작동 원리를 설명해 이해 중심",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "집중력",
+     "뇌과학"
+    ],
+    "way": "개념",
+    "why": "성인 ADHD와 뇌 원리로 집중 문제를 다루는 책이라 "
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/194751777",
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "뇌과학",
+     "집중력"
+    ],
+    "way": "개념",
+    "one_liner": "산만함이 의지 탓이 아니라 뇌가 작동하는 방식 때문임을 이해하게 돼요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
+  },
+  {
+   "isbn": "9788931558210",
+   "title": "뇌",
+   "author": "모기 겐이치로 저",
+   "pages": 128,
+   "entry": "target",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
+   "keywords": [
+    "뇌과학"
+   ],
+   "keywords_regex": [
+    "뇌과학"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "one_liner_style": "summary",
+   "one_liner": "뇌의 구조와 기능, 창의성이 생기는 원리를 짧은 에피소드로 이해해요",
+   "evidence": "뇌 기능과 원리 설명이 중심이라 뇌과학, 이해 위주",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념",
+    "why": "뇌 지식을 교양으로 다루는 책, 습관·집중 실천서 아님"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/114915169",
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념",
+    "one_liner": "뇌의 구조와 기능, 창의성이 생기는 원리를 짧은 에피소드로 이해해요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791187809418",
+   "title": "뇌신경 의사, 책을 읽다",
+   "author": "신동선 저",
+   "pages": 248,
+   "entry": "target",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
+   "keywords": [
+    "뇌과학"
+   ],
+   "keywords_regex": [
+    "습관",
+    "뇌과학"
+   ],
+   "way": "실습",
+   "keyword_candidate": "독서법",
+   "one_liner_style": "summary",
+   "one_liner": "뇌신경이 연결되는 원리로 짧은 시간에 책을 읽고 정리하는 단계별 독서법을 익혀요",
+   "evidence": "뇌 원리로 독서법을 설명하고 단계별 읽기를 제시",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "뇌과학 기반이나 중심은 독서법. 습관·집중 주제 밖"
+   },
+   "flags": [
+    "fits",
+    "keywords",
+    "confidence"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/105760711",
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "실습",
+    "one_liner": "뇌신경이 연결되는 원리로 짧은 시간에 책을 읽고 정리하는 단계별 독서법을 익혀요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791197459566",
+   "title": "기적을 만드는 감사메모",
+   "author": "엄남미 저",
+   "pages": 272,
+   "entry": "target",
+   "topic": "시간·생산성",
+   "field": "습관·자기계발",
+   "keywords": [],
+   "keywords_regex": [],
+   "way": "실습",
+   "keyword_candidate": null,
+   "one_liner_style": "summary",
+   "one_liner": "하루 한 줄 감사를 적으며 마음을 긍정으로 바꾸는 방법을 알려 줘요",
+   "evidence": "감사 습관과 긍정이 중심, 업무 효율과 무관",
+   "confidence": 0.9,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "감사 습관·긍정 마음이 중심, 업무 생산성과 무관"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/104661176"
+  },
+  {
+   "isbn": "9791160406498",
+   "title": "일 잘하는 공무원은 문장부터 다릅니다",
+   "author": "박창식 저",
+   "pages": 240,
+   "entry": "target",
+   "topic": "시간·생산성",
+   "field": "습관·자기계발",
+   "keywords": [],
+   "keywords_regex": [
+    "일하는 법"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "one_liner_style": "summary",
+   "one_liner": "공직자가 보고서와 보도자료, 안내문을 쉽고 명료하게 쓰고 말하는 방법을 익혀요",
+   "evidence": "업무 효율보다 공공 글쓰기·말하기가 중심",
+   "confidence": 0.88,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "업무 효율이 아닌 공직자 글쓰기·말하기 매뉴얼"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/103751687"
+  },
+  {
+   "isbn": "9791162335390",
+   "title": "일잘러를 위한 이메일 가이드 101",
+   "author": "조성도 저",
+   "pages": 512,
+   "entry": "target",
+   "topic": "시간·생산성",
+   "field": "습관·자기계발",
+   "keywords": [],
+   "keywords_regex": [],
+   "way": "실습",
+   "keyword_candidate": null,
+   "one_liner_style": "summary",
+   "one_liner": "이메일 주소부터 제목·본문·첨부파일까지 바로 따라 할 수 있게 짚어줘요",
+   "evidence": "이메일 쓰는 법이 중심이라 글쓰기 업무 글에 가깝다",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "이메일 작성법 중심이라 업무 글 주제, 시간·생산성 아"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/61193999"
+  },
+  {
+   "isbn": "9791194587644",
+   "title": "생각을 맡기는 사람들: 호모 브레인리스",
+   "author": "안광섭 저",
+   "pages": 236,
+   "entry": "target",
+   "topic": "시간·생산성",
+   "field": "습관·자기계발",
+   "keywords": [],
+   "keywords_regex": [],
+   "way": "개념",
+   "keyword_candidate": "비판적 사고",
+   "one_liner_style": "summary",
+   "one_liner": "AI에게 생각을 맡기지 않고 질문하고 판단하며 함께 일하는 힘을 길러요",
+   "evidence": "AI 시대 사고력 책, 업무 효율서 아님",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "개념",
+    "why": "AI 시대 사고력·협업 관점이 중심이라 업무 효율 주제"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/153156828"
+  },
+  {
+   "isbn": "9788901273037",
+   "title": "요즘 팀장의 오답 노트",
+   "author": "서현직 저 ",
+   "pages": 336,
+   "entry": "target",
+   "topic": "시간·생산성",
+   "field": "습관·자기계발",
+   "keywords": [],
+   "keywords_regex": [
+    "일하는 법"
+   ],
+   "way": "사례",
+   "keyword_candidate": null,
+   "one_liner_style": "summary",
+   "one_liner": "초보 팀장이 겪은 시행착오와 팀 운영 노하우를 솔직하게 풀어내요",
+   "evidence": "팀장 시행착오 경험담, 직장 생활 주제에 가까움",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "사례",
+    "why": "팀장 리더십·팀 운영 중심이라 직장 생활 주제에 가깝다"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/119773488"
+  },
+  {
+   "isbn": "9791169213677",
+   "title": "개발자 기술 면접 노트",
+   "author": "이남희 저",
+   "pages": 352,
+   "entry": "target",
+   "topic": "취업·커리어",
+   "field": "일·커리어",
+   "keywords": [
+    "자소서·면접",
+    "이직·퇴사"
+   ],
+   "keywords_regex": [
+    "자소서·면접",
+    "이직·퇴사",
+    "커리어 설계"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "one_liner_style": "summary",
+   "one_liner": "개발자 이력서·포트폴리오부터 면접 답변까지 이직 준비를 따라가요",
+   "evidence": "서류·면접 준비와 이직 전략이 중심인 방법서",
+   "confidence": 0.86,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "자소서·면접",
+     "이직·퇴사"
+    ],
+    "way": "실습",
+    "why": "개발자 취업·이직 서류와 면접 준비를 다룸"
+   },
+   "flags": [],
+   "issues": [
+    "김(38자)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/144553215",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "자소서·면접",
+     "이직·퇴사"
+    ],
+    "way": "실습",
+    "one_liner": "개발자 이력서와 포트폴리오 쓰는 법부터 면접 답변 준비까지 이직 과정을 따라가 볼 수 있어요",
+    "status": "reserve"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791141619992",
+   "title": "눈 내리는 삼일포",
+   "author": "김연수 저",
+   "pages": 296,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "one_liner_style": "question",
+   "one_liner": "정교한 문체로 삶과 내일을 다시 바라보게 하는 소설집일까요?",
+   "evidence": "한국 소설집이고 문체가 두드러지며 마음에 남는 삶의 통찰",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "why": "김연수의 한국 현대 소설집이라 장르에 맞음"
+   },
+   "flags": [
+    "temp",
+    "confidence"
+   ],
+   "issues": [
+    "근거 김(31자)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196183375",
+   "draft": {
+    "genre": "한국 소설",
+    "axes": {
+     "temp": 0,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "정교한 문체로 삶과 내일을 다시 바라보게 하는 소설집일까요?",
+    "status": "reserve"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9788937473401",
+   "title": "급류",
+   "author": "정대건 저",
+   "pages": 300,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "one_liner_style": "question",
+   "one_liner": "첫사랑이 물살처럼 어디로 흘러가는지 따라가 볼래요?",
+   "evidence": "현실 배경의 첫사랑, 서늘한 여운과 몰입 전개",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "why": "한국 작가의 현실 배경 장편소설이라 한국 소설에 맞음"
+   },
+   "flags": [
+    "pull"
+   ],
+   "issues": [
+    "근거 약함(겹치는 단어 1개)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/116586303",
+   "draft": {
+    "genre": "한국 소설",
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "첫사랑이 물살처럼 어디로 흘러가는지 따라가 볼래요?",
+    "status": "reserve"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791141617226",
+   "title": "시간의 감촉",
+   "author": "은희경 저",
+   "pages": 384,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": 0,
+    "pull": 0,
+    "gain": -1,
+    "world": 1
+   },
+   "one_liner_style": "question",
+   "one_liner": "서로 다른 두 자매가 삶의 저녁에 맞는 첫 순간들을 따라가 볼까요?",
+   "evidence": "현실 속 자매의 삶을 그린 한국 장편소설",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "why": "은희경의 현실 배경 장편소설, 한국 소설에 맞음"
+   },
+   "flags": [
+    "pull"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/191550933",
+   "draft": {
+    "genre": "한국 소설",
+    "axes": {
+     "temp": 0,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "서로 다른 두 자매가 삶의 저녁에 맞는 첫 순간들을 따라가 볼까요?",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9788998441074",
+   "title": "나는 소망한다 내게 금지된 것을",
+   "author": "양귀자 저",
+   "pages": 368,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "one_liner_style": "question",
+   "one_liner": "납치와 감금이라는 위험한 관계 속에서 두 사람은 무엇을 마주하게 될까요?",
+   "evidence": "현실 배경의 한국 장편소설, 긴장된 전개와 서늘한 여운",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "why": "양귀자의 한국 현대 장편소설로 한국 소설에 해당함"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/72127217",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791168343887",
+   "title": "주와 연 (한정판 레드 에디션)",
+   "author": "청예 저",
+   "pages": 300,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": 0,
+    "gain": -1,
+    "world": -1
+   },
+   "one_liner_style": "question",
+   "one_liner": "죽음과 환생을 따라가며 삶이 형벌인지 되묻게 되는 이야기일까요?",
+   "evidence": "한국 장편소설, 환생 오컬트 미스터리라 서늘하고 비현실",
+   "confidence": 0.7,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": -1,
+     "world": -1
+    },
+    "why": "한국 작가의 장편소설로 죽음·환생을 다룬 오컬트미스터리"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/192879211",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9791170875666",
+   "title": "별똥별",
+   "author": "카렐 차페크 저/정보라 역",
+   "pages": 276,
+   "entry": "leaf",
+   "genre": "외국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": 0,
+    "world": 0
+   },
+   "one_liner_style": "question",
+   "one_liner": "정체 모를 환자 X의 삶을 세 사람이 각자 상상으로 쫓아가면 어떨까요?",
+   "evidence": "체코 번역 철학소설, 추적 전개와 서늘한 여운",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": -1,
+     "world": 0
+    },
+    "why": "체코 작가 차페크의 번역 철학소설이라 외국 소설에 맞음"
+   },
+   "flags": [
+    "pull",
+    "gain"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196262364",
+   "draft": {
+    "genre": "외국 소설",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": 0,
+     "world": 0
+    },
+    "one_liner": "정체 모를 환자 X의 삶을 세 사람이 각자 상상으로 쫓아가면 어떨까요?",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9788937434488",
+   "title": "노르웨이의 숲",
+   "author": "무라카미 하루키 저/양억관 역",
+   "pages": 572,
+   "entry": "leaf",
+   "genre": "외국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": 0,
+    "gain": -1,
+    "world": 1
+   },
+   "one_liner_style": "question",
+   "one_liner": "청춘의 상실과 기억을 예민하고 섬세하게 따라가 볼래요?",
+   "evidence": "일본 현실 청춘 소설, 상실과 여운, 마음에 남는 책",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "why": "일본 작가 하루키의 청춘 상실 소설이라 외국 소설에 맞"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/44499829",
+   "auto": "ai-agree"
+  },
+  {
+   "isbn": "9788937460449",
+   "title": "데미안",
+   "author": "헤르만 헤세 저/전영애 역",
+   "pages": 239,
+   "entry": "leaf",
+   "genre": "외국 소설",
+   "axes": {
+    "temp": 0,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "one_liner_style": "question",
+   "one_liner": "알에서 나오려 애쓰던 소년은 어떤 어른이 될까요?",
+   "evidence": "성장 소설, 문체 강조, 마음의 변화, 현실 배경",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 0
+    },
+    "why": "독일 작가 헤세의 성장소설로 외국 소설에 맞음"
+   },
+   "flags": [
+    "temp",
+    "world"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/176787",
+   "draft": {
+    "genre": "외국 소설",
+    "axes": {
+     "temp": 0,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "알에서 나오려 애쓰던 소년은 어떤 어른이 될까요?",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9788937464720",
+   "title": "사람은 무엇으로 사는가",
+   "author": "레프 톨스토이 저/연진희 역",
+   "pages": 384,
+   "entry": "leaf",
+   "genre": "외국 소설",
+   "axes": {
+    "temp": 1,
+    "pull": 0,
+    "gain": -1,
+    "world": 1
+   },
+   "one_liner_style": "question",
+   "one_liner": "사람을 끝내 살게 하는 건 결국 사랑일까요?",
+   "evidence": "러시아 거장의 우화풍 단편, 마음에 남는 깨달음 중심",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "why": "톨스토이 단편선으로 러시아 외국 소설에 해당"
+   },
+   "flags": [
+    "world",
+    "confidence"
+   ],
+   "issues": [
+    "질문형인데 ?로 끝나지 않음"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/164707039",
+   "draft": {
+    "genre": "외국 소설",
+    "axes": {
+     "temp": 1,
+     "pull": 0,
+     "gain": -1,
+     "world": 0
+    },
+    "one_liner": "사랑으로 사는 삶의 이치를 쉬운 말로 들려주는 이야기 모음이에요.",
+    "status": "reserve"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791170875673",
+   "title": "평범한 인생",
+   "author": "카렐 차페크 저/정보라 역",
+   "pages": 256,
+   "entry": "leaf",
+   "genre": "외국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": 0,
+    "gain": 0,
+    "world": 1
+   },
+   "one_liner_style": "question",
+   "one_liner": "평범하다 믿은 한 사람의 삶이 자서전 속에서 어떻게 달라질까요?",
+   "evidence": "체코 철학소설, 현실 인물의 삶과 자기 인식",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": -1,
+     "world": 0
+    },
+    "why": "체코 작가 차페크의 번역 철학소설, 외국 소설에 해당"
+   },
+   "flags": [
+    "gain",
+    "world",
+    "confidence"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196262367",
+   "draft": {
+    "genre": "외국 소설",
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": 0,
+     "world": 1
+    },
+    "one_liner": "평범하다 믿은 한 사람의 삶이 자서전 속에서 어떻게 달라질까요?",
+    "status": "review"
+   },
+   "reviewed": true
+  }
+ ]
+}
