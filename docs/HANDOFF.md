@@ -6,6 +6,13 @@ Last Updated: 2026-10-05 (책갈피 꾸미기 `feat/decorate` 병합 전 — 아
 
 ## 지금 상태
 
+- **꾸미기 보안 수정 (`fix/art-guard`, `.worktrees/art-guard`, 병합 전, 10-05)**: 로그인한 사람이 anon 키로 `saves.art`를 직접 바꿔 도감에 없는 그림을 넣을 수 있던 구멍을 DB 트리거로 막음(0006). 앱 코드 변경 없음. 기록 `context.md` 10-05 "꾸미기 규칙을 DB에서도".
+  **사용자가 할 일 (0005 다음, 순서대로)**:
+  1. SQL Editor → New query에 `web/supabase/migrations/0006_art_guard.sql` 전체를 붙여 **Run** (다시 돌려도 안전). "Success. No rows returned"가 나오면 됨.
+  2. 새 query에 `web/supabase/checks/art_guard.sql` 전체를 붙여 Run → 빨간 오류 상자 "RLS CHECK RESULT" 안 11줄이 모두 `ok`인지. `FAILED`나 다른 오류면 그 글을 Claude에게.
+  3. (선택) `checks/decorate_rls.sql`을 다시 돌려 8줄 `ok`.
+  - **남은 구멍**: 저장(`POST /api/library/saves`)은 아는 부분이면 어떤 그림이든 받는다(지우고 다시 꽂기로 우회 가능). 막으려면 저장 그림에 서버 서명이 필요 — 따로 결정.
+
 - **책갈피 꾸미기 (`feat/decorate`, `.worktrees/decorate`, 병합 전, 10-05)**: S-09 시트 버튼 시안 C([예스24] → [🎨 꾸미기][↔ 옮기기] → [빼기]), [꾸미기] 편집기(내 도감에 있는 부분으로만 그림 바꾸기, [처음 그림으로]·[이대로 꽂기]), 서버 `PATCH /api/library/saves/art`(도감 확인, 아니면 403), taxonomy v1.6(E-38). 계획 `plans/2026-10-05-decorate.md`, 스크린샷 `mockups/2026-10-05-decorate/impl-*.png`.
   **사용자가 할 일 (병합·배포 전, 0004 다음, 순서대로)**:
   1. Supabase 대시보드 → SQL Editor → New query에 `web/supabase/migrations/0005_original_art.sql` 전체를 붙여 **Run** (한 번만). "Success. No rows returned"가 나오면 됨. 기존 책갈피는 모두 지금 그림이 "처음 그림"이 된다.
