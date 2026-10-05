@@ -72,7 +72,10 @@ B: 깊게 파고들기 | len=-1 | next=draw
 unsure: next=draw
 ```
 
+1. 데이터 분석 → 인문
+
 ```far
 from: entry=target | topics=데이터 분석
-to: entry=leaf | genres=에세이
+to: entry=leaf | genres=인문
+why: 숫자에서 사람으로
 ```

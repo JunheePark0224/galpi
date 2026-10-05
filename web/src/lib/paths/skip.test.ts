@@ -13,7 +13,7 @@ const a = (node: string, choice: Answer["choice"]): Answer => ({ node, choice })
 const SQL = [a("start", "A"), a("branch", "B"), a("learn-area", "A"), a("learn-data", "A")];   // standing before mood-way
 const t = (id: string, keywords: string[], way: TargetBook["way"], pages = 320, topic = "데이터 분석"): TargetBook =>
   ({ id, entry: "target", field: "데이터·통계", topic, genre: topic, pages, way, keywords });
-const l = (id: string, axes: Partial<LeafBook["axes"]>, genre = "에세이", pages = 320): LeafBook =>
+const l = (id: string, axes: Partial<LeafBook["axes"]>, genre = "인문", pages = 320): LeafBook =>
   ({ id, entry: "leaf", genre, pages, axes: { temp: 0, pull: 0, gain: 0, world: 0, ...axes } });
 const sql = (ways: TargetBook["way"][]) => ways.map((w, i) => t(`s${i}`, ["SQL"], w));
 

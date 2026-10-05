@@ -82,15 +82,46 @@ function scopeOf(side: "from" | "to", text: string): Partial<Scope> {
   return scope;
 }
 
+const FAR_KEYS = ["from", "to", "pick", "why"];
+const HEADING = /^(\d+)\.\s+(.+)$/;
+
+/** The "N. title" line right above a far block (optional), its number checked against the rule's place. */
+function headingOf(before: string, n: number): string | undefined {
+  const last = before.split(/\r?\n/).map((l) => l.trim()).filter(Boolean).at(-1);
+  const m = last?.match(HEADING);
+  if (!m) return undefined;
+  if (Number(m[1]) !== n) throw new MapParseError(`far ${n}: its heading is numbered ${m[1]} — far rules are numbered 1, 2, 3 … in order`);
+  return m[2];
+}
+
+function farRule(lines: Map<string, string>, n: number, title: string | undefined): FarRule {
+  const where = `far ${n}`;
+  const extra = [...lines.keys()].find((k) => !FAR_KEYS.includes(k));
+  if (extra) throw new MapParseError(`${where}: unknown line "${extra}:"`);
+  const pick = lines.get("pick");
+  if (pick !== undefined && pick !== "one") throw new MapParseError(`${where}: pick must be "one", got "${pick}"`);
+  const why = lines.get("why");
+  if (why === "") throw new MapParseError(`${where}: why is empty`);
+  const to = scopeOf("to", field("far", lines, "to"));
+  if (pick && !to.genres) throw new MapParseError(`${where}: pick: one needs a genres list in to:`);
+  return {
+    from: scopeOf("from", field("far", lines, "from")), to,
+    ...(title ? { title } : {}), ...(pick ? { pick } : {}), ...(why ? { why } : {}),
+  };
+}
+
 export function parseQuestionMap(markdown: string): QuestionMap {
   const nodes: Record<string, QNode> = {};
   const far: FarRule[] = [];
   let start: string | null = null;
+  let after = 0;
   for (const m of markdown.matchAll(BLOCK)) {
+    const before = markdown.slice(after, m.index);
+    after = m.index + m[0].length;
     const { lines, twice } = linesOf(m[2]);
     if (m[1] === "far") {
       once("far", twice);
-      far.push({ from: scopeOf("from", field("far", lines, "from")), to: scopeOf("to", field("far", lines, "to")) });
+      far.push(farRule(lines, far.length + 1, headingOf(before, far.length + 1)));
       continue;
     }
     const id = field("?", lines, "id");
