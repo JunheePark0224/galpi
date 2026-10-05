@@ -29,5 +29,6 @@ export function toDrawView(res: PathDrawResponse, fallbackSeed: number): DrawVie
     exhausted: res.exhausted,
     path: res.path,
     ticket: ticket?.sig ? ticket : null,
+    challenge: res.challenge ?? null,
   };
 }

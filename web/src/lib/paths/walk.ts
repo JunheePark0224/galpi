@@ -1,6 +1,6 @@
-import type { AxisKey, Entry, Rng, Way } from "@/lib/recommend";
-import { LEAF_GENRES } from "../books/taxonomy";
-import { ALL_SCOPE, NEUTRAL_MOOD, scopeKey, type Answer, type Effects, type FarRule, type Mood, type QuestionMap, type Scope } from "./types";
+import type { AxisKey, Book, Entry, Rng, Way } from "@/lib/recommend";
+import { challengeOf, LEARN_CHALLENGE_GENRES, pickGenre } from "./challenge";
+import { ALL_SCOPE, NEUTRAL_MOOD, scopeKey, type Answer, type Challenge, type Effects, type FarRule, type Mood, type QuestionMap, type Scope } from "./types";
 
 export class PathError extends Error {}
 
@@ -16,6 +16,8 @@ export interface Walked {
   unsure: number;
   /** Mood questions passed over (map.skip), in order: never shown, so not in depth, unsure or the answers. */
   skipped: string[];
+  /** Set by applyChallenge when a far rule moved the scope: where from, where to, which rule (10-05 v2). */
+  challenge?: Challenge;
 }
 
 const withScope = (s: Scope, e: Effects): Scope => ({
@@ -103,35 +105,34 @@ function waysOnStoryAxes(m: Mood): Mood {
   return { ...m, axes, ways: [] };
 }
 
+/** What a challenge draw may use: its rng (the seed) and the catalogue (a list rule counts books per genre). */
+export interface ChallengeDraw { rng: Rng; books: readonly Book[] }
+
 /**
- * Design 4절: the "what" flips (far scope), the "how" (mood) stays. The first far rule that matches wins. The levels become
- * the far side's entry, then the far scope — the 운명 1장 and any widening stay on the far side. With no rule:
- * - 배우기: the 이야기 entry whole;
- * - 이야기 (10-05 round 2): never 배우기 — one 이야기 genre at random from all of LEAF_GENRES (0-book genres too, they widen),
- *   other than the ones already chosen;
- * - no entry (섞어서): one entry at random.
- * The random picks use the draw's rng (reproducible by the seed); without it (the skip table, E-34 scope_id) the walked
- * scope stays.
+ * Design 4절, challenge rules v2 (10-05): the "what" moves within the purpose chosen, the "how" (mood) stays. The first far
+ * rule that matches wins; a challenge never leaves the person's branch, and there is no fallback to the other one:
+ * - 이야기: to other story genres (rules 1-19); 배우기: to LEARN_CHALLENGE_GENRES only (rules 20-36) — those genres are also
+ *   the widest level, so widening and the 운명 1장 stay inside them;
+ * - a `pick: one` rule (19, 36 — no genre / no topic chosen) takes one genre of its list (pickGenre: 5+ books, equal chance,
+ *   by the seed), else the whole list;
+ * - 섞어서 (no branch): one branch at random by the seed, then that branch's rule.
+ * Without `draw` (the skip table, coverage, E-34 scope_id) 섞어서 stays as walked and a list rule keeps its whole list.
+ * No rule matches → the walk as it was (the data test keeps a rule for every branch of the real map: 19 and 36).
  */
-export function applyChallenge(map: QuestionMap, w: Walked, rng?: Rng): Walked {
+export function applyChallenge(map: QuestionMap, w: Walked, draw?: ChallengeDraw): Walked {
   if (w.mode !== "challenge") return w;
-  const rule = map.far.find((r) => matches(r, w.scope));
-  if (!rule && w.scope.entry === null) {
-    if (!rng) return w;
-    const entry: Entry = rng() < 0.5 ? "leaf" : "target";
-    const scope = { ...ALL_SCOPE, entry };
-    return { ...w, scope, levels: [ALL_SCOPE, scope] };
-  }
-  if (!rule && w.scope.entry === "leaf") {
-    if (!rng) return w;
-    const others = LEAF_GENRES.filter((g) => !w.scope.genres?.includes(g));
-    const genres = others.length ? others : [...LEAF_GENRES];
-    const scope: Scope = { ...ALL_SCOPE, entry: "leaf", genres: [genres[Math.floor(rng() * genres.length)]] };
-    return { ...w, scope, levels: [ALL_SCOPE, { ...ALL_SCOPE, entry: "leaf" }, scope] };
-  }
-  const scope: Scope = rule ? { ...ALL_SCOPE, ...rule.to } : { ...ALL_SCOPE, entry: "leaf" };
-  const side: Scope = { ...ALL_SCOPE, entry: scope.entry };
-  const levels = scopeKey(scope) === scopeKey(side) ? [ALL_SCOPE, side] : [ALL_SCOPE, side, scope];
-  const crosses = w.scope.entry === "target" && scope.entry === "leaf";
-  return { ...w, scope, levels, mood: crosses ? waysOnStoryAxes(w.mood) : w.mood };
+  if (w.scope.entry === null && !draw) return w;
+  const entry: Entry = w.scope.entry ?? (draw!.rng() < 0.5 ? "leaf" : "target");
+  const own: Scope = { ...w.scope, entry };
+  const n = map.far.findIndex((r) => matches(r, own));
+  if (n < 0) return w;
+  const rule = map.far[n];
+  const listed: Scope = { ...ALL_SCOPE, ...rule.to };
+  const scope: Scope = rule.pick === "one" && draw ? { ...listed, genres: pickGenre(rule.to, draw.books, draw.rng) } : listed;
+  const learn = entry === "target";
+  const side: Scope = learn ? { ...ALL_SCOPE, entry: "leaf", genres: [...LEARN_CHALLENGE_GENRES] } : { ...ALL_SCOPE, entry: scope.entry };
+  const levels = [ALL_SCOPE, side, scope].filter((s, i, all) => i === 0 || scopeKey(s) !== scopeKey(all[i - 1]));
+  const crosses = learn && scope.entry === "leaf";
+  const branch = w.scope.entry ?? "mixed";
+  return { ...w, scope, levels, mood: crosses ? waysOnStoryAxes(w.mood) : w.mood, challenge: challengeOf(w.scope, branch, n + 1, rule, scope) };
 }

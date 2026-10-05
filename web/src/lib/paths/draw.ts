@@ -61,7 +61,7 @@ function exhaustedBy(picks: DrawPick[], max: number): boolean {
 
 export function drawForPath(books: Book[], map: QuestionMap, walked: Walked, opts: { seen: ReadonlySet<string>; rng: Rng }): PathDraw {
   if (walked.next !== null) throw new Error(`path not finished: next question is "${walked.next}"`);
-  const w = applyChallenge(map, walked, opts.rng);
+  const w = applyChallenge(map, walked, { rng: opts.rng, books });
   const unseen = books.filter((b) => !opts.seen.has(b.id));
   const up = levelsUp(w);
   const at = poolLevel(unseen, up);

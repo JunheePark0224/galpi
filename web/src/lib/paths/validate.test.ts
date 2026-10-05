@@ -7,7 +7,7 @@ import { validateMap, type Vocabulary } from "./validate";
 const MINI = readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/mini-map.md"), "utf8");
 const VOCAB: Vocabulary = {
   topics: { "데이터 분석": ["SQL", "엑셀"], "마음 돌보기": ["우울"] },
-  genres: ["한국 소설", "외국 소설", "에세이", "SF·판타지", "데이터 분석", "마음 돌보기"],
+  genres: ["한국 소설", "외국 소설", "에세이", "시", "SF·판타지", "인문", "과학 교양", "데이터 분석", "마음 돌보기"],
 };
 const edit = (from: string, to: string) => parseQuestionMap(MINI.replace(from, to));
 
@@ -35,15 +35,32 @@ describe("validateMap", () => {
   });
   it("names an unsure that goes nowhere and far tags that are not ours", () => {
     expect(validateMap(edit("unsure: next=mood-way", "unsure: next=nowhere"), VOCAB)).toContain('learn-area: unsure goes to unknown node "nowhere"');
-    expect(validateMap(edit("genres=에세이\n```", "genres=무협\n```"), VOCAB)).toContain('far 1 to: genre "무협" is not one of ours');
+    expect(validateMap(edit("genres=인문\n", "genres=무협\n"), VOCAB)).toContain('far 1 to: genre "무협" is not one of ours');
     expect(validateMap(edit("from: entry=target | topics=데이터 분석", "from: topics=요리"), VOCAB)).toContain('far 1 from: topic "요리" is not one of ours');
   });
   it("names a far rule that can never win because an earlier rule covers it (the first rule wins)", () => {
-    const far = (...froms: string[]) => parseQuestionMap(froms.reduce((md, f) => `${md}\n\`\`\`far\nfrom: ${f}\nto: entry=leaf | genres=에세이\n\`\`\``, MINI));
+    const far = (...froms: string[]) => parseQuestionMap(froms.reduce((md, f) => `${md}\n\`\`\`far\nfrom: ${f}\nto: entry=leaf | genres=인문\n\`\`\``, MINI));
     const errors = (...froms: string[]) => validateMap(far(...froms), VOCAB);
     expect(errors("entry=target | topics=데이터 분석 | keywords=SQL")).toEqual(["far 2 is shadowed by far 1"]);
     expect(errors("entry=target")).toEqual([]);                                         // wider rule below a narrow one: fine
     expect(errors("entry=leaf | topics=데이터 분석")).toEqual([]);                        // another entry
     expect(errors("genres=SF·판타지", "genres=SF·판타지,에세이", "genres=SF·판타지")).toEqual(["far 4 is shadowed by far 2"]);
+  });
+
+  it("challenge rules v2: a 배우기 far rule goes only to 과학 교양·인문·역사·예술·여행·사회·시사", () => {
+    const learn = (to: string) => validateMap(parseQuestionMap(`${MINI}\n\`\`\`far\nfrom: entry=target\nto: ${to}\n\`\`\``), VOCAB);
+    expect(learn("entry=leaf | genres=인문,과학 교양")).toEqual([]);
+    expect(learn("entry=leaf | genres=시")).toEqual(['far 2: a 배우기 challenge may not go to "시" (only 과학 교양·인문·역사·예술·여행·사회·시사)']);
+    expect(learn("entry=leaf | genres=인문,에세이,SF·판타지")).toEqual([
+      'far 2: a 배우기 challenge may not go to "에세이" (only 과학 교양·인문·역사·예술·여행·사회·시사)',
+      'far 2: a 배우기 challenge may not go to "SF·판타지" (only 과학 교양·인문·역사·예술·여행·사회·시사)',
+    ]);
+    const shape = "far 2: a 배우기 challenge must go to entry=leaf | genres= of 과학 교양·인문·역사·예술·여행·사회·시사";
+    expect(learn("entry=leaf")).toEqual([shape]);                                       // no genres named
+    expect(learn("genres=인문")).toEqual([shape]);                                      // no entry
+    expect(learn("entry=leaf | genres=인문 | topics=마음 돌보기")).toEqual([shape]);
+    expect(learn("entry=leaf | genres=인문 | keywords=SQL")).toEqual([shape]);
+    // a 이야기 rule is not a 배우기 challenge: it may go to 시
+    expect(validateMap(parseQuestionMap(`${MINI}\n\`\`\`far\nfrom: entry=leaf\nto: entry=leaf | genres=시\n\`\`\``), VOCAB)).toEqual([]);
   });
 });
