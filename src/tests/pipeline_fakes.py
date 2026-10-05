@@ -48,12 +48,19 @@ class FakeClient:
 
 
 def kind_of(kwargs: dict) -> tuple[str, str]:
+    """(entry, kind): kind "tag" (pass A), "check" (pass B) or "fix" (a one-liner retry — its schema has one field, so the
+    entry is read from the first answer sent back)."""
     props = kwargs["output_config"]["format"]["schema"]["properties"]
+    if set(props) == {"one_liner"}:
+        first = json.loads(kwargs["messages"][1]["content"])
+        return ("target" if "way" in first else "leaf"), "fix"
     return ("target" if "way" in props else "leaf"), ("tag" if "one_liner" in props else "check")
 
 
 def agreeing(kwargs: dict) -> SimpleNamespace:
     entry, kind = kind_of(kwargs)
+    if kind == "fix":  # a retry gets the default line of its entry, which passes every rule
+        return message({"one_liner": tag_answer(entry)["one_liner"]})
     return message(tag_answer(entry) if kind == "tag" else check_answer(entry))
 
 

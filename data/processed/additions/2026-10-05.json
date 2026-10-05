@@ -303,7 +303,7 @@
    "way": "실습",
    "keyword_candidate": null,
    "one_liner_style": "summary",
-   "one_liner": "제미나이와 앱스 스크립트로 유튜브 데이터를 모아 보는 나만의 분석 시트를 만들어 봐요",
+   "one_liner": "제미나이와 앱스 스크립트로 유튜브 데이터 분석 시트를 만들어요",
    "evidence": "스프레드시트·API 자동화 시트를 따라 만드는 실습서",
    "confidence": 0.6,
    "fits": true,
@@ -327,7 +327,7 @@
      "AI 업무 활용"
     ],
     "way": "실습",
-    "one_liner": "제미나이와 앱스 스크립트로 유튜브 데이터를 모아 보는 나만의 분석 시트를 만들어 봐요",
+    "one_liner": "제미나이와 앱스 스크립트로 유튜브 데이터 분석 시트를 만들어요",
     "status": "review"
    },
    "reviewed": true

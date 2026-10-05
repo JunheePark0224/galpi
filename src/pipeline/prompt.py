@@ -88,7 +88,7 @@ def reference(vocab: dict, docs: Path = DOCS) -> str:
     chips = (docs / "target-chips.md").read_text(encoding="utf-8")
     pool = (docs / "book-pool.md").read_text(encoding="utf-8")
     return "\n".join([
-        "## 🍃 축 4개 (각 +1 / 0 / -1) — temp=온도, pull=끌림, gain=얻는 것, world=세계. 애매하면 0",
+        "## 🍃 축 4개 (각 +1 / 0 / -1) — temp=온도, pull=끌림, gain=얻는 것, world=세계. 애매하면 0 — 단 world는 표의 중간(0) 조건일 때만 0 (현실 배경 소설은 +1)",
         *table_after(balance, "### 태그 기준"),
         "", "## 🍃 장르 경계", *table_after(pool, "### 1-3."),
         "", "## 🎯 읽는 방식 하나 — 책을 덮었을 때 독자 손에 남는 것", *table_after(chips, "**읽는 방식 태그 기준"),

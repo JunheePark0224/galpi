@@ -11,6 +11,8 @@ status, or the line differs from pass A) — that, not the mixed shares, says ho
 The day's tally is computed from EVERY reviewed book of the file (`tally_of`), not from the latest download, so applying in
 two sittings or applying a download again gives the same row. 🎯 answers are checked by apply_review.checked_answer (the
 pilot's rules); `screened` refuses to pick a book whose one-liner breaks the rules instead of aborting the whole apply.
+A "다른 갈래로 (다시 태그)" answer (`status: "requeue"`, pipeline/requeue.py) stores the book as `dropped` with
+`requeued_to` {entry, slot} — never picked under the wrong entry — and counts as dropped; review.py writes its requeue row.
 """
 from collections import Counter
 
@@ -20,7 +22,7 @@ from check_one_liners import check_line
 
 from .agreement_log import LEAF_FIELDS, TARGET_FIELDS
 from .checks import AUTO
-from .gaps import GENRE_TARGET
+from .gaps import GENRES
 from .keyword_candidates import clean as clean_candidate
 from .prompt import AXES
 
@@ -29,7 +31,7 @@ NO_LINE = "(한 줄 없음)"  # a book that is dropped / held needs no line, but
 
 
 def checked_leaf(isbn: str, ans: dict) -> dict:
-    if ans.get("genre") not in GENRE_TARGET:
+    if ans.get("genre") not in GENRES:
         raise ReviewError(f"{isbn}: unknown genre {ans.get('genre')}")
     axes = ans.get("axes") if isinstance(ans.get("axes"), dict) else {}
     if any(axes.get(a) not in (-1, 0, 1) or isinstance(axes.get(a), bool) for a in AXES):
@@ -80,6 +82,20 @@ def candidate_of(book: dict, ans: dict, topic: str, kept: dict[str, dict], exclu
     return clean_candidate(value, topic, kept.get(topic, {}), excluded.get(topic, []))
 
 
+def requeue_target(book: dict, ans: dict) -> dict:
+    """{entry, slot} of a requeue answer: the other entry; a 🍃 target needs one of our genres, a 🎯 target may name a topic
+    or leave it to the pipeline (None)."""
+    to_entry = "leaf" if book["entry"] == "target" else "target"
+    if ans.get("to_entry", to_entry) != to_entry:
+        raise ReviewError(f"{book['isbn']}: a requeue goes to the other entry ({to_entry})")
+    slot = ans.get("to_slot") or None
+    if to_entry == "leaf" and slot not in GENRES:
+        raise ReviewError(f"{book['isbn']}: choose the 🍃 genre this book belongs to")
+    if to_entry == "target" and slot is not None and slot not in FIELD_OF_TOPIC:
+        raise ReviewError(f"{book['isbn']}: unknown topic {slot}")
+    return {"entry": to_entry, "slot": slot}
+
+
 def apply_answers(doc: dict, answers: dict[str, dict], kept: dict[str, dict], only: set[str] | None = None,
                   excluded: dict[str, list[str]] | None = None) -> tuple[dict, Counter]:
     """New doc with the human answers applied (the input is not changed) + the tally of the whole file (`tally_of`;
@@ -93,6 +109,11 @@ def apply_answers(doc: dict, answers: dict[str, dict], kept: dict[str, dict], on
             continue
         if ans.get("auto"):
             raise ReviewError(f"{book['isbn']}: this page sends human answers only")
+        if ans.get("status") == "requeue":
+            books.append({**{k: v for k, v in book.items() if k != "auto"}, "status": "dropped",
+                          "requeued_to": requeue_target(book, ans), "draft": draft_of(book), "reviewed": True,
+                          **({"sampled": True} if book.get("auto") == AUTO or book.get("sampled") else {})})
+            continue
         if book["entry"] == "target":
             a = checked_target(book["isbn"], ans, kept)
             a = {**a, "field": FIELD_OF_TOPIC[a["topic"]], "keyword_candidate": candidate_of(book, ans, a["topic"], kept, excluded or {})}

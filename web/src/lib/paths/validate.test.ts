@@ -63,4 +63,15 @@ describe("validateMap", () => {
     // a 이야기 rule is not a 배우기 challenge: it may go to 시
     expect(validateMap(parseQuestionMap(`${MINI}\n\`\`\`far\nfrom: entry=leaf\nto: entry=leaf | genres=시\n\`\`\``), VOCAB)).toEqual([]);
   });
+  it("10-05: names rules by their own numbers; the new topics' rules pass, and 로맨스 is story-only for a 배우기 challenge", () => {
+    const vocab: Vocabulary = { topics: { ...VOCAB.topics, "마케팅·브랜딩": ["브랜딩"], "요리·살림": ["집밥"] }, genres: [...VOCAB.genres, "로맨스", "역사", "예술·여행"] };
+    const rule = (n: number, from: string, to: string) => `\n${n}. 규칙\n\n\`\`\`far\nfrom: ${from}\nto: ${to}\n\`\`\``;
+    const check = (...rules: string[]) => validateMap(parseQuestionMap(`${MINI}${rules.join("")}`), vocab);
+    expect(check(rule(38, "entry=target | topics=마케팅·브랜딩", "entry=leaf | genres=예술·여행,인문"), rule(41, "entry=target | topics=요리·살림", "entry=leaf | genres=역사,예술·여행"))).toEqual([]);
+    expect(check(rule(37, "entry=leaf | genres=로맨스", "entry=leaf | genres=SF·판타지,역사"))).toEqual([]);
+    expect(check(rule(38, "entry=target | topics=마케팅·브랜딩", "entry=leaf | genres=로맨스,인문")))
+      .toEqual(['far 38: a 배우기 challenge may not go to "로맨스" (only 과학 교양·인문·역사·예술·여행·사회·시사)']);
+    expect(check(rule(36, "entry=target", "entry=leaf | genres=인문"), rule(38, "entry=target | topics=마케팅·브랜딩", "entry=leaf | genres=인문")))
+      .toEqual(["far 38 is shadowed by far 36"]);
+  });
 });

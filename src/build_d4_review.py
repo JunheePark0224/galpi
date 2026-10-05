@@ -26,7 +26,8 @@ from build_d3_bundles import BUNDLE_DIR, load_selected
 ROOT = Path(__file__).resolve().parents[1]
 OUT = OUT_DIR / "d4_review.html"
 
-# key, question, +1 side, 0 side, -1 side, hint (side names from TAGGING.md)
+# key, question, +1 side, 0 side, -1 side, hint (side names from TAGGING.md). The world hint is a short form of the
+# balance-game.md 태그 기준 row 세계 (10-05) — test_pipeline_review.py checks its words against that row
 AXIS_LABELS = [
     ["temp", "책을 덮은 뒤 남는 느낌", "따뜻함", "중간", "여운·서늘함",
      "마음이 데워지는 책인가, 오래 먹먹하고 서늘하게 남는 책인가"],
@@ -35,7 +36,8 @@ AXIS_LABELS = [
     ["gain", "읽고 나서 얻는 것", "알게 됨", "중간", "마음",
      "새로 아는 게 생기는 책인가, 마음이 달라지는 책인가"],
     ["world", "책 속 세상", "현실", "중간", "딴 세상",
-     "지금 여기 같은 현실 이야기인가, 여기 없는 세계인가 (이야기가 없는 책은 중간)"],
+     "실제로 있을 수 있는 세계인가, 여기 없는 세계를 만든 책인가 — 현실 배경 소설은 철학적이거나 실험적이어도 현실, "
+     "사람·삶·사회를 다룬 비소설도 현실, 중간은 현실과 비현실이 정말 섞였거나 사람도 세계도 없는 책만"],
 ]
 WAY_LABELS = [["개념", "개념부터 쉽게"], ["실습", "따라 하며 실습"], ["사례", "사례로 술술"]]
 assert [a[0] for a in AXIS_LABELS] == list(AXES) and [w[0] for w in WAY_LABELS] == list(WAYS)

@@ -181,12 +181,14 @@ def files(tmp_path, monkeypatch):
     (tmp_path / "vocab.json").write_text(json.dumps(VOCAB), encoding="utf-8")
     for mod, name, value in ((review, "ADDITIONS", adds), (sample, "ADDITIONS", adds), (review, "VOCAB", tmp_path / "vocab.json"),
                              (review, "AGREEMENT", tmp_path / "agreement.csv"), (review, "PAGES", tmp_path / "pages"),
+                             (review, "REQUEUE", tmp_path / "requeue.json"),
                              (build_pilot_review, "DETAIL", tmp_path / "detail")):
         monkeypatch.setattr(mod, name, value)
     monkeypatch.setattr(review, "keyword_definitions", lambda: {})
     monkeypatch.setattr(review, "yes24_env", lambda: {})
     monkeypatch.setattr(review, "load_config", lambda: parse_config(
-        {"daily_count": 5, "auto_merge": False, "sample_rate": 0.5, "model": "claude-haiku-4-5", "second_model": "claude-haiku-4-5"}))
+        {"daily_count": 5, "auto_merge": False, "sample_rate": 0.5, "model": "claude-haiku-4-5", "second_model": "claude-haiku-4-5",
+         "target_phase": "launch"}))
     (tmp_path / "detail").mkdir()
     for isbn in "1234":
         item = {"contentDetail": {"bookIntroduction": INTRO, "tableOfContents": TOC}}
@@ -469,3 +471,34 @@ def test_graduation_reads_batches_of_one_day_in_order():
     assert graduation(rows)["streak"] == 1                                           # -10 is the latest, -9 breaks the streak
     rows[0], rows[1] = day("2026-10-06-10", **{**ALL_96, "world": 80}, **SAMPLED), day("2026-10-06-9", **ALL_96, **SAMPLED)
     assert graduation(rows)["streak"] == 0
+
+
+def test_review_pages_go_to_the_main_checkout_even_from_a_worktree(tmp_path):
+    main, wt = tmp_path / "Galpi", tmp_path / "Galpi" / ".worktrees" / "x"
+    wt.mkdir(parents=True)
+    fake = lambda out, code=0: (lambda *a, **k: subprocess.CompletedProcess(a[0], code, stdout=out, stderr=""))  # noqa: E731
+    assert review.main_checkout(wt, fake(str(main / ".git") + "\n")) == main.resolve()   # worktree: absolute common dir
+    assert review.main_checkout(main, fake(".git\n")) == main.resolve()                  # main checkout: relative ".git"
+
+    def broken(*a, **k):
+        raise FileNotFoundError("no git")
+    assert review.main_checkout(wt, broken) == wt and review.main_checkout(wt, fake("", 128)) == wt  # fall back
+    assert review.PAGES.parts[-4:] == ("data", "processed", "check", "pipeline")
+
+
+def _world_row() -> str:
+    from pipeline import ROOT
+    text = (ROOT / "docs" / "balance-game.md").read_text(encoding="utf-8")
+    rows = [line for line in text.splitlines() if line.startswith("| 세계 |")]
+    assert len(rows) == 1
+    return rows[0]
+
+
+def test_the_world_hint_on_the_review_pages_follows_the_balance_game_rule():
+    """10-05: the dropped "이야기가 없는 책은 중간" hint is gone, and the hint's rule words are the source row's."""
+    from build_d4_review import AXIS_LABELS
+    hint, row = dict((a[0], a[5]) for a in AXIS_LABELS)["world"], _world_row()
+    assert "이야기가 없는" not in hint and "이야기가 없는" not in row
+    for word in ("소설", "철학적이거나 실험적이어도", "비소설", "사람·삶·사회", "정말 섞", "사람도 세계도 없는"):
+        assert word in hint and word in row, word
+    assert "평범한 인생" in row and "톨스토이 우화" in row

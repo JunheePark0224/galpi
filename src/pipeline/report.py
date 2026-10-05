@@ -22,7 +22,7 @@ from simulate_real import FILL_TARGET, GENRES_TARGET, evaluate, leaf_pool
 from . import ADDITIONS, AGREEMENT, BOOKS, RUNS
 from .agreement_log import MAX_SAMPLE_CHANGED, MIN_SAMPLE, STREAK, graduation, read_rows
 from .config import load_config
-from .gaps import GENRE_TARGET, TOPIC_TARGET, tally
+from .gaps import DEFAULT_PHASE, GENRES, tally, targets_of
 from .keyword_candidates import count as count_candidates
 from .keyword_candidates import load_docs
 from .keyword_candidates import section as candidate_section
@@ -87,11 +87,11 @@ def review_notes(doc: dict, auto_merge: bool, rate: float) -> list[str]:
 
 
 def pr_body(summary: dict, doc: dict, books: list[dict], sim: dict, auto_merge: bool, grad: dict,
-            sample_rate: float = 0.1, candidates: list[dict] | None = None) -> str:
+            sample_rate: float = 0.1, candidates: list[dict] | None = None, phase: str = DEFAULT_PHASE) -> str:
     picked = [b for b in doc["books"] if b["status"] == "picked"]
     waiting = [b for b in doc["books"] if b["status"] == "review"]  # flagged: not in books.json until a person applies a review
     held = [b for b in doc["books"] if b["status"] == "reserve"]
-    t = tally(books)
+    t, tg = tally(books), targets_of(phase)
     warn = warnings(sim, axis_shares(books))
     n_auto = sum(bool(b.get("auto")) for b in picked)  # counted from the file, not the run summary (which may be missing)
     batch = doc.get("batch_id") or doc["date"]  # files from before 10-05 have no batch_id: their id is the date
@@ -102,8 +102,8 @@ def pr_body(summary: dict, doc: dict, books: list[dict], sim: dict, auto_merge: 
         f"후보 {summary.get('candidates', 0)} / 계획 {summary.get('wanted', 0)}",
         f"- 모델 {doc['model']} → 확인 {doc['second_model']} · 비용 약 ${summary.get('cost_usd', 0)}"
         + (f" · 멈춤: {summary['stopped']}" if summary.get("stopped") else ""),
-        f"- 책 {len(books)}권 · 🎯 주제 {TOPIC_TARGET}권 미만 {sum(t['topic'][x] < TOPIC_TARGET for x in FIELD_OF_TOPIC)}개 · "
-        f"🍃 목표 미만 장르 {sum(t['genre'][g] < n for g, n in GENRE_TARGET.items())}개",
+        f"- 책 {len(books)}권 · 목표 단계 {phase} · 🎯 주제 {tg.topic}권 미만 {sum(t['topic'][x] < tg.topic for x in FIELD_OF_TOPIC)}개 · "
+        f"🍃 {tg.genre}권 미만 장르 {sum(t['genre'][g] < tg.genre for g in GENRES)}개",
         f"- 🍃 시뮬레이션({sim.get('books', len([b for b in books if b['entry'] == 'leaf']))}권): 첫 뽑기 채움 {sim['fill_pct']}% "
         f"(기준 {FILL_TARGET}%) · 뽑기당 장르 {sim['genres_per_draw']} (기준 {GENRES_TARGET})", "",
         *(["### ⚠ 경고", *[f"- {w}" for w in warn], ""] if warn else []),
@@ -139,7 +139,7 @@ def main(argv: list[str] | None = None) -> int:
     sim = evaluate(leaf_pool(books), leaf_users())
     cfg = load_config()
     body = pr_body(summary, doc, books, sim, cfg.auto_merge, graduation(read_rows(AGREEMENT)), cfg.sample_rate,
-                   count_candidates(load_docs(ADDITIONS)))
+                   count_candidates(load_docs(ADDITIONS)), cfg.target_phase)
     args.out.write_text(body, encoding="utf-8")
     print(body)
     return 0

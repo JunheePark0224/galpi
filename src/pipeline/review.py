@@ -12,13 +12,17 @@ Shown: books a person must look at — the two passes disagreed or pass A was un
 trial a fixed `sample_rate` share of them (sample.trial_sample, seeded by the batch id) is shown too ("표본") BY DEFAULT, so
 the agreement figures also say how often an agreed book was still wrong; `--no-sample` turns that off. The page shows YES24
 intro/TOC from the local cache (fetched with the local .env key when missing), so it is written under data/processed/check/
-(git-ignored) and never committed. Applying the same download again changes nothing (any book of the day may be answered).
+(git-ignored) and never committed — always the MAIN checkout's data/processed/check/pipeline/, also when the command runs
+inside a worktree (.worktrees/<name>), so the user finds every page in one place (10-05). `--apply` takes a download path
+from anywhere. Applying the same download again changes nothing (any book of the day may be answered).
 """
 import argparse
 import json
 import re
+import subprocess
 import sys
 from collections import Counter
+from datetime import datetime
 from pathlib import Path
 
 from apply_review import ReviewError, unwrap
@@ -27,17 +31,34 @@ from build_d4_review import AXIS_LABELS, WAY_LABELS
 from build_pilot_review import keyword_definitions, yes24_text
 from collect_candidates import detail
 
-from . import ADDITIONS, AGREEMENT, VOCAB
+from . import ADDITIONS, AGREEMENT, KST, REQUEUE, VOCAB
+from . import requeue
 from .agreement import apply_answers, screened, stats_row
 from .agreement_log import MAX_SAMPLE_CHANGED, MIN_SAMPLE, STREAK, below, graduation, read_rows, upsert, write_rows
 from .candidates import yes24_env
 from .config import load_config
-from .gaps import GENRE_TARGET
+from .gaps import GENRES
 from .keyword_candidates import excluded_names
 from .review_page import TEMPLATE
 from .sample import daily_docs, sample_books, trial_sample
 
-PAGES = OUT_DIR / "pipeline"
+
+
+def main_checkout(root: Path = OUT_DIR.parents[2], git=subprocess.run) -> Path:
+    """The main checkout's root: the parent of `git rev-parse --git-common-dir` (in a worktree that is the main repo's .git;
+    in the main checkout, its own .git). `root` itself when git is missing or fails."""
+    try:
+        res = git(["git", "-C", str(root), "rev-parse", "--git-common-dir"], capture_output=True, text=True, timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        return root
+    common = (res.stdout or "").strip()
+    if res.returncode != 0 or not common:
+        return root
+    path = Path(common)
+    return (path if path.is_absolute() else root / path).resolve().parent
+
+
+PAGES = main_checkout() / OUT_DIR.relative_to(OUT_DIR.parents[2]) / "pipeline"
 KEEP = ("isbn", "title", "author", "pages", "link", "entry", "topic", "keywords", "way", "genre", "axes", "one_liner",
         "evidence", "confidence", "fits", "second", "flags", "issues", "status", "keyword_candidate")
 
@@ -63,7 +84,7 @@ def entry_of(b: dict, file: str, env: dict, sample: bool = False) -> dict:
 
 def render(entries: list[dict], vocab: dict, key: str) -> str:
     slots = {"__BOOKS__": js_json(entries), "__KW__": js_json({t: list(v.get("kept", {})) for t, v in vocab.items()}),
-             "__GENRES__": js_json(list(GENRE_TARGET)), "__DEFS__": js_json(keyword_definitions()),
+             "__GENRES__": js_json(list(GENRES)), "__DEFS__": js_json(keyword_definitions()),
              "__AXES__": js_json(AXIS_LABELS), "__WAYS__": js_json(WAY_LABELS),
              "__KEY__": js_json(f"galpi-pipeline-{key}"), "__NAME__": js_json(key)}
     return re.sub("|".join(slots), lambda m: slots[m.group(0)], TEMPLATE)
@@ -124,7 +145,29 @@ def apply(name: str, batch: str, picked: list[tuple[Path, dict, list[str]]], dow
         total["auto_agreed"] = 0  # a sample row counts only what the person looked at
     row = stats_row(name, batch, total)
     write_rows(AGREEMENT, upsert(read_rows(AGREEMENT), row))
+    record_requeue(name, picked)
     return row, total, refused
+
+
+def record_requeue(name: str, picked: list[tuple[Path, dict, list[str]]]) -> list[dict]:
+    """Rows for data/pipeline/requeue.json: every book of these files now stored with `requeued_to` (pipeline/requeue.py).
+    Read back from the files just written, so applying the same download again changes nothing."""
+    today = datetime.now(KST).date().isoformat()
+    new = []
+    for path, _, isbns in picked:
+        doc = json.loads(path.read_text(encoding="utf-8"))
+        new += [{"isbn": b["isbn"], "to_entry": b["requeued_to"]["entry"], "to_slot": b["requeued_to"]["slot"],
+                 "from_batch": doc.get("batch_id") or doc.get("date") or name, "date": today}
+                for b in doc["books"] if b["isbn"] in isbns and isinstance(b.get("requeued_to"), dict)]
+    rows = requeue.load(REQUEUE)
+    known = {r["isbn"]: r for r in rows}
+    fresh = [r for r in new if {k: v for k, v in known.get(r["isbn"], {}).items() if k != "date"}
+             != {k: v for k, v in r.items() if k != "date"}]
+    if fresh:
+        requeue.save(REQUEUE, requeue.added(rows, fresh))
+        for r in fresh:
+            print(f"REQUEUE {r['isbn']}: next batch tags it as {r['to_entry']} {r['to_slot'] or '(topic by the pipeline)'}")
+    return fresh
 
 
 def main(argv: list[str] | None = None) -> int:

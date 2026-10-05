@@ -15,14 +15,14 @@
   - 모드: `mode=normal|challenge`
 - `next=`는 다음 질문의 `id`. 마지막 질문은 `next=draw`로 책 뽑기에 들어간다.
 - 기분(`mood`) 노드는 범위를 바꾸지 않는다. 범위 효과는 `narrow` 노드에서만 쓴다.
-- `far` 블록은 도전 길에서 쓰는 규칙으로, `from:`(지금 범위)과 `to:`(멀리 건너갈 범위)를 한 줄씩 쓴다. 블록 바로 위 줄 `N. 제목`이 규칙 번호와 이름이다 — 번호는 1, 2, 3 … 순서대로(틀리면 빌드 실패), 이름은 뽑기 응답의 도전 근거(`challenge.rule`)에 그대로 실린다.
+- `far` 블록은 도전 길에서 쓰는 규칙으로, `from:`(지금 범위)과 `to:`(멀리 건너갈 범위)를 한 줄씩 쓴다. 블록 바로 위 줄 `N. 제목`이 규칙 번호와 이름이다 — 번호는 규칙마다 하나(겹치면 빌드 실패)이고 **규칙에 붙어 다닌다** — 새 규칙은 번호를 이어서 매기고(10-05: 37~43), 자리는 아래 "첫 규칙이 이긴다"에 맞춰 위쪽에 둘 수 있다. 그래서 문서 순서와 번호 순서가 다를 수 있다(기록된 E-07 `challenge_rule`의 뜻이 바뀌지 않게). 이름은 뽑기 응답의 도전 근거(`challenge.rule`)에 그대로 실린다.
 - `far` 규칙은 위에서부터 맞춰 보고 **첫 규칙이 이긴다 — 좁은 규칙을 위에** 쓴다. 위 규칙이 아래 규칙을 다 덮으면(아래 규칙이 영영 쓰이지 않으면) 검사가 실패한다.
-- **도전 규칙 v2 (10-05, 사용자 확정 — `plans/2026-10-05-challenge-rules.md`)**: 도전은 고른 큰 목적(이야기 / 배우기) 안에서 한 발짝 옮긴다. **반대 갈래로 건너가는 대체 규칙은 없다** — 이야기는 규칙 19까지, 배우기는 규칙 36까지가 모든 범위를 받는다(데이터 테스트가 도전 길 끝마다 규칙이 있는지 확인). **배우기 도전(`from: entry=target …`)의 `to`는 과학 교양·인문·역사·예술·여행·사회·시사만**(코드의 `LEARN_CHALLENGE_GENRES`, 검사가 실패시킴) — 시·에세이·한국 소설·외국 소설·SF·판타지·추리·스릴러·호러·괴담으로 가지 않는다. 배우기 도전은 넓히기·운명 1장도 이 다섯 장르 안에서. 이야기 도전은 넓히면 이야기 전체까지(전과 같음). 갈래를 고르지 않았으면(섞어서) 이야기·배우기 중 하나를 뽑기 시드로 고른 뒤 그 갈래의 규칙(19 또는 36).
+- **도전 규칙 v2 (10-05, 사용자 확정 — `plans/2026-10-05-challenge-rules.md`)**: 도전은 고른 큰 목적(이야기 / 배우기) 안에서 한 발짝 옮긴다. **반대 갈래로 건너가는 대체 규칙은 없다** — 이야기는 목록 규칙 19가, 배우기는 목록 규칙 36이 갈래마다 맨 아래에서 모든 범위를 받는다(데이터 테스트가 도전 길 끝마다 규칙이 있는지 확인). **배우기 도전(`from: entry=target …`)의 `to`는 과학 교양·인문·역사·예술·여행·사회·시사만**(코드의 `LEARN_CHALLENGE_GENRES`, 검사가 실패시킴) — 시·에세이·한국 소설·외국 소설·로맨스·SF·판타지·추리·스릴러·호러·괴담으로 가지 않는다. 배우기 도전은 넓히기·운명 1장도 이 다섯 장르 안에서. 이야기 도전은 넓히면 이야기 전체까지(전과 같음). 갈래를 고르지 않았으면(섞어서) 이야기·배우기 중 하나를 뽑기 시드로 고른 뒤 그 갈래의 규칙(19 또는 36).
 - **도전 목록 `pick: one`**: `far` 블록에 `pick: one`을 쓰면 `to:`의 `genres`가 목록이 되고, 뽑기마다 그중 **한 장르**에서 뽑는다 — 지금 책(카탈로그 전체)이 **5권 이상**(`LIST_MIN_BOOKS`)인 장르만 후보, 후보끼리 **같은 확률**, 뽑기 시드로(같은 시드 → 같은 장르). 그 한 장르에서 평소처럼 넓힌다. 5권인 장르가 하나도 없으면 목록 전체를 한 범위로. 책이 늘면 지도를 고치지 않아도 후보가 는다. **사용자의 과거(꽂은 책·이전 길)는 보지 않는다**(사용자 결정). 시드가 없는 곳(기분 질문 건너뛰기 표, `map:coverage`, E-34 `scope_id`)에서는 목록 전체를 범위로 본다.
-- **`why:`** = 규칙의 "이동의 뜻" 한 줄 **초안**(사람이 씀, 데이터). 뽑기 응답 `challenge.reasonDraft`로 실리지만 **화면에는 쓰지 않는다** — 사용자가 실제 결과를 보고 나중에 다듬는다(10-05). 이야기 규칙 1~19에는 아직 없다(`null`).
+- **`why:`** = 규칙의 "이동의 뜻" 한 줄 **초안**(사람이 씀, 데이터). 뽑기 응답 `challenge.reasonDraft`로 실리지만 **화면에는 쓰지 않는다** — 사용자가 실제 결과를 보고 나중에 다듬는다(10-05). 이야기 규칙 1~19에는 아직 없다(`null`). 로맨스 규칙 37에는 있다(10-05 계획에 이동의 뜻이 함께 왔다).
 - 배우기 도전은 🍃 책(과학 교양·인문 …)으로 가므로 방식 답은 이야기 축 하나로 옮겨 점수를 준다: 개념 → 알게 됨, 실습 → 현실, 사례 → 몰입(10-05, `balance-game.md`).
 - **기분 질문을 넘기는 자리**(10-05, 설계 5-2): 그 자리에서 두 답이 각각 1권 이상 점수를 주는 책이 없으면 "못 잡겠어요"처럼 넘긴다(화면에 안 나옴). 어디서 넘기는지는 책에 따라 바뀌므로 지도가 아니라 `web/src/data/mood-skips.json`(`npm run map:build`·`books:import`가 다시 만듦)에 있다. 그래서 같은 질문도 범위에 따라 나오기도, 안 나오기도 한다.
-- 검사(`validateMap`)가 모든 `next`, 장르·주제·키워드 이름이 우리 데이터에 있는지(장르는 `MAP_GENRES` = 🍃 12개 + 🎯 주제 — 아직 책이 없는 장르도 된다) 확인하고, 하나라도 틀리면 빌드가 실패한다.
+- 검사(`validateMap`)가 모든 `next`, 장르·주제·키워드 이름이 우리 데이터에 있는지(장르는 `MAP_GENRES` = 🍃 13개 + 🎯 주제 — 아직 책이 없는 장르도 된다) 확인하고, 하나라도 틀리면 빌드가 실패한다.
 
 ## 지도 v1 초안 (10-04, 사용자 검토 전)
 
@@ -33,9 +33,9 @@
 - **처음**: 평소 / 도전 → 이야기 / 배우기 (못 잡겠어요 = 섞어서 분량 질문 하나) → 갈래 초입 "떠오르는 게 있어요 / 기분 따라 갈래요"
 - **이야기 좁히기**: 책장(소설 / 진짜 세상) → 묶음 → 장르. 좁히기가 끝나거나 못 잡겠어요면 기분 질문 `story-temp`(온도) → `story-pull`(끌림) → `story-len`(분량)
 - **이야기 기분 따라**: `story-gain`(얻는 것) → `story-world`(세계) → 온도 → 끌림 → 분량 (다섯 개 — `balance-game.md` 1·2·3·4·9번 문장에서)
-- **배우기 좁히기**: 일을 더 잘하기(데이터·AI·커리어·글쓰기·시간) / 나를 더 잘 돌보기(습관·돈·경제·마음·관계) → 분야 → 주제 → 키워드(셋 이상이면 두 단계). 끝나면 `learn-way`(방식: 개념 / 써먹기 = 실습·사례 → 실습 / 사례) → `learn-len`(분량: 얇은 책 ≤280쪽 / 두툼한 책 ≥380쪽)
+- **배우기 좁히기**: 일을 더 잘하기(데이터·AI·커리어·글쓰기·시간·마케팅·리더십) / 나를 더 잘 돌보기(습관·돈·경제·마음·관계·건강·요리) → 분야 → 주제 → 키워드(셋 이상이면 두 단계). 끝나면 `learn-way`(방식: 개념 / 써먹기 = 실습·사례 → 실습 / 사례) → `learn-len`(분량: 얇은 책 ≤280쪽 / 두툼한 책 ≥380쪽)
 - **먼 곳 표**: 장르·주제 하나짜리 규칙이 위, 묶음 규칙이 아래. **이야기 길은 늘 이야기 장르 안에서 뒤집는다**(10-04 사용자 결정 — 🍃 → 🎯 규칙 없음, 장르를 고르지 않은 이야기 길도 마지막 `entry=leaf` 규칙이 받는다). 배우기 도전은 배움의 확장 영역(과학 교양·인문·역사·예술·여행·사회·시사)으로만, 주제를 고르지 않은 배우기 길은 마지막 규칙 36(도전 목록)이 받는다(10-05 v2)
-- **모든 장르가 있다고 본다**(10-04 사용자 결정): 검사의 장르 목록은 `MAP_GENRES`(🍃 12개 + 🎯 주제) — 책이 0권인 역사·사회·시사·호러·괴담도 길이 있고, coverage에 0권으로 나온다(뽑기는 윗단계로 넓혀 채움)
+- **모든 장르가 있다고 본다**(10-04 사용자 결정): 검사의 장르 목록은 `MAP_GENRES`(🍃 13개 + 🎯 주제) — 책이 0권인 역사·사회·시사·호러·괴담·로맨스(10-05)와 새 주제 넷도 길이 있고, coverage에 0권으로 나온다(뽑기는 윗단계로 넓혀 채움)
 
 ### 처음
 
@@ -83,7 +83,7 @@ unsure: next=story-gain
 id: story-shelf
 kind: narrow
 question: 어떤 책장 앞에 서 볼까요?
-A: 소설 속으로 | genres=한국 소설,외국 소설,SF·판타지,추리·스릴러,호러·괴담 | next=story-fiction
+A: 소설 속으로 | genres=한국 소설,외국 소설,SF·판타지,추리·스릴러,호러·괴담,로맨스 | next=story-fiction
 B: 진짜 세상 이야기 | genres=에세이,시,인문,과학 교양,예술·여행,역사,사회·시사 | next=story-nonfiction
 unsure: next=story-gain
 ```
@@ -92,8 +92,19 @@ unsure: next=story-gain
 id: story-fiction
 kind: narrow
 question: 소설이라면 어느 쪽이에요?
-A: 현실에 발 딛은 소설 | genres=한국 소설,외국 소설 | next=story-novel
+A: 현실에 발 딛은 소설 | genres=한국 소설,외국 소설,로맨스 | next=story-real
 B: 장르의 짜릿함 | genres=SF·판타지,추리·스릴러,호러·괴담 | next=story-genre
+unsure: next=story-temp
+```
+
+`story-real`(10-05, `plans/2026-10-05-new-genres.md`): 선택지 문구는 계획 그대로, 질문 문장은 **초안**(사용자 확인 대기).
+
+```node
+id: story-real
+kind: narrow
+question: 어떤 이야기에 마음이 가요?
+A: 설레는 사랑 이야기 | genres=로맨스 | next=story-temp
+B: 삶을 그린 소설 | genres=한국 소설,외국 소설 | next=story-novel
 unsure: next=story-temp
 ```
 
@@ -242,8 +253,8 @@ unsure: next=learn-way
 id: learn-area
 kind: narrow
 question: 어떤 걸 배우고 싶어요?
-A: 일을 더 잘하기 | topics=데이터 분석,통계,AI 활용,업무 자동화,취업·커리어,글쓰기,시간·생산성 | next=learn-work
-B: 나를 더 잘 돌보기 | topics=습관·집중,돈 관리·투자,경제 상식,마음 돌보기,대화·관계 | next=learn-life
+A: 일을 더 잘하기 | topics=데이터 분석,통계,AI 활용,업무 자동화,취업·커리어,글쓰기,시간·생산성,마케팅·브랜딩,리더십 | next=learn-work
+B: 나를 더 잘 돌보기 | topics=습관·집중,돈 관리·투자,경제 상식,마음 돌보기,대화·관계,건강·운동,요리·살림 | next=learn-life
 unsure: next=learn-way
 ```
 
@@ -252,7 +263,27 @@ id: learn-work
 kind: narrow
 question: 일에서 무엇을 키우고 싶어요?
 A: 숫자·도구 다루기 | topics=데이터 분석,통계,AI 활용,업무 자동화 | next=learn-tools
-B: 일하는 방식 다듬기 | topics=취업·커리어,글쓰기,시간·생산성 | next=learn-craft
+B: 일하는 방식과 사람 | topics=취업·커리어,글쓰기,시간·생산성,마케팅·브랜딩,리더십 | next=learn-craft-people
+unsure: next=learn-way
+```
+
+`learn-craft-people` · `learn-reach`(10-05, `plans/2026-10-05-new-genres.md`): 선택지 문구는 계획 그대로, 질문 문장은 **초안**(사용자 확인 대기).
+
+```node
+id: learn-craft-people
+kind: narrow
+question: 일하는 방식의 어느 쪽을 키울까요?
+A: 나를 다듬기 | topics=취업·커리어,글쓰기,시간·생산성 | next=learn-craft
+B: 함께 움직이기 | topics=마케팅·브랜딩,리더십 | next=learn-reach
+unsure: next=learn-way
+```
+
+```node
+id: learn-reach
+kind: narrow
+question: 누구와 어떻게 움직이고 싶어요?
+A: 알리고 팔기 | topics=마케팅·브랜딩 | next=learn-market
+B: 사람을 이끌기 | topics=리더십 | next=learn-lead
 unsure: next=learn-way
 ```
 
@@ -292,7 +323,27 @@ id: learn-life
 kind: narrow
 question: 무엇을 돌보고 싶어요?
 A: 마음과 관계 | topics=마음 돌보기,대화·관계 | next=learn-mind-field
-B: 하루와 살림 | topics=습관·집중,돈 관리·투자,경제 상식 | next=learn-daily
+B: 하루와 살림 | topics=습관·집중,돈 관리·투자,경제 상식,건강·운동,요리·살림 | next=learn-daily-body
+unsure: next=learn-way
+```
+
+`learn-daily-body` · `learn-body`(10-05, `plans/2026-10-05-new-genres.md`): 선택지 문구는 계획 그대로, 질문 문장은 **초안**(사용자 확인 대기).
+
+```node
+id: learn-daily-body
+kind: narrow
+question: 하루의 어느 쪽을 돌볼까요?
+A: 몸과 생활 | topics=건강·운동,요리·살림 | next=learn-body
+B: 습관과 돈 | topics=습관·집중,돈 관리·투자,경제 상식 | next=learn-daily
+unsure: next=learn-way
+```
+
+```node
+id: learn-body
+kind: narrow
+question: 무엇부터 챙길까요?
+A: 몸 움직이기 | topics=건강·운동 | next=learn-health
+B: 밥과 살림 | topics=요리·살림 | next=learn-home
 unsure: next=learn-way
 ```
 
@@ -758,6 +809,86 @@ B: 무례에 맞서기 | keywords=갈등·무례 대처 | next=learn-way
 unsure: next=learn-way
 ```
 
+### 배우기 — 마케팅·브랜딩 · 리더십 (10-05)
+
+키워드 셋 → 두 단계(다른 주제와 같은 모양). 질문 문장·선택지 문구 모두 **초안**(사용자 확인 대기). 키워드 책이 5권 미만이면 뽑기가 넓히기 규칙대로 주제 → 분야로 넓힌다.
+
+```node
+id: learn-market
+kind: narrow
+question: 알리고 파는 일, 어디부터 볼까요?
+A: 브랜드와 콘텐츠 만들기 | keywords=브랜딩,콘텐츠 마케팅 | next=learn-market-make
+B: 고객 마음 읽기 | keywords=고객 이해 | next=learn-way
+unsure: next=learn-way
+```
+
+```node
+id: learn-market-make
+kind: narrow
+question: 무엇을 만들어 볼까요?
+A: 기억되는 브랜드 | keywords=브랜딩 | next=learn-way
+B: 사람을 모으는 콘텐츠 | keywords=콘텐츠 마케팅 | next=learn-way
+unsure: next=learn-way
+```
+
+```node
+id: learn-lead
+kind: narrow
+question: 이끄는 일, 어디가 궁금해요?
+A: 팀과 사람 이끌기 | keywords=팀 이끌기,피드백·코칭 | next=learn-lead-team
+B: 일하기 좋은 조직 문화 | keywords=조직 문화 | next=learn-way
+unsure: next=learn-way
+```
+
+```node
+id: learn-lead-team
+kind: narrow
+question: 어느 쪽이 더 필요해요?
+A: 팀을 이끄는 법 | keywords=팀 이끌기 | next=learn-way
+B: 피드백과 코칭 | keywords=피드백·코칭 | next=learn-way
+unsure: next=learn-way
+```
+
+### 배우기 — 건강·운동 · 요리·살림 (10-05)
+
+키워드 셋 → 두 단계. 질문 문장·선택지 문구 모두 **초안**(사용자 확인 대기).
+
+```node
+id: learn-health
+kind: narrow
+question: 몸의 어느 쪽을 챙길까요?
+A: 운동하고 단련하기 | keywords=운동 습관,달리기·근력 | next=learn-health-move
+B: 잘 자고 회복하기 | keywords=잠·회복 | next=learn-way
+unsure: next=learn-way
+```
+
+```node
+id: learn-health-move
+kind: narrow
+question: 어떻게 움직여 볼까요?
+A: 운동을 습관으로 | keywords=운동 습관 | next=learn-way
+B: 달리기·근력 키우기 | keywords=달리기·근력 | next=learn-way
+unsure: next=learn-way
+```
+
+```node
+id: learn-home
+kind: narrow
+question: 집의 어느 쪽을 꾸려 볼까요?
+A: 부엌에서 집밥 | keywords=집밥 | next=learn-way
+B: 집 안 돌보기 | keywords=정리·미니멀,살림 기술 | next=learn-home-care
+unsure: next=learn-way
+```
+
+```node
+id: learn-home-care
+kind: narrow
+question: 무엇부터 해 볼까요?
+A: 비우고 정리하기 | keywords=정리·미니멀 | next=learn-way
+B: 살림 요령 익히기 | keywords=살림 기술 | next=learn-way
+unsure: next=learn-way
+```
+
 ### 배우기 — 기분
 
 ```node
@@ -789,7 +920,7 @@ unsure: next=draw
 
 ### 먼 곳 표 (도전 루트)
 
-위에서부터 맞춰 보고 첫 규칙이 이긴다. 그래서 장르·주제 하나짜리 규칙이 위, 묶음 규칙이 아래, 고르지 않은 길을 받는 목록 규칙(19 이야기 · 36 배우기)이 갈래마다 맨 아래. 반대 갈래로 건너가는 대체 규칙은 없다(10-05 v2). 섞어서 + 도전은 시드로 한 갈래를 고른 뒤 그 갈래의 목록 규칙. 먼 곳이 모자라면 이야기 도전은 이야기 전체까지, 배우기 도전은 배움의 확장 영역(과학 교양·인문·역사·예술·여행·사회·시사)까지만 넓히고, 운명 1장도 그 안에서.
+위에서부터 맞춰 보고 첫 규칙이 이긴다. 그래서 장르·주제 하나짜리 규칙이 위, 묶음 규칙이 아래, 고르지 않은 길을 받는 목록 규칙(19 이야기 · 36 배우기)이 갈래마다 맨 아래. 10-05에 더한 37~43(로맨스·새 주제 넷)은 번호만 이어서 매기고 자리는 같은 원칙대로 — 하나짜리 규칙 사이, 묶음 규칙 위에 둔다. 반대 갈래로 건너가는 대체 규칙은 없다(10-05 v2). 섞어서 + 도전은 시드로 한 갈래를 고른 뒤 그 갈래의 목록 규칙. 먼 곳이 모자라면 이야기 도전은 이야기 전체까지, 배우기 도전은 배움의 확장 영역(과학 교양·인문·역사·예술·여행·사회·시사)까지만 넓히고, 운명 1장도 그 안에서.
 
 1. SF·판타지 → 에세이·시 (딴 세상 → 지금 여기의 문장, 설계 4절 예시)
 
@@ -854,6 +985,14 @@ from: entry=leaf | genres=한국 소설,외국 소설
 to: entry=leaf | genres=과학 교양,인문
 ```
 
+37. 로맨스 → SF·판타지·역사 (두 사람의 이야기 → 더 큰 세계와 시간)
+
+```far
+from: entry=leaf | genres=로맨스
+to: entry=leaf | genres=SF·판타지,역사
+why: 두 사람의 이야기에서 더 큰 세계와 시간으로
+```
+
 10. 숨죽이는 긴장(추리·호러) → 시·에세이·예술·여행
 
 ```far
@@ -906,7 +1045,7 @@ to: entry=leaf | genres=한국 소설,외국 소설,SF·판타지
 17. 소설 전체 → 세상을 알아 가는 글
 
 ```far
-from: entry=leaf | genres=한국 소설,외국 소설,SF·판타지,추리·스릴러,호러·괴담
+from: entry=leaf | genres=한국 소설,외국 소설,SF·판타지,추리·스릴러,호러·괴담,로맨스
 to: entry=leaf | genres=인문,과학 교양,역사,사회·시사
 ```
 
@@ -914,8 +1053,10 @@ to: entry=leaf | genres=인문,과학 교양,역사,사회·시사
 
 ```far
 from: entry=leaf | genres=에세이,시,인문,과학 교양,예술·여행,역사,사회·시사
-to: entry=leaf | genres=한국 소설,외국 소설,SF·판타지,추리·스릴러,호러·괴담
+to: entry=leaf | genres=한국 소설,외국 소설,SF·판타지,추리·스릴러,호러·괴담,로맨스
 ```
+
+10-05 사용자: 로맨스도 소설 전체에 든다(규칙 17의 `from`과 같은 소설 묶음).
 
 19. 이야기 · 장르 없음 → 도전 목록
 
@@ -927,7 +1068,7 @@ pick: one
 
 장르를 고르지 않은 이야기 길(기분 따라 · 책장에서 못 잡겠어요)을 모두 받는 이야기 길의 마지막 규칙. 목록 중 책이 5권 이상인 장르에서 같은 확률로 한 곳(10-05: 시·인문·과학 교양·예술·여행).
 
-#### 배우기 도전 (20~36, 10-05 v2 — 배움의 확장 영역 과학 교양·인문·역사·예술·여행·사회·시사로만)
+#### 배우기 도전 (20~36, 38~43 — 10-05 v2, 배움의 확장 영역 과학 교양·인문·역사·예술·여행·사회·시사로만)
 
 `why:`는 "이동의 뜻" **초안**이다(사용자 10-05: 실제 결과를 보고 나중에 다듬음). 규칙의 데이터로만 두고 화면에는 아직 쓰지 않는다.
 
@@ -979,6 +1120,38 @@ to: entry=leaf | genres=예술·여행,과학 교양
 why: 고치기에서 그저 바라보기로
 ```
 
+38. 마케팅·브랜딩 → 예술·여행·인문
+
+```far
+from: entry=target | topics=마케팅·브랜딩
+to: entry=leaf | genres=예술·여행,인문
+why: 파는 말에서 쓸모를 묻지 않는 아름다움으로
+```
+
+39. 리더십 → 역사·인문
+
+```far
+from: entry=target | topics=리더십
+to: entry=leaf | genres=역사,인문
+why: 이끄는 법에서 사람이 걸어온 시간으로
+```
+
+40. 건강·운동 → 과학 교양
+
+```far
+from: entry=target | topics=건강·운동
+to: entry=leaf | genres=과학 교양
+why: 몸 쓰는 법에서 몸이 움직이는 원리로
+```
+
+41. 요리·살림 → 역사·예술·여행
+
+```far
+from: entry=target | topics=요리·살림
+to: entry=leaf | genres=역사,예술·여행
+why: 밥상에서 음식이 지나온 시간과 장소로
+```
+
 26. 마음과 관계 전체 → 과학 교양·역사
 
 ```far
@@ -1019,10 +1192,26 @@ to: entry=leaf | genres=인문,역사
 why: 값을 매기는 글에서 사람과 시간을 바라보는 글로
 ```
 
-31. 일하는 방식 다듬기 전체 → 예술·여행·과학 교양
+42. 함께 움직이기 → 인문·역사
 
 ```far
-from: entry=target | topics=취업·커리어,글쓰기,시간·생산성
+from: entry=target | topics=마케팅·브랜딩,리더십
+to: entry=leaf | genres=인문,역사
+why: 알리고 이끄는 일에서 사람과 시간을 바라보는 글로
+```
+
+43. 몸과 생활 → 과학 교양·예술·여행
+
+```far
+from: entry=target | topics=건강·운동,요리·살림
+to: entry=leaf | genres=과학 교양,예술·여행
+why: 몸과 살림을 돌보던 손에서 원리와 아름다움으로
+```
+
+31. 일하는 방식과 사람 전체 → 예술·여행·과학 교양
+
+```far
+from: entry=target | topics=취업·커리어,글쓰기,시간·생산성,마케팅·브랜딩,리더십
 to: entry=leaf | genres=예술·여행,과학 교양
 why: 일하는 방식에서 아름다움과 원리로
 ```
@@ -1030,7 +1219,7 @@ why: 일하는 방식에서 아름다움과 원리로
 32. 하루와 살림 전체 → 예술·여행·인문·역사
 
 ```far
-from: entry=target | topics=습관·집중,돈 관리·투자,경제 상식
+from: entry=target | topics=습관·집중,돈 관리·투자,경제 상식,건강·운동,요리·살림
 to: entry=leaf | genres=예술·여행,인문,역사
 why: 하루와 살림에서 사람과 시간으로
 ```
@@ -1046,7 +1235,7 @@ why: 숫자와 도구에서 사람과 삶으로
 34. 나를 더 잘 돌보기 전체 → 과학 교양·역사
 
 ```far
-from: entry=target | topics=습관·집중,돈 관리·투자,경제 상식,마음 돌보기,대화·관계
+from: entry=target | topics=습관·집중,돈 관리·투자,경제 상식,마음 돌보기,대화·관계,건강·운동,요리·살림
 to: entry=leaf | genres=과학 교양,역사
 why: 나를 돌보던 시선에서 원리와 시간으로
 ```
@@ -1054,7 +1243,7 @@ why: 나를 돌보던 시선에서 원리와 시간으로
 35. 일을 더 잘하기 전체 → 인문·예술·여행
 
 ```far
-from: entry=target | topics=데이터 분석,통계,AI 활용,업무 자동화,취업·커리어,글쓰기,시간·생산성
+from: entry=target | topics=데이터 분석,통계,AI 활용,업무 자동화,취업·커리어,글쓰기,시간·생산성,마케팅·브랜딩,리더십
 to: entry=leaf | genres=인문,예술·여행
 why: 일을 잘하는 법에서 사람의 생각과 아름다움으로
 ```

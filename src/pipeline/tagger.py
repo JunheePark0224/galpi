@@ -77,28 +77,29 @@ def _usage(msg) -> Usage:
                  getattr(u, "cache_creation_input_tokens", 0) or 0)
 
 
-def request(model: str, system: str, user: str, schema: dict) -> dict:
-    """Keyword arguments for client.messages.create."""
+def request(model: str, system: str, user: str, schema: dict, follow: tuple = ()) -> dict:
+    """Keyword arguments for client.messages.create. `follow`: later turns after the book's user message (a one-liner
+    retry sends the model's own answer back and asks for one field — pipeline/one_liner.py)."""
     opt = MODEL_OPTIONS[model]
     out = {"format": {"type": "json_schema", "schema": schema}}
     if "effort" in opt:
         out["effort"] = opt["effort"]
     kwargs = {"model": model, "max_tokens": opt.get("max_tokens", MAX_TOKENS), "output_config": out,
               "system": [{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
-              "messages": [{"role": "user", "content": user}]}
+              "messages": [{"role": "user", "content": user}, *follow]}
     if "extra_body" in opt:
         kwargs["extra_body"] = dict(opt["extra_body"])  # a copy per call: the module-level options stay untouched
     return kwargs
 
 
 def call(client, model: str, system: str, user: str, schema: dict, breaker: Breaker | None = None,
-         pass_: str = "A") -> tuple[dict | None, Usage, str]:
+         pass_: str = "A", follow: tuple = ()) -> tuple[dict | None, Usage, str]:
     """(answer JSON or None, usage, reason). Raises TaggerStop on 401/403, on a 404 (unknown model), on a 400 about the
     model / billing / limits, and — when a `breaker` is given — after STOP_LIMIT API failures in a row in one `pass_` (A / B).
     Reasons: ok, http_<status>, connection, a stop_reason (refusal, max_tokens…), invalid_json."""
     failure = None
     try:
-        msg = client.messages.create(**request(model, system, user, schema))
+        msg = client.messages.create(**request(model, system, user, schema, follow))
     except (anthropic.AuthenticationError, anthropic.PermissionDeniedError) as err:
         raise TaggerStop(type(err).__name__) from None
     except anthropic.APIStatusError as err:
