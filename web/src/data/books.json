@@ -6801,6 +6801,752 @@
   ]
  },
  {
+  "isbn": "9788931558210",
+  "title": "뇌",
+  "author": "모기 겐이치로",
+  "pages": 128,
+  "one_liner": "뇌는 어떻게 창의성을 만들고 AI와 다를까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193401675",
+  "title": "최소한의 세계사",
+  "author": "이다지",
+  "pages": 472,
+  "one_liner": "서양과 동양의 흐름을 한 번에 꿰어 세계사의 큰 줄기를 잡아볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": 0,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193128428",
+  "title": "요즘 어른을 위한 최소한의 세계사",
+  "author": "임소미",
+  "pages": 348,
+  "one_liner": "러시아는 왜 전쟁을 벌이고 미국은 어떻게 강대국이 됐는지 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791159098161",
+  "title": "벌거벗은 세계사 : 전쟁편",
+  "author": "tvN〈벌거벗은 세계사〉제작팀",
+  "pages": 400,
+  "one_liner": "백년전쟁부터 우크라이나 전쟁까지 굵직한 전쟁의 배경과 흐름을 이야기로 따라가요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194085751",
+  "title": "재활용의 거짓말",
+  "author": "문관식",
+  "pages": 208,
+  "one_liner": "분리배출한 쓰레기가 왜 대부분 소각되는지, 통계 뒤 구조를 짚어 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 0,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791189143466",
+  "title": "퍼센트 %",
+  "author": "안지현",
+  "pages": 286,
+  "one_liner": "숫자로 재난, 주거, 교육, 노동 같은 한국 사회의 오늘을 볼 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198239020",
+  "title": "호러만찬회",
+  "author": "신진오, 전건우",
+  "pages": 388,
+  "one_liner": "한국 사회의 세대별 공포를 여덟 가지 맛으로 맛볼 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 0
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791171259939",
+  "title": "인수세공",
+  "author": "고바야시 야스미",
+  "pages": 244,
+  "one_liner": "섬뜩한 묘사와 반전이 이어지는 핏빛 이야기에 빠져들고 싶나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788967998387",
+  "title": "박해로 오컬트 포크 호러",
+  "author": "박해로",
+  "pages": 248,
+  "one_liner": "민속신앙에서 비롯된 기이한 공포가 가상 도시 섭주에서 이어지는 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 0
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791173573910",
+  "title": "돌비공포라디오 더 레드",
+  "author": "돌비",
+  "pages": 340,
+  "one_liner": "무속과 사이비, 이웃의 얼굴을 한 공포를 사연으로 만나 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 0
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193358245",
+  "title": "말하고 싶은 비밀",
+  "author": "사쿠라 이이요",
+  "pages": 328,
+  "one_liner": "잘못 날아온 고백 때문에 시작된 거짓말, 마음은 어디로 향할까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193358825",
+  "title": "노트북",
+  "author": "니컬러스 스파크스",
+  "pages": 240,
+  "one_liner": "오랜 세월 이어진 두 사람의 사랑이 어떻게 다시 닿는지 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788965707820",
+  "title": "마케팅이다",
+  "author": "세스 고딘",
+  "pages": 368,
+  "one_liner": "스팸 같은 광고 대신 최소한의 열광할 고객을 찾아 신뢰를 쌓는 마케팅 관점을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "고객 이해",
+   "브랜딩"
+  ]
+ },
+ {
+  "isbn": "9791144200265",
+  "title": "AI가 선택하는 브랜드는 어떻게 만들어지는가",
+  "author": "최인찬",
+  "pages": 304,
+  "one_liner": "AI가 브랜드를 읽고 추천하는 방식을 알고 선택받는 브랜드 전략을 세워요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "브랜딩",
+   "고객 이해"
+  ]
+ },
+ {
+  "isbn": "9788965966463",
+  "title": "좋은 리더를 넘어 위대한 리더로",
+  "author": "짐 콜린스 외",
+  "pages": 520,
+  "one_liner": "위대한 리더의 조건과 비전, 용인술, 혁신 조직 만드는 법을 이해해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "조직 문화"
+  ]
+ },
+ {
+  "isbn": "9791162544914",
+  "title": "리더의 일은 맡기는 것이 전부다",
+  "author": "이바 마사야스",
+  "pages": 212,
+  "one_liner": "일을 누구에게 어디까지 맡길지 단계별 원칙과 상황별 방법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "피드백·코칭"
+  ]
+ },
+ {
+  "isbn": "9788927810872",
+  "title": "처음 리더가 된 당신에게",
+  "author": "박태현",
+  "pages": 300,
+  "one_liner": "첫 팀장이 팀 운영부터 성과 관리, 원온원까지 바로 써먹을 해결책을 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "피드백·코칭"
+  ]
+ },
+ {
+  "isbn": "9791168120112",
+  "title": "팀워크의 부활",
+  "author": "패트릭 렌시오니",
+  "pages": 292,
+  "one_liner": "뛰어난 사람들이 모여도 삐걱대는 팀이 어디서 막히는지 짚고 풀어 가는 법을 알려 줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "조직 문화"
+  ]
+ },
+ {
+  "isbn": "9788932919584",
+  "title": "우리는 왜 잠을 자야 할까",
+  "author": "매슈 워커",
+  "pages": 512,
+  "one_liner": "수면이 몸과 마음에 하는 일을 과학으로 풀어 잠을 지키고 싶어져요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "잠·회복"
+  ]
+ },
+ {
+  "isbn": "9791160322699",
+  "title": "김명섭의 아나토미 헬스 교실",
+  "author": "김명섭",
+  "pages": 196,
+  "one_liner": "근육 구조 그림을 보며 부위별 웨이트 동작과 주차별 프로그램을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "달리기·근력"
+  ]
+ },
+ {
+  "isbn": "9791158464639",
+  "title": "내 몸 오래 쓰는 백년 스트레칭",
+  "author": "김범수",
+  "pages": 252,
+  "one_liner": "목부터 발까지 하루 10분 스트레칭으로 통증을 미리 막는 법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "운동 습관"
+  ]
+ },
+ {
+  "isbn": "9788978496926",
+  "title": "New 뉴 근육운동가이드",
+  "author": "프레데릭 데라비에",
+  "pages": 318,
+  "one_liner": "부위별 근육 운동법을 해부도로 보며 내 목적에 맞는 운동을 짜요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "달리기·근력"
+  ]
+ },
+ {
+  "isbn": "9788956994550",
+  "title": "헬스의 정석 : 근력운동편",
+  "author": "수피",
+  "pages": 492,
+  "one_liner": "근육이 커지는 원리부터 부위별 동작, 내 몸에 맞는 운동 프로그램 짜기까지 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "달리기·근력"
+  ]
+ },
+ {
+  "isbn": "9791197987694",
+  "title": "요가 아나토미",
+  "author": "레슬리 카미노프 외",
+  "pages": 449,
+  "one_liner": "요가 자세마다 어떤 근육과 관절이 움직이는지 해부 그림으로 이해해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "개념",
+  "axes": null,
+  "keywords": []
+ },
+ {
+  "isbn": "9788954449014",
+  "title": "요가 하는데 왜 아프죠?",
+  "author": "이재은",
+  "pages": 220,
+  "one_liner": "어깨·엉덩관절·척추의 구조와 근육을 알면 다치지 않고 요가 하는 길이 보여요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "개념",
+  "axes": null,
+  "keywords": []
+ },
+ {
+  "isbn": "9791175911345",
+  "title": "박준면의 낯가리는 레시피",
+  "author": "박준면",
+  "pages": 448,
+  "one_liner": "계량 걱정 없이 따라 하는 집밥 반찬 60가지를 상황별로 골라 바로 만들어 봐요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791185473437",
+  "title": "진짜 기본 요리책",
+  "author": "요리잡지 수퍼레시피",
+  "pages": 356,
+  "one_liner": "나물·국물요리부터 손질·보관 요령까지 처음 요리하는 사람도 따라 해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791192366395",
+  "title": "진짜 기본 청소책",
+  "author": "두룸 정두미",
+  "pages": 232,
+  "one_liner": "청소 루틴과 구역별 청소 레시피로 집안 곳곳을 쉽게 관리해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "살림 기술"
+  ]
+ },
+ {
+  "isbn": "9791198553386",
+  "title": "내 몸을 바꾸는 집밥테라피",
+  "author": "박용우, 김영아",
+  "pages": 272,
+  "one_liner": "가공식품을 줄이고 집에서 건강하게 차리는 식사 원칙과 간단한 레시피를 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791155362501",
+  "title": "미니멀라이프 수납법",
+  "author": "주부의 벗",
+  "pages": 144,
+  "one_liner": "주방부터 현관까지 공간별로 따라 할 수납 요령을 엿보고 내 집에 적용해 봐요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "정리·미니멀"
+  ]
+ },
+ {
+  "isbn": "9791194140108",
+  "title": "살림의 책 The Book of Living",
+  "author": "이지영 외",
+  "pages": 600,
+  "one_liner": "요일별 루틴과 도구 고르는 기준으로 나에게 편한 살림법을 찾아요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "정리·미니멀",
+   "살림 기술"
+  ]
+ },
+ {
+  "isbn": "9788969525390",
+  "title": "김대석 셰프의 집밥 레시피 1",
+  "author": "김대석",
+  "pages": 203,
+  "one_liner": "밑반찬부터 국, 김치, 명절 음식까지 한식 상차림을 영상 보며 따라 해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791193282793",
+  "title": "걍레오 그냥 레오의 오늘 요리",
+  "author": "강레오",
+  "pages": 320,
+  "one_liner": "83가지 일상 레시피를 반복하며 요리 기본기와 식재료 보는 눈을 키워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9788953150812",
+  "title": "C.S. 루이스의 글쓰기에 관하여",
+  "author": "C.S. 루이스",
+  "pages": 236,
+  "one_liner": "소설·시·설득하는 글까지 루이스가 남긴 글쓰기 조언과 철학을 모아 만나요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "개념",
+  "axes": null,
+  "keywords": []
+ },
+ {
+  "isbn": "9791167700452",
+  "title": "편지 쓰는 법",
+  "author": "문주희",
+  "pages": 162,
+  "one_liner": "첫 줄부터 마무리, 봉투와 우표까지 손편지를 직접 써 보는 길잡이예요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "일기·편지"
+  ]
+ },
+ {
+  "isbn": "9788965180449",
+  "title": "일기, 독서록, 체험학습보고서 쓰기",
+  "author": "김수정",
+  "pages": 307,
+  "one_liner": "아이와 함께 일기와 독서록, 체험 보고서를 단계별로 써 보는 방법을 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "일기·편지"
+  ]
+ },
+ {
+  "isbn": "9791167700209",
+  "title": "일기 쓰는 법",
+  "author": "조경국",
+  "pages": 184,
+  "one_liner": "일기를 매일 이어 쓰는 마음가짐과 구성, 도구까지 차근차근 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "일기·편지"
+  ]
+ },
+ {
+  "isbn": "9791157956357",
+  "title": "윤동주 전 시집 하늘과 바람과 별과 시",
+  "author": "윤동주",
+  "pages": 256,
+  "one_liner": "별과 바람 사이에서 부끄러움을 되새기던 시인의 목소리를 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788970638331",
+  "title": "지금 알고 있는 걸 그때도 알았더라면",
+  "author": "류시화",
+  "pages": 136,
+  "one_liner": "살아온 날을 돌아보며 지금의 나를 다독이고 싶은 날, 어떤 시가 마음에 남을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788925568355",
+  "title": "가슴속엔 조그만 사랑이 반짝이누나",
+  "author": "나태주",
+  "pages": 348,
+  "one_liner": "사랑의 순간마다 어울리는 시를 한 편씩 옮겨 쓰며 마음을 데워 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791189074883",
+  "title": "모두를 위한 한국미술사",
+  "author": "유홍준",
+  "pages": 664,
+  "one_liner": "구석기부터 근대까지 우리 미술의 흐름을 도판으로 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": 0,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
   "isbn": "9791129708328",
   "title": "회사는 엑셀을 가르쳐주지 않아요",
   "author": "쏘피",
