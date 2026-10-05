@@ -70,7 +70,7 @@ export function meetingOf(draw: DrawView | null, pick: PickView | undefined): Fo
   const ticket = draw?.ticket;
   const index = pick && draw ? draw.picks.indexOf(pick) : -1;
   if (!ticket?.sig || index < 0) return undefined;
-  return { seed: ticket.seed, count: ticket.count, iat: ticket.iat, sub: ticket.sub, sig: ticket.sig, index };
+  return { seed: ticket.seed, count: ticket.count, iat: ticket.iat, sub: ticket.sub, sig: ticket.sig, isbns: [...ticket.isbns], index };
 }
 
 const addSeen = (seen: string[], id: string) => (seen.includes(id) ? seen : [...seen, id]);

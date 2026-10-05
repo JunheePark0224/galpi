@@ -22,7 +22,9 @@ export async function requestDraw(body: Record<string, unknown>): Promise<PathDr
  * so the server can work the same pictures out again; `fallbackSeed` only for an answer without one (nothing recorded).
  */
 export function toDrawView(res: PathDrawResponse, fallbackSeed: number): DrawView {
-  const ticket = res.art && res.art.count === res.picks.length ? res.art : null;
+  // v3: a ticket names the draw's books — one that does not match these picks is not this draw's (nothing recorded)
+  const ticket = res.art && res.art.count === res.picks.length && Array.isArray(res.art.isbns)
+    && res.art.isbns.every((isbn, i) => isbn === res.picks[i]?.card.id) && res.art.isbns.length === res.picks.length ? res.art : null;
   const arts = artsForDraw(res.picks.length, ticket?.seed ?? fallbackSeed);
   return {
     picks: res.picks.map((p, i) => ({ card: p.card, kind: p.kind, art: arts[i], reason: p.reason })),

@@ -6,6 +6,7 @@ Last Updated: 2026-10-05 (책갈피 꾸미기 `feat/decorate` 병합 전 — 아
 
 ## 지금 상태
 
+- **로그인 전 저장 → 도감 (`fix/guest-dex`, `.worktrees/guest-dex`, 병합 전, 10-05)**: 로그인 전에 저장한 책갈피가 로그인 뒤 도감에 오르게(서명된 뽑기 표 v3 — 뽑힌 책까지 서명, 한 책갈피는 한 사람만). **사용자가 할 일 (병합·배포 전, 0004 다음)**: ① SQL Editor → New query에 `web/supabase/migrations/0007_kept_claims.sql` 전체를 붙여 **Run** (한 번만, "Success. No rows returned") ② 새 query에 `web/supabase/checks/kept_claims_rls.sql` 전체를 붙여 Run → 빨간 "RLS CHECK RESULT" 상자 안 10줄이 모두 `ok`(이 오류는 정상 — 시험 데이터를 되돌림). 0007 전에 배포해도 사이트는 그대로(그 기능만 503). 배포하면 v2 표는 받지 않으므로 배포 순간 S-05에 떠 있던 책갈피 하나쯤은 도감에 안 오를 수 있다. 저장할 때 그림은 이제 서버가 뽑기 표로 정한다(표 없는 옛 임시 책갈피는 서버가 고른 그림 — context 10-05).
 - **책갈피 꾸미기 (`feat/decorate`, `.worktrees/decorate`, 병합 전, 10-05)**: S-09 시트 버튼 시안 C([예스24] → [🎨 꾸미기][↔ 옮기기] → [빼기]), [꾸미기] 편집기(내 도감에 있는 부분으로만 그림 바꾸기, [처음 그림으로]·[이대로 꽂기]), 서버 `PATCH /api/library/saves/art`(도감 확인, 아니면 403), taxonomy v1.6(E-38). 계획 `plans/2026-10-05-decorate.md`, 스크린샷 `mockups/2026-10-05-decorate/impl-*.png`.
   **사용자가 할 일 (병합·배포 전, 0004 다음, 순서대로)**:
   1. Supabase 대시보드 → SQL Editor → New query에 `web/supabase/migrations/0005_original_art.sql` 전체를 붙여 **Run** (한 번만). "Success. No rows returned"가 나오면 됨. 기존 책갈피는 모두 지금 그림이 "처음 그림"이 된다.

@@ -25,5 +25,6 @@ export async function POST(request: Request): Promise<Response> {
   // 도감 v1: the pictures' seed is always the server's own (never the request's `seed`, which only replays the books)
   // the ticket is bound to the logged-in person (sub); the session is looked up only when an auth cookie is there
   const sub = await verifiedUserId(request);
-  return Response.json({ ...drawn, art: issueTicket(drawn.picks.length, { sub }) });
+  // v3: the ticket signs the draw's books in order, so it can only ever vouch for these bookmarks
+  return Response.json({ ...drawn, art: issueTicket(drawn.picks.map((p) => p.card.id), { sub }) });
 }

@@ -133,7 +133,7 @@ describe("flowReducer (v2 questions)", () => {
 });
 
 describe("meetingOf (v1.7: which signed bookmark an S-06 save is, for the 도감 after a login)", () => {
-  const ticket = { seed: 99, count: 3, iat: 1_790_000_000, sub: null, sig: "s".repeat(43) };
+  const ticket = { seed: 99, count: 3, iat: 1_790_000_000, sub: null, sig: "s".repeat(43), isbns: ["a", "b", "c"] };
   const base = view(1);
   const pick = (id: string) => ({ ...base.picks[0], card: { ...base.picks[0].card, id } });
   const draw: DrawView = { ...base, picks: [pick("a"), pick("b"), pick("c")], ticket };

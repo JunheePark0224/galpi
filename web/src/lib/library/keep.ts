@@ -3,10 +3,15 @@ import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { track } from "@/lib/track/client";
 import { libraryRequest } from "./client";
 import { addGuestSave, removeGuestSave, type GuestSave } from "./guest";
+import type { FoundRequest } from "@/lib/collection/meeting";
 import type { SaveInput } from "./service";
 
-/** What the account gets: the bookmark without the card (the server has the catalogue). */
-export const saveInput = ({ isbn, art, reason, metOn }: SaveInput): SaveInput => ({ isbn, art, reason, metOn });
+/**
+ * What the account gets: the bookmark without the card (the server has the catalogue), and the draw's signed ticket with
+ * the bookmark's place when there is one (v1.7.1 — the server stores the picture worked out from it, never the sent art).
+ */
+export const saveInput = ({ isbn, art, reason, metOn, meeting }: SaveInput & { meeting?: FoundRequest }): SaveInput & { ticket?: FoundRequest } =>
+  ({ isbn, art, reason, metOn, ...(meeting ? { ticket: meeting } : {}) });
 
 /**
  * F-12 저장 in the browser, outside React (v1.7, plans/2026-10-05-guest-keep.md): the button only shows the book's keep

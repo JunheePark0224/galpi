@@ -139,7 +139,7 @@ describe("guest saves (로그인 전 내 책갈피, localStorage galpi.guestSave
   });
 
   it("keeps the draw's signed ticket and the bookmark's place in it, read with the 도감's rules (v1.7 — for the 도감 after a login)", () => {
-    const meeting = { seed: 1234, count: 5, iat: 1_790_000_000, sub: null, sig: "a".repeat(43), index: 2 };
+    const meeting = { seed: 1234, count: 5, iat: 1_790_000_000, sub: null, sig: "a".repeat(43), isbns: ["9790000000000", "9790000000001", "9790000000002", "9790000000003", "9790000000004"], index: 2 };
     expect(addGuestSave({ ...save(ISBN), meeting })).toBe("added");
     expect(guestSaves()[0].meeting).toEqual(meeting);
     const stored = (m: unknown) => JSON.stringify({ v: 1, items: [{ ...save(ISBN), meeting: m }] });

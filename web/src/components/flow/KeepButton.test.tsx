@@ -19,7 +19,7 @@ const pick: PickView = {
 const IN = { enabled: true, loggedIn: true, id: "u1", count: 0 };
 const OUT = { enabled: true, loggedIn: false, id: null, count: 0 };
 
-async function mount(me: unknown, meeting?: { seed: number; count: number; iat: number; sub: null; sig: string; index: number }) {
+async function mount(me: unknown, meeting?: { seed: number; count: number; iat: number; sub: null; sig: string; isbns: string[]; index: number }) {
   vi.resetModules();
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => me }));
   const [{ KeepButton }, store, guest] = await Promise.all([import("./KeepButton"), import("@/lib/account/store"), import("@/lib/library/guest")]);
@@ -51,7 +51,7 @@ describe("KeepButton (S-06 [🔖 내 책갈피에 저장], C-16b v1.7)", () => {
 
   it("keeps the draw's ticket and the bookmark's place with the save, for the 도감 after a login (v1.7)", async () => {
     pressKeep.mockReturnValue(true);
-    const meeting = { seed: 7, count: 5, iat: 1_790_000_000, sub: null, sig: "a".repeat(43), index: 3 };
+    const meeting = { seed: 7, count: 5, iat: 1_790_000_000, sub: null, sig: "a".repeat(43), isbns: ["9790000000000", "9790000000001", "9790000000002", "9790000000003", "9790000000004"], index: 3 };
     await mount(OUT, meeting);
     fireEvent.click(keepButton());
     expect(pressKeep).toHaveBeenCalledWith(expect.objectContaining({ isbn: ISBN, meeting }), false);

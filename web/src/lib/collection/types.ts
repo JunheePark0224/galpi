@@ -2,10 +2,11 @@ import type { ArtCombo, ArtKind, Tier } from "@/lib/art/combine";
 
 /**
  * 도감 v1: the server's seed for one draw's pictures (artsForDraw(count, seed)), when it was issued (`iat`, seconds — good
- * for 2 hours), the logged-in person it was drawn for (`sub`, null when logged out) and the HMAC over all four. `sig` is
+ * for 2 hours), the logged-in person it was drawn for (`sub`, null when logged out), the draw's books in order (`isbns`,
+ * v3 — one per bookmark) and the HMAC over all five. `sig` is
  * null when the server has no (long enough) signing secret in production — the pictures still show, nothing is recorded.
  */
-export interface ArtTicket { seed: number; count: number; iat: number; sub: string | null; sig: string | null }
+export interface ArtTicket { seed: number; count: number; iat: number; sub: string | null; sig: string | null; isbns: string[] }
 
 /** One part met for the first time — what /api/collection/found returns and E-36 sends (no personal data). */
 export interface FoundItem { kind: ArtKind; value: string; tier: Tier }
@@ -23,6 +24,11 @@ export interface CollectionStore {
   record(art: ArtCombo): Promise<{ kind: ArtKind; value: string }[]>;
   /** Clears NEW on every row (the 도감 was seen). How many rows changed. */
   markSeen(): Promise<number>;
+  /**
+   * v1.7 `kept` (0007): this person takes bookmark `index` of the draw (seed, iat) — one person per bookmark, so a shared
+   * ticket fills one 도감 only. true when this person holds it (now or before), false when someone else does.
+   */
+  claimKept(claim: { seed: number; iat: number; index: number }): Promise<boolean>;
 }
 
 /** The table is not there yet (the migration was not applied): the 도감 says it cannot load, the site goes on. */
