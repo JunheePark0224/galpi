@@ -104,7 +104,8 @@ describe("POST /api/books/draw", () => {
   });
 
   it("signs the pictures' seed for the 도감 (dev secret outside production)", async () => {
-    const { art } = await (await POST(req({ ...PATH, seed: 5 }))).json();
+    const { art, picks } = await (await POST(req({ ...PATH, seed: 5 }))).json();
+    expect(art.isbns).toEqual(picks.map((p: { card: { id: string } }) => p.card.id));      // v3: the draw's books, signed in order
     expect(art).toMatchObject({ count: 5, seed: expect.any(Number), iat: expect.any(Number), sub: null, sig: expect.stringMatching(/^[A-Za-z0-9_-]{43}$/) });
     expect(Math.abs(art.iat - Date.now() / 1000)).toBeLessThan(5);
     expect(verifyTicket(art, "galpi-dev-only-collection-secret-not-for-production")).toBe(true);

@@ -37,6 +37,22 @@ describe("keep (F-12 내 책갈피에 저장, v1.7)", () => {
     expect(store.accountSnapshot().count).toBe(3);
   });
 
+  it("sends the draw's ticket with the save (the server picks the picture from it), never the card", async () => {
+    const { keep } = await setup();
+    request.mockResolvedValue({ ok: true, status: 200, body: { ok: true, saved: true } });
+    const meeting = { seed: 7, count: 5, iat: 1_790_000_000, sub: null, sig: "a".repeat(43), isbns: [ISBN, "9790000000001", "9790000000002", "9790000000003", "9790000000004"], index: 0 };
+    await keep.keepBookmark({ ...item(), meeting });
+    expect(request).toHaveBeenCalledWith("POST", "/api/library/saves", { ...INPUT, ticket: meeting });
+  });
+
+  it("sends E-36 for 도감 parts the save brought in (a logged-out draw's bookmark, v1.7.1)", async () => {
+    const { keep } = await setup();
+    request.mockResolvedValue({ ok: true, status: 200, body: { ok: true, saved: true, found: [{ kind: "animal", value: "fox" }, { kind: "hat", value: "x" }] } });
+    await keep.keepBookmark(item());
+    expect(track).toHaveBeenCalledWith("collection_item_found", { part_kind: "animal", part_value: "fox", tier: "common" });
+    expect(track.mock.calls.filter(([n]) => n === "collection_item_found")).toHaveLength(1);
+  });
+
   it("does not count or log a book that was already in the account", async () => {
     const { keep, store } = await setup();
     request.mockResolvedValue({ ok: true, status: 200, body: { ok: true, saved: false } });

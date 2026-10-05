@@ -3,8 +3,9 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { authClient, sessionUserId } from "@/lib/auth/server";
 import { guardJson, guardRequest } from "@/lib/server/guard";
 import type { LibraryError } from "./service";
+import { serviceClient } from "@/lib/server/serviceClient";
 import { supabaseStore } from "./supabaseStore";
-import type { LibraryStore } from "./types";
+import { LibraryWriteOff, type LibraryStore } from "./types";
 
 /** Small JSON bodies only: a bookmark (isbn, picture, 나온 이유, date) or a rod name. */
 const MAX_BYTES = 2_000;
@@ -37,13 +38,14 @@ export async function openLibrary(request: Request, route: string, withBody: boo
   if (!db) return json(503, "login is not set up");
   const userId = await sessionUserId(db);
   if (!userId) return json(401, "login needed");
-  return { store: supabaseStore(db, userId), db, userId, body };
+  // new bookmarks are written by the server's client (0007), always as this verified person
+  return { store: supabaseStore(db, userId, serviceClient()), db, userId, body };
 }
 
 const STATUS: Record<LibraryError, number> = { invalid: 400, missing: 404, full: 409, first: 409, not_empty: 409, forbidden: 403, unavailable: 503 };
 
 /** A service result as the response: 200 with the extra fields, or the error with its status. */
-export function reply(result: { ok: true } | { ok: false; error: LibraryError }, status = 200): Response {
+export function reply(result: ({ ok: true } & Record<string, unknown>) | { ok: false; error: LibraryError }, status = 200): Response {
   if (!result.ok) return json(STATUS[result.error], result.error);
   return Response.json(result, { status, headers: { "Cache-Control": "no-store" } });
 }
@@ -55,6 +57,7 @@ export async function guarded(run: () => Promise<Response>): Promise<Response> {
   try {
     return await run();
   } catch (err) {
+    if (err instanceof LibraryWriteOff) return json(503, "saving is off");     // no service key: fail closed, not a 500
     console.error("library:", err instanceof Error ? err.message : "unknown error");
     return json(500, "something went wrong");
   }

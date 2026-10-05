@@ -4,22 +4,24 @@ import { loadCollection, markCollectionSeen, parseFound, reportMeeting } from ".
 const ART = { animal: "otter", bg: "peach", sky: "moon", ground: "none", rare: true };
 const answer = (status: number, body: unknown) => vi.fn().mockResolvedValue(new Response(JSON.stringify(body), { status }));
 
+const ISBNS = ["9790000000000", "9790000000001", "9790000000002", "9790000000003", "9790000000004"];
+
 describe("도감 client", () => {
   afterEach(() => vi.unstubAllGlobals());
 
   it("reports a shown bookmark with the ticket and the index, and keeps only parts we collect (never the empty ground)", async () => {
     const fetchMock = answer(200, { ok: true, found: [{ kind: "animal", value: "otter" }, { kind: "animal", value: "dragon" }, { kind: "hat", value: "x" }, null, { kind: "ground", value: "none" }] });
     vi.stubGlobal("fetch", fetchMock);
-    expect(await reportMeeting({ seed: 3, count: 5, iat: 100, sub: null, sig: "s" }, 2)).toEqual([{ kind: "animal", value: "otter", tier: "limited" }]);
-    expect(fetchMock).toHaveBeenCalledWith("/api/collection/found", expect.objectContaining({ method: "POST", body: JSON.stringify({ seed: 3, count: 5, iat: 100, sub: null, sig: "s", index: 2 }) }));
+    expect(await reportMeeting({ seed: 3, count: 5, iat: 100, sub: null, sig: "s", isbns: ISBNS }, 2)).toEqual([{ kind: "animal", value: "otter", tier: "limited" }]);
+    expect(fetchMock).toHaveBeenCalledWith("/api/collection/found", expect.objectContaining({ method: "POST", body: JSON.stringify({ seed: 3, count: 5, iat: 100, sub: null, sig: "s", isbns: ISBNS, index: 2 }) }));
   });
 
   it("does not ask without a signature, and treats a refusal as nothing new", async () => {
     const fetchMock = answer(403, { error: "bad ticket" });
     vi.stubGlobal("fetch", fetchMock);
-    expect(await reportMeeting({ seed: 3, count: 5, iat: 100, sub: null, sig: null }, 0)).toEqual([]);
+    expect(await reportMeeting({ seed: 3, count: 5, iat: 100, sub: null, sig: null, isbns: ISBNS }, 0)).toEqual([]);
     expect(fetchMock).not.toHaveBeenCalled();
-    expect(await reportMeeting({ seed: 3, count: 5, iat: 100, sub: null, sig: "s" }, 0)).toEqual([]);
+    expect(await reportMeeting({ seed: 3, count: 5, iat: 100, sub: null, sig: "s", isbns: ISBNS }, 0)).toEqual([]);
     expect(parseFound(null)).toEqual([]);
   });
 

@@ -2,6 +2,7 @@ import { catalog } from "@/lib/books/catalog";
 import { kstDate } from "@/lib/books/library";
 import { badRequest, guarded, ISBN13, openLibrary, reply, UUID } from "@/lib/library/http";
 import { MAX_SAVES, moveBookmark, removeBookmark, saveBookmark } from "@/lib/library/service";
+import { savedArt } from "@/lib/library/savedArt";
 import { parseArt, parseMetOn, parseReason } from "@/lib/library/validate";
 
 const isbnOf = (v: unknown): string | null => (typeof v === "string" && ISBN13.test(v) ? v : null);
@@ -9,7 +10,10 @@ const isbnOf = (v: unknown): string | null => (typeof v === "string" && ISBN13.t
 const indexOf = (v: unknown): number | undefined | null =>
   v === undefined ? undefined : typeof v === "number" && Number.isInteger(v) && v >= 0 && v <= MAX_SAVES ? v : null;
 
-/** F-12 꽂기: { isbn, art, reason, metOn } — a book of our catalogue, the picture and 나온 이유 it was met with. */
+/**
+ * F-12 저장: { isbn, art, reason, metOn, ticket? } — a book of our catalogue, the picture and 나온 이유 it was met with, and
+ * (v1.7.1) the draw's signed ticket + the bookmark's place: the picture stored is the server's (lib/library/savedArt).
+ */
 export async function POST(request: Request): Promise<Response> {
   const opened = await openLibrary(request, "save", true);
   if (opened instanceof Response) return opened;
@@ -19,7 +23,13 @@ export async function POST(request: Request): Promise<Response> {
   const reason = parseReason(body.reason);
   const metOn = parseMetOn(body.metOn, kstDate(new Date()));
   if (!isbn || !art || !reason || !metOn || !catalog().some((b) => b.isbn === isbn)) return badRequest();
-  return guarded(async () => reply(await saveBookmark(opened.store, { isbn, art, reason, metOn })));
+  return guarded(async () => {
+    const picture = await savedArt(art, body.ticket, isbn, opened);
+    if (!picture) return badRequest();
+    const result = await saveBookmark(opened.store, { isbn, art: picture.art, reason, metOn });
+    // `found`: 도감 parts a logged-out draw's bookmark brought in just now (the browser sends E-36 for them)
+    return reply(result.ok ? { ...result, found: picture.found } : result);
+  });
 }
 
 /** S-09 [빼기]: { isbn }. */

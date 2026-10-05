@@ -12,7 +12,7 @@ function fakeDb(results: Result[]) {
   const calls: string[] = [];
   const queue = [...results];
   const builder: Record<string, unknown> = {};
-  for (const m of ["select", "upsert", "update", "eq", "order"]) {
+  for (const m of ["select", "upsert", "update", "eq", "order", "insert"]) {
     builder[m] = (...args: unknown[]) => {
       calls.push(`${m}(${args.map((a) => JSON.stringify(a)).join(",")})`);
       return builder;
@@ -27,6 +27,22 @@ const ART = { animal: "otter", bg: "peach", sky: "moon", ground: "none", rare: t
 
 describe("supabaseCollection — reads with the session, writes with the server's key, always for this person", () => {
   afterEach(() => vi.unstubAllEnvs());
+
+  it("claims a kept bookmark with the person's session (RLS); a taken one is this person's only when they can see it (0007)", async () => {
+    const claim = { seed: 7, iat: 100, index: 1 };
+    const free = fakeDb([{}]);
+    expect(await supabaseCollection(free.db, null, "u1").claimKept(claim)).toBe(true);
+    expect(free.calls).toEqual(["from(collection_kept_claims)", 'insert({"seed":7,"iat":100,"idx":1,"user_id":"u1"})']);
+    const mineAgain = fakeDb([{ error: { code: "23505" } }, { data: [{ user_id: "u1" }] }]);
+    expect(await supabaseCollection(mineAgain.db, null, "u1").claimKept(claim)).toBe(true);
+    expect(mineAgain.calls.slice(2)).toEqual(["from(collection_kept_claims)", 'select("user_id")', 'eq("seed",7)', 'eq("iat",100)', 'eq("idx",1)']);
+    const theirs = fakeDb([{ error: { code: "23505" } }, { data: [] }]);
+    expect(await supabaseCollection(theirs.db, null, "u1").claimKept(claim)).toBe(false);
+    await expect(supabaseCollection(fakeDb([{ error: { code: "42P01" } }]).db, null, "u1").claimKept(claim)).rejects.toBeInstanceOf(CollectionUnavailable);
+    await expect(supabaseCollection(fakeDb([{ error: { code: "42501" } }]).db, null, "u1").claimKept(claim)).rejects.toThrow("collection claim failed: 42501");
+    await expect(supabaseCollection(fakeDb([{ error: { code: "23505" } }, { error: { code: "08006" } }]).db, null, "u1").claimKept(claim))
+      .rejects.toThrow("collection claim failed: 08006");
+  });
 
   it("reads the person's rows in meeting order and drops rows that are not parts we draw", async () => {
     const { db, calls } = fakeDb([{ data: [

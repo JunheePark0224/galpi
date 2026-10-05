@@ -2,7 +2,7 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ArtCombo } from "@/lib/art/combine";
 import type { Reason } from "@/lib/recommend";
-import type { LibraryStore, SaveRow, Shelf } from "./types";
+import { LibraryWriteOff, type LibraryStore, type SaveRow, type Shelf } from "./types";
 
 const UNIQUE = "23505";
 const FOREIGN_KEY = "23503";
@@ -22,13 +22,20 @@ const toSave = (r: SaveDbRow): SaveRow => ({
 });
 const SAVE_COLUMNS = "isbn, art, reason, met_on, shelf_id, position";
 
+export { LibraryWriteOff } from "./types";
+
 /**
  * The person's rows in Supabase, through a client carrying their session (lib/auth/server) — RLS (0003) limits every
- * statement to them; the user_id filters only say the same thing out loud and use the indexes.
+ * statement to them; the user_id filters only say the same thing out loud and use the indexes. New bookmarks go through
+ * `writer` (the server's service-role client, 0007): user_id is always the verified session's, the picture the server's.
  */
-export function supabaseStore(db: SupabaseClient, userId: string): LibraryStore {
+export function supabaseStore(db: SupabaseClient, userId: string, writer: SupabaseClient | null = null): LibraryStore {
   const shelves = () => db.from("shelves");
   const saves = () => db.from("saves");
+  const inserted = () => {
+    if (!writer) throw new LibraryWriteOff();                   // fail closed: never fall back to the person's session
+    return writer.from("saves");
+  };
   return {
     async shelves() {
       const { data, error } = await shelves().select("id, name, position").eq("user_id", userId).order("position");
@@ -52,7 +59,7 @@ export function supabaseStore(db: SupabaseClient, userId: string): LibraryStore 
       return data as Shelf;
     },
     async insertSave(row) {
-      const { error } = await saves().insert({
+      const { error } = await inserted().insert({
         user_id: userId, isbn: row.isbn, art: row.art, reason: row.reason, met_on: row.metOn, shelf_id: row.shelfId, position: row.position,
       });
       if (error?.code === UNIQUE) return false;

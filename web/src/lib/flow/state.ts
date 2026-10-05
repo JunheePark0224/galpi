@@ -1,5 +1,6 @@
 import type { ArtCombo } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
+import type { FoundRequest } from "@/lib/collection/meeting";
 import type { ArtTicket } from "@/lib/collection/types";
 import type { Answer, AnswerChoice, Challenge, PathSummary } from "@/lib/paths";
 import type { Reason } from "@/lib/recommend";
@@ -59,6 +60,17 @@ function requestDraw(s: FlowState): FlowState {
 /** The 궁금해요 books of this round, in bookmark order — S-06 shows them one by one. */
 export function curiousPicks(s: Pick<FlowState, "draw" | "reactions">): PickView[] {
   return (s.draw?.picks ?? []).filter((_, i) => s.reactions[i] === "curious");
+}
+
+/**
+ * v1.7: the draw's signed ticket and the pick's place in the draw — kept with an S-06 save made before logging in, so the
+ * 도감 can record it after the login. Nothing when the draw was not signed or the pick is not from this draw.
+ */
+export function meetingOf(draw: DrawView | null, pick: PickView | undefined): FoundRequest | undefined {
+  const ticket = draw?.ticket;
+  const index = pick && draw ? draw.picks.indexOf(pick) : -1;
+  if (!ticket?.sig || index < 0) return undefined;
+  return { seed: ticket.seed, count: ticket.count, iat: ticket.iat, sub: ticket.sub, sig: ticket.sig, isbns: [...ticket.isbns], index };
 }
 
 const addSeen = (seen: string[], id: string) => (seen.includes(id) ? seen : [...seen, id]);
