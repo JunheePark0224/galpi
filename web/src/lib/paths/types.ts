@@ -27,12 +27,14 @@ export interface QNode {
 }
 
 /**
- * Challenge route (design 4절): a scope the person's answers point to → the far scope to draw from instead. Its number is
- * its place in the map (1-based). title: the "N. …" line above the block. pick "one" (10-05 v2): `to.genres` is a list —
+ * Challenge route (design 4절): a scope the person's answers point to → the far scope to draw from instead. Its place in the
+ * map is its priority (the first match wins); n: its number, from the "N. …" line above the block — numbers stay with their
+ * rules, so a newer, narrower rule may sit above older ones (10-05: 37+ for 로맨스 and the four new topics). No heading → its
+ * place (1-based). title: the rest of that line. pick "one" (10-05 v2): `to.genres` is a list —
  * the draw takes one genre of it (walk.ts applyChallenge). why: the human-written "이동의 뜻" — a draft, data only, not
  * shown on any screen yet.
  */
-export interface FarRule { from: Partial<Scope>; to: Partial<Scope>; title?: string; pick?: "one"; why?: string }
+export interface FarRule { from: Partial<Scope>; to: Partial<Scope>; n?: number; title?: string; pick?: "one"; why?: string }
 
 /**
  * Where a challenge draw came from and went (10-05 v2) — on the walk applyChallenge returns and in the draw response.
