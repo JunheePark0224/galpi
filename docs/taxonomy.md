@@ -19,6 +19,7 @@
 | taxonomy v1.1 | 2026-10-04 | 내 책갈피 끌어서 옮기기 `plans/2026-10-04-library-front-drag.md` | E-30 `method` "drag" 추가("hold"는 보내지 않음), `is_same_shelf` 추가, 같은 막대 안 순서 바꾸기도 남김 (8절) |
 | taxonomy v1.2 | 2026-10-04 | 내 책갈피 [모두 제거] (PRD F-13, 시안 `mockups/2026-10-04-v2/library-buttons-options.png` A) | E-35 `library_cleared`(`removed_count`) live, 동사 `cleared`, 모두 빼기는 E-16을 책마다 보내지 않음 (8절) |
 | taxonomy v1.3 | 2026-10-05 | 도감 v1 (PRD F-21, `plans/2026-10-05-collection-dex.md`) | E-36 `collection_item_found`·E-37 `collection_viewed` live, 동사 `found`, 분류 `도감`, E-07 `art.rare`의 뜻, 처리방침 6-3g (8절) |
+| taxonomy v1.4 | 2026-10-05 | 공개 홍보(10-07) 유입 채널 구분 (`launch-plan.md` 4절, `launch-attribution.md`) | E-01 `utm_source`·`utm_medium`·`utm_campaign`(세션 첫 주소, Supabase only), 공통 `referrer`는 호스트만, `is_in_app_browser`에 스레드·링크드인, 처리방침 6-3h (3-1b, 8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -127,7 +128,7 @@
 - 열거형 값은 영어 소문자 snake_case — `"curious"`, `"first_page"`
 - **예외 1 — 시스템 키**: 책 표(`books`)·태그에서 쓰는 한국어 키는 그대로 보낸다(주제 `"데이터 분석"`, 읽는 방식 `"실습"`, 키워드 `"SQL"`). SQL에서 책 표와 바로 이어 붙이기 위해서다
 - **예외 2 — 문서 표기**: 밸런스 답 `"A"`/`"B"`는 `balance-game.md` 표의 열 이름, 구간 `"0"`/`"1-3"`/`"4+"`는 PRD E-22 표기 그대로
-- 값이 없음 / "상관없음"은 `null`. 빈 문자열을 쓰지 않는다 (예외: `referrer`는 브라우저가 주는 빈 문자열 그대로)
+- 값이 없음 / "상관없음"은 `null`. 빈 문자열을 쓰지 않는다 (예외: `referrer`는 들어온 곳이 없으면 빈 문자열 — v1.4 전 기록과 같게)
 - 배열은 같은 타입만 (`keywords`, `changed_items`)
 - 화면 문구(한국어 라벨)는 값으로 보내지 않는다 — 문구가 바뀌어도 값은 그대로여야 한다
 
@@ -177,6 +178,7 @@
 | E-31 `feedback_text` (v0.10) | **`Supabase only`** | 갈피 우체통에 적은 글(≤500자). Amplitude 사본에는 `text_length`(글자 수)만 간다. 처리방침 6-3e |
 | E-21 `goal_text` | **`Supabase only`** | 직접 쓴 글(≤30자)은 Supabase `events.props`에만 저장한다. **같은 이벤트의 Amplitude 사본에는 이 속성이 없다** — `topic`·`keywords`·`is_matched`·`method`는 그대로 간다. 이유·처리방침 변경은 6-2·6-3 |
 | E-01 `prompt_version` | `Amplitude only` | 강사 안내문 6단계 설치 확인값 (기존) |
+| E-01 `utm_source`·`utm_medium`·`utm_campaign` (v1.4) | **`Supabase only`** | 홍보 링크의 표시(3-1b). Amplitude는 같은 표시를 주소에서 스스로 읽어 유저 속성(`utm_source`·`initial_utm_source` …)으로 가진다 — 같은 이름의 이벤트 속성을 또 보내면 어느 쪽 값인지 헷갈리므로 `referrer`(3-1)처럼 Supabase에만 |
 
 구현 규칙: `track()`이 Amplitude로 넘기기 전에 `Supabase only` 속성을 뺀다. 어떤 속성이 `Supabase only`인지는 코드에서도 한 곳(`schema.ts`의 명세)에 두어 문서와 어긋나지 않게 한다. v0.3부터 `EVENT_SPEC`의 `only: "supabase"`가 그 목록이고(`props.ts`의 `forAmplitude`가 뺀다), taxonomy 테스트 #7이 csv Note의 `Supabase only`·`Amplitude only`와 대조한다.
 
@@ -216,10 +218,26 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | `entry` | v1.0: 뜻만 바뀜 | String \| null | **갈래** — 두 번째 질문의 답. `leaf`=이야기에 빠지기, `target`=뭔가 배우기. 고르기 전·갈피를 못 잡겠어요(섞어서)·처음으로 뒤는 null. 도전이어도 고른 갈래 그대로. 값이 v1 입구(🍃=leaf, 🎯=target)와 같아 v1 기록과 이어 볼 수 있다 | common | 이벤트 속성 (null이면 생략) |
 | `mode` | 추가 (v1.0) | String \| null | **길의 모드** — 첫 질문의 답. `normal`=평소 끌리는 쪽(갈피를 못 잡겠어요도), `challenge`=오늘은 낯선 쪽으로 도전. 첫 답 전·처음으로 뒤는 null | common | 이벤트 속성 (null이면 생략) |
 | `screen_version` | 같음 | String | 화면 버전 `v1` → 2단계 `v2` (F-18) — v1.0부터 `v2` | common | 이벤트 속성 |
-| `referrer` | 같음 | String | 들어온 곳, 500자 | common | 보내지 않음 — Amplitude는 자동 수집(최초 유입)으로 따로 가진다 |
+| `referrer` | v1.4: 호스트만 | String | 들어온 곳의 **호스트**(`l.instagram.com`), 없으면 "". v1.4 전 기록은 주소 전체(500자) — 3-1b | common | 보내지 않음 — Amplitude는 자동 수집(최초 유입)으로 따로 가진다 |
 | `is_returning` | `returning` → `is_returning` | Boolean | 세션 시작 때 이전 기록이 있었나 | common | 이벤트 속성 |
 | `device` | 같음 | String | `phone` / `desktop` | common | 이벤트 속성 |
-| `is_in_app_browser` | `in_app_browser` → `is_in_app_browser` | Boolean | 카톡 등 앱 안 브라우저 | common | 이벤트 속성 |
+| `is_in_app_browser` | `in_app_browser` → `is_in_app_browser` | Boolean | 카톡 등 앱 안 브라우저 (User-Agent). v1.4: 스레드(`Barcelona`)·링크드인(`LinkedInApp`) 추가 — 그 전 기록에서는 두 앱이 FALSE | common | 이벤트 속성 |
+
+#### 3-1b. 유입 채널 — `utm_*`와 `referrer` (v1.4 결정, 2026-10-05)
+
+공개 홍보(링크드인·스레드·인스타그램, `launch-plan.md`)의 채널을 Supabase 원본에서도 가르기 위해 정했다. 앱 안 브라우저(인스타그램·스레드·카톡)는 `referrer`를 거의 비워 보내므로 링크에 붙인 표시가 유일한 구분이다.
+
+| 무엇 | 결정 | 이유 |
+|---|---|---|
+| 어디에 싣나 | **E-01 `site_visited`의 이벤트 속성** (`utm_source`·`utm_medium`·`utm_campaign`). 공통 속성으로 두지 않는다 | 1-2 "속성 상속" 원칙 — 퍼널을 가르는 유입 경로는 따로 두고, 다른 이벤트에는 `session_id`로 잇는다. 세션마다 한 번 정해지는 값이라 모든 줄에 null 세 개를 싣지 않는다(행을 작게) |
+| 언제 읽나 | **첫 접촉(first touch)** — 세션의 첫 주소에서 한 번 읽어 sessionStorage `galpi.campaign`에 둔다(`session_id`와 같은 곳·같은 수명, 막힌 저장소면 메모리). 표시가 없어도 "없음"을 둔다 | 같은 탭의 새로고침 E-01도 같은 값. 나중에 다른 표시 링크를 열어도 바뀌지 않는다. 새 탭 = 새 세션 = 그 주소에서 다시 |
+| 값 | 소문자로 바꾼 뒤 `[a-z0-9_-]` 1~40자면 그대로, 아니면 `null`. 어떤 값이든 받는다(`linkedin`만이 아님). 서버는 40자에서 자른다 | 링크를 고쳐 이메일·이름 같은 글을 넣어도 저장되지 않게 |
+| 보내는 곳 | **`Supabase only`** (2-7) | Amplitude는 스스로 같은 표시를 유저 속성으로 가진다 |
+| 주소창 | 읽은 뒤 `utm_*`를 모두 지운다 — `history.replaceState`(Next 라우터와 맞물림, 라우터의 history state 유지). **Amplitude가 주소를 읽은 뒤**(초기화가 끝난 뒤, 실패해도) 지운다. Amplitude가 꺼져 있으면 바로 | 공유한 주소가 우리 표시를 퍼뜨리지 않게(친구가 연 링크가 홍보 유입으로 세지지 않게). 먼저 지우면 Amplitude의 유입 기록이 비어 버린다 |
+| 어느 화면 | E-01은 홈(/)에서만 남으므로 **홍보 링크는 홈 주소로** 건다 | /privacy는 번호를 만들지 않는 화면이라 읽지 않는다 |
+| `referrer` | **호스트만** (`l.instagram.com`, 없으면 ""). 이름은 그대로. 브라우저(`commonProps`)와 서버(`parseCommon`)가 같은 `referrerHost`로 — 배포 전에 열려 있던 화면이 주소 전체를 보내도 호스트만 저장 | 6-2의 검토 메모대로 검색 주소의 검색어 같은 개인 정보를 남기지 않는다. `referrer_host`를 새로 두면 위험한 원래 값을 계속 모으게 된다. 옛 기록(주소 전체)과 새 기록(호스트)은 같은 SQL 식으로 호스트를 뽑으면 이어진다(`launch-attribution.md`) |
+
+분석 SQL(채널별 방문·세션·완주)은 `launch-attribution.md`.
 
 #### 3-1a. `round` 규칙 (v0.2 확정)
 
@@ -320,12 +338,15 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 진입 | view | live | `visit` → `site_visited` |
 
-**언제**: 홈 주소(/) 페이지가 열릴 때 1번 (app/page.tsx TrackVisit 마운트). 새로고침·앱 안 브라우저 재로딩 때도 남음 — 새로고침·뒤로 가기·버려졌다 복원된 탭은 흐름을 sessionStorage로 이어가고, 주소를 다시 입력하거나 링크·헤더 로고·처리방침의 [처음으로]로 새로 열면 S-01에서 시작하며 진행 중이던 판이 있었다면 round +1(끝 이벤트 없이 둔 판 = 이탈). 이벤트 이름·속성은 그대로. /privacy에서는 남지 않음  
+**언제**: 홈 주소(/) 페이지가 열릴 때 1번 (app/page.tsx TrackVisit 마운트). 새로고침·앱 안 브라우저 재로딩 때도 남음 — 새로고침·뒤로 가기·버려졌다 복원된 탭은 흐름을 sessionStorage로 이어가고, 주소를 다시 입력하거나 링크·헤더 로고·처리방침의 [처음으로]로 새로 열면 S-01에서 시작하며 진행 중이던 판이 있었다면 round +1(끝 이벤트 없이 둔 판 = 이탈). 이벤트 이름·속성은 그대로. /privacy에서는 남지 않음. v1.4: 그 세션의 첫 주소에 붙은 utm 표시 세 개를 싣는다(없으면 null, 3-1b) — 홍보 링크는 이 주소로  
 **분석 질문**: Q-01, Q-14, Q-15
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `prompt_version` | 같음 | String | "BA400.4" | Amplitude 설치 확인값 (강사 안내문 6단계) — Amplitude로만 보냄 (Supabase props에는 없음) |
+| `utm_source` | 추가 (v1.4) | String | null, "linkedin", "threads", "instagram" | 세션 첫 주소의 `utm_source` — 어느 곳에 올린 링크인지. 정리 규칙 3-1b. Supabase에만 |
+| `utm_medium` | 추가 (v1.4) | String | null, "social" | 세션 첫 주소의 `utm_medium`. Supabase에만 |
+| `utm_campaign` | 추가 (v1.4) | String | null, "launch_1007" | 세션 첫 주소의 `utm_campaign` — 어떤 홍보인지. Supabase에만 |
 
 #### E-02 `entry_selected`
 
@@ -1002,6 +1023,8 @@ group by 1, 2;
 
 Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나눈다. 두 결과가 다르면 SQL을 기준으로 한다(원본은 Supabase).
 
+유입 채널별 방문·세션·완주(v1.4 `utm_*`, 호스트만 남긴 `referrer`) SQL은 `launch-attribution.md`.
+
 ---
 
 ## 6. 개인정보
@@ -1023,7 +1046,8 @@ Amplitude에서는 같은 이벤트로 퍼널 차트를 만들고 `entry`로 나
 | `goal_text` (v1.0 없앰 — 남은 기록은 1년 뒤 삭제) | 최대 30자, 앞뒤 공백 제거. 입력칸 아래 "이름·연락처는 적지 마세요". **Supabase에만 저장한다 — Amplitude 사본에는 이 속성을 넣지 않는다**(결정 2026-09-30, 9절 Q3). 못 찾은 요청 분석(5-3)은 SQL로 하므로 잃는 것이 없다. Amplitude에는 `topic`·`keywords`·`is_matched`·`method`가 간다. 처리방침에 저장 명시, **Amplitude로는 안 간다는 문장은 v0.3에서 추가(6-3)**. **P4**: 주제를 찾으려고 이 글만 Anthropic(Claude Haiku)에 보낸다 — 익명 번호·공통 속성·다른 기록은 보내지 않고, 서버 로그에도 글을 남기지 않는다. 처리방침에 먼저 적었다(6-3b). 첫 장(S-04)이 이 글을 화면에 보이면 Session Replay(20%)가 화면 글자를 담을 수 있다 — v0.3: 직접 쓴 글이 있는 첫 장(`FirstPage.tsx`)과 글을 쓰는 입력 칸(`TargetInput.tsx`)에 `data-amp-mask`를 달아 리플레이에서 가린다 (v0.3.1: 입력 칸도 — 대시보드의 가림 수준이 `light`로 바뀌어도 가려진다) |
 | `missing_text` (v0.6) (v1.0 없앰 — 남은 기록은 1년 뒤 삭제) | 분류(Claude Haiku)가 `goal_text`에서 뽑은 짧은 말, 최대 20자(서버 `max`), `<` `>` 제거. `goal_text`와 같이 **Supabase에만** — Amplitude에는 `has_missing`만. 화면에서는 F-24 ②·③의 [예스24에서 찾기] 검색어로 쓰여, 누르면 **그 짧은 말만** 예스24 검색 주소에 실려 간다(익명 번호는 가지 않음. 짧은 글이면 그 말이 글과 같을 수 있다). **DOM 속성에는 절대 넣지 않는다** — Amplitude 자동 수집은 링크 `href`를 가리지 않고 보내고 Session Replay는 속성을 기록하므로, ②·③은 `<a href>`가 아니라 버튼이고 누를 때만 주소를 만들어 `window.open`으로 연다. 그 말이 보이는 글자는 `data-amp-mask`가 달린 첫 장 안에만 있어 리플레이·자동 수집 글자에서 가려진다 (단위·E2E 테스트가 속성·가림을 확인) |
 | `feedback_text` (v0.10) | 갈피 우체통 글, 앞뒤 공백 제거 1~500자(넘으면 서버가 받지 않음). **Supabase에만** — Amplitude에는 `text_length`만. 서버 로그·알림 메일·DOM 속성에 넣지 않는다(글칸의 값은 화면 글자로만). 글칸을 `data-amp-mask`로 감싸 리플레이에서 가린다. 시트에 "이름·연락처는 적지 마세요". 다른 이벤트와 같은 공통 속성(익명 번호, 로그인했으면 서버가 확인한 사용자 번호 등)과 함께 저장 — 처리방침 6-3e |
-| `referrer` | 500자에서 자름. Supabase에만. 검색 주소 등 쿼리 문자열에 개인 정보가 섞일 수 있어, 필요하면 호스트만 남기는 것을 검토 |
+| `referrer` | Supabase에만. 검색 주소 등 쿼리 문자열에 개인 정보가 섞일 수 있어 **v1.4부터 호스트만** 남긴다(3-1b — 브라우저·서버 둘 다). 그 전 기록은 500자에서 자른 주소 전체이고 1년 자동 삭제(6-4)로 사라진다 |
+| `utm_source`·`utm_medium`·`utm_campaign` (v1.4) | 홍보 링크의 표시. `[a-z0-9_-]` 40자를 벗어나면 null이라 이메일·이름 같은 글이 들어오지 않는다. Supabase에만. 읽은 뒤 주소창에서 지운다. 처리방침 6-3h |
 | `anon_id` | 처리방침 "지우고 싶다면"에서 이 번호로 삭제 요청을 받는다 — 값의 형식·위치를 바꾸면 처리방침 화면도 함께 |
 | Autocapture·Session Replay | IP·대략적 지역·누른 요소가 Amplitude로 간다(처리방침에 명시). 리플레이는 입력칸을 가린다 — 새 입력칸도 가림 대상인지 확인 |
 
@@ -1062,6 +1086,10 @@ P4의 `/api/goal/classify`가 직접 쓴 글(≤30자)을 Anthropic API로 보�
 ### 6-3g. 처리방침 변경 — 도감 v1 (PRD F-21, v1.3)
 
 7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고쳤다(갱신일 2026-10-05). 표에 새 행 — "도감: 로그인했다면, 책을 넘기며 만난 책갈피 그림의 동물·배경·소품과 각각 처음 만난 때와 그때의 그림을 갈피의 데이터베이스에 저장해요 (어떤 책이었는지는 넣지 않아요)" / 왜 "만난 책갈피를 도감에 모아 보여 주기 위해". 저장은 Supabase `collection`(0004, 사용자 번호·부분·값·처음 만난 때·그때 그림·NEW 여부)뿐, 이벤트 E-36·E-37에는 부분·값·등급·개수만(개인 정보 없음). 보관은 내 책갈피와 같이 탈퇴 요청 때까지(계정을 지우면 함께 지워짐 — `on delete cascade`) — `events`의 1년 자동 삭제 대상이 아니다. 그래서 "보관" 문단을 "내 책갈피, 도감과 로그인 정보는 탈퇴를 요청할 때까지 보관해요"로, "지우고 싶다면"의 탈퇴 문장을 "계정과 내 책갈피, 도감, 기록을 함께 지워요"로 고쳤다(보안 리뷰 10-05).
+
+### 6-3h. 처리방침 변경 — 유입 채널 (v1.4)
+
+7-1의 7단계대로 **기능보다 먼저** `/privacy`를 고쳤다(갱신일 그대로 2026-10-05). ① 표의 기기 행: "들어온 곳(이전 페이지 주소)" → "들어온 곳(이전 사이트의 이름만 — 예: instagram.com, 주소 전체는 저장하지 않아요)" ② 새 행 — "홍보 링크로 들어왔다면 그 링크에 붙은 표시 (어디에 올린 어떤 홍보인지 — 예: threads, social, launch_1007). 읽은 뒤 주소창에서 지워요" / 왜 "어느 홍보로 몇 명이 왔는지 세기 위해". Amplitude가 모으는 페이지 주소(광고 태그 포함)는 원래 행 그대로.
 
 ### 6-4. 보관
 
@@ -1187,6 +1215,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v1.1 | 2026-10-04 | Claude (사용자 요청) | 내 책갈피(S-09)를 꾹 눌러 **끌어서** 다른 막대 어디든·같은 막대 안 다른 자리로 옮김(PRD F-13, `plans/2026-10-04-library-front-drag.md`). E-30 `bookmark_moved`: `method`에 "drag" 추가, "hold"(들고 → 막대 누르기)는 v1.1부터 보내지 않음 — 그 화면이 없어짐, 옛 탭과 v1.0까지의 기록을 읽으려고 스펙에 남김. 새 속성 `is_same_shelf`(Boolean — 2-3 규칙으로 `is_`, 계획서의 `same_shelf`). 같은 막대 안 순서 바꾸기도 남김, 제자리·막대 밖 놓기는 남지 않음. 놓인 자리 번호는 넣지 않음(답할 질문이 없음, 1-1). 모으는 정보 변화 없음 — `/privacy` 그대로 |
 | v1.2 | 2026-10-04 | Claude (사용자 요청) | 내 책갈피(S-09)에 [모두 제거] → 확인 시트 [모두 빼기](PRD F-13, 시안 `library-buttons-options.png` A). 새 E-35 `library_cleared`(`removed_count` Number — 서버가 지운 수)를 화면과 함께 `live`로, 동사 `cleared` 추가. 서버가 지운 것을 확인한 뒤에만 보낸다. 빠진 책마다 E-16 `book_unsaved`를 보내지 않는다(한 누름 = 한 이벤트 — 어떤 책이었는지는 그 전 E-15로 안다). 막대 이름·번호는 넣지 않음(6-1). 모으는 정보 변화 없음(지운 수뿐) — `/privacy`는 기록을 "누른 버튼"으로만 적고 이벤트를 하나하나 나열하지 않아 그대로 |
 | v1.3 | 2026-10-05 | Claude (도감 v1 구현) | 도감 v1(PRD F-21, `plans/2026-10-05-collection-dex.md`). 새 E-36 `collection_item_found`(`part_kind`·`part_value`·`tier` — 서버가 새로 기록한 부분마다, 로그인한 사람만)·E-37 `collection_viewed`(`collected_count`·`is_logged_in`)를 화면과 함께 `live`로. 동사 `found`, 분류 `도감`. 이름 규칙 2-3 때문에 계획서의 `kind`·`value`·`found_count` 대신 `part_kind`·`part_value`·`collected_count`(`kind`는 E-32의 질문 종류, `found_count`는 옛 E-22의 책 수와 뜻이 다름). E-07 `art`: 값에 한정판·초판본이 더해지고 `rare`의 뜻을 정함(넷 중 하나라도 한정판 이상). 처리방침 6-3g 먼저(갱신일 2026-10-05) |
+| v1.4 | 2026-10-05 | Claude (공개 준비) | 공개 홍보(10-07)의 유입 채널을 Supabase 원본에서도 가른다(3-1b). E-01 `site_visited`에 `utm_source`·`utm_medium`·`utm_campaign`(String 또는 null, ≤40, **Supabase only**) — 세션 첫 주소에서 한 번 읽어 sessionStorage에 두고(첫 접촉), `[a-z0-9_-]` 밖은 null, Amplitude가 주소를 읽은 뒤 주소창에서 `utm_*`를 지움. 공통 속성이 아니라 E-01 속성인 이유는 1-2 속성 상속 원칙과 행 크기. 공통 `referrer`는 이름 그대로 **호스트만**(6-2 검토 메모 — 브라우저·서버 `referrerHost`, 그 전 기록은 주소 전체). `is_in_app_browser`가 스레드(`Barcelona`)·링크드인(`LinkedInApp`) 앱 안 브라우저도 TRUE로(그 전 기록은 FALSE). 처리방침 6-3h 먼저(갱신일 그대로). 분석 SQL은 `launch-attribution.md`. 새 이벤트 없음 |
 
 ---
 

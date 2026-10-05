@@ -9,19 +9,21 @@ describe("/privacy (S-10)", () => {
   beforeEach(() => localStorage.clear());
   afterEach(() => vi.unstubAllEnvs());
 
-  it("shows the title, the date and the ten collected items (v2: no written goal; 도감 v1 row)", () => {
+  it("shows the title, the date and the eleven collected items (v2: no written goal; 도감 v1 row; v1.4 link tags)", () => {
     render(<PrivacyPage />);
     expect(screen.getByRole("heading", { level: 1, name: "개인정보 처리방침" })).toBeInTheDocument();
     expect(screen.getByText(/2026-10-05/)).toBeInTheDocument();
     expect(screen.getByText("갈피는 이름·전화번호를 받지 않아요.")).toBeInTheDocument();
     expect(screen.getByText(/이메일·닉네임은 로그인할 때 로그인 확인용으로 로그인 서비스에만 남고, 갈피는 쓰지 않아요\./)).toBeInTheDocument();
     const rows = within(screen.getByRole("table")).getAllByRole("row");
-    expect(rows).toHaveLength(11); // header + 10 (v2: the 🎯 written-goal row is gone; 도감 v1 adds one)
+    expect(rows).toHaveLength(12); // header + 11 (v2: the 🎯 written-goal row is gone; 도감 v1 adds one; taxonomy v1.4 the link tags)
     expect(screen.getByText(/도감: 로그인했다면, 책을 넘기며 만난 책갈피 그림의 동물·배경·소품과 각각 처음 만난 때와 그때의 그림/)).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "모으는 것" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "왜" })).toBeInTheDocument();
     expect(screen.getByText(ACTIONS)).toBeInTheDocument();
-    expect(screen.getByText("기기 종류(휴대폰/컴퓨터), 앱 안 브라우저 여부, 들어온 곳(이전 페이지 주소), 화면 버전")).toBeInTheDocument();
+    expect(screen.getByText("기기 종류(휴대폰/컴퓨터), 앱 안 브라우저 여부, 들어온 곳(이전 사이트의 이름만 — 예: instagram.com, 주소 전체는 저장하지 않아요), 화면 버전")).toBeInTheDocument();
+    expect(screen.getByText("홍보 링크로 들어왔다면 그 링크에 붙은 표시 (어디에 올린 어떤 홍보인지 — 예: threads, social, launch_1007). 읽은 뒤 주소창에서 지워요")).toBeInTheDocument();
+    expect(screen.getByText("어느 홍보로 몇 명이 왔는지 세기 위해")).toBeInTheDocument();
     expect(screen.queryByRole("cell", { name: /무엇을 알고 싶어요/ })).toBeNull();
     expect(screen.getByText("같은 사람이 다시 왔는지 세기 위해")).toBeInTheDocument();
     expect(screen.getByText("추천이 잘 맞는지 분석하기 위해")).toBeInTheDocument();

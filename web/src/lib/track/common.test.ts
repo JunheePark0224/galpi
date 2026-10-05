@@ -2,6 +2,24 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { commonProps, detectDevice, nextRound, setEntry, setMode } from "./common";
 
 describe("detectDevice", () => {
+  // taxonomy v1.4: the launch channels' in-app browsers (UA shapes as those apps send them)
+  it.each([
+    ["Instagram iOS", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Instagram 345.0.0.24.89 (iPhone15,2; iOS 17_5; ko_KR; ko; scale=3.00; 1179x2556; 634108168)"],
+    ["Instagram Android", "Mozilla/5.0 (Linux; Android 14; SM-S911N Build/UP1A.231005.007; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/129.0.6668.81 Mobile Safari/537.36 Instagram 345.0.0.48.95 Android (34/14; 480dpi; 1080x2340; samsung; SM-S911N; dm1q; qcom; ko_KR; 634108168)"],
+    ["Threads iOS", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Barcelona 352.0.0.20.80 (iPhone15,2; iOS 17_5; ko_KR; ko; scale=3.00; 1179x2556; 645204331)"],
+    ["Threads Android", "Mozilla/5.0 (Linux; Android 14; SM-S911N Build/UP1A.231005.007; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/129.0.6668.81 Mobile Safari/537.36 Barcelona 352.0.0.20.80 Android (34/14; 480dpi; 1080x2340; samsung; SM-S911N; dm1q; qcom; ko_KR; 645204331)"],
+    ["KakaoTalk iOS", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 KAKAOTALK 10.9.5"],
+    ["LinkedIn iOS", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 [LinkedInApp]/9.30.1234"],
+    ["LinkedIn Android", "Mozilla/5.0 (Linux; Android 14; Pixel 8; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/129.0.6668.81 Mobile Safari/537.36 [LinkedInApp]/4.1.1010"],
+  ])("detects a phone inside the %s in-app browser", (_, ua) => {
+    expect(detectDevice(ua)).toEqual({ device: "phone", is_in_app_browser: true });
+  });
+  it.each([
+    ["mobile Safari", "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1"],
+    ["Android Chrome", "Mozilla/5.0 (Linux; Android 14; SM-S911N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.6668.81 Mobile Safari/537.36"],
+  ])("does not flag %s as in-app", (_, ua) => {
+    expect(detectDevice(ua)).toEqual({ device: "phone", is_in_app_browser: false });
+  });
   it("detects a phone inside the KakaoTalk in-app browser", () => {
     const ua = "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 Mobile Safari/537.36 KAKAOTALK 10.8.0";
     expect(detectDevice(ua)).toEqual({ device: "phone", is_in_app_browser: true });
@@ -30,18 +48,11 @@ describe("commonProps", () => {
     expect(second.is_returning).toBe(false);
   });
 
-  it("cuts a very long document.referrer to 500 characters", () => {
+  it("sends only the host of document.referrer, never its path or search words (taxonomy v1.4)", () => {
     vi.spyOn(document, "referrer", "get").mockReturnValue("https://search.example/?q=" + "가".repeat(900));
-    const p = commonProps();
-    expect(p.referrer).toHaveLength(500);
-    expect(p.referrer.startsWith("https://search.example/?q=")).toBe(true);
-  });
-
-  it("does not cut an emoji in half at the 500 boundary", () => {
-    vi.spyOn(document, "referrer", "get").mockReturnValue("x".repeat(499) + "😀");
-    expect(commonProps().referrer).toBe("x".repeat(499));
-    vi.spyOn(document, "referrer", "get").mockReturnValue("x".repeat(498) + "😀");
-    expect(commonProps().referrer).toBe("x".repeat(498) + "😀");
+    expect(commonProps().referrer).toBe("search.example");
+    vi.spyOn(document, "referrer", "get").mockReturnValue("");
+    expect(commonProps().referrer).toBe("");
   });
 
   it("carries entry and round", () => {
@@ -330,5 +341,40 @@ describe("ensureAnonId (used as the Amplitude device id)", () => {
     ensureAnonId();
     expect(sessionStorage.length).toBe(0);
     expect(localStorage.getItem("galpi.seen")).toBeNull();
+  });
+});
+
+describe("campaignAtLanding (taxonomy v1.4 — first touch, kept for the session like the session id)", () => {
+  /** A fresh module = a fresh page load (the in-memory fallback starts empty, as in a real new document). */
+  const pageLoad = async () => { vi.resetModules(); return (await import("./common")).campaignAtLanding; };
+  beforeEach(() => sessionStorage.clear());
+  afterEach(() => window.history.replaceState(null, "", "/"));
+
+  it("reads the landing address once and keeps it for the session, even after the address changes or a reload", async () => {
+    window.history.replaceState(null, "", "/?utm_source=Threads&utm_medium=social&utm_campaign=launch_1007");
+    const campaignAtLanding = await pageLoad();
+    const first = campaignAtLanding();
+    expect(first).toEqual({ utm_source: "threads", utm_medium: "social", utm_campaign: "launch_1007" });
+    window.history.replaceState(null, "", "/?utm_source=instagram");
+    expect(campaignAtLanding()).toEqual(first);
+    expect(await pageLoad().then((read) => read())).toEqual(first);   // reload in the same tab
+    expect(JSON.parse(sessionStorage.getItem("galpi.campaign") ?? "{}")).toEqual(first);
+  });
+
+  it("an untagged first load is the session's answer too: a later tagged address does not replace it", async () => {
+    const read = await pageLoad();
+    window.history.replaceState(null, "", "/");
+    expect(read()).toEqual({ utm_source: null, utm_medium: null, utm_campaign: null });
+    window.history.replaceState(null, "", "/?utm_source=linkedin");
+    expect(read().utm_source).toBeNull();
+    expect((await pageLoad())().utm_source).toBeNull();
+  });
+
+  it("a new session (tab) reads its own landing address", async () => {
+    window.history.replaceState(null, "", "/?utm_source=linkedin&utm_medium=social");
+    expect((await pageLoad())().utm_source).toBe("linkedin");
+    sessionStorage.clear();
+    window.history.replaceState(null, "", "/?utm_source=instagram");
+    expect((await pageLoad())()).toEqual({ utm_source: "instagram", utm_medium: null, utm_campaign: null });
   });
 });

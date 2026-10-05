@@ -27,6 +27,22 @@ let sdk: Sdk | null = null;
 let waiting: Waiting[] = [];
 /** A login (or logout) that happened before the SDK arrived — applied first, so the waiting events carry the person. */
 let identity: { userId: string | null; provider?: Provider } | null = null;
+let settled = false;   // init finished (Amplitude has read the landing address) or broke
+/** Work that must wait until Amplitude has read the address (taking the utm tags off it — taxonomy v1.4). */
+let afterRead: (() => void)[] = [];
+
+function settle(): void {
+  settled = true;
+  const run = afterRead;
+  afterRead = [];
+  run.forEach((fn) => {
+    try {
+      fn();
+    } catch {
+      // one caller's failure must not stop the others
+    }
+  });
+}
 
 function whenIdle(run: () => void): void {
   if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(run, { timeout: IDLE_TIMEOUT_MS });
@@ -76,6 +92,17 @@ async function load(key: string): Promise<void> {
     sdk = null;
     waiting = [];
   }
+  settle();
+}
+
+/**
+ * Runs `fn` once Amplitude has read the landing address — its own attribution takes the utm tags from the URL at init —
+ * or right away when Amplitude is off (no key) or broke. Lets the page take the tags off the address without Amplitude
+ * losing them.
+ */
+export function afterAmplitudeRead(fn: () => void): void {
+  if (settled || failed || !apiKey()) fn();
+  else afterRead.push(fn);
 }
 
 /**
