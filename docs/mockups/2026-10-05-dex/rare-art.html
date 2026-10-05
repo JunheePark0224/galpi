@@ -1,0 +1,75 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+body{margin:0;padding:22px 28px;background:#FAF5EA;font-family:"Gowun Dodum",sans-serif;color:#2B2724}
+h2{font-family:"Gowun Batang",serif;font-size:21px;margin:18px 0 6px}
+.row{display:flex;flex-wrap:wrap;gap:14px}
+.cell{display:flex;flex-direction:column;align-items:center;gap:6px;width:150px;text-align:center}
+.win{width:150px;height:114px;border-radius:75px 75px 4px 4px;overflow:hidden;box-shadow:0 0 0 1px rgba(43,39,36,.15)}
+.win.gold{box-shadow:0 0 0 2.5px #D9B65A,0 0 10px rgba(217,182,90,.6)}
+.name{font-size:14px;font-family:"Gowun Batang",serif;font-weight:700}
+.tier{font-size:11px;padding:1px 8px;border-radius:9999px}
+.t1{background:#ECE4D3;color:#4A433D}.t2{background:#DDE7F3;color:#2D4E6E}.t3{background:linear-gradient(90deg,#E9CF86,#F6E7B8,#E2B64A);color:#5A3420}
+.note{font-size:13px;color:#7A6048;margin:0 0 10px}
+
+@keyframes breathe{0%,100%{opacity:.35}50%{opacity:.85}}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.3)}50%{opacity:1;transform:scale(1)}}
+@keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-34px);opacity:0}}
+@keyframes sweep{0%,60%{transform:translateX(-60px)}100%{transform:translateX(160px)}}
+.aura{animation:breathe 2.4s ease-in-out infinite}
+.tw{transform-box:fill-box;transform-origin:center;animation:twinkle 1.8s ease-in-out infinite}
+.dust{animation:rise 3.2s linear infinite}
+.sweep{animation:sweep 3.6s ease-in-out infinite}
+</style></head><body>
+<div id="out"></div>
+<script>
+const BG={peach:["#F9DCCB","#E7B597"],leaf:["#E4EFD9","#A9C69A"],sky:["#DCEAF5","#A7C2A0"],butter:["#FBF0C9","#D8C27E"],lavender:["#E7E1F3","#B8ACD6"],night:["#3E4569","#5B6B58"]};
+const HILL="M-5 76 V60 Q50 44 105 60 V76 Z";
+const GOLD="#E2B64A";
+function star(cx,cy,o,i,p){let s=[];for(let k=0;k<p*2;k++){const a=Math.PI/p*k-Math.PI/2,r=k%2?i:o;s.push((k?"L":"M")+(cx+r*Math.cos(a)).toFixed(1)+" "+(cy+r*Math.sin(a)).toFixed(1))}return s.join(" ")+"Z"}
+function sky(kind,c){switch(kind){
+ case"moon":return'<circle cx="75" cy="22" r="7" fill="#FFF6DA"/><circle cx="78.5" cy="19.5" r="6" fill="'+c+'"/>';
+ case"cloud":return'<g fill="#fff" opacity=".92"><ellipse cx="72" cy="25" rx="10" ry="4.5"/><circle cx="68" cy="22" r="4.5"/><circle cx="75" cy="20.5" r="5.5"/></g>';
+ case"rainbow":return'<g fill="none" stroke-width="2.2" opacity=".9"><path d="M60 32 A14 14 0 0 1 88 32" stroke="#E98A7A"/><path d="M62.3 32 A11.7 11.7 0 0 1 85.7 32" stroke="#F2D16B"/><path d="M64.6 32 A9.4 9.4 0 0 1 83.4 32" stroke="#9CC98A"/><path d="M66.9 32 A7.1 7.1 0 0 1 81.1 32" stroke="#8AB7DE"/></g>';
+ case"shooting":return'<path d="M58 12 L76 23" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".8"/><path d="'+star(78,25,4,1.5,5)+'" fill="#FFF1B8"/>';
+ case"goldmoon":return'<circle cx="75" cy="22" r="8" fill="'+GOLD+'"/><circle cx="79" cy="19" r="7" fill="'+c+'"/><path d="'+star(62,15,2.2,.7,4)+'" fill="'+GOLD+'"/><path d="'+star(88,32,1.8,.6,4)+'" fill="'+GOLD+'"/>';
+ default:return""}}
+function ground(kind){switch(kind){
+ case"grass":return'<path d="M10 56 l2 -7 l2 7 M15 56 l2 -9 l2 9 M82 56 l2 -8 l2 8 M87 56 l2 -6 l2 6" stroke="#5F7F52" stroke-width="1.5" fill="none" stroke-linecap="round"/>';
+ case"books":return'<rect x="78" y="51.5" width="15" height="4.5" rx="1" fill="#7A4A2E"/><rect x="79.5" y="47" width="12" height="4.5" rx="1" fill="#3A6684"/><rect x="81" y="43" width="9.5" height="4" rx="1" fill="#B8912F"/>';
+ case"clover":return'<path d="M16 57 Q15 52 16.3 48" stroke="#4E7A4A" stroke-width="1.2" fill="none"/><g fill="#5E9A58"><circle cx="14" cy="45" r="2.6"/><circle cx="18.6" cy="45" r="2.6"/><circle cx="14" cy="49.6" r="2.6"/><circle cx="18.6" cy="49.6" r="2.6"/></g>';
+ case"firefly":return'<circle cx="13" cy="44" r="3.4" fill="#FFF3A6" opacity=".4"/><circle cx="13" cy="44" r="1.3" fill="#FFE866"/><circle cx="86" cy="40" r="3.2" fill="#FFF3A6" opacity=".4"/><circle cx="86" cy="40" r="1.2" fill="#FFE866"/><circle cx="21" cy="35" r="2.6" fill="#FFF3A6" opacity=".4"/><circle cx="21" cy="35" r="1" fill="#FFE866"/>';
+ case"goldbook":return'<rect x="76" y="45" width="17" height="11" rx="1.5" fill="#6B3A22" stroke="'+GOLD+'" stroke-width="1"/><rect x="83.5" y="45" width="2" height="11" fill="'+GOLD+'"/><path d="'+star(80,50.5,1.6,.6,4)+'" fill="'+GOLD+'"/>';
+ default:return""}}
+function back(kind){
+ if(BG[kind])return{sky:BG[kind][0],hill:BG[kind][1],extra:""};
+ if(kind==="cherry")return{sky:"#FBE3EA",hill:"#E8A9BC",extra:[[18,20],[34,12],[60,30],[88,18],[26,38],[70,10]].map(function(p,i){return'<ellipse cx="'+p[0]+'" cy="'+p[1]+'" rx="2.2" ry="1.3" transform="rotate('+(i*40)+' '+p[0]+' '+p[1]+')" fill="#F3B6C6"/>'}).join("")};
+ if(kind==="sunset")return{sky:"url(#sun)",moonBg:"#F09A7A",hill:"#7E5A6E",extra:'<circle cx="50" cy="56" r="11" fill="#FFD59A" opacity=".8"/>'};
+ if(kind==="aurora")return{sky:"#1D2E4A",hill:"#2C4440",extra:'<path d="M-5 30 Q20 12 45 26 T100 18 L100 30 Q75 38 50 34 T-5 42 Z" fill="#7FD8B0" opacity=".45"/><path d="M-5 22 Q30 6 60 20 T105 12 L105 18 Q70 28 45 24 T-5 30 Z" fill="#6CC3D6" opacity=".35"/><path d="'+star(20,10,1.4,.5,4)+'" fill="#fff"/><path d="'+star(84,30,1.2,.4,4)+'" fill="#fff"/>'};
+ if(kind==="galaxy")return{sky:"#141936",hill:"#2E3456",extra:'<path d="M-5 50 Q40 28 105 4 L105 18 Q50 36 -5 62 Z" fill="#B9B2EC" opacity=".25"/>'+[[12,14],[30,8],[48,20],[70,12],[86,28],[22,32],[58,6],[92,10]].map(function(p,i){return'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+(i%3?0.7:1)+'" fill="#fff"/>'}).join("")+'<path d="'+star(40,12,2.4,.8,4)+'" fill="'+GOLD+'"/><path d="'+star(80,20,2,.7,4)+'" fill="'+GOLD+'"/>'};
+ if(kind==="study"){let e="";for(let i=0;i<14;i++){const x=i*7.4,hgt=20+((i*37)%12),c=["#3A6684","#A94C60","#4A7456","#B8912F","#5E55A0"][i%5];e+='<rect x="'+x+'" y="'+(44-hgt)+'" width="6.4" height="'+hgt+'" fill="'+c+'" opacity=".9"/><rect x="'+x+'" y="'+(48-hgt)+'" width="6.4" height="1.2" fill="'+GOLD+'"/>'}e+='<rect x="0" y="44" width="100" height="2.2" fill="'+GOLD+'"/>';return{sky:"#7A4A2E",hill:"#5A3420",extra:e}}
+}
+
+function sparkles(pts){return pts.map(function(p,i){return'<path class="tw" style="animation-delay:'+(i*0.45)+'s" d="'+star(p[0],p[1],p[2]||2.6,(p[2]||2.6)*.32,4)+'" fill="#FFE9A8"/>'}).join("")}
+function auraFx(){return'<circle class="aura" cx="50" cy="40" r="27" fill="url(#aura)"/>'}
+function animalFx(){return sparkles([[24,26],[78,34,2.2],[30,50,1.8],[72,14,2]])}
+function bgFx(){let e="";[[14,70],[30,74],[46,68],[62,72],[78,70],[90,74],[22,66]].forEach(function(p,i){e+='<circle class="dust" style="animation-delay:'+(i*0.45)+'s" cx="'+p[0]+'" cy="'+p[1]+'" r="'+(i%2?0.9:1.2)+'" fill="#F3D98A"/>'});return e}
+function propFx(kind){if(kind==="goldmoon")return'<circle class="aura" cx="76" cy="21" r="13" fill="url(#aura)"/>';if(kind==="goldbook")return'<circle class="aura" cx="84.5" cy="50" r="12" fill="url(#aura)"/>';return""}
+function propSpark(kind){if(kind==="goldmoon")return sparkles([[66,10,2.2],[90,26,1.8]]);if(kind==="goldbook")return sparkles([[74,42,2],[95,46,1.6]]);return""}
+function sweep(){return'<rect class="sweep" x="-30" y="-10" width="16" height="100" transform="skewX(-20)" fill="#FFF6D6" opacity=".35"/>'}
+var FIRST_A=["bluedragon","whitetiger","redbird","blacktortoise"],FIRST_B=["galaxy","study"],FIRST_P=["goldmoon","goldbook"];
+function win(animal,bgk,s,g){const b=back(bgk),fa=FIRST_A.includes(animal),fb=FIRST_B.includes(bgk),fp=FIRST_P.includes(s)||FIRST_P.includes(g),any=fa||fb||fp;
+return'<svg viewBox="0 0 100 76" width="150" height="114"><defs><linearGradient id="sun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9C7BB8"/><stop offset=".55" stop-color="#F09A7A"/><stop offset="1" stop-color="#F8C98A"/></linearGradient><radialGradient id="aura"><stop offset="0" stop-color="#FFE29A" stop-opacity=".95"/><stop offset=".6" stop-color="#F3C861" stop-opacity=".35"/><stop offset="1" stop-color="#F3C861" stop-opacity="0"/></radialGradient></defs><rect width="100" height="76" fill="'+b.sky+'"/>'+b.extra+(fb?bgFx():"")+propFx(s)+sky(s,b.moonBg||b.sky)+propSpark(s)+'<path d="'+HILL+'" fill="'+b.hill+'"/>'+(fa?auraFx():"")+'<image href="'+animal+'.svg" x="22.5" y="12" width="55" height="55"/>'+(fa?animalFx():"")+propFx(g)+ground(g)+propSpark(g)+(any?sweep():"")+'</svg>'}
+function cell(svg,name,tier){return'<div class="cell"><div class="win '+(tier==="초판본"?"gold":"")+'">'+svg+'</div><div class="name">'+name+'</div><span class="tier '+(tier==="초판본"?"t3":tier==="한정판"?"t2":"t1")+'">'+tier+'</span></div>'}
+let h='<h2>동물</h2><p class="note">한정판 5 · 초판본 4 (초판본 = 금빛 테두리 + 금박 무늬). 배경·소품은 일반판으로 둠</p><div class="row">';
+[["redpanda","레서판다","sky","cloud","grass"],["fennec","사막여우","butter","moon","none"],["otter","수달","leaf","cloud","grass"],["panda","판다","leaf","cloud","books"],["koala","코알라","peach","moon","grass"]].forEach(function(r){h+=cell(win(r[0],r[2],r[3],r[4]),r[1],"한정판")});
+[["bluedragon","청룡","sky","cloud","none"],["whitetiger","백호","night","moon","grass"],["redbird","주작","butter","cloud","none"],["blacktortoise","현무","lavender","moon","grass"]].forEach(function(r){h+=cell(win(r[0],r[2],r[3],r[4]),r[1],"초판본")});
+h+='</div><h2>배경</h2><p class="note">한정판 3 · 초판본 2 (동물은 일반판 여우)</p><div class="row">';
+[["cherry","벚꽃 언덕","한정판"],["sunset","노을","한정판"],["aurora","오로라","한정판"],["galaxy","은하수","초판본"],["study","금박 서재","초판본"]].forEach(function(r){h+=cell(win("fox",r[0],"none","none"),r[1],r[2])});
+h+='</div><h2>소품</h2><p class="note">한정판: 무지개·별똥별(하늘), 네잎클로버·반딧불(땅) / 초판본: 금빛 초승달(하늘), 금장 고서(땅)</p><div class="row">';
+[["butter","rainbow","none","무지개","한정판"],["night","shooting","none","별똥별","한정판"],["leaf","none","clover","네잎클로버","한정판"],["night","none","firefly","반딧불","한정판"],["sky","goldmoon","none","금빛 초승달","초판본"],["peach","none","goldbook","금장 고서","초판본"]].forEach(function(r){h+=cell(win("cat",r[0],r[1],r[2]),r[3],r[4])});
+h+='</div><h2>조합 예시</h2><div class="row">'+cell(win("bluedragon","galaxy","goldmoon","goldbook"),"청룡 · 은하수 · 금빛 초승달 · 금장 고서","초판본")+cell(win("redpanda","cherry","rainbow","clover"),"레서판다 · 벚꽃 · 무지개 · 네잎클로버","한정판")+'</div>';
+if(location.search.includes("bird")){FIRST_A.push("redbird-old","redbird-a","redbird-b","redbird-c","redbird-d");h='<h2>주작 다시 그리기 (옆모습)</h2><div class="row">'+cell(win("redbird-a","butter","cloud","none"),"전 시안 A","초판본")+cell(win("redbird-c","butter","cloud","none"),"C · 옆모습, 불꽃 목깃","초판본")+cell(win("redbird-d","butter","cloud","none"),"D · 옆모습, 긴 볏 + 금빛 목깃","초판본")+cell(win("redbird-c","galaxy","goldmoon","none"),"C · 은하수에서","초판본")+cell(win("redbird-d","night","none","none"),"D · 밤에서","초판본")+'</div>';}
+document.getElementById("out").innerHTML=h;
+if(location.search.includes("first")){document.querySelectorAll(".cell").forEach(function(c){if(!c.querySelector(".t3"))c.remove()});document.querySelectorAll(".note").forEach(function(n){n.remove()});document.querySelectorAll("h2").forEach(function(x){if(x.textContent==="동물")x.textContent="초판본 동물";if(x.textContent==="배경")x.textContent="초판본 배경";if(x.textContent==="소품")x.textContent="초판본 소품";if(x.textContent==="조합 예시")x.textContent="가장 귀한 조합"});}
+</script></body></html>

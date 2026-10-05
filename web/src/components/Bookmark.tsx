@@ -37,7 +37,7 @@ export function Bookmark({ card, art, moving = false, met }: Props) {
       <span className={frame.string} aria-hidden="true" />
       <div className={`${frame.film} ${styles.card}`} aria-hidden="true">
         <span className={frame.hole} />
-        <div className={styles.window}><BookmarkArt art={art} clipId={`arch-${card.id}`} /></div>
+        <div className={styles.window}><BookmarkArt art={art} clipId={`arch-${card.id}`} fx={moving ? "light" : "full"} /></div>
         <GenreTag card={card} />
         <h3 ref={titleRef} className={styles.title} data-part="title">{bookTitle(card.title)}</h3>
         {card.author ? <p className={styles.author} data-part="author">{card.author}</p> : null}

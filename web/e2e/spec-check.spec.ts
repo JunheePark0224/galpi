@@ -6,7 +6,10 @@ const common = { anon_id: "a", user_id: null, session_id: "s", round: 1, entry: 
 
 // No page: proves the check the flow specs rely on can fail.
 test("the posted-event check catches old names, wrong prop keys and old common keys", () => {
-  expect(specMismatches([{ name: "book_opened", props: {}, common }, { name: "site_visited", props: {}, common }])).toEqual([]);
+  expect(specMismatches([{ name: "book_opened", props: {}, common }, { name: "site_visited", props: { utm_source: null, utm_medium: null, utm_campaign: null }, common }])).toEqual([]);
+  // taxonomy v1.4: a visit always carries its three utm tags (null when the address had none)
+  expect(specMismatches([{ name: "site_visited", props: {}, common }]))
+    .toEqual(["site_visited: props [], spec [utm_campaign,utm_medium,utm_source]"]);
   expect(specMismatches([{ name: "visit", props: {}, common }])).toEqual(["visit: not in EVENT_SPEC"]);
   expect(specMismatches([{ name: "home_clicked", props: { curious: 0 }, common }]))
     .toEqual(["home_clicked: props [curious], spec [curious_count,source]"]);

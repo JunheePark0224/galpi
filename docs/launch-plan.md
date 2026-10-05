@@ -45,15 +45,22 @@
   만난 그림은 서버가 뽑기 seed로 다시 계산해 기록한다 (브라우저가 보낸 그림을 그대로 믿지 않는다 — 전설을 꾸며 넣지 못하게).
 - 도감 화면: 등급별 칸. 못 만난 칸은 실루엣과 "?"로 보인다. 처음 만나면 "새 친구!", 모은 수 n / N.
 - **분석**: 도감이 꽂기와 떨어져 있으므로, 꽂기는 계속 "책이 마음에 들었다"는 신호로 쓴다. `art.rare`가 이벤트에 남으므로 희귀가 꽂기에 영향을 주는지도 따로 본다.
-- [ ] 희귀 동물·배경 시안 (Claude) → [ ] 사용자 선택 → [ ] 도감 화면 시안 → [ ] 구현 (taxonomy·PRD·DESIGN 먼저)
+- [x] 희귀 동물·배경 시안 (Claude) → [x] 사용자 선택 → [x] 도감 화면 시안 → [x] 구현 (taxonomy v1.3·PRD F-21·DESIGN A-04·C-25, `feat/collection-dex`, 10-05) → [ ] 사용자: Supabase 0004 적용 + Vercel `COLLECTION_SIGNING_SECRET` → 병합·배포
 - **시간이 남으면 (아니면 공개 뒤 첫 업데이트 = 다음 홍보거리)**: 꾸미기. 도감에서 모은 동물·배경·소품으로 내 책갈피의 그림을 바꾼다. 한 번 만난 것은 계속 쓸 수 있다.
 
 ## 4. 버그·디자인 마무리
 
 - [ ] 처음부터 끝까지 직접 한 바퀴 (사용자) → 어색한 곳 목록
 - [ ] 휴대폰 실제 점검: 카톡·인스타·스레드 앱 안 브라우저, 작은 폰(320px — S-04 배치), 로그인(카카오·구글) → 꽂기 → 내 책갈피
-- [ ] 링크 미리보기 카드 · 파비콘
+  - [x] 자동 점검 (Chromium, UA 7종 × 5크기): `launch-sweep.md` — 320px S-04·처리방침 링크 고침. 남은 결정: S-06 주 버튼이 작은 화면에서 첫 화면 밖, 앱 안 브라우저의 구글 로그인(PRD F-20), iOS 길게 누름은 실기기로
+- [x] 링크 미리보기 카드 (10-05 시안 B) — 1,000권이 되면 카드 문구를 숫자로 바꾸기 · 도메인 연결 때 `NEXT_PUBLIC_SITE_URL` · [ ] 파비콘
 - [ ] 유입 채널: 홍보 링크에 `utm_source` (linkedin·threads·instagram). 첫 방문 기록에 남는지 확인
+  - [x] 코드: E-01 `site_visited`에 `utm_source`·`utm_medium`·`utm_campaign` (세션 첫 주소, Supabase에만), 읽은 뒤 주소창에서 지움, `referrer`는 호스트만 (taxonomy v1.4 3-1b, `feat/launch-prep`, 10-05)
+  - [ ] 사용자: 채널마다 **아래 링크 하나씩만** 올린다 (홈 주소여야 E-01이 남는다. 도메인을 연결하면 `galpi-omega.vercel.app`만 새 도메인으로 바꾸고 `?` 뒤는 그대로)
+    - 링크드인: `https://galpi-omega.vercel.app/?utm_source=linkedin&utm_medium=social&utm_campaign=launch_1007`
+    - 스레드: `https://galpi-omega.vercel.app/?utm_source=threads&utm_medium=social&utm_campaign=launch_1007`
+    - 인스타그램 (프로필 링크·스토리 링크 스티커): `https://galpi-omega.vercel.app/?utm_source=instagram&utm_medium=social&utm_campaign=launch_1007`
+  - [ ] 공개 뒤 확인: 링크 하나를 휴대폰으로 열고 주소창에서 `utm_`이 사라지는지, Supabase `events`의 `site_visited.props.utm_source`가 채워지는지. 분석 SQL은 `launch-attribution.md`
 - [ ] 갑자기 몰릴 때: Supabase·Vercel 무료 한도, 오류를 알아챌 방법
 - [ ] 처리방침·"예스24와 무관한 개인 프로젝트" 표기 최종 확인
 

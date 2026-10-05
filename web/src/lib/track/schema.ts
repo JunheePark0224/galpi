@@ -28,10 +28,14 @@ const CURIOUS_COUNT = { type: "number" } as const;
 const PROVIDER = { type: ["kakao", "google"] } as const;
 /** E-31: the longest 갈피 우체통 letter (UTF-16 units, after trimming) — the textarea, /api/feedback and the spec share it. */
 export const FEEDBACK_MAX = 500;
+/** E-01 (v1.4): the longest utm value kept — the browser turns anything longer (or with other characters) into null. */
+export const UTM_MAX = 40;
+/** E-01 (v1.4): a link tag from the address of the visit that started the session (first touch), Supabase only. */
+const UTM = { type: "string", nullable: true, only: "supabase", max: UTM_MAX } as const;
 
 /** Every live and planned event (taxonomy 4-1), in PRD order. Props are the event's own; common props are separate. */
 export const EVENT_SPEC = {
-  site_visited: { prompt_version: { type: "string", only: "amplitude" } },
+  site_visited: { prompt_version: { type: "string", only: "amplitude" }, utm_source: UTM, utm_medium: UTM, utm_campaign: UTM },
   entry_selected: { source: { type: ["home", "first_page"] } },
   question_answered: {
     node_id: NODE_ID,
@@ -45,7 +49,12 @@ export const EVENT_SPEC = {
   question_back_clicked: { node_id: NODE_ID, depth: DEPTH, source: { type: ["question", "first_page"] } },
   path_completed: { scope_id: { type: "string" }, depth: DEPTH, unsure_count: { type: "number" } },
   book_opened: {},
-  bookmark_shown: { book_id: BOOK_ID, position: POSITION, one_liner_style: ONE_LINER_STYLE, pick_type: PICK_TYPE, art: { type: "object" } },
+  // v1.5: the draw's challenge provenance rides on the first event that follows the server's answer (null off the challenge route)
+  bookmark_shown: {
+    book_id: BOOK_ID, position: POSITION, one_liner_style: ONE_LINER_STYLE, pick_type: PICK_TYPE, art: { type: "object" },
+    challenge_rule: { type: "number", nullable: true },
+    challenge_genre: { type: "string", nullable: true },
+  },
   bookmark_reacted: {
     book_id: BOOK_ID, position: POSITION, reaction: { type: ["pass", "curious"] }, pick_type: PICK_TYPE, one_liner_style: ONE_LINER_STYLE,
   },
@@ -77,6 +86,13 @@ export const EVENT_SPEC = {
   },
   // v1.2: S-09 [모두 제거] after the server took them — one event, never E-16 per book
   library_cleared: { removed_count: { type: "number" } },
+  // v1.3 도감: a part the server recorded for the first time (logged in only), and opening the 도감
+  collection_item_found: {
+    part_kind: { type: ["animal", "bg", "sky", "ground"] },
+    part_value: { type: "string" },   // a collectible value — never the empty ground "none" (taxonomy v1.4.1)
+    tier: { type: ["common", "limited", "first_edition"] },
+  },
+  collection_viewed: { collected_count: { type: "number" }, is_logged_in: { type: "boolean" } },
 } as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
 
 type Spec = typeof EVENT_SPEC;
@@ -139,8 +155,27 @@ export const COMMON_KEYS = [
 export const SCREEN_VERSION = "v2";
 
 const MAX_ID = 200;
-const MAX_REFERRER = 500;
 const MAX_ROUND = 1000;
+/** Longest DNS name. */
+const MAX_HOST = 253;
+const HOST = /^[a-z0-9-]+(\.[a-z0-9-]+)*$/;
+
+/**
+ * taxonomy v1.4 (6-2): `referrer` keeps the host only (`l.instagram.com`), never the path or query — a search address can
+ * carry personal words. Accepts a full URL (document.referrer, or an older page still open) or a host already cut; anything
+ * else (about:blank, an IP in brackets, junk) is "" like an empty referrer.
+ */
+export function referrerHost(raw: string): string {
+  if (raw === "") return "";
+  let host: string;
+  try {
+    host = new URL(raw).hostname;
+  } catch {
+    host = raw.trim();
+  }
+  host = host.toLowerCase();
+  return host.length <= MAX_HOST && HOST.test(host) ? host : "";
+}
 
 /** Cuts to at most `max` UTF-16 units without leaving half of an emoji (a trailing high surrogate is dropped). */
 export function cutText(s: string, max: number): string {
@@ -163,8 +198,8 @@ export function parseCommon(x: unknown): CommonProps | null {
   if (mode !== null && mode !== "normal" && mode !== "challenge") return null;
   if (device !== "phone" && device !== "desktop") return null;
   if (typeof is_returning !== "boolean" || typeof is_in_app_browser !== "boolean") return null;
-  // referrer comes from the visitor's browser and may be a long URL: keep the event, cut the value.
+  // referrer comes from the visitor's browser: keep the event, keep the host only (an older page may still send a full URL).
   return {
-    anon_id, user_id, session_id, round, entry, mode, screen_version, referrer: cutText(referrer, MAX_REFERRER), is_returning, device, is_in_app_browser,
+    anon_id, user_id, session_id, round, entry, mode, screen_version, referrer: referrerHost(referrer), is_returning, device, is_in_app_browser,
   };
 }

@@ -110,6 +110,14 @@ export function cleanAuthor(raw: string): string {
   return both;
 }
 
+/**
+ * The names in a cleaned author line, for "one book per author" (design 5-3): "천선란, 임솔아" → both, "피터 브루스 외" →
+ * "피터 브루스" (only the first name is kept for three or more, so only that one is compared).
+ */
+export function authorNames(author: string): string[] {
+  return author.replace(/\s*외$/, "").split(",").map((n) => n.trim()).filter(Boolean);
+}
+
 export function bibFromCsv(text: string): Map<string, Bib> {
   const [head = [], ...rows] = parseCsv(text);
   const [iIsbn, iTitle, iAuthor] = ["isbn", "title", "author"].map((c) => head.indexOf(c));

@@ -37,10 +37,12 @@ describe("pathEnds", () => {
     expect(() => pathEnds(map)).toThrow(/loop: start → .* → mood-len → start/);
   });
 
-  it("lists the challenge ends: far scopes, and the whole library stays whole", () => {
-    const challenge = pathEnds(MAP).filter((e) => e.mode === "challenge").map((e) => e.scopeKey);
-    expect(challenge).toEqual(expect.arrayContaining(["all", "entry=leaf;genres=에세이", "entry=leaf", "entry=target"]));
-    expect(new Set(challenge).size).toBe(challenge.length);
+  it("lists the challenge ends: far scopes (a list rule as its whole list), and the whole library stays whole", () => {
+    const lists = parseQuestionMap(`${MINI}\n${readFileSync(path.join(process.cwd(), "src/lib/paths/__fixtures__/list-rules.md"), "utf8")}`);
+    const challenge = pathEnds(lists).filter((e) => e.mode === "challenge").map((e) => e.scopeKey);
+    expect([...challenge].sort()).toEqual(["all", "entry=leaf;genres=과학 교양,역사,인문", "entry=leaf;genres=시,에세이,한국 소설", "entry=leaf;genres=인문"]);
+    // without a rule for a scope (the mini map alone), the challenge keeps the person's scope — it never crosses branches
+    expect(pathEnds(MAP).filter((e) => e.mode === "challenge").map((e) => e.scopeKey)).toEqual(expect.arrayContaining(["entry=target", "entry=leaf;genres=SF·판타지"]));
   });
 });
 

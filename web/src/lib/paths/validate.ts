@@ -1,10 +1,11 @@
+import { LEARN_CHALLENGE_GENRES } from "./challenge";
 import type { Choice, Effects, FarRule, QNode, QuestionMap } from "./types";
 
 export interface Vocabulary { topics: Record<string, string[]>; genres: string[] }
 
 const SIDES = [["A", "a"], ["B", "b"]] as const;
 const setsScope = (e: Effects) => Boolean(e.entry || e.topics || e.keywords || e.genres);
-const setsMood = (e: Effects) => Boolean(e.axes || e.len !== undefined || e.way);
+const setsMood = (e: Effects) => Boolean(e.axes || e.len !== undefined || e.ways);
 
 function tagErrors(where: string, e: Effects, vocab: Vocabulary, topicsSoFar: string[] | null): string[] {
   const out: string[] = [];
@@ -21,6 +22,17 @@ function tagErrors(where: string, e: Effects, vocab: Vocabulary, topicsSoFar: st
 function covers(i: FarRule["from"], j: FarRule["from"]): boolean {
   const within = (wide?: string[] | null, narrow?: string[] | null) => !wide || (narrow != null && narrow.every((v) => wide.includes(v)));
   return (!i.entry || i.entry === j.entry) && within(i.topics, j.topics) && within(i.keywords, j.keywords) && within(i.genres, j.genres);
+}
+
+/**
+ * Challenge rules v2 (10-05): a 배우기 challenge (`from: entry=target …`) goes to 🍃 genres of LEARN_CHALLENGE_GENRES only —
+ * never 시·에세이·소설·SF·추리·호러 — and names them (no topics or keywords on the far side).
+ */
+function learnErrors(where: string, r: FarRule): string[] {
+  if (r.from.entry !== "target") return [];
+  const allowed = LEARN_CHALLENGE_GENRES.join("·");
+  if (r.to.entry !== "leaf" || !r.to.genres || r.to.topics || r.to.keywords) return [`${where}: a 배우기 challenge must go to entry=leaf | genres= of ${allowed}`];
+  return r.to.genres.filter((g) => !LEARN_CHALLENGE_GENRES.includes(g)).map((g) => `${where}: a 배우기 challenge may not go to "${g}" (only ${allowed})`);
 }
 
 export function validateMap(map: QuestionMap, vocab: Vocabulary): string[] {
@@ -67,6 +79,7 @@ export function validateMap(map: QuestionMap, vocab: Vocabulary): string[] {
     errors.push(...tagErrors(`far ${j + 1} from:`, r.from as Effects, vocab, null), ...tagErrors(`far ${j + 1} to:`, r.to as Effects, vocab, null));
     const i = map.far.findIndex((earlier, k) => k < j && covers(earlier.from, r.from));
     if (i >= 0) errors.push(`far ${j + 1} is shadowed by far ${i + 1}`);
+    errors.push(...learnErrors(`far ${j + 1}`, r));
   });
   return [...new Set(errors)];
 }
