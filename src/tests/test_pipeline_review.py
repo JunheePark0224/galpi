@@ -571,14 +571,14 @@ def _world_section() -> str:
 
 
 def test_the_world_hint_on_the_review_pages_follows_the_label_dictionary():
-    """10-06 (label-dictionary.md 1-4): non-fiction is 현실 even in space, a real setting with ghosts (fables too) is the
-    middle, and there is no 'not applicable' middle — the review hint says the same words as the dictionary."""
+    """10-06 (label-dictionary.md 1-4, user's afternoon rule): non-fiction is 현실 even in space; a novel or fable where a
+    being that does not exist (ghosts too) really appears is 딴 세상 even in a real setting; the middle is only a book with
+    neither people nor a world; no 'not applicable' middle — the review hint says the same words as the dictionary."""
     from build_d4_review import AXIS_LABELS
     hint, rule = dict((a[0], a[5]) for a in AXIS_LABELS)["world"], _world_section()
-    for word in ("비소설", "우주여도 현실", "있었던 세상", "귀신·괴이", "우화", "지금 없는 존재·기술·마법", "해당 없음"):
+    for word in ("비소설", "우주여도 현실", "있었던 세상", "귀신·괴이", "우화", "실제로 등장", "사람도 세계도 없는", "해당 없음"):
         assert word in hint and word in rule, word
-    assert "사람도 세계도 없는" not in hint and "사람도 세계도 없는" not in rule
-    assert "평범한 인생" in rule and "톨스토이 우화" in rule
+    assert "평범한 인생" in rule and "톨스토이 우화 → −1" in rule
 
 
 def test_a_retagged_file_has_its_own_page_and_progress_key(files):

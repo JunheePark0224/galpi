@@ -34,14 +34,15 @@ def test_the_reference_is_read_from_the_label_dictionary():
 
 
 def test_the_10_06_world_rule_reaches_both_prompts():
-    """10-06 user: non-fiction is 현실 even in space, the world axis has no 'not applicable' 0, a real setting with
-    ghosts is 0 (fables too). The 10-05 examples stay."""
+    """10-06 user: non-fiction is 현실 even in space, the world axis has no 'not applicable' 0, a being that does not
+    exist (ghosts too) really appearing makes a novel or fable −1 even in a real setting, 0 only with neither people nor
+    a world. The 10-05 examples stay (톨스토이 우화 is now −1)."""
     for kind in ("tag", "check"):
         p = system_prompt(VOC, kind)
         assert "무대가 우주여도 현실" in p and "**세계 축에는 \"해당 없음 0\"이 없다.**" in p
-        assert "현실 배경에 귀신·괴이가 나오면 **0 중간**. 우화도 포함한다." in p
-        assert "카렐 차페크 『평범한 인생』" in p and "톨스토이 우화" in p
-        assert "사람도 세계도 없는" not in p and "이야기가 없는 책은" not in p
+        assert "실제로 등장하면 −1 딴 세상**. 현실 배경이어도 −1." in p and "사람도 세계도 나오지 않는 책" in p
+        assert "카렐 차페크 『평범한 인생』" in p and "톨스토이 우화 → −1" in p
+        assert "현실 배경에 귀신·괴이가 나오면 **0 중간**" not in p and "이야기가 없는 책은" not in p
 
 
 def test_people_notes_and_open_decisions_never_reach_the_tagger():
