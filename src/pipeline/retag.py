@@ -4,7 +4,7 @@ Usage (from the checkout; real API calls — costs money):
   PYTHONIOENCODING=utf-8 python -m src.pipeline.retag 2026-10-05-2 [--max-cost 3]
   → data/processed/additions/2026-10-05-2.v2.json, then `python -m src.pipeline.review 2026-10-05-2.v2` builds its own page
 Every book of the batch that was not dropped runs through both passes again (run_daily.tag_one: pass A with the one-liner
-retry, blind pass B, today's checks and decide), with the models of data/pipeline/config.json. The text is the YES24 intro
+retry, blind pass B, today's checks and decide), with the models of data/pipeline/config.json; every book and the file carry `rules_version` (rules_version.py). The text is the YES24 intro
 and TOC from the local cache (this checkout's data/raw/yes24/detail, then the main checkout's), fetched with the local key
 only when neither has it; a book with no text is skipped and named. The original file — and any answers a person has
 already applied to it — is never touched; the new file keeps the original's trial sample (the same books are measured)
@@ -27,6 +27,7 @@ from .merge import additions_doc
 from .one_liner import RetryLog
 from .prompt import system_prompt
 from .review import main_checkout
+from .rules_version import rules_version
 from .run_daily import anthropic_key, tag_one
 from .tagger import Breaker, TaggerStop
 
@@ -55,7 +56,7 @@ def candidate(b: dict, intro: str, toc: str) -> Candidate:
 def run(batch: str, cfg: Config, client, vocab: dict, text_of, max_cost: float = MAX_COST) -> tuple[dict | None, dict]:
     """(new doc or None when the run stopped, summary). `text_of(isbn)` → (intro, TOC)."""
     doc = json.loads((ADDITIONS / f"{batch}.json").read_text(encoding="utf-8"))
-    prompts = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}
+    prompts, rules = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}, rules_version()
     recs, failed, no_text, ledger, breaker, retries, stopped = [], {}, [], {}, Breaker(), RetryLog(), None
     for b in doc["books"]:
         if b["status"] == "dropped":
@@ -65,7 +66,7 @@ def run(batch: str, cfg: Config, client, vocab: dict, text_of, max_cost: float =
             no_text.append(b["isbn"])
             continue
         try:
-            rec, why = tag_one(client, cfg, prompts, vocab, candidate(b, intro, toc), breaker, ledger, retries)
+            rec, why = tag_one(client, cfg, prompts, vocab, candidate(b, intro, toc), breaker, ledger, retries, rules)
         except TaggerStop as err:
             stopped = str(err)
             break
@@ -77,14 +78,14 @@ def run(batch: str, cfg: Config, client, vocab: dict, text_of, max_cost: float =
         if spent > max_cost:
             stopped = f"cost cap ${max_cost} passed (${spent:.2f})"
             break
-    summary = {"batch": batch, "model": cfg.model, "second_model": cfg.second_model, "tagged": len(recs),
+    summary = {"batch": batch, "rules_version": rules, "model": cfg.model, "second_model": cfg.second_model, "tagged": len(recs),
                "failed": failed, "skipped_no_text": no_text, "stopped": stopped, "one_liner_retries": retries.summary(),
                "usage": {m: u.__dict__ for m, u in ledger.items()},
                "cost_usd": round(sum(u.cost(m) for m, u in ledger.items()), 4)}
     if stopped:
         return None, summary
     new = additions_doc(doc["date"], cfg.model, cfg.second_model, recs, f"{batch}{SUFFIX}")
-    return new | {"retag_of": batch, "trial_sample": list(doc.get("trial_sample") or [])}, summary
+    return new | {"retag_of": batch, "rules_version": rules, "trial_sample": list(doc.get("trial_sample") or [])}, summary
 
 
 def write(batch: str, doc: dict) -> Path:

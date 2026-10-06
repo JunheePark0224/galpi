@@ -49,6 +49,7 @@ from .keyword_candidates import excluded_names
 from .merge import additions_doc, keyword_hints, record, write_doc
 from .one_liner import RetryLog, retry as retry_one_liner
 from .prompt import schema, system_prompt, user_message
+from .rules_version import rules_version
 from .slots import keyword_rule, slot_rule
 from .tagger import Breaker, TaggerStop, Usage, call, parse
 
@@ -89,9 +90,10 @@ def _spend(ledger: dict, model: str, used: Usage) -> None:
 
 
 def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, breaker: Breaker,
-            ledger: dict, retries: RetryLog | None = None) -> tuple[dict | None, str]:
+            ledger: dict, retries: RetryLog | None = None, rules: str | None = None) -> tuple[dict | None, str]:
     """(record or None, reason). Pass A tags (a one-liner that breaks a rule is asked for once more — one_liner.py), pass B
-    checks blind (it writes no one-liner); token use goes to `ledger`, retries also to `retries`. Raises TaggerStop."""
+    checks blind (it writes no one-liner); token use goes to `ledger`, retries also to `retries`. Raises TaggerStop.
+    The record carries `rules_version`: `rules`, or the label dictionary's version (rules_version.py) when not given."""
     if not cand.author.strip() or cand.pages <= 0:  # find() never offers one; a book that import would reject costs nothing
         return None, "incomplete_candidate"
     kept = vocab.get(cand.slot, {}).get("kept", {}) if cand.entry == "target" else {}  # a new topic may have no list yet
@@ -115,7 +117,8 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     flags = disagreements(cand.entry, a, b)
     issues = rule_issues(cand.entry, a, cand.title, f"{cand.intro} {cand.toc}", b)
     status, auto = decide(a, b, flags, issues, cfg.auto_merge)
-    return record(cand, a, b, flags, issues, status, auto, hints), "ok"  # record() blanks any field that copied YES24 text
+    rec = record(cand, a, b, flags, issues, status, auto, hints)  # record() blanks any field that copied YES24 text
+    return {**rec, "rules_version": rules or rules_version()}, "ok"
 
 
 def run(batch: str, cfg: Config, env: dict, client) -> dict:
@@ -140,11 +143,11 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
                 "yes24_empty": len(new_fails) - len(yes24_fail)}
     if not cands:
         return summary | {"status": "yes24_failed" if yes24_fail else "no_candidates"}
-    prompts = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}
+    prompts, rules = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}, rules_version()
     recs, reasons, ledger, stopped, breaker, tried, retries = [], Counter(), {}, None, Breaker(), 0, RetryLog()
     for cand in cands:
         try:
-            rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger, retries)
+            rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger, retries, rules)
         except TaggerStop as err:
             stopped = str(err)
             break
@@ -160,7 +163,7 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
             stopped = f"{tried - len(recs)} of {tried} books failed ({top}) — over {MAX_FAILED_SHARE:.0%}, stopped to save cost"
             break
     status = Counter(r["status"] for r in recs)
-    summary |= {"tagged": len(recs), "reasons": dict(reasons), "stopped": stopped,
+    summary |= {"tagged": len(recs), "reasons": dict(reasons), "stopped": stopped, "rules_version": rules,
                 "picked": status["picked"], "review": status["review"], "reserve": status["reserve"],
                 "dropped": status["dropped"],
                 "auto_agreed": sum(r.get("auto") == "ai-agree" for r in recs),
