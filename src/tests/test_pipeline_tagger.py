@@ -368,3 +368,12 @@ def test_parse_keeps_the_signal_lines_cut_short_and_the_missing_axes_in_order():
     got = parse(old, "leaf", "tag", [])
     assert got["signals"] == {a: "" for a in AXES_} and got["missing"] == []      # an answer without them still parses
     assert "signals" not in parse(tag_answer("target"), "target", "tag", ["주식"])
+
+
+def test_a_field_name_run_into_a_text_value_is_cut():
+    """10-06 calibration: pass B wrote "…한국 소설이 아님.way". Only a field name glued after the last sentence mark goes."""
+    from pipeline.tagger import _text
+    assert _text("오컬트미스터리라 한국 소설이 아님.way") == "오컬트미스터리라 한국 소설이 아님."
+    assert _text("끝맺음 −: 마지막 장이 이별. why ") == "끝맺음 −: 마지막 장이 이별."
+    assert _text("이 책은 the way we live를 다룬다") == "이 책은 the way we live를 다룬다"   # a word inside the text stays
+    assert _text("일하는 way") == "일하는 way"                                               # no sentence mark before it: kept

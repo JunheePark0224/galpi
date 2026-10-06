@@ -131,8 +131,13 @@ def _failed(breaker: Breaker | None, pass_: str, model: str, reason: str) -> tup
     return None, Usage(1, 1), reason
 
 
+# A model now and then runs the next answer field's name into a text value ("…한국 소설이 아님.way", 10-06 calibration:
+# 1 of ~9,800 strings). Only a field name glued after the sentence's last mark is cut — never a word inside the text.
+LEAKED_FIELD = re.compile(r"(?<=[.!?。])\s*(way|why|keywords|axes|fits|signals|missing|one_liner|evidence|confidence|temp|pull|gain|world)\s*$")
+
+
 def _text(v: object) -> str:
-    return v.strip() if isinstance(v, str) else ""
+    return LEAKED_FIELD.sub("", v.strip()) if isinstance(v, str) else ""
 
 
 def signals_of(raw: dict) -> dict:
