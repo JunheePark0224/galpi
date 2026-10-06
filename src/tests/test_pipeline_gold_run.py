@@ -71,3 +71,14 @@ def test_a_failed_book_is_named_not_fatal():
         return msg
     doc, summary = gold.calibrate(ROWS, POOL, CFG, FakeClient(answer), VOCAB, texts, runs=1, rules="v3")
     assert doc["failed"] == {"1:2": "refusal"} and [r["isbn"] for r in doc["results"]] == ["1"]
+
+
+def test_axis_re_asks_are_counted_in_the_run_summary():
+    from pipeline_fakes import check_answer, kind_of, message
+    zeros = {"temp": 0, "pull": 0, "gain": 0, "world": 0, "signals": {"temp": "", "pull": "", "gain": "", "world": ""}}
+
+    def answer(kw):
+        entry, kind = kind_of(kw)
+        return message(check_answer(entry, **zeros)) if kind == "check" and entry == "leaf" else agreeing(kw)
+    doc, summary = gold.calibrate(ROWS, POOL, CFG, FakeClient(answer), VOCAB, texts, runs=1, rules="v3")
+    assert summary["axis_retries"]["tried"] == 1 and doc["axis_retries"]["tried"] == 1

@@ -5,9 +5,12 @@ Labels (the gold page's download, {labels: {isbn: …}}):
       reasons: {axis: one line}}
   🎯 {topic: a topic or "" (no 🎯 topic), keywords: [...], way: 개념 / 실습 / 사례, reason: one line}
 Results: [{run, isbn, record}] — a record as run_daily.tag_one writes it (pass A on the record, pass B under `second`).
-The tagger is told the slot and answers `fits`, so genre / topic agreement = `fits` is true exactly when the person kept the
-book in that slot. An axis the person left without a value (only "정보 없음") is not counted; its no-info marks are tallied.
-Keywords agree when the sets are equal. Several runs: each run is counted, mismatches are one row per book and field.
+The tagger is told the slot and answers `fits`; a pass that says the book does not fit also names the slot it belongs to
+(`suggest`, 10-06 calibration). Genre / topic agree when the AI's slot (the given one when it fits, else its suggestion,
+"" = none) is the person's. A record from before suggestions keeps the old rule: `fits` is true exactly when the person
+kept the book in that slot. An axis the person left without a value (only "정보 없음") is not counted; its no-info marks
+are tallied. Keywords agree when the sets are equal; on a book the person moved to another topic, a pass's keywords are
+compared only when it suggested that same topic (its `suggest_keywords`), otherwise not counted for that pass. Several runs: each run is counted, mismatches are one row per book and field.
 """
 from collections import defaultdict
 
@@ -42,19 +45,27 @@ def _person(field: str, lab: dict):
     return lab.get(field) or None
 
 
-def _ai(field: str, g: dict, src: dict):
+SKIP = "(다른 주제를 제안 — 비교 안 함)"  # a pass's keywords on a book the person moved, without the same suggestion
+
+
+def _ai(field: str, g: dict, src: dict, lab: dict):
     if field in AXES:
         return (src.get("axes") or {}).get(field)
     if field in ("genre", "topic"):
-        return g["slot"] if src.get("fits") else f"{g['slot']} 아님"
+        if src.get("fits"):
+            return g["slot"]
+        return src["suggest"] if isinstance(src.get("suggest"), str) else f"{g['slot']} 아님"
     if field == "keywords":
-        return sorted(src.get("keywords") or [])
+        moved = lab.get("topic") != g["slot"]
+        if not moved:
+            return sorted(src.get("keywords") or [])
+        return sorted(src.get("suggest_keywords") or []) if src.get("suggest") == lab.get("topic") and not src.get("fits") else SKIP
     return src.get(field)
 
 
 def _same(field: str, g: dict, person, ai) -> bool:
-    if field in ("genre", "topic"):
-        return (ai == g["slot"]) == (person == g["slot"])
+    if field in ("genre", "topic") and ai == f"{g['slot']} 아님":  # a record from before suggestions
+        return person != g["slot"]
     return person == ai
 
 
@@ -83,12 +94,14 @@ def score(gold: list[dict], labels: dict[str, dict], results: list[dict]) -> dic
                 _tally_missing(missing, field, lab, srcs)
             if person is None:
                 continue
-            ai = {w: _ai(field, g, s) for w, s in srcs.items()}
-            ok = {w: _same(field, g, person, ai[w]) for w in srcs}
+            ai = {w: _ai(field, g, s, lab) for w, s in srcs.items()}
+            ok = {w: _same(field, g, person, ai[w]) for w in srcs if ai[w] != SKIP}
+            if not ok:
+                continue
             for w in srcs:
                 for table in (fields[field], slots[g["slot"]]):
-                    table[f"ai{w}"][0] += ok[w]
-                    table[f"ai{w}"][1] += 1
+                    table[f"ai{w}"][0] += ok.get(w, False)
+                    table[f"ai{w}"][1] += w in ok
             if not all(ok.values()):
                 _mismatch(rows, g, lab, field, person, res["run"], ai, srcs)
     order = {f: i for i, f in enumerate(FIELDS)}

@@ -136,6 +136,7 @@ def calibrate(rows: list[dict], books: dict[str, dict], cfg: Config, client, voc
     prompts = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}
     texts = {r["isbn"]: text_of(r["isbn"]) for r in rows}
     results, failed, ledger, breaker, retries, stopped = [], {}, {}, Breaker(), RetryLog(), None
+    axis_retries = RetryLog()
     for run in range(1, runs + 1):
         for r in rows:
             intro, toc = texts[r["isbn"]]
@@ -145,7 +146,7 @@ def calibrate(rows: list[dict], books: dict[str, dict], cfg: Config, client, voc
             cand = Candidate(r["entry"], r["slot"], r["isbn"], r["title"], b.get("author") or "?", b.get("pages") or 1,
                              b.get("link") or "", intro, toc)
             try:
-                rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger, retries, rules)
+                rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger, retries, rules, axis_retries)
             except TaggerStop as err:
                 stopped = str(err)
                 break
@@ -162,7 +163,7 @@ def calibrate(rows: list[dict], books: dict[str, dict], cfg: Config, client, voc
     cost = round(sum(u.cost(m) for m, u in ledger.items()), 4)
     summary = {"rules_version": rules, "model": cfg.model, "second_model": cfg.second_model, "runs": runs,
                "tagged": len(results), "failed": failed, "stopped": stopped, "cost_usd": cost,
-               "one_liner_retries": retries.summary(), "usage": {m: u.__dict__ for m, u in ledger.items()}}
+               "one_liner_retries": retries.summary(), "axis_retries": axis_retries.summary(), "usage": {m: u.__dict__ for m, u in ledger.items()}}
     doc = {**summary, "made": datetime.now(KST).isoformat(timespec="seconds"),
            "skipped_no_text": [r["isbn"] for r in rows if not texts[r["isbn"]][0]], "results": results}
     return doc, summary

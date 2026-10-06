@@ -40,6 +40,7 @@ from compare_apis import load_env
 
 from . import ADDITIONS, BOOKS, KST, REQUEUE, RUNS, VOCAB
 from . import requeue
+from .axis_check import retry as retry_axes
 from .batch import BatchError, parse as parse_batch
 from .candidates import Candidate, find, known_from, yes24_env
 from .checks import decide, disagreements, rule_issues
@@ -90,9 +91,12 @@ def _spend(ledger: dict, model: str, used: Usage) -> None:
 
 
 def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, breaker: Breaker,
-            ledger: dict, retries: RetryLog | None = None, rules: str | None = None) -> tuple[dict | None, str]:
+            ledger: dict, retries: RetryLog | None = None, rules: str | None = None,
+            axis_retries: RetryLog | None = None) -> tuple[dict | None, str]:
     """(record or None, reason). Pass A tags (a one-liner that breaks a rule is asked for once more — one_liner.py), pass B
-    checks blind (it writes no one-liner); token use goes to `ledger`, retries also to `retries`. Raises TaggerStop.
+    checks blind (it writes no one-liner); on a 🍃 book either pass whose axis values its own signal lines do not back is
+    asked once more (axis_check.py). Token use goes to `ledger`, one-liner retries also to `retries`, axis re-asks to
+    `axis_retries`. Raises TaggerStop. A pass that says the book does not fit names the slot it belongs to (`suggest`).
     The record carries `rules_version`: `rules`, or the label dictionary's version (rules_version.py) when not given."""
     if not cand.author.strip() or cand.pages <= 0:  # find() never offers one; a book that import would reject costs nothing
         return None, "incomplete_candidate"
@@ -102,23 +106,38 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     raw_a, used, why = call(client, cfg.model, prompts["tag"], user, schema(cand.entry, "tag", all_keywords(vocab)), breaker, "A")
     _spend(ledger, cfg.model, used)
     left_out = excluded_names(vocab.get(cand.slot, {})) if cand.entry == "target" else []
-    a = parse(raw_a, cand.entry, "tag", names, cand.slot, left_out) if raw_a else None
+    lists = topic_lists(vocab)
+    a = parse(raw_a, cand.entry, "tag", names, cand.slot, left_out, lists) if raw_a else None
     if a is None:
         return None, why if raw_a is None else "invalid_answer"
     a, used, outcome = retry_one_liner(client, cfg.model, prompts["tag"], user, cand.entry, raw_a, a, cand.title, breaker)
     _spend(ledger, cfg.model, used)
     if retries is not None:
         retries.note(cfg.model, used, outcome)
+    a = _axes_backed(client, cfg.model, prompts["tag"], user, cand.entry, raw_a, a, "A", breaker, ledger, axis_retries)
     raw_b, used, why = call(client, cfg.second_model, prompts["check"], user, schema(cand.entry, "check", all_keywords(vocab)), breaker, "B")
     _spend(ledger, cfg.second_model, used)
-    b = parse(raw_b, cand.entry, "check", names) if raw_b else None
+    b = parse(raw_b, cand.entry, "check", names, lists=lists) if raw_b else None
     if b is None:
         return None, why if raw_b is None else "invalid_answer"
+    b = _axes_backed(client, cfg.second_model, prompts["check"], user, cand.entry, raw_b, b, "B", breaker, ledger, axis_retries)
     flags = disagreements(cand.entry, a, b)
     issues = rule_issues(cand.entry, a, cand.title, f"{cand.intro} {cand.toc}", b)
     status, auto = decide(a, b, flags, issues, cfg.auto_merge)
     rec = record(cand, a, b, flags, issues, status, auto, hints)  # record() blanks any field that copied YES24 text
     return {**rec, "rules_version": rules or rules_version()}, "ok"
+
+
+def _axes_backed(client, model: str, system: str, user: str, entry: str, raw: dict, ans: dict, pass_: str,
+                 breaker: Breaker, ledger: dict, log: RetryLog | None) -> dict:
+    """A 🍃 pass's answer after at most one axis re-ask (axis_check.retry); a 🎯 answer as it is."""
+    if entry != "leaf":
+        return ans
+    ans, used, outcome = retry_axes(client, model, system, user, raw, ans, pass_, breaker)
+    _spend(ledger, model, used)
+    if log is not None:
+        log.note(model, used, outcome)
+    return ans
 
 
 def run(batch: str, cfg: Config, env: dict, client) -> dict:
@@ -145,9 +164,10 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
         return summary | {"status": "yes24_failed" if yes24_fail else "no_candidates"}
     prompts, rules = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}, rules_version()
     recs, reasons, ledger, stopped, breaker, tried, retries = [], Counter(), {}, None, Breaker(), 0, RetryLog()
+    axis_retries = RetryLog()
     for cand in cands:
         try:
-            rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger, retries, rules)
+            rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger, retries, rules, axis_retries)
         except TaggerStop as err:
             stopped = str(err)
             break
@@ -169,6 +189,7 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
                 "auto_agreed": sum(r.get("auto") == "ai-agree" for r in recs),
                 "flagged": sum(bool(r["flags"]) and r["status"] != "dropped" for r in recs),
                 "one_liner_retries": retries.summary(),
+                "axis_retries": axis_retries.summary(),
                 "usage": {m: u.__dict__ for m, u in ledger.items()},
                 "cost_usd": round(sum(u.cost(m) for m, u in ledger.items()), 4)}
     if not recs:

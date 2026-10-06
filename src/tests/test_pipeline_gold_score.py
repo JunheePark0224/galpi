@@ -87,3 +87,34 @@ def test_labels_for_books_outside_the_gold_set_are_refused():
     with pytest.raises(gs.GoldError):
         gs.check_labels(GOLD, {"99": {"genre": "시"}})
     assert gs.check_labels(GOLD, {"labels": LABELS}) == LABELS and gs.check_labels(GOLD, LABELS) == LABELS
+
+
+def test_a_suggested_slot_is_compared_with_the_persons_genre_or_topic():
+    """10-06 calibration: a pass that says the book does not fit names where it belongs; that suggestion must be the
+    person's genre / topic. A record from before suggestions keeps the old rule (not the slot = agrees with a move)."""
+    gold = GOLD[:2]
+    rec = leaf_rec("2", AX, fits=False, second_fits=False)
+    rec["suggest"], rec["second"]["suggest"] = "사회·시사", "인문"
+    s = gs.score(gold, LABELS, [{"run": 1, "isbn": "2", "record": rec}])
+    assert s["fields"]["genre"] == {"ai1": [1, 1], "ai2": [0, 1]}
+    row = next(m for m in s["mismatches"] if m["key"] == "2|genre")
+    assert row["runs"][0]["ai1"] == "사회·시사" and row["runs"][0]["ai2"] == "인문"
+    rec["second"]["suggest"] = ""                       # "no genre fits" is right only when the person said so too
+    assert gs.score(gold, LABELS, [{"run": 1, "isbn": "2", "record": rec}])["fields"]["genre"]["ai2"] == [0, 1]
+    none = {**LABELS, "2": {**LABELS["2"], "genre": ""}}
+    assert gs.score(gold, none, [{"run": 1, "isbn": "2", "record": rec}])["fields"]["genre"]["ai2"] == [1, 1]
+
+
+def test_keywords_of_a_moved_book_count_only_when_the_ai_suggested_the_persons_topic():
+    gold = [GOLD[2]]
+    labels = {"3": {"topic": "경제 상식", "keywords": ["금리·환율"], "way": "개념"}}
+    rec = target_rec("3", ["주식"], "개념", fits=False)
+    rec |= {"suggest": "경제 상식", "suggest_keywords": ["금리·환율"]}
+    rec["second"] |= {"fits": False, "suggest": "마케팅·브랜딩", "suggest_keywords": ["고객 이해"]}
+    s = gs.score(gold, labels, [{"run": 1, "isbn": "3", "record": rec}])
+    assert s["fields"]["keywords"] == {"ai1": [1, 1], "ai2": [0, 0]}       # AI-2 named another topic: not compared
+    assert s["fields"]["topic"] == {"ai1": [1, 1], "ai2": [0, 1]}
+    old = target_rec("3", ["주식"], "개념", fits=False)                       # no suggestion: the slot's keywords are moot
+    assert gs.score(gold, labels, [{"run": 1, "isbn": "3", "record": old}])["fields"].get("keywords") is None
+    kept = {"3": {"topic": "돈 관리·투자", "keywords": ["주식"], "way": "개념"}}  # the person kept it: compared as before
+    assert gs.score(gold, kept, [{"run": 1, "isbn": "3", "record": rec}])["fields"]["keywords"] == {"ai1": [1, 1], "ai2": [1, 1]}

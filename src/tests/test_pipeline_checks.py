@@ -83,7 +83,9 @@ def test_record_holds_our_tags_only(tmp_path):
     a, b = tag_answer("target"), check_answer("target", way="실습")
     rec = record(CAND, a, b, ["way"], [], "picked", None, keyword_hints(CAND, {"주식": {"pattern": "주식"}, "연금·노후": {"pattern": "연금"}}))
     assert rec["topic"] == "돈 관리·투자" and rec["field"] == "돈·경제" and rec["keywords_regex"] == ["주식"]
-    assert rec["second"] == {"fits": True, "keywords": ["주식"], "way": "실습", "why": "주식 입문서"} and "auto" not in rec
+    assert rec["second"] == {"fits": True, "keywords": ["주식"], "way": "실습", "why": "주식 입문서", "suggest": "",
+                             "suggest_keywords": []} and "auto" not in rec
+    assert rec["suggest"] == "" and rec["suggest_keywords"] == []
     path = tmp_path / "2026-10-05.json"
     write_doc(path, additions_doc("2026-10-05", "claude-haiku-4-5", "claude-haiku-4-5", [rec]))
     text = path.read_text(encoding="utf-8")

@@ -52,9 +52,11 @@ class FakeClient:
 
 
 def kind_of(kwargs: dict) -> tuple[str, str]:
-    """(entry, kind): kind "tag" (pass A), "check" (pass B) or "fix" (a one-liner retry — its schema has one field, so the
-    entry is read from the first answer sent back)."""
+    """(entry, kind): kind "tag" (pass A), "check" (pass B), "fix" (a one-liner retry — its schema has one field, so the
+    entry is read from the first answer sent back) or "axisfix" (a 🍃 axis re-ask)."""
     props = kwargs["output_config"]["format"]["schema"]["properties"]
+    if "fits" not in props and "signals" in props:  # an axis re-ask (axis_check.py): 🍃 only
+        return "leaf", "axisfix"
     if set(props) == {"one_liner"}:
         first = json.loads(kwargs["messages"][1]["content"])
         return ("target" if "way" in first else "leaf"), "fix"

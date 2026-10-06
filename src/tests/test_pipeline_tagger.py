@@ -101,8 +101,9 @@ def test_schema_enums_are_our_closed_lists():
     assert s["properties"]["keywords"]["items"]["enum"] == ["주식", "ETF·펀드"]
     assert s["properties"]["way"]["enum"] == ["개념", "실습", "사례"] and s["additionalProperties"] is False
     leaf = schema("leaf", "check", [])
-    assert leaf["properties"]["world"]["enum"] == [-1, 0, 1] and "one_liner" not in leaf["properties"]
-    assert set(leaf["required"]) == {"fits", "temp", "pull", "gain", "world", "signals", "missing", "why"}
+    assert leaf["properties"]["world"] == {"anyOf": [{"type": "integer", "enum": [-1, 0, 1]}, {"type": "null"}]}
+    assert "one_liner" not in leaf["properties"]
+    assert set(leaf["required"]) == {"fits", "temp", "pull", "gain", "world", "signals", "missing", "why", "suggest"}
 
 
 def test_the_book_text_cannot_close_its_frame():
@@ -394,3 +395,49 @@ def test_the_first_calibration_rules_reach_both_prompts():
         assert "**장르는 세계 축 값과 따로 정한다**" in p and "| 에세이 ↔ 예술·여행 |" in p
         assert "과학철학)은 인문" in p and "| 마케팅·브랜딩 ↔ 대화·관계(설득·협상) |" in p
         assert "그 마음을 움직여 파는 법" in p  # 고객 이해, from target-chips.md
+
+
+def test_an_axis_value_may_be_empty_only_as_no_info():
+    """10-06: no signal at all → '정보 없음' + an empty value, never a 0 filler. An empty value always carries its no-info
+    mark: one the model left unmarked is marked here."""
+    got = parse(tag_answer("leaf", pull=None, missing=["pull"]), "leaf", "tag", [])
+    assert got["axes"]["pull"] is None and got["missing"] == ["pull"]
+    got = parse(check_answer("leaf", gain=None, missing=[]), "leaf", "check", [])
+    assert got["axes"]["gain"] is None and got["missing"] == ["gain"]
+    no_key = {k: v for k, v in tag_answer("leaf").items() if k != "world"}
+    assert parse(no_key, "leaf", "tag", []) is None              # a missing field is not an empty value
+
+
+TOPIC_LISTS = {"돈 관리·투자": ["주식", "ETF·펀드"], "경제 상식": ["금리·환율", "경제 기초"], "글쓰기": []}
+
+
+def test_a_pass_that_says_the_book_does_not_fit_names_the_slot_it_belongs_to():
+    """10-06 calibration: a book that does not fit its slot comes with the slot it belongs to (🍃 genre, or 🎯 topic + that
+    topic's keywords from its closed list); "" when no slot fits. A pass that says it fits suggests nothing."""
+    for kind, make in (("tag", tag_answer), ("check", check_answer)):
+        got = parse(make("leaf", fits=False, suggest="호러·괴담"), "leaf", kind, [])
+        assert got["suggest"] == "호러·괴담"
+        assert parse(make("leaf", fits=False, suggest="아무 장르"), "leaf", kind, [])["suggest"] == ""
+        assert parse(make("leaf", fits=True, suggest="호러·괴담"), "leaf", kind, [])["suggest"] == ""
+        assert parse(make("leaf", fits=False, suggest="경제 상식"), "leaf", kind, [])["suggest"] == ""  # a topic is no genre
+        got = parse(make("target", fits=False, suggest="경제 상식", suggest_keywords=["금리·환율", "주식", "금리·환율"]),
+                    "target", kind, ["주식"], "돈 관리·투자", lists=TOPIC_LISTS)
+        assert got["suggest"] == "경제 상식" and got["suggest_keywords"] == ["금리·환율"]
+        got = parse(make("target", fits=True, suggest="경제 상식", suggest_keywords=["금리·환율"]), "target", kind, ["주식"],
+                    "돈 관리·투자", lists=TOPIC_LISTS)
+        assert got["suggest"] == "" and got["suggest_keywords"] == []
+    old = parse(tag_answer("leaf", fits=False), "leaf", "tag", [])     # answers from before 10-06 evening still parse
+    assert old["suggest"] == ""
+
+
+def test_schemas_ask_for_the_suggested_slot_from_our_closed_lists():
+    from pipeline.gaps import GENRES
+    from apply_review import FIELD_OF_TOPIC
+    for kind in ("tag", "check"):
+        leaf, target = schema("leaf", kind, []), schema("target", kind, ["주식", "금리·환율"])
+        assert leaf["properties"]["suggest"]["enum"] == ["", *GENRES] and "suggest" in leaf["required"]
+        assert target["properties"]["suggest"]["enum"] == ["", *FIELD_OF_TOPIC]
+        assert target["properties"]["suggest_keywords"]["items"]["enum"] == ["주식", "금리·환율"]
+        assert {"suggest", "suggest_keywords"} <= set(target["required"])
+    p = system_prompt(VOC, "check")
+    assert "suggest" in p and "suggest_keywords" in p and "null" in p

@@ -36,8 +36,8 @@ STATUS_TEXT = {"ok": "정상", "partial": "중간에 멈춤"}
 def axis_shares(books: list[dict]) -> dict[str, tuple[float, float]]:
     leaf = [b for b in books if b["entry"] == "leaf"]
     n = len(leaf) or 1
-    return {a: (round(100 * sum(b["axes"][a] > 0 for b in leaf) / n, 1),
-                round(100 * sum(b["axes"][a] < 0 for b in leaf) / n, 1)) for a in AXES}
+    return {a: (round(100 * sum((b["axes"][a] or 0) > 0 for b in leaf) / n, 1),   # null = no info (10-06): neither side
+                round(100 * sum((b["axes"][a] or 0) < 0 for b in leaf) / n, 1)) for a in AXES}
 
 
 def warnings(sim: dict, shares: dict[str, tuple[float, float]]) -> list[str]:
@@ -52,7 +52,7 @@ def warnings(sim: dict, shares: dict[str, tuple[float, float]]) -> list[str]:
 
 def book_line(b: dict) -> str:
     tags = (f"{b['topic']} · {', '.join(b['keywords']) or '-'} · {b['way']}" if b["entry"] == "target"
-            else f"{b['genre']} · " + " ".join(f"{k}{v:+d}" for k, v in b["axes"].items()))
+            else f"{b['genre']} · " + " ".join(f"{k}{v:+d}" if v is not None else f"{k}?" for k, v in b["axes"].items()))
     mark = ("AI 일치(사람 안 봄)" if b.get("auto") else "사람이 확인함" if b.get("reviewed")
             else "검수 필요: " + ", ".join(b.get("flags") or []))
     return f"| {cell(b['title'])} | {cell(tags)} | {cell(b['one_liner'])} | {mark} |"

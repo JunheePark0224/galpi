@@ -262,7 +262,7 @@ const cell=p=>{const v=pct(p);return `<td>${p[0]}/${p[1]}</td><td style="width:3
 const table=(rows,name)=>`<table class="agr"><tr><th>${name}</th><th colspan="3">AI-1</th><th colspan="3">AI-2</th></tr>${rows.map(([n,p])=>`<tr><td>${esc(n)}</td>${cell(p.ai1)}${cell(p.ai2)}</tr>`).join("")}</table>`;
 function show(field,v){if(v===null||v===undefined)return "(비움)";
  const a=AXES.find(x=>x[0]===field); if(a)return v===1?a[2]:v===-1?a[4]:a[3];
- if(field==="keywords")return v.length?v.join(", "):"(없음)";
+ if(field==="keywords")return Array.isArray(v)?(v.length?v.join(", "):"(없음)"):String(v);
  if(field==="genre"&&v==="")return "🍃 장르 아님"; if(field==="topic"&&v==="")return "🎯 주제 아님"; return String(v)}
 const aiShow=(m,v)=>(m.field==="genre"||m.field==="topic")&&v===m.slot?`${v}에 맞음`:show(m.field,v);
 const none=on=>on?' <span class="nomark">정보 없음</span>':"";

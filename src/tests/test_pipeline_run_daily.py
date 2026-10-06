@@ -358,3 +358,62 @@ def test_the_cached_prefix_is_the_same_for_every_book_of_a_kind():
     assert all(len(p) == 1 for p in seen.values()), {k: len(p) for k, p in seen.items()}
     keywords = json.loads(next(iter(seen["target", "tag"])))["output_config"]["format"]["schema"]["properties"]["keywords"]
     assert keywords["items"]["enum"] == ["주식", "ETF·펀드", "업무 글"]
+
+
+LEAF = Candidate("leaf", "한국 소설", "9790000000021", "소설 하나", "다 저", 300, "https://y/21", INTRO, TOC)
+ZEROS = {"temp": 0, "pull": 0, "gain": 0, "world": 0, "signals": {"temp": "", "pull": "", "gain": "", "world": ""}}
+FIXED = {"temp": 1, "pull": -1, "gain": 0, "world": 1,
+         "signals": {"temp": "끝맺음 +", "pull": "몰입 −: 사건", "gain": "0 반반", "world": "현실"}, "missing": []}
+
+
+def test_a_pass_with_values_its_signals_do_not_back_is_asked_once_more_and_counted():
+    """10-06 calibration: AI-2 gave 넥서스 four 0s with no signal — a failed pass, asked again automatically."""
+    from pipeline.one_liner import RetryLog
+
+    def empty_b(kwargs):
+        entry, kind = kind_of(kwargs)
+        if kind == "check":
+            return message(check_answer(entry, **ZEROS))
+        if kind == "axisfix":
+            return message(FIXED)
+        return agreeing(kwargs)
+    client, ledger, axis_log = FakeClient(empty_b), {}, RetryLog()
+    rec, why = run_daily.tag_one(client, CFG, {"tag": "T", "check": "C"}, {}, LEAF, Breaker(), ledger, RetryLog(), "v",
+                                 axis_log)
+    assert why == "ok" and rec["second"]["axes"] == {"temp": 1, "pull": -1, "gain": 0, "world": 1}
+    assert rec["second"]["signals"]["pull"] == "몰입 −: 사건"
+    fix = [kw for kw in client.messages.calls if kind_of(kw)[1] == "axisfix"]
+    assert len(fix) == 1 and fix[0]["model"] == CFG.second_model and len(client.messages.calls) == 3
+    assert axis_log.summary()["tried"] == 1 and axis_log.summary()["fixed"] == 1
+    assert ledger[CFG.model].calls == 3                       # the re-ask is in the run's ledger too (haiku on both passes)
+
+
+def test_an_empty_axis_keeps_the_book_out_of_the_app_until_a_person_answers():
+    def no_info(kwargs):
+        entry, kind = kind_of(kwargs)
+        if kind in ("tag", "check"):
+            make = tag_answer if kind == "tag" else check_answer
+            return message(make(entry, pull=None, missing=["pull"], signals={**FIXED["signals"], "pull": ""}))
+        return agreeing(kwargs)
+    for cfg in (CFG, parse_config({**CFG.__dict__, "auto_merge": True})):
+        rec, why = run_daily.tag_one(FakeClient(no_info), cfg, {"tag": "T", "check": "C"}, {}, LEAF, Breaker(), {}, rules="v")
+        assert why == "ok" and rec["axes"]["pull"] is None and "pull" in rec["flags"]
+        assert rec["status"] in ("review", "reserve") and rec["status"] != "picked"
+
+
+def test_a_suggested_slot_is_kept_on_the_record_for_the_review_page():
+    vocab = {"돈 관리·투자": {"kept": {"주식": {"pattern": "주식"}}}, "경제 상식": {"kept": {"금리·환율": {"pattern": "금리"}}}}
+    cand = Candidate("target", "돈 관리·투자", "9790000000022", "경제 이야기", "가 저", 200, "https://y/22", INTRO, TOC)
+
+    def moves(kwargs):
+        entry, kind = kind_of(kwargs)
+        if kind == "tag":
+            return message(tag_answer(entry, fits=False, suggest="경제 상식", suggest_keywords=["금리·환율"]))
+        if kind == "check":
+            return message(check_answer(entry, fits=False, suggest="경제 상식", suggest_keywords=["금리·환율", "주식"]))
+        return agreeing(kwargs)
+    rec, _ = run_daily.tag_one(FakeClient(moves), CFG, {"tag": "T", "check": "C"}, vocab, cand, Breaker(), {}, rules="v")
+    assert rec["suggest"] == "경제 상식" and rec["suggest_keywords"] == ["금리·환율"]
+    assert rec["second"]["suggest"] == "경제 상식" and rec["second"]["suggest_keywords"] == ["금리·환율"]
+    rec, _ = run_daily.tag_one(FakeClient(), CFG, {"tag": "T", "check": "C"}, {}, LEAF, Breaker(), {}, rules="v")
+    assert rec["suggest"] == "" and rec["second"]["suggest"] == ""
