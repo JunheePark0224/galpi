@@ -17,6 +17,27 @@ describe("PathPage (S-04 당신이 고른 길)", () => {
     expect(screen.getByText("평소의 당신과 반대편에서 골랐어요")).toBeInTheDocument();
   });
 
+  it("puts the rule's moving reason under the challenge line, broken after 에서 (10-06)", () => {
+    const { container } = render(
+      <PathPage summary={{ crumbs: ["이야기"], moods: [], mode: "challenge" }} notices={[]} reason="두 사람의 이야기에서 더 큰 세계와 시간으로" />,
+    );
+    const why = container.querySelector("[data-part='challenge-reason']")!;
+    expect(why).toHaveTextContent("두 사람의 이야기에서더 큰 세계와 시간으로");
+    expect(why.querySelector("br")).not.toBeNull();
+    expect(screen.getByText(CHALLENGE_LINE).compareDocumentPosition(why) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("a list rule's reason stays one line; no reason, or the usual route, shows none", () => {
+    const { container, rerender } = render(
+      <PathPage summary={{ crumbs: [], moods: [], mode: "challenge" }} notices={[]} reason="늘 고르던 곳 밖으로 한 발짝" />,
+    );
+    expect(container.querySelector("[data-part='challenge-reason'] br")).toBeNull();
+    rerender(<PathPage summary={{ crumbs: [], moods: [], mode: "challenge" }} notices={[]} reason={null} />);
+    expect(container.querySelector("[data-part='challenge-reason']")).toBeNull();
+    rerender(<PathPage summary={{ crumbs: [], moods: [], mode: "normal" }} notices={[]} reason="숫자에서 사람과 삶으로" />);
+    expect(container.querySelector("[data-part='challenge-reason']")).toBeNull();
+  });
+
   it("names the whole library and a mood left to Galpi when nothing was narrowed or chosen", () => {
     render(<PathPage summary={{ crumbs: [], moods: [], mode: "normal" }} notices={[]} />);
     expect(screen.getByText(WHOLE_LIBRARY)).toBeInTheDocument();

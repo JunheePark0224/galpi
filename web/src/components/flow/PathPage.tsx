@@ -7,16 +7,18 @@ export const MOOD_ANY = "기분은 갈피에게 맡겼어요";
 
 /**
  * S-04 right page (DESIGN C-10 v2, design 10절): "당신이 고른 길" — the narrowing answers in order, then the mood
- * answers. No book count: a short scope is widened quietly. The challenge route gets one line on top. `summary` is the
+ * answers. No book count: a short scope is widened quietly. The challenge route gets one line on top, and under it the
+ * far rule's moving reason (`reason`, question-map `why:` — 10-06), broken after "에서" into two short lines. `summary` is the
  * draw's `path`; null while the draw is on its way (only the notes show). The notes share one live region that is always
  * on the page, so a note that arrives with the draw is announced (a region added together with its text often is not).
  */
-export function PathPage({ summary, notices }: { summary: PathSummary | null; notices: readonly string[] }) {
+export function PathPage({ summary, notices, reason = null }: { summary: PathSummary | null; notices: readonly string[]; reason?: string | null }) {
   return (
     <div className={styles.page}>
       {summary && (
         <>
           {summary.mode === "challenge" && <p className={styles.challenge}>{CHALLENGE_LINE}</p>}
+          {summary.mode === "challenge" && reason && <ChallengeReason text={reason} />}
           <section aria-labelledby="path-way">
             <h3 id="path-way" className={styles.label}>지나온 길</h3>
             <ol className={styles.rows}>
@@ -35,5 +37,15 @@ export function PathPage({ summary, notices }: { summary: PathSummary | null; no
         {notices.map((n) => <p key={n} className={styles.note}>{n}</p>)}
       </div>
     </div>
+  );
+}
+
+/** "A에서 B로" as two lines (the break after "에서 "); a line without one (the list rules) stays one line. */
+function ChallengeReason({ text }: { text: string }) {
+  const at = text.indexOf("에서 ");
+  return (
+    <p className={styles.challengeReason} data-part="challenge-reason">
+      {at < 0 ? text : <>{text.slice(0, at + 2)}<br />{text.slice(at + 3)}</>}
+    </p>
   );
 }

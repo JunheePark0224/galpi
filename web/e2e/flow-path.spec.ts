@@ -79,6 +79,7 @@ test("challenge route: the far side's books, the one-line note on the first page
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await expect(page.getByText("평소의 당신과 반대편에서 골랐어요")).toBeVisible();
   await expect(page.getByRole("region", { name: "지나온 길" })).toContainText("여기 없는 딴 세상");
+  await expect(page.locator("[data-part='challenge-reason']")).toHaveText("딴 세상에서지금 여기의 문장으로");   // rule 1's why (10-06)
   await shot(page, "s04-challenge");
   await page.getByRole("button", { name: "다음 장" }).click();
   await expect(page.getByText("1 / 5")).toBeVisible();
