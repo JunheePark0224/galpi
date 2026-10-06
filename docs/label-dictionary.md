@@ -1,6 +1,6 @@
 # 라벨 정의서 — 책에 태그를 붙이는 기준 (사람·AI 공통)
 
-v3 초안 2026-10-06 · 계획 `plans/2026-10-06-calibration.md` 1단계 · 신호 기준 `plans/2026-10-06-label-signals.md`
+버전 v3 초안 2026-10-06 · 계획 `plans/2026-10-06-calibration.md` 1단계 · 신호 기준 `plans/2026-10-06-label-signals.md`
 
 사람이 검수할 때와 AI가 태그할 때 **이 문서 하나**를 본다.
 - 태그 지시문(`src/pipeline/prompt.py`)은 0~5절을 그대로 읽는다. 여기 문구를 고치면 다음 태그부터 바로 바뀐다.
