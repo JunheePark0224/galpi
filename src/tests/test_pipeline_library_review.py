@@ -1,0 +1,134 @@
+"""Pipeline: what the v3 library re-tag decides alone, and --apply into the import's files
+(src/pipeline/library_review.py · library_apply.py)."""
+import sys
+from pathlib import Path
+
+import pytest
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from apply_review import ReviewError  # noqa: E402
+from pipeline import library_apply, library_review  # noqa: E402
+
+AX = {"temp": 1, "pull": -1, "gain": 0, "world": 1}
+LINE = "잃어버린 하루는 어디로 갈까요?"
+KEPT = {"돈 관리·투자": {"주식": {}, "ETF·펀드": {}}}
+
+
+def leaf_book(isbn, a=AX, b=AX, cur=AX, source="books_v1.json", line=LINE, status="picked", a_missing=(), b_fits=True,
+              b_suggest=""):
+    rec = {"entry": "leaf", "genre": "에세이", "axes": dict(a), "missing": list(a_missing), "fits": True, "suggest": "",
+           "one_liner": "새 한 줄은 무엇을 남길까요?",
+           "second": {"fits": b_fits, "axes": dict(b), "missing": [], "suggest": b_suggest}}
+    return {"isbn": isbn, "source": source, "entry": "leaf", "slot": "에세이", "title": f"책{isbn}", "status": status,
+            "current": {"genre": "에세이", "axes": dict(cur), "one_liner": line}, "record": rec}
+
+
+def target_book(isbn, a_kw=("주식",), b_kw=("주식",), cur_kw=("주식",), way=("개념", "개념"), cur_way="개념",
+                source="2026-10-01.json"):
+    rec = {"entry": "target", "topic": "돈 관리·투자", "keywords": list(a_kw), "way": way[0], "fits": True, "suggest": "",
+           "one_liner": "주식의 기본을 쉽게 알려줘요",
+           "second": {"fits": True, "keywords": list(b_kw), "way": way[1], "suggest": ""}}
+    return {"isbn": isbn, "source": source, "entry": "target", "slot": "돈 관리·투자", "title": f"책{isbn}", "status": "picked",
+            "current": {"topic": "돈 관리·투자", "keywords": list(cur_kw), "way": cur_way,
+                        "one_liner": "배당과 분산으로 주식의 기본을 알려줘요"}, "record": rec}
+
+
+def test_agreed_values_are_auto_and_their_differences_from_the_library_are_changes():
+    d = library_review.decide(leaf_book("1", a={**AX, "temp": 0}, b={**AX, "temp": 0}), None)
+    assert d["asks"] == [] and d["auto"] == {**AX, "temp": 0}
+    assert d["changes"] == [{"field": "temp", "old": 1, "new": 0}]
+
+
+def test_a_person_gets_unsettled_splits_no_info_slot_disputes_and_a_current_line_that_breaks_a_rule():
+    d = library_review.decide(leaf_book("1", a={**AX, "temp": 0}, a_missing=["world"], b_fits=False, b_suggest="한국 소설",
+                                        line="짧아요?"), None)
+    assert d["asks"] == ["slot", "temp", "world", "line"] and d["line_issues"]
+    t = library_review.decide(target_book("2", a_kw=["주식"], b_kw=["ETF·펀드"], way=("개념", "실습")),
+                              {"settled": {"keywords": None, "way": "실습"}})
+    assert t["asks"] == ["keywords"] and t["auto"] == {"way": "실습"} and t["settled"] == ["way"]
+
+
+def test_the_majority_keeps_a_disputed_slot_and_settles_an_axis():
+    book = leaf_book("1", a={**AX, "temp": 0}, b_fits=False, b_suggest="한국 소설")
+    d = library_review.decide(book, {"settled": {"slot": "에세이", "temp": 0}})
+    assert d["asks"] == [] and d["settled"] == ["slot", "temp"] and d["auto"]["temp"] == 0
+
+
+def test_groups_sample_five_percent_of_the_auto_books_with_a_seed_and_the_table_counts_changes():
+    books = [leaf_book(str(i), a={**AX, "temp": 0}, b={**AX, "temp": 0}) for i in range(40)] + [
+        leaf_book("x", a={**AX, "temp": 0})]
+    g1, g2 = library_review.groups(books, {}), library_review.groups(books, {})
+    assert g1 == g2 and sum(d["group"] == "sample" for d in g1.values()) == 2 and g1["x"]["group"] == "person"
+    table = library_review.change_table(books, g1)
+    assert table == [{"field": "temp", "change": "1 → 0", "count": 40, "isbns": [str(i) for i in range(40)]}]
+    assert library_review.field_shares(books, g1)["temp"] == {"auto": 40, "changed": 40}
+    c = library_review.counts(g1)
+    assert c["to_person"] == 1 and c["changed_auto"] == 40 and c["sample"] == 2
+
+
+def test_keyword_changes_are_rows_per_keyword_added_or_taken_off():
+    books = [target_book("1", a_kw=["주식", "ETF·펀드"], b_kw=["ETF·펀드", "주식"])]
+    rows = library_review.change_table(books, library_review.groups(books, {}))
+    assert [r["change"] for r in rows] == ["돈 관리·투자: + ETF·펀드"]
+
+
+def v1_rows():
+    return [{"isbn": "1", "entry": "leaf", "slot": "에세이", "genre": "에세이", "topic": None, "field": None, "pages": 200,
+             "way": None, "axes": dict(AX), "keywords": [], "one_liner": LINE, "one_liner_style": "question"},
+            {"isbn": "3", "entry": "leaf", "slot": "에세이", "genre": "에세이", "topic": None, "field": None, "pages": 200,
+             "way": None, "axes": dict(AX), "keywords": [], "one_liner": LINE, "one_liner_style": "question"}]
+
+
+def addition(isbn, status="picked", **over):
+    return {"isbn": isbn, "title": f"책{isbn}", "author": "가 저", "pages": 200, "entry": "target", "topic": "돈 관리·투자",
+            "field": "돈·경제", "keywords": ["주식"], "way": "개념", "one_liner": "배당과 분산으로 주식의 기본을 알려줘요",
+            "status": status, **over}
+
+
+def setup():
+    books = [leaf_book("1", a={**AX, "temp": 0}, b={**AX, "temp": 0}),
+             leaf_book("3", a={**AX, "temp": 0}),                      # split → person
+             target_book("2", way=("실습", "실습")),
+             target_book("4", source="2026-10-05-2.json")]
+    books[3]["status"] = "review"
+    docs = {"2026-10-01.json": {"books": [addition("2"), addition("9", status="reserve")]},
+            "2026-10-05-2.json": {"books": [addition("4", status="review")]}}
+    return books, library_review.groups(books, {}, rate=0.0001), docs
+
+
+def test_apply_writes_auto_values_with_history_and_stamps_unchanged_books():
+    books, decided, docs = setup()
+    v1, new_docs, removed, tally = library_apply.apply(books, decided, {}, KEPT, v1_rows(), docs)
+    one = v1[0]
+    assert one["axes"]["temp"] == 0 and one["rules_version"] == "v3" and one["slot"] == "에세이"
+    assert one["history"] == [{"rules_version": "before-v3", "genre": "에세이", "axes": AX, "one_liner": LINE}]
+    assert v1[1] == v1_rows()[1]                                         # waits for a person
+    two = new_docs["2026-10-01.json"]["books"][0]
+    assert two["way"] == "실습" and two["draft"]["way"] == "개념" and two["history"][0]["way"] == "개념"
+    assert new_docs["2026-10-01.json"]["books"][1]["status"] == "reserve"    # not a library book
+    four = new_docs["2026-10-05-2.json"]["books"][0]
+    assert four["status"] == "picked" and four["auto"] == "ai-agree" and "history" not in four
+    assert four["rules_version"] == "v3" and removed == [] and tally["skipped_edited"] == []
+    again = library_apply.apply(books, decided, {}, KEPT, v1, new_docs)
+    assert again[0] == v1 and again[1] == new_docs                       # applying again changes nothing
+
+
+def test_apply_takes_a_persons_answer_and_a_dropped_v1_book_leaves_books_v1():
+    books, decided, docs = setup()
+    ans = {"3": {"genre": "에세이", "axes": {**AX, "temp": -1}, "one_liner": LINE, "status": "dropped", "ok": True}}
+    v1, _, removed, tally = library_apply.apply(books, decided, ans, KEPT, v1_rows(), docs)
+    assert [r["isbn"] for r in v1] == ["1"] and removed[0]["isbn"] == "3" and removed[0]["axes"]["temp"] == -1
+    assert tally["dropped"] == 1
+
+
+def test_apply_refuses_stray_answers_bad_lines_and_skips_rows_edited_since_the_run():
+    books, decided, docs = setup()
+    with pytest.raises(ReviewError, match="not on this page"):
+        library_apply.apply(books, decided, {"1": {"ok": True}}, KEPT, v1_rows(), docs)
+    with pytest.raises(ReviewError, match="one-liner"):
+        library_apply.apply(books, decided, {"3": {"genre": "에세이", "axes": AX, "one_liner": "짧아요?", "ok": True}},
+                            KEPT, v1_rows(), docs)
+    edited = [{**v1_rows()[0], "axes": {**AX, "pull": 1}}, v1_rows()[1]]
+    v1, _, _, tally = library_apply.apply(books, decided, {}, KEPT, edited, docs)
+    assert tally["skipped_edited"] == ["1"] and v1[0] == edited[0]

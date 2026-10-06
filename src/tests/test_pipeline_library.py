@@ -103,3 +103,46 @@ def test_the_estimate_counts_only_books_not_done():
     doc = retag_library.empty_doc(CFG, "v3") | {"books": [{"isbn": "9780000000001"}]}
     assert retag_library.remaining(items(), doc) == 4
     assert retag_library.estimate(4) == pytest.approx(4 * retag_library.EST_PER_BOOK, abs=0.005)
+
+
+def test_the_tiebreak_asks_pass_c_once_per_book_with_a_settleable_split_and_resumes():
+    from pipeline import library_cli
+    from pipeline_fakes import SIGNALS, agreeing, check_answer, kind_of, message
+    half = {**SIGNALS, "temp": "온도 반반 0: 둘 다 뚜렷함"}
+
+    def answer(kw):
+        entry, kind = kind_of(kw)
+        if entry == "leaf" and kind == "check":
+            return message(check_answer("leaf", temp=0, signals=half))
+        return agreeing(kw)
+    doc, _ = retag_library.run(items(), retag_library.empty_doc(CFG, "v3"), CFG, FakeClient(answer), VOCAB, texts,
+                               max_cost=15, save=lambda d: None, rules="v3")
+    third = FakeClient(lambda kw: message(check_answer("leaf", temp=0, signals=half)))
+    tb, summary = library_cli.run_tiebreak(doc, {"cost_usd": 0.0, "books": {}}, CFG, third, VOCAB, texts, 2, lambda d: None)
+    leafs = [b["isbn"] for b in doc["books"] if b["entry"] == "leaf"]
+    assert sorted(tb["books"]) == sorted(leafs) and summary["asked"] == len(leafs)
+    row = tb["books"][leafs[0]]
+    assert row["splits"] == ["temp"] and row["settled"] == {"temp": 0} and "why" not in row["third"]
+    again = FakeClient()
+    library_cli.run_tiebreak(doc, tb, CFG, again, VOCAB, texts, 2, lambda d: None)
+    assert again.messages.calls == []
+
+
+def test_the_page_carries_the_change_table_and_only_person_and_sample_books(tmp_path):
+    import re as _re
+    import shutil
+    import subprocess
+
+    from pipeline import library_cli, library_review
+    doc, _ = retag_library.run(items(), retag_library.empty_doc(CFG, "v3"), CFG, FakeClient(), VOCAB, texts,
+                               max_cost=15, save=lambda d: None, rules="v3")
+    decided = library_review.groups(doc["books"], {})
+    entries = library_cli.page_entries(doc, {"books": {}}, decided, lambda i: (INTRO, TOC))
+    assert {e["group"] for e in entries} <= {"person", "sample"} and len(entries) < len(doc["books"])
+    table = library_review.change_table(doc["books"], decided)
+    html = library_cli.render(entries, table, library_review.counts(decided), {}, VOCAB)
+    assert "galpi-library-v3" in html and "__BOOKS__" not in html and "__TABLE__" not in html
+    if shutil.which("node"):
+        script = _re.search(r"<script>(.*)</script>", html, _re.S).group(1)
+        (tmp_path / "page.js").write_text(script, encoding="utf-8")
+        assert subprocess.run(["node", "--check", str(tmp_path / "page.js")], capture_output=True).returncode == 0
