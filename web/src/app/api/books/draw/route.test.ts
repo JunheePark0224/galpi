@@ -100,7 +100,7 @@ describe("POST /api/books/draw", () => {
 
   it("a challenge path carries where it moved from and to, by which far rule (10-05 v2)", async () => {
     const body = await (await POST(req({ answers: CHALLENGE_PATH, seen: [], seed: 7 }))).json();
-    expect(body.challenge).toMatchObject({ from: ["SF·판타지"], to: ["에세이", "시"], rule: { n: 1 }, reasonDraft: null });
+    expect(body.challenge).toMatchObject({ from: ["SF·판타지"], to: ["에세이", "시"], rule: { n: 1 }, reason: "딴 세상에서 지금 여기의 문장으로" });
   });
 
   it("signs the pictures' seed for the 도감 (dev secret outside production)", async () => {

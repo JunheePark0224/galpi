@@ -35,13 +35,16 @@ describe("src/data/question-map.json", () => {
 describe("far rules (challenge rules v2, 10-05)", () => {
   const far = (built as QuestionMap).far;
   const rule = (n: number) => far.find((r) => r.n === n)!;
-  it("are numbered and titled in the document; the moving reasons (drafts) are written for the 배우기 rules and 로맨스 (37) only", () => {
+  it("are numbered and titled in the document; every rule has its moving reason (S-04, 10-06)", () => {
     expect(far).toHaveLength(43);
     expect(far.map((r) => r.n!).sort((a, b) => a - b)).toEqual(Array.from({ length: 43 }, (_, i) => i + 1));
     expect(far.every((r) => typeof r.title === "string" && r.title.length > 0)).toBe(true);
     const story = far.filter((r) => r.from.entry === "leaf");
-    expect(story.filter((r) => r.why !== undefined).map((r) => r.n)).toEqual([37]);
-    expect(far.filter((r) => r.from.entry === "target").every((r) => typeof r.why === "string")).toBe(true);
+    // one short line, "…에서 …로" — the list rules (19, 36) step "… 밖으로 한 발짝"
+    for (const r of far) {
+      expect(r.why, `rule ${r.n}`).toMatch(r.n === 19 || r.n === 36 ? /밖으로 한 발짝$/ : /^\S.*에서 .+로$/);
+      expect(r.why!.length, `rule ${r.n}`).toBeLessThanOrEqual(32);
+    }
     expect(story.map((r) => r.n)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 37, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]);
   });
   it("10-05: rules 37-43 (로맨스 and the four new topics) sit above the group rules they are narrower than", () => {

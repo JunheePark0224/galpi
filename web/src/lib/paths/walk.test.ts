@@ -64,7 +64,7 @@ describe("walkPath", () => {
     // a 배우기 challenge widens only inside the learning genres, never to the whole 이야기 side
     expect(far.levels).toEqual([ALL_SCOPE, { ...ALL_SCOPE, entry: "leaf", genres: [...LEARN_CHALLENGE_GENRES] }, far.scope]);
     expect(far.mood.len).toBe(w.mood.len);
-    expect(far.challenge).toEqual({ from: ["데이터 분석"], to: ["인문"], rule: { n: 1, title: "데이터 분석 → 인문" }, reasonDraft: "숫자에서 사람으로" });
+    expect(far.challenge).toEqual({ from: ["데이터 분석"], to: ["인문"], rule: { n: 1, title: "데이터 분석 → 인문" }, reason: "숫자에서 사람으로" });
     expect(applyChallenge(MAP, walkPath(MAP, SQL))).toEqual(walkPath(MAP, SQL));                // not a challenge: as walked, no record
     expect(walkPath(MAP, SQL).challenge).toBeUndefined();
   });
@@ -100,7 +100,7 @@ describe("walkPath", () => {
       expect(far.scope.genres).toHaveLength(1);
       expect(applyChallenge(LISTS, w, draw(seed)).scope).toEqual(far.scope);                   // reproducible
       expect(far.challenge).toEqual({
-        from: [NO_CHOICE_LABEL.target], to: far.scope.genres, rule: { n: 3, title: "배우기 · 주제 없음 → 목록" }, reasonDraft: "다른 분야로 한 발짝",
+        from: [NO_CHOICE_LABEL.target], to: far.scope.genres, rule: { n: 3, title: "배우기 · 주제 없음 → 목록" }, reason: "다른 분야로 한 발짝",
       });
       count.set(far.scope.genres![0], (count.get(far.scope.genres![0]) ?? 0) + 1);
     }
@@ -115,7 +115,7 @@ describe("walkPath", () => {
       const far = applyChallenge(LISTS, w, draw(seed));
       expect(far.levels).toEqual([ALL_SCOPE, { ...ALL_SCOPE, entry: "leaf" }, far.scope]);   // a story challenge widens inside 이야기
       expect(far.mood).toBe(w.mood);
-      expect(far.challenge).toEqual({ from: [NO_CHOICE_LABEL.leaf], to: far.scope.genres, rule: { n: 2, title: "이야기 · 장르 없음 → 목록" }, reasonDraft: null });
+      expect(far.challenge).toEqual({ from: [NO_CHOICE_LABEL.leaf], to: far.scope.genres, rule: { n: 2, title: "이야기 · 장르 없음 → 목록" }, reason: null });
       seen.add(far.scope.genres![0]);
     }
     expect([...seen].sort()).toEqual(["에세이", "한국 소설"]);                                 // 시 has 2 books

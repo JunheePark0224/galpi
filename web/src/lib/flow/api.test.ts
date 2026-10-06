@@ -12,7 +12,7 @@ const RES: PathDrawResponse = {
     card: card(id), kind: i === 0 ? "random" : "recommended", reason: { label: "나온 이유", items: [`이유 ${id}`] },
   })),
   exhausted: false, widened: false, path: { crumbs: ["이야기에 빠지기"], moods: [], mode: "challenge" },
-  challenge: { from: ["이야기 · 장르 없음"], to: ["시"], rule: { n: 19, title: "이야기 · 장르 없음 → 도전 목록" }, reasonDraft: null },
+  challenge: { from: ["이야기 · 장르 없음"], to: ["시"], rule: { n: 19, title: "이야기 · 장르 없음 → 도전 목록" }, reason: null },
 };
 
 describe("flow api", () => {
