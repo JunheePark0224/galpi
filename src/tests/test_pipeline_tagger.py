@@ -340,7 +340,7 @@ def test_the_signal_rules_of_every_axis_reach_both_prompts():
         assert "| 한 줄 소개 테스트 |" in p and "**둘 다 약하면 더 강한 쪽.**" in p             # 얻는 것
         assert "**흔한 실수**" in p and "signals" in p and "missing" in p
     assert "넥서스 → 사회·시사" in system_prompt(VOC, "tag") and "**편 수**를 센다" in system_prompt(VOC, "tag")
-    assert "영업·세일즈·협상" in system_prompt(VOC, "tag") and "책의 독자가 누구인가" in system_prompt(VOC, "tag")
+    assert "말·협상·고객 관리로 파는 법" in system_prompt(VOC, "tag") and "책이 가르치는 기술로 본다" in system_prompt(VOC, "tag") and "책의 독자가 누구인가" in system_prompt(VOC, "tag")
 
 
 def test_leaf_schemas_ask_both_passes_for_a_signal_line_per_axis_and_the_axes_without_info():
