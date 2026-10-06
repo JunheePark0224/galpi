@@ -2,8 +2,10 @@
 
 rule_issues (+ scrub): the one-liner rules of check_one_liners.check_line (length, hype, title repeat, grounded in intro/TOC), the
 style (🍃 question ends with "?", 🎯 summary does not), evidence at most EVIDENCE_MAX chars, and no copying — a run of
-COPY_RUN characters (spaces ignored) shared with the YES24 intro/TOC means our words were not our own.
-disagreements: why a person should look — the two passes differ on fit / keywords / way / an axis, or pass A is unsure.
+COPY_RUN characters (spaces ignored) shared with the YES24 intro/TOC means our words were not our own — also checked on
+each 🍃 axis's signal line of both passes (10-06; a copied line is blanked by scrub, its issue is a note nobody is asked).
+disagreements: why a person should look — the two passes differ on fit / keywords / way / an axis, or either pass marked
+an axis as having no info (`missing`, 10-06). Pass A being unsure is not a reason (10-06: confidence gates nothing).
 decide: rule issues → reserve (대기, never merged as is); both passes say it does not fit → dropped; a disagreement →
 "review" (auto_merge false: waits in the file, NOT in books.json, until a person's --apply sets picked / dropped / reserve —
 merging the PR without reviewing cannot put an unreviewed flagged book into the app) or reserve (auto_merge true: nobody
@@ -12,7 +14,6 @@ human-reviewed books (agreement.py). Only "picked" books reach books.json (web/s
 """
 from difflib import SequenceMatcher
 
-from build_pilot_review import LOW_CONFIDENCE
 from check_one_liners import check_line
 
 from .prompt import AXES, EVIDENCE_MAX
@@ -53,7 +54,14 @@ def rule_issues(entry: str, tag: dict, title: str, material: str, second: dict) 
         issues.append(COPY_ISSUES["one_liner"])
     if copied_run(second.get("why", ""), material) >= COPY_RUN:
         issues.append(COPY_ISSUES["why"])
-    return issues
+    return issues + [signal_issue(who, axis) for who, ans in (("AI-1", tag), ("AI-2", second))
+                     for axis, line in (ans.get("signals") or {}).items() if copied_run(line, material) >= COPY_RUN]
+
+
+def signal_issue(who: str, axis: str) -> str:
+    """The issue of a 🍃 signal line that copied the YES24 text; starts like the evidence issue, so it is a note
+    (split_issues) and never a question for a person."""
+    return f"{COPY_ISSUES['evidence']} ({who} {axis})"
 
 
 EVIDENCE_ISSUE_STARTS = ("근거 없음", "근거 김", "근거가 ", "판단 이유")  # evidence / pass B reason: missing, long, copied ("근거 약함" is a one-liner rule)
@@ -70,8 +78,13 @@ def scrub(tag: dict, second: dict, issues: list[str]) -> tuple[dict, dict]:
     """Copies of both answers where a field that failed the YES24-copy check is blanked: the issue flag stays in `issues`,
     the copied words are never written to a file, a PR or an eval row."""
     blank = {f for f, text in COPY_ISSUES.items() if text in issues}
-    return ({k: ("" if k in blank else v) for k, v in tag.items()},
-            {k: ("" if k in blank else v) for k, v in second.items()})
+
+    def clean(ans: dict, who: str) -> dict:
+        out = {k: ("" if k in blank else v) for k, v in ans.items()}
+        if isinstance(ans.get("signals"), dict):
+            out["signals"] = {a: ("" if signal_issue(who, a) in issues else line) for a, line in ans["signals"].items()}
+        return out
+    return clean(tag, "AI-1"), clean(second, "AI-2")
 
 
 def disagreements(entry: str, a: dict, b: dict) -> list[str]:
@@ -84,13 +97,12 @@ def disagreements(entry: str, a: dict, b: dict) -> list[str]:
         if a["way"] != b["way"]:
             out.append("way")
     else:
-        out += [axis for axis in AXES if a["axes"][axis] != b["axes"][axis]]
-    if a["confidence"] < LOW_CONFIDENCE:
-        out.append("confidence")
+        marked = set(a.get("missing") or []) | set(b.get("missing") or [])
+        out += [axis for axis in AXES if a["axes"][axis] != b["axes"][axis] or axis in marked]
     return out
 
 
-UNSURE = "confidence"
+UNSURE = "confidence"  # flag of files tagged before 10-06 (pass A unsure); never asked, never written any more
 
 
 def needs_person(flags: list[str], issues: list[str]) -> tuple[list[str], list[str]]:

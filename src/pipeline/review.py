@@ -8,7 +8,8 @@ Usage (from the checkout, on the day's PR branch):
   in the `date` column)
   PYTHONIOENCODING=utf-8 python -m src.pipeline.review --sample 2026-W42 [--apply <download.json>]
   then: cd web && npm run books:import   (and commit to the PR branch)
-Shown: books a person must look at — the two passes disagreed or pass A was unsure (flags), or a rule check held the book
+Shown: books a person must look at — the two passes disagreed or one of them found no info for a 🍃 axis (flags, 10-06;
+pass A being unsure is not a reason any more), or a rule check held the book
 (issues) — or every book of a weekly sample. Books the passes agreed on are auto-accepted and counted apart. During the
 trial a fixed `sample_rate` share of them (sample.trial_sample, seeded by the batch id) is shown too ("표본") BY DEFAULT, so
 the agreement figures also say how often an agreed book was still wrong; `--no-sample` turns that off. The page shows YES24
@@ -62,7 +63,7 @@ def main_checkout(root: Path = OUT_DIR.parents[2], git=subprocess.run) -> Path:
 
 PAGES = main_checkout() / OUT_DIR.relative_to(OUT_DIR.parents[2]) / "pipeline"
 KEEP = ("isbn", "title", "author", "pages", "link", "entry", "topic", "keywords", "way", "genre", "axes", "one_liner",
-        "evidence", "confidence", "fits", "second", "flags", "issues", "status", "keyword_candidate")
+        "evidence", "signals", "missing", "confidence", "fits", "second", "flags", "issues", "status", "keyword_candidate")
 
 
 def needs_look(b: dict) -> bool:

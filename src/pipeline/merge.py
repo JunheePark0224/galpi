@@ -1,6 +1,7 @@
 """Today's additions file (design 2-1 "merge"): data/processed/additions/YYYY-MM-DD.json.
 
-Our tags only — ISBN, title, author, pages, link, tags, one-liner, evidence, confidence, the second pass's opinion and why a
+Our tags only — ISBN, title, author, pages, link, tags, one-liner, evidence, confidence, for a 🍃 book each pass's signal line
+per axis and the axes it found no info for (10-06), the second pass's opinion and why a
 book was flagged / held, and for a 🎯 book the short name of a keyword missing from its topic's list (`keyword_candidate`,
 pipeline/keyword_candidates.py; null when none). No YES24 intro or TOC (YES24 terms). `npm run books:import` then appends the picked books to
 web/src/data/books.json (web/src/lib/books/additions.ts) — the same path the 10-01 pilot file takes.
@@ -37,8 +38,10 @@ def record(cand: Candidate, a: dict, b: dict, flags: list[str], issues: list[str
                 "one_liner_style": "summary"}
         second = {k: b[k] for k in ("fits", "keywords", "way", "why")}
     else:
-        out |= {"genre": cand.slot, "axes": a["axes"], "one_liner_style": "question"}
-        second = {k: b[k] for k in ("fits", "axes", "why")}
+        out |= {"genre": cand.slot, "axes": a["axes"], "signals": a.get("signals", {}), "missing": a.get("missing", []),
+                "one_liner_style": "question"}
+        second = {"fits": b["fits"], "axes": b["axes"], "signals": b.get("signals", {}), "missing": b.get("missing", []),
+                  "why": b["why"]}
     out |= {"one_liner": a["one_liner"], "evidence": a["evidence"], "confidence": a["confidence"], "fits": a["fits"],
             "second": second, "flags": flags, "issues": issues, "status": status, "link": cand.link}
     return out | ({"auto": auto} if auto else {})

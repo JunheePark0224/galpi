@@ -1,7 +1,8 @@
 """Tagger instructions and output schemas (design 2-2: "지시문은 balance-game.md 태그 기준표 + target-chips.md 정의 그대로").
 
 The reference part of the system prompt is read from the docs at run time, so the people's rules and the AI's
-instructions cannot drift apart: the axis table (balance-game.md "태그 기준"), the 🎯 reading-way rule, keyword
+instructions cannot drift apart: the whole axis section (balance-game.md "태그 기준" — principle 0, the axis table and the
+10-06 signal tables and rules after it), the 🎯 reading-way rule, keyword
 definitions and topic boundaries (target-chips.md 2절), the 🍃 genre boundaries (book-pool.md 1-3절), and each topic's closed keyword list
 (keyword_vocab.json, with plain spellings from its word pattern). One-liner rules come from check_one_liners.py.
 
@@ -20,6 +21,7 @@ WAYS = ("개념", "실습", "사례")
 AXES = ("temp", "pull", "gain", "world")
 MAX_KEYWORDS = 3
 EVIDENCE_MAX = 30
+SIGNAL_MAX = 40  # one 🍃 axis's evidence signal line (10-06), e.g. "끝맺음 −: 마지막 부가 재난·난민"
 WHY_MAX = 30
 
 
@@ -42,6 +44,24 @@ def table_after(text: str, marker: str) -> list[str]:
     if not rows:
         raise PromptError(f"rule table not found in the docs: {marker!r} " + ("(no rows after it)" if seen else "(no such line)"))
     return rows
+
+
+def section_after(text: str, marker: str) -> list[str]:
+    """Every non-empty line after the first line starting with `marker`, up to the next markdown heading: a rule section
+    whose tables are followed by more tables and bullets (balance-game.md 태그 기준, 10-06). PromptError when the marker
+    is missing or the section has no table (a section cut short would silently drop rules from the instructions)."""
+    lines, seen = [], False
+    for line in text.splitlines():
+        if not seen:
+            seen = line.startswith(marker)
+            continue
+        if line.startswith("#"):
+            break
+        if line.strip():
+            lines.append(line)
+    if not any(line.startswith("|") for line in lines):
+        raise PromptError(f"rule section not found in the docs: {marker!r} " + ("(no table in it)" if seen else "(no such line)"))
+    return lines
 
 
 def line_starting(text: str, prefix: str) -> str:
@@ -88,8 +108,9 @@ def reference(vocab: dict, docs: Path = DOCS) -> str:
     chips = (docs / "target-chips.md").read_text(encoding="utf-8")
     pool = (docs / "book-pool.md").read_text(encoding="utf-8")
     return "\n".join([
-        "## 🍃 축 4개 (각 +1 / 0 / -1) — temp=온도, pull=끌림, gain=얻는 것, world=세계. 애매하면 0 — 단 world는 표의 중간(0) 조건일 때만 0 (현실 배경 소설은 +1)",
-        *table_after(balance, "### 태그 기준"),
+        "## 🍃 축 4개 (각 +1 / 0 / -1) — temp=온도, pull=끌림, gain=얻는 것, world=세계. 축마다 아래 신호 규칙대로 — "
+        "0은 그 규칙의 0 조건일 때만 (world는 표의 중간(0) 조건일 때만 0, 현실 배경 소설은 +1)",
+        *section_after(balance, "### 태그 기준"),
         "", "## 🍃 장르 경계", *table_after(pool, "### 1-3."),
         "", "## 🎯 읽는 방식 하나 — 책을 덮었을 때 독자 손에 남는 것", *table_after(chips, "**읽는 방식 태그 기준"),
         line_starting(chips, "헷갈리면:"),
@@ -108,7 +129,7 @@ TAG_RULES = [
     "🎯: keywords는 그 주제의 키워드 중 책의 중심인 것 0~3개(단어 규칙이 찾은 후보는 힌트일 뿐), way는 개념·실습·사례 중 하나.",
     "🎯 new_keyword: 책의 중심을 나타내는 키워드가 그 주제의 키워드 목록에 없을 때만, 그 중심의 짧은 이름(우리 말 또는 영어 2~12자, 예: 엑셀). "
     "목록에 있는 키워드나 주제 이름이면, 또는 중심이 목록으로 충분하면 \"\"(빈 문자열).",
-    "🍃: temp·pull·gain·world를 표의 가르는 질문대로 +1/0/-1.",
+    "🍃: temp·pull·gain·world를 기준표의 신호 규칙대로 +1/0/-1.",
     f"one_liner: 첫인상 한 줄. 🎯는 요약형(이 책으로 무엇을 얻는지 한 문장, 물음표 없음), 🍃는 질문형(반드시 ?로 끝남). 공백 빼고 {MIN_LEN}~{MAX_LEN}자, 해요체, "
     f"제목을 되풀이하지 않는다, 결말·반전을 말하지 않는다, 과장어 금지: {', '.join(HYPE_WORDS)}. 내용어 2개 이상은 책소개·목차에 실제로 나오는 말로 — 단 문장을 옮겨 쓰지 않는다.",
     f"evidence: 왜 이렇게 태그했는지 우리 말 {EVIDENCE_MAX}자 이내. 책소개 표현을 그대로 옮기지 않는다.",
@@ -117,13 +138,19 @@ TAG_RULES = [
 CHECK_RULES = [
     "다른 사람이 이미 태그를 붙였지만 너는 그것을 보지 않고, 같은 기준표로 혼자 판단한다. 질문 하나: 이 칸으로 찾아온 사람에게 이 책을 줘도 되나?",
     f"why: fits 판단의 이유, 우리 말 {WHY_MAX}자 이내.",
-    "🎯: keywords(0~3개, 책의 중심만)와 way. 🍃: temp·pull·gain·world.",
+    "🎯: keywords(0~3개, 책의 중심만)와 way. 🍃: temp·pull·gain·world를 기준표의 신호 규칙대로.",
+]
+SIGNAL_RULES = [
+    f"🍃 signals: 축마다(temp·pull·gain·world) 근거 신호 한 줄, 우리 말 {SIGNAL_MAX}자 이내 — 어떤 신호를 어디서 봤는지 "
+    "(예: \"끝맺음 −: 마지막 부가 재난·난민\", \"0 해당 없음: 설명 중심\"). 책소개·목차 문장을 옮기지 않는다.",
+    "🍃 missing: 그 축을 판단할 정보(결말·맺음말·마지막 장 등)가 책소개·목차에 아예 없을 때만 그 축 이름을 넣는다. "
+    "값은 그래도 가장 그럴듯한 것을 고른다. 확신이 낮다는 이유만으로는 넣지 않는다. 정보가 있으면 [].",
 ]
 
 
 def system_prompt(vocab: dict, kind: str, docs: Path = DOCS) -> str:
     rules = TAG_RULES if kind == "tag" else CHECK_RULES
-    return "\n".join([*COMMON, *rules, "", "# 기준표", reference(vocab, docs)])
+    return "\n".join([*COMMON, *rules, *SIGNAL_RULES, "", "# 기준표", reference(vocab, docs)])
 
 
 def user_message(entry: str, slot: str, title: str, intro: str, toc: str, hints: list[str]) -> str:
@@ -145,6 +172,9 @@ def schema(entry: str, kind: str, keywords: list[str]) -> dict:
         props |= {"keywords": _keywords(keywords), "way": {"type": "string", "enum": list(WAYS)}}
     else:
         props |= {a: {"type": "integer", "enum": [-1, 0, 1]} for a in AXES}
+        props |= {"signals": {"type": "object", "properties": {a: {"type": "string"} for a in AXES},
+                              "required": list(AXES), "additionalProperties": False},
+                  "missing": {"type": "array", "items": {"type": "string", "enum": list(AXES)}}}
     if kind == "tag":
         props |= {"one_liner": {"type": "string"}, "evidence": {"type": "string"}, "confidence": {"type": "number"}}
         if entry == "target":
