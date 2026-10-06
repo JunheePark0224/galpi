@@ -45,14 +45,56 @@ def test_a_person_gets_unsettled_splits_no_info_slot_disputes_and_a_current_line
                                         line="짧아요?"), None)
     assert d["asks"] == ["slot", "temp", "world", "line"] and d["line_issues"]
     t = library_review.decide(target_book("2", a_kw=["주식"], b_kw=["ETF·펀드"], way=("개념", "실습")),
-                              {"settled": {"keywords": None, "way": "실습"}})
+                              {"third": {"fits": True, "keywords": ["ETF·펀드"], "way": "실습"}})
     assert t["asks"] == ["keywords"] and t["auto"] == {"way": "실습"} and t["settled"] == ["way"]
 
 
 def test_the_majority_keeps_a_disputed_slot_and_settles_an_axis():
     book = leaf_book("1", a={**AX, "temp": 0}, b_fits=False, b_suggest="한국 소설")
-    d = library_review.decide(book, {"settled": {"slot": "에세이", "temp": 0}})
-    assert d["asks"] == [] and d["settled"] == ["slot", "temp"] and d["auto"]["temp"] == 0
+    d = library_review.decide(book, {"third": {"fits": True, "axes": {**AX, "temp": 0}, "missing": []}})
+    assert d["asks"] == [] and d["settled"] == ["slot", "temp"] and d["auto"]["temp"] == 0 and "slot" not in d["auto"]
+    moved = library_review.decide(book, {"third": {"fits": False, "suggest": "한국 소설", "axes": AX, "missing": []}})
+    assert moved["auto"]["slot"] == "한국 소설" and moved["slot_by"] == "majority"
+    assert {"field": "slot", "old": "에세이", "new": "한국 소설"} in moved["changes"]
+
+
+def test_both_passes_naming_the_same_other_slot_move_the_book_and_different_names_go_to_a_person():
+    same = leaf_book("1", b_fits=False, b_suggest="한국 소설")
+    same["record"] |= {"fits": False, "suggest": "한국 소설"}
+    d = library_review.decide(same, None)
+    assert d["asks"] == [] and d["auto"]["slot"] == "한국 소설" and d["slot_by"] == "agreed"
+    diff = leaf_book("2", b_fits=False, b_suggest="한국 소설")
+    diff["record"] |= {"fits": False, "suggest": "SF·판타지"}
+    assert library_review.decide(diff, None)["asks"] == ["slot"]
+
+
+def test_a_moved_target_book_takes_the_keywords_both_movers_named():
+    book = target_book("1")
+    book["record"] |= {"fits": False, "suggest": "경제 상식", "suggest_keywords": ["금리·환율", "물가"]}
+    book["record"]["second"] |= {"fits": False, "suggest": "경제 상식", "suggest_keywords": ["금리·환율"]}
+    d = library_review.decide(book, None)
+    assert d["auto"]["slot"] == "경제 상식" and d["auto"]["keywords"] == ["금리·환율"] and d["asks"] == []
+
+
+def test_split_keywords_take_the_intersection_and_only_an_empty_one_goes_to_a_person():
+    d = library_review.decide(target_book("1", a_kw=["주식", "ETF·펀드"], b_kw=["주식"]), None)
+    assert d["asks"] == [] and d["auto"]["keywords"] == ["주식"] and d["keywords_by"] == "intersection"
+    e = library_review.decide(target_book("2", a_kw=["주식"], b_kw=["ETF·펀드"]), None)
+    assert e["asks"] == ["keywords"]
+
+
+def test_three_tiebreak_slot_books_join_the_sample():
+    books = []
+    for i in range(6):
+        b = leaf_book(f"s{i}", b_fits=False, b_suggest="한국 소설")
+        books.append(b)
+    tbs = {b["isbn"]: {"third": {"fits": True, "axes": AX, "missing": []}} for b in books}
+    g = library_review.groups(books, tbs, rate=0.0001)
+    assert sum(d["group"] == "sample" for d in g.values()) == 4   # 1 (5% rounds up to one) + 3 tiebreak books
+    assert library_review.counts(g)["slot_tiebreak_settled"] == 6
+    left = leaf_book("u", b_fits=False, b_suggest="한국 소설")
+    one = library_review.groups([left], {"u": {"third": {"fits": False, "suggest": "SF·판타지", "axes": AX, "missing": []}}})
+    assert library_review.counts(one)["slot_tiebreak_unsettled"] == 1
 
 
 def test_groups_sample_five_percent_of_the_auto_books_with_a_seed_and_the_table_counts_changes():
@@ -132,3 +174,22 @@ def test_apply_refuses_stray_answers_bad_lines_and_skips_rows_edited_since_the_r
     edited = [{**v1_rows()[0], "axes": {**AX, "pull": 1}}, v1_rows()[1]]
     v1, _, _, tally = library_apply.apply(books, decided, {}, KEPT, edited, docs)
     assert tally["skipped_edited"] == ["1"] and v1[0] == edited[0]
+
+
+def test_apply_moves_a_book_both_passes_sent_elsewhere_and_keeps_the_old_slot_as_history():
+    leaf_moved = leaf_book("1", b_fits=False, b_suggest="한국 소설")
+    leaf_moved["record"] |= {"fits": False, "suggest": "한국 소설"}
+    t = target_book("2")
+    t["record"] |= {"fits": False, "suggest": "경제 상식", "suggest_keywords": ["금리·환율"]}
+    t["record"]["second"] |= {"fits": False, "suggest": "경제 상식", "suggest_keywords": ["금리·환율"]}
+    books = [leaf_moved, t]
+    decided = library_review.groups(books, {}, rate=0.0001)
+    decided = {i: d | {"group": "auto"} for i, d in decided.items()}
+    docs = {"2026-10-01.json": {"books": [addition("2")]}}
+    v1, new_docs, _, _ = library_apply.apply(books, decided, {}, {**KEPT, "경제 상식": {"금리·환율": {}}}, v1_rows()[:1], docs)
+    assert v1[0]["slot"] == v1[0]["genre"] == "한국 소설" and v1[0]["history"][0]["genre"] == "에세이"
+    moved = new_docs["2026-10-01.json"]["books"][0]
+    assert moved["topic"] == "경제 상식" and moved["field"] == "돈·경제" and moved["keywords"] == ["금리·환율"]
+    assert moved["history"][0]["topic"] == "돈 관리·투자"
+    rows = library_review.change_table(books, decided)
+    assert {"field": "slot", "change": "에세이 → 한국 소설", "count": 1, "isbns": ["1"]} in rows

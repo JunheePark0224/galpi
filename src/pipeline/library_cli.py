@@ -137,7 +137,7 @@ def cmd_page(out: Path, tb_path: Path) -> int:
     vocab, dirs = json.loads(VOCAB.read_text(encoding="utf-8")), detail_dirs()
     entries = page_entries(doc, tb, decided, lambda i: page_text(i, dirs))
     table = change_table(doc["books"], decided)
-    n = counts(decided) | {"skipped": len(doc.get("skipped_no_text") or [])}
+    n = counts(decided) | {"skipped": len(doc.get("skipped_no_text") or []) + len(doc.get("failed") or {})}
     page = PAGES / "library-v3.html"
     page.parent.mkdir(parents=True, exist_ok=True)
     page.write_text(render(entries, table, n, {b["isbn"]: b["title"] for b in doc["books"]}, vocab), encoding="utf-8")
