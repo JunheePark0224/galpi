@@ -26,7 +26,7 @@ def test_the_reference_is_read_from_the_label_dictionary():
     p = system_prompt(VOC, "tag")
     assert "## 0. 공통 원칙" in p and "## 1. 🍃 이야기 축 4개" in p and "### 1-4. 세계" in p     # dictionary 0-1
     assert "**판단 순서 — 비소설**" in p and "**판단 순서 — 소설·시**" in p
-    assert "## 2. 🍃 장르 13개" in p and "| 사회·시사 | 지금 사회의 문제를 다루는 책 |" in p      # dictionary 2
+    assert "## 2. 🍃 장르 13개" in p and "| 사회·시사 | 지금 사회의 문제를 다루는 책" in p      # dictionary 2
     assert "## 3. 🎯 주제 16개" in p and "| 돈 관리·투자 ↔ 경제 상식 |" in p                    # dictionary 3
     assert "## 4. 🎯 키워드" in p and "  - ETF·펀드 — ETF·인덱스·펀드처럼 묶음으로 사는 투자" in p  # keyword list + definition
     assert "| 실습 | **바로 해 볼 방법**" in p and "헷갈리면:" in p                               # dictionary 5
