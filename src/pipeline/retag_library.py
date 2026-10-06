@@ -3,6 +3,9 @@
 Usage (from the checkout; real API calls — costs money):
   PYTHONIOENCODING=utf-8 python -m src.pipeline.retag_library --dry-run           counts + estimate, no calls
   PYTHONIOENCODING=utf-8 python -m src.pipeline.retag_library [--max-cost 15]     tag every book not done yet
+  PYTHONIOENCODING=utf-8 python -m src.pipeline.retag_library --tiebreak          pass C for split fields (library_cli)
+  PYTHONIOENCODING=utf-8 python -m src.pipeline.retag_library --page              review page (library_review)
+  PYTHONIOENCODING=utf-8 python -m src.pipeline.retag_library --apply <download>  into books_v1 / additions, then books:import
 Every library book (library.py: books_v1 + the additions the import reads + every live book of 2026-10-05-2) runs through
 run_daily.tag_one — pass A with the one-liner retry, blind pass B, the 🍃 axis re-ask, slot suggestions, the copy checks —
 with the models of data/pipeline/config.json, calls one after another so the prompt cache stays warm. The YES24 intro/TOC
@@ -140,11 +143,26 @@ def cmd_run(args) -> int:
     return 0 if not summary["stopped"] else 1
 
 
+TIEBREAK = OUT.with_name("library-v3-tiebreak.json")
+REMOVED = OUT.with_name("removed.json")
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="v3 re-tag of the whole library")
     ap.add_argument("--dry-run", action="store_true")
-    ap.add_argument("--max-cost", type=float, default=MAX_COST)
+    ap.add_argument("--max-cost", type=float, help=f"USD in all (run: default {MAX_COST}; tiebreak: default 1.7)")
+    ap.add_argument("--tiebreak", action="store_true", help="third pass for split fields (library_cli.py)")
+    ap.add_argument("--page", action="store_true", help="build the review page")
+    ap.add_argument("--apply", type=Path, metavar="DOWNLOAD", help="write the decided values into the import's files")
     args = ap.parse_args(argv)
+    from . import library_cli
+    if args.apply:
+        return library_cli.cmd_apply(OUT, TIEBREAK, REMOVED, args.apply, write)
+    if args.page:
+        return library_cli.cmd_page(OUT, TIEBREAK)
+    if args.tiebreak:
+        return library_cli.cmd_tiebreak(OUT, TIEBREAK, args.max_cost, write)
+    args.max_cost = MAX_COST if args.max_cost is None else args.max_cost
     return cmd_run(args)
 
 
