@@ -576,7 +576,7 @@ def test_the_world_hint_on_the_review_pages_follows_the_label_dictionary():
     neither people nor a world; no 'not applicable' middle — the review hint says the same words as the dictionary."""
     from build_d4_review import AXIS_LABELS
     hint, rule = dict((a[0], a[5]) for a in AXIS_LABELS)["world"], _world_section()
-    for word in ("비소설", "우주여도 현실", "있었던 세상", "귀신·괴이", "우화", "실제로 등장", "사람도 세계도 없는", "해당 없음"):
+    for word in ("비소설", "우주여도 현실", "있었던 세상", "귀신·괴이", "우화", "실제로 등장", "사람·장소가 전혀 보이지 않는 책만", "해당 없음"):
         assert word in hint and word in rule, word
     assert "평범한 인생" in rule and "톨스토이 우화 → −1" in rule
 

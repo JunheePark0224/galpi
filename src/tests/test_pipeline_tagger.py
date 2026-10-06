@@ -40,7 +40,7 @@ def test_the_10_06_world_rule_reaches_both_prompts():
     for kind in ("tag", "check"):
         p = system_prompt(VOC, kind)
         assert "무대가 우주여도 현실" in p and "**세계 축에는 \"해당 없음 0\"이 없다.**" in p
-        assert "실제로 등장하면 −1 딴 세상**. 현실 배경이어도 −1." in p and "사람도 세계도 나오지 않는 책" in p
+        assert "실제로 등장하면 −1 딴 세상**. 현실 배경이어도 −1." in p and "사람·장소가 전혀 보이지 않는 책만" in p
         assert "카렐 차페크 『평범한 인생』" in p and "톨스토이 우화 → −1" in p
         assert "현실 배경에 귀신·괴이가 나오면 **0 중간**" not in p and "이야기가 없는 책은" not in p
 
@@ -340,7 +340,7 @@ def test_the_signal_rules_of_every_axis_reach_both_prompts():
         assert "| 한 줄 소개 테스트 |" in p and "**둘 다 약하면 더 강한 쪽.**" in p             # 얻는 것
         assert "**흔한 실수**" in p and "signals" in p and "missing" in p
     assert "넥서스 → 사회·시사" in system_prompt(VOC, "tag") and "**편 수**를 센다" in system_prompt(VOC, "tag")
-    assert "말·협상·고객 관리로 파는 법" in system_prompt(VOC, "tag") and "책이 가르치는 기술로 본다" in system_prompt(VOC, "tag") and "책의 독자가 누구인가" in system_prompt(VOC, "tag")
+    assert "**고객에게** 상품·서비스를 파는 협상·설득이면 마케팅·브랜딩" in system_prompt(VOC, "tag") and "책이 가르치는 기술로 본다" in system_prompt(VOC, "tag") and "책의 독자가 누구인가" in system_prompt(VOC, "tag")
 
 
 def test_leaf_schemas_ask_both_passes_for_a_signal_line_per_axis_and_the_axes_without_info():
@@ -377,3 +377,20 @@ def test_a_field_name_run_into_a_text_value_is_cut():
     assert _text("끝맺음 −: 마지막 장이 이별. why ") == "끝맺음 −: 마지막 장이 이별."
     assert _text("이 책은 the way we live를 다룬다") == "이 책은 the way we live를 다룬다"   # a word inside the text stays
     assert _text("일하는 way") == "일하는 way"                                               # no sentence mark before it: kept
+
+
+def test_the_first_calibration_rules_reach_both_prompts():
+    """10-06 calibration decisions: '정보 없음' does not change the value rule, no signal → value left empty, a value
+    needs a matching signal line, no outside knowledge, the ending is the arrival point, 문장 only when the book's own
+    sentences are praised, poetry world, the new SF·판타지 definition and the new boundaries."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**\"어느 쪽도 뚜렷하지 않음\"은 0의 이유가 아니다.**" in p and "정보 없음 + **값 비움**" in p
+        assert "**값을 낸 축은 근거 신호 한 줄이 반드시 있다.**" in p and "**소개·목차 밖의 지식은 쓰지 않는다**" in p
+        assert "인물의 도착점(어디로 변해 가는지)" in p and "**정보 없음과 상관없이** 더 강한 쪽" in p
+        assert "이 책의 문장·문체를 직접 칭찬할 때만" in p and "**인물의 매력·삶의 이야기가 끌고 감**" in p
+        assert "**시집도 소설과 같은 순서로 판단한다**" in p and "사랑과 멸종을 바꿔 읽어보십시오 → +1" in p
+        assert "현재 존재하지 않는 기술·존재·세계에 대한 상상이 이야기를 움직이는 소설" in p
+        assert "**장르는 세계 축 값과 따로 정한다**" in p and "| 에세이 ↔ 예술·여행 |" in p
+        assert "과학철학)은 인문" in p and "| 마케팅·브랜딩 ↔ 대화·관계(설득·협상) |" in p
+        assert "그 마음을 움직여 파는 법" in p  # 고객 이해, from target-chips.md
