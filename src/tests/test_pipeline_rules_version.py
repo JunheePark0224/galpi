@@ -5,11 +5,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from pipeline import retag, run_daily, rules_version as rv  # noqa: E402
-from pipeline.candidates import Candidate  # noqa: E402
-from pipeline.tagger import Breaker  # noqa: E402
 from pipeline_fakes import INTRO, TOC, FakeClient  # noqa: E402
 from test_pipeline_retag import CFG, VOCAB, batch, texts  # noqa: E402,F401 — the fixture is reused
+
+from pipeline import retag, run_daily  # noqa: E402
+from pipeline import rules_version as rv  # noqa: E402
+from pipeline.candidates import Candidate  # noqa: E402
+from pipeline.tagger import Breaker  # noqa: E402
 
 
 def test_the_version_is_read_from_the_dictionary_heading(tmp_path):

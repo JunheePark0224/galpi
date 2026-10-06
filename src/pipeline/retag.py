@@ -4,12 +4,13 @@ Usage (from the checkout; real API calls — costs money):
   PYTHONIOENCODING=utf-8 python -m src.pipeline.retag 2026-10-05-2 [--max-cost 3]
   → data/processed/additions/2026-10-05-2.v2.json, then `python -m src.pipeline.review 2026-10-05-2.v2` builds its own page
 Every book of the batch that was not dropped runs through both passes again (run_daily.tag_one: pass A with the one-liner
-retry, blind pass B, today's checks and decide), with the models of data/pipeline/config.json; every book and the file carry `rules_version` (rules_version.py). The text is the YES24 intro
-and TOC from the local cache (this checkout's data/raw/yes24/detail, then the main checkout's), fetched with the local key
-only when neither has it; a book with no text is skipped and named. The original file — and any answers a person has
-already applied to it — is never touched; the new file keeps the original's trial sample (the same books are measured)
-and is never written over. A TaggerStop (refused key, unknown model, API failures in a row) or the `--max-cost` cap stops
-the run and writes nothing; the summary says what was spent. The new file holds our tags only — no YES24 text.
+retry, blind pass B, today's checks and decide), with the models of data/pipeline/config.json; every book and the file
+carry `rules_version` (rules_version.py). The text is the YES24 intro and TOC from the local cache (this checkout's
+data/raw/yes24/detail, then the main checkout's), fetched with the local key only when neither has it; a book with no
+text is skipped and named. The original file — and any answers a person has already applied to it — is never touched;
+the new file keeps the original's trial sample (the same books are measured) and is never written over. A TaggerStop
+(refused key, unknown model, API failures in a row) or the `--max-cost` cap stops the run and writes nothing; the summary says what was spent.
+The new file holds our tags only — no YES24 text.
 """
 import argparse
 import json
