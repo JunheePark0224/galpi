@@ -48,7 +48,7 @@ from .gaps import plan_day
 from .keyword_candidates import excluded_names
 from .merge import additions_doc, keyword_hints, record, write_doc
 from .one_liner import RetryLog, retry as retry_one_liner
-from .prompt import schema, system_prompt, user_message
+from .prompt import all_keywords, schema, system_prompt, user_message
 from .rules_version import rules_version
 from .slots import keyword_rule, slot_rule
 from .tagger import Breaker, TaggerStop, Usage, call, parse
@@ -99,7 +99,7 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     kept = vocab.get(cand.slot, {}).get("kept", {}) if cand.entry == "target" else {}  # a new topic may have no list yet
     names, hints = list(kept), keyword_hints(cand, kept) if kept else []
     user = user_message(cand.entry, cand.slot, cand.title, cand.intro, cand.toc, hints)
-    raw_a, used, why = call(client, cfg.model, prompts["tag"], user, schema(cand.entry, "tag", names), breaker, "A")
+    raw_a, used, why = call(client, cfg.model, prompts["tag"], user, schema(cand.entry, "tag", all_keywords(vocab)), breaker, "A")
     _spend(ledger, cfg.model, used)
     left_out = excluded_names(vocab.get(cand.slot, {})) if cand.entry == "target" else []
     a = parse(raw_a, cand.entry, "tag", names, cand.slot, left_out) if raw_a else None
@@ -109,7 +109,7 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     _spend(ledger, cfg.model, used)
     if retries is not None:
         retries.note(cfg.model, used, outcome)
-    raw_b, used, why = call(client, cfg.second_model, prompts["check"], user, schema(cand.entry, "check", names), breaker, "B")
+    raw_b, used, why = call(client, cfg.second_model, prompts["check"], user, schema(cand.entry, "check", all_keywords(vocab)), breaker, "B")
     _spend(ledger, cfg.second_model, used)
     b = parse(raw_b, cand.entry, "check", names) if raw_b else None
     if b is None:

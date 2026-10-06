@@ -335,3 +335,26 @@ def test_main_keys_a_later_batch_by_its_id_and_checks_it(day, monkeypatch, tmp_p
     for bad in (["--batch", "2026-10-05-1"], ["--batch", "2026-10-05-pilot"], ["--date", "2026-10-04", "--batch", "2026-10-05-2"]):
         with pytest.raises(SystemExit):
             run_daily.main(bad)
+
+
+def test_the_cached_prefix_is_the_same_for_every_book_of_a_kind():
+    """Model, system and output_config (the schema is part of the cached prefix) must not depend on the book or the slot:
+    a per-topic keyword enum made every 🎯 topic its own ~23k-token cache write (10-06). Only messages may differ."""
+    vocab = {"돈 관리·투자": {"kept": {"주식": {"pattern": "주식"}, "ETF·펀드": {"pattern": "ETF"}}},
+             "글쓰기": {"kept": {"업무 글": {"pattern": "업무"}, "주식": {"pattern": "주식"}}}}
+    prompts = {"tag": "TAG RULES", "check": "CHECK RULES"}
+    books = [Candidate("target", "돈 관리·투자", "9790000000011", "주식 첫걸음", "가 저", 200, "https://y/1", INTRO, TOC),
+             Candidate("target", "글쓰기", "9790000000012", "업무 글쓰기", "나 저", 180, "https://y/2", "다른 소개 " + INTRO, TOC),
+             Candidate("leaf", "한국 소설", "9790000000013", "소설 하나", "다 저", 300, "https://y/3", INTRO, TOC),
+             Candidate("leaf", "SF·판타지", "9790000000014", "소설 둘", "라 저", 320, "https://y/4", INTRO + " 끝", TOC)]
+    client = FakeClient()
+    for cand in books:
+        run_daily.tag_one(client, MIXED_CFG, prompts, vocab, cand, Breaker(), {}, rules="v")
+    prefix = lambda kw: json.dumps({k: v for k, v in kw.items() if k != "messages"}, ensure_ascii=False, sort_keys=True)  # noqa: E731
+    seen: dict = {}
+    for kw in client.messages.calls:
+        seen.setdefault(kind_of(kw), set()).add(prefix(kw))
+    assert {("target", "tag"), ("target", "check"), ("leaf", "tag"), ("leaf", "check")} <= set(seen)
+    assert all(len(p) == 1 for p in seen.values()), {k: len(p) for k, p in seen.items()}
+    keywords = json.loads(next(iter(seen["target", "tag"])))["output_config"]["format"]["schema"]["properties"]["keywords"]
+    assert keywords["items"]["enum"] == ["주식", "ETF·펀드", "업무 글"]
