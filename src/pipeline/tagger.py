@@ -18,7 +18,8 @@ from dataclasses import dataclass
 import anthropic
 
 from .keyword_candidates import clean as clean_candidate
-from .prompt import AXES, MAX_KEYWORDS, SIGNAL_MAX, WAYS, WHY_MAX
+from .gaps import GENRES
+from .prompt import AXES, MAX_KEYWORDS, SIGNAL_MAX, TOPICS, WAYS, WHY_MAX
 
 MAX_TOKENS = 2048
 MODEL_OPTIONS = {"claude-haiku-4-5": {"extra_body": {"temperature": 0}},
@@ -133,7 +134,7 @@ def _failed(breaker: Breaker | None, pass_: str, model: str, reason: str) -> tup
 
 # A model now and then runs the next answer field's name into a text value ("…한국 소설이 아님.way", 10-06 calibration:
 # 1 of ~9,800 strings). Only a field name glued after the sentence's last mark is cut — never a word inside the text.
-LEAKED_FIELD = re.compile(r"(?<=[.!?。])\s*(way|why|keywords|axes|fits|signals|missing|one_liner|evidence|confidence|temp|pull|gain|world)\s*$")
+LEAKED_FIELD = re.compile(r"(?<=[.!?。])\s*(way|why|keywords|axes|fits|signals|missing|one_liner|evidence|confidence|temp|pull|gain|world|suggest|suggest_keywords)\s*$")
 
 
 def _text(v: object) -> str:
@@ -148,9 +149,39 @@ def signals_of(raw: dict) -> dict:
     return {"signals": {a: _text(given.get(a))[:SIGNAL_MAX] for a in AXES}, "missing": [a for a in AXES if a in marked]}
 
 
-def parse(raw: dict, entry: str, kind: str, keywords: list[str], topic: str = "", excluded=()) -> dict | None:
+def axes_of(raw: dict) -> dict | None:
+    """A 🍃 answer's axes, signal lines and no-info axes, or None when an axis is absent or not -1 / 0 / 1 / null (1.0 and
+    True are not axis values). An empty (null) value always counts as no info: it is added to `missing` if the model left
+    it out (10-06 calibration: no signal → '정보 없음' + an empty value, never a 0 filler)."""
+    if any(a not in raw for a in AXES):
+        return None
+    axes = {a: raw[a] for a in AXES}
+    if any(v is not None and (type(v) is not int or v not in (-1, 0, 1)) for v in axes.values()):
+        return None
+    sig = signals_of(raw)
+    marked = set(sig["missing"]) | {a for a, v in axes.items() if v is None}
+    return {"axes": axes, "signals": sig["signals"], "missing": [a for a in AXES if a in marked]}
+
+
+def suggestion(raw: dict, entry: str, fits: bool, lists: dict[str, list[str]] | None) -> dict:
+    """The slot a pass names for a book it says does not fit (10-06 calibration): a 🍃 genre or a 🎯 topic from our lists,
+    "" when none or when the pass says the book fits; a 🎯 suggestion also carries that topic's keywords, cut to its closed
+    list (`lists`: topic → keywords; at most MAX_KEYWORDS)."""
+    named = raw.get("suggest")
+    slot = named if not fits and isinstance(named, str) and named in (TOPICS if entry == "target" else GENRES) else ""
+    if entry != "target":
+        return {"suggest": slot}
+    own = (lists or {}).get(slot, [])
+    given = raw.get("suggest_keywords") if slot and isinstance(raw.get("suggest_keywords"), list) else []
+    return {"suggest": slot, "suggest_keywords": list(dict.fromkeys(k for k in given if k in own))[:MAX_KEYWORDS]}
+
+
+def parse(raw: dict, entry: str, kind: str, keywords: list[str], topic: str = "", excluded=(),
+          lists: dict[str, list[str]] | None = None) -> dict | None:
     """The answer cut to our lists: keywords outside the topic are dropped (at most MAX_KEYWORDS); a bad way / axis /
     missing one-liner makes the whole answer unusable (None). Pass B's free-text `why` is cut to WHY_MAX characters.
+    A 🍃 axis may be null (no info — axes_of). Both passes give `suggest` (and on a 🎯 book `suggest_keywords`) — see
+    suggestion(); `lists` maps every topic to its keywords.
     Pass A on a 🎯 book also gives `keyword_candidate`: its `new_keyword` cleaned (keyword_candidates.clean — a short name,
     None when missing, too long, the topic `topic`, on the list or `excluded` by it); a bad candidate never spoils the answer."""
     if not isinstance(raw.get("fits"), bool):
@@ -162,10 +193,11 @@ def parse(raw: dict, entry: str, kind: str, keywords: list[str], topic: str = ""
         out |= {"keywords": list(dict.fromkeys(k for k in raw["keywords"] if k in keywords))[:MAX_KEYWORDS],
                 "way": raw["way"]}
     else:
-        axes = {a: raw.get(a) for a in AXES}
-        if any(type(v) is not int or v not in (-1, 0, 1) for v in axes.values()):  # 1.0 and True are not axis values
+        axes = axes_of(raw)
+        if axes is None:
             return None
-        out |= {"axes": axes, **signals_of(raw)}
+        out |= axes
+    out |= suggestion(raw, entry, out["fits"], lists)
     if kind == "check":
         return out | {"why": _text(raw.get("why"))[:WHY_MAX]}
     line, conf = _text(raw.get("one_liner")), raw.get("confidence")

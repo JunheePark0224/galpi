@@ -268,6 +268,10 @@ b=B({signals:{temp:"끝맺음 +: 화해로 닫힘",pull:"",gain:"",world:""},mis
  second:{fits:true,axes:{temp:0,pull:0,gain:0,world:-1},signals:{temp:"0 반반: 상실과 위로",pull:"",gain:"",world:""},missing:[]}});
 out.signals_temp=signalsOf(b,"temp"); out.signals_old=signalsOf(B({}),"temp");
 out.missing_only=asks(B({flags:["gain"],missing:["gain"]}));
+const mv={...t,fits:false,suggest:"경제 상식",suggest_keywords:["금리·환율","주식"],flags:["fits"],second:{fits:false,keywords:[],way:"개념",suggest:"",suggest_keywords:[]}};
+put(mv,{status:"picked",moveOpen:false,...moveTo(mv,"경제 상식")},"fits"); out.moved_keywords=cur(mv).keywords;
+out.other_topic=moveTo(mv,"글쓰기").keywords;
+st[mv.isbn]={...cur(mv),moveOpen:true}; out.suggest_hint=ask(mv,cur(mv),"fits");
 console.log(JSON.stringify(out));
 """
 
@@ -294,6 +298,9 @@ def test_the_page_gates_confirm_on_what_a_person_must_decide(files):
     assert "정보 없음 (AI-1)" in sig and "정보 없음 (AI-2)" not in sig
     assert out["signals_old"] == ""                       # a book tagged before 10-06 has no lines: nothing shown
     assert out["missing_only"] == ["gain"]                # an axis asked only because a pass found no info
+    assert out["moved_keywords"] == ["금리·환율"]          # 10-06: moving to the suggested topic starts from its keywords
+    assert out["other_topic"] == []                       # another topic starts empty, as before
+    assert "AI 제안: <b>경제 상식</b> (AI-1)" in out["suggest_hint"] and "경제 상식 (AI 제안)" in out["suggest_hint"]
 
 
 def test_the_pilot_page_still_renders_from_the_shared_parts():

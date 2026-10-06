@@ -3,7 +3,9 @@
 Our tags only — ISBN, title, author, pages, link, tags, one-liner, evidence, confidence, for a 🍃 book each pass's signal line
 per axis and the axes it found no info for (10-06), the second pass's opinion and why a
 book was flagged / held, and for a 🎯 book the short name of a keyword missing from its topic's list (`keyword_candidate`,
-pipeline/keyword_candidates.py; null when none). No YES24 intro or TOC (YES24 terms). `npm run books:import` then appends the picked books to
+pipeline/keyword_candidates.py; null when none), and the slot each pass names for a book it says does not fit
+(`suggest`, a 🎯 one with `suggest_keywords`; "" when none — 10-06). A 🍃 axis may be null (no info, always flagged, so
+such a book waits for a person and never reaches books.json as is). No YES24 intro or TOC (YES24 terms). `npm run books:import` then appends the picked books to
 web/src/data/books.json (web/src/lib/books/additions.ts) — the same path the 10-01 pilot file takes.
 """
 import json
@@ -35,13 +37,15 @@ def record(cand: Candidate, a: dict, b: dict, flags: list[str], issues: list[str
     if cand.entry == "target":
         out |= {"topic": cand.slot, "field": FIELD_OF_TOPIC[cand.slot], "keywords": a["keywords"],
                 "keywords_regex": hints, "way": a["way"], "keyword_candidate": a.get("keyword_candidate"),
+                "suggest": a.get("suggest", ""), "suggest_keywords": a.get("suggest_keywords", []),
                 "one_liner_style": "summary"}
-        second = {k: b[k] for k in ("fits", "keywords", "way", "why")}
+        second = {k: b[k] for k in ("fits", "keywords", "way", "why")} | {
+            "suggest": b.get("suggest", ""), "suggest_keywords": b.get("suggest_keywords", [])}
     else:
         out |= {"genre": cand.slot, "axes": a["axes"], "signals": a.get("signals", {}), "missing": a.get("missing", []),
-                "one_liner_style": "question"}
+                "suggest": a.get("suggest", ""), "one_liner_style": "question"}
         second = {"fits": b["fits"], "axes": b["axes"], "signals": b.get("signals", {}), "missing": b.get("missing", []),
-                  "why": b["why"]}
+                  "suggest": b.get("suggest", ""), "why": b["why"]}
     out |= {"one_liner": a["one_liner"], "evidence": a["evidence"], "confidence": a["confidence"], "fits": a["fits"],
             "second": second, "flags": flags, "issues": issues, "status": status, "link": cand.link}
     return out | ({"auto": auto} if auto else {})

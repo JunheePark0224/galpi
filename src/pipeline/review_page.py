@@ -10,6 +10,9 @@ other decisions (대기 / 다른 갈래로 — a 🎯 book that is really a 🍃
 other entry; pipeline/requeue.py). Notes the app never shows (the evidence / pass B reason checks) and "AI-1 unsure" on
 agreed books are not asked (checks.needs_person). 10-06: a 🍃 axis is also asked when either pass marked it as having no
 info (`missing`); under each asked axis the page shows both AIs' signal line for it and "정보 없음 (AI-n)" (signalsOf).
+10-06 evening: a pass that says the book does not fit names the slot it belongs to (`suggest`); the fits question shows it
+as a suggestion ("AI 제안"), marks it in the move list, and moving a 🎯 book to the suggested topic starts its keywords
+from that pass's `suggest_keywords` (moveTo).
 Progress stays in this browser (localStorage).
 """
 from build_pilot_review import COMMON, STYLE
@@ -74,6 +77,9 @@ const asks=b=>[...splits(b),...(heldBy(b).length?["line"]:[])];
 const lineLeft=(b,c)=>issues(c.one_liner,b).length>0||(c.one_liner.trim()===(b.one_liner||"").trim()&&!(c.answered||[]).includes("line"));
 const left=(b,c)=>asks(b).filter(k=>k==="line"?lineLeft(b,c):!(c.answered||[]).includes(k));
 const decisionKey=b=>asks(b).includes("fits")?"fits":null;  // any decision in the box also answers "넣을지"
+// 10-06: the slot each AI named for a book it says does not fit ("" or absent = none); AI-1's first
+const suggestions=b=>[[1,b],[2,b.second||{}]].filter(([,o])=>o.fits===false&&o.suggest).map(([n,o])=>({who:n,slot:o.suggest,keywords:o.suggest_keywords||[]}));
+const moveTo=(b,v)=>{if(b.entry==="leaf")return {genre:v};const s=suggestions(b).find(x=>x.slot===v);return {topic:v,keywords:s?s.keywords.filter(k=>(KW[v]||[]).includes(k)):[]}};
 const chipsOf=(b,c)=>{const kept=KW[c.topic]||[], two=b.second||{};
  return [...new Set([...(b.keywords||[]),...(two.keywords||[]),...kept])].filter(x=>kept.includes(x))};
 const marks=(on1,on2)=>`${on1?'<span class="ai1">AI-1</span>':""}${on2?'<span class="ai2">AI-2</span>':""}`;
@@ -86,11 +92,12 @@ function ask(b,c,k){const two=b.second||{}, done=(c.answered||[]).includes(k);
  if(k==="fits"){const leaf=b.entry==="leaf", slot=leaf?b.genre:b.topic, now=leaf?c.genre:c.topic, moved=now!==slot, yes=o=>o.fits===false?"안 맞아요":"맞아요";
   const pick=!done?"":c.status==="dropped"?"dropped":moved?"move":"picked", open=pick==="move"||c.moveOpen;
   const names=leaf?GENRES:TOPICS, kind=leaf?"장르":"주제";
-  return `<p class="q">이 책을 어디에 둘까요? <span class="hint">— AI가 <b>${esc(slot)}</b> 칸으로 가져왔어요 · AI-1 ${yes(b)} · AI-2 ${yes(two)}${two.why?` (AI-2: ${esc(two.why)})`:""}</span></p>
+  const sug=suggestions(b), named=new Set(sug.map(x=>x.slot));
+  return `<p class="q">이 책을 어디에 둘까요? <span class="hint">— AI가 <b>${esc(slot)}</b> 칸으로 가져왔어요 · AI-1 ${yes(b)} · AI-2 ${yes(two)}${two.why?` (AI-2: ${esc(two.why)})`:""}${sug.length?` · AI 제안: ${sug.map(x=>`<b>${esc(x.slot)}</b> (AI-${x.who})`).join(", ")}`:""}</span></p>
    <div class="opts"><label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="picked" ${pick==="picked"?"checked":""}><span>${esc(slot)} 맞아요<span class="ai0">이대로 넣기</span></span></label>
    <label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="move" ${open?"checked":""}><span>다른 ${kind}예요<span class="ai0">옮겨서 넣기</span></span></label>
    <label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="dropped" ${pick==="dropped"?"checked":""}><span>어디에도 안 맞아요<span class="ai0">빼기</span></span></label></div>
-   ${open?`<div class="row"><span class="lab">${kind}</span><select data-act="fitto"><option value="">${kind}를 골라 주세요</option>${names.filter(n=>n!==slot).map(n=>`<option ${moved&&n===now?"selected":""}>${esc(n)}</option>`).join("")}</select>
+   ${open?`<div class="row"><span class="lab">${kind}</span><select data-act="fitto"><option value="">${kind}를 골라 주세요</option>${names.filter(n=>n!==slot).map(n=>`<option value="${esc(n)}" ${moved&&n===now?"selected":""}>${esc(n)}${named.has(n)?" (AI 제안)":""}</option>`).join("")}</select>
    ${leaf?"":'<span class="cnt">키워드는 아래 "같게 본 칸도 고치기"에서 새 주제에 맞게 골라 주세요</span>'}</div>`:""}`}
  if(AXIS_NAME[k]){const [,q,p,z,m,hint]=AXES.find(x=>x[0]===k), ax2=two.axes||{};
   return `<p class="q">${esc(q)} <span class="hint">— ${esc(hint)}</span></p><div class="opts">${[[p,1],[z,0],[m,-1]].map(([t,v])=>`<label><input type="radio" name="q-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${done&&c.axes[k]===v?"checked":""}><span>${esc(t)}
@@ -159,7 +166,7 @@ document.addEventListener("change",e=>{const b=bookOf(e); if(!b)return; const ac
  if(act==="fit"){const slot=b.entry==="leaf"?{genre:b.genre}:{topic:b.topic,keywords:[...(b.keywords||[])]};
   if(v==="move"){st[b.isbn]={...cur(b),moveOpen:true,ok:false,answered:(cur(b).answered||[]).filter(x=>x!=="fits")};save();render();return}
   put(b,{status:v,moveOpen:false,...slot},"fits");return}
- if(act==="fitto"){if(!v)return; put(b,{status:"picked",moveOpen:false,...(b.entry==="leaf"?{genre:v}:{topic:v,keywords:[]})},"fits");return}
+ if(act==="fitto"){if(!v)return; put(b,{status:"picked",moveOpen:false,...moveTo(b,v)},"fits");return}
  if(act==="topic")put(b,{topic:v,keywords:[]},null,"keywords"); if(act==="way")put(b,{way:v},"way"); if(act==="genre")put(b,{genre:v,status:"picked"},asks(b).includes("fits")?"fits":null);
  if(act==="status")put(b,v==="requeue"?{status:v,to_entry:toEntry(b),to_slot:cur(b).to_slot||""}:{status:v},decisionKey(b));
  if(act==="to_slot")put(b,{to_slot:v})});  // the one-liner is stored by the input handler (a re-render here would swallow the next click)
