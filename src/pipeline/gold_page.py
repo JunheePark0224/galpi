@@ -153,14 +153,14 @@ function left(b){const c=cur(b), out=[];
 const blk=(f,inner)=>`<div class="blk" data-field="${f}">${inner}</div>`;
 function leafQs(b,c){
  const g=blk("genre",`<p class="q">장르</p><div class="row"><select data-act="genre"><option value="" ${c.genre===undefined?"selected":""}>장르를 골라 주세요</option>
-  ${GENRES.map(x=>`<option ${c.genre===x?"selected":""}>${esc(x)}</option>`).join("")}<option value="${NONE}" ${c.genre===""?"selected":""}>어느 🍃 장르도 아님</option></select></div>`);
+  ${GENRES.map(x=>`<option ${c.genre===x?"selected":""}>${esc(x)}</option>`).join("")}<option value="${NONE}" ${c.genre===""?"selected":""}>어느 🍃 장르도 아님 (🎯 배우기 책)</option></select></div>`);
  return g+AXES.map(([k,q,p,z,m,hint])=>blk(k,`<p class="q">${esc(LABEL[k])} — ${esc(q)} <span class="hint">${esc(hint)}</span></p>
   <div class="opts">${[[p,1],[z,0],[m,-1]].map(([t,v])=>`<label><input type="radio" name="ax-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${c.axes[k]===v?"checked":""}><span>${esc(t)}</span></label>`).join("")}</div>
   <div class="row"><button class="none ${c.missing.includes(k)?"on":""}" data-none="${k}">정보 없음</button>
   <input type="text" data-reason="${k}" maxlength="60" value="${esc(c.reasons[k]||"")}" placeholder="근거 한 줄 (선택) — 예: 끝맺음 −, 마지막 장이 이별"></div>`)).join("")}
 function targetQs(b,c){const kept=c.topic?KW[c.topic]||[]:[], defs=DEFS[c.topic]||{};
  return blk("topic",`<p class="q">주제</p><div class="row"><select data-act="topic"><option value="" ${c.topic===undefined?"selected":""}>주제를 골라 주세요</option>
-   ${TOPICS.map(t=>`<option ${c.topic===t?"selected":""}>${esc(t)}</option>`).join("")}<option value="${NONE}" ${c.topic===""?"selected":""}>어느 🎯 주제도 아님</option></select></div>`)
+   ${TOPICS.map(t=>`<option ${c.topic===t?"selected":""}>${esc(t)}</option>`).join("")}<option value="${NONE}" ${c.topic===""?"selected":""}>어느 🎯 주제도 아님 (🍃 이야기 책)</option></select></div>`)
  +blk("keywords",`<p class="q">키워드 <span class="hint">— 책의 중심일 때만, 0~3개 · 눌러서 켜고 끄기</span></p>
    <div class="row">${kept.map(k=>`<button class="chip ${c.keywords.includes(k)?"on":""}" data-kw="${esc(k)}" title="${esc(defs[k]||"")}">${esc(k)}</button>`).join("")||'<span class="cnt">주제를 먼저 골라 주세요 (목록이 없는 주제도 있어요)</span>'}
    <button class="none ${c.kwDone&&!c.keywords.length?"on":""}" data-act="kwnone">키워드 없음</button></div>
