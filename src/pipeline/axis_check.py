@@ -2,8 +2,9 @@
 AI-2 gave 넥서스 four 0s with no signal at all; AI-1 wrote "약하게 −" / "몰입 쪽" and still answered 0).
 
 problems: per axis with a value — the signal line is empty, or the line states a direction (stated()) that the value
-contradicts. An axis left empty (null) is in `missing` by construction (tagger.axes_of) and needs no line. Four 0s with
-four empty lines are four problems, so a pass that failed that way is always asked again.
+contradicts. An axis left empty (null) is in `missing` by construction (tagger.axes_of) and needs no line — but all four
+empty at once is a problem (a pass that gave up). Four 0s with four empty lines are four problems, so a pass that failed
+that way is always asked again.
 stated: the directions a line names — signs (+, −, a lone "-" or "–", "+1"/"−1"), a lone 0 or the zero words (반반,
 해당 없음, 둘 다), and each axis's own words (온도 따뜻/서늘·여운, 끌림 문장/몰입, 얻는 것 알게 됨/마음, 세계 현실/딴 세상).
 A value contradicts its line when the line names directions and the value is none of them; 0 under a line that names both
@@ -37,6 +38,9 @@ ASK = ("방금 답에서 temp·pull·gain·world와 signals·missing만 다시 �
        "있고 그 줄의 방향이 값과 같아야 해요. 신호가 하나도 없으면 missing에 넣고 값은 null. 고칠 점:")
 
 
+ALL_EMPTY = "네 축을 모두 비웠어요 — 약하게라도 한쪽을 가리키는 신호가 있는 축은 값을 내 주세요(기준표 0절 6)"
+
+
 def stated(axis: str, line: str) -> set[int]:
     """The directions (+1 / 0 / −1) a signal line names; empty when it names none."""
     out = set()
@@ -57,7 +61,10 @@ def _sign(v: int) -> str:
 
 
 def problems(ans: dict) -> list[str]:
-    """What to fix in a parsed 🍃 answer, in Korean, [] when every value is backed by its signal line."""
+    """What to fix in a parsed 🍃 answer, in Korean, [] when every value is backed by its signal line. All four axes left
+    empty is one problem too (a pass that gave up on the book, calibration 2 of 10-06)."""
+    if all(ans["axes"][a] is None for a in AXES):
+        return [ALL_EMPTY]
     out = []
     for axis in AXES:
         value, line = ans["axes"][axis], (ans.get("signals") or {}).get(axis, "")

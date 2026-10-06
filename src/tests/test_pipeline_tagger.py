@@ -441,3 +441,5 @@ def test_schemas_ask_for_the_suggested_slot_from_our_closed_lists():
         assert {"suggest", "suggest_keywords"} <= set(target["required"])
     p = system_prompt(VOC, "check")
     assert "suggest" in p and "suggest_keywords" in p and "null" in p
+    # calibration 2 (10-06): passes gave up on books (fits false with no tags, all four axes null) — told not to
+    assert "정보가 적다는 이유로 false로 하지 않는다" in p and "null은 드문 예외다" in p

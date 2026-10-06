@@ -55,6 +55,13 @@ def test_an_empty_value_marked_as_no_info_needs_no_signal_line():
     assert a["axes"]["pull"] is None and problems(a) == []
 
 
+def test_four_empty_values_are_asked_again_once():
+    """Calibration 2 (10-06): with the 'no signal → null' rule a pass sometimes emptied all four axes of a book whose intro
+    plainly had signals. One empty axis is a legitimate answer; four at once is asked again like four 0s with no lines."""
+    _, a = answer(temp=None, pull=None, gain=None, world=None, missing=list(EMPTY), signals=EMPTY)
+    assert problems(a) == ["네 축을 모두 비웠어요 — 약하게라도 한쪽을 가리키는 신호가 있는 축은 값을 내 주세요(기준표 0절 6)"]
+
+
 def test_a_both_sides_line_with_a_zero_value_is_not_a_contradiction():
     _, a = answer(gain=0, signals={**SIGNALS, "gain": "알게 됨 + 마음 반반"})
     assert problems(a) == []
