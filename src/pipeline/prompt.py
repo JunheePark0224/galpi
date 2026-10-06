@@ -142,8 +142,16 @@ def _keywords(names: list[str]) -> dict:
     return {"type": "array", "items": {"type": "string", "enum": list(names) or ["-"]}}
 
 
+def all_keywords(vocab: dict) -> list[str]:
+    """Every topic's kept keywords in vocab order, no repeats: the one keyword enum all 🎯 calls share (see schema)."""
+    return list(dict.fromkeys(name for t in vocab.values() for name in t.get("kept", {})))
+
+
 def schema(entry: str, kind: str, keywords: list[str]) -> dict:
-    """Structured-output schema: enums are our closed lists, so the model cannot name anything outside them."""
+    """Structured-output schema: enums are our closed lists, so the model cannot name anything outside them.
+    Callers pass all_keywords(vocab), not the slot's own list: the schema is part of the cached prompt prefix, so a
+    per-topic enum made every topic a separate ~23k-token cache write (10-06: $2.05 for 81 calls). The topic's list
+    is in the instructions, and tagger.parse drops any keyword outside it."""
     props: dict = {"fits": {"type": "boolean"}}
     if entry == "target":
         props |= {"keywords": _keywords(keywords), "way": {"type": "string", "enum": list(WAYS)}}
