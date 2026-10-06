@@ -90,12 +90,31 @@ def disagreements(entry: str, a: dict, b: dict) -> list[str]:
     return out
 
 
+UNSURE = "confidence"
+
+
+def needs_person(flags: list[str], issues: list[str]) -> tuple[list[str], list[str]]:
+    """(flags, issues) a person must decide (10-05): a field the two passes answered differently, and a one-liner rule the
+    shown line breaks. Kept in the record but never sent to a person: the evidence / pass B reason checks (notes the app
+    never shows; a copied note is already blanked by scrub) and "AI-1 unsure" when both passes agree on every field (the
+    trial sample measures how often agreed books are still wrong)."""
+    return [f for f in flags if f != UNSURE], split_issues(issues)[0]
+
+
 def decide(a: dict, b: dict, flags: list[str], issues: list[str], auto_merge: bool) -> tuple[str, str | None]:
     """(status, auto mark)."""
     if not a["fits"] and not b["fits"]:
         return "dropped", None
+    flags, issues = needs_person(flags, issues)
     if issues:
         return "reserve", None
     if flags:
         return ("reserve" if auto_merge else "review"), None
     return "picked", AUTO
+
+
+def redecide(book: dict, auto_merge: bool) -> tuple[str, str | None]:
+    """decide() for a stored additions record (pass A's fits on the book, pass B's under `second`) — to re-sort a batch
+    tagged before a rule changed."""
+    return decide({"fits": book["fits"]}, {"fits": (book.get("second") or {}).get("fits", book["fits"])},
+                  book.get("flags") or [], book.get("issues") or [], auto_merge)

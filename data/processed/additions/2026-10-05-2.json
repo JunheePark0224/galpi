@@ -219,7 +219,7 @@
    "issues": [
     "근거 김(31자)"
    ],
-   "status": "reserve",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/104409067"
   },
   {
@@ -613,8 +613,9 @@
    "issues": [
     "근거 김(32자)"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/102035886"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/102035886",
+   "auto": "ai-agree"
   },
   {
    "isbn": "9788925556253",
@@ -683,8 +684,9 @@
     "confidence"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/122674421"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/122674421",
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791189143466",
@@ -891,7 +893,7 @@
    "issues": [
     "근거 김(33자)"
    ],
-   "status": "reserve",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/195235375"
   },
   {
@@ -1065,8 +1067,9 @@
    "issues": [
     "근거 김(31자)"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/194327707"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/194327707",
+   "auto": "ai-agree"
   },
   {
    "isbn": "9788960901087",
@@ -1497,7 +1500,7 @@
    "issues": [
     "근거 김(32자)"
    ],
-   "status": "reserve",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/116255710"
   },
   {
@@ -1795,8 +1798,9 @@
    "issues": [
     "판단 이유가 책소개를 베낌"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/195766353"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/195766353",
+   "auto": "ai-agree"
   },
   {
    "isbn": "9788986022919",
@@ -1910,7 +1914,7 @@
    "issues": [
     "근거 김(33자)"
    ],
-   "status": "reserve",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/133810169"
   },
   {
@@ -2320,8 +2324,9 @@
    "issues": [
     "근거 김(33자)"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/143088088"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/143088088",
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791160322699",
@@ -3091,8 +3096,9 @@
     "confidence"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/144380743"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/144380743",
+   "auto": "ai-agree"
   },
   {
    "isbn": "9788932043272",
@@ -3132,7 +3138,7 @@
    "issues": [
     "근거 김(33자)"
    ],
-   "status": "reserve",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/136299730"
   },
   {
@@ -3413,8 +3419,9 @@
    "issues": [
     "근거 김(32자)"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/128996"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/128996",
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791189074883",
@@ -3563,5 +3570,12 @@
    "status": "review",
    "link": "https://www.yes24.com/product/goods/195808948"
   }
+ ],
+ "trial_sample": [
+  "9788932919584",
+  "9788956994550",
+  "9788965180449",
+  "9788970638331",
+  "9791168120112"
  ]
 }

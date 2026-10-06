@@ -166,10 +166,31 @@ def test_the_sample_counts_reach_the_csv(tmp_path):
 
 def test_which_books_need_a_look_and_how_the_trial_sample_is_drawn():
     assert [b["isbn"] for b in DOC["books"] if review.needs_look(b)] == ["1", "3", "4"]
+    notes_only = [target("5", status="reserve", flags=["confidence"], issues=["근거 김(33자)", "판단 이유가 책소개를 베낌"])]
+    assert [b["isbn"] for b in notes_only if review.needs_look(b)] == []   # 10-05: nothing there for a person to decide
     assert review.trial_sample is sample.trial_sample                       # one implementation, two callers
     many = {"date": "2026-10-05", "books": [target(str(i), auto="ai-agree", flags=[]) for i in range(20)]}
     assert len(sample.trial_sample(many, 0.1)) == 2 and sample.trial_sample(many, 0.1) == sample.trial_sample(many, 0.1)
     assert sample.trial_sample(many, 0.0) == [] and sample.trial_sample(DOC, 0.1) == ["2"]
+    assert sample.trial_sample({**many, "trial_sample": ["7"]}, 0.1) == ["7"]   # a frozen draw wins
+
+
+def test_resorted_applies_todays_rules_and_keeps_the_sample_a_person_may_have_started():
+    doc = {"date": "2026-10-05", "batch_id": "2026-10-05-2", "books": [
+        target(str(i), auto="ai-agree", flags=[]) for i in range(10)] + [
+        target("n", status="reserve", flags=["confidence"], issues=["근거 김(33자)"]),
+        target("w", status="reserve", flags=["way"], issues=["근거 김(33자)"]),
+        target("d", status="review", flags=["confidence"], reviewed=True)]}
+    drawn = sample.trial_sample(doc, 0.1)
+    new = review.resorted(doc, auto_merge=False, rate=0.1)
+    by = {b["isbn"]: b for b in new["books"]}
+    assert (by["n"]["status"], by["n"]["auto"]) == ("picked", "ai-agree")
+    assert by["w"]["status"] == "review" and "auto" not in by["w"]
+    assert by["d"] == doc["books"][-1]                                       # a book a person answered stays as it is
+    assert new["trial_sample"] == drawn and sample.trial_sample(new, 0.1) == drawn
+    assert doc["books"][10]["status"] == "reserve"                           # the input is not changed
+    assert review.resorted(new, auto_merge=False, rate=0.1) == new           # running it again changes nothing
+    assert review.resorted(doc, auto_merge=False, rate=0.0)["trial_sample"] == []   # --no-sample freezes no sample
 
 
 @pytest.fixture
@@ -206,7 +227,8 @@ def test_the_page_has_the_sample_by_default_and_not_with_no_sample(files, capsys
     assert [(b["isbn"], b["sample"]) for b in books] == [("1", False), ("2", True), ("3", False), ("4", False)]
     assert "1 of them sample" in capsys.readouterr().out
     assert books[2]["second"]["axes"]["world"] == 0 and books[0]["second"]["way"] == "실습"   # AI-2 side by side
-    assert "따뜻함" in html and "딴 세상" in html and "AI-1이 맞아요" in html and "AI-2가 맞아요" in html
+    assert "따뜻함" in html and "딴 세상" in html and "사람이 정해야 하는 것만" in html and "같게 본 칸도 고치기" in html
+    assert "근거 김" not in html.split("<script>")[0]                                          # 10-05: only what a person decides
     assert review.main(["2026-10-05", "--no-sample"]) == 0
     html = (tmp / "pages" / "2026-10-05.html").read_text(encoding="utf-8")
     assert [b["isbn"] for b in json.loads(re.search(r"const BOOKS=(.*?), KW=", html, re.S).group(1))] == ["1", "3", "4"]
@@ -221,6 +243,47 @@ def test_the_page_script_is_valid_javascript(files):
     script.write_text(re.search(r"<script>(.*)</script>", html, re.S).group(1), encoding="utf-8")
     done = subprocess.run(["node", "--check", str(script)], capture_output=True, text=True, check=False)
     assert done.returncode == 0, done.stderr
+
+
+STUB = """const _el=()=>({textContent:"",innerHTML:"",onclick:null});const _els={};
+globalThis.document={getElementById:id=>_els[id]||(_els[id]=_el()),querySelectorAll:()=>[],addEventListener:()=>{}};
+globalThis.localStorage={getItem:()=>null,setItem:()=>{}};
+"""
+PROBE = r"""
+const B=(over)=>({isbn:"x",title:"아무 책",entry:"leaf",genre:"SF·판타지",axes:{temp:1,pull:0,gain:0,world:-1},one_liner:"다른 별에서 집은 어떤 모습일까요?",
+ fits:true,second:{fits:true,axes:{temp:0,pull:0,gain:0,world:-1}},flags:["temp"],issues:[],...over});
+const out={};
+let b=B({flags:[],issues:["근거 약함(겹치는 단어 1개)"]});                      // a line held for a rule the page cannot recheck
+out.grounding_untouched=left(b,cur(b));
+st[b.isbn]={...cur(b),answered:["line"]}; out.grounding_kept=left(b,cur(b)); delete st[b.isbn];
+st[b.isbn]={...cur(b),one_liner:"우주 정거장에서 집을 짓는 사람은 무엇을 그리워할까요?"}; out.grounding_edited=left(b,cur(b)); delete st[b.isbn];
+b=B({flags:["temp","confidence"],issues:["근거 김(33자)"]}); out.notes_not_asked=asks(b);
+b=B({flags:["fits"]}); put(b,{status:"dropped"},decisionKey(b)); out.fits_by_select=left(b,cur(b));
+const t={isbn:"t",title:"책",entry:"target",topic:"돈 관리·투자",keywords:["주식"],way:"개념",one_liner:"주식의 기본을 쉽게 알려줘요",fits:true,
+ second:{fits:true,keywords:["ETF·펀드"],way:"개념"},flags:["keywords"],issues:[]};
+put(t,{keywords:["주식"]},"keywords"); put(t,{topic:"경제 상식",keywords:[]},null,"keywords"); out.topic_resets=left(t,cur(t));
+out.chips_after_topic=chipsOf(t,cur(t));
+console.log(JSON.stringify(out));
+"""
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_the_page_gates_confirm_on_what_a_person_must_decide(files):
+    """Runs the page's own script in node (DOM stubbed): which questions a card asks and when [확인] turns on."""
+    tmp, _ = files
+    review.main(["2026-10-05"])
+    html = (tmp / "pages" / "2026-10-05.html").read_text(encoding="utf-8")
+    script = tmp / "probe.js"
+    script.write_text(STUB + re.search(r"<script>(.*)</script>", html, re.S).group(1) + PROBE, encoding="utf-8")
+    done = subprocess.run(["node", str(script)], capture_output=True, text=True, encoding="utf-8", check=False)
+    assert done.returncode == 0, done.stderr
+    out = json.loads(done.stdout.strip().splitlines()[-1])
+    assert out["grounding_untouched"] == ["line"]        # an unedited line held for 근거 약함 is never confirmed by accident
+    assert out["grounding_kept"] == [] and out["grounding_edited"] == []   # "이대로 괜찮아요" or a passing edit answers it
+    assert out["notes_not_asked"] == ["temp"]
+    assert out["fits_by_select"] == []                   # choosing 빼기 in the decision box answers "넣을지"
+    assert out["topic_resets"] == ["keywords"]           # a new topic asks the keywords again
+    assert out["chips_after_topic"] == ["금리·환율"]      # no keyword left over from the old topic
 
 
 def test_the_pilot_page_still_renders_from_the_shared_parts():
@@ -343,12 +406,16 @@ def test_a_pick_with_a_failing_line_is_refused_but_the_rest_of_the_download_is_a
     assert review.main(["2026-10-05", "--apply", str(tmp / "dl3.json")]) == 0 and "REFUSED 2" in capsys.readouterr().out
 
 
-def test_the_pick_buttons_never_promote_a_held_book_and_the_page_keeps_open_details(files):
+def test_the_page_asks_only_the_split_fields_with_nothing_preselected_and_keeps_open_details(files):
+    """10-05: a split field has no answer until the person picks one, and [확인] stays off until every question is answered
+    (a one-liner question is answered when the line passes the rules)."""
     tmp, _ = files
     review.main(["2026-10-05"])
     script = (tmp / "pages" / "2026-10-05.html").read_text(encoding="utf-8")
-    assert 'status:o.fits===false?"dropped":cur(b).status' in script                  # keep the decision, drop only when AI says no fit
-    assert 'status:o.fits===false?"dropped":"picked"' not in script
+    assert 'status:"picked",answered:[]' in script and '${done&&c.axes[k]===v?"checked":""}' in script
+    assert 'k==="line"?lineLeft(b,c):!(c.answered||[]).includes(k)' in script   # behaviour: test_the_page_gates_confirm…
+    assert 'if(act==="ok"){if(left(b,c).length)return;' in script
+    assert 'filter(f=>f!=="confidence")' in script and "근거 김|" in script                     # not asked (checks.needs_person)
     assert 'querySelectorAll("details[open]")' in script and "d.open=true" in script   # a re-render keeps the open details
 
 
@@ -375,7 +442,7 @@ def test_the_page_defaults_a_waiting_book_to_picked_so_one_confirm_puts_it_in(fi
     tmp, _ = files
     review.main(["2026-10-05"])
     script = (tmp / "pages" / "2026-10-05.html").read_text(encoding="utf-8")
-    assert 'status:b.status==="reserve"?"reserve":"picked"' in script                 # review → picked in the form
+    assert 'one_liner:b.one_liner,status:"picked"' in script        # a held book goes in once its line is fixed and confirmed
 
 
 def test_the_weekly_issue_table_escapes_pipes_and_line_breaks():
