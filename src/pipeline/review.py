@@ -1,7 +1,8 @@
 """Local review page for a day's additions (or a weekly sample) and applying its download (design 2-3).
 
 Usage (from the checkout, on the day's PR branch):
-  PYTHONIOENCODING=utf-8 python -m src.pipeline.review 2026-10-05 [--no-sample]     → page
+  PYTHONIOENCODING=utf-8 python -m src.pipeline.review 2026-10-05 [--no-sample] [--resort]     → page
+  (--resort: a batch tagged before a rule change is sorted again by today's rules first — the file is rewritten)
   PYTHONIOENCODING=utf-8 python -m src.pipeline.review 2026-10-05 --apply <download.json>
   (a later batch of the same day: its id, e.g. `review 2026-10-06-2` — pipeline/batch.py; its agreement row has that id
   in the `date` column)
@@ -36,6 +37,7 @@ from . import requeue
 from .agreement import apply_answers, screened, stats_row
 from .agreement_log import MAX_SAMPLE_CHANGED, MIN_SAMPLE, STREAK, below, graduation, read_rows, upsert, write_rows
 from .candidates import yes24_env
+from .checks import needs_person, redecide
 from .config import load_config
 from .gaps import GENRES
 from .keyword_candidates import excluded_names
@@ -64,7 +66,23 @@ KEEP = ("isbn", "title", "author", "pages", "link", "entry", "topic", "keywords"
 
 
 def needs_look(b: dict) -> bool:
-    return b["status"] != "dropped" and bool(b.get("flags") or b.get("issues")) and not b.get("reviewed")
+    flags, issues = needs_person(b.get("flags") or [], b.get("issues") or [])
+    return b["status"] != "dropped" and bool(flags or issues) and not b.get("reviewed")
+
+
+def resorted(doc: dict, auto_merge: bool, rate: float) -> dict:
+    """A copy of a batch with every unanswered book sorted again by today's checks.decide (10-05: notes nobody reads and
+    "AI-1 unsure" on agreed books no longer hold a book). The trial sample drawn before (at `rate`) is frozen into the file,
+    so a sample a person has started does not move; books that turn agreed now are not added to it. A batch tagged before
+    a rule change must be re-sorted before review, else a book held only by a dropped rule is on no page and not in the app."""
+    frozen = trial_sample(doc, rate)
+    books = []
+    for b in doc["books"]:
+        if b["status"] in ("review", "reserve") and not b.get("reviewed"):
+            status, auto = redecide(b, auto_merge)
+            b = {**{k: v for k, v in b.items() if k != "auto"}, "status": status, **({"auto": auto} if auto else {})}
+        books.append(b)
+    return {**doc, "books": books, "trial_sample": frozen}
 
 
 def text_of(isbn: str, env: dict) -> tuple[str, str]:
@@ -175,6 +193,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("date", nargs="?")
     ap.add_argument("--sample", metavar="WEEK", help="weekly sample of the given ISO week instead of a day")
     ap.add_argument("--apply", type=Path, metavar="DOWNLOAD")
+    ap.add_argument("--resort", action="store_true", help="sort the day's unanswered books again by today's rules (writes the file)")
     ap.add_argument("--no-sample", action="store_true", help="do not add the trial sample of AI-agreed books to a day's page")
     args = ap.parse_args(argv)
     if bool(args.date) == bool(args.sample):
@@ -182,6 +201,12 @@ def main(argv: list[str] | None = None) -> int:
     vocab = json.loads(VOCAB.read_text(encoding="utf-8"))
     name, batch = (args.sample, f"sample-{args.sample}") if args.sample else (args.date, "daily")
     rate = 0.0 if args.no_sample else load_config().sample_rate
+    if args.resort:
+        if args.sample or args.apply:
+            ap.error("--resort goes with a date and builds the page (not with --sample or --apply)")
+        path = ADDITIONS / f"{args.date}.json"
+        path.write_text(json.dumps(resorted(json.loads(path.read_text(encoding="utf-8")), load_config().auto_merge, rate),
+                                   ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="")
     try:
         picked = chosen(args.date, args.sample, rate, everything=bool(args.apply))
     except FileNotFoundError:

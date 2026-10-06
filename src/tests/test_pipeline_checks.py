@@ -8,7 +8,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from pipeline.candidates import Candidate  # noqa: E402
-from pipeline.checks import AUTO, copied_run, decide, disagreements, rule_issues, scrub, split_issues  # noqa: E402
+from pipeline.checks import AUTO, copied_run, decide, disagreements, needs_person, redecide, rule_issues, scrub, split_issues  # noqa: E402
 from pipeline.merge import additions_doc, keyword_hints, record, write_doc  # noqa: E402
 from pipeline.tagger import parse  # noqa: E402
 from pipeline_fakes import INTRO, TOC, check_answer, tag_answer  # noqa: E402
@@ -61,6 +61,22 @@ def test_decide():
     assert decide(a, b, ["way"], [], auto_merge=True) == ("reserve", None)      # nobody looks before merge → waits
     assert decide(a, b, [], ["짧음(5자)"], auto_merge=False) == ("reserve", None)
     assert decide({**a, "fits": False}, {**b, "fits": False}, ["fits"], [], False) == ("dropped", None)
+    # 10-05: a person is not asked about notes nobody reads (evidence / pass B reason) or about "AI-1 unsure" when both agree
+    assert decide(a, b, [], ["근거 김(33자)", "판단 이유가 책소개를 베낌"], auto_merge=False) == ("picked", AUTO)
+    assert decide(a, b, ["confidence"], [], auto_merge=False) == ("picked", AUTO)
+    assert decide(a, b, ["confidence", "way"], ["근거 김(33자)"], auto_merge=False) == ("review", None)
+    assert decide(a, b, [], ["근거 김(33자)", "한 줄이 책소개를 베낌"], auto_merge=False) == ("reserve", None)
+
+
+def test_needs_person_names_only_what_a_person_must_decide():
+    assert needs_person(["confidence"], ["근거 김(31자)", "근거 없음", "근거가 책소개를 베낌", "판단 이유가 책소개를 베낌"]) == ([], [])
+    assert needs_person(["temp", "confidence"], ["근거 김(31자)", "과장 표현: 미친"]) == (["temp"], ["과장 표현: 미친"])
+
+
+def test_redecide_a_stored_book_with_todays_rules():
+    stored = {"fits": True, "second": {"fits": True}, "flags": ["confidence"], "issues": ["근거 김(31자)"], "status": "reserve"}
+    assert redecide(stored, auto_merge=False) == ("picked", AUTO)
+    assert redecide({**stored, "flags": ["fits"], "second": {"fits": False}}, auto_merge=False) == ("review", None)
 
 
 def test_record_holds_our_tags_only(tmp_path):
