@@ -78,7 +78,7 @@ def test_schema_enums_are_our_closed_lists():
     assert s["properties"]["way"]["enum"] == ["개념", "실습", "사례"] and s["additionalProperties"] is False
     leaf = schema("leaf", "check", [])
     assert leaf["properties"]["world"]["enum"] == [-1, 0, 1] and "one_liner" not in leaf["properties"]
-    assert set(leaf["required"]) == {"fits", "temp", "pull", "gain", "world", "why"}
+    assert set(leaf["required"]) == {"fits", "temp", "pull", "gain", "world", "signals", "missing", "why"}
 
 
 def test_the_book_text_cannot_close_its_frame():
@@ -301,3 +301,56 @@ def test_the_tagger_knows_romance_and_the_four_new_topics_from_the_same_docs_and
     assert "  - 브랜딩 — 상품·서비스·조직이 기억되는" in p and "  - 잠·회복 — 잘 자고" in p and "  - 집밥 — 집에서" in p
     assert "의학 전문서·질병 치료서·다이어트 비법서" in p
 
+
+
+# --- 10-06 label signals (docs/plans/2026-10-06-label-signals.md) ---
+
+def test_the_signal_rules_of_every_axis_reach_both_prompts():
+    """The tagger reads the whole 태그 기준 section — principle 0, the axis table, and the signal tables and bullets after it."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "0은 \"모르겠다\"가 아니다" in p and "'정보 없음'" in p                       # principle 0
+        assert "| 끝맺음 | 결말, 인물이 마지막에 닿는 곳 |" in p                             # 온도 signal table
+        assert "끝맺음·어조 **두 신호만**" in p and "총, 균, 쇠 → 0 (해당 없음)" in p
+        assert "어렵거나 두꺼운 책이라는 이유로 0을 주지 않는다" in p                         # 끌림 rules
+        assert "| 한 줄 소개 테스트 |" in p and "**둘 다 약하면 더 강한 쪽**" in p              # 얻는 것 signal table
+        assert "| 세계 | 현실 | 딴 세상 |" in p and "## 3. 책 태그와 점수" not in p           # the section, not the next one
+        assert "signals" in p and "missing" in p
+    assert "넥서스" in system_prompt(VOC, "tag") and "편 수로 센다" in system_prompt(VOC, "tag")   # book-pool 1-3
+    assert "영업·세일즈·협상" in system_prompt(VOC, "tag") and "책의 독자가 누구인가" in system_prompt(VOC, "tag")
+
+
+def test_section_after_keeps_every_line_up_to_the_next_heading():
+    from pipeline.prompt import section_after
+    text = "## 2\n### A\nintro\n\n| a |\n| b |\n\n- rule\n| c |\n## 3\n| d |"
+    assert section_after(text, "### A") == ["intro", "| a |", "| b |", "- rule", "| c |"]
+    for bad in ("### A\nno table\n## 3", "nothing"):
+        with pytest.raises(PromptError):
+            section_after(bad, "### A")
+
+
+def test_leaf_schemas_ask_both_passes_for_a_signal_line_per_axis_and_the_axes_without_info():
+    for kind in ("tag", "check"):
+        props = schema("leaf", kind, [])["properties"]
+        assert props["signals"]["properties"].keys() == {"temp", "pull", "gain", "world"}
+        assert props["signals"]["additionalProperties"] is False and set(props["signals"]["required"]) == set(AXES_)
+        assert props["missing"]["items"]["enum"] == list(AXES_)
+        assert {"signals", "missing"} <= set(schema("leaf", kind, [])["required"])
+    assert "signals" not in schema("target", "tag", ["주식"])["properties"]
+
+
+AXES_ = ("temp", "pull", "gain", "world")
+
+
+def test_parse_keeps_the_signal_lines_cut_short_and_the_missing_axes_in_order():
+    from pipeline.prompt import SIGNAL_MAX
+    raw = tag_answer("leaf", signals={"temp": " 끝맺음 −: 마지막 부가 재난 ", "pull": "가" * 99, "gain": 3, "world": "현실 배경"},
+                     missing=["gain", "temp", "gain", "기타"])
+    for kind in ("tag", "check"):
+        got = parse(raw, "leaf", kind, [])
+        assert got["signals"] == {"temp": "끝맺음 −: 마지막 부가 재난", "pull": "가" * SIGNAL_MAX, "gain": "", "world": "현실 배경"}
+        assert got["missing"] == ["temp", "gain"]
+    old = {k: v for k, v in tag_answer("leaf").items() if k not in ("signals", "missing")}
+    got = parse(old, "leaf", "tag", [])
+    assert got["signals"] == {a: "" for a in AXES_} and got["missing"] == []      # an answer without them still parses
+    assert "signals" not in parse(tag_answer("target"), "target", "tag", ["주식"])

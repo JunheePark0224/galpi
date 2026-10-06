@@ -8,7 +8,9 @@ book only those questions, with AI-1 / AI-2 marked on the choices and nothing pr
 answered. Fields both passes agreed on are one summary line, editable under "같게 본 칸도 고치기", which also holds the
 other decisions (대기 / 다른 갈래로 — a 🎯 book that is really a 🍃 genre book, or the other way round, goes back in as the
 other entry; pipeline/requeue.py). Notes the app never shows (the evidence / pass B reason checks) and "AI-1 unsure" on
-agreed books are not asked (checks.needs_person). Progress stays in this browser (localStorage).
+agreed books are not asked (checks.needs_person). 10-06: a 🍃 axis is also asked when either pass marked it as having no
+info (`missing`); under each asked axis the page shows both AIs' signal line for it and "정보 없음 (AI-n)" (signalsOf).
+Progress stays in this browser (localStorage).
 """
 from build_pilot_review import COMMON, STYLE
 
@@ -26,6 +28,7 @@ EXTRA_STYLE = """
 h2{font-family:'Gowun Batang',serif;font-size:17px;margin:22px 0 2px}h2 small{font-size:12px;color:var(--muted);font-weight:400}
 #toc{font-size:13px;margin:4px 0 8px}#toc a{color:var(--ink)}
 .agreed{font-size:12.5px;color:var(--soft);margin:10px 0 4px;line-height:1.6}.agreed b{color:var(--ok)}
+.sig{font-size:12.5px;color:var(--soft);margin:6px 0 0;line-height:1.6}.sig .none{color:#9A3B4E;font-weight:700}
 .fix summary{font-size:12.5px;color:var(--muted);cursor:pointer}.ghost.on{background:var(--ink);color:var(--paper)}.ok:disabled{opacity:.45;cursor:not-allowed}
 """
 
@@ -52,7 +55,7 @@ const STATUS=[["picked","넣기"],["reserve","대기"],["dropped","빼기"],["re
 const AXIS_NAME={temp:"온도",pull:"끌림",gain:"얻는 것",world:"세계"};
 const NOTE=/^(근거 없음|근거 김|근거가 |판단 이유)/;
 const GROUPS=[["fits","① 넣을지 정하기","두 AI 중 하나가 이 책이 이 칸에 안 맞는다고 봤어요"],
- ["tags","② 두 AI가 다르게 본 칸","다르게 본 칸만 골라 주세요"],
+ ["tags","② 두 AI가 다르게 본 칸 · 정보 없는 칸","다르게 본 칸, 또는 책소개·목차에 판단할 정보가 없다고 한 칸만 골라 주세요"],
  ["line","③ 한 줄 고치기","이용자에게 보이는 한 줄이 규칙에 걸렸어요"],
  ["sample","④ 표본 — 두 AI가 같게 본 책","자동으로 들어갈 책이 정말 맞는지 재요. 맞으면 [확인]만 누르면 돼요"]];
 const side=(k,v)=>{const a=AXES.find(x=>x[0]===k);return v>0?a[2]:v<0?a[4]:a[3]};
@@ -75,6 +78,10 @@ const chipsOf=(b,c)=>{const kept=KW[c.topic]||[], two=b.second||{};
  return [...new Set([...(b.keywords||[]),...(two.keywords||[]),...kept])].filter(x=>kept.includes(x))};
 const marks=(on1,on2)=>`${on1?'<span class="ai1">AI-1</span>':""}${on2?'<span class="ai2">AI-2</span>':""}`;
 const NAME_OF=k=>k==="fits"?"어디에 둘지":k==="line"?"한 줄":k==="keywords"?"키워드":k==="way"?"방식":AXIS_NAME[k]||k;
+// 10-06: each AI's signal line for an asked 🍃 axis, and which AI found no info for it (books tagged before have neither)
+function signalsOf(b,k){const two=b.second||{}, rows=[[1,b],[2,two]].map(([n,o])=>{const line=(o.signals||{})[k]||"", none=(o.missing||[]).includes(k);
+  return line||none?`<span>AI-${n} 근거: ${esc(line||"(없음)")}${none?` <span class="none">정보 없음 (AI-${n})</span>`:""}</span>`:""}).filter(Boolean);
+ return rows.length?`<p class="sig">${rows.join("<br>")}</p>`:""}
 function ask(b,c,k){const two=b.second||{}, done=(c.answered||[]).includes(k);
  if(k==="fits"){const leaf=b.entry==="leaf", slot=leaf?b.genre:b.topic, now=leaf?c.genre:c.topic, moved=now!==slot, yes=o=>o.fits===false?"안 맞아요":"맞아요";
   const pick=!done?"":c.status==="dropped"?"dropped":moved?"move":"picked", open=pick==="move"||c.moveOpen;
@@ -87,7 +94,7 @@ function ask(b,c,k){const two=b.second||{}, done=(c.answered||[]).includes(k);
    ${leaf?"":'<span class="cnt">키워드는 아래 "같게 본 칸도 고치기"에서 새 주제에 맞게 골라 주세요</span>'}</div>`:""}`}
  if(AXIS_NAME[k]){const [,q,p,z,m,hint]=AXES.find(x=>x[0]===k), ax2=two.axes||{};
   return `<p class="q">${esc(q)} <span class="hint">— ${esc(hint)}</span></p><div class="opts">${[[p,1],[z,0],[m,-1]].map(([t,v])=>`<label><input type="radio" name="q-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${done&&c.axes[k]===v?"checked":""}><span>${esc(t)}
-   ${marks(b.axes[k]===v,ax2[k]===v)}</span></label>`).join("")}</div>`}
+   ${marks(b.axes[k]===v,ax2[k]===v)}</span></label>`).join("")}</div>${signalsOf(b,k)}`}
  if(k==="keywords"){const k1=b.keywords||[], k2=two.keywords||[], list=chipsOf(b,c);
   return `<p class="q">키워드 <span class="hint">— 책의 중심일 때만 · 눌러서 켜고 끄기 (최대 5개) · ¹ AI-1이 붙임 · ² AI-2가 붙임</span></p>
    <div class="row">${list.map(x=>`<button class="chip ${done&&c.keywords.includes(x)?"on":""}" data-kw="${esc(x)}" title="${esc((DEFS[c.topic]||{})[x]||"")}">${esc(x)}${k1.includes(x)?" ¹":""}${k2.includes(x)?" ²":""}</button>`).join("")}

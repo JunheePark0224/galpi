@@ -227,6 +227,7 @@ def test_the_page_has_the_sample_by_default_and_not_with_no_sample(files, capsys
     assert [(b["isbn"], b["sample"]) for b in books] == [("1", False), ("2", True), ("3", False), ("4", False)]
     assert "1 of them sample" in capsys.readouterr().out
     assert books[2]["second"]["axes"]["world"] == 0 and books[0]["second"]["way"] == "실습"   # AI-2 side by side
+    assert "signals" in books[2] and "missing" in books[2]                                     # 10-06 per-axis evidence
     assert "따뜻함" in html and "딴 세상" in html and "사람이 정해야 하는 것만" in html and "같게 본 칸도 고치기" in html
     assert "근거 김" not in html.split("<script>")[0]                                          # 10-05: only what a person decides
     assert review.main(["2026-10-05", "--no-sample"]) == 0
@@ -263,6 +264,10 @@ const t={isbn:"t",title:"책",entry:"target",topic:"돈 관리·투자",keywords
  second:{fits:true,keywords:["ETF·펀드"],way:"개념"},flags:["keywords"],issues:[]};
 put(t,{keywords:["주식"]},"keywords"); put(t,{topic:"경제 상식",keywords:[]},null,"keywords"); out.topic_resets=left(t,cur(t));
 out.chips_after_topic=chipsOf(t,cur(t));
+b=B({signals:{temp:"끝맺음 +: 화해로 닫힘",pull:"",gain:"",world:""},missing:["temp"],
+ second:{fits:true,axes:{temp:0,pull:0,gain:0,world:-1},signals:{temp:"0 반반: 상실과 위로",pull:"",gain:"",world:""},missing:[]}});
+out.signals_temp=signalsOf(b,"temp"); out.signals_old=signalsOf(B({}),"temp");
+out.missing_only=asks(B({flags:["gain"],missing:["gain"]}));
 console.log(JSON.stringify(out));
 """
 
@@ -284,6 +289,11 @@ def test_the_page_gates_confirm_on_what_a_person_must_decide(files):
     assert out["fits_by_select"] == []                   # choosing 빼기 in the decision box answers "넣을지"
     assert out["topic_resets"] == ["keywords"]           # a new topic asks the keywords again
     assert out["chips_after_topic"] == ["금리·환율"]      # no keyword left over from the old topic
+    sig = out["signals_temp"]                            # 10-06: both AIs' signal line under an asked axis
+    assert "AI-1" in sig and "끝맺음 +: 화해로 닫힘" in sig and "AI-2" in sig and "0 반반: 상실과 위로" in sig
+    assert "정보 없음 (AI-1)" in sig and "정보 없음 (AI-2)" not in sig
+    assert out["signals_old"] == ""                       # a book tagged before 10-06 has no lines: nothing shown
+    assert out["missing_only"] == ["gain"]                # an axis asked only because a pass found no info
 
 
 def test_the_pilot_page_still_renders_from_the_shared_parts():

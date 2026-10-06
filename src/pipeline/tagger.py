@@ -18,7 +18,7 @@ from dataclasses import dataclass
 import anthropic
 
 from .keyword_candidates import clean as clean_candidate
-from .prompt import AXES, MAX_KEYWORDS, WAYS, WHY_MAX
+from .prompt import AXES, MAX_KEYWORDS, SIGNAL_MAX, WAYS, WHY_MAX
 
 MAX_TOKENS = 2048
 MODEL_OPTIONS = {"claude-haiku-4-5": {"extra_body": {"temperature": 0}},
@@ -135,6 +135,14 @@ def _text(v: object) -> str:
     return v.strip() if isinstance(v, str) else ""
 
 
+def signals_of(raw: dict) -> dict:
+    """A 🍃 answer's per-axis signal lines (cut to SIGNAL_MAX, "" when absent) and the axes it marked as having no info
+    (in AXES order, no repeats, unknown names dropped). Both passes give them (10-06); an answer without them still parses."""
+    given = raw.get("signals") if isinstance(raw.get("signals"), dict) else {}
+    marked = raw.get("missing") if isinstance(raw.get("missing"), list) else []
+    return {"signals": {a: _text(given.get(a))[:SIGNAL_MAX] for a in AXES}, "missing": [a for a in AXES if a in marked]}
+
+
 def parse(raw: dict, entry: str, kind: str, keywords: list[str], topic: str = "", excluded=()) -> dict | None:
     """The answer cut to our lists: keywords outside the topic are dropped (at most MAX_KEYWORDS); a bad way / axis /
     missing one-liner makes the whole answer unusable (None). Pass B's free-text `why` is cut to WHY_MAX characters.
@@ -152,7 +160,7 @@ def parse(raw: dict, entry: str, kind: str, keywords: list[str], topic: str = ""
         axes = {a: raw.get(a) for a in AXES}
         if any(type(v) is not int or v not in (-1, 0, 1) for v in axes.values()):  # 1.0 and True are not axis values
             return None
-        out |= {"axes": axes}
+        out |= {"axes": axes, **signals_of(raw)}
     if kind == "check":
         return out | {"why": _text(raw.get("why"))[:WHY_MAX]}
     line, conf = _text(raw.get("one_liner")), raw.get("confidence")
