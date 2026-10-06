@@ -579,3 +579,12 @@ def test_the_world_hint_on_the_review_pages_follows_the_balance_game_rule():
     for word in ("소설", "철학적이거나 실험적이어도", "비소설", "사람·삶·사회", "정말 섞", "사람도 세계도 없는"):
         assert word in hint and word in row, word
     assert "평범한 인생" in row and "톨스토이 우화" in row
+
+
+def test_a_retagged_file_has_its_own_page_and_progress_key(files):
+    """10-06: `review 2026-10-05-2.v2` builds the re-tagged batch's page next to the original's (own localStorage key)."""
+    tmp, path = files
+    (path.parent / "2026-10-05.v2.json").write_text(path.read_text(encoding="utf-8"), encoding="utf-8")
+    assert review.main(["2026-10-05.v2"]) == 0
+    html = (tmp / "pages" / "2026-10-05.v2.html").read_text(encoding="utf-8")
+    assert '"galpi-pipeline-2026-10-05.v2"' in html and not (tmp / "pages" / "2026-10-05.html").exists()
