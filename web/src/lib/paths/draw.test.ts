@@ -343,7 +343,7 @@ describe("drawForPath — challenge rules v2 (10-05)", () => {
       const d = drawForPath(books, LISTS, walkPath(LISTS, STORY_NONE), opts(seed));
       seen.add(d.drawnFrom.scope.genres![0]);
       expect(d.picks.every((p) => p.book.entry === "leaf")).toBe(true);
-      expect(d.drawnFrom.challenge).toMatchObject({ from: ["이야기 · 장르 없음"], rule: { n: 2, title: "이야기 · 장르 없음 → 목록" }, reasonDraft: null });
+      expect(d.drawnFrom.challenge).toMatchObject({ from: ["이야기 · 장르 없음"], rule: { n: 2, title: "이야기 · 장르 없음 → 목록" }, reason: null });
     }
     expect(seen).toEqual(new Set(["에세이", "한국 소설"]));
   });

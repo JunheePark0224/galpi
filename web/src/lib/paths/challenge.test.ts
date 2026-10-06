@@ -46,17 +46,17 @@ describe("pickGenre", () => {
 describe("challengeOf", () => {
   const rule = { from: { entry: "target" as const }, to: TO, title: "배우기 · 주제 없음 → 도전 목록", pick: "one" as const, why: "한 발짝" };
 
-  it("from: the genres or topics chosen, else the branch's no-choice label; the rule numbered from 1; the draft reason", () => {
+  it("from: the genres or topics chosen, else the branch's no-choice label; the rule numbered from 1; the reason", () => {
     const to = { ...ALL_SCOPE, entry: "leaf" as const, genres: ["인문"] };
     expect(challengeOf({ ...ALL_SCOPE, entry: "target" }, "target", 36, rule, to)).toEqual({
-      from: ["배우기 · 주제 없음"], to: ["인문"], rule: { n: 36, title: "배우기 · 주제 없음 → 도전 목록" }, reasonDraft: "한 발짝",
+      from: ["배우기 · 주제 없음"], to: ["인문"], rule: { n: 36, title: "배우기 · 주제 없음 → 도전 목록" }, reason: "한 발짝",
     });
     expect(challengeOf({ ...ALL_SCOPE, entry: "target", topics: ["돈 관리·투자", "경제 상식"] }, "target", 30, rule, to).from).toEqual(["돈 관리·투자", "경제 상식"]);
     expect(challengeOf({ ...ALL_SCOPE, entry: "target", keywords: ["SQL"] }, "target", 1, rule, to).from).toEqual(["SQL"]);
     expect(challengeOf({ ...ALL_SCOPE, entry: "leaf", genres: ["SF·판타지"] }, "leaf", 1, rule, to).from).toEqual(["SF·판타지"]);
     expect(challengeOf(ALL_SCOPE, "mixed", 19, rule, to).from).toEqual([NO_CHOICE_LABEL.mixed]);
     expect(challengeOf({ ...ALL_SCOPE, entry: "leaf" }, "leaf", 19, { from: {}, to: {} }, { ...ALL_SCOPE, entry: "leaf" })).toEqual({
-      from: ["이야기 · 장르 없음"], to: [], rule: { n: 19, title: null }, reasonDraft: null,
+      from: ["이야기 · 장르 없음"], to: [], rule: { n: 19, title: null }, reason: null,
     });
   });
 });
