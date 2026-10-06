@@ -1,10 +1,11 @@
-"""Tagger instructions and output schemas (design 2-2: "지시문은 balance-game.md 태그 기준표 + target-chips.md 정의 그대로").
+"""Tagger instructions and output schemas (design 2-2: the tagger follows the same written rules as the people).
 
 The reference part of the system prompt is read from the docs at run time, so the people's rules and the AI's
-instructions cannot drift apart: the whole axis section (balance-game.md "태그 기준" — principle 0, the axis table and the
-10-06 signal tables and rules after it), the 🎯 reading-way rule, keyword
-definitions and topic boundaries (target-chips.md 2절), the 🍃 genre boundaries (book-pool.md 1-3절), and each topic's closed keyword list
-(keyword_vocab.json, with plain spellings from its word pattern). One-liner rules come from check_one_liners.py.
+instructions cannot drift apart: sections 0-5 of docs/label-dictionary.md (정의서 v3, 10-06 — principle 0, the four
+🍃 axes' steps, the 13 genres, the 16 topics and their boundaries, the keyword rules, the 🎯 reading way; lines starting
+with ">" are people's notes and open decisions and are left out), and each topic's closed keyword list (keyword_vocab.json,
+with plain spellings from its word pattern) with its definitions (target-chips.md "새 키워드 정의").
+One-liner rules come from check_one_liners.py.
 
 Two prompts share that reference: TAG (pass A — every tag + one-liner + evidence) and CHECK (pass B — blind second
 opinion on the slot fit and the categorical tags, no one-liner). Pass B never sees pass A's answer.
@@ -29,47 +30,28 @@ class PromptError(ValueError):
     """A rule the instructions are built from is missing from the docs: stop, never send a prompt with a hole in it."""
 
 
-def table_after(text: str, marker: str) -> list[str]:
-    """The markdown table rows that follow the first line starting with `marker`. Raises PromptError if the marker or
-    its table is missing (an empty section would silently drop a rule from the instructions)."""
-    rows, seen = [], False
-    for line in text.splitlines():
-        if not seen:
-            seen = line.startswith(marker)
-            continue
-        if line.startswith("|"):
-            rows.append(line)
-        elif rows:
-            break
-    if not rows:
-        raise PromptError(f"rule table not found in the docs: {marker!r} " + ("(no rows after it)" if seen else "(no such line)"))
-    return rows
+DICTIONARY = "label-dictionary.md"
+DICTIONARY_PARTS = ("## 0.", "## 1.", "## 2.", "## 3.", "## 4.", "## 5.")  # what the tagger reads; 6-8 are for people
 
 
-def section_after(text: str, marker: str) -> list[str]:
-    """Every non-empty line after the first line starting with `marker`, up to the next markdown heading: a rule section
-    whose tables are followed by more tables and bullets (balance-game.md 태그 기준, 10-06). PromptError when the marker
-    is missing or the section has no table (a section cut short would silently drop rules from the instructions)."""
+def dictionary_part(text: str, marker: str) -> list[str]:
+    """One `## ` section of the label dictionary — from its heading line (starting with `marker`) up to the next `## `
+    heading, sub-headings kept — without blank lines and people's notes (lines starting with ">", e.g. [결정 필요]).
+    PromptError when the heading is missing or the section has no rule lines (a hole would silently drop rules)."""
     lines, seen = [], False
     for line in text.splitlines():
         if not seen:
             seen = line.startswith(marker)
+            if seen:
+                lines.append(line)
             continue
-        if line.startswith("#"):
+        if line.startswith("## "):
             break
-        if line.strip():
+        if line.strip() and not line.lstrip().startswith(">"):
             lines.append(line)
-    if not any(line.startswith("|") for line in lines):
-        raise PromptError(f"rule section not found in the docs: {marker!r} " + ("(no table in it)" if seen else "(no such line)"))
+    if len(lines) < 2:
+        raise PromptError(f"rule section not found in {DICTIONARY}: {marker!r} " + ("(no rules in it)" if seen else "(no such heading)"))
     return lines
-
-
-def line_starting(text: str, prefix: str) -> str:
-    """The first line that starts with `prefix`; PromptError if there is none."""
-    for line in text.splitlines():
-        if line.startswith(prefix):
-            return line
-    raise PromptError(f"rule line not found in the docs: {prefix!r}")
 
 
 def aliases(pattern: str, name: str) -> list[str]:
@@ -104,18 +86,13 @@ def keyword_lines(vocab: dict) -> list[str]:
 
 
 def reference(vocab: dict, docs: Path = DOCS) -> str:
-    balance = (docs / "balance-game.md").read_text(encoding="utf-8")
-    chips = (docs / "target-chips.md").read_text(encoding="utf-8")
-    pool = (docs / "book-pool.md").read_text(encoding="utf-8")
+    dictionary = (docs / DICTIONARY).read_text(encoding="utf-8")
+    parts = [dictionary_part(dictionary, marker) for marker in DICTIONARY_PARTS]
     return "\n".join([
-        "## 🍃 축 4개 (각 +1 / 0 / -1) — temp=온도, pull=끌림, gain=얻는 것, world=세계. 축마다 아래 신호 규칙대로 — "
-        "0은 그 규칙의 0 조건일 때만 (world는 표의 중간(0) 조건일 때만 0, 현실 배경 소설은 +1)",
-        *section_after(balance, "### 태그 기준"),
-        "", "## 🍃 장르 경계", *table_after(pool, "### 1-3."),
-        "", "## 🎯 읽는 방식 하나 — 책을 덮었을 때 독자 손에 남는 것", *table_after(chips, "**읽는 방식 태그 기준"),
-        line_starting(chips, "헷갈리면:"),
-        "", "## 🎯 주제별 키워드 (닫힌 목록 — 이 이름만, 책의 중심일 때만)", *keyword_lines(vocab),
-        "", "## 🎯 주제 경계", *table_after(chips, "경계 (한 책·한 글이 두 주제에 걸릴 때"),
+        "축 이름: temp=온도, pull=끌림, gain=얻는 것, world=세계 (각 +1 / 0 / -1)",
+        *[line for part in parts[:4] for line in [*part, ""]],
+        *parts[4], "", "### 주제별 키워드 목록 (닫힌 목록 — 이 이름만, 책의 중심일 때만)", *keyword_lines(vocab),
+        "", *parts[5],
     ])
 
 

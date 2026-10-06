@@ -12,7 +12,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from pipeline import ROOT, VOCAB  # noqa: E402
-from pipeline.prompt import PromptError, aliases, schema, system_prompt, table_after, user_message  # noqa: E402
+from pipeline.prompt import PromptError, aliases, schema, system_prompt, user_message  # noqa: E402
 from pipeline.tagger import MODEL_OPTIONS, Breaker, TaggerStop, Usage, call, parse, request  # noqa: E402
 from pipeline_fakes import FakeClient, check_answer, message, tag_answer  # noqa: E402
 
@@ -20,46 +20,70 @@ VOC = json.loads(VOCAB.read_text(encoding="utf-8"))
 DOCS = ROOT / "docs"
 
 
-def test_the_reference_is_read_from_the_docs():
+def test_the_reference_is_read_from_the_label_dictionary():
+    """10-06 (plans/2026-10-06-calibration.md step 1): the axis, genre, topic, keyword and way rules come from
+    docs/label-dictionary.md sections 0-5; the keyword list and definitions still come from the vocab + target-chips."""
     p = system_prompt(VOC, "tag")
-    assert "| 세계 | 현실 | 딴 세상 |" in p                       # balance-game.md 태그 기준
-    assert "호러·괴담 ↔ 추리·스릴러" in p                          # book-pool.md 1-3
-    assert "돈 관리·투자 ↔ 경제 상식" in p                          # target-chips.md 경계
-    assert "  - ETF·펀드 — ETF·인덱스·펀드처럼 묶음으로 사는 투자" in p  # keyword definition
-    assert "| 실습 | **바로 해 볼 방법**" in p and "헷갈리면:" in p      # reading way (target-chips, pilot 10-01)
+    assert "## 0. 공통 원칙" in p and "## 1. 🍃 이야기 축 4개" in p and "### 1-4. 세계" in p     # dictionary 0-1
+    assert "**판단 순서 — 비소설**" in p and "**판단 순서 — 소설·시**" in p
+    assert "## 2. 🍃 장르 13개" in p and "| 사회·시사 | 지금 사회의 문제를 다루는 책 |" in p      # dictionary 2
+    assert "## 3. 🎯 주제 16개" in p and "| 돈 관리·투자 ↔ 경제 상식 |" in p                    # dictionary 3
+    assert "## 4. 🎯 키워드" in p and "  - ETF·펀드 — ETF·인덱스·펀드처럼 묶음으로 사는 투자" in p  # keyword list + definition
+    assert "| 실습 | **바로 해 볼 방법**" in p and "헷갈리면:" in p                               # dictionary 5
     assert "one_liner" in p and "one_liner" not in system_prompt(VOC, "check")
 
 
-def test_the_world_rule_and_its_two_examples_reach_the_prompt():
-    """10-05: a realistic novel is 현실 even when philosophical; 0 only when real and unreal are truly mixed."""
+def test_the_10_06_world_rule_reaches_both_prompts():
+    """10-06 user: non-fiction is 현실 even in space, the world axis has no 'not applicable' 0, a real setting with
+    ghosts is 0 (fables too). The 10-05 examples stay."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "무대가 우주여도 현실" in p and "**세계 축에는 \"해당 없음 0\"이 없다.**" in p
+        assert "현실 배경에 귀신·괴이가 나오면 **0 중간**. 우화도 포함한다." in p
+        assert "카렐 차페크 『평범한 인생』" in p and "톨스토이 우화" in p
+        assert "사람도 세계도 없는" not in p and "이야기가 없는 책은" not in p
+
+
+def test_people_notes_and_open_decisions_never_reach_the_tagger():
+    """Lines starting with '>' (people's notes, [결정 필요]) and sections 6-8 are for people only."""
     p = system_prompt(VOC, "tag")
-    assert "카렐 차페크 『평범한 인생』" in p and "톨스토이 우화" in p
-    assert "문학적·철학적이라는 이유만으로 0을 주지 않는다" in p and "world는 표의 중간(0) 조건일 때만" in p
-    assert "이야기가 없는 책은" not in p
-    assert "카렐 차페크" in system_prompt(VOC, "check")  # the blind second pass reads the same row
+    assert "[결정 필요]" not in p and "LD-3" not in p and "target-chips.md` 2-1 \"새 키워드 정의\" 표가 원본" not in p
+    assert "## 6. 한 줄" not in p and "## 7. [결정 필요] 모음" not in p and "## 8. 바뀐 기록과 출처" not in p
+    assert "v3 초안 2026-10-06" not in p   # the intro (version line, how to use) is for people too
 
 
-def _docs_copy(tmp_path, cut: str = "") -> Path:
-    for name in ("balance-game.md", "book-pool.md", "target-chips.md"):
+def _docs_copy(tmp_path, cut: str = "", swap: tuple[str, str] = ("", "")) -> Path:
+    for name in ("label-dictionary.md", "target-chips.md"):
         text = (DOCS / name).read_text(encoding="utf-8")
-        (tmp_path / name).write_text(text.replace(cut, "") if cut else text, encoding="utf-8")
+        if cut:
+            text = text.replace(cut, "")
+        if swap[0]:
+            text = text.replace(*swap)
+        (tmp_path / name).write_text(text, encoding="utf-8")
     return tmp_path
 
 
-@pytest.mark.parametrize("cut, missing", [
-    ("**읽는 방식 태그 기준", "읽는 방식 태그 기준"), ("헷갈리면:", "헷갈리면:"), ("### 태그 기준", "### 태그 기준"),
-    ("### 1-3.", "### 1-3."), ("경계 (한 책·한 글이 두 주제에 걸릴 때", "경계 (한 책")])
-def test_a_missing_rule_table_stops_the_prompt_instead_of_going_out_empty(tmp_path, cut, missing):
-    with pytest.raises(PromptError, match=re.escape(missing)):
+def test_a_wording_change_in_the_dictionary_flows_to_the_prompt(tmp_path):
+    old = "끝맺음이 가장 무겁다."
+    assert old in system_prompt(VOC, "tag")
+    p = system_prompt(VOC, "tag", _docs_copy(tmp_path, swap=(old, "끝맺음을 맨 먼저 본다.")))
+    assert old not in p and "끝맺음을 맨 먼저 본다." in p
+
+
+@pytest.mark.parametrize("cut", ["## 0.", "## 1.", "## 2.", "## 3.", "## 4.", "## 5."])
+def test_a_missing_dictionary_section_stops_the_prompt_instead_of_going_out_empty(tmp_path, cut):
+    with pytest.raises(PromptError, match=re.escape(cut)):
         system_prompt(VOC, "tag", _docs_copy(tmp_path, cut))
     assert "| 실습 | **바로 해 볼 방법**" in system_prompt(VOC, "tag", _docs_copy(tmp_path))  # the copy itself is fine
 
 
-def test_a_marker_with_no_table_rows_is_an_error_too():
-    assert table_after("## A\n| a |", "## A") == ["| a |"]
-    for text in ("## A\ntext only\n", "nothing here"):
+def test_dictionary_part_keeps_one_section_without_notes():
+    from pipeline.prompt import dictionary_part
+    text = "intro\n## 1. A\nrule\n\n> note\n### 1-1. B\n| t |\n## 2. C\nnext"
+    assert dictionary_part(text, "## 1.") == ["## 1. A", "rule", "### 1-1. B", "| t |"]
+    for bad in ("## 1. A\n> only a note\n## 2. C", "nothing"):
         with pytest.raises(PromptError):
-            table_after(text, "## A")
+            dictionary_part(bad, "## 1.")
 
 
 def test_an_empty_vocab_is_an_error():
@@ -67,8 +91,7 @@ def test_an_empty_vocab_is_an_error():
         system_prompt({}, "tag")
 
 
-def test_table_after_and_aliases():
-    assert table_after("x\n## A\n| a |\n| b |\nend\n| c |", "## A") == ["| a |", "| b |"]
+def test_aliases():
     assert aliases("주식|배당|가치 ?투자|(?<![A-Z])FIRE", "주식") == ["배당", "가치 투자"]
 
 
@@ -290,14 +313,14 @@ def test_names_the_list_left_out_on_purpose_are_not_candidates():
 
 def test_the_tagger_knows_romance_and_the_four_new_topics_from_the_same_docs_and_vocab_the_app_reads():
     """10-05 (docs/plans/2026-10-05-new-genres.md, drafts): the genre boundary, the topic definitions and boundaries and the
-    twelve keywords with their definitions all come from book-pool.md 1-3 · target-chips.md 2-1 · keyword_vocab.json."""
+    twelve keywords with their definitions all come from label-dictionary.md 2-3 · target-chips.md 2-1 · keyword_vocab.json."""
     p = system_prompt(VOC, "tag")
-    assert "로맨스 ↔ 한국 소설·외국 소설" in p and "웹소설·장르 로맨스 문고·19금" in p
+    assert "| 로맨스 | 사랑·연애 관계가 이야기의 **중심 줄기**인 소설" in p and "웹소설·장르 로맨스 문고·19금" in p
     # 10-05 user: content genres before origin, the 중심 줄기, and the order when truly half and half
-    assert "내용 장르(SF·판타지 · 추리·스릴러 · 호러·괴담 · 로맨스) ↔ 한국 소설·외국 소설" in p
+    assert "**내용 장르**(SF·판타지 · 추리·스릴러 · 호러·괴담 · 로맨스)" in p and "출처 장르보다 먼저" in p
     assert "SF·판타지 → 추리·스릴러 → 호러·괴담 → 로맨스 → 한국·외국 소설" in p and "이 책을 한 줄로 소개할 때" in p
     for topic in ("마케팅·브랜딩", "리더십", "건강·운동", "요리·살림"):
-        assert f"- {topic}:" in p and f"| {topic} (10-05 사용자 확정)" in p
+        assert f"- {topic}:" in p and f"| {topic} | " in p
     assert "  - 브랜딩 — 상품·서비스·조직이 기억되는" in p and "  - 잠·회복 — 잘 자고" in p and "  - 집밥 — 집에서" in p
     assert "의학 전문서·질병 치료서·다이어트 비법서" in p
 
@@ -306,27 +329,17 @@ def test_the_tagger_knows_romance_and_the_four_new_topics_from_the_same_docs_and
 # --- 10-06 label signals (docs/plans/2026-10-06-label-signals.md) ---
 
 def test_the_signal_rules_of_every_axis_reach_both_prompts():
-    """The tagger reads the whole 태그 기준 section — principle 0, the axis table, and the signal tables and bullets after it."""
+    """The tagger reads the dictionary's principle 0 and every axis's signals, steps, examples and common mistakes."""
     for kind in ("tag", "check"):
         p = system_prompt(VOC, kind)
-        assert "0은 \"모르겠다\"가 아니다" in p and "'정보 없음'" in p                       # principle 0
+        assert "**0은 \"모르겠다\"가 아니다.**" in p and "**정보 없음**" in p                 # principle 0
         assert "| 끝맺음 | 결말, 인물이 마지막에 닿는 곳 |" in p                             # 온도 signal table
-        assert "끝맺음·어조 **두 신호만**" in p and "총, 균, 쇠 → 0 (해당 없음)" in p
-        assert "어렵거나 두꺼운 책이라는 이유로 0을 주지 않는다" in p                         # 끌림 rules
-        assert "| 한 줄 소개 테스트 |" in p and "**둘 다 약하면 더 강한 쪽**" in p              # 얻는 것 signal table
-        assert "| 세계 | 현실 | 딴 세상 |" in p and "## 3. 책 태그와 점수" not in p           # the section, not the next one
-        assert "signals" in p and "missing" in p
-    assert "넥서스" in system_prompt(VOC, "tag") and "편 수로 센다" in system_prompt(VOC, "tag")   # book-pool 1-3
+        assert "**\"해당 없음 0\"**" in p and "총, 균, 쇠 → 0 (해당 없음 0: 설명이 중심)" in p   # 비소설: two signals
+        assert "어렵거나 두꺼운 책이라서 0." in p and "**둘 다 뚜렷하게 강할 때만** 0" in p      # 끌림
+        assert "| 한 줄 소개 테스트 |" in p and "**둘 다 약하면 더 강한 쪽.**" in p             # 얻는 것
+        assert "**흔한 실수**" in p and "signals" in p and "missing" in p
+    assert "넥서스 → 사회·시사" in system_prompt(VOC, "tag") and "**편 수**를 센다" in system_prompt(VOC, "tag")
     assert "영업·세일즈·협상" in system_prompt(VOC, "tag") and "책의 독자가 누구인가" in system_prompt(VOC, "tag")
-
-
-def test_section_after_keeps_every_line_up_to_the_next_heading():
-    from pipeline.prompt import section_after
-    text = "## 2\n### A\nintro\n\n| a |\n| b |\n\n- rule\n| c |\n## 3\n| d |"
-    assert section_after(text, "### A") == ["intro", "| a |", "| b |", "- rule", "| c |"]
-    for bad in ("### A\nno table\n## 3", "nothing"):
-        with pytest.raises(PromptError):
-            section_after(bad, "### A")
 
 
 def test_leaf_schemas_ask_both_passes_for_a_signal_line_per_axis_and_the_axes_without_info():

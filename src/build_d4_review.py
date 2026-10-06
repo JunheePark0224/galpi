@@ -26,8 +26,8 @@ from build_d3_bundles import BUNDLE_DIR, load_selected
 ROOT = Path(__file__).resolve().parents[1]
 OUT = OUT_DIR / "d4_review.html"
 
-# key, question, +1 side, 0 side, -1 side, hint (side names from TAGGING.md). The world hint is a short form of the
-# balance-game.md 태그 기준 row 세계 (10-05) — test_pipeline_review.py checks its words against that row
+# key, question, +1 side, 0 side, -1 side, hint (side names from TAGGING.md). The world hint is a short form of
+# docs/label-dictionary.md 1-4 세계 (10-06) — test_pipeline_review.py checks its words against that section
 AXIS_LABELS = [
     ["temp", "책을 덮은 뒤 남는 느낌", "따뜻함", "중간", "여운·서늘함",
      "끝맺음(결말·맺음말)과 어조로 — 끝맺음이 가장 무겁다. 비소설은 끝맺음·어조만 보고, 둘이 반대이거나 둘 다 약하면 중간"],
@@ -36,8 +36,8 @@ AXIS_LABELS = [
     ["gain", "읽고 나서 얻는 것", "알게 됨", "중간", "마음",
      "사실·원리를 설명·증명하면 알게 됨, 질문·성찰·감정을 건네면 마음 — 정말 반반일 때만 중간, 둘 다 약하면 더 강한 쪽"],
     ["world", "책 속 세상", "현실", "중간", "딴 세상",
-     "실제로 있을 수 있는 세계인가, 여기 없는 세계를 만든 책인가 — 현실 배경 소설은 철학적이거나 실험적이어도 현실, "
-     "사람·삶·사회를 다룬 비소설도 현실, 중간은 현실과 비현실이 정말 섞였거나 사람도 세계도 없는 책만"],
+     "비소설은 무대가 우주여도 현실. 소설은 실제로 있거나 있었던 세상이 배경이면 현실(철학적이어도), 우주·다른 행성이거나 "
+     "지금 없는 존재·기술·마법이 이야기를 움직이면 딴 세상, 현실 배경에 귀신·괴이가 나오면 중간(우화 포함). 해당 없음 중간은 없다"],
 ]
 WAY_LABELS = [["개념", "개념부터 쉽게"], ["실습", "따라 하며 실습"], ["사례", "사례로 술술"]]
 assert [a[0] for a in AXIS_LABELS] == list(AXES) and [w[0] for w in WAY_LABELS] == list(WAYS)
