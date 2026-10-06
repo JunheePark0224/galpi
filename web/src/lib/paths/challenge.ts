@@ -27,8 +27,8 @@ export function pickGenre(to: Partial<Scope>, books: readonly Book[], rng: Rng):
   return enough.length ? [enough[Math.floor(at * enough.length)]] : [...list];
 }
 
-/** Provenance of a challenge draw: the person's own scope, where it went, the rule (1-based) and its draft reason. */
+/** Provenance of a challenge draw: the person's own scope, where it went, the rule (1-based) and its reason (S-04). */
 export function challengeOf(own: Scope, branch: "leaf" | "target" | "mixed", n: number, rule: FarRule, to: Scope): Challenge {
   const from = own.genres ?? own.topics ?? own.keywords ?? [NO_CHOICE_LABEL[branch]];
-  return { from: [...from], to: [...(to.genres ?? [])], rule: { n, title: rule.title ?? null }, reasonDraft: rule.why ?? null };
+  return { from: [...from], to: [...(to.genres ?? [])], rule: { n, title: rule.title ?? null }, reason: rule.why ?? null };
 }

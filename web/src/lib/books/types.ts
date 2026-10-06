@@ -45,7 +45,7 @@ export interface PathDrawResponse {
   path: PathSummary;
   /**
    * Challenge rules v2 (10-05): where a challenge draw moved from and to, by which far rule — null on the usual route. Its
-   * `reasonDraft` is a draft, data only: no screen shows it yet (the user polishes the lines after seeing real results).
+   * `reason` (the rule's `why:` line) is shown under the S-04 challenge line (10-06).
    */
   challenge: Challenge | null;
   /** 도감 v1: the server's seed for this draw's pictures, signed (lib/collection/ticket). Absent from older answers. */

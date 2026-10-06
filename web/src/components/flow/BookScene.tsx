@@ -72,7 +72,7 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
   const left = step === "first" && state.opened ? <FirstPageTitle /> : <RuledPage />;
   const right = step === "bookmarks"
     ? <RuledPage turn={state.index} />
-    : state.opened && <PathPage summary={draw?.path ?? null} notices={noBooks ? [EXHAUSTED_NOTICE] : []} />;
+    : state.opened && <PathPage summary={draw?.path ?? null} notices={noBooks ? [EXHAUSTED_NOTICE] : []} reason={draw?.challenge?.reason ?? null} />;
 
   // C-19: five decorative bookmark tips stand out of the closed book (nothing from the draw — no wait, no hint).
   const tucked = step === "book" || step === "first" ? <CoverPeeks open={state.opened} /> : null;

@@ -40,9 +40,9 @@ export interface FarRule { from: Partial<Scope>; to: Partial<Scope>; n?: number;
  * Where a challenge draw came from and went (10-05 v2) — on the walk applyChallenge returns and in the draw response.
  * from: the person's own scope (genres or topics, or "이야기 · 장르 없음" / "배우기 · 주제 없음" / "섞어서");
  * to: the far genres (for a list rule, the one picked); rule: the far rule's number and title;
- * reasonDraft: the rule's `why:` line — a draft for the result screen later, never shown yet (null where none is written).
+ * reason: the rule's `why:` line (10-06, user-approved) — shown under the challenge line on S-04 (null where none is written).
  */
-export interface Challenge { from: string[]; to: string[]; rule: { n: number; title: string | null }; reasonDraft: string | null }
+export interface Challenge { from: string[]; to: string[]; rule: { n: number; title: string | null }; reason: string | null }
 
 /**
  * skip: mood questions that cannot change the draw where they would be asked (skip.ts — moodSkips over books.json, built

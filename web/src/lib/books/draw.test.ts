@@ -85,23 +85,23 @@ describe("drawPath — challenge provenance (rules v2, 10-05)", () => {
     const res = drawPath(MONEY, none, mulberry32(3), catalogue);
     expect(res.challenge).toEqual({
       from: ["돈 관리·투자", "경제 상식"], to: ["인문", "역사"], rule: { n: 30, title: "돈·경제 → 인문·역사" },
-      reasonDraft: "값을 매기는 글에서 사람과 시간을 바라보는 글로",
+      reason: "값을 매기는 글에서 사람과 시간을 바라보는 글로",
     });
     expect(res.picks.every((p) => p.card.entry === "leaf" && LEARN_CHALLENGE_GENRES.includes(p.card.genre))).toBe(true);
   });
 
   it("rule 36: 배우기 · 주제 없음 → one list genre, the same one again for the same seed", () => {
     const res = drawPath(LEARN_NONE, none, mulberry32(11), catalogue);
-    expect(res.challenge).toMatchObject({ from: ["배우기 · 주제 없음"], rule: { n: 36 }, reasonDraft: "이번에는 평소와 다른 분야에서 한 발짝 나아가 봤어요" });
+    expect(res.challenge).toMatchObject({ from: ["배우기 · 주제 없음"], rule: { n: 36 }, reason: rule(36).why });
     expect(res.challenge!.to).toHaveLength(1);
     expect(LEARN_CHALLENGE_GENRES).toContain(res.challenge!.to[0]);
     expect(drawPath(LEARN_NONE, none, mulberry32(11), catalogue).challenge).toEqual(res.challenge);
     expect(res.picks.filter((p) => p.kind === "recommended").every((p) => p.card.genre === res.challenge!.to[0])).toBe(true);
   });
 
-  it("rule 19: 이야기 · 장르 없음 → one list genre, no reason written yet", () => {
+  it("rule 19: 이야기 · 장르 없음 → one list genre, its one-line reason (10-06)", () => {
     const res = drawPath(STORY_NONE, none, mulberry32(5), catalogue);
-    expect(res.challenge).toMatchObject({ from: ["이야기 · 장르 없음"], rule: { n: 19 }, reasonDraft: null });
+    expect(res.challenge).toMatchObject({ from: ["이야기 · 장르 없음"], rule: { n: 19 }, reason: rule(19).why });
     expect(rule(19).to.genres).toContain(res.challenge!.to[0]);
     expect(res.picks.every((p) => p.card.entry === "leaf")).toBe(true);
   });
@@ -109,7 +109,7 @@ describe("drawPath — challenge provenance (rules v2, 10-05)", () => {
   it("10-05: rule 37 (로맨스) and the new topics' rules 38-43 win over the older group rules below them, by their own numbers", () => {
     const romance = finish(["start", "B"], ["branch", "A"], ["story-intro", "A"], ["story-shelf", "A"], ["story-fiction", "A"], ["story-real", "A"]);
     expect(drawPath(romance, none, mulberry32(3), catalogue).challenge).toMatchObject({
-      from: ["로맨스"], to: ["SF·판타지", "역사"], rule: { n: 37 }, reasonDraft: "두 사람의 이야기에서 더 큰 세계와 시간으로",
+      from: ["로맨스"], to: ["SF·판타지", "역사"], rule: { n: 37 }, reason: "두 사람의 이야기에서 더 큰 세계와 시간으로",
     });
     const realNovel = finish(["start", "B"], ["branch", "A"], ["story-intro", "A"], ["story-shelf", "A"], ["story-fiction", "A"]);
     expect(drawPath(realNovel, none, mulberry32(3), catalogue).challenge).toMatchObject({ from: ["한국 소설", "외국 소설", "로맨스"], rule: { n: 17 } });
@@ -133,9 +133,9 @@ describe("drawPath — challenge provenance (rules v2, 10-05)", () => {
     expect(drawPath(lead, none, mulberry32(3), catalogue).challenge).toMatchObject({ from: ["리더십"], to: ["역사", "인문"], rule: { n: 39 } });
   });
 
-  it("rule 1 (SF chosen): the story rule's title, no reason", () => {
+  it("rule 1 (SF chosen): the story rule's title and reason (10-06)", () => {
     expect(drawPath(CHALLENGE_PATH, none, mulberry32(3), catalogue).challenge).toEqual({
-      from: ["SF·판타지"], to: ["에세이", "시"], rule: { n: 1, title: rule(1).title }, reasonDraft: null,
+      from: ["SF·판타지"], to: ["에세이", "시"], rule: { n: 1, title: rule(1).title }, reason: rule(1).why,
     });
   });
 });

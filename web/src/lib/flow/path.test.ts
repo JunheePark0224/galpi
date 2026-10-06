@@ -49,9 +49,9 @@ describe("flow path helpers (the real question map)", () => {
   it("builds the E-07 challenge props from the draw's challenge (taxonomy v1.5): null, null off the challenge route", () => {
     expect(challengeProps(null)).toEqual({ challenge_rule: null, challenge_genre: null });
     expect(challengeProps(undefined)).toEqual({ challenge_rule: null, challenge_genre: null });
-    const list = { from: ["이야기 · 장르 없음"], to: ["과학 교양"], rule: { n: 19, title: "이야기 · 장르 없음 → 도전 목록" }, reasonDraft: null };
+    const list = { from: ["이야기 · 장르 없음"], to: ["과학 교양"], rule: { n: 19, title: "이야기 · 장르 없음 → 도전 목록" }, reason: null };
     expect(challengeProps(list)).toEqual({ challenge_rule: 19, challenge_genre: "과학 교양" });
-    const fixed = { from: ["돈 관리·투자"], to: ["인문", "역사"], rule: { n: 30, title: null }, reasonDraft: "x" };
+    const fixed = { from: ["돈 관리·투자"], to: ["인문", "역사"], rule: { n: 30, title: null }, reason: "x" };
     expect(challengeProps(fixed)).toEqual({ challenge_rule: 30, challenge_genre: "인문,역사" });
     expect(challengeProps({ ...fixed, to: [] })).toEqual({ challenge_rule: 30, challenge_genre: null });
   });
