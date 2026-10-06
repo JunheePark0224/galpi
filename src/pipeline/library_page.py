@@ -33,7 +33,9 @@ __STYLE__
 기록으로 남아 되돌릴 수 있어요) — 무엇이 바뀌는지는 아래 표. 표본은 자동으로 들어갈 책 중 5%예요: 맞으면 [확인]만.
 다 하면 <b>검수 결과 내려받기</b> → <code>python -m src.pipeline.retag_library --apply &lt;파일&gt;</code> → <code>cd web &amp;&amp; npm run books:import</code>.</p>
 <div id="counts" class="sub"></div>
-<h2>자동으로 바뀌는 값 <small>두 AI가 같게 봤는데 지금 서재 값과 달라요 — 이상한 줄은 열어서 책을 보세요</small></h2>
+<h2>칸 이동 <small>두 AI가 모두 "이 칸 아님"이라며 같은 칸을 짚었거나, 세 번째 AI 다수결로 옮겨요</small></h2>
+<div id="moves"></div>
+<h2>자동으로 바뀌는 값 <small>두 AI가 같게 봤거나(키워드는 두 AI가 함께 고른 것만) 다수결로 정해졌는데 지금 서재 값과 달라요 — 이상한 줄은 열어서 책을 보세요</small></h2>
 <div id="table"></div>
 <nav id="toc"></nav>
 <div id="app"></div></main>
@@ -50,8 +52,8 @@ const GROUPS=[["person","① 사람이 정할 책","두 AI가 갈렸는데 다�
 const leafOf=b=>b.entry==="leaf";
 const side=(k,v)=>{const a=AXES.find(x=>x[0]===k);return v===null||v===undefined?"(비어 있음)":v>0?a[2]:v<0?a[4]:a[3]};
 function init(b){const cur=b.current, au=b.auto;
- const v=leafOf(b)?{genre:cur.genre,axes:{...cur.axes,...Object.fromEntries(Object.entries(au).filter(([k])=>AXIS_NAME[k]))}}
-  :{topic:cur.topic,keywords:[...(au.keywords||cur.keywords||[])],way:au.way||cur.way};
+ const v=leafOf(b)?{genre:au.slot||cur.genre,axes:{...cur.axes,...Object.fromEntries(Object.entries(au).filter(([k])=>AXIS_NAME[k]))}}
+  :{topic:au.slot||cur.topic,keywords:[...(au.keywords||cur.keywords||[])],way:au.way||cur.way};
  return {...v,one_liner:cur.one_liner,status:"picked",answered:[],ok:false}}
 const cur=b=>st[b.isbn]||init(b);
 const put=(b,patch,key)=>{const c=cur(b), was=c.answered||[];st[b.isbn]={...c,...patch,answered:key&&!was.includes(key)?[...was,key]:was,ok:false};save();render()};
@@ -106,8 +108,10 @@ function card(b){const c=cur(b), rest=left(b,c), isV1=b.source==="books_v1.json"
   ${b.asks.includes("line")?"":`<div class="row"><span class="lab">한 줄</span><input type="text" data-act="line" value="${esc(c.one_liner)}"></div><div class="row"><span class="cnt"></span></div>`}
   <div class="row"><span class="lab">결정</span><select data-act="status">${status.map(([v,l])=>`<option value="${v}" ${v===c.status?"selected":""}>${l}</option>`).join("")}</select></div></details>
  <div class="row"><button class="ok" data-act="ok" ${rest.length&&!c.ok?"disabled":""}>${c.ok?"확인함 ✓":rest.length?`남은 것 ${rest.length}개`:"확인"}</button></div></div>`}
-function head(){document.getElementById("counts").innerHTML=`서재 ${COUNTS.books}권 다시 태그 · 사람이 정할 책 <b>${COUNTS.to_person}</b> · 세 번째 AI 다수결로 정해진 책 ${COUNTS.settled_by_tiebreak} · 자동으로 값이 바뀌는 책 ${COUNTS.changed_auto} · 표본 ${COUNTS.sample} · 그대로 ${COUNTS.unchanged_silent}${COUNTS.skipped?` · 책소개가 없어 못 한 책 ${COUNTS.skipped}`:""}`;
- document.getElementById("table").innerHTML=TABLE.length?`<table class="chg"><tr><th>칸</th><th>지금 → v3</th><th>권</th></tr>${TABLE.map(r=>`<tr><td>${esc(FNAME(r.field))}</td><td>${esc(r.field==="keywords"?r.change:r.change.split(" → ").map(v=>AXIS_NAME[r.field]&&v!=="(비어 있음)"?`${v} ${side(r.field,Number(v))}`:v).join(" → "))}</td><td><details><summary>${r.count}권</summary><ul>${r.isbns.map(i=>`<li>${esc(TITLES[i]||i)} <small>${i}</small></li>`).join("")}</ul></details></td></tr>`).join("")}</table>`:'<p class="sub">없음</p>'}
+function tableOf(rows){return rows.length?`<table class="chg"><tr><th>칸</th><th>지금 → v3</th><th>권</th></tr>${rows.map(r=>`<tr><td>${esc(FNAME(r.field))}</td><td>${esc(r.field==="keywords"||r.field==="slot"?r.change:r.change.split(" → ").map(v=>AXIS_NAME[r.field]&&v!=="(비어 있음)"?`${v} ${side(r.field,Number(v))}`:v).join(" → "))}</td><td><details><summary>${r.count}권</summary><ul>${r.isbns.map(i=>`<li>${esc(TITLES[i]||i)} <small>${i}</small></li>`).join("")}</ul></details></td></tr>`).join("")}</table>`:'<p class="sub">없음</p>'}
+function head(){document.getElementById("counts").innerHTML=`서재 ${COUNTS.books}권 다시 태그 · 사람이 정할 책 <b>${COUNTS.to_person}</b> · 자동으로 칸을 옮기는 책 ${COUNTS.moved_auto} · 키워드를 두 AI 공통으로 정한 책 ${COUNTS.keyword_intersection} · 세 번째 AI 다수결로 정해진 책 ${COUNTS.settled_by_tiebreak} · 자동으로 값이 바뀌는 책 ${COUNTS.changed_auto} · 표본 ${COUNTS.sample} · 그대로 ${COUNTS.unchanged_silent}${COUNTS.skipped?` · 태그 실패 ${COUNTS.skipped}`:""}`;
+ document.getElementById("moves").innerHTML=tableOf(TABLE.filter(r=>r.field==="slot"));
+ document.getElementById("table").innerHTML=tableOf(TABLE.filter(r=>r.field!=="slot"))}
 function render(){const open=[...document.querySelectorAll(".card details[open]")].map(d=>d.closest(".card").id+"|"+d.className);
  document.getElementById("app").innerHTML=GROUPS.map(([g,t,d])=>{const list=BOOKS.filter(b=>b.group===g);if(!list.length)return "";
   return `<h2 id="g-${g}">${esc(t)} <small>${list.filter(b=>cur(b).ok).length}/${list.length} 확인</small></h2><p class="sub">${esc(d)}</p>${list.map(card).join("")}`}).join("");

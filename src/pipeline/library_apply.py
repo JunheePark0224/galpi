@@ -1,7 +1,7 @@
 """--apply of the v3 library re-tag: the decided values go into the files `npm run books:import` reads.
 
-A book decided without a person (library_review: auto, sample not answered) takes its v3 values — the library's one-liner
-stays. A book a person answered (the page's download, {answers: {isbn: {…, ok: true}}}) takes the answer, checked like
+A book decided without a person (library_review: auto, sample not answered) takes its v3 values — including a slot both
+passes (or the third-pass majority) moved it to — and the library's one-liner stays. A book a person answered (the page's download, {answers: {isbn: {…, ok: true}}}) takes the answer, checked like
 the review pages' answers (agreement.checked_leaf / apply_review.checked_answer; a pick whose one-liner breaks a rule is
 refused). A "person" book without an answer is left as it is. Every written book gets `rules_version: "v3"`; when its
 values change, the old ones are appended to `history` (so the change can be undone) and an additions record keeps its
@@ -36,9 +36,9 @@ def from_answer(book: dict, ans: dict, kept: dict) -> dict:
 def from_auto(book: dict, d: dict) -> dict:
     cur, auto = book["current"], d["auto"]
     if book["entry"] == "leaf":
-        return {"genre": cur["genre"], "axes": {a: auto.get(a, (cur.get("axes") or {}).get(a)) for a in AXES},
+        return {"genre": auto.get("slot", cur["genre"]), "axes": {a: auto.get(a, (cur.get("axes") or {}).get(a)) for a in AXES},
                 "one_liner": cur["one_liner"], "status": None}
-    return {"topic": cur["topic"], "keywords": list(auto.get("keywords", cur["keywords"])), "way": auto.get("way", cur["way"]),
+    return {"topic": auto.get("slot", cur["topic"]), "keywords": list(auto.get("keywords", cur["keywords"])), "way": auto.get("way", cur["way"]),
             "one_liner": cur["one_liner"], "status": None}
 
 

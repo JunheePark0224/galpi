@@ -43,10 +43,15 @@ def test_the_majority_settles_a_field_and_a_three_way_split_or_no_info_goes_to_a
     assert tiebreak.settle(rec, None) == {"temp": None, "gain": None}
 
 
-def test_a_slot_is_settled_only_when_the_majority_keeps_the_book_where_it_is():
+def test_a_slot_split_with_one_fitting_pass_is_settled_to_stay_or_to_the_named_slot():
     rec = leaf(AX, AX, b_fits=False, b_suggest="한국 소설")
     assert tiebreak.settle(rec, {"fits": True, "axes": AX}) == {"slot": "에세이"}
-    assert tiebreak.settle(rec, {"fits": False, "suggest": "한국 소설", "axes": AX}) == {"slot": None}
+    assert tiebreak.settle(rec, {"fits": False, "suggest": "한국 소설", "axes": AX}) == {"slot": "한국 소설"}
+    assert tiebreak.settle(rec, {"fits": False, "suggest": "SF·판타지", "axes": AX}) == {"slot": None}
+    nowhere = leaf(AX, AX, b_fits=False)
+    assert tiebreak.settle(nowhere, {"fits": False, "suggest": "", "axes": AX}) == {"slot": None}
+    two = leaf(AX, AX, a_fits=False, b_fits=False, b_suggest="한국 소설") | {"suggest": "SF·판타지"}
+    assert tiebreak.settle(two, {"fits": False, "suggest": "한국 소설", "axes": AX}) == {"slot": None}
 
 
 def test_the_third_pass_is_a_blind_check_call_and_keeps_no_free_text():

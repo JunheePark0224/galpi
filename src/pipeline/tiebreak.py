@@ -5,8 +5,8 @@ the book fits, else its suggestion, "" = none), a 🍃 axis both passes gave a v
 info is not a split: 정보 없음 always goes to a person), 🎯 keywords (as a set) and way.
 third: one more blind pass B — the same v3 check prompt and model (config second_model), the 🍃 axis re-ask included —
 as pass "C" (its own Breaker streak). settle: per split field, the value two of the three passes gave; None when all three
-differ, when the third marked that axis as having no info, or for the slot when the majority is not the book's own slot
-(a move or "nowhere" is a person's decision). Only the value is kept from the third pass's free text: the `why` line is
+differ, when the third marked that axis as having no info, or for the slot unless one of A / B kept the book where it is
+(user 10-06: then 2 of 3 decide — stay, or move to the slot both "not fit" votes name; "nowhere" is a person's decision). Only the value is kept from the third pass's free text: the `why` line is
 cut like pass B's and copy-checked by the caller (record keeps no YES24 text).
 """
 from .merge import keyword_hints
@@ -62,7 +62,9 @@ def settle(rec: dict, third: dict | None, only: tuple[str, ...] | None = None) -
         va, vb = value(f, a, slot), value(f, b, slot)
         vc = value(f, third, slot) if third else None
         won = va if vc is not None and vc == va else vb if vc is not None and vc == vb else None
-        out[f] = None if (f == "slot" and won != slot) or (only is not None and f not in only) else won
+        if f == "slot" and (slot not in (va, vb) or not won):  # two passes already out of the slot, or "nowhere"
+            won = None
+        out[f] = None if only is not None and f not in only else won
     return out
 
 
@@ -88,4 +90,4 @@ def kept_of(ans: dict | None) -> dict | None:
     """What the library file keeps of pass C: the values and signal lines, never the free-text reason."""
     if ans is None:
         return None
-    return {k: ans[k] for k in ("fits", "suggest", "axes", "signals", "missing", "keywords", "way") if k in ans}
+    return {k: ans[k] for k in ("fits", "suggest", "suggest_keywords", "axes", "signals", "missing", "keywords", "way") if k in ans}
