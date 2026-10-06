@@ -16,6 +16,7 @@
 | `docs/proposal.md` | 왜 (고객·문제·분석) | — |
 | `docs/PRD.md` | 무엇을 | 기능 `F-xx` · 화면 `S-xx` · 이벤트 `E-xx` · 데이터 `D-xx` |
 | `docs/balance-game.md` · `target-chips.md` · `book-pool.md` | 추천 규칙 (입력·점수·뽑기) | — |
+| `docs/label-dictionary.md` | 라벨 정의서 — 책에 태그를 붙이는 기준 (사람·태거 공통, 태그 지시문이 읽음) | 결정 필요 `LD-x` |
 | `docs/PHASES.md` | 순서와 완료 기준 | Phase `P-xx`, 데이터 `D1~D4` |
 | `docs/DESIGN.md` | 어떻게 보이나 (원본) | 토큰 `T-xx` · 컴포넌트 `C-xx` · 에셋 `A-xx` |
 | `docs/stitch/` | Stitch용 파생본 (`DESIGN.md`는 공식 형식, lint 통과 유지) | — |
