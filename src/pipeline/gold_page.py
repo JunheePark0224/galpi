@@ -143,27 +143,28 @@ __STYLE__
 <script>
 const BOOKS=__BOOKS__, KW=__KW__, DEFS=__DEFS__, GENRES=__GENRES__, AXES=__AXES__, WAYS=__WAYS__, GUIDE=__GUIDE__, KEY=__KEY__, RULES=__RULES__;
 __COMMON__
-const TOPICS=Object.keys(KW), LABEL=__LABEL__, NONE="-";
+const TOPICS=Object.keys(KW), LABEL=__LABEL__, NONE="-", DROP="서재에 넣지 않음";  // DROP: the book does not belong in Galpi at all (교재·수험서 …, 10-06)
+const other=v=>v===""||v===DROP;
 const cur=b=>st[b.isbn]||(b.entry==="leaf"?{axes:{},missing:[],reasons:{}}:{keywords:[],kwDone:false});
 const put=(b,patch)=>{st[b.isbn]={...cur(b),...patch};save();render()};
 function left(b){const c=cur(b), out=[];
  // "어느 장르/주제도 아님" (the other branch): nothing else to answer for this book (10-06)
- if(b.entry==="leaf"){if(c.genre===undefined)out.push("장르");else if(c.genre!=="")for(const [k] of AXES)if(![1,0,-1].includes(c.axes[k])&&!c.missing.includes(k))out.push(LABEL[k])}
- else{if(c.topic===undefined)out.push("주제");else if(c.topic!==""){if(!c.kwDone)out.push("키워드");if(!c.way)out.push("방식")}}
+ if(b.entry==="leaf"){if(c.genre===undefined)out.push("장르");else if(!other(c.genre))for(const [k] of AXES)if(![1,0,-1].includes(c.axes[k])&&!c.missing.includes(k))out.push(LABEL[k])}
+ else{if(c.topic===undefined)out.push("주제");else if(!other(c.topic)){if(!c.kwDone)out.push("키워드");if(!c.way)out.push("방식")}}
  return out}
 const blk=(f,inner)=>`<div class="blk" data-field="${f}">${inner}</div>`;
 function leafQs(b,c){
  const g=blk("genre",`<p class="q">장르</p><div class="row"><select data-act="genre"><option value="" ${c.genre===undefined?"selected":""}>장르를 골라 주세요</option>
-  ${GENRES.map(x=>`<option ${c.genre===x?"selected":""}>${esc(x)}</option>`).join("")}<option value="${NONE}" ${c.genre===""?"selected":""}>어느 🍃 장르도 아님 (🎯 배우기 책)</option></select></div>`);
- if(c.genre==="")return g+'<p class="hint">🎯 배우기 책이라 축은 고르지 않아요.</p>';
+  ${GENRES.map(x=>`<option ${c.genre===x?"selected":""}>${esc(x)}</option>`).join("")}<option value="${NONE}" ${c.genre===""?"selected":""}>어느 🍃 장르도 아님 (🎯 배우기 책)</option><option value="${DROP}" ${c.genre===DROP?"selected":""}>서재에 넣지 않음 (빼기)</option></select></div>`);
+ if(other(c.genre))return g+`<p class="hint">${c.genre===DROP?"빼는 책이라":"🎯 배우기 책이라"} 축은 고르지 않아요.</p>`;
  return g+AXES.map(([k,q,p,z,m,hint])=>blk(k,`<p class="q">${esc(LABEL[k])} — ${esc(q)} <span class="hint">${esc(hint)}</span></p>
   <div class="opts">${[[p,1],[z,0],[m,-1]].map(([t,v])=>`<label><input type="radio" name="ax-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${c.axes[k]===v?"checked":""}><span>${esc(t)}</span></label>`).join("")}</div>
   <div class="row"><button class="none ${c.missing.includes(k)?"on":""}" data-none="${k}">정보 없음</button>
   <input type="text" data-reason="${k}" maxlength="60" value="${esc(c.reasons[k]||"")}" placeholder="근거 한 줄 (선택) — 예: 끝맺음 −, 마지막 장이 이별"></div>`)).join("")}
 function targetQs(b,c){const kept=c.topic?KW[c.topic]||[]:[], defs=DEFS[c.topic]||{};
  const tb=blk("topic",`<p class="q">주제</p><div class="row"><select data-act="topic"><option value="" ${c.topic===undefined?"selected":""}>주제를 골라 주세요</option>
-   ${TOPICS.map(t=>`<option ${c.topic===t?"selected":""}>${esc(t)}</option>`).join("")}<option value="${NONE}" ${c.topic===""?"selected":""}>어느 🎯 주제도 아님 (🍃 이야기 책)</option></select></div>`);
- if(c.topic==="")return tb+'<p class="hint">🍃 이야기 책이라 키워드·방식은 고르지 않아요.</p>';
+   ${TOPICS.map(t=>`<option ${c.topic===t?"selected":""}>${esc(t)}</option>`).join("")}<option value="${NONE}" ${c.topic===""?"selected":""}>어느 🎯 주제도 아님 (🍃 이야기 책)</option><option value="${DROP}" ${c.topic===DROP?"selected":""}>서재에 넣지 않음 (빼기)</option></select></div>`);
+ if(other(c.topic))return tb+`<p class="hint">${c.topic===DROP?"빼는 책이라":"🍃 이야기 책이라"} 키워드·방식은 고르지 않아요.</p>`;
  return tb+blk("keywords",`<p class="q">키워드 <span class="hint">— 책의 중심일 때만, 0~3개 · 눌러서 켜고 끄기</span></p>
    <div class="row">${kept.map(k=>`<button class="chip ${c.keywords.includes(k)?"on":""}" data-kw="${esc(k)}" title="${esc(defs[k]||"")}">${esc(k)}</button>`).join("")||'<span class="cnt">주제를 먼저 골라 주세요 (목록이 없는 주제도 있어요)</span>'}
    <button class="none ${c.kwDone&&!c.keywords.length?"on":""}" data-act="kwnone">키워드 없음</button></div>
