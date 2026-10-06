@@ -74,12 +74,17 @@ const decisionKey=b=>asks(b).includes("fits")?"fits":null;  // any decision in t
 const chipsOf=(b,c)=>{const kept=KW[c.topic]||[], two=b.second||{};
  return [...new Set([...(b.keywords||[]),...(two.keywords||[]),...kept])].filter(x=>kept.includes(x))};
 const marks=(on1,on2)=>`${on1?'<span class="ai1">AI-1</span>':""}${on2?'<span class="ai2">AI-2</span>':""}`;
-const NAME_OF=k=>k==="fits"?"넣을지":k==="line"?"한 줄":k==="keywords"?"키워드":k==="way"?"방식":AXIS_NAME[k]||k;
+const NAME_OF=k=>k==="fits"?"어디에 둘지":k==="line"?"한 줄":k==="keywords"?"키워드":k==="way"?"방식":AXIS_NAME[k]||k;
 function ask(b,c,k){const two=b.second||{}, done=(c.answered||[]).includes(k);
- if(k==="fits"){const slot=b.entry==="target"?b.topic:b.genre, yes=o=>o.fits===false?"안 맞아요":"맞아요";
-  return `<p class="q">이 책, <b>${esc(slot)}</b> 칸에 맞나요? <span class="hint">— AI-1 ${yes(b)} · AI-2 ${yes(two)}${two.why?` (AI-2: ${esc(two.why)})`:""}</span></p>
-   <div class="opts two"><label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="picked" ${done&&c.status!=="dropped"?"checked":""}><span>맞아요 · 넣기</span></label>
-   <label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="dropped" ${done&&c.status==="dropped"?"checked":""}><span>안 맞아요 · 빼기</span></label></div>`}
+ if(k==="fits"){const leaf=b.entry==="leaf", slot=leaf?b.genre:b.topic, now=leaf?c.genre:c.topic, moved=now!==slot, yes=o=>o.fits===false?"안 맞아요":"맞아요";
+  const pick=!done?"":c.status==="dropped"?"dropped":moved?"move":"picked", open=pick==="move"||c.moveOpen;
+  const names=leaf?GENRES:TOPICS, kind=leaf?"장르":"주제";
+  return `<p class="q">이 책을 어디에 둘까요? <span class="hint">— AI가 <b>${esc(slot)}</b> 칸으로 가져왔어요 · AI-1 ${yes(b)} · AI-2 ${yes(two)}${two.why?` (AI-2: ${esc(two.why)})`:""}</span></p>
+   <div class="opts"><label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="picked" ${pick==="picked"?"checked":""}><span>${esc(slot)} 맞아요<span class="ai0">이대로 넣기</span></span></label>
+   <label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="move" ${open?"checked":""}><span>다른 ${kind}예요<span class="ai0">옮겨서 넣기</span></span></label>
+   <label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="dropped" ${pick==="dropped"?"checked":""}><span>어디에도 안 맞아요<span class="ai0">빼기</span></span></label></div>
+   ${open?`<div class="row"><span class="lab">${kind}</span><select data-act="fitto"><option value="">${kind}를 골라 주세요</option>${names.filter(n=>n!==slot).map(n=>`<option ${moved&&n===now?"selected":""}>${esc(n)}</option>`).join("")}</select>
+   ${leaf?"":'<span class="cnt">키워드는 아래 "같게 본 칸도 고치기"에서 새 주제에 맞게 골라 주세요</span>'}</div>`:""}`}
  if(AXIS_NAME[k]){const [,q,p,z,m,hint]=AXES.find(x=>x[0]===k), ax2=two.axes||{};
   return `<p class="q">${esc(q)} <span class="hint">— ${esc(hint)}</span></p><div class="opts">${[[p,1],[z,0],[m,-1]].map(([t,v])=>`<label><input type="radio" name="q-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${done&&c.axes[k]===v?"checked":""}><span>${esc(t)}
    ${marks(b.axes[k]===v,ax2[k]===v)}</span></label>`).join("")}</div>`}
@@ -144,8 +149,11 @@ document.addEventListener("click",e=>{const b=bookOf(e); if(!b)return; const c=c
   st[b.isbn]={...c,ok:true};save();render()}});
 document.addEventListener("change",e=>{const b=bookOf(e); if(!b)return; const act=e.target.dataset.act, axis=e.target.dataset.axis, v=e.target.value;
  if(axis){put(b,{axes:{...cur(b).axes,[axis]:Number(v)}},axis);return}
- if(act==="fit"){put(b,{status:v},"fits");return}
- if(act==="topic")put(b,{topic:v,keywords:[]},null,"keywords"); if(act==="way")put(b,{way:v},"way"); if(act==="genre")put(b,{genre:v});
+ if(act==="fit"){const slot=b.entry==="leaf"?{genre:b.genre}:{topic:b.topic,keywords:[...(b.keywords||[])]};
+  if(v==="move"){st[b.isbn]={...cur(b),moveOpen:true,ok:false,answered:(cur(b).answered||[]).filter(x=>x!=="fits")};save();render();return}
+  put(b,{status:v,moveOpen:false,...slot},"fits");return}
+ if(act==="fitto"){if(!v)return; put(b,{status:"picked",moveOpen:false,...(b.entry==="leaf"?{genre:v}:{topic:v,keywords:[]})},"fits");return}
+ if(act==="topic")put(b,{topic:v,keywords:[]},null,"keywords"); if(act==="way")put(b,{way:v},"way"); if(act==="genre")put(b,{genre:v,status:"picked"},asks(b).includes("fits")?"fits":null);
  if(act==="status")put(b,v==="requeue"?{status:v,to_entry:toEntry(b),to_slot:cur(b).to_slot||""}:{status:v},decisionKey(b));
  if(act==="to_slot")put(b,{to_slot:v})});  // the one-liner is stored by the input handler (a re-render here would swallow the next click)
 document.addEventListener("input",e=>{if(e.target.dataset.act==="cand"){const b=bookOf(e), el=e.target.closest(".card");
@@ -157,7 +165,7 @@ document.addEventListener("input",e=>{if(e.target.dataset.act==="cand"){const b=
  st[b.isbn]={...c,answered:(c.answered||[]).filter(k=>k!=="line")};save();  // an edit replaces "이대로 괜찮아요"
  el.classList.remove("done"); const ok=el.querySelector(".ok"), rest=left(b,cur(b)); if(ok){ok.disabled=rest.length>0; ok.textContent=rest.length?`남은 것 ${rest.length}개`:"확인"}});
 document.getElementById("dl").onclick=()=>{const answers={};
- for(const b of BOOKS){const c=st[b.isbn]; if(c&&c.ok){const a={...c,one_liner:c.one_liner.trim(),...(typeof c.keyword_candidate==="string"?{keyword_candidate:c.keyword_candidate.trim()}:{})}; if(!a.pick)delete a.pick; delete a.answered; answers[b.isbn]=a}}
+ for(const b of BOOKS){const c=st[b.isbn]; if(c&&c.ok){const a={...c,one_liner:c.one_liner.trim(),...(typeof c.keyword_candidate==="string"?{keyword_candidate:c.keyword_candidate.trim()}:{})}; if(!a.pick)delete a.pick; delete a.answered; delete a.moveOpen; answers[b.isbn]=a}}
  const blob=new Blob([JSON.stringify({saved_at:new Date().toISOString(),file:NAME,answers},null,1)],{type:"application/json"});
  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`${NAME}-review.json`;a.click()};
 document.getElementById("name").textContent=NAME; render();
