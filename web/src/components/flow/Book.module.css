@@ -81,6 +81,30 @@
   background: var(--paper); border-radius: 8px 0 0 8px;
   box-shadow: inset -14px 0 14px -12px var(--shadow-ink);    /* the gutter */
 }
+/* S-11 (10-07): the right half that shuts over the left — inside, the same rim + lined page as the open spread (the static
+   board and page under it hide at once, so nothing changes at the swap); outside, the back cover of C-29 (spine on the right). */
+.board[data-under], .pageRight[data-under] { visibility: hidden; }
+.backHalf {
+  position: absolute; top: -5px; bottom: -5px; left: 50%; right: -5px; z-index: 3;
+  transform-style: preserve-3d; transform-origin: left center;
+}
+.backInside, .backOutside { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: var(--radius-book); }
+.backInside { padding: 5px 5px 5px 0; background: var(--leather-grain), var(--cloth); border-radius: 2px var(--radius-book) var(--radius-book) 2px; box-shadow: var(--shadow-book); }
+.backPage {
+  position: relative; height: 100%; overflow: hidden; background: var(--paper); border-radius: 0 8px 8px 0;
+  box-shadow: inset 14px 0 14px -12px var(--shadow-ink);
+}
+.backOutside {
+  transform: rotateY(180deg);
+  border-radius: 4px var(--radius-book) var(--radius-book) 4px;
+  background: var(--leather-grain), var(--leather-sheen), var(--cloth);
+  box-shadow: inset 0 0 0 1px var(--cloth-edge), var(--shadow-book);
+}
+.backOutside::after {   /* the spine, on the right of the back */
+  content: ""; position: absolute; top: 0; bottom: 0; right: 0; width: 22px;
+  border-radius: 0 var(--radius-book) var(--radius-book) 0; background: var(--spine-shade), var(--cloth-edge);
+}
+.backStamp { position: absolute; inset: 14px 34px 14px 14px; border: 1px solid var(--foil-line); border-radius: 6px; }
 .ruled {
   position: absolute; inset: 0; perspective: 1600px;
   background: repeating-linear-gradient(to bottom, transparent 0 27px, var(--paper-rule) 27px 28px);

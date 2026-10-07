@@ -2,7 +2,7 @@
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
 import { LogoMark } from "@/components/Logo";
-import { FLIP_PAGE, OPEN_COVER } from "@/lib/motion";
+import { FLIP_PAGE, OPEN_COVER, SHUT_BOOK } from "@/lib/motion";
 import styles from "./Book.module.css";
 
 interface Props {
@@ -11,6 +11,9 @@ interface Props {
   left?: ReactNode;       // inside of the cover once open
   right?: ReactNode;      // right-hand page
   tucked?: ReactNode;     // C-19: bookmark tips tucked into the closed book (CoverPeeks)
+  /** S-11 (10-07): the round is over — the right-hand page shuts over the left, showing the back cover. */
+  shut?: boolean;
+  onShut?: () => void;
 }
 
 /**
@@ -19,13 +22,20 @@ interface Props {
  * with the open-cover timing); on a phone the closed cover is a normal book (1 : 1.45) and the tall pages behind it stay
  * hidden until it opens. Opening swings the cover left around the spine (T-06) while the book settles to full size.
  * Transform and opacity only — no filter, no animated shadow. initial={false}: a resumed flow does not replay it.
+ * `shut` (S-11, 10-07): the right half (back board + its page) turns over onto the left around the spine — the opening
+ * reversed on the other side, so the back cover faces up — while the book slides to the middle; then onShut.
  */
-export function Book({ open, onPress, left, right, tucked }: Props) {
+export function Book({ open, onPress, left, right, tucked, shut = false, onShut }: Props) {
   return (
     <div className={styles.zoom} data-closed={open ? undefined : ""}>
-      <motion.div className={styles.book} initial={false} animate={{ x: open ? "0%" : "-25%" }} transition={OPEN_COVER}>
-        <div className={styles.board} aria-hidden="true" />
-        <div className={styles.pageRight}>{right}</div>
+      <motion.div
+        className={styles.book}
+        initial={false}
+        animate={{ x: shut ? "25%" : open ? "0%" : "-25%" }}
+        transition={shut ? SHUT_BOOK : OPEN_COVER}
+      >
+        <div className={styles.board} aria-hidden="true" data-under={shut ? "" : undefined} />
+        <div className={styles.pageRight} data-under={shut ? "" : undefined}>{right}</div>
         {tucked}
         <motion.div className={styles.cover} initial={false} animate={{ rotateY: open ? -180 : 0 }} transition={OPEN_COVER}>
           <button
@@ -52,6 +62,20 @@ export function Book({ open, onPress, left, right, tucked }: Props) {
           </button>
           <div className={styles.back}><div className={styles.pageLeft}>{left}</div></div>
         </motion.div>
+        {shut && (
+          <motion.div
+            className={styles.backHalf}
+            data-shut=""
+            aria-hidden="true"
+            initial={{ rotateY: 0 }}
+            animate={{ rotateY: -180 }}
+            transition={SHUT_BOOK}
+            onAnimationComplete={onShut}
+          >
+            <div className={styles.backInside}><div className={styles.backPage}><RuledPage /></div></div>
+            <div className={styles.backOutside}><span className={styles.backStamp} /></div>
+          </motion.div>
+        )}
       </motion.div>
     </div>
   );

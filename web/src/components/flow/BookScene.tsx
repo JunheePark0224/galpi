@@ -41,13 +41,15 @@ interface Props {
   onHome: () => void;
   /** 도감 v1: parts of the bookmark now shown that a logged-in person met for the first time ("처음 만난 …!"). */
   found?: readonly FoundItem[] | null;
+  /** S-11 (10-07): the book has shut over the last page — Flow shows the back cover now. */
+  onClosed?: () => void;
 }
 
 /**
  * S-03 · S-04 · S-05 share one book so the cover keeps its place between steps. The book fills the column; the bookmark
  * rises out of the gutter, centred between the two pages. Buttons sit below the book; the page count is the folio.
  */
-export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onHome, found = null }: Props) {
+export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onHome, found = null, onClosed }: Props) {
   const [busy, setBusy] = useState(true);            // a bookmark is still moving: reactions wait (and frost stays off)
   const [last, setLast] = useState<Reaction>("pass");
   // C-20: the first bookmark of a browser's first round explains itself once (logged in or not)
@@ -61,6 +63,7 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
   const picks = draw?.picks ?? [];
   const pick = step === "bookmarks" ? picks[state.index] : undefined;
   const noBooks = status === "ready" && picks.length === 0;
+  const shutting = step === "back";   // after the last bookmark: the book shuts before the back cover (S-11, 10-07)
 
   const react = (reaction: Reaction) => {
     if (busy) return;
@@ -70,8 +73,8 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
   };
 
   const left = step === "first" && state.opened ? <FirstPageTitle /> : <RuledPage />;
-  const right = step === "bookmarks"
-    ? <RuledPage turn={state.index} />
+  const right = step === "bookmarks" || shutting
+    ? <RuledPage turn={shutting ? 0 : state.index} />
     : state.opened && <PathPage summary={draw?.path ?? null} notices={noBooks ? [EXHAUSTED_NOTICE] : []} reason={draw?.challenge?.reason ?? null} />;
 
   // C-19: five decorative bookmark tips stand out of the closed book (nothing from the draw — no wait, no hint).
@@ -80,7 +83,15 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
   return (
     <div ref={scene} className={styles.scene} data-wide-scene="" data-peeks={step === "book" ? "" : undefined} data-clip={tucked ? "" : undefined}>
       <div className={styles.stage}>
-        <Book open={state.opened} onPress={step === "book" ? onOpen : undefined} left={left} right={right} tucked={tucked} />
+        <Book
+          open={state.opened}
+          onPress={step === "book" ? onOpen : undefined}
+          left={left}
+          right={right}
+          tucked={tucked}
+          shut={shutting}
+          onShut={onClosed}
+        />
         {pick && <p className={styles.folio}>{`${state.index + 1} / ${picks.length}`}</p>}
         {pick && (
           <div className={styles.slot}>
