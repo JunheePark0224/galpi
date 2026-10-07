@@ -13,8 +13,8 @@ describe("parseArt — only picture parts we draw (DESIGN A-01~A-04)", () => {
     }
   });
   it("reads a four-part picture from before 10-07 A as three parts: the sky prop dropped, fireflies as the empty ground", () => {
-    expect(parseArt({ animal: "whale", bg: "lavender", sky: "bigStar", ground: "none", rare: false }))
-      .toEqual({ animal: "whale", bg: "lavender", ground: "none", rare: false });
+    expect(parseArt({ animal: "owl", bg: "lavender", sky: "bigStar", ground: "none", rare: false }))
+      .toEqual({ animal: "owl", bg: "lavender", ground: "none", rare: false });
     expect(parseArt({ ...ART, sky: "goldmoon", ground: "firefly", rare: true })).toEqual({ ...ART, ground: "none", rare: false });
   });
   it("accepts the 한정판·초판본 parts and works `rare` out from the parts, whatever the browser said", () => {
