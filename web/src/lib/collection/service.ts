@@ -15,10 +15,10 @@ export async function recordMeeting(store: CollectionStore, ticket: { seed: numb
   });
 }
 
-/** 도감 tabs: animals, backgrounds, props (sky and ground props share one tab). */
+/** 도감 tabs: animals, backgrounds, props (the ground props — 10-07 A: there are no sky props). */
 export const DEX_TABS = ["animal", "bg", "prop"] as const;
 export type DexTab = (typeof DEX_TABS)[number];
-const KINDS_OF: Record<DexTab, readonly ArtKind[]> = { animal: ["animal"], bg: ["bg"], prop: ["sky", "ground"] };
+const KINDS_OF: Record<DexTab, readonly ArtKind[]> = { animal: ["animal"], bg: ["bg"], prop: ["ground"] };
 
 export interface DexCell { kind: ArtKind; value: string; tier: Tier; met: CollectionItem | null }
 export interface DexSection { tier: Tier; cells: DexCell[]; found: number }
@@ -32,7 +32,7 @@ export function dexSections(tab: DexTab, items: readonly CollectionItem[]): DexS
   });
 }
 
-/** "동물 n / 16 · 배경 n / 11 · 소품 n / 15": found and total per tab. */
+/** "동물 n / 16 · 배경 n / 12 · 소품 n / 6": found and total per tab. */
 export function dexCounts(items: readonly CollectionItem[]): Record<DexTab, { found: number; total: number }> {
   const count = (tab: DexTab) => dexSections(tab, items).reduce(
     (acc, s) => ({ found: acc.found + s.found, total: acc.total + s.cells.length }), { found: 0, total: 0 },
@@ -42,7 +42,7 @@ export function dexCounts(items: readonly CollectionItem[]): Record<DexTab, { fo
 
 /**
  * Rows that name a part we collect: a value dropped from the lists later is left out (not shown broken), and so are the
- * "none" ground rows recorded before the 10-05 fix (no migration — they are only ever ignored).
+ * "none" ground rows recorded before the 10-05 fix and any sky row from before 10-07 A (0008 deletes those for launch).
  */
 export function knownItems(items: readonly CollectionItem[]): CollectionItem[] {
   return items.filter((i) => isCollectible(i.kind, i.value));

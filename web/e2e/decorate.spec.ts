@@ -10,14 +10,14 @@ test.use({ reducedMotion: "reduce" });
 
 const ISBN = "9790000000001";
 const TITLE = "물고기는 존재하지 않는다";
-const FIRST = { animal: "cat", bg: "peach", sky: "moon", ground: "none", rare: false };
+const FIRST = { animal: "cat", bg: "peach", ground: "none", rare: false };
 const ROD_A = "11111111-1111-4111-8111-111111111111";
 const ROD_B = "22222222-2222-4222-8222-222222222222";
 const item = (kind: string, value: string) => ({ kind, value, firstMetAt: "2026-10-05T01:00:00.000Z", firstArt: { ...FIRST, [kind]: value }, isNew: false });
-/** 도감: 고양이 · 곰 · 여우 · 부엉이 (일반판), 레서판다 · 수달 (한정판), 백호 (초판본); 배경 밤 · 벚꽃 언덕; 하늘 무지개. */
+/** 도감: 고양이 · 곰 · 여우 · 부엉이 (일반판), 레서판다 · 수달 (한정판), 백호 (초판본); 배경 밤 · 벚꽃 언덕; 땅 네잎클로버. */
 const DEX = [
   item("animal", "cat"), item("animal", "bear"), item("animal", "fox"), item("animal", "owl"), item("animal", "redpanda"),
-  item("animal", "otter"), item("animal", "whitetiger"), item("bg", "night"), item("bg", "cherry"), item("sky", "rainbow"),
+  item("animal", "otter"), item("animal", "whitetiger"), item("bg", "night"), item("bg", "cherry"), item("ground", "clover"),
 ];
 
 interface Fake { art: typeof FIRST; patches: unknown[]; rods: number }
@@ -77,8 +77,10 @@ test("sheet → [꾸미기] → pick a collected animal → [이대로 꽂기]: 
   await expect(editor.getByRole("button", { name: "고양이, 일반판" })).toHaveAttribute("aria-pressed", "true");
   await editor.getByRole("button", { name: "레서판다, 한정판" }).click();
   await expect(editor.getByRole("button", { name: "레서판다, 한정판" })).toHaveAttribute("aria-pressed", "true");
-  await editor.getByRole("button", { name: "하늘 소품" }).click();
-  await editor.getByRole("button", { name: "무지개, 한정판" }).click();
+  // 10-07 A: three tabs — no 하늘 소품
+  await expect(editor.getByRole("group", { name: "꾸밀 부분" }).getByRole("button")).toHaveText(["동물", "배경", "땅 소품"]);
+  await editor.getByRole("button", { name: "땅 소품" }).click();
+  await editor.getByRole("button", { name: "네잎클로버, 한정판" }).click();
   await editor.getByRole("button", { name: "배경" }).click();
   await editor.getByRole("button", { name: "벚꽃 언덕, 한정판" }).click();
   await editor.getByRole("button", { name: "동물" }).click();
@@ -97,12 +99,12 @@ test("sheet → [꾸미기] → pick a collected animal → [이대로 꽂기]: 
   await expect(page.getByRole("status").filter({ hasText: "새 그림으로 꽂았어요" })).toBeVisible();
   await expect(page.getByRole("button", { name: "책갈피 꾸미기" })).toBeFocused();
   await expect.poll(() => rodAnimal(page)).toBe("/animals/redpanda.svg");
-  const art = { animal: "redpanda", bg: "cherry", sky: "rainbow", ground: "none", rare: true };
+  const art = { animal: "redpanda", bg: "cherry", ground: "clover", rare: true };
   expect(lib.patches).toEqual([{ isbn: ISBN, art }]);
   if (SHOTS) await page.screenshot({ path: `${SHOTS}/impl-saved.png` });
 
   await expect.poll(() => named(events, "bookmark_decorated").map((e) => e.props)).toEqual([
-    { book_id: ISBN, parts_changed: ["animal", "bg", "sky"], tiers_changed: ["limited", "limited", "limited"], art, is_reset: false },
+    { book_id: ISBN, parts_changed: ["animal", "bg", "ground"], tiers_changed: ["limited", "limited", "limited"], art, is_reset: false },
   ]);
   expect(specMismatches(events)).toEqual([]);
 });

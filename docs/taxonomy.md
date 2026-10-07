@@ -26,6 +26,7 @@
 | taxonomy v1.7.1 | 2026-10-05 | 로그인 전 저장 → 도감 (버그 수정, `fix/guest-dex`) | E-36이 로그인 뒤 옮긴 임시 책갈피에도(서명된 뽑기 표 — 기한 없음, 그 사람이 저장한 그 그림·한 사람만), 6-3j 표 보관 (8절) |
 | taxonomy v1.4 | 2026-10-05 | 공개 홍보(10-07) 유입 채널 구분 (`launch-plan.md` 4절, `launch-attribution.md`) | E-01 `utm_source`·`utm_medium`·`utm_campaign`(세션 첫 주소, Supabase only), 공통 `referrer`는 호스트만, `is_in_app_browser`에 스레드·링크드인, 처리방침 6-3h (3-1b, 8절) |
 | taxonomy v1.8 | 2026-10-07 | 내 책갈피 [막대 지우기] (PRD F-13, DESIGN C-17·C-27) | E-40 `shelf_removed`(`removed_count`) live, 동사 `removed`, 막대와 함께 지운 책갈피는 E-16을 책마다 보내지 않음 (8절) |
+| taxonomy v1.9 | 2026-10-07 | 책갈피 그림 세 부분 (사용자 결정 10-07 A, 시안 `deco/sky.html` A, `context.md` 10-07) | 하늘 소품 없앰 — E-36 `part_kind`·E-38 `parts_changed`에서 "sky" 뺌, E-07·E-38 `art`는 {animal, bg, ground, rare}, E-37 `collected_count` 최대 34 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -565,7 +566,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | `position` | `index` → `position` | Number | 1, 3, 5 | 몇 번째 책갈피인지 (1부터) |
 | `one_liner_style` | 같음 | String | "summary", "question" | 첫인상 한 줄 말투 — 🎯 요약형, 🍃 질문형(좋은 질문이 없으면 요약형) |
 | `pick_type` | `kind` → `pick_type` | String | "recommended", "random" | 추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음) |
-| `art` | 같음 | Object | {"animal": "fox", "bg": "peach", "sky": "moon", "ground": "grass", "rare": false} | 책갈피 그림 조합 {animal, bg, sky, ground, rare} — 중첩 객체 예외 — D-05 보관 그림과 같은 모양. Amplitude에서는 art.animal처럼 펼쳐짐. v1.3: 값에 한정판·초판본(예: "otter", "galaxy", "goldmoon")이 더해짐, `rare` = 넷 중 하나라도 한정판 이상(그 전 기록은 모두 false). 부분별 등급은 값에서 찾는다(`tierOf`) |
+| `art` | 같음 | Object | {"animal": "fox", "bg": "peach", "ground": "grass", "rare": false} | 책갈피 그림 조합 {animal, bg, ground, rare} — 중첩 객체 예외 — D-05 보관 그림과 같은 모양. Amplitude에서는 art.animal처럼 펼쳐짐. v1.3: 값에 한정판·초판본(예: "otter", "galaxy", "goldbook")이 더해짐, `rare` = 부분 중 하나라도 한정판 이상(그 전 기록은 모두 false). v1.9: 세 부분 — `sky`(하늘 소품) 없음, 배경 "summer"(여름밤, 한정판) 더함, 땅 "firefly" 없음(그 전 기록에는 `art.sky`가 있다). 부분별 등급은 값에서 찾는다(`tierOf`) |
 | `challenge_rule` | 추가 (v1.5) | Number | null, 1, 19, 36 | 이 판에 적용된 도전 규칙 번호(`question-map.md`의 `N.` 줄, 1~43 — 10-05에 로맨스·새 주제 넷의 37~43이 더해짐. 번호는 규칙에 붙어 다녀 이미 남은 값의 뜻은 그대로). 도전이 아니거나 규칙이 맞지 않아 그대로 뽑은 판은 null. 같은 판의 모든 책갈피 장이 같은 값 — 서버가 뽑기 응답에 싣는 `challenge.rule.n`. E-34가 아니라 여기에 둔 까닭은 8절 v1.5 |
 | `challenge_genre` | 추가 (v1.5) | String | null, "인문", "인문,역사" | 도전 규칙이 보낸 먼 쪽 장르 — 목록 규칙(19·36)은 서버가 씨앗으로 뽑은 한 장르, 그 밖의 규칙은 규칙에 적힌 장르를 적힌 순서대로 쉼표(`,`)로 이은 것(`challenge.to`). 도전이 아니면 null. 시스템 키(책 표 장르 이름, 2-4 예외 1) |
 
@@ -847,9 +848,9 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `book_id` | 추가 (v1.6) | String | "9788998441012" | 책 ISBN-13 (books.isbn) |
-| `parts_changed` | 추가 (v1.6) | String[] | "animal", "bg", "sky", "ground" | 바꾼 부분 — 저장 전 그림과 값이 다른 부분만, 그림 순서(animal → bg → sky → ground). `part_kind`(E-36)와 같은 값 |
+| `parts_changed` | 추가 (v1.6) | String[] | "animal", "bg", "ground" | 바꾼 부분 — 저장 전 그림과 값이 다른 부분만, 그림 순서(animal → bg → ground). `part_kind`(E-36)와 같은 값. v1.9: "sky" 없음(그 전 기록에는 있을 수 있다) |
 | `tiers_changed` | 추가 (v1.6) | String[] | "common", "limited", "first_edition" | 바꾼 부분의 새 등급 — `parts_changed`와 같은 순서·같은 길이(땅 "없음"은 common). 값은 E-36 `tier`와 같음 |
-| `art` | 추가 (v1.6) | Object | {"animal": "otter", "bg": "galaxy", "sky": "moon", "ground": "none", "rare": true} | 저장한 새 그림 — E-07 `art`와 같은 모양·같은 뜻(중첩 객체 예외, 2-3). 새 값은 여기서, 등급은 `tiers_changed`에서 본다. `rare`는 서버처럼 부분에서 다시 계산 |
+| `art` | 추가 (v1.6) | Object | {"animal": "otter", "bg": "galaxy", "ground": "none", "rare": true} | 저장한 새 그림 — E-07 `art`와 같은 모양·같은 뜻(중첩 객체 예외, 2-3). 새 값은 여기서, 등급은 `tiers_changed`에서 본다. `rare`는 서버처럼 부분에서 다시 계산 |
 | `is_reset` | 추가 (v1.6) | Boolean | TRUE, FALSE | 저장한 그림이 처음 꽂은 그림과 같은지 ([처음 그림으로]로 되돌린 저장이면 TRUE) |
 
 #### E-36 `collection_item_found`
@@ -863,8 +864,8 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `part_kind` | 추가 (v1.3) | String | "animal", "bg", "sky", "ground" | 그림의 어느 부분인지 — 동물·배경·하늘 소품·땅 소품 (`kind`는 E-32에서 다른 뜻이라 쓰지 않음, 2-3) |
-| `part_value` | 추가 (v1.3) | String | "otter", "galaxy", "goldmoon" | 그 부분의 값 — `art`의 값과 같은 시스템 키(lib/art/combine.ts 목록) |
+| `part_kind` | 추가 (v1.3) | String | "animal", "bg", "ground" | 그림의 어느 부분인지 — 동물·배경·땅 소품 (`kind`는 E-32에서 다른 뜻이라 쓰지 않음, 2-3). v1.9: "sky"(하늘 소품) 없음 — 그 전 기록의 "sky" 행은 분석에서 뺀다 |
+| `part_value` | 추가 (v1.3) | String | "otter", "galaxy", "goldbook" | 그 부분의 값 — `art`의 값과 같은 시스템 키(lib/art/combine.ts 목록) |
 | `tier` | 추가 (v1.3) | String | "common", "limited", "first_edition" | 등급 — 일반판·한정판·초판본 |
 
 #### E-37 `collection_viewed`
@@ -878,7 +879,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `collected_count` | 추가 (v1.3) | Number | 0, 9, 30 | 도감에 모은 항목 수(동물·배경·소품 합, 최대 42 — v1.4.1부터 땅 "없음"은 세지 않음). 로그인 전은 0 |
+| `collected_count` | 추가 (v1.3) | Number | 0, 9, 30 | 도감에 모은 항목 수(동물·배경·소품 합, 최대 34 — 동물 16·배경 12·땅 소품 6, v1.9; 그 전은 42, v1.4.1부터 땅 "없음"은 세지 않음). 로그인 전은 0 |
 | `is_logged_in` | 추가 (v1.3) | Boolean | TRUE, FALSE | 열 때 로그인 상태였는지 |
 
 #### E-19 `redraw_clicked`
@@ -1290,6 +1291,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v1.7.1 | 2026-10-05 | Claude (버그 수정) | 로그인 전에 저장한 책갈피가 로그인 뒤 계정으로 옮겨져도 도감에 오르지 않던 문제(도감은 서명된 뽑기 표로만 기록하는데 임시 책갈피에 표가 없었음). 임시 책갈피에 그 뽑기의 표(`meeting`)를 함께 두고, 옮긴 뒤 `/api/collection/found`에 `kept: true`·`isbn`과 함께 보낸다 — 서버는 로그인 전 뽑기(`sub` null)·그 사람이 저장한 그 책의 처음 그림이 표의 그림과 같을 때만 기록. 보안 검토 반영: 표 v3가 뽑힌 책들을 순서대로 서명하고 보낸 책이 `isbns[index]`여야 하며, 한 책갈피는 한 사람만 청구(0007 `collection_kept_claims`, 다른 사람이면 409), S-05 경로는 그 사람 자신의 표만(로그인 전 표는 403). E-36 "언제"에 이 경우를 더함(속성 그대로). 이 수정 전에 저장한 임시 책갈피는 표가 없어 기록하지 않는다(그림을 증명할 수 없음). 처리방침 그대로(6-3j) |
 | v1.7 | 2026-10-05 | Claude (사용자 결정) | 로그인 없이 저장 + 문구 "내 책갈피에 저장"(PRD F-12·F-13·S-06·S-09, `plans/2026-10-05-guest-keep.md` — 친구 시험: "왜 꽂아야 하는지 와닿지 않는다"). 새 E-39 `guest_saves_merged`(`guest_count`·`merged_count` Number)를 화면과 함께 `live`로, 동사 `merged` 추가. 이름: 계획서의 `count`·`merged`는 2-3(개수는 `_count`, 한 이름 = 한 뜻)에 맞춰 `guest_count`·`merged_count`로. E-15 `book_saved`에 `storage`("browser"/"account") 추가, `is_auto_save`는 늘 FALSE(로그인 뒤 자동 꽂기가 없어지고 옮기기는 E-39 하나 — 책마다 E-15를 다시 남기지 않음). E-12 `source`에 "library"(S-09 로그인 전 [로그인하고 지키기]). E-11 버튼이 제목 옆 [🔖 꽂기] → 제목·저자 아래 [🔖 내 책갈피에 저장], E-16은 S-06 다시 누르기·로그인 전 빼기도. FN-5 새 단계(5-2). 처리방침 6-3j 먼저 |
 | v1.4 | 2026-10-05 | Claude (공개 준비) | 공개 홍보(10-07)의 유입 채널을 Supabase 원본에서도 가른다(3-1b). E-01 `site_visited`에 `utm_source`·`utm_medium`·`utm_campaign`(String 또는 null, ≤40, **Supabase only**) — 세션 첫 주소에서 한 번 읽어 sessionStorage에 두고(첫 접촉), `[a-z0-9_-]` 밖은 null, Amplitude가 주소를 읽은 뒤 주소창에서 `utm_*`를 지움. 공통 속성이 아니라 E-01 속성인 이유는 1-2 속성 상속 원칙과 행 크기. 공통 `referrer`는 이름 그대로 **호스트만**(6-2 검토 메모 — 브라우저·서버 `referrerHost`, 그 전 기록은 주소 전체). `is_in_app_browser`가 스레드(`Barcelona`)·링크드인(`LinkedInApp`) 앱 안 브라우저도 TRUE로(그 전 기록은 FALSE). 처리방침 6-3h 먼저(갱신일 그대로). 분석 SQL은 `launch-attribution.md`. 새 이벤트 없음 |
+| v1.9 | 2026-10-07 | Claude (사용자 결정 10-07 A) | 책갈피 그림이 세 부분(동물 + 배경 + 땅 소품)이 된다 — 하늘 소품(달·구름·별·새·큰 별·무지개·별똥별·금빛 초승달)을 없애고 하늘은 배경이 맡는다(일반판 배경은 깔끔한 하늘, 한정판·초판본 배경은 움직이는 "살아 있는 배경"). 반딧불은 땅 소품에서 빠져 새 한정판 배경 "summer"(여름밤)가 된다. E-36 `part_kind`·E-38 `parts_changed` 값에서 "sky"를 뺌(`schema.ts` 허용 값도), E-07·E-38 `art`는 {animal, bg, ground, rare}, E-37 `collected_count` 최대 42 → 34. 이벤트 이름·속성·타입 그대로. 출시 전이라 도감·시험 기록을 비운다(0008 — 모두 같은 출발선). 그 전 기록에는 "sky"·"firefly"가 있을 수 있어 분석에서 뺀다. 모으는 정보 변화 없음 — `/privacy`는 "하늘"을 말하지 않아 그대로 |
 | v1.8 | 2026-10-07 | Claude (사용자 요청) | 내 책갈피(S-09) [막대 지우기](PRD F-13, DESIGN C-17·C-27): 첫 막대가 아닌 막대를 책갈피와 함께 지운다(책갈피가 있으면 확인 시트). 새 E-40 `shelf_removed`(`removed_count` Number — 서버가 함께 지운 책갈피 수, 빈 막대면 0)를 화면과 함께 `live`로, 동사 `removed` 추가. v0.8의 "막대 지우기는 이벤트 없음"은 빈 막대만 치울 수 있을 때의 결정 — 이제 책갈피가 함께 사라지므로 남긴다. 함께 지운 책마다 E-16을 보내지 않음(E-35와 같음). 막대 이름·번호는 넣지 않음(6-1). 모으는 정보 변화 없음(지운 수뿐) — `/privacy`는 기록을 "누른 버튼"으로만 적어 그대로 |
 
 ---

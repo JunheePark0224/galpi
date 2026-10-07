@@ -90,7 +90,7 @@ export const EVENT_SPEC = {
   library_cleared: { removed_count: { type: "number" } },
   // v1.3 도감: a part the server recorded for the first time (logged in only), and opening the 도감
   collection_item_found: {
-    part_kind: { type: ["animal", "bg", "sky", "ground"] },
+    part_kind: { type: ["animal", "bg", "ground"] },
     part_value: { type: "string" },   // a collectible value — never the empty ground "none" (taxonomy v1.4.1)
     tier: { type: ["common", "limited", "first_edition"] },
   },
@@ -98,7 +98,7 @@ export const EVENT_SPEC = {
   // v1.6 책갈피 꾸미기: a new picture the server saved — which parts changed, their new tiers, the new picture, back to the first?
   bookmark_decorated: {
     book_id: BOOK_ID,
-    parts_changed: { type: ["animal", "bg", "sky", "ground"], array: true },
+    parts_changed: { type: ["animal", "bg", "ground"], array: true },
     tiers_changed: { type: ["common", "limited", "first_edition"], array: true },
     art: { type: "object" },
     is_reset: { type: "boolean" },

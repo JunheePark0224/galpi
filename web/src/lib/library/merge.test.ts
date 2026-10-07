@@ -8,7 +8,7 @@ vi.mock("./client", () => ({ libraryRequest: (...a: unknown[]) => request(...a) 
 
 const isbnAt = (i: number) => `979000000${String(i).padStart(4, "0")}`;
 const save = (isbn: string, tries?: number) => ({
-  isbn, art: { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false } as const,
+  isbn, art: { animal: "fox", bg: "night", ground: "books", rare: false } as const,
   reason: { label: "나온 이유" as const, items: [] as string[] }, metOn: "2026-10-01",
   card: { id: isbn, entry: "leaf" as const, title: "책", author: "저자", genre: "한국 소설", field: null, oneLiner: "?", oneLinerStyle: "question" as const },
   ...(tries === undefined ? {} : { tries }),

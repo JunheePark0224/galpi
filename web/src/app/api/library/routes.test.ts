@@ -66,7 +66,7 @@ const get = (path: string) => new Request(`${ORIGIN}${path}`, { headers: headers
 const send = (method: string, path: string, body: unknown) =>
   new Request(`${ORIGIN}${path}`, { method, headers: { ...headers(), "content-type": "application/json" }, body: JSON.stringify(body) });
 
-const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false };
+const ART = { animal: "fox", bg: "night", ground: "books", rare: false };
 const BODY = { isbn: "9788998441012", art: ART, reason: { label: "이 책은", items: ["한국 소설"] }, metOn: "2026-09-30" };
 const A = "11111111-1111-4111-8111-111111111111";
 const B = "22222222-2222-4222-8222-222222222222";

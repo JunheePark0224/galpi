@@ -56,9 +56,9 @@ describe("event schema", () => {
     const side: PropsOf<"question_answered"> = { node_id: "start", kind: "both", choice: "A", depth: 1, position: 1, elapsed_ms: 1 };
     const decorated: PropsOf<"bookmark_decorated"> = {
       book_id: "9788998441012", parts_changed: ["animal", "ground"], tiers_changed: ["limited", "common"],
-      art: { animal: "otter", bg: "night", sky: "moon", ground: "none", rare: true }, is_reset: false,
+      art: { animal: "otter", bg: "night", ground: "none", rare: true }, is_reset: false,
     };
-    // @ts-expect-error — parts_changed is a list of the four part kinds (E-38, v1.6)
+    // @ts-expect-error — parts_changed is a list of the three part kinds (E-38, v1.6)
     const oneKind: PropsOf<"bookmark_decorated"> = { book_id: "1", parts_changed: "animal", tiers_changed: [], art: {}, is_reset: false };
     expect([shown, answered, visit, bare, old, entry, side, decorated, oneKind]).toHaveLength(9);
   });

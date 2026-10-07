@@ -53,7 +53,7 @@ describe("parseProps (server check against EVENT_SPEC)", () => {
   });
 
   it("keeps an object prop as sent (art is a fixed small shape, the body is already size-capped)", () => {
-    const art = { animal: "fox", bg: "peach", sky: "moon", ground: "grass", rare: false };
+    const art = { animal: "fox", bg: "peach", ground: "grass", rare: false };
     expect(parseProps("bookmark_shown", { art }).props).toEqual({ art });
   });
 

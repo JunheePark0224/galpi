@@ -71,7 +71,7 @@ begin
     values ('00000000-0000-4000-8000-00000000f5f5', '00000000-0000-4000-8000-0000000000f2', '첫 막대', 0);
   begin
     insert into public.saves (user_id, isbn, art, shelf_id, position, reason, met_on)
-      values ('00000000-0000-4000-8000-0000000000f2', '9788998441012', '{"animal":"bluedragon","bg":"galaxy","sky":"moon","ground":"none","rare":true}',
+      values ('00000000-0000-4000-8000-0000000000f2', '9788998441012', '{"animal":"bluedragon","bg":"galaxy","ground":"none","rare":true}',
               '00000000-0000-4000-8000-00000000f5f5', 0, '{}', '2026-10-05');
     insert into rls_result values ('K11 a person cannot insert a bookmark directly', false);
   exception when insufficient_privilege then
@@ -83,7 +83,7 @@ set local role service_role;
 do $$
 begin
   insert into public.saves (user_id, isbn, art, shelf_id, position, reason, met_on)
-    values ('00000000-0000-4000-8000-0000000000f2', '9788998441012', '{"animal":"fox","bg":"peach","sky":"moon","ground":"none","rare":false}',
+    values ('00000000-0000-4000-8000-0000000000f2', '9788998441012', '{"animal":"fox","bg":"peach","ground":"none","rare":false}',
             '00000000-0000-4000-8000-00000000f5f5', 0, '{}', '2026-10-05');
   insert into rls_result values ('K12 the server saves bookmarks', true);
 exception when others then

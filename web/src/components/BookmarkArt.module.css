@@ -1,19 +1,37 @@
-/* 초판본 effects inside the art SVG (도감 v1, rare-art.html · first-edition-effects.gif). Animations on SVG children are
-   NOT compositor-only: each frame repaints the SVG. So only one full-effect bookmark may animate at a time — the landed
-   S-05 bookmark (fx="full"); everything else (moving, the rods, the sheet, the 도감, the examples) is fx="light" = `.still`,
-   rim and a still aura, as is reduced motion. Keep it that way when adding a new place that draws BookmarkArt. */
+/* 초판본 effects and the living backgrounds inside the art SVG (도감 v1 rare-art.html · first-edition-effects.gif; 10-07 A
+   시안 deco/sky.html A). Animations on SVG children are NOT compositor-only: each frame repaints the SVG. So only one
+   full-effect bookmark may animate at a time — the landed S-05 bookmark (fx="full"); everything else (moving, the rods, the
+   sheet, the 도감, the examples) is fx="light" = `.still`: every living thing stands where it is drawn, as with reduced
+   motion. Keep it that way when adding a new place that draws BookmarkArt. */
 .aura { animation: breathe 2.4s ease-in-out infinite; }
 .tw { transform-box: fill-box; transform-origin: center; animation: twinkle 1.8s ease-in-out infinite; }
 .dust { animation: rise 3.2s linear infinite; }
 .sweep { animation: sweep 3.6s ease-in-out infinite; }
+
+/* living backgrounds (한정판·초판본) and the clover's glint — gentle, slow */
+.petal { transform-box: fill-box; transform-origin: center; animation: fall 5.6s linear infinite; }
+.drift { animation: drift 6s ease-in-out infinite; }
+.wave { transform-box: fill-box; transform-origin: center; animation: wave 5s ease-in-out infinite; }
+.firefly { animation: float 4.2s ease-in-out infinite; }
+.glint { transform-box: fill-box; transform-origin: center; animation: glint 2.6s ease-in-out infinite; }
+.shoot { animation: shoot 7s ease-in infinite; }
+
 .still .aura { animation: none; opacity: 0.6; }
+.still :is(.petal, .drift, .wave, .firefly, .glint, .dust, .shoot) { animation: none; }
 
 @keyframes breathe { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.85; } }
 @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1); } }
 @keyframes rise { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-34px); opacity: 0; } }
 @keyframes sweep { 0%, 60% { transform: translateX(-60px); } 100% { transform: translateX(160px); } }
+@keyframes fall { 0% { transform: translate(0, -6px) rotate(0deg); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translate(-8px, 44px) rotate(200deg); opacity: 0; } }
+@keyframes drift { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(5px, -2px); } }
+@keyframes wave { 0%, 100% { transform: translateX(0) scaleY(1); } 50% { transform: translateX(-5px) scaleY(1.18); } }
+@keyframes float { 0% { transform: translateY(4px); opacity: 0.2; } 50% { opacity: 1; } 100% { transform: translateY(-12px); opacity: 0.2; } }
+@keyframes glint { 0%, 100% { opacity: 0.3; transform: scale(0.6); } 50% { opacity: 1; transform: scale(1); } }
+@keyframes shoot { 0%, 70% { transform: translate(0, 0); opacity: 0; } 74% { opacity: 1; } 86% { transform: translate(-46px, 23px); opacity: 0; } 100% { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   .aura { animation: none; opacity: 0.6; }
-  .tw, .dust, .sweep { display: none; }
+  .tw, .sweep { display: none; }
+  .petal, .drift, .wave, .firefly, .glint, .dust, .shoot { animation: none; }
 }
