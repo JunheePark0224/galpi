@@ -194,7 +194,7 @@ function Og({ view }: { view: SharedView }) {
         <div style={{ display: "flex", fontSize: 64, fontFamily: "Batang", color: INK }}>갈피</div>
         <div style={{ display: "flex", fontSize: 24, fontFamily: "Dodum", color: MUTED, margin: "8px 0 36px" }}>읽을 책, 갈피가 안 잡힐 때</div>
         <div style={{ display: "flex", fontSize: 32, fontFamily: "Batang", color: INK, lineHeight: 1.5 }}>{`오늘 책갈피 ${view.cards.length}장을 만났어요.`}</div>
-        <div style={{ display: "flex", fontSize: 32, fontFamily: "Batang", color: INK, lineHeight: 1.5 }}>너도 갈피 잡아 봐</div>
+        <div style={{ display: "flex", fontSize: 32, fontFamily: "Batang", color: INK, lineHeight: 1.5 }}>나도 갈피 잡으러 가기</div>
         <div style={{ display: "flex", fontSize: 22, fontFamily: "Dodum", color: MUTED, marginTop: 28 }}>galpibook.com</div>
       </div>
     </div>
@@ -207,7 +207,7 @@ function Story({ view }: { view: SharedView }) {
       <div style={{ display: "flex", fontSize: 88, fontFamily: "Batang", color: INK }}>갈피</div>
       <div style={{ display: "flex", fontSize: 36, fontFamily: "Dodum", color: MUTED, margin: "12px 0 56px" }}>오늘 만난 책갈피</div>
       <Board view={view} w={860} />
-      <div style={{ display: "flex", fontSize: 36, fontFamily: "Dodum", color: MUTED, marginTop: 64 }}>너도 갈피 잡아 봐 · galpibook.com</div>
+      <div style={{ display: "flex", fontSize: 36, fontFamily: "Dodum", color: MUTED, marginTop: 64 }}>나도 갈피 잡으러 가기 · galpibook.com</div>
     </div>
   );
 }
@@ -215,7 +215,7 @@ function Story({ view }: { view: SharedView }) {
 /** Every letter the image draws — the fonts are fetched cut to these. */
 function textOf(view: SharedView): string {
   return [
-    "갈피 읽을 책, 갈피가 안 잡힐 때 오늘 책갈피 5장을 만났어요. 너도 잡아 봐 galpibook.com 오늘 만난 책갈피 · 내가 고른 길 이 길에서 만난 장",
+    "갈피 읽을 책, 갈피가 안 잡힐 때 오늘 책갈피 5장을 만났어요. 나도 갈피 잡으러 가기 galpibook.com 오늘 만난 책갈피 · 내가 고른 길 이 길에서 만난 장",
     NO_CHIP_LINE, CHALLENGE, ...chipsOf(view), ...view.cards.flatMap((c) => [c.genre, shortTitle(c.title)]), "0123456789…『』",
   ].join("");
 }

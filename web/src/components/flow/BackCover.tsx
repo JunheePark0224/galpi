@@ -14,7 +14,7 @@ export const NEXT_WHEN_NONE = "다음 책갈피 만나기";
 export const SHARE = "공유하기";
 export const COPIED = "링크를 복사했어요";
 export const COPY_FAILED = "링크를 복사하지 못했어요. 아래 링크를 길게 눌러 복사해 주세요";
-const shareText = (n: number) => `오늘 갈피에서 책갈피 ${n}장을 만났어요. 너도 갈피 잡아 봐`;
+const shareText = (n: number) => `오늘 갈피에서 책갈피 ${n}장을 만났어요. 나도 갈피 잡으러 가기`;
 
 export type ShareMethod = "native" | "copy" | "save_image";
 
