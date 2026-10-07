@@ -3,7 +3,7 @@ import type { ArtKind, Tier } from "./combine";
 /** The 도감's names for every part (plans/2026-10-05-collection-dex.md 표). Screen words only — never event values. */
 export const PART_NAMES: { readonly [K in ArtKind]: Readonly<Record<string, string>> } = {
   animal: {
-    cat: "고양이", bear: "곰", rabbit: "토끼", fox: "여우", duck: "오리", whale: "고래", owl: "부엉이",
+    cat: "고양이", bear: "곰", rabbit: "토끼", fox: "여우", duck: "오리", owl: "부엉이", dog: "강아지", whale: "고래",
     redpanda: "레서판다", fennec: "사막여우", otter: "수달", panda: "판다", koala: "코알라",
     bluedragon: "청룡", whitetiger: "백호", redbird: "주작", blacktortoise: "현무",
   },

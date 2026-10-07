@@ -35,7 +35,7 @@ begin
       raise exception 'bookmark picture: % is not in this person''s collection', k using errcode = 'insufficient_privilege';
     end if;
     rare := rare or v = any (case k
-      when 'animal' then array['redpanda', 'fennec', 'otter', 'panda', 'koala', 'bluedragon', 'whitetiger', 'redbird', 'blacktortoise']
+      when 'animal' then array['whale', 'redpanda', 'fennec', 'otter', 'panda', 'koala', 'bluedragon', 'whitetiger', 'redbird', 'blacktortoise']
       when 'bg' then array['cherry', 'sunset', 'aurora', 'summer', 'galaxy', 'study']
       when 'ground' then array['clover', 'teacup', 'jar', 'quill', 'goldbook', 'musicbox']
     end);
@@ -63,7 +63,7 @@ create or replace function pg_temp.three_part(a jsonb) returns jsonb language sq
     'animal', a ->> 'animal',
     'bg', a ->> 'bg',
     'ground', g,
-    'rare', (a ->> 'animal') = any (array['redpanda', 'fennec', 'otter', 'panda', 'koala', 'bluedragon', 'whitetiger', 'redbird', 'blacktortoise'])
+    'rare', (a ->> 'animal') = any (array['whale', 'redpanda', 'fennec', 'otter', 'panda', 'koala', 'bluedragon', 'whitetiger', 'redbird', 'blacktortoise'])
          or (a ->> 'bg') = any (array['cherry', 'sunset', 'aurora', 'summer', 'galaxy', 'study'])
          or g = any (array['clover', 'teacup', 'jar', 'quill', 'goldbook', 'musicbox']))
   from (select case when a ->> 'ground' = 'firefly' then 'none' else a ->> 'ground' end as g) parts

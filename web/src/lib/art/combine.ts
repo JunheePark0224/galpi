@@ -7,8 +7,9 @@ import { mulberry32, type Rng } from "@/lib/recommend";
 export const TIERS = ["common", "limited", "first_edition"] as const;
 export type Tier = (typeof TIERS)[number];
 
-const ANIMALS_COMMON = ["cat", "bear", "rabbit", "fox", "duck", "whale", "owl"] as const;
-const ANIMALS_LIMITED = ["redpanda", "fennec", "otter", "panda", "koala"] as const;
+// 10-07 사용자: 강아지가 일반판에 들어오고 고래는 한정판으로
+const ANIMALS_COMMON = ["cat", "bear", "rabbit", "fox", "duck", "owl", "dog"] as const;
+const ANIMALS_LIMITED = ["whale", "redpanda", "fennec", "otter", "panda", "koala"] as const;
 const ANIMALS_FIRST = ["bluedragon", "whitetiger", "redbird", "blacktortoise"] as const;
 /** DESIGN A-01 — files in public/animals (copied from Galpi/assets/animals). */
 export const ANIMALS = [...ANIMALS_COMMON, ...ANIMALS_LIMITED, ...ANIMALS_FIRST] as const;
@@ -83,7 +84,7 @@ export function isCollectible(kind: ArtKind, value: string): boolean {
   return !(kind === "ground" && value === EMPTY_GROUND) && TIER_OF.has(`${kind}:${value}`);
 }
 
-/** The 도감's cells: KIND_TIERS without the empty ground. 동물 16 · 배경 12 · 소품 10 (땅 소품). */
+/** The 도감's cells: KIND_TIERS without the empty ground. 동물 17 · 배경 12 · 소품 10 (땅 소품). */
 export const DEX_TIERS: { readonly [K in ArtKind]: Record<Tier, readonly string[]> } = {
   ...KIND_TIERS,
   ground: { ...KIND_TIERS.ground, common: KIND_TIERS.ground.common.filter((v) => v !== EMPTY_GROUND) },
