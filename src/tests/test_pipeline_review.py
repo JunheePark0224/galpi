@@ -595,3 +595,18 @@ def test_a_retagged_file_has_its_own_page_and_progress_key(files):
     assert review.main(["2026-10-05.v2"]) == 0
     html = (tmp / "pages" / "2026-10-05.v2.html").read_text(encoding="utf-8")
     assert '"galpi-pipeline-2026-10-05.v2"' in html and not (tmp / "pages" / "2026-10-05.html").exists()
+
+
+def test_the_story_hints_on_the_review_pages_follow_dictionary_v3_1():
+    """10-07 (label-dictionary.md v3.1): the hints a reviewer reads say what the tagger reads — 비움 only for fiction and
+    poetry, non-fiction's 'no signal' is the middle; settings and words of how much the heart moves are not temperature;
+    fiction pulls by story and poetry by sentences unless told otherwise; fiction and poetry leave a feeling unless
+    teaching is the stated main aim."""
+    from build_d4_review import AXIS_LABELS
+    hint = {a[0]: a[5] for a in AXIS_LABELS}
+    for word in ("비움", "흐릿", "세상의 설정", "눈물·울림", "비소설", "해당 없음"):
+        assert word in hint["temp"], word
+    for word in ("소설은", "시집은", "몰입", "문장"):
+        assert word in hint["pull"], word
+    for word in ("소설·시", "주된 목적", "마음"):
+        assert word in hint["gain"], word
