@@ -26,7 +26,7 @@
 | taxonomy v1.7.1 | 2026-10-05 | 로그인 전 저장 → 도감 (버그 수정, `fix/guest-dex`) | E-36이 로그인 뒤 옮긴 임시 책갈피에도(서명된 뽑기 표 — 기한 없음, 그 사람이 저장한 그 그림·한 사람만), 6-3j 표 보관 (8절) |
 | taxonomy v1.4 | 2026-10-05 | 공개 홍보(10-07) 유입 채널 구분 (`launch-plan.md` 4절, `launch-attribution.md`) | E-01 `utm_source`·`utm_medium`·`utm_campaign`(세션 첫 주소, Supabase only), 공통 `referrer`는 호스트만, `is_in_app_browser`에 스레드·링크드인, 처리방침 6-3h (3-1b, 8절) |
 | taxonomy v1.8 | 2026-10-07 | 내 책갈피 [막대 지우기] (PRD F-13, DESIGN C-17·C-27) | E-40 `shelf_removed`(`removed_count`) live, 동사 `removed`, 막대와 함께 지운 책갈피는 E-16을 책마다 보내지 않음 (8절) |
-| taxonomy v1.9 | 2026-10-07 | 책갈피 그림 세 부분 (사용자 결정 10-07 A, 시안 `deco/sky.html` A, `context.md` 10-07) | 하늘 소품 없앰 — E-36 `part_kind`·E-38 `parts_changed`에서 "sky" 뺌, E-07·E-38 `art`는 {animal, bg, ground, rare}, E-37 `collected_count` 최대 38 — 10-07 시안으로 땅 소품 한정판 +3·초판본 +1 (배포 전 같은 v1.9) (8절) |
+| taxonomy v1.9 | 2026-10-07 | 책갈피 그림 세 부분 (사용자 결정 10-07 A, 시안 `deco/sky.html` A, `context.md` 10-07) | 하늘 소품 없앰 — E-36 `part_kind`·E-38 `parts_changed`에서 "sky" 뺌, E-07·E-38 `art`는 {animal, bg, ground, rare}, E-37 `collected_count` 최대 39 — 10-07 시안으로 땅 소품 한정판 +3·초판본 +1, 일반판 강아지 +1(고래는 한정판으로) (배포 전 같은 v1.9) (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -879,7 +879,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `collected_count` | 추가 (v1.3) | Number | 0, 9, 30 | 도감에 모은 항목 수(동물·배경·소품 합, 최대 38 — 동물 16·배경 12·땅 소품 10, v1.9; 그 전은 42, v1.4.1부터 땅 "없음"은 세지 않음). 로그인 전은 0 |
+| `collected_count` | 추가 (v1.3) | Number | 0, 9, 30 | 도감에 모은 항목 수(동물·배경·소품 합, 최대 39 — 동물 17·배경 12·땅 소품 10, v1.9; 그 전은 42, v1.4.1부터 땅 "없음"은 세지 않음). 로그인 전은 0 |
 | `is_logged_in` | 추가 (v1.3) | Boolean | TRUE, FALSE | 열 때 로그인 상태였는지 |
 
 #### E-19 `redraw_clicked`

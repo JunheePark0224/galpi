@@ -42,7 +42,7 @@ test("logged out: the 도감 shows every cell as a silhouette and asks for a log
   await page.goto("/library");
   await expect(page.getByRole("heading", { level: 1, name: "도감" })).toBeVisible();
   await expect(page.getByText("로그인하면 만난 책갈피가 도감에 모여요")).toBeVisible();
-  await expect(page.getByText("동물 0 / 16 · 배경 0 / 12 · 소품 0 / 10")).toBeVisible();
+  await expect(page.getByText("동물 0 / 17 · 배경 0 / 12 · 소품 0 / 10")).toBeVisible();
   await expect(page.getByText("아직 만나지 않은 동물")).toHaveCount(16);
   await expect(page.getByText("책과는 상관없이 뽑혀요. 돈으로 뽑는 기능은 없어요.")).toBeAttached();
   if (SHOTS) await page.screenshot({ path: `${SHOTS}/impl-dex-loggedout.png` });
@@ -72,7 +72,7 @@ test("logged in: [막대 | 도감] opens the 도감 — counts, tiers, NEW once,
   await expect(page.getByRole("heading", { level: 1, name: "내 책갈피" })).toBeVisible();
   await expect(page.getByRole("button", { name: "막대", exact: true })).toHaveAttribute("aria-pressed", "true");
   await page.getByRole("button", { name: "도감", exact: true }).click();
-  await expect(page.getByText("동물 5 / 16 · 배경 3 / 12 · 소품 4 / 10")).toBeVisible();
+  await expect(page.getByText("동물 5 / 17 · 배경 3 / 12 · 소품 4 / 10")).toBeVisible();
   const first = page.getByRole("region", { name: "동물 초판본" });
   await expect(first.getByRole("heading")).toHaveText(/초판본\s*1 \/ 4/);
   await expect(first.getByText("백호")).toBeVisible();

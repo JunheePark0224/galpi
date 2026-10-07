@@ -54,13 +54,13 @@ describe("도감 service", () => {
   it("lays the tabs out by tier, props = the ground props (10-07 A), with the person's rows in place", () => {
     const items = [item("animal", "cat"), item("animal", "bluedragon", true), item("bg", "summer"), item("ground", "goldbook")];
     const animals = dexSections("animal", items);
-    expect(animals.map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 7, 1], ["limited", 5, 0], ["first_edition", 4, 1]]);
+    expect(animals.map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 7, 1], ["limited", 6, 0], ["first_edition", 4, 1]]);
     expect(animals[2].cells.find((c) => c.value === "bluedragon")?.met?.isNew).toBe(true);
     const props = dexSections("prop", items);
     expect(props.map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 4, 0], ["limited", 4, 0], ["first_edition", 2, 1]]);
     expect(props.flatMap((s) => s.cells).every((c) => c.kind === "ground")).toBe(true);
     expect(dexSections("bg", items).map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 6, 0], ["limited", 4, 1], ["first_edition", 2, 0]]);
-    expect(dexCounts(items)).toEqual({ animal: { found: 2, total: 16 }, bg: { found: 1, total: 12 }, prop: { found: 1, total: 10 } });
+    expect(dexCounts(items)).toEqual({ animal: { found: 2, total: 17 }, bg: { found: 1, total: 12 }, prop: { found: 1, total: 10 } });
   });
 
   it("leaves out a sky row recorded before 10-07 A (not a part any more)", () => {
