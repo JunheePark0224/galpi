@@ -151,10 +151,14 @@ function Board({ view, w }: { view: SharedView; w: number }) {
         return (
           <div key={c.id} style={{
             position: "absolute", left: areaL + areaW * (x / 70), top: areaT + (y > 20 ? cardH * 0.92 : y * u),
-            width: card, height: cardH, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 * u, overflow: "hidden",
-            padding: `${5 * u}px ${4 * u}px ${12 * u}px`, background: "#FFFDF8", borderRadius: `${8 * u}px ${8 * u}px 0 0`,
-            transform: `rotate(${turn}deg)`, boxShadow: "0 3px 6px rgba(0,0,0,0.3)",
+            width: card, height: cardH, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 * u,
+            padding: `${5 * u}px ${4 * u}px ${12 * u}px`, transform: `rotate(${turn}deg)`,
           }}>
+            {/* C-02 shape even this small (10-07, user): the string, and the paper with its swallowtail and stitch line */}
+            <div style={{ position: "absolute", top: -9 * u, left: card / 2 - 0.75 * u, width: 1.5 * u, height: 12 * u, background: cssColour(tone.bg) }} />
+            <div style={{ position: "absolute", top: -11 * u, left: card / 2 - 2.5 * u, width: 5 * u, height: 5 * u, borderRadius: 3 * u, background: cssColour(tone.bg) }} />
+            {/* eslint-disable-next-line @next/next/no-img-element -- next/og draws <img> only */}
+            <img src={filmUri(cssColour(tone.bg), true)} width={card} height={cardH} alt="" style={{ position: "absolute", top: 0, left: 0 }} />
             {/* eslint-disable-next-line @next/next/no-img-element -- next/og draws <img> only */}
             <img src={artUri(view.arts[i], String(i))} width={card - 8 * u} height={(card - 8 * u) * 0.76} alt="" />
             <div style={{
@@ -201,13 +205,101 @@ function Og({ view }: { view: SharedView }) {
   );
 }
 
+/** The C-02 bookmark's paper shape (DESIGN 4절) at 160 × 344: rounded top, swallowtail notch (7%), punched hole, stitch line. */
+function filmUri(tone: string, stretch = false): string {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 344" width="160" height="344"${stretch ? ' preserveAspectRatio="none"' : ""}>`
+    + `<path d="M10 0H150Q160 0 160 10V344L80 320L0 344V10Q0 0 10 0Z" fill="#FBFAF6" stroke="#FFFFFF" stroke-width="1.5"/>`
+    + `<circle cx="80" cy="11" r="4" fill="#F0E6D0" stroke="#DDD0B4" stroke-width="1"/>`
+    + `<line x1="0" y1="302" x2="160" y2="302" stroke="${tone}" stroke-width="1.5" stroke-dasharray="4 3"/></svg>`;
+  return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
+}
+
+/** Story positions (10-07, user: "책이 꽉 차게, 책갈피에 다 적히게"): three, then two between them — left/top in px, turn. */
+const STORY_LAID: readonly (readonly [number, number, number])[] = [[44, 34, -4], [334, 18, 2], [622, 40, -2], [188, 566, 3], [478, 578, -3]];
+const STORY_S = 1.6;   // the 160px bookmark drawn 256px wide
+
+/** One real-looking bookmark for the story: string, paper shape, arched picture, name tag, the whole title, author, one-liner. */
+function StoryBookmark({ c, art, i }: { c: SharedView["cards"][number]; art: ArtCombo; i: number }) {
+  const S = STORY_S;
+  const tone = toneOf(c);
+  const title = bookTitle(c.title);
+  const long = title.length > 20;
+  // whole words in a wrapping row: Satori would otherwise break before a closing 』 when a line is just full
+  // (bookTitle's no-break spaces keep a one-letter word with its neighbour, so they stay inside a word here)
+  const words = title.split(" ");
+  const [x, y, turn] = STORY_LAID[i % STORY_LAID.length];
+  return (
+    <div style={{ position: "absolute", left: x, top: y, width: 160 * S, height: 370 * S, display: "flex", transform: `rotate(${turn}deg)` }}>
+      <div style={{ position: "absolute", top: 0, left: 80 * S - 1.5, width: 3, height: 37 * S, background: cssColour(tone.bg) }} />
+      <div style={{ position: "absolute", top: -6, left: 80 * S - 6, width: 12, height: 12, borderRadius: 6, background: cssColour(tone.bg) }} />
+      <div style={{
+        position: "absolute", top: 26 * S, left: 0, width: 160 * S, height: 344 * S, display: "flex", flexDirection: "column",
+        alignItems: "center", padding: `${16 * S}px ${9 * S}px 0`, textAlign: "center",
+      }}>
+        {/* eslint-disable-next-line @next/next/no-img-element -- next/og draws <img> only */}
+        <img src={filmUri(cssColour(tone.bg))} width={160 * S} height={344 * S} alt="" style={{ position: "absolute", top: 0, left: 0 }} />
+        {/* the words stop at the stitch line, whatever the book (the longest title and one-liner fit, 10-07) */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxHeight: 284 * S, overflow: "hidden" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element -- next/og draws <img> only */}
+        <img src={artUri(art, `s${i}`)} width={142 * S} height={142 * S * 0.76} alt="" />
+        <div style={{
+          display: "flex", marginTop: 3 * S, padding: `0 ${6 * S}px`, borderRadius: 99, fontSize: 9.5 * S, lineHeight: 1.6,
+          background: cssColour(tone.bg), color: cssColour(tone.fg), fontFamily: "Dodum",
+        }}>{c.genre}</div>
+        <div style={{
+          display: "flex", flexWrap: "wrap", justifyContent: "center", columnGap: (long ? 13 : 15) * S * 0.3, marginTop: 3 * S,
+          fontSize: (long ? 13 : 15) * S, lineHeight: long ? 1.15 : 1.3, color: INK, fontFamily: "Batang",
+        }}>
+          {words.map((word, k) => <div key={k} style={{ display: "flex" }}>{word}</div>)}
+        </div>
+        {c.author ? <div style={{ display: "flex", marginTop: 1 * S, fontSize: 12 * S, color: INK, fontFamily: "Dodum" }}>{c.author}</div> : null}
+        <div style={{ display: "flex", marginTop: 8 * S, fontSize: 12 * S, lineHeight: 1.3, color: INK, fontFamily: "Dodum", wordBreak: "keep-all" }}>{c.oneLiner}</div>
+        </div>
+        <div style={{ position: "absolute", top: 308 * S, left: 0, right: 0, display: "flex", justifyContent: "center", fontSize: 12 * S, fontFamily: "Batang", color: INK }}>갈피</div>
+      </div>
+    </div>
+  );
+}
+
+/** The story's back cover fills the picture (10-07): the real bookmarks, big enough to read, and the label under them. */
+function StoryBoard({ view }: { view: SharedView }) {
+  const w = 1000;
+  const h = 1540;
+  const chips = chipsOf(view);
+  return (
+    <div style={{
+      position: "relative", display: "flex", width: w, height: h, borderRadius: "12px 40px 40px 12px",
+      background: "linear-gradient(110deg, #6E4129, #7A4A2E 45%, #683C25)", boxShadow: "0 20px 40px rgba(0,0,0,0.28)",
+    }}>
+      <div style={{ position: "absolute", top: 0, bottom: 0, right: 0, width: 64, background: "#5A3420", borderRadius: "0 40px 40px 0" }} />
+      <div style={{ position: "absolute", top: 36, bottom: 36, left: 36, right: 96, border: "2px solid rgba(234,217,176,0.45)", borderRadius: 16 }} />
+      {view.cards.map((c, i) => <StoryBookmark key={c.id} c={c} art={view.arts[i]} i={i} />)}
+      <div style={{
+        position: "absolute", left: 70, right: 130, bottom: 56, display: "flex", flexDirection: "column", alignItems: "center",
+        padding: "22px 24px 18px", borderRadius: 10, background: PAPER, border: "2px solid #E2D6BE",
+      }}>
+        <div style={{ display: "flex", fontSize: 34, fontFamily: "Batang", color: INK, marginBottom: 12 }}>내가 고른 길</div>
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10 }}>
+          {chips.length
+            ? chips.map((t) => (
+              <div key={t} style={{ display: "flex", padding: "3px 20px", borderRadius: 99, background: "#ECE3CF", fontSize: 28, color: INK, fontFamily: "Dodum" }}>{t}</div>
+            ))
+            : <div style={{ display: "flex", fontSize: 30, color: MUTED, fontFamily: "Dodum" }}>{NO_CHIP_LINE}</div>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Story({ view }: { view: SharedView }) {
   return (
     <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: PAPER }}>
-      <div style={{ display: "flex", fontSize: 88, fontFamily: "Batang", color: INK }}>갈피</div>
-      <div style={{ display: "flex", fontSize: 36, fontFamily: "Dodum", color: MUTED, margin: "12px 0 56px" }}>오늘 만난 책갈피</div>
-      <Board view={view} w={860} />
-      <div style={{ display: "flex", fontSize: 36, fontFamily: "Dodum", color: MUTED, marginTop: 64 }}>나도 갈피 잡으러 가기 · galpibook.com</div>
+      <div style={{ display: "flex", alignItems: "baseline", gap: 24, marginBottom: 32 }}>
+        <div style={{ display: "flex", fontSize: 76, fontFamily: "Batang", color: INK }}>갈피</div>
+        <div style={{ display: "flex", fontSize: 36, fontFamily: "Dodum", color: MUTED }}>오늘 만난 책갈피</div>
+      </div>
+      <StoryBoard view={view} />
+      <div style={{ display: "flex", fontSize: 34, fontFamily: "Dodum", color: MUTED, marginTop: 36 }}>나도 갈피 잡으러 가기 · galpibook.com</div>
     </div>
   );
 }
@@ -216,7 +308,7 @@ function Story({ view }: { view: SharedView }) {
 function textOf(view: SharedView): string {
   return [
     "갈피 읽을 책, 갈피가 안 잡힐 때 오늘 책갈피 5장을 만났어요. 나도 갈피 잡으러 가기 galpibook.com 오늘 만난 책갈피 · 내가 고른 길 이 길에서 만난 장",
-    NO_CHIP_LINE, CHALLENGE, ...chipsOf(view), ...view.cards.flatMap((c) => [c.genre, shortTitle(c.title)]), "0123456789…『』",
+    NO_CHIP_LINE, CHALLENGE, ...chipsOf(view), ...view.cards.flatMap((c) => [c.genre, shortTitle(c.title), bookTitle(c.title), c.author ?? "", c.oneLiner]), "0123456789…『』",
   ].join("");
 }
 

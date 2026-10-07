@@ -216,6 +216,11 @@ for (const width of [320, 360, 412]) {
     const pull = page.locator("[data-pull]");
     const cover = page.locator("[data-pose] > div").last();
     // 10-02: ‹ › either side of the cover — 44px, on screen, clear of the cover and of the peeking bookmark
+    // the cover slides in (T-06): measure once it has landed — centred between ‹ ›
+    await expect.poll(async () => {
+      const [b, t] = [(await cover.boundingBox())!, (await page.getByRole("button", { name: "앞 책 보기" }).boundingBox())!];
+      return Math.abs(t.y + t.height / 2 - (b.y + b.height / 2));
+    }).toBeLessThanOrEqual(1);
     const c = (await cover.boundingBox())!;
     const peek = (await page.getByRole("button", { name: "책갈피 꺼내기" }).boundingBox())!;
     for (const name of ["앞 책 보기", "뒤 책 보기"]) {
