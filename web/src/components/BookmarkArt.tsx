@@ -229,8 +229,9 @@ const CLOVER_GLINT = starPath(21.5, 43, 1.8, 0.6, 4);
 const FLAMES = [[28, 40, 9], [72, 40, 9], [37, 24, 7], [63, 24, 7], [50, 17, 8]] as const;
 const flame = (x: number, y: number, h: number) =>
   `M${x} ${y} C ${x - h * 0.45} ${y - h * 0.35}, ${x - h * 0.2} ${y - h * 0.8}, ${x} ${y - h} C ${x + h * 0.2} ${y - h * 0.8}, ${x + h * 0.45} ${y - h * 0.35}, ${x} ${y} Z`;
-const BLUE_FLAMES = [[24, 62, 24], [76, 62, 24], [31, 54, 30], [69, 54, 30], [41, 36, 20], [59, 36, 20]] as const;
-const EMBERS = [[18, 30], [84, 26], [24, 18], [78, 44]] as const;
+// kept inside x 28–72 so the fire never reaches a ground prop (props sit at x < 22 and x > 76)
+const BLUE_FLAMES = [[30, 60, 21], [70, 60, 21], [35, 52, 27], [65, 52, 27], [43, 34, 15], [57, 34, 15]] as const;
+const EMBERS = [[30, 30], [70, 26], [36, 18], [66, 42]] as const;
 const CLOUDS = [[23, 30, 1], [77, 30, -1], [30, 52, 0.8], [70, 52, -0.8]] as const;
 
 /**
@@ -253,7 +254,7 @@ function AnimalAura({ animal }: { animal: string }) {
     case "whitetiger":
       return (
         <g data-part="animal-aura" data-aura="blue-fire" className={styles.flicker}>
-          <circle cx="50" cy="42" r="24" fill="#4FA3F7" opacity="0.18" />
+          <circle cx="50" cy="42" r="20" fill="#4FA3F7" opacity="0.18" />
           {BLUE_FLAMES.map(([x, y, h], i) => (
             <g key={i}><path d={flame(x, y, h)} fill="#3D8EEB" opacity="0.5" /><path d={flame(x, y - 2, h * 0.6)} fill="#8CCBFF" opacity="0.7" /></g>
           ))}
