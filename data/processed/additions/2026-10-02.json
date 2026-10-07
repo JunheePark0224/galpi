@@ -46,7 +46,19 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/186869546",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "돈 관리·투자",
+    "keywords": [
+     "재테크 기초",
+     "부동산·청약",
+     "연금·노후"
+    ],
+    "way": "실습",
+    "one_liner": "사회 초년부터 노후까지 단계별로 돈을 쌓는 순서를 짚어 줘요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791124575420",
@@ -92,7 +104,8 @@
     "one_liner": "AI로 몰린 자본과 산업 변화의 흐름을 8개 분야로 짚어 봐요",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791175230576",
@@ -127,7 +140,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/196106687",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "경제 상식",
+    "keywords": [
+     "트렌드"
+    ],
+    "way": "개념",
+    "one_liner": "AI 시대에 달라지는 소비와 일상의 흐름을 짚어 보고 다음 기회를 읽어요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791189799915",
@@ -269,7 +292,8 @@
     "one_liner": "휘둘리거나 상처받지 않게 나와 세상 사이의 적당한 거리를 잡는 법을 알려줘요",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791191636048",
@@ -322,7 +346,7 @@
     "커리어 설계",
     "직장 생활"
    ],
-   "way": "개념",
+   "way": "실습",
    "one_liner_style": "summary",
    "one_liner": "경력을 운에 맡기지 않고 강점과 사이드 프로젝트로 직접 짜는 전략을 얻어요",
    "evidence": "경력 설계 원리와 브랜딩 전략이 중심",
@@ -353,7 +377,20 @@
     "one_liner": "경력을 운에 맡기지 않고 강점과 사이드 프로젝트로 직접 짜는 전략을 얻어요",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "취업·커리어",
+     "keywords": [
+      "커리어 설계",
+      "퍼스널 브랜딩"
+     ],
+     "way": "개념",
+     "one_liner": "경력을 운에 맡기지 않고 강점과 사이드 프로젝트로 직접 짜는 전략을 얻어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791190006187",
@@ -390,7 +427,18 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/147123265",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "커리어 설계",
+     "이직·퇴사"
+    ],
+    "way": "실습",
+    "one_liner": "40대 이후 생애 경력을 설계하고 재취업과 자격증 준비까지 단계별로 챙겨요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788966074310",
@@ -406,7 +454,7 @@
    "keywords_regex": [
     "커리어 설계"
    ],
-   "way": "개념",
+   "way": "실습",
    "one_liner_style": "summary",
    "one_liner": "자기분석으로 흥미와 강점을 찾고 직업 선택과 실행 계획까지 이어 가요",
    "evidence": "자기탐색·직업탐색·비전 설정이 중심이라 진로 설계",
@@ -424,7 +472,28 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/111378855",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "커리어 설계"
+    ],
+    "way": "개념",
+    "one_liner": "자기분석으로 흥미와 강점을 찾고 직업 선택과 실행 계획까지 이어 가요",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "취업·커리어",
+     "keywords": [
+      "커리어 설계"
+     ],
+     "way": "개념",
+     "one_liner": "자기분석으로 흥미와 강점을 찾고 직업 선택과 실행 계획까지 이어 가요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791190865968",
@@ -470,7 +539,8 @@
     "one_liner": "SNS로 나만의 브랜드 콘셉트를 잡고 콘텐츠로 알리는 단계별 방법을 얻어요",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791173181887",
@@ -478,10 +548,10 @@
    "author": "안세진 저",
    "pages": 258,
    "entry": "target",
-   "topic": "취업·커리어",
+   "topic": "글쓰기",
    "field": "일·커리어",
    "keywords": [
-    "퍼스널 브랜딩"
+    "에세이·책 쓰기"
    ],
    "keywords_regex": [
     "퍼스널 브랜딩"
@@ -514,7 +584,19 @@
     "one_liner": "전자책을 써서 출간하고 홍보하는 단계를 차근차근 따라 해 볼 수 있어요",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "취업·커리어",
+     "keywords": [
+      "퍼스널 브랜딩"
+     ],
+     "way": "실습",
+     "one_liner": "전자책을 써서 출간하고 홍보하는 단계를 차근차근 따라 해 볼 수 있어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791169213165",
@@ -626,7 +708,8 @@
     "status": "picked"
    },
    "reviewed": true,
-   "sampled": true
+   "sampled": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9788964362495",
@@ -660,7 +743,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/122093609",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "에세이·책 쓰기"
+    ],
+    "way": "실습",
+    "one_liner": "소재 찾기부터 문장 쓰기, 투고와 출간까지 에세이 쓰는 길을 안내해요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791198347619",
@@ -678,7 +771,7 @@
     "업무 글",
     "문해력·어휘"
    ],
-   "way": "사례",
+   "way": "실습",
    "one_liner_style": "summary",
    "one_liner": "집필부터 투고, 계약, 출간까지 단계별로 알려 줘서 책 쓰기에 도전하게 돕는 책이에요",
    "evidence": "출간 과정과 투고 정보를 단계별로 안내함",
@@ -707,7 +800,19 @@
     "one_liner": "집필부터 투고, 계약, 출간까지 단계별로 알려 줘서 책 쓰기에 도전하게 돕는 책이에요",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "글쓰기",
+     "keywords": [
+      "에세이·책 쓰기"
+     ],
+     "way": "사례",
+     "one_liner": "집필부터 투고, 계약, 출간까지 단계별로 알려 줘서 책 쓰기에 도전하게 돕는 책이에요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788993784794",
@@ -741,7 +846,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/123183257",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "업무 글"
+    ],
+    "way": "실습",
+    "one_liner": "빈칸만 채워 이메일과 문서를 쓰는 포맷과 테크닉을 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791191349764",
@@ -775,7 +890,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/118978851",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "문해력·어휘"
+    ],
+    "way": "실습",
+    "one_liner": "하루 4개 단어를 따라 쓰며 기초 한자와 관련 어휘를 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791155817629",
@@ -810,7 +935,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/130167416",
-   "auto": "ai-agree"
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "카피라이팅"
+    ],
+    "way": "실습",
+    "one_liner": "헤드라인과 세일즈레터를 쓰는 공식으로 상품이 팔리는 글을 써 볼 수 있어요.",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791196604899",
@@ -845,7 +980,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/123647611",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "카피라이팅"
+    ],
+    "way": "실습",
+    "one_liner": "고객 마음을 움직이는 PASONA 법칙으로 팔리는 문장 쓰는 법을 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791186151006",
@@ -890,7 +1035,8 @@
     "status": "picked"
    },
    "reviewed": true,
-   "sampled": true
+   "sampled": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791190985215",
@@ -957,7 +1103,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/142874899",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "데이터 분석",
+    "keywords": [
+     "SQL"
+    ],
+    "way": "실습",
+    "one_liner": "오라클 환경에서 조회·조인·서브쿼리를 직접 따라 치며 쿼리 작성 감각을 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791140712120",
@@ -968,7 +1124,8 @@
    "topic": "데이터 분석",
    "field": "데이터·통계",
    "keywords": [
-    "엑셀"
+    "엑셀",
+    "데이터 리터러시"
    ],
    "keywords_regex": [
     "SQL"
@@ -998,7 +1155,19 @@
     "one_liner": "피벗 테이블과 차트로 데이터를 정리하고 숨은 패턴을 찾아내는 방법을 익혀요",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "데이터 분석",
+     "keywords": [
+      "엑셀"
+     ],
+     "way": "실습",
+     "one_liner": "피벗 테이블과 차트로 데이터를 정리하고 숨은 패턴을 찾아내는 방법을 익혀요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791163033806",
@@ -1032,7 +1201,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/110262600",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "데이터 분석",
+    "keywords": [
+     "SQL"
+    ],
+    "way": "실습",
+    "one_liner": "나스닥 실제 데이터로 SELECT부터 따라 하며 쿼리를 직접 짜 볼 수 있어요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791175981430",
@@ -1091,7 +1270,15 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/104195468",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "데이터 분석",
+    "keywords": [],
+    "way": "실습",
+    "one_liner": "자료구조부터 차근차근 익혀 아파트 실거래 데이터를 직접 분석해 봐요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791157687947",
@@ -1130,7 +1317,19 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/108404213",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "통계",
+    "keywords": [
+     "기초 통계",
+     "확률",
+     "가설검정"
+    ],
+    "way": "개념",
+    "one_liner": "생활 속 사례로 잊었던 통계 개념과 공식을 핵심만 다시 정리해요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788960779501",
@@ -1207,8 +1406,8 @@
    "topic": "통계",
    "field": "데이터·통계",
    "keywords": [
-    "확률",
-    "기초 통계"
+    "기초 통계",
+    "확률"
    ],
    "keywords_regex": [
     "기초 통계",
@@ -1233,7 +1432,18 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/103287562",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "통계",
+    "keywords": [
+     "확률",
+     "기초 통계"
+    ],
+    "way": "개념",
+    "one_liner": "경우의 수부터 평균·표준편차까지 데이터를 보는 눈을 쉬운 대화로 익혀요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791188754564",
@@ -1267,7 +1477,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/107514027",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "통계",
+    "keywords": [
+     "확률"
+    ],
+    "way": "개념",
+    "one_liner": "불확실한 미래를 확률로 따져 보고 결과보다 판단을 돌아보게 돼요",
+    "status": "picked"
+   },
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791124205976",
@@ -1278,8 +1498,7 @@
    "topic": "AI 활용",
    "field": "AI·IT 활용",
    "keywords": [
-    "바이브 코딩",
-    "클로드"
+    "바이브 코딩"
    ],
    "keywords_regex": [
     "클로드",
@@ -1319,7 +1538,20 @@
     "one_liner": "AI와 대화하며 26개 서비스를 직접 만들어 보고, 도구마다 다른 개발 방식도 경험해요",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "AI 활용",
+     "keywords": [
+      "바이브 코딩",
+      "클로드"
+     ],
+     "way": "실습",
+     "one_liner": "AI와 대화하며 26개 서비스를 직접 만들고 도구별 개발 방식도 경험해요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791169213516",
@@ -1369,7 +1601,8 @@
     "one_liner": "트랜스포머 구조를 이해하고 실전 코드로 언어 모델을 직접 만들어 봐요",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193059777",
@@ -1377,14 +1610,10 @@
    "author": "임세범 저 ",
    "pages": 256,
    "entry": "target",
-   "topic": "AI 활용",
+   "topic": "업무 자동화",
    "field": "AI·IT 활용",
    "keywords": [
-    "프롬프트 엔지니어링",
-    "챗GPT",
-    "클로드",
-    "제미나이",
-    "바이브 코딩"
+    "AI 업무 활용"
    ],
    "keywords_regex": [
     "챗GPT",
@@ -1426,7 +1655,23 @@
     "one_liner": "수업 준비와 행정 업무에 AI를 단계별로 적용해 시간을 아껴요",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "AI 활용",
+     "keywords": [
+      "프롬프트 엔지니어링",
+      "챗GPT",
+      "클로드",
+      "제미나이",
+      "바이브 코딩"
+     ],
+     "way": "실습",
+     "one_liner": "수업 준비와 행정 업무에 AI를 단계별로 적용해 시간을 아껴요"
+    }
+   ],
+   "rules_version": "v3.1"
   }
  ]
 }

@@ -13,7 +13,8 @@
    "topic": "돈 관리·투자",
    "field": "돈·경제",
    "keywords": [
-    "연금·노후"
+    "연금·노후",
+    "ETF·펀드"
    ],
    "keywords_regex": [
     "재테크 기초",
@@ -37,7 +38,19 @@
     "one_liner": "연금 계좌로 노후 준비를 시작하는 법을 차근차근 알려줘요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "돈 관리·투자",
+     "keywords": [
+      "연금·노후"
+     ],
+     "way": "실습",
+     "one_liner": "연금 계좌로 노후 준비를 시작하는 법을 차근차근 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193904435",
@@ -53,7 +66,7 @@
    "keywords_regex": [
     "부동산·청약"
    ],
-   "way": "사례",
+   "way": "실습",
    "one_liner": "초보가 고수에게 집 사는 법을 배우는 이야기로 부동산을 풀어요",
    "one_liner_style": "summary",
    "evidence": "소설 형식으로 집 사는 기초를 설명",
@@ -69,7 +82,19 @@
     "one_liner": "초보가 고수에게 집 사는 법을 배우는 이야기로 부동산을 풀어요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "돈 관리·투자",
+     "keywords": [
+      "부동산·청약"
+     ],
+     "way": "사례",
+     "one_liner": "초보가 고수에게 집 사는 법을 배우는 이야기로 부동산을 풀어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791188331796",
@@ -80,7 +105,8 @@
    "topic": "돈 관리·투자",
    "field": "돈·경제",
    "keywords": [
-    "돈의 심리"
+    "돈의 심리",
+    "재테크 기초"
    ],
    "keywords_regex": [
     "재테크 기초",
@@ -104,7 +130,19 @@
     "one_liner": "종잣돈을 모으고 불리기 전에 돈을 대하는 태도부터 짚어요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "돈 관리·투자",
+     "keywords": [
+      "돈의 심리"
+     ],
+     "way": "개념",
+     "one_liner": "종잣돈을 모으고 불리기 전에 돈을 대하는 태도부터 짚어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791168343443",
@@ -120,7 +158,7 @@
    "keywords_regex": [
     "돈의 심리"
    ],
-   "way": "사례",
+   "way": "개념",
    "one_liner": "투자 성패를 가르는 건 지식보다 심리라는 걸 이야기로 보여줘요",
    "one_liner_style": "summary",
    "evidence": "부와 심리에 관한 이야기 20편",
@@ -136,7 +174,19 @@
     "one_liner": "투자 성패를 가르는 건 지식보다 심리라는 걸 이야기로 보여줘요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "돈 관리·투자",
+     "keywords": [
+      "돈의 심리"
+     ],
+     "way": "사례",
+     "one_liner": "투자 성패를 가르는 건 지식보다 심리라는 걸 이야기로 보여줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791164847983",
@@ -171,7 +221,8 @@
     "one_liner": "적금 대신 ETF로 내게 맞는 포트폴리오를 짜는 법을 알려줘요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9788962604658",
@@ -181,7 +232,9 @@
    "entry": "target",
    "topic": "돈 관리·투자",
    "field": "돈·경제",
-   "keywords": [],
+   "keywords": [
+    "주식"
+   ],
    "keywords_regex": [
     "ETF·펀드"
    ],
@@ -201,7 +254,17 @@
     "one_liner": "하워드 막스가 메모로 정리한 투자의 원칙 20가지를 담았어요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "돈 관리·투자",
+     "keywords": [],
+     "way": "개념",
+     "one_liner": "하워드 막스가 메모로 정리한 투자의 원칙 20가지를 담았어요"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788901294179",
@@ -221,7 +284,7 @@
     "ETF·펀드",
     "연금·노후"
    ],
-   "way": "사례",
+   "way": "실습",
    "one_liner": "직장인이 미국 ETF 세 개로 은퇴 자금을 만든 방법을 보여줘요",
    "one_liner_style": "summary",
    "evidence": "저자 계좌·포트폴리오 공개형",
@@ -238,7 +301,20 @@
     "one_liner": "직장인이 미국 ETF 세 개로 은퇴 자금을 만든 방법을 보여줘요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "돈 관리·투자",
+     "keywords": [
+      "ETF·펀드",
+      "연금·노후"
+     ],
+     "way": "사례",
+     "one_liner": "직장인이 미국 ETF 세 개로 은퇴 자금을 만든 방법을 보여줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791158883591",
@@ -252,7 +328,7 @@
     "돈의 심리"
    ],
    "keywords_regex": [],
-   "way": "사례",
+   "way": "개념",
    "one_liner": "두 아빠의 다른 돈 습관으로 부자의 사고방식을 보여줘요",
    "one_liner_style": "summary",
    "evidence": "두 아버지 비교로 돈 사고방식 설명",
@@ -269,7 +345,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "돈 관리·투자",
+     "keywords": [
+      "돈의 심리"
+     ],
+     "way": "사례",
+     "one_liner": "두 아빠의 다른 돈 습관으로 부자의 사고방식을 보여줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791130668895",
@@ -302,7 +390,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9788957822401",
@@ -336,7 +425,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791191378061",
@@ -370,7 +460,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791158513269",
@@ -381,7 +472,8 @@
    "topic": "돈 관리·투자",
    "field": "돈·경제",
    "keywords": [
-    "재테크 기초"
+    "재테크 기초",
+    "부동산·청약"
    ],
    "keywords_regex": [
     "재테크 기초",
@@ -405,7 +497,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "돈 관리·투자",
+     "keywords": [
+      "재테크 기초"
+     ],
+     "way": "실습",
+     "one_liner": "0원에서 시작한 직장인이 퇴근 후 돈 공부로 자산을 키운 과정을 담았어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791140712090",
@@ -416,7 +520,9 @@
    "topic": "돈 관리·투자",
    "field": "돈·경제",
    "keywords": [
-    "재테크 기초"
+    "재테크 기초",
+    "주식",
+    "ETF·펀드"
    ],
    "keywords_regex": [
     "재테크 기초",
@@ -425,7 +531,7 @@
     "부동산·청약",
     "연금·노후"
    ],
-   "way": "개념",
+   "way": "실습",
    "one_liner": "연말정산부터 ETF까지 직장인 재테크 상식을 항목별로 정리했어요",
    "one_liner_style": "summary",
    "evidence": "직장인 금융 상식 항목별 사전",
@@ -441,8 +547,19 @@
     "one_liner": "연말정산부터 ETF까지 직장인 재테크 상식을 항목별로 정리했어요",
     "status": "picked"
    },
-   "reviewed": false,
-   "auto": "ai-agree"
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "돈 관리·투자",
+     "keywords": [
+      "재테크 기초"
+     ],
+     "way": "개념",
+     "one_liner": "연말정산부터 ETF까지 직장인 재테크 상식을 항목별로 정리했어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788960306134",
@@ -453,7 +570,9 @@
    "topic": "돈 관리·투자",
    "field": "돈·경제",
    "keywords": [
-    "재테크 기초"
+    "재테크 기초",
+    "주식",
+    "부동산·청약"
    ],
    "keywords_regex": [
     "재테크 기초",
@@ -461,7 +580,7 @@
     "ETF·펀드",
     "부동산·청약"
    ],
-   "way": "사례",
+   "way": "실습",
    "one_liner": "사회초년생의 돈 고민에 유튜버가 자기 경험으로 노하우를 건네요",
    "one_liner_style": "summary",
    "evidence": "유튜버의 재테크 에세이",
@@ -478,7 +597,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "돈 관리·투자",
+     "keywords": [
+      "재테크 기초"
+     ],
+     "way": "사례",
+     "one_liner": "사회초년생의 돈 고민에 유튜버가 자기 경험으로 노하우를 건네요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791140716999",
@@ -512,7 +643,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9788901290003",
@@ -596,8 +728,8 @@
    "topic": "경제 상식",
    "field": "돈·경제",
    "keywords": [
-    "시사·경제 이슈",
-    "금리·환율"
+    "금리·환율",
+    "시사·경제 이슈"
    ],
    "keywords_regex": [
     "금리·환율",
@@ -621,7 +753,8 @@
     "one_liner": "전세사기부터 금리까지 내 재산을 지키는 경제 원리를 풀어요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9788957365793",
@@ -655,7 +788,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791124073483",
@@ -688,7 +822,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9788901248684",
@@ -704,7 +839,7 @@
    "keywords_regex": [
     "행동경제학"
    ],
-   "way": "사례",
+   "way": "개념",
    "one_liner": "사람이 왜 비합리적으로 선택하는지 40년 연구 이야기로 풀어요",
    "one_liner_style": "summary",
    "evidence": "연구자 회고로 푼 행동경제학",
@@ -721,7 +856,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "경제 상식",
+     "keywords": [
+      "행동경제학"
+     ],
+     "way": "사례",
+     "one_liner": "사람이 왜 비합리적으로 선택하는지 40년 연구 이야기로 풀어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791189352479",
@@ -755,7 +902,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791194530107",
@@ -766,7 +914,8 @@
    "topic": "경제 상식",
    "field": "돈·경제",
    "keywords": [
-    "금리·환율"
+    "금리·환율",
+    "시사·경제 이슈"
    ],
    "keywords_regex": [
     "금리·환율"
@@ -788,7 +937,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "경제 상식",
+     "keywords": [
+      "금리·환율"
+     ],
+     "way": "개념",
+     "one_liner": "달러와 엔, 금의 흐름이 왜 바뀌는지와 대응법을 짚어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193282533",
@@ -834,7 +995,7 @@
     "행동경제학"
    ],
    "keywords_regex": [],
-   "way": "사례",
+   "way": "개념",
    "one_liner": "실험으로 사람들이 얼마나 비합리적으로 선택하는지 보여줘요",
    "one_liner_style": "summary",
    "evidence": "실험 사례 중심 행동경제학",
@@ -851,7 +1012,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "경제 상식",
+     "keywords": [
+      "행동경제학"
+     ],
+     "way": "사례",
+     "one_liner": "실험으로 사람들이 얼마나 비합리적으로 선택하는지 보여줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791191183351",
@@ -887,7 +1060,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791124539040",
@@ -921,7 +1095,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788901268095",
@@ -935,7 +1110,7 @@
    "keywords_regex": [
     "시사·경제 이슈"
    ],
-   "way": "사례",
+   "way": "개념",
    "one_liner": "일상 곳곳에 숨은 경제 논리를 이야기처럼 쉽게 풀어요",
    "one_liner_style": "summary",
    "evidence": "일상 사례로 경제학 원리 설명",
@@ -950,7 +1125,17 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "경제 상식",
+     "keywords": [],
+     "way": "사례",
+     "one_liner": "일상 곳곳에 숨은 경제 논리를 이야기처럼 쉽게 풀어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791168344006",
@@ -983,7 +1168,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9788934965961",
@@ -1016,7 +1202,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791140712779",
@@ -1026,9 +1213,7 @@
    "entry": "target",
    "topic": "경제 상식",
    "field": "돈·경제",
-   "keywords": [
-    "시사·경제 이슈"
-   ],
+   "keywords": [],
    "keywords_regex": [
     "금리·환율",
     "시사·경제 이슈",
@@ -1050,7 +1235,19 @@
     "one_liner": "왕초보가 알아야 할 경제 이슈 152개를 그림과 함께 풀어요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "경제 상식",
+     "keywords": [
+      "시사·경제 이슈"
+     ],
+     "way": "개념",
+     "one_liner": "왕초보가 알아야 할 경제 이슈 152개를 그림과 함께 풀어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791198987631",
@@ -1082,7 +1279,8 @@
     "one_liner": "트럼프의 관세 정책이 세계 경제 질서를 어떻게 흔드는지 짚어요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791124038826",
@@ -1157,7 +1355,8 @@
    "topic": "마음 돌보기",
    "field": "마음·관계",
    "keywords": [
-    "자존감"
+    "자존감",
+    "감정 다루기"
    ],
    "keywords_regex": [
     "자존감",
@@ -1179,7 +1378,19 @@
     "one_liner": "정신과 의사가 낮은 자존감을 스스로 회복하는 방법을 알려줘요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마음 돌보기",
+     "keywords": [
+      "자존감"
+     ],
+     "way": "실습",
+     "one_liner": "정신과 의사가 낮은 자존감을 스스로 회복하는 방법을 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788991799073",
@@ -1213,7 +1424,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791156757344",
@@ -1248,7 +1460,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791189217167",
@@ -1259,8 +1472,8 @@
    "topic": "마음 돌보기",
    "field": "마음·관계",
    "keywords": [
-    "우울",
-    "감정 다루기"
+    "감정 다루기",
+    "우울"
    ],
    "keywords_regex": [
     "불안·걱정",
@@ -1283,7 +1496,8 @@
     "one_liner": "반복되는 우울과 무력감에서 벗어나는 마음 회복 연습을 담았어요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9788974796594",
@@ -1316,7 +1530,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791192389790",
@@ -1349,7 +1564,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791157689842",
@@ -1384,7 +1600,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791188096428",
@@ -1429,7 +1646,8 @@
    "topic": "마음 돌보기",
    "field": "마음·관계",
    "keywords": [
-    "감정 다루기"
+    "감정 다루기",
+    "명상·마음챙김"
    ],
    "keywords_regex": [
     "감정 다루기",
@@ -1453,7 +1671,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마음 돌보기",
+     "keywords": [
+      "감정 다루기"
+     ],
+     "way": "개념",
+     "one_liner": "감정에 압도되지 않고 느끼는 법을 트라우마 연구로 풀어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788901297477",
@@ -1464,7 +1694,8 @@
    "topic": "마음 돌보기",
    "field": "마음·관계",
    "keywords": [
-    "감정 다루기"
+    "감정 다루기",
+    "불안·걱정"
    ],
    "keywords_regex": [
     "불안·걱정",
@@ -1487,7 +1718,19 @@
     "one_liner": "불안과 우울 같은 감정을 다루는 과학적 도구를 알려줘요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마음 돌보기",
+     "keywords": [
+      "감정 다루기"
+     ],
+     "way": "실습",
+     "one_liner": "불안과 우울 같은 감정을 다루는 과학적 도구를 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791188632077",
@@ -1505,7 +1748,7 @@
     "감정 다루기",
     "우울"
    ],
-   "way": "개념",
+   "way": "실습",
    "one_liner": "화와 우울 뒤에 숨은 진짜 감정을 알아차리는 법을 알려줘요",
    "one_liner_style": "summary",
    "evidence": "위장된 감정 개념 설명",
@@ -1522,7 +1765,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마음 돌보기",
+     "keywords": [
+      "감정 다루기"
+     ],
+     "way": "개념",
+     "one_liner": "화와 우울 뒤에 숨은 진짜 감정을 알아차리는 법을 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791173350030",
@@ -1532,9 +1787,12 @@
    "entry": "target",
    "topic": "마음 돌보기",
    "field": "마음·관계",
-   "keywords": [],
+   "keywords": [
+    "번아웃·스트레스",
+    "감정 다루기"
+   ],
    "keywords_regex": [],
-   "way": "사례",
+   "way": "실습",
    "one_liner": "유리멘탈을 다잡는 행동 강령을 실제 사례와 함께 알려줘요",
    "one_liner_style": "summary",
    "evidence": "칼럼 모음, 사례로 멘탈 관리",
@@ -1548,7 +1806,17 @@
     "one_liner": "유리멘탈을 다잡는 행동 강령을 실제 사례와 함께 알려줘요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마음 돌보기",
+     "keywords": [],
+     "way": "사례",
+     "one_liner": "유리멘탈을 다잡는 행동 강령을 실제 사례와 함께 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788999731419",
@@ -1558,7 +1826,9 @@
    "entry": "target",
    "topic": "마음 돌보기",
    "field": "마음·관계",
-   "keywords": [],
+   "keywords": [
+    "감정 다루기"
+   ],
    "keywords_regex": [
     "번아웃·스트레스"
    ],
@@ -1577,7 +1847,17 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마음 돌보기",
+     "keywords": [],
+     "way": "실습",
+     "one_liner": "어린 시절 상처가 지금의 나에게 남긴 흔적을 돌보는 법을 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791191369564",
@@ -1612,7 +1892,8 @@
     "one_liner": "매일 요동치는 감정과 이유 모를 불안을 다스리는 법을 알려줘요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193081143",
@@ -1644,7 +1925,8 @@
     "one_liner": "생각과 감정에서 한 걸음 물러나 마음의 자유를 찾는 법을 담았어요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193388266",
@@ -1748,7 +2030,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791187142560",
@@ -1759,13 +2042,14 @@
    "topic": "대화·관계",
    "field": "마음·관계",
    "keywords": [
-    "호감·사회생활"
+    "호감·사회생활",
+    "설득·협상"
    ],
    "keywords_regex": [
     "설득·협상",
     "호감·사회생활"
    ],
-   "way": "사례",
+   "way": "실습",
    "one_liner": "적을 만들지 않고 호감을 얻는 인간관계 원칙을 일화로 보여줘요",
    "one_liner_style": "summary",
    "evidence": "일화 중심 인간관계 원칙",
@@ -1782,7 +2066,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "대화·관계",
+     "keywords": [
+      "호감·사회생활"
+     ],
+     "way": "사례",
+     "one_liner": "적을 만들지 않고 호감을 얻는 인간관계 원칙을 일화로 보여줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788934989738",
@@ -1798,7 +2094,7 @@
    "keywords_regex": [
     "설득·협상"
    ],
-   "way": "개념",
+   "way": "실습",
    "one_liner": "돈부터 관계까지 삶 곳곳의 협상 상황을 헤쳐 가는 요령을 알려줘요",
    "one_liner_style": "summary",
    "evidence": "협상 요소 해설 고전",
@@ -1815,7 +2111,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "대화·관계",
+     "keywords": [
+      "설득·협상"
+     ],
+     "way": "개념",
+     "one_liner": "돈부터 관계까지 삶 곳곳의 협상 상황을 헤쳐 가는 요령을 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791185952987",
@@ -1848,7 +2156,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791124370988",
@@ -1859,14 +2168,15 @@
    "topic": "대화·관계",
    "field": "마음·관계",
    "keywords": [
-    "말투·대화법"
+    "말투·대화법",
+    "호감·사회생활"
    ],
    "keywords_regex": [
     "말투·대화법",
     "설득·협상",
     "호감·사회생활"
    ],
-   "way": "사례",
+   "way": "실습",
    "one_liner": "무심코 던진 한마디를 바꿔 관계와 자존감을 지키는 말투를 알려줘요",
    "one_liner_style": "summary",
    "evidence": "말투 사례 위주 개정판",
@@ -1883,7 +2193,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "대화·관계",
+     "keywords": [
+      "말투·대화법"
+     ],
+     "way": "사례",
+     "one_liner": "무심코 던진 한마디를 바꿔 관계와 자존감을 지키는 말투를 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791199247888",
@@ -1894,6 +2216,7 @@
    "topic": "대화·관계",
    "field": "마음·관계",
    "keywords": [
+    "말투·대화법",
     "호감·사회생활"
    ],
    "keywords_regex": [
@@ -1918,7 +2241,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "대화·관계",
+     "keywords": [
+      "호감·사회생활"
+     ],
+     "way": "실습",
+     "one_liner": "말수가 적어도 기억에 남는 사람이 되는 대화 기술을 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788950998790",
@@ -1929,14 +2264,14 @@
    "topic": "대화·관계",
    "field": "마음·관계",
    "keywords": [
-    "거리 두기",
-    "말투·대화법"
+    "말투·대화법",
+    "거리 두기"
    ],
    "keywords_regex": [
     "말투·대화법",
     "거리 두기"
    ],
-   "way": "개념",
+   "way": "실습",
    "one_liner": "타인의 시선에 휘둘리지 않고 나를 지키는 관계 거리를 다뤄요",
    "one_liner_style": "summary",
    "evidence": "상담학 교수의 관계 강의",
@@ -1952,7 +2287,20 @@
     "one_liner": "타인의 시선에 휘둘리지 않고 나를 지키는 관계 거리를 다뤄요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "대화·관계",
+     "keywords": [
+      "거리 두기",
+      "말투·대화법"
+     ],
+     "way": "개념",
+     "one_liner": "타인의 시선에 휘둘리지 않고 나를 지키는 관계 거리를 다뤄요"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791192625355",
@@ -1963,13 +2311,14 @@
    "topic": "대화·관계",
    "field": "마음·관계",
    "keywords": [
-    "갈등·무례 대처"
+    "갈등·무례 대처",
+    "거리 두기"
    ],
    "keywords_regex": [
     "갈등·무례 대처",
     "호감·사회생활"
    ],
-   "way": "사례",
+   "way": "실습",
    "one_liner": "선을 넘는 말에 감정 상하지 않고 내 뜻을 전하는 법을 담았어요",
    "one_liner_style": "summary",
    "evidence": "경험담 섞인 무례 대처법",
@@ -1986,7 +2335,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "대화·관계",
+     "keywords": [
+      "갈등·무례 대처"
+     ],
+     "way": "사례",
+     "one_liner": "선을 넘는 말에 감정 상하지 않고 내 뜻을 전하는 법을 담았어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791168341234",
@@ -1997,7 +2358,8 @@
    "topic": "대화·관계",
    "field": "마음·관계",
    "keywords": [
-    "말투·대화법"
+    "말투·대화법",
+    "발표"
    ],
    "keywords_regex": [
     "말투·대화법",
@@ -2021,7 +2383,19 @@
     "one_liner": "아나운서가 목소리와 말투를 다듬는 원포인트 요령을 알려줘요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "대화·관계",
+     "keywords": [
+      "말투·대화법"
+     ],
+     "way": "실습",
+     "one_liner": "아나운서가 목소리와 말투를 다듬는 원포인트 요령을 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791194415374",
@@ -2032,8 +2406,8 @@
    "topic": "대화·관계",
    "field": "마음·관계",
    "keywords": [
-    "갈등·무례 대처",
-    "거리 두기"
+    "거리 두기",
+    "갈등·무례 대처"
    ],
    "keywords_regex": [
     "갈등·무례 대처"
@@ -2055,7 +2429,8 @@
     "one_liner": "거절 못 하고 웃어넘기던 순간에 할 말을 하는 법을 알려줘요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791198476494",
@@ -2066,7 +2441,8 @@
    "topic": "대화·관계",
    "field": "마음·관계",
    "keywords": [
-    "말투·대화법"
+    "말투·대화법",
+    "갈등·무례 대처"
    ],
    "keywords_regex": [
     "말투·대화법",
@@ -2090,7 +2466,19 @@
     "one_liner": "상대를 부정하지 않는 말투로 의견이 달라도 갈등을 줄여요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "대화·관계",
+     "keywords": [
+      "말투·대화법"
+     ],
+     "way": "실습",
+     "one_liner": "상대를 부정하지 않는 말투로 의견이 달라도 갈등을 줄여요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788901290669",
@@ -2101,7 +2489,9 @@
    "topic": "대화·관계",
    "field": "마음·관계",
    "keywords": [
-    "말투·대화법"
+    "말투·대화법",
+    "발표",
+    "호감·사회생활"
    ],
    "keywords_regex": [
     "말투·대화법",
@@ -2125,7 +2515,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "대화·관계",
+     "keywords": [
+      "말투·대화법"
+     ],
+     "way": "실습",
+     "one_liner": "내향적이고 목소리가 작아도 조리 있게 말하는 소통법을 익혀요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193000090",
@@ -2159,7 +2561,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791192357188",
@@ -2193,7 +2596,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193937143",
@@ -2225,7 +2629,8 @@
     "one_liner": "1,000명 인터뷰로 찾은 다시 만나고 싶은 사람의 말과 태도를 담았어요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791191043655",
@@ -2327,7 +2732,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791170437321",
@@ -2361,7 +2767,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791124571019",
@@ -2372,7 +2779,7 @@
    "topic": "취업·커리어",
    "field": "일·커리어",
    "keywords": [
-    "자소서·면접"
+    "퍼스널 브랜딩"
    ],
    "keywords_regex": [
     "자소서·면접",
@@ -2395,7 +2802,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "취업·커리어",
+     "keywords": [
+      "자소서·면접"
+     ],
+     "way": "실습",
+     "one_liner": "링크드인 프로필과 인맥으로 채용 기회를 여는 전략을 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791197980725",
@@ -2406,7 +2825,8 @@
    "topic": "취업·커리어",
    "field": "일·커리어",
    "keywords": [
-    "이직·퇴사"
+    "이직·퇴사",
+    "자소서·면접"
    ],
    "keywords_regex": [
     "자소서·면접",
@@ -2431,7 +2851,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "취업·커리어",
+     "keywords": [
+      "이직·퇴사"
+     ],
+     "way": "실습",
+     "one_liner": "이직 타이밍 진단부터 경력기술서·퇴직 사유까지 준비하는 법을 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791158393335",
@@ -2464,7 +2896,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791191266467",
@@ -2497,7 +2930,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791160022247",
@@ -2513,7 +2947,7 @@
    "keywords_regex": [
     "직장 생활"
    ],
-   "way": "개념",
+   "way": "실습",
    "one_liner": "매일 마주치는 동료·상사와의 불편한 관계를 심리학으로 풀어요",
    "one_liner_style": "summary",
    "evidence": "직장 관계 심리 처방",
@@ -2529,7 +2963,19 @@
     "one_liner": "매일 마주치는 동료·상사와의 불편한 관계를 심리학으로 풀어요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "취업·커리어",
+     "keywords": [
+      "직장 생활"
+     ],
+     "way": "개념",
+     "one_liner": "매일 마주치는 동료·상사와의 불편한 관계를 심리학으로 풀어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791167471901",
@@ -2546,7 +2992,7 @@
    "one_liner_style": "summary",
    "evidence": "직업 체험기, 진로 탐색용",
    "confidence": 0.7,
-   "status": "picked",
+   "status": "dropped",
    "link": "https://www.yes24.com/product/goods/127157769",
    "draft": {
     "topic": "취업·커리어",
@@ -2557,7 +3003,11 @@
     "one_liner": "낯가리는 PD가 20년 방송 일을 하며 겪은 현실을 들려줘요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "에세이"
+   }
   },
   {
    "isbn": "9791197867101",
@@ -2593,7 +3043,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791170520108",
@@ -2624,7 +3075,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791192389844",
@@ -2640,7 +3092,7 @@
    "keywords_regex": [
     "직장 생활"
    ],
-   "way": "개념",
+   "way": "실습",
    "one_liner": "일보다 사람이 어려운 직장에서 까다로운 동료를 대하는 법을 알려줘요",
    "one_liner_style": "summary",
    "evidence": "직장 내 관계 유형별 해법",
@@ -2656,7 +3108,19 @@
     "one_liner": "일보다 사람이 어려운 직장에서 까다로운 동료를 대하는 법을 알려줘요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "취업·커리어",
+     "keywords": [
+      "직장 생활"
+     ],
+     "way": "개념",
+     "one_liner": "일보다 사람이 어려운 직장에서 까다로운 동료를 대하는 법을 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788925573021",
@@ -2667,8 +3131,7 @@
    "topic": "취업·커리어",
    "field": "일·커리어",
    "keywords": [
-    "퍼스널 브랜딩",
-    "이직·퇴사"
+    "퍼스널 브랜딩"
    ],
    "keywords_regex": [
     "이직·퇴사",
@@ -2691,7 +3154,20 @@
     "one_liner": "대기업을 나온 저자가 SNS로 자신을 브랜딩해 온 과정을 솔직히 담았어요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "취업·커리어",
+     "keywords": [
+      "퍼스널 브랜딩",
+      "이직·퇴사"
+     ],
+     "way": "사례",
+     "one_liner": "대기업을 나온 저자가 SNS로 자신을 브랜딩해 온 과정을 솔직히 담았어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791124205501",
@@ -2728,7 +3204,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791168322721",
@@ -2739,7 +3216,9 @@
    "topic": "취업·커리어",
    "field": "일·커리어",
    "keywords": [
-    "이직·퇴사"
+    "이직·퇴사",
+    "자소서·면접",
+    "커리어 설계"
    ],
    "keywords_regex": [
     "자소서·면접",
@@ -2763,7 +3242,19 @@
     "one_liner": "서치펌 대표가 AI 시대에 몸값을 올리는 이직 전략을 알려줘요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "취업·커리어",
+     "keywords": [
+      "이직·퇴사"
+     ],
+     "way": "실습",
+     "one_liner": "서치펌 대표가 AI 시대에 몸값을 올리는 이직 전략을 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791190938167",
@@ -2774,7 +3265,8 @@
    "topic": "취업·커리어",
    "field": "일·커리어",
    "keywords": [
-    "이직·퇴사"
+    "이직·퇴사",
+    "자소서·면접"
    ],
    "keywords_regex": [
     "자소서·면접",
@@ -2799,7 +3291,19 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "취업·커리어",
+     "keywords": [
+      "이직·퇴사"
+     ],
+     "way": "실습",
+     "one_liner": "홧김 퇴사 대신 연봉을 올리는 이직 준비를 문답으로 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791138855143",
@@ -2902,7 +3406,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9788965133520",
@@ -2912,9 +3417,11 @@
    "entry": "target",
    "topic": "글쓰기",
    "field": "일·커리어",
-   "keywords": [],
+   "keywords": [
+    "문해력·어휘"
+   ],
    "keywords_regex": [],
-   "way": "개념",
+   "way": "실습",
    "one_liner": "글쓰기가 두려운 사람에게 논리적인 글을 쓰는 비결을 알려줘요",
    "one_liner_style": "summary",
    "evidence": "논리적 글쓰기 특강",
@@ -2929,7 +3436,17 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "글쓰기",
+     "keywords": [],
+     "way": "개념",
+     "one_liner": "글쓰기가 두려운 사람에게 논리적인 글을 쓰는 비결을 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791185152431",
@@ -2943,7 +3460,7 @@
     "문해력·어휘"
    ],
    "keywords_regex": [],
-   "way": "사례",
+   "way": "실습",
    "one_liner": "교정자의 이야기와 함께 어색한 문장을 다듬는 요령을 익혀요",
    "one_liner_style": "summary",
    "evidence": "교정 이야기+문장 다듬기",
@@ -2959,7 +3476,19 @@
     "one_liner": "교정자의 이야기와 함께 어색한 문장을 다듬는 요령을 익혀요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "글쓰기",
+     "keywords": [
+      "문해력·어휘"
+     ],
+     "way": "사례",
+     "one_liner": "교정자의 이야기와 함께 어색한 문장을 다듬는 요령을 익혀요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791173324901",
@@ -2969,7 +3498,9 @@
    "entry": "target",
    "topic": "글쓰기",
    "field": "일·커리어",
-   "keywords": [],
+   "keywords": [
+    "에세이·책 쓰기"
+   ],
    "keywords_regex": [],
    "way": "실습",
    "one_liner": "스티븐 킹이 작가로 성장한 삶과 소설 쓰기의 기본기를 들려줘요",
@@ -2985,8 +3516,17 @@
     "one_liner": "스티븐 킹이 작가로 성장한 삶과 소설 쓰기의 기본기를 들려줘요",
     "status": "picked"
    },
-   "reviewed": false,
-   "auto": "ai-agree"
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "글쓰기",
+     "keywords": [],
+     "way": "실습",
+     "one_liner": "스티븐 킹이 작가로 성장한 삶과 소설 쓰기의 기본기를 들려줘요"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791139724363",
@@ -3019,7 +3559,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791194442097",
@@ -3048,7 +3589,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9788990701626",
@@ -3080,8 +3622,8 @@
     "one_liner": "글쓰기의 마지막 단계로 내 책 한 권을 기획하고 쓰는 법을 알려줘요",
     "status": "picked"
    },
-   "reviewed": false,
-   "auto": "ai-agree"
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791190216555",
@@ -3114,7 +3656,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791192099118",
@@ -3124,11 +3667,13 @@
    "entry": "target",
    "topic": "글쓰기",
    "field": "일·커리어",
-   "keywords": [],
+   "keywords": [
+    "에세이·책 쓰기"
+   ],
    "keywords_regex": [
     "에세이·책 쓰기"
    ],
-   "way": "사례",
+   "way": "개념",
    "one_liner": "읽고 생각하고 쓰는 일을 함께 나눈 글쓰기 수업의 기록이에요",
    "one_liner_style": "summary",
    "evidence": "글쓰기 수업 산문집",
@@ -3143,7 +3688,17 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "글쓰기",
+     "keywords": [],
+     "way": "사례",
+     "one_liner": "읽고 생각하고 쓰는 일을 함께 나눈 글쓰기 수업의 기록이에요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791199491731",
@@ -3175,7 +3730,8 @@
     "one_liner": "보고서와 메일에 쓰는 어색한 문장을 명확하게 고쳐요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791157063482",
@@ -3189,7 +3745,7 @@
     "업무 글"
    ],
    "keywords_regex": [],
-   "way": "사례",
+   "way": "실습",
    "one_liner": "연설비서관이 두 대통령에게 배운 소통의 글쓰기를 전해요",
    "one_liner_style": "summary",
    "evidence": "연설문 작성 경험담",
@@ -3205,7 +3761,19 @@
     "one_liner": "연설비서관이 두 대통령에게 배운 소통의 글쓰기를 전해요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "글쓰기",
+     "keywords": [
+      "업무 글"
+     ],
+     "way": "사례",
+     "one_liner": "연설비서관이 두 대통령에게 배운 소통의 글쓰기를 전해요"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791192908298",
@@ -3231,7 +3799,8 @@
     "one_liner": "지식의 저주를 피해 읽기 쉬운 글을 쓰는 원리를 인지과학으로 풀어요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9788968333767",
@@ -3264,8 +3833,8 @@
     "one_liner": "읽어도 남지 않는 어른을 위해 주 3회 문해력 훈련을 이끌어요",
     "status": "picked"
    },
-   "reviewed": false,
-   "auto": "ai-agree"
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193926574",
@@ -3298,7 +3867,8 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791189328672",
@@ -3308,11 +3878,14 @@
    "entry": "target",
    "topic": "글쓰기",
    "field": "일·커리어",
-   "keywords": [],
+   "keywords": [
+    "에세이·책 쓰기",
+    "업무 글"
+   ],
    "keywords_regex": [
     "에세이·책 쓰기"
    ],
-   "way": "개념",
+   "way": "실습",
    "one_liner": "31년 차 기자가 읽히는 글을 쓰는 원칙을 순서대로 알려줘요",
    "one_liner_style": "summary",
    "evidence": "기자의 글쓰기 원칙",
@@ -3327,7 +3900,17 @@
     "status": "picked"
    },
    "reviewed": false,
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "글쓰기",
+     "keywords": [],
+     "way": "개념",
+     "one_liner": "31년 차 기자가 읽히는 글을 쓰는 원칙을 순서대로 알려줘요"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791173719165",

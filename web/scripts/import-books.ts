@@ -29,7 +29,9 @@ if (!source) {
   process.exit(2);
 }
 const addDir = path.join(processed, "additions");
-const addFiles = existsSync(addDir) ? readdirSync(addDir).filter((f) => f.endsWith(".json") && !f.endsWith("-ai2.json")).sort() : [];
+const addFiles = existsSync(addDir) ? readdirSync(addDir)
+  // -ai2: pass B's own file; <batch>.v2.json: a re-tag working copy (src/pipeline/library.py) — neither is a library file
+  .filter((f) => f.endsWith(".json") && !f.endsWith("-ai2.json") && !/\.v\d+\.json$/.test(f)).sort() : [];
 const base = readJson(source) as Record<string, unknown>[];
 const merged = mergeAdditions(base, bibFromCsv(readFileSync(path.join(processed, "d1_selected.csv"), "utf8")),
   addFiles.map((f) => readJson(path.join(addDir, f))), vocab);

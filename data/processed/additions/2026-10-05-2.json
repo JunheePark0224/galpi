@@ -39,7 +39,19 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/114915169",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "과학 교양",
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "뇌는 어떻게 창의성을 만들고 AI와 다를까요?",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193401200",
@@ -47,11 +59,11 @@
    "author": "최태성 저",
    "pages": 304,
    "entry": "leaf",
-   "genre": "역사",
+   "genre": "인문",
    "axes": {
     "temp": 1,
-    "pull": 0,
-    "gain": 1,
+    "pull": -1,
+    "gain": -1,
     "world": 1
    },
    "one_liner_style": "question",
@@ -74,8 +86,34 @@
     "gain"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/128944234"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/128944234",
+   "draft": {
+    "genre": "역사",
+    "axes": {
+     "temp": 1,
+     "pull": 0,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "신라 삼국통일과 독립운동가의 선택에서 내 삶의 힘을 찾아볼까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "역사",
+     "axes": {
+      "temp": 1,
+      "pull": 0,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "신라 삼국통일과 독립운동가의 선택에서 내 삶의 힘을 찾아볼까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193401675",
@@ -86,7 +124,7 @@
    "genre": "역사",
    "axes": {
     "temp": 0,
-    "pull": 0,
+    "pull": -1,
     "gain": 1,
     "world": 1
    },
@@ -109,7 +147,32 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/189245464",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "역사",
+    "axes": {
+     "temp": 0,
+     "pull": 0,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "서양과 동양의 흐름을 한 번에 꿰어 세계사의 큰 줄기를 잡아볼까요?",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "역사",
+     "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "서양과 동양의 흐름을 한 번에 꿰어 세계사의 큰 줄기를 잡아볼까요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788934942467",
@@ -119,7 +182,7 @@
    "entry": "leaf",
    "genre": "역사",
    "axes": {
-    "temp": -1,
+    "temp": 0,
     "pull": -1,
     "gain": 1,
     "world": 1
@@ -144,8 +207,34 @@
     "pull"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/118755085"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/118755085",
+   "draft": {
+    "genre": "역사",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "대륙마다 문명의 출발선이 달라진 까닭을 지리와 생물로 풀어 볼까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "역사",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "대륙마다 문명의 출발선이 달라진 까닭을 지리와 생물로 풀어 볼까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791139728002",
@@ -219,8 +308,21 @@
    "issues": [
     "근거 김(31자)"
    ],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/104409067"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/104409067",
+   "draft": {
+    "genre": "역사",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "드레퓌스 사건에서 소련 해체까지, 20세기를 뒤흔든 장면이 궁금하지 않나요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791198243430",
@@ -254,8 +356,21 @@
     "pull"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/119458052"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/119458052",
+   "draft": {
+    "genre": "역사",
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "고조선부터 현대까지 흐름을 시대별로 훑으며 한국사의 뼈대를 잡아 봐요?",
+    "status": "review"
+   },
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791194330424",
@@ -263,10 +378,10 @@
    "author": "유발 하라리 저/김명주 역",
    "pages": 684,
    "entry": "leaf",
-   "genre": "역사",
+   "genre": "사회·시사",
    "axes": {
     "temp": -1,
-    "pull": 0,
+    "pull": -1,
     "gain": 1,
     "world": 1
    },
@@ -291,8 +406,34 @@
     "confidence"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/134602629"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/134602629",
+   "draft": {
+    "genre": "역사",
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "정보 네트워크의 역사를 따라가면 AI 시대의 민주주의가 보일까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "역사",
+     "axes": {
+      "temp": -1,
+      "pull": 0,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "정보 네트워크의 역사를 따라가면 AI 시대의 민주주의가 보일까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193128428",
@@ -326,7 +467,19 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/122433629",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "역사",
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "러시아는 왜 전쟁을 벌이고 미국은 어떻게 강대국이 됐는지 궁금하지 않나요?",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791159098161",
@@ -360,7 +513,19 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/111114279",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "역사",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "백년전쟁부터 우크라이나 전쟁까지 굵직한 전쟁의 배경과 흐름을 이야기로 따라가요?",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788936479381",
@@ -446,8 +611,8 @@
    "entry": "leaf",
    "genre": "사회·시사",
    "axes": {
-    "temp": -1,
-    "pull": 1,
+    "temp": 0,
+    "pull": -1,
     "gain": 1,
     "world": 1
    },
@@ -471,8 +636,34 @@
     "pull"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/194502573"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/194502573",
+   "draft": {
+    "genre": "사회·시사",
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "돌봄 곁에서 늘 해 온 계획과 결정의 부담을 사회 문제로 보게 될까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "사회·시사",
+     "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "돌봄 곁에서 늘 해 온 계획과 결정의 부담을 사회 문제로 보게 될까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791194085751",
@@ -483,7 +674,7 @@
    "genre": "사회·시사",
    "axes": {
     "temp": -1,
-    "pull": 0,
+    "pull": -1,
     "gain": 1,
     "world": 1
    },
@@ -506,7 +697,32 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/154750530",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "사회·시사",
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "분리배출한 쓰레기가 왜 대부분 소각되는지, 통계 뒤 구조를 짚어 볼까요?",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "사회·시사",
+     "axes": {
+      "temp": -1,
+      "pull": 0,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "분리배출한 쓰레기가 왜 대부분 소각되는지, 통계 뒤 구조를 짚어 볼까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788968335327",
@@ -516,8 +732,8 @@
    "entry": "leaf",
    "genre": "사회·시사",
    "axes": {
-    "temp": -1,
-    "pull": 0,
+    "temp": 0,
+    "pull": -1,
     "gain": 1,
     "world": 1
    },
@@ -542,8 +758,34 @@
     "world"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/172737160"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/172737160",
+   "draft": {
+    "genre": "사회·시사",
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "내 소비가 기후와 노동, 생물에 닿는 길을 일상 사례로 짚어 봐요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "사회·시사",
+     "axes": {
+      "temp": -1,
+      "pull": 0,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "내 소비가 기후와 노동, 생물에 닿는 길을 일상 사례로 짚어 봐요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788901242644",
@@ -554,7 +796,7 @@
    "genre": "사회·시사",
    "axes": {
     "temp": -1,
-    "pull": 1,
+    "pull": -1,
     "gain": 1,
     "world": 1
    },
@@ -578,8 +820,34 @@
     "pull"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/90990068"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/90990068",
+   "draft": {
+    "genre": "사회·시사",
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "남자를 표준으로 설계된 일상과 일터, 의료 속 성별 격차를 자료로 짚어 봐요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "사회·시사",
+     "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "남자를 표준으로 설계된 일상과 일터, 의료 속 성별 격차를 자료로 짚어 봐요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791187064664",
@@ -589,9 +857,9 @@
    "entry": "leaf",
    "genre": "사회·시사",
    "axes": {
-    "temp": 0,
-    "pull": 0,
-    "gain": 1,
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
     "world": 1
    },
    "one_liner_style": "question",
@@ -615,7 +883,32 @@
    ],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/102035886",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "사회·시사",
+    "axes": {
+     "temp": 0,
+     "pull": 0,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "노년의 몸과 욕망, 돌봄과 죽음을 페미니즘으로 보면 무엇이 달라질까요?",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "사회·시사",
+     "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "노년의 몸과 욕망, 돌봄과 죽음을 페미니즘으로 보면 무엇이 달라질까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788925556253",
@@ -625,8 +918,8 @@
    "entry": "leaf",
    "genre": "사회·시사",
    "axes": {
-    "temp": 0,
-    "pull": 0,
+    "temp": 1,
+    "pull": -1,
     "gain": 1,
     "world": 1
    },
@@ -649,8 +942,34 @@
     "pull"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/91181719"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/91181719",
+   "draft": {
+    "genre": "사회·시사",
+    "axes": {
+     "temp": 0,
+     "pull": 0,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "수도를 틀 때 그 물이 어디서 왔는지 생각해 본 적 있나요?",
+    "status": "review"
+   },
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "사회·시사",
+     "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "수도를 틀 때 그 물이 어디서 왔는지 생각해 본 적 있나요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791198138729",
@@ -658,12 +977,12 @@
    "author": "유범상 저/유기훈 그림",
    "pages": 304,
    "entry": "leaf",
-   "genre": "사회·시사",
+   "genre": "한국 소설",
    "axes": {
     "temp": 1,
-    "pull": 0,
-    "gain": 1,
-    "world": 0
+    "pull": -1,
+    "gain": -1,
+    "world": -1
    },
    "one_liner_style": "question",
    "one_liner": "민달팽이 이야기로 자유권과 사회권 같은 인권을 쉽게 짚어 볼까요?",
@@ -686,7 +1005,32 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/122674421",
-   "auto": "ai-agree"
+   "draft": {
+    "genre": "사회·시사",
+    "axes": {
+     "temp": 1,
+     "pull": 0,
+     "gain": 1,
+     "world": 0
+    },
+    "one_liner": "민달팽이 이야기로 자유권과 사회권 같은 인권을 쉽게 짚어 볼까요?",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "사회·시사",
+     "axes": {
+      "temp": 1,
+      "pull": 0,
+      "gain": 1,
+      "world": 0
+     },
+     "one_liner": "민달팽이 이야기로 자유권과 사회권 같은 인권을 쉽게 짚어 볼까요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791189143466",
@@ -720,7 +1064,19 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/125909877",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "사회·시사",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "숫자로 재난, 주거, 교육, 노동 같은 한국 사회의 오늘을 볼 수 있을까요?",
+    "status": "picked"
+   },
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791199244351",
@@ -731,7 +1087,7 @@
    "genre": "사회·시사",
    "axes": {
     "temp": -1,
-    "pull": 1,
+    "pull": -1,
     "gain": 1,
     "world": 1
    },
@@ -754,8 +1110,34 @@
     "pull"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/190819712"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/190819712",
+   "draft": {
+    "genre": "사회·시사",
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "연애가 힘든 이유를 개인 탓 말고 사회에서 찾아볼까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "사회·시사",
+     "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "연애가 힘든 이유를 개인 탓 말고 사회에서 찾아볼까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791198239020",
@@ -768,7 +1150,7 @@
     "temp": -1,
     "pull": -1,
     "gain": -1,
-    "world": 0
+    "world": -1
    },
    "one_liner_style": "question",
    "one_liner": "한국 사회의 세대별 공포를 여덟 가지 맛으로 맛볼 수 있을까요?",
@@ -789,7 +1171,32 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/119183662",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "호러·괴담",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 0
+    },
+    "one_liner": "한국 사회의 세대별 공포를 여덟 가지 맛으로 맛볼 수 있을까요?",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "호러·괴담",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 0
+     },
+     "one_liner": "한국 사회의 세대별 공포를 여덟 가지 맛으로 맛볼 수 있을까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791171259939",
@@ -823,7 +1230,19 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/196679956",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "호러·괴담",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "one_liner": "섬뜩한 묘사와 반전이 이어지는 핏빛 이야기에 빠져들고 싶나요?",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788967998387",
@@ -836,7 +1255,7 @@
     "temp": -1,
     "pull": -1,
     "gain": -1,
-    "world": 0
+    "world": -1
    },
    "one_liner_style": "question",
    "one_liner": "민속신앙에서 비롯된 기이한 공포가 가상 도시 섭주에서 이어지는 이야기일까요?",
@@ -857,7 +1276,32 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/130769798",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "호러·괴담",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 0
+    },
+    "one_liner": "민속신앙에서 비롯된 기이한 공포가 가상 도시 섭주에서 이어지는 이야기일까요?",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "호러·괴담",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 0
+     },
+     "one_liner": "민속신앙에서 비롯된 기이한 공포가 가상 도시 섭주에서 이어지는 이야기일까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788932925868",
@@ -865,10 +1309,10 @@
    "author": "메리 W. 셸리 저/오숙은 역",
    "pages": 320,
    "entry": "leaf",
-   "genre": "호러·괴담",
+   "genre": "SF·판타지",
    "axes": {
     "temp": -1,
-    "pull": 0,
+    "pull": -1,
     "gain": -1,
     "world": -1
    },
@@ -893,8 +1337,34 @@
    "issues": [
     "근거 김(33자)"
    ],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/195235375"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/195235375",
+   "draft": {
+    "genre": "호러·괴담",
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": -1,
+     "world": -1
+    },
+    "one_liner": "생명을 만든 과학자와 버려진 피조물의 분노가 어디로 번지는지 따라가 볼까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "호러·괴담",
+     "axes": {
+      "temp": -1,
+      "pull": 0,
+      "gain": -1,
+      "world": -1
+     },
+     "one_liner": "생명을 만든 과학자와 버려진 피조물의 분노가 어디로 번지는지 따라가 볼까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791169108423",
@@ -906,7 +1376,7 @@
    "axes": {
     "temp": -1,
     "pull": -1,
-    "gain": 0,
+    "gain": -1,
     "world": -1
    },
    "one_liner_style": "question",
@@ -928,8 +1398,34 @@
     "gain"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/134028998"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/134028998",
+   "draft": {
+    "genre": "호러·괴담",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": 0,
+     "world": -1
+    },
+    "one_liner": "좀비 바이러스가 퍼진 법정에서 무슨 일이 벌어질까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "호러·괴담",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": 0,
+      "world": -1
+     },
+     "one_liner": "좀비 바이러스가 퍼진 법정에서 무슨 일이 벌어질까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791175773370",
@@ -963,8 +1459,21 @@
     "world"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/192274286"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/192274286",
+   "draft": {
+    "genre": "호러·괴담",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "one_liner": "퇴마사들이 다시 모여 어둠의 존재와 맞서는 오컬트 전개가 궁금해지나요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791158791971",
@@ -975,9 +1484,9 @@
    "genre": "호러·괴담",
    "axes": {
     "temp": -1,
-    "pull": 0,
+    "pull": -1,
     "gain": -1,
-    "world": 0
+    "world": -1
    },
    "one_liner_style": "question",
    "one_liner": "비 오는 밤 낯선 이들이 들려주는 기이한 체험담, 어떤 괴이가 숨어 있을까요?",
@@ -998,8 +1507,34 @@
     "pull"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/114946621"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/114946621",
+   "draft": {
+    "genre": "호러·괴담",
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": -1,
+     "world": 0
+    },
+    "one_liner": "비 오는 밤 낯선 이들이 들려주는 기이한 체험담, 어떤 괴이가 숨어 있을까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "호러·괴담",
+     "axes": {
+      "temp": -1,
+      "pull": 0,
+      "gain": -1,
+      "world": 0
+     },
+     "one_liner": "비 오는 밤 낯선 이들이 들려주는 기이한 체험담, 어떤 괴이가 숨어 있을까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791173573910",
@@ -1012,7 +1547,7 @@
     "temp": -1,
     "pull": -1,
     "gain": -1,
-    "world": 0
+    "world": -1
    },
    "one_liner_style": "question",
    "one_liner": "무속과 사이비, 이웃의 얼굴을 한 공포를 사연으로 만나 볼까요?",
@@ -1033,7 +1568,32 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/149730220",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "호러·괴담",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 0
+    },
+    "one_liner": "무속과 사이비, 이웃의 얼굴을 한 공포를 사연으로 만나 볼까요?",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "호러·괴담",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 0
+     },
+     "one_liner": "무속과 사이비, 이웃의 얼굴을 한 공포를 사연으로 만나 볼까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791192738826",
@@ -1046,7 +1606,7 @@
     "temp": -1,
     "pull": -1,
     "gain": -1,
-    "world": 0
+    "world": -1
    },
    "one_liner_style": "question",
    "one_liner": "유령 저택부터 슬래셔까지, 다양한 공포를 한 권에서 만나 볼까요?",
@@ -1069,7 +1629,32 @@
    ],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/194327707",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "호러·괴담",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 0
+    },
+    "one_liner": "유령 저택부터 슬래셔까지, 다양한 공포를 한 권에서 만나 볼까요?",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "호러·괴담",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 0
+     },
+     "one_liner": "유령 저택부터 슬래셔까지, 다양한 공포를 한 권에서 만나 볼까요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788960901087",
@@ -1140,7 +1725,19 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/123906352",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "로맨스",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "잘못 날아온 고백 때문에 시작된 거짓말, 마음은 어디로 향할까요?",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791191043297",
@@ -1150,7 +1747,7 @@
    "entry": "leaf",
    "genre": "로맨스",
    "axes": {
-    "temp": 1,
+    "temp": -1,
     "pull": -1,
     "gain": -1,
     "world": 1
@@ -1174,8 +1771,34 @@
     "temp"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/102360203"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/102360203",
+   "draft": {
+    "genre": "로맨스",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "기억이 매일 리셋되는 소녀와 고등학생의 애틋한 사랑은 어떻게 흘러갈까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "로맨스",
+     "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "one_liner": "기억이 매일 리셋되는 소녀와 고등학생의 애틋한 사랑은 어떻게 흘러갈까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788932909363",
@@ -1260,7 +1883,7 @@
    "entry": "leaf",
    "genre": "로맨스",
    "axes": {
-    "temp": 0,
+    "temp": 1,
     "pull": -1,
     "gain": -1,
     "world": 1
@@ -1284,8 +1907,34 @@
     "temp"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/123915061"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/123915061",
+   "draft": {
+    "genre": "로맨스",
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "겨울 해변 마을의 첫사랑을 따라가며 마음이 촉촉해지는 이야기일까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "로맨스",
+     "axes": {
+      "temp": 0,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "one_liner": "겨울 해변 마을의 첫사랑을 따라가며 마음이 촉촉해지는 이야기일까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788937464614",
@@ -1332,7 +1981,7 @@
    "entry": "leaf",
    "genre": "로맨스",
    "axes": {
-    "temp": 1,
+    "temp": -1,
     "pull": -1,
     "gain": -1,
     "world": 1
@@ -1356,7 +2005,32 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/126406459",
-   "auto": "ai-agree"
+   "draft": {
+    "genre": "로맨스",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "오랜 세월 이어진 두 사람의 사랑이 어떻게 다시 닿는지 따라가 볼까요?",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "로맨스",
+     "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "one_liner": "오랜 세월 이어진 두 사람의 사랑이 어떻게 다시 닿는지 따라가 볼까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788956608846",
@@ -1366,9 +2040,9 @@
    "entry": "leaf",
    "genre": "로맨스",
    "axes": {
-    "temp": 0,
-    "pull": 0,
-    "gain": 1,
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
     "world": 1
    },
    "one_liner_style": "question",
@@ -1391,8 +2065,34 @@
     "gain"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/30547371"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/30547371",
+   "draft": {
+    "genre": "로맨스",
+    "axes": {
+     "temp": 0,
+     "pull": 0,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "사랑이 이루어진 뒤 결혼 생활 속 갈등을 어떻게 이어 갈 수 있을까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "로맨스",
+     "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "사랑이 이루어진 뒤 결혼 생활 속 갈등을 어떻게 이어 갈 수 있을까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791194530701",
@@ -1474,7 +2174,9 @@
    "entry": "target",
    "topic": "마케팅·브랜딩",
    "field": "일·커리어",
-   "keywords": [],
+   "keywords": [
+    "고객 이해"
+   ],
    "keywords_regex": [
     "고객 이해"
    ],
@@ -1500,8 +2202,26 @@
    "issues": [
     "근거 김(32자)"
    ],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/116255710"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/116255710",
+   "draft": {
+    "topic": "마케팅·브랜딩",
+    "keywords": [],
+    "way": "실습",
+    "one_liner": "광고 문구부터 구매 버튼까지 판매 과정을 하나의 시스템으로 짜는 법을 알려 줘요",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마케팅·브랜딩",
+     "keywords": [],
+     "way": "실습",
+     "one_liner": "광고 문구부터 구매 버튼까지 판매 과정을 하나의 시스템으로 짜는 법을 알려 줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791176881364",
@@ -1521,7 +2241,7 @@
    "way": "실습",
    "keyword_candidate": "영업",
    "one_liner_style": "summary",
-   "one_liner": "",
+   "one_liner": "거절을 넘어 성과를 만드는 실전 세일즈 심리 전략",
    "evidence": "영업 현장 심리·협상 기법 중심, 고객 심리 읽기",
    "confidence": 0.6,
    "fits": true,
@@ -1540,8 +2260,30 @@
    "issues": [
     "한 줄이 책소개를 베낌"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/196184770"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196184770",
+   "draft": {
+    "topic": "마케팅·브랜딩",
+    "keywords": [
+     "고객 이해"
+    ],
+    "way": "실습",
+    "one_liner": "",
+    "status": "reserve"
+   },
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마케팅·브랜딩",
+     "keywords": [
+      "고객 이해"
+     ],
+     "way": "실습",
+     "one_liner": ""
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788965707820",
@@ -1578,7 +2320,18 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/71388571",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "마케팅·브랜딩",
+    "keywords": [
+     "고객 이해",
+     "브랜딩"
+    ],
+    "way": "개념",
+    "one_liner": "스팸 같은 광고 대신 최소한의 열광할 고객을 찾아 신뢰를 쌓는 마케팅 관점을 익혀요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788970414843",
@@ -1622,7 +2375,8 @@
    "topic": "마케팅·브랜딩",
    "field": "일·커리어",
    "keywords": [
-    "브랜딩"
+    "브랜딩",
+    "고객 이해"
    ],
    "keywords_regex": [
     "고객 이해"
@@ -1647,8 +2401,30 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/124720040"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/124720040",
+   "draft": {
+    "topic": "마케팅·브랜딩",
+    "keywords": [
+     "브랜딩"
+    ],
+    "way": "실습",
+    "one_liner": "고객 인사이트와 비전에서 컨셉을 끌어내 한 문장으로 쓰는 단계를 익혀요.",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마케팅·브랜딩",
+     "keywords": [
+      "브랜딩"
+     ],
+     "way": "실습",
+     "one_liner": "고객 인사이트와 비전에서 컨셉을 끌어내 한 문장으로 쓰는 단계를 익혀요."
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791144200265",
@@ -1659,8 +2435,7 @@
    "topic": "마케팅·브랜딩",
    "field": "일·커리어",
    "keywords": [
-    "브랜딩",
-    "고객 이해"
+    "브랜딩"
    ],
    "keywords_regex": [
     "브랜딩",
@@ -1686,7 +2461,30 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/196816476",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "마케팅·브랜딩",
+    "keywords": [
+     "브랜딩",
+     "고객 이해"
+    ],
+    "way": "개념",
+    "one_liner": "AI가 브랜드를 읽고 추천하는 방식을 알고 선택받는 브랜드 전략을 세워요.",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마케팅·브랜딩",
+     "keywords": [
+      "브랜딩",
+      "고객 이해"
+     ],
+     "way": "개념",
+     "one_liner": "AI가 브랜드를 읽고 추천하는 방식을 알고 선택받는 브랜드 전략을 세워요."
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791194793090",
@@ -1723,8 +2521,19 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/147562832"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/147562832",
+   "draft": {
+    "topic": "마케팅·브랜딩",
+    "keywords": [
+     "고객 이해"
+    ],
+    "way": "실습",
+    "one_liner": "고객 여정을 살피고 직원 경험까지 이어 90일 안에 고객 경험을 다듬는 틀을 얻어요.",
+    "status": "review"
+   },
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791157688715",
@@ -1743,7 +2552,7 @@
    "way": "실습",
    "keyword_candidate": "심리 마케팅",
    "one_liner_style": "summary",
-   "one_liner": "",
+   "one_liner": "손해 강조, 선택지 3개 같은 설득 심리 기술로 고객의 지갑을 여는 법을 익혀요",
    "evidence": "팔리는 심리 기술 100개로 판매 설득법 제시",
    "confidence": 0.8,
    "fits": true,
@@ -1759,8 +2568,30 @@
    "issues": [
     "한 줄이 책소개를 베낌"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/118485416"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/118485416",
+   "draft": {
+    "topic": "마케팅·브랜딩",
+    "keywords": [
+     "고객 이해"
+    ],
+    "way": "실습",
+    "one_liner": "",
+    "status": "reserve"
+   },
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마케팅·브랜딩",
+     "keywords": [
+      "고객 이해"
+     ],
+     "way": "실습",
+     "one_liner": ""
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791122040203",
@@ -1771,8 +2602,8 @@
    "topic": "마케팅·브랜딩",
    "field": "일·커리어",
    "keywords": [
-    "콘텐츠 마케팅",
-    "고객 이해"
+    "고객 이해",
+    "콘텐츠 마케팅"
    ],
    "keywords_regex": [
     "브랜딩",
@@ -1800,7 +2631,18 @@
    ],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/195766353",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "마케팅·브랜딩",
+    "keywords": [
+     "콘텐츠 마케팅",
+     "고객 이해"
+    ],
+    "way": "실습",
+    "one_liner": "AI가 고객에게 우리 가게를 추천하도록 데이터를 심는 마케팅 방법을 알려줘요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788986022919",
@@ -1811,8 +2653,7 @@
    "topic": "마케팅·브랜딩",
    "field": "일·커리어",
    "keywords": [
-    "브랜딩",
-    "고객 이해"
+    "브랜딩"
    ],
    "keywords_regex": [],
    "way": "개념",
@@ -1834,8 +2675,32 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/135363243"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/135363243",
+   "draft": {
+    "topic": "마케팅·브랜딩",
+    "keywords": [
+     "브랜딩",
+     "고객 이해"
+    ],
+    "way": "개념",
+    "one_liner": "소비자 머릿속 인식을 중심으로 시장에서 기억되는 전략의 원리를 이해해요",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마케팅·브랜딩",
+     "keywords": [
+      "브랜딩",
+      "고객 이해"
+     ],
+     "way": "개념",
+     "one_liner": "소비자 머릿속 인식을 중심으로 시장에서 기억되는 전략의 원리를 이해해요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791130625867",
@@ -1871,8 +2736,19 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/79633189"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/79633189",
+   "draft": {
+    "topic": "리더십",
+    "keywords": [
+     "조직 문화"
+    ],
+    "way": "개념",
+    "one_liner": "구성원이 거리낌 없이 의견을 내는 팀을 만드는 이유와 단계를 알려줘요",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791191662177",
@@ -1880,11 +2756,10 @@
    "author": "손창훈,유하림 저",
    "pages": 250,
    "entry": "target",
-   "topic": "리더십",
+   "topic": "취업·커리어",
    "field": "일·커리어",
    "keywords": [
-    "피드백·코칭",
-    "조직 문화"
+    "직장 생활"
    ],
    "keywords_regex": [
     "팀 이끌기",
@@ -1914,8 +2789,32 @@
    "issues": [
     "근거 김(33자)"
    ],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/133810169"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/133810169",
+   "draft": {
+    "topic": "리더십",
+    "keywords": [
+     "피드백·코칭",
+     "조직 문화"
+    ],
+    "way": "실습",
+    "one_liner": "일대일 면담으로 팀원과 소통하고 성장을 돕는 방법을 배워요",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "리더십",
+     "keywords": [
+      "피드백·코칭",
+      "조직 문화"
+     ],
+     "way": "실습",
+     "one_liner": "일대일 면담으로 팀원과 소통하고 성장을 돕는 방법을 배워요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788965966463",
@@ -1926,8 +2825,7 @@
    "topic": "리더십",
    "field": "일·커리어",
    "keywords": [
-    "팀 이끌기",
-    "조직 문화"
+    "팀 이끌기"
    ],
    "keywords_regex": [
     "팀 이끌기"
@@ -1952,7 +2850,30 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/132567247",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "리더십",
+    "keywords": [
+     "팀 이끌기",
+     "조직 문화"
+    ],
+    "way": "개념",
+    "one_liner": "위대한 리더의 조건과 비전, 용인술, 혁신 조직 만드는 법을 이해해요",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "리더십",
+     "keywords": [
+      "팀 이끌기",
+      "조직 문화"
+     ],
+     "way": "개념",
+     "one_liner": "위대한 리더의 조건과 비전, 용인술, 혁신 조직 만드는 법을 이해해요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791172541385",
@@ -1963,7 +2884,7 @@
    "topic": "리더십",
    "field": "일·커리어",
    "keywords": [
-    "팀 이끌기",
+    "피드백·코칭",
     "조직 문화"
    ],
    "keywords_regex": [
@@ -1992,8 +2913,32 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/194255353"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/194255353",
+   "draft": {
+    "topic": "리더십",
+    "keywords": [
+     "팀 이끌기",
+     "조직 문화"
+    ],
+    "way": "개념",
+    "one_liner": "답을 주는 대신 묻는 태도로 신뢰 관계를 쌓는 리더의 대화 기술을 배워요",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "리더십",
+     "keywords": [
+      "팀 이끌기",
+      "조직 문화"
+     ],
+     "way": "개념",
+     "one_liner": "답을 주는 대신 묻는 태도로 신뢰 관계를 쌓는 리더의 대화 기술을 배워요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791173327964",
@@ -2047,7 +2992,7 @@
     "피드백·코칭",
     "조직 문화"
    ],
-   "way": "개념",
+   "way": "실습",
    "keyword_candidate": null,
    "one_liner_style": "summary",
    "one_liner": "솔직한 피드백과 신뢰로 팀원과 관계를 쌓고 성장시키는 방법을 알게 돼요.",
@@ -2068,8 +3013,32 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/74259979"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/74259979",
+   "draft": {
+    "topic": "리더십",
+    "keywords": [
+     "피드백·코칭",
+     "팀 이끌기"
+    ],
+    "way": "개념",
+    "one_liner": "솔직한 피드백과 신뢰로 팀원과 관계를 쌓고 성장시키는 방법을 알게 돼요.",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "리더십",
+     "keywords": [
+      "피드백·코칭",
+      "팀 이끌기"
+     ],
+     "way": "개념",
+     "one_liner": "솔직한 피드백과 신뢰로 팀원과 관계를 쌓고 성장시키는 방법을 알게 돼요."
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791162544914",
@@ -2108,7 +3077,18 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/192474519",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "리더십",
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ],
+    "way": "실습",
+    "one_liner": "일을 누구에게 어디까지 맡길지 단계별 원칙과 상황별 방법을 익혀요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788927810872",
@@ -2146,7 +3126,18 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/86639921",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "리더십",
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ],
+    "way": "실습",
+    "one_liner": "첫 팀장이 팀 운영부터 성과 관리, 원온원까지 바로 써먹을 해결책을 얻어요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791168120112",
@@ -2161,7 +3152,7 @@
     "조직 문화"
    ],
    "keywords_regex": [],
-   "way": "개념",
+   "way": "사례",
    "keyword_candidate": null,
    "one_liner_style": "summary",
    "one_liner": "뛰어난 사람들이 모여도 삐걱대는 팀이 어디서 막히는지 짚고 풀어 가는 법을 알려 줘요",
@@ -2181,7 +3172,30 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/103930184",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "리더십",
+    "keywords": [
+     "팀 이끌기",
+     "조직 문화"
+    ],
+    "way": "개념",
+    "one_liner": "뛰어난 사람들이 모여도 삐걱대는 팀이 어디서 막히는지 짚고 풀어 가는 법을 알려 줘요",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "리더십",
+     "keywords": [
+      "팀 이끌기",
+      "조직 문화"
+     ],
+     "way": "개념",
+     "one_liner": "뛰어난 사람들이 모여도 삐걱대는 팀이 어디서 막히는지 짚고 풀어 가는 법을 알려 줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791124629086",
@@ -2220,8 +3234,20 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/193360736"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/193360736",
+   "draft": {
+    "topic": "리더십",
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ],
+    "way": "실습",
+    "one_liner": "팀원의 잠재력을 끌어내는 상황별 대화법과 성장시키는 리더의 태도를 익혀요",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791196834005",
@@ -2232,7 +3258,8 @@
    "topic": "건강·운동",
    "field": "습관·자기계발",
    "keywords": [
-    "달리기·근력"
+    "달리기·근력",
+    "운동 습관"
    ],
    "keywords_regex": [
     "달리기·근력"
@@ -2257,8 +3284,30 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/82589741"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/82589741",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [
+     "달리기·근력"
+    ],
+    "way": "실습",
+    "one_liner": "척추와 관절을 지키며 유산소와 근력운동을 안전하게 하는 방법을 알려 줘요",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "건강·운동",
+     "keywords": [
+      "달리기·근력"
+     ],
+     "way": "실습",
+     "one_liner": "척추와 관절을 지키며 유산소와 근력운동을 안전하게 하는 방법을 알려 줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788932919584",
@@ -2293,7 +3342,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/69761743",
-   "auto": "ai-agree"
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [
+     "잠·회복"
+    ],
+    "way": "개념",
+    "one_liner": "수면이 몸과 마음에 하는 일을 과학으로 풀어 잠을 지키고 싶어져요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788927813330",
@@ -2326,7 +3385,15 @@
    ],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/143088088",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [],
+    "way": "실습",
+    "one_liner": "몸의 근막 연결을 따라 굳은 곳을 스스로 풀어 주는 케어 방법을 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791160322699",
@@ -2361,7 +3428,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/183749147",
-   "auto": "ai-agree"
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [
+     "달리기·근력"
+    ],
+    "way": "실습",
+    "one_liner": "근육 구조 그림을 보며 부위별 웨이트 동작과 주차별 프로그램을 익혀요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791158464639",
@@ -2397,7 +3474,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/190252541",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [
+     "운동 습관"
+    ],
+    "way": "실습",
+    "one_liner": "목부터 발까지 하루 10분 스트레칭으로 통증을 미리 막는 법을 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788978496926",
@@ -2432,7 +3519,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/121770609",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [
+     "달리기·근력"
+    ],
+    "way": "실습",
+    "one_liner": "부위별 근육 운동법을 해부도로 보며 내 목적에 맞는 운동을 짜요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791198675606",
@@ -2449,7 +3546,7 @@
    "way": "실습",
    "keyword_candidate": "인요가",
    "one_liner_style": "summary",
-   "one_liner": "",
+   "one_liner": "인요가로 몸과 마음을 돌아보는 수련 안내서",
    "evidence": "몸을 돌보는 요가 수련법이라 건강·운동, 달리기·근력은 아님",
    "confidence": 0.8,
    "fits": true,
@@ -2468,8 +3565,26 @@
     "근거 김(33자)",
     "한 줄이 책소개를 베낌"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/125576822"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/125576822",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [],
+    "way": "실습",
+    "one_liner": "",
+    "status": "reserve"
+   },
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "건강·운동",
+     "keywords": [],
+     "way": "실습",
+     "one_liner": ""
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788956994550",
@@ -2505,7 +3620,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/123385881",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [
+     "달리기·근력"
+    ],
+    "way": "실습",
+    "one_liner": "근육이 커지는 원리부터 부위별 동작, 내 몸에 맞는 운동 프로그램 짜기까지 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791197987694",
@@ -2536,7 +3661,15 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/141310792",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [],
+    "way": "개념",
+    "one_liner": "요가 자세마다 어떤 근육과 관절이 움직이는지 해부 그림으로 이해해요",
+    "status": "picked"
+   },
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788954449014",
@@ -2567,7 +3700,15 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/122095612",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [],
+    "way": "개념",
+    "one_liner": "어깨·엉덩관절·척추의 구조와 근육을 알면 다치지 않고 요가 하는 길이 보여요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791194087700",
@@ -2586,7 +3727,7 @@
    "way": "실습",
    "keyword_candidate": null,
    "one_liner_style": "summary",
-   "one_liner": "",
+   "one_liner": "쉬운 집밥 79가지를 계량과 단계로 따라 하며 밥상을 차려요",
    "evidence": "집밥 레시피 모음이라 바로 따라 해 볼 방법서",
    "confidence": 0.95,
    "fits": true,
@@ -2602,8 +3743,30 @@
    "issues": [
     "한 줄이 책소개를 베낌"
    ],
-   "status": "reserve",
-   "link": "https://www.yes24.com/product/goods/148068039"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/148068039",
+   "draft": {
+    "topic": "요리·살림",
+    "keywords": [
+     "집밥"
+    ],
+    "way": "실습",
+    "one_liner": "",
+    "status": "reserve"
+   },
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "요리·살림",
+     "keywords": [
+      "집밥"
+     ],
+     "way": "실습",
+     "one_liner": ""
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791175911345",
@@ -2638,7 +3801,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/196781105",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "요리·살림",
+    "keywords": [
+     "집밥"
+    ],
+    "way": "실습",
+    "one_liner": "계량 걱정 없이 따라 하는 집밥 반찬 60가지를 상황별로 골라 바로 만들어 봐요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791185473437",
@@ -2673,7 +3846,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/8286501",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "요리·살림",
+    "keywords": [
+     "집밥"
+    ],
+    "way": "실습",
+    "one_liner": "나물·국물요리부터 손질·보관 요령까지 처음 요리하는 사람도 따라 해요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791192366395",
@@ -2710,7 +3893,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/128928871",
-   "auto": "ai-agree"
+   "draft": {
+    "topic": "요리·살림",
+    "keywords": [
+     "살림 기술"
+    ],
+    "way": "실습",
+    "one_liner": "청소 루틴과 구역별 청소 레시피로 집안 곳곳을 쉽게 관리해요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791198553386",
@@ -2745,7 +3938,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/189497782",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "요리·살림",
+    "keywords": [
+     "집밥"
+    ],
+    "way": "실습",
+    "one_liner": "가공식품을 줄이고 집에서 건강하게 차리는 식사 원칙과 간단한 레시피를 얻어요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791155362501",
@@ -2781,7 +3984,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/195900756",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "요리·살림",
+    "keywords": [
+     "정리·미니멀"
+    ],
+    "way": "실습",
+    "one_liner": "주방부터 현관까지 공간별로 따라 할 수납 요령을 엿보고 내 집에 적용해 봐요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791194140108",
@@ -2792,8 +4005,8 @@
    "topic": "요리·살림",
    "field": "습관·자기계발",
    "keywords": [
-    "정리·미니멀",
-    "살림 기술"
+    "살림 기술",
+    "정리·미니멀"
    ],
    "keywords_regex": [
     "정리·미니멀",
@@ -2819,7 +4032,18 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/151698947",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "요리·살림",
+    "keywords": [
+     "정리·미니멀",
+     "살림 기술"
+    ],
+    "way": "실습",
+    "one_liner": "요일별 루틴과 도구 고르는 기준으로 나에게 편한 살림법을 찾아요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788987779300",
@@ -2886,7 +4110,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/118473339",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "요리·살림",
+    "keywords": [
+     "집밥"
+    ],
+    "way": "실습",
+    "one_liner": "밑반찬부터 국, 김치, 명절 음식까지 한식 상차림을 영상 보며 따라 해요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193282793",
@@ -2922,7 +4156,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/193851798",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "요리·살림",
+    "keywords": [
+     "집밥"
+    ],
+    "way": "실습",
+    "one_liner": "83가지 일상 레시피를 반복하며 요리 기본기와 식재료 보는 눈을 키워요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788953150812",
@@ -2953,7 +4197,15 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/145780228",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [],
+    "way": "개념",
+    "one_liner": "소설·시·설득하는 글까지 루이스가 남긴 글쓰기 조언과 철학을 모아 만나요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791167700452",
@@ -2989,7 +4241,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/113761243",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "일기·편지"
+    ],
+    "way": "실습",
+    "one_liner": "첫 줄부터 마무리, 봉투와 우표까지 손편지를 직접 써 보는 길잡이예요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788965180449",
@@ -3025,7 +4287,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/6083102",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "일기·편지"
+    ],
+    "way": "실습",
+    "one_liner": "아이와 함께 일기와 독서록, 체험 보고서를 단계별로 써 보는 방법을 얻어요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791167700209",
@@ -3060,7 +4332,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/105772481",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "일기·편지"
+    ],
+    "way": "실습",
+    "one_liner": "일기를 매일 이어 쓰는 마음가짐과 구성, 도구까지 차근차근 익혀요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791140713059",
@@ -3068,10 +4350,10 @@
    "author": "제갈명(단단) 저",
    "pages": 280,
    "entry": "target",
-   "topic": "글쓰기",
-   "field": "일·커리어",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
    "keywords": [
-    "일기·편지"
+    "습관"
    ],
    "keywords_regex": [
     "에세이·책 쓰기",
@@ -3098,7 +4380,28 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/144380743",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "일기·편지"
+    ],
+    "way": "실습",
+    "one_liner": "하루 10분 기록을 쌓아 내 일과 콘텐츠로 키우는 방법을 알려줘요",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "글쓰기",
+     "keywords": [
+      "일기·편지"
+     ],
+     "way": "실습",
+     "one_liner": "하루 10분 기록을 쌓아 내 일과 콘텐츠로 키우는 방법을 알려줘요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788932043272",
@@ -3138,8 +4441,21 @@
    "issues": [
     "근거 김(33자)"
    ],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/136299730"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/136299730",
+   "draft": {
+    "genre": "시",
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "사랑의 끝을 멸종의 말로 더듬어 보면 어떤 풍경이 보일까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791194591375",
@@ -3149,7 +4465,7 @@
    "entry": "leaf",
    "genre": "시",
    "axes": {
-    "temp": 1,
+    "temp": -1,
     "pull": 1,
     "gain": -1,
     "world": 1
@@ -3173,8 +4489,34 @@
     "temp"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/143302568"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/143302568",
+   "draft": {
+    "genre": "시",
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "토속 시어로 그려 낸 옛 고향 풍경을 천천히 음미해 볼래요?",
+    "status": "review"
+   },
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "시",
+     "axes": {
+      "temp": 1,
+      "pull": 1,
+      "gain": -1,
+      "world": 1
+     },
+     "one_liner": "토속 시어로 그려 낸 옛 고향 풍경을 천천히 음미해 볼래요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791157956357",
@@ -3208,7 +4550,19 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/107487179",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "시",
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "별과 바람 사이에서 부끄러움을 되새기던 시인의 목소리를 만나 볼래요?",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791199983861",
@@ -3218,7 +4572,7 @@
    "entry": "leaf",
    "genre": "시",
    "axes": {
-    "temp": 0,
+    "temp": null,
     "pull": 1,
     "gain": -1,
     "world": 1
@@ -3242,8 +4596,34 @@
     "temp"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/196785036"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196785036",
+   "draft": {
+    "genre": "시",
+    "axes": {
+     "temp": 0,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "계절마다 다른 시인의 시를 음악처럼 들으며 마음을 쉬게 해 볼까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "시",
+     "axes": {
+      "temp": 0,
+      "pull": 1,
+      "gain": -1,
+      "world": 1
+     },
+     "one_liner": "계절마다 다른 시인의 시를 음악처럼 들으며 마음을 쉬게 해 볼까요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788970638331",
@@ -3277,7 +4657,19 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/15816722",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "시",
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "살아온 날을 돌아보며 지금의 나를 다독이고 싶은 날, 어떤 시가 마음에 남을까요?",
+    "status": "picked"
+   },
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788954693370",
@@ -3312,8 +4704,21 @@
     "confidence"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/119423730"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/119423730",
+   "draft": {
+    "genre": "시",
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "근거 없이 이어지는 사랑과 삶을 낯선 감각의 시로 따라가 볼래요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3"
   },
   {
    "isbn": "9791194591368",
@@ -3325,8 +4730,8 @@
    "axes": {
     "temp": -1,
     "pull": 1,
-    "gain": 0,
-    "world": 0
+    "gain": -1,
+    "world": 1
    },
    "one_liner_style": "question",
    "one_liner": "실험적인 시어와 낯선 문법으로 쓴 이상의 시와 소설을 한자리에서 만나요?",
@@ -3350,8 +4755,34 @@
     "confidence"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/143303044"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/143303044",
+   "draft": {
+    "genre": "시",
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": 0,
+     "world": 0
+    },
+    "one_liner": "실험적인 시어와 낯선 문법으로 쓴 이상의 시와 소설을 한자리에서 만나요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "시",
+     "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": 0,
+      "world": 0
+     },
+     "one_liner": "실험적인 시어와 낯선 문법으로 쓴 이상의 시와 소설을 한자리에서 만나요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788925568355",
@@ -3385,7 +4816,19 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/197053065",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "시",
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "사랑의 순간마다 어울리는 시를 한 편씩 옮겨 쓰며 마음을 데워 볼까요?",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788936421564",
@@ -3395,7 +4838,7 @@
    "entry": "leaf",
    "genre": "시",
    "axes": {
-    "temp": 1,
+    "temp": -1,
     "pull": 1,
     "gain": -1,
     "world": 1
@@ -3421,7 +4864,32 @@
    ],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/128996",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "시",
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "어머니와 아버지, 가난한 일상을 따사롭고 쓸쓸한 말로 읽는 시집인가요?",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "시",
+     "axes": {
+      "temp": 1,
+      "pull": 1,
+      "gain": -1,
+      "world": 1
+     },
+     "one_liner": "어머니와 아버지, 가난한 일상을 따사롭고 쓸쓸한 말로 읽는 시집인가요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791189074883",
@@ -3429,10 +4897,10 @@
    "author": "유홍준 저",
    "pages": 664,
    "entry": "leaf",
-   "genre": "예술·여행",
+   "genre": "역사",
    "axes": {
     "temp": 0,
-    "pull": 0,
+    "pull": -1,
     "gain": 1,
     "world": 1
    },
@@ -3455,7 +4923,32 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/154253945",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "예술·여행",
+    "axes": {
+     "temp": 0,
+     "pull": 0,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "구석기부터 근대까지 우리 미술의 흐름을 도판으로 따라가 볼까요?",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "예술·여행",
+     "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "구석기부터 근대까지 우리 미술의 흐름을 도판으로 따라가 볼까요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791155818541",
@@ -3466,7 +4959,7 @@
    "genre": "예술·여행",
    "axes": {
     "temp": 0,
-    "pull": 0,
+    "pull": -1,
     "gain": 1,
     "world": 1
    },
@@ -3489,8 +4982,34 @@
     "temp"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/153170791"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/153170791",
+   "draft": {
+    "genre": "예술·여행",
+    "axes": {
+     "temp": 0,
+     "pull": 0,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "거장의 대표작을 따라가며 미술사의 흐름을 한눈에 잡아 보면 어떨까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "예술·여행",
+     "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "거장의 대표작을 따라가며 미술사의 흐름을 한눈에 잡아 보면 어떨까요?"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791197325809",
@@ -3498,10 +5017,10 @@
    "author": "피에르 베르제 저/김유진 역",
    "pages": 160,
    "entry": "leaf",
-   "genre": "예술·여행",
+   "genre": "에세이",
    "axes": {
-    "temp": 0,
-    "pull": 1,
+    "temp": -1,
+    "pull": -1,
     "gain": -1,
     "world": 1
    },
@@ -3528,8 +5047,34 @@
     "confidence"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/97389404"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/97389404",
+   "draft": {
+    "genre": "예술·여행",
+    "axes": {
+     "temp": 0,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "50년을 함께한 연인에게 보내지 못한 편지를 읽어 볼까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "예술·여행",
+     "axes": {
+      "temp": 0,
+      "pull": 1,
+      "gain": -1,
+      "world": 1
+     },
+     "one_liner": "50년을 함께한 연인에게 보내지 못한 편지를 읽어 볼까요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791175780439",
@@ -3537,7 +5082,7 @@
    "author": "정유진 저",
    "pages": 288,
    "entry": "leaf",
-   "genre": "예술·여행",
+   "genre": "사회·시사",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -3567,8 +5112,34 @@
     "confidence"
    ],
    "issues": [],
-   "status": "review",
-   "link": "https://www.yes24.com/product/goods/195808948"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/195808948",
+   "draft": {
+    "genre": "예술·여행",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "AI가 다 해 주는 시대에도 창작자의 자리가 남을까요?",
+    "status": "review"
+   },
+   "auto": "ai-agree",
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "예술·여행",
+     "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": 1,
+      "world": 1
+     },
+     "one_liner": "AI가 다 해 주는 시대에도 창작자의 자리가 남을까요?"
+    }
+   ],
+   "rules_version": "v3"
   }
  ],
  "trial_sample": [
