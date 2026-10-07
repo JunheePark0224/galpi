@@ -2,10 +2,11 @@
 
 Per book (an entry of retag/library-v3.json + its tiebreak row, tiebreak.py):
   asks — a person decides: a field pass A and B split on that the third-pass majority did not settle (keyword splits are
-         never settled), an axis either pass marked as having no info (정보 없음), the slot when a pass says the book does
-         not belong there (unless the majority keeps it), and the CURRENT one-liner when it breaks a line rule
+         never settled), an axis exactly one pass left empty (null, 비움 — v3.1 rule 9, 10-07), the slot when a pass says
+         the book does not belong there (unless the majority keeps it), and the CURRENT one-liner when it breaks a line rule
          (agreement.line_problems — the library keeps its one-liner; the v3 line is offered as a replacement)
-  auto — the v3 value of every other field: both passes agreed, or the majority settled it (`settled`)
+  auto — the v3 value of every other field: both passes agreed, or the majority settled it (`settled`); an axis both passes
+         left empty is decided as empty (None, listed in `emptied`) — the app scores it 0 and never filters by it
   changes — auto fields whose v3 value differs from the library's: applied by --apply without a person (old values kept as
          history); summed up in a table (field, old → new, count, ISBNs) on the page and in the report
 Groups: "person" (any ask), else auto; a seeded SAMPLE_RATE share of the auto books is shown prefilled as a sample ("sample").
@@ -49,7 +50,7 @@ def decide(book: dict, tb: dict | None) -> dict:
     a, b = rec, rec.get("second") or {}
     third = (tb or {}).get("third")
     settled = settle(rec, third, SETTLES) if third else {}
-    asks, auto, by_majority, keywords_by = [], {}, [], None
+    asks, auto, by_majority, keywords_by, emptied = [], {}, [], None, []
     new_slot, slot_by = slot_decision(book, a, b, settled)
     if slot_by == "ask":
         asks.append("slot")
@@ -66,6 +67,9 @@ def decide(book: dict, tb: dict | None) -> dict:
                 asks.append(f)
             else:
                 auto[f] = kws
+        elif f in AXES and va is None and vb is None:
+            auto[f] = None
+            emptied.append(f)
         elif f in AXES and (va is None or vb is None):
             asks.append(f)
         elif va == vb:
@@ -86,7 +90,7 @@ def decide(book: dict, tb: dict | None) -> dict:
         asks.append("line")
     one_fit = book["slot"] in (pass_slot(a, book["slot"]), pass_slot(b, book["slot"])) and slot_by is not None
     return {"asks": asks, "auto": auto, "settled": by_majority, "slot_by": slot_by, "keywords_by": keywords_by,
-            "one_fit": one_fit,
+            "one_fit": one_fit, "emptied": emptied,
             "line_issues": issues, "changes": changes_of(cur, auto)}
 
 
@@ -169,4 +173,6 @@ def counts(decided: dict[str, dict]) -> dict[str, int]:
             "slot_tiebreak_settled": sum(d["slot_by"] == "majority" for d in auto),
             "slot_tiebreak_unsettled": sum(d["slot_by"] == "ask" and d["one_fit"] for d in decided.values()),
             "sample": sum(d["group"] == "sample" for d in decided.values()),
+            "empty_confirmed_books": sum(bool(d.get("emptied")) for d in decided.values()),
+            "empty_confirmed_axes": sum(len(d.get("emptied") or []) for d in decided.values()),
             "unchanged_silent": sum(d["group"] == "auto" and not d["changes"] for d in decided.values())}

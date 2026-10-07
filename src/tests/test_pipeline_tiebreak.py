@@ -27,9 +27,12 @@ def target(a_kw, b_kw, a_way="개념", b_way="개념"):
             "second": {"fits": True, "keywords": b_kw, "way": b_way, "suggest": ""}}
 
 
-def test_splits_are_fields_with_two_values_and_never_a_no_info_axis():
+def test_splits_are_fields_with_two_values_and_never_an_empty_axis():
+    """v3.1 rule 9 (10-07): an axis is empty only when its value is null — a no-info mark on a value is still that value."""
     rec = leaf(AX, {**AX, "temp": 0, "pull": 1, "world": None}, b_missing=["world", "pull"])
-    assert tiebreak.splits(rec) == ["temp"]
+    assert tiebreak.splits(rec) == ["temp", "pull"]
+    assert tiebreak.splits(leaf({**AX, "temp": None}, {**AX, "temp": None}, ["temp"], ["temp"])) == []
+    assert tiebreak.splits(leaf(AX, AX, b_missing=["gain"])) == []
     assert tiebreak.splits(leaf(AX, AX, b_fits=False, b_suggest="한국 소설")) == ["slot"]
     assert tiebreak.splits(target(["주식"], ["ETF·펀드", "주식"], b_way="실습")) == ["keywords", "way"]
     assert tiebreak.splits(target(["주식", "ETF·펀드"], ["ETF·펀드", "주식"])) == []

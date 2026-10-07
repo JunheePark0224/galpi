@@ -3,7 +3,8 @@
 A book decided without a person (library_review: auto, sample not answered) takes its v3 values — including a slot both
 passes (or the third-pass majority) moved it to — and the library's one-liner stays. A book a person answered (the page's download, {answers: {isbn: {…, ok: true}}}) takes the answer, checked like
 the review pages' answers (agreement.checked_leaf / apply_review.checked_answer; a pick whose one-liner breaks a rule is
-refused). A "person" book without an answer is left as it is. Every written book gets `rules_version: "v3"`; when its
+refused). A "person" book without an answer is left as it is. Every written book gets the rules it was tagged under
+(`rules_version` of the re-tag entry — "v3.1" for a book re-tagged after the v3.1 rules, else "v3"); when its
 values change, the old ones are appended to `history` (so the change can be undone) and an additions record keeps its
 pre-review `draft`. An additions book still waiting (review / unreviewed reserve) becomes picked — `auto: "ai-agree"`
 when no person answered. A books_v1 book a person drops leaves books_v1.json and is kept in retag/removed.json.
@@ -53,7 +54,7 @@ def _same(a: dict, b: dict, entry: str) -> bool:
     return a == b
 
 
-def updated(row: dict, entry: str, vals: dict, source: str, answered: bool) -> dict:
+def updated(row: dict, entry: str, vals: dict, source: str, answered: bool, rules: str = RULES) -> dict:
     """A copy of a source row with `vals` written in."""
     old, new = values_of(row), _values(vals, entry)
     out = dict(row)
@@ -78,7 +79,7 @@ def updated(row: dict, entry: str, vals: dict, source: str, answered: bool) -> d
             out["auto"] = AUTO
     if not _same(old, new, entry):
         out["history"] = [*(row.get("history") or []), {"rules_version": row.get("rules_version") or "before-v3", **old}]
-    out["rules_version"] = RULES
+    out["rules_version"] = rules
     return out
 
 
@@ -114,7 +115,7 @@ def apply(books: list[dict], decided: dict[str, dict], answers: dict[str, dict],
         if not vals["answered"] and not (_same(now, b["current"], entry) or _same(now, target, entry)):
             tally["skipped_edited"].append(row["isbn"])
             return row
-        new = updated(row, entry, vals, source, vals["answered"])
+        new = updated(row, entry, vals, source, vals["answered"], b.get("rules_version") or RULES)
         tally["written"] += 1
         tally["changed" if len(new.get("history") or []) > len(row.get("history") or []) else "unchanged"] += 1
         if vals["status"] == "dropped":

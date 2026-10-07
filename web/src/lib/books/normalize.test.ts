@@ -50,6 +50,11 @@ describe("normalizeBook", () => {
     }
   });
 
+  it("keeps an empty axis (null, 비움 — label-dictionary v3.1 rule 9) as null", () => {
+    expect(normalizeBook({ ...leafRow, axes: { temp: null, pull: 0, gain: -1, world: 1 } }, BIB).axes)
+      .toEqual({ temp: null, pull: 0, gain: -1, world: 1 });
+  });
+
   it("accepts Korean one-liner style names", () => {
     expect(normalizeBook({ ...targetRow, one_liner_style: "요약형" }, BIB).one_liner_style).toBe("summary");
   });
@@ -57,6 +62,7 @@ describe("normalizeBook", () => {
   it.each([
     ["an unknown genre", { ...leafRow, slot: "요리" }, /unknown leaf genre/],
     ["an axis outside -1..1", { ...leafRow, axes: { temp: 2, pull: 0, gain: 0, world: 0 } }, /axis temp/],
+    ["a missing axis (only null is empty)", { ...leafRow, axes: { temp: 1, pull: 0, gain: 0 } }, /axis world/],
     ["a missing title", { ...leafRow, isbn: "9793333333333" }, /no title/],
     ["a bad isbn", { ...leafRow, isbn: "12" }, /13 digits/],
     ["an unknown way", { ...targetRow, way: "독학" }, /way must be/],

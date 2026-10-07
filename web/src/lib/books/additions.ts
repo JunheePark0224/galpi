@@ -7,10 +7,6 @@ type Row = Record<string, unknown>;
 const STATUSES = ["picked", "review", "reserve", "dropped"];
 const bad = (isbn: unknown, why: string) => new Error(`${String(isbn || "(no isbn)")}: ${why}`);
 
-/** A 🍃 book with an axis left empty (null — the tagger found no info, 10-06): it waits for a person like a "review" book. */
-const hasEmptyAxis = (b: Row) => b.entry === "leaf" && typeof b.axes === "object" && b.axes !== null
-  && Object.values(b.axes as Row).some((v) => v === null);
-
 /**
  * One picked book of data/processed/additions/*.json → a books_v1-shaped row (slot = topic / genre). 🍃 books come from the
  * daily pipeline (D-B) with their four axes; normalizeBook checks the genre list and the axis values.
@@ -36,7 +32,8 @@ function toRow(b: Row, vocab: Vocab): Row {
 /**
  * books_v1 rows + the picked books of every additions file (the 10-01 pilot, then the daily pipeline) → rows and bib
  * for normalizeCatalog. Base rows keep their order and content; additions come after, file by file. Review, reserve and
- * dropped books stay out, and so does a 🍃 book with an empty (null) axis until a person gives it a value. Only our tags, titles and authors are in these files — no YES24 text.
+ * dropped books stay out. A 🍃 book with an empty (null, 비움) axis comes in: label-dictionary v3.1 rule 9 — the score
+ * counts that axis 0 (recommend/score.ts). Only our tags, titles and authors are in these files — no YES24 text.
  */
 export function mergeAdditions(baseRows: readonly Row[], baseBib: ReadonlyMap<string, Bib>, files: readonly unknown[], vocab: Vocab) {
   const rows: Row[] = [...baseRows];
@@ -47,7 +44,7 @@ export function mergeAdditions(baseRows: readonly Row[], baseBib: ReadonlyMap<st
     if (!Array.isArray(books)) throw new Error("additions file needs a books list");
     for (const b of books as Row[]) {
       if (!STATUSES.includes(String(b.status))) throw bad(b.isbn, `unknown status ${String(b.status)}`);
-      if (b.status !== "picked" || hasEmptyAxis(b)) continue;
+      if (b.status !== "picked") continue;
       const isbn = String(b.isbn ?? "");
       if (seen.has(isbn)) throw bad(isbn, "already in books");
       const title = typeof b.title === "string" ? b.title.trim() : "";

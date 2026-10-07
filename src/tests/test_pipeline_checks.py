@@ -125,13 +125,18 @@ def test_split_issues_separates_the_one_liner_rules_from_the_evidence_rules():
 
 # --- 10-06 label signals: who asks a person, per-axis evidence and its copy check ---
 
-def test_an_axis_is_asked_when_the_passes_differ_or_either_marked_it_without_info_never_for_low_confidence():
+def test_an_axis_is_asked_when_the_passes_differ_or_one_left_it_empty_never_for_low_confidence():
+    """v3.1 rule 9 (10-07): one pass empty (null) or two different values → a person; both empty → decided as empty;
+    a no-info mark on a value both passes gave asks nothing."""
     a = parse(tag_answer("leaf", confidence=0.3), "leaf", "tag", [])
     b = parse(check_answer("leaf"), "leaf", "check", [])
     assert disagreements("leaf", a, b) == []                                      # unsure alone asks nothing
     a2 = parse(tag_answer("leaf", missing=["temp"]), "leaf", "tag", [])
     b2 = parse(check_answer("leaf", world=-1, missing=["gain", "temp"]), "leaf", "check", [])
-    assert disagreements("leaf", a2, b2) == ["temp", "gain", "world"]             # AXES order, no repeats
+    assert disagreements("leaf", a2, b2) == ["world"]                             # the marks alone ask nothing
+    a3 = parse(tag_answer("leaf", temp=None, pull=None, missing=["temp", "pull"]), "leaf", "tag", [])
+    b3 = parse(check_answer("leaf", temp=None, world=-1, missing=["temp"]), "leaf", "check", [])
+    assert disagreements("leaf", a3, b3) == ["pull", "world"]                     # AXES order; temp both empty
     assert disagreements("target", tag_answer("target", confidence=0.1), check_answer("target")) == []
 
 

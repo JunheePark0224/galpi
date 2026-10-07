@@ -27,6 +27,9 @@ export function reasonLine(book: Book, answers: LeafAnswers | TargetAnswers): Re
   const len = lengthTag(book.pages);
   if (a.len !== 0 && a.len === len) matched.push(a.len > 0 ? "얇게" : "두껍게");
   if (matched.length) return { label: "나온 이유", items: matched.slice(0, MAX_ITEMS) };
-  const own = AXES.filter((axis) => book.axes[axis] !== 0).map((axis) => label(axis, book.axes[axis]));
+  const own = AXES.flatMap((axis) => {
+    const v = book.axes[axis];
+    return v === null || v === 0 ? [] : [label(axis, v)];   // an empty axis (비움) says nothing about the book
+  });
   return { label: "이 책은", items: own.slice(0, 3) };
 }

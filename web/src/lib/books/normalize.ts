@@ -1,4 +1,4 @@
-import { AXES, type AxisKey, type Tag, type Way } from "../recommend/types";
+import { AXES, type AxisKey, type AxisValue, type Way } from "../recommend/types";
 import { FIELD_OF_TOPIC, LEAF_GENRES, TOPICS, WAYS, type Topic } from "./taxonomy";
 import type { CatalogBook, OneLinerStyle, Vocab } from "./types";
 
@@ -34,10 +34,10 @@ export function normalizeBook(raw: Row, bib: ReadonlyMap<string, Bib>): CatalogB
     if (!(LEAF_GENRES as readonly string[]).includes(slot)) throw bad(b.isbn, `unknown leaf genre ${slot}`);
     const axes = raw.axes;
     if (typeof axes !== "object" || axes === null) throw bad(b.isbn, "leaf book needs axes");
-    const tags = {} as Record<AxisKey, Tag>;
+    const tags = {} as Record<AxisKey, AxisValue>;
     for (const axis of AXES) {
-      const v = (axes as Row)[axis];
-      if (v !== -1 && v !== 0 && v !== 1) throw bad(b.isbn, `axis ${axis} must be -1, 0 or 1`);
+      const v = (axes as Row)[axis];   // null = 비움 (both passes found no signal, v3.1 rule 9); a missing key is an error
+      if (v !== -1 && v !== 0 && v !== 1 && v !== null) throw bad(b.isbn, `axis ${axis} must be -1, 0, 1 or null`);
       tags[axis] = v;
     }
     return { ...b, entry: "leaf", genre: slot, field: null, topic: null, way: null, axes: tags, keywords: [] };

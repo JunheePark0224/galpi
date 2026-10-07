@@ -4,8 +4,9 @@ rule_issues (+ scrub): the one-liner rules of check_one_liners.check_line (lengt
 style (🍃 question ends with "?", 🎯 summary does not), evidence at most EVIDENCE_MAX chars, and no copying — a run of
 COPY_RUN characters (spaces ignored) shared with the YES24 intro/TOC means our words were not our own — also checked on
 each 🍃 axis's signal line of both passes (10-06; a copied line is blanked by scrub, its issue is a note nobody is asked).
-disagreements: why a person should look — the two passes differ on fit / keywords / way / an axis, or either pass marked
-an axis as having no info (`missing`, 10-06). Pass A being unsure is not a reason (10-06: confidence gates nothing).
+disagreements: why a person should look — the two passes differ on fit / keywords / way / an axis, an axis one pass left
+empty (null) included; both passes empty is decided as empty and a no-info mark on a value asks nothing (v3.1 rule 9,
+10-07). Pass A being unsure is not a reason (10-06: confidence gates nothing).
 decide: rule issues → reserve (대기, never merged as is); both passes say it does not fit → dropped; a disagreement →
 "review" (auto_merge false: waits in the file, NOT in books.json, until a person's --apply sets picked / dropped / reserve —
 merging the PR without reviewing cannot put an unreviewed flagged book into the app) or reserve (auto_merge true: nobody
@@ -97,8 +98,7 @@ def disagreements(entry: str, a: dict, b: dict) -> list[str]:
         if a["way"] != b["way"]:
             out.append("way")
     else:
-        marked = set(a.get("missing") or []) | set(b.get("missing") or [])
-        out += [axis for axis in AXES if a["axes"][axis] != b["axes"][axis] or axis in marked]
+        out += [axis for axis in AXES if a["axes"][axis] != b["axes"][axis]]  # one empty (None) differs; both empty agree
     return out
 
 
