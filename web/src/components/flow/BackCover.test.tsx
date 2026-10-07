@@ -1,9 +1,9 @@
-import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ArtCombo } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
 import { NO_CHIP_LINE } from "@/lib/share/label";
-import { BackActions, BackLaid, CHALLENGE_CHIP, COPIED, COPY_FAILED, LABEL_TITLE, NEXT_WHEN_NONE, SHARE, type ShareMethod } from "./BackCover";
+import { BackActions, BackLaid, CHALLENGE_CHIP, LABEL_TITLE, NEXT_WHEN_NONE, SHARE, type ShareMethod } from "./BackCover";
 import type { ShareLabel } from "@/lib/share/label";
 
 const card = (id: string): BookCard => ({
@@ -53,43 +53,14 @@ describe("BackLaid + BackActions (S-11, F-27 — the back of the book with today
     expect(screen.getByText(NO_CHIP_LINE)).toBeInTheDocument();
   });
 
-  it("[공유하기] opens the phone's share sheet with the link when there is one (E-42 native)", async () => {
-    const share = vi.fn().mockResolvedValue(undefined);
-    vi.stubGlobal("navigator", { ...navigator, share });
-    const p = props();
-    render(<BackCover {...p} />);
-    await act(async () => { fireEvent.click(screen.getByRole("button", { name: SHARE })); });
-    expect(share).toHaveBeenCalledWith(expect.objectContaining({ url: URL_, title: "갈피", text: expect.stringContaining("책갈피 5장") }));
-    expect(p.onShared).toHaveBeenCalledWith("native");
-  });
-
-  it("does not count a share sheet the person closed", async () => {
-    vi.stubGlobal("navigator", { ...navigator, share: vi.fn().mockRejectedValue(new DOMException("closed", "AbortError")) });
-    const p = props();
-    render(<BackCover {...p} />);
-    await act(async () => { fireEvent.click(screen.getByRole("button", { name: SHARE })); });
-    expect(p.onShared).not.toHaveBeenCalled();
-  });
-
-  it("says so and shows the link to copy by hand when the clipboard refuses", async () => {
-    vi.stubGlobal("navigator", { ...navigator, share: undefined, clipboard: { writeText: vi.fn().mockRejectedValue(new Error("denied")) } });
-    const p = props();
-    render(<BackCover {...p} />);
-    await act(async () => { fireEvent.click(screen.getByRole("button", { name: SHARE })); });
-    expect(screen.getByRole("status")).toHaveTextContent(COPY_FAILED);
-    expect(screen.getByRole("textbox", { name: "공유 링크" })).toHaveValue(URL_);
-    expect(p.onShared).not.toHaveBeenCalled();
-  });
-
-  it("copies the link where there is no share sheet and says so (E-42 copy); there is no 이미지 저장 any more", async () => {
-    const writeText = vi.fn().mockResolvedValue(undefined);
-    vi.stubGlobal("navigator", { ...navigator, share: undefined, clipboard: { writeText } });
-    const p = props();
-    render(<BackCover {...p} />);
-    await act(async () => { fireEvent.click(screen.getByRole("button", { name: SHARE })); });
-    expect(writeText).toHaveBeenCalledWith(URL_);
-    expect(screen.getByRole("status")).toHaveTextContent(COPIED);
-    expect(p.onShared).toHaveBeenCalledWith("copy");
-    expect(screen.queryByRole("link", { name: "이미지 저장" })).toBeNull();
+  it("[↗ 결과 공유하기] opens the share sheet (C-31) and 닫기 closes it", () => {
+    vi.stubGlobal("navigator", { ...navigator, userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/129.0", canShare: undefined });
+    render(<BackCover {...props()} />);
+    expect(screen.queryByRole("dialog")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: SHARE }));
+    expect(screen.getByRole("dialog", { name: "결과 공유하기" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "닫기" }));
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(screen.getByRole("button", { name: SHARE })).toHaveFocus();   // focus back where it was
   });
 });

@@ -1,9 +1,7 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ArtCombo } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
-import { BACK_TITLE } from "./BackCover";
-import { SHARE } from "./ShareActions";
 import { SHARED_TITLE, START_MINE, SharedBack } from "./SharedBack";
 
 const track = vi.fn();
@@ -14,29 +12,16 @@ const card = (id: string): BookCard => ({
   id, entry: "leaf", title: `책 ${id}`, author: "작가", genre: "에세이", field: null, oneLiner: "한 줄?", oneLinerStyle: "question",
 });
 const ART: ArtCombo = { animal: "cat", bg: "peach", ground: "grass", rare: false };
-const props = (mine: boolean) => ({
-  code: "1~0A~a.b~000000", cards: [card("a"), card("b")], arts: [ART, ART], label: { chips: ["따뜻한 이야기"], challenge: false }, mine,
-});
+const props = () => ({ cards: [card("a"), card("b")], arts: [ART, ART], label: { chips: ["따뜻한 이야기"], challenge: false } });
 
 describe("SharedBack (S-12, F-27)", () => {
   beforeEach(() => { track.mockClear(); });
 
   it("a visitor sees someone's back cover and [나도 갈피 잡기], and counts as a visit (E-43)", () => {
-    render(<SharedBack {...props(false)} />);
+    render(<SharedBack {...props()} />);
     expect(screen.getByRole("heading", { level: 1, name: SHARED_TITLE })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: START_MINE })).toBeInTheDocument();
     expect(track).toHaveBeenCalledWith("share_page_viewed", { label_count: 1 });
   });
 
-  it("?mine=1 is the person's own back cover handed over from KakaoTalk: [공유하기] first, and not a visit", async () => {
-    render(<SharedBack {...props(true)} />);
-    expect(screen.getByRole("heading", { level: 1, name: BACK_TITLE })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: SHARE })).toHaveAttribute("data-variant", "primary");
-    expect(screen.queryByRole("button", { name: START_MINE })).toBeNull();
-    expect(track).not.toHaveBeenCalled();
-    vi.stubGlobal("navigator", { ...navigator, share: vi.fn().mockResolvedValue(undefined) });
-    await act(async () => { fireEvent.click(screen.getByRole("button", { name: SHARE })); });
-    expect(track).toHaveBeenCalledWith("share_clicked", { method: "native", label_count: 1 });
-    vi.unstubAllGlobals();
-  });
 });

@@ -107,9 +107,9 @@ export const EVENT_SPEC = {
   guest_saves_merged: { guest_count: { type: "number" }, merged_count: { type: "number" } },
   // v1.8: S-09 [막대 지우기] after the server took the rod and its bookmarks — one event, never E-16 per book
   shelf_removed: { removed_count: { type: "number" } },
-  // v2.0 (F-27): S-11 뒤표지, its [공유하기], and the S-12 page a shared link opens
+  // v2.0 (F-27): S-11 뒤표지, its share sheet (v2.2), and the S-12 page a shared link opens
   back_cover_shown: { curious_count: CURIOUS_COUNT, label_count: { type: "number" } },
-  share_clicked: { method: { type: ["native", "copy", "image"] }, label_count: { type: "number" } },
+  share_clicked: { method: { type: ["native", "copy", "image", "save_image"] }, label_count: { type: "number" } },
   share_page_viewed: { label_count: { type: "number" } },
   share_page_started: {},
 } as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;

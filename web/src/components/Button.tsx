@@ -1,8 +1,9 @@
-import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, Ref } from "react";
 import styles from "./Button.module.css";
 
 type Variant = "primary" | "secondary";
-type Props = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant };
+// React 19: `ref` is a plain prop, passed on to the <button> with the rest (S-11 returns focus to [결과 공유하기])
+type Props = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; ref?: Ref<HTMLButtonElement> };
 
 export function Button({ variant = "primary", className, type = "button", ...rest }: Props) {
   return (

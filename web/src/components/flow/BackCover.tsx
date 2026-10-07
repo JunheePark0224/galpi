@@ -1,18 +1,19 @@
 "use client";
-import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { Bookmark } from "@/components/Bookmark";
 import { Button } from "@/components/Button";
 import type { ArtCombo } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
 import { NO_CHIP_LINE, type ShareLabel } from "@/lib/share/label";
 import styles from "./BackCover.module.css";
-import { ShareActions, type ShareMethod } from "./ShareActions";
+import { ShareSheet, type ShareMethod } from "./ShareSheet";
 
 export const BACK_TITLE = "오늘 만난 책갈피";
 export const LABEL_TITLE = "내가 고른 길";
 export const CHALLENGE_CHIP = "오늘은 낯선 쪽으로 도전";
 export const NEXT_WHEN_NONE = "다음 책갈피 만나기";
-export { COPIED, COPY_FAILED, SHARE, type ShareMethod } from "./ShareActions";
+export const SHARE = "결과 공유하기";
+export type { ShareMethod } from "./ShareSheet";
 
 /** Where each bookmark lies on the back cover (시안 A, 10-07: laid down by hand, a little askew) — left/top in %, turn in deg. */
 const LAID: readonly (readonly [number, number, number])[] = [[4, 3, -8], [36, 0, 4], [67, 4, -3], [18, 37, 6], [51, 39, -6]];
@@ -92,15 +93,23 @@ interface ActionsProps {
 }
 
 /**
- * S-11 buttons under the shut book: the main button goes on (S-06, or S-08 with no 궁금해요); [공유하기] and
- * [이미지로 공유] are ShareActions (inside KakaoTalk: open this back cover in the phone's browser instead).
- * Shows only — Flow sends the events (E-42 through onShared).
+ * S-11 buttons under the shut book: the main button goes on (S-06, or S-08 with no 궁금해요); [↗ 결과 공유하기] opens the
+ * share sheet (C-31). Shows only — Flow sends the events (E-42 through onShared).
  */
 export function BackActions({ count, curious, shareUrl, onContinue, onShared }: ActionsProps) {
+  const [sheet, setSheet] = useState(false);
+  const opener = useRef<HTMLButtonElement>(null);
+  const close = useCallback(() => {
+    setSheet(false);
+    opener.current?.focus();   // back to [결과 공유하기]
+  }, []);
   return (
     <div className={styles.actions}>
       <Button onClick={onContinue}>{curious > 0 ? `궁금해요 ${curious}권 책 정보 보기` : NEXT_WHEN_NONE}</Button>
-      <ShareActions shareUrl={shareUrl} count={count} variant="secondary" handOver onShared={onShared} />
+      <Button ref={opener} variant="secondary" onClick={() => setSheet(true)} aria-haspopup="dialog">
+        <span aria-hidden="true">↗ </span>{SHARE}
+      </Button>
+      {sheet && <ShareSheet shareUrl={shareUrl} count={count} onClose={close} onShared={onShared} />}
     </div>
   );
 }
