@@ -66,17 +66,19 @@ def test_gold_keywords_are_cut_to_the_closed_list_the_tagger_can_name():
     assert evaluate.wrong_fields(g, {"fits": True, "keywords": ["주식"], "way": "개념"}) == ["keywords"]
 
 
-def test_gold_books_come_from_the_200_alone_and_take_the_reviewed_pilot_when_present(tmp_path, monkeypatch):
+def test_gold_books_come_from_books_v1_alone_and_take_the_reviewed_pilot_when_present(tmp_path, monkeypatch):
     monkeypatch.setattr(evaluate, "ADDITIONS", tmp_path)          # no pilot file committed yet
     base = evaluate.gold_books()
-    assert len(base) == 200 and {g["source"] for g in base} == {"d4"} and all(g["title"] for g in base)
+    # the D4 books still in books_v1 (200 at D4; a book a person drops later leaves the file — 194 since 10-07)
+    v1 = json.loads((evaluate.PROCESSED / "books_v1.json").read_text(encoding="utf-8"))
+    assert len(base) == len(v1) > 0 and {g["source"] for g in base} == {"d4"} and all(g["title"] for g in base)
     pilot = {"books": [
         {"isbn": "p1", "title": "파일럿", "status": "picked", "reviewed": True, "topic": "글쓰기", "keywords": ["업무 글"], "way": "실습"},
         {"isbn": "p2", "title": "미검수", "status": "picked", "reviewed": False, "topic": "글쓰기", "keywords": [], "way": "개념"},
         {"isbn": "p3", "title": "대기", "status": "reserve", "reviewed": True, "topic": "글쓰기", "keywords": [], "way": "개념"}]}
     (tmp_path / "2026-10-01-pilot.json").write_text(json.dumps(pilot, ensure_ascii=False), encoding="utf-8")
     both = evaluate.gold_books()
-    assert [g["isbn"] for g in both[200:]] == ["p1"] and both[200]["source"] == "pilot"
+    assert [g["isbn"] for g in both[len(v1):]] == ["p1"] and both[len(v1)]["source"] == "pilot"
 
 
 def test_estimate_is_a_range_and_covers_every_call(tmp_path):

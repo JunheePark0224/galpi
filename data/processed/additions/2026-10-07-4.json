@@ -1,0 +1,4942 @@
+{
+ "date": "2026-10-07",
+ "batch_id": "2026-10-07-4",
+ "batch": "daily",
+ "reviewed": false,
+ "model": "claude-sonnet-5-5",
+ "second_model": "claude-sonnet-5-5",
+ "note": "Daily pipeline: pass A (model) tags, pass B (second_model) checks blind. Our tags only — no YES24 intro/TOC. auto=ai-agree: both passes agreed, accepted without human review (not in the agreement figures).",
+ "books": [
+  {
+   "isbn": "9791175910249",
+   "title": "모든 요일의 여행 (10주년 개정증보판)",
+   "author": "김민철 저",
+   "pages": 312,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 계획이 틀어져도 내 여행이라 긍정하며 곁에서 다독임",
+    "pull": "문장 +: 담백하게 그려내는 글맛과 깊은 울림이 강점으로 소개됨",
+    "gain": "마음 −: 삶을 대하는 태도와 나를 마주하는 성찰을 건넴",
+    "world": "현실 +: 실제 여행과 일상, 비소설이라 현실"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "낯선 곳에서 내 취향과 속도를 찾고 일상도 여행처럼 살게 될까요?",
+   "evidence": "여행으로 삶의 태도를 바꾼 저자 이야기라 예술·여행에 맞음",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 담백하게 그리며 일상을 여행처럼 사는 법을 건넴",
+     "pull": "문장 +: 여행 에세이의 새 지평, 담백하게 그린 글맛",
+     "gain": "마음 −: 나를 마주하고 삶의 태도를 바꾼 이야기",
+     "world": "현실 +: 비소설, 실제 여행지·망원동·대학로"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "여행 에세이라 예술·여행 칸에 맞음"
+   },
+   "flags": [],
+   "issues": [
+    "근거 김(32자)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/171569426",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788970415857",
+   "title": "다시, 그림이다",
+   "author": "마틴 게이퍼드 저/주은정 역",
+   "pages": 248,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 대담 중심이라 끝맺음·어조 신호 약함",
+    "pull": "몰입 −: 화가와의 대화·작품 이야기로 끌고 감",
+    "gain": "알게 됨 +: 시각 예술의 목적을 깨닫게 되는 대담",
+    "world": "현실 +: 실제 화가와 작품을 다룬 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "호크니와 나눈 대담으로 그림이 세상을 어떻게 보여 주는지 따라가 볼까요?",
+   "evidence": "화가 호크니와의 대담, 작품을 보는 예술 글",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 대담 중심, 끝맺음·어조의 방향이 드러나지 않음",
+     "pull": "몰입 −: 호크니와 나눈 대담과 작업 이야기가 끌고 감",
+     "gain": "알게 됨 +: 시각 예술의 목적·재현을 깨닫게 한다는 설명",
+     "world": "현실 +: 실존 화가와 작품을 다룬 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "화가와 나눈 미술 대담이라 예술·여행에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/7911679",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788925568560",
+   "title": "미야자키 하야오라는 세계",
+   "author": "니콜라스 라폴드 저/서나연 역",
+   "pages": 224,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 영감의 원천을 해설하는 설명 중심",
+    "pull": "몰입 −: 영화·장소·인물 사례로 끌고 감",
+    "gain": "알게 됨 +: 영감의 원천을 풀어 알려 주는 해설",
+    "world": "현실 +: 비소설, 실제 장소·작가·영화사를 다룸"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "감독의 세계가 어디서 왔는지 영감의 원천을 따라가 보고 싶지 않나요?",
+   "evidence": "영화·미술 해설서라 예술 글에 맞음",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "0 해당 없음: 설명·분석이 중심, 끝맺음·어조 신호 약함",
+     "pull": "몰입 −: 영감의 원천을 추적하는 흐름과 작품 사례로 끌고 감",
+     "gain": "알게 됨 +: 영감의 원천·영향을 해부해 설명하는 책",
+     "world": "현실 +: 비소설, 실제 작가·장소·영화사를 다룸"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "영화·예술 작품 세계를 탐구하는 예술 글이라 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/193846841",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791199031739",
+   "title": "나무 같은 사람이 되고 싶다",
+   "author": "리즈 마빈 저/애니 데이비든슨 그림/박은진 역",
+   "pages": 136,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 나무 지혜로 독자에게 조용히 다정한 메시지",
+    "pull": "문장 +: 일러스트와 짧은 글, 읽는 맛이 중심",
+    "gain": "마음 −: 삶의 태도를 느끼게 하는 성찰",
+    "world": "현실 +: 비소설, 실제 나무 59종"
+   },
+   "missing": [],
+   "suggest": "인문",
+   "one_liner_style": "question",
+   "one_liner": "나무의 생태에 삶의 지혜를 빗대어 흔들리는 마음을 다독여 줄까요?",
+   "evidence": "나무 비유로 삶의 태도를 제안하는 글",
+   "confidence": 0.7,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 흔들리는 현대인에게 조용히 위로하는 메시지",
+     "pull": "문장 +: 아름답게 압축한 글과 일러스트가 어우러짐",
+     "gain": "마음 −: 나무에 빗대 삶의 태도를 성찰하게 함",
+     "world": "현실 +: 실제 나무와 인생을 다루는 비소설"
+    },
+    "missing": [],
+    "suggest": "인문",
+    "why": "나무를 빗댄 삶의 태도가 중심이라 인문"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/150011719",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791171715510",
+   "title": "라흐마니노프, 피아노의 빛을 따라",
+   "author": "피오나 매덕스 저/장호연 역",
+   "pages": 424,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 망명·죽음 등 상실을 따라가는 시선, 목차 '두 번째 망명'",
+    "pull": "몰입 −: 인물의 삶 이야기와 시간 순서 전개가 끌고 감",
+    "gain": "알게 됨 +: 자료 조사·사실 검증으로 작곡가의 삶을 알려 줌",
+    "world": "현실 +: 실존 인물과 실제 러시아·미국 무대의 비소설"
+   },
+   "missing": [],
+   "suggest": "역사",
+   "one_liner_style": "question",
+   "one_liner": "망명과 영광을 오간 작곡가의 삶을 자료로 따라가 볼까요?",
+   "evidence": "연대순 인물 평전, 사실 조사가 뼈대라 역사",
+   "confidence": 0.55,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 전기 서술이 중심, 끝맺음·어조 신호 약함",
+     "pull": "몰입 −: 망명·영광·죽음으로 이어지는 삶의 흐름이 끌고 감",
+     "gain": "알게 됨 +: 자료 조사로 인물의 삶을 밝혀 설명",
+     "world": "현실 +: 실제 인물과 러시아·미국 배경의 비소설"
+    },
+    "missing": [],
+    "suggest": "역사",
+    "why": "작곡가의 생애를 시간순으로 다룬 전기라 역사"
+   },
+   "flags": [
+    "fits",
+    "temp"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/168275710",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788979294408",
+   "title": "컬러 앤 라이트",
+   "author": "제임스 거니(James Gurney) 저/김지혜 역",
+   "pages": 224,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 설명 중심이라 끝맺음·어조 신호가 약함",
+    "pull": "몰입 −: 장면별 사례와 관찰로 끌고 감",
+    "gain": "알게 됨 +: 빛과 색의 원리를 과학과 관찰로 설명",
+    "world": "현실 +: 비소설이라 현실 세계"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "빛과 색의 원리를 관찰로 익혀 그림에 쓰고 싶지 않나요?",
+   "evidence": "창작론 미술 교육서, 예술을 만드는 글",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 설명 중심 미술 교육서, 맺음말도 제목뿐",
+     "pull": "몰입 −: 장마다 사례·관찰·단계로 끌고 감",
+     "gain": "알게 됨 +: 빛과 색의 원리를 과학·관찰로 설명",
+     "world": "현실 +: 비소설, 실제 빛·색·풍경을 다룸"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "그림 그리는 법을 가르치는 예술 창작론이라 예술·여행"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/139804496",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791198262028",
+   "title": "스페인, 너는 자유다",
+   "author": "손미나 저",
+   "pages": 296,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 청춘에게 용기를 건네는 다정한 고백, 자유로 닫힘",
+    "pull": "몰입 −: 스페인 1년의 사람·사건 이야기가 끌고 감",
+    "gain": "마음 −: 떠날 용기와 자유를 느끼게 하는 기록",
+    "world": "현실 +: 스페인 실제 도시·사람이 무대인 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "떠날 용기가 없던 마음이 스페인의 1년을 따라가며 가벼워질까요?",
+   "evidence": "스페인 체류기와 장소 체험이 뼈대라 여행 글",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 청춘에게 용기를 건네는 다정한 시선, 자유로 닫힘",
+     "pull": "몰입 −: 스페인 1년의 사건·사람들 이야기가 끌고 감",
+     "gain": "마음 −: 용기와 자유를 건네는 고백, 지식 전달 아님",
+     "world": "현실 +: 실제 스페인 도시·역사가 무대인 비소설"
+    },
+    "missing": [],
+    "suggest": "에세이",
+    "why": "저자 자신의 1년 경험·감정이 뼈대인 에세이"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/122680996",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788997023158",
+   "title": "예술가여, 무엇이 두려운가!",
+   "author": "데이비드 베일즈,테드 올랜드 공저/임경아 역",
+   "pages": 204,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 1,
+    "pull": 0,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 예술가에게 용기를 주고 해결책·조언을 건네는 다정한 시선",
+    "pull": "해당 없음 0: 문장 칭찬도 사례 중심 전개도 소개·목차에 뚜렷하지 않음",
+    "gain": "마음 −: 두려움을 마주하고 용기를 얻게 하는 성찰 중심",
+    "world": "현실 +: 비소설, 현실의 예술가와 창작 현장"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "창작 앞에서 느끼는 두려움을 들여다보고 계속 만들 용기를 얻어요?",
+   "evidence": "창작론: 예술가의 두려움과 용기를 다룸",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 포기하지 않도록 용기를 주는 다정한 시선",
+     "pull": "약한 몰입: 두려움 사례·경험으로 끌고 감, 문체 칭찬 없음",
+     "gain": "마음 −: 두려움을 마주하고 용기를 얻게 하는 책",
+     "world": "현실 +: 비소설, 평범한 예술가의 현실"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "예술 창작론으로 예술을 만드는 글에 맞음"
+   },
+   "flags": [
+    "pull"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/8034950",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791155818992",
+   "title": "일본 책방 도감",
+   "author": "마사키 데쓰야 저/백운숙 역",
+   "pages": 192,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 따스한 안내서, 독자 곁에서 권하는 시선",
+    "pull": "몰입 −: 책방을 하나씩 돌아보는 사례 흐름이 끌고 감",
+    "gain": "알게 됨: 책방 공간의 실측 정보와 구조를 보여 줌",
+    "world": "현실: 일본 실제 책방과 지역이 목차에 나옴"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "줄자로 잰 도면 속 책방을 거닐며 나만의 공간 취향을 찾아볼까요?",
+   "evidence": "실제 책방 공간을 보고 느끼는 여행·예술 글",
+   "confidence": 0.82,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "",
+     "pull": "몰입 −: 책방을 하나씩 돌아보는 탐방 흐름이 끌고 감",
+     "gain": "알게 됨: 실측 도면·수치로 공간을 보여 주는 안내서",
+     "world": "현실: 일본에 실제로 있는 책방과 지역"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "실제 책방을 찾아가 보고 느끼는 여행·공간 글"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-2 temp)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/191944038",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791191197518",
+   "title": "짐 챙겨",
+   "author": "김영희 저",
+   "pages": 232,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 유쾌하고 거침없는 입담으로 독자 곁에서 웃게 함",
+    "pull": "몰입 −: 여행지에서 벌어지는 사건과 에피소드가 끌고 감",
+    "gain": "마음 −: 웃음과 용기, 여행의 의미를 느끼게 하는 글",
+    "world": "현실: 네팔·케냐·영국 등 실제 여행지가 무대"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "세계 곳곳에서 벌어진 웃기는 일들로 떠나고 싶은 마음을 간질여 볼까요?",
+   "evidence": "여행 에세이, 장소 경험 중심이라 예술·여행에 맞음",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 유쾌하고 독자와 웃음을 나누는 시선",
+     "pull": "몰입 −: 웃긴 에피소드·사건이 끌고 감",
+     "gain": "마음 −: 웃음과 여행의 용기·낭만을 건넴",
+     "world": "현실 +: 비소설, 실제 세계 여행지"
+    },
+    "missing": [],
+    "suggest": "에세이",
+    "why": "저자 PD 자신의 여행 경험담이 뼈대인 에세이"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/149122373",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791194777786",
+   "title": "지도로 보는 세계의 역사",
+   "author": "크리스티앙 그라탈루 저/정미애 역",
+   "pages": 784,
+   "entry": "leaf",
+   "genre": "역사",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 시대순 지도 해설이라 끝맺음·어조 신호 약함",
+    "pull": "몰입 −: 지도와 시대 흐름으로 끌고 감",
+    "gain": "알게 됨 +: 지도와 해설로 역사적 사건을 설명",
+    "world": "현실 +: 실제 인류 역사와 지역이 중심인 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "지도 위에서 문명의 흐름을 따라가며 사건의 맥락을 짚어 볼까요?",
+   "evidence": "시대·지역 순 지도 해설이라 역사",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 시대 순서 지도 해설이라 끝맺음·어조 약함",
+     "pull": "몰입 −: 600개 지도와 시대 흐름·사건으로 끌고 감",
+     "gain": "알게 됨 +: 지도와 해설로 사건·맥락을 설명",
+     "world": "현실 +: 실제 인류 역사가 배경인 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "시대 순서로 사실·사건을 다룬 역사 지도책"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/180488803",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788936476694",
+   "title": "나의 문화유산답사기 : 산사 순례",
+   "author": "유홍준 저",
+   "pages": 400,
+   "entry": "leaf",
+   "genre": "역사",
+   "axes": {
+    "temp": 1,
+    "pull": 1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 산사를 예찬하며 독자에게 함께 가보자고 권함",
+    "pull": "문장 +: 목차의 서정적 절 제목이 글맛을 앞세움, 약한 신호",
+    "gain": "알게 됨 +: 산사의 가치·아름다움을 설명하는 답사 안내",
+    "world": "현실 +: 실제 산사와 지명이 나오는 비소설"
+   },
+   "missing": [],
+   "suggest": "예술·여행",
+   "one_liner_style": "question",
+   "one_liner": "깊은 산중 절집을 따라 걸으며 우리 산사의 아름다움을 만나 보고 싶지 않나요?",
+   "evidence": "사실 흐름이 아니라 장소를 보고 느끼는 답사 글",
+   "confidence": 0.82,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 산사를 예찬하며 독자에게 가볼 곳을 건네는 다정한 시선",
+     "pull": "",
+     "gain": "알게 됨: 산사의 가치·유래를 알려 주는 답사 안내",
+     "world": "현실: 실제 산사와 지명이 무대인 비소설"
+    },
+    "missing": [],
+    "suggest": "예술·여행",
+    "why": "사건 흐름이 아닌 산사를 보고 느끼는 답사 글"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-2 pull)"
+   ],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/63594853",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788936480691",
+   "title": "유배지에서 보낸 편지",
+   "author": "정약용 저/박석무 역",
+   "pages": 356,
+   "entry": "leaf",
+   "genre": "역사",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 아버지로서 자식·제자에게 다정히 당부하고 가르침",
+    "pull": "몰입 −: 편지 속 인물과 삶의 이야기가 끌고 감",
+    "gain": "마음 −: 삶의 태도와 처신을 건네는 가르침이 중심",
+    "world": "현실 +: 조선 후기 유배지와 가족·제자가 무대인 비소설"
+   },
+   "missing": [],
+   "suggest": "인문",
+   "one_liner_style": "question",
+   "one_liner": "유배지에서 자식과 제자에게 건넨 당부로 삶의 도리를 되새겨 봐요?",
+   "evidence": "사건 연표 아닌 삶의 태도 가르침이 중심",
+   "confidence": 0.7,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 아버지로서 후대에 남기는 다정한 가르침, 사랑과 교훈",
+     "pull": "몰입 −: 인물 정약용의 삶과 편지 이야기가 끌고 감",
+     "gain": "마음 −: 삶의 태도·도리를 성찰하게 건네는 가르침",
+     "world": "현실 +: 조선 후기 유배지 실제 인물의 비소설"
+    },
+    "missing": [],
+    "suggest": "인문",
+    "why": "사건 서술 아닌 삶의 도리를 건네는 편지글"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/142076008",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791166835384",
+   "title": "썬킴의 거침없는 중국사",
+   "author": "썬킴 저",
+   "pages": 264,
+   "entry": "leaf",
+   "genre": "역사",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 시대순 통사라 끝맺음 없고 어조도 설명 중심",
+    "pull": "몰입 −: 영화·드라마처럼 이야기로 끌고 감",
+    "gain": "알게 됨 +: 중국사 사건·흐름을 설명",
+    "world": "현실 +: 실제 중국 역사를 다루는 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "",
+   "evidence": "신화~청 시대순 구성이라 역사 통사",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 시대 순서 통사, 맺음말 없음, 어조는 설명 중심",
+     "pull": "몰입 −: 영화·드라마처럼 이야기로 끌고 가는 스토리텔링",
+     "gain": "알게 됨 +: 중국 역사를 배우는 것이 책의 목적",
+     "world": "현실 +: 실제 중국 역사가 배경인 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "시대 순서로 이어지는 중국 통사라 역사에 맞음"
+   },
+   "flags": [],
+   "issues": [
+    "한 줄이 책소개를 베낌"
+   ],
+   "status": "reserve",
+   "link": "https://www.yes24.com/product/goods/118147608",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788901241630",
+   "title": "사진과 그림으로 보는 한국현대사",
+   "author": "서중석 저",
+   "pages": 504,
+   "entry": "leaf",
+   "genre": "역사",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 시대 순서 개설서, 맺음말도 보이지 않음",
+    "pull": "몰입 −: 사진·사건 사례와 시대 흐름으로 끌고 감",
+    "gain": "알게 됨 +: 현대사 사건을 설명하는 개설서",
+    "world": "현실 +: 실제 한국 현대사를 다룬 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "해방부터 민주화까지 한국 현대사의 굵직한 장면을 차례로 따라가 볼까요?",
+   "evidence": "시대순 목차의 한국 현대사 개설서",
+   "confidence": 0.93,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 시대순 개설이라 마지막 장은 끝맺음 아님, 설명 중심",
+     "pull": "몰입 −: 시대 흐름과 사건·인물 사례로 끌고 감",
+     "gain": "알게 됨 +: 현대사 사건·쟁점을 설명하는 개설서",
+     "world": "현실 +: 실제 있었던 한국 현대사가 무대인 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "시대·사건 순서로 지난 사실을 다룬 현대사 개설서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/90689330",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791195124480",
+   "title": "책문, 이 시대가 묻는다",
+   "author": "김태완 저",
+   "pages": 492,
+   "entry": "leaf",
+   "genre": "역사",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 목차가 문답 중심, 끝맺음·어조 신호 약함",
+    "pull": "몰입 −: 왕의 물음과 신하의 대책, 일화로 끌고 감",
+    "gain": "알게 됨 +: 조선 정책 논의를 설명하고 해법을 짚음",
+    "world": "현실 +: 비소설, 실제 조선 시대 배경"
+   },
+   "missing": [],
+   "suggest": "인문",
+   "one_liner_style": "question",
+   "one_liner": "조선 선비들의 대책에서 오늘 사회의 문제를 풀 원칙을 찾아볼까요?",
+   "evidence": "조선 문답으로 오늘 문제를 풂, 인문",
+   "confidence": 0.55,
+   "fits": false,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 끝맺음 목차가 잘렸고 어조는 설명 중심",
+     "pull": "몰입 −: 조선 시대 책문과 대책의 사례·사건으로 끌고 감",
+     "gain": "알게 됨 +: 책문과 대책을 풀어 설명하며 알려 줌",
+     "world": "현실 +: 조선시대 실제 역사와 한국 사회가 무대"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "조선 책문·대책 사례가 뼈대라 역사에 맞음"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/18502393",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788958285236",
+   "title": "아틀라스 일본사",
+   "author": "일본사학회 저",
+   "pages": 235,
+   "entry": "leaf",
+   "genre": "역사",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 객관적 서술 중심, 끝맺음·어조 신호 없음",
+    "pull": "몰입 −: 고대부터 근현대까지 시대 흐름으로 끌고 감",
+    "gain": "알게 됨 +: 일본사를 개설로 설명하는 책",
+    "world": "현실 +: 실제 있었던 일본의 역사를 다룬 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "고대부터 근현대까지 일본사의 흐름을 균형 잡힌 시선으로 훑어볼까요?",
+   "evidence": "시대순 목차의 일본사 개설서라 역사에 맞음",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 객관적 서술의 시대순 개설사, 맺음말 없음",
+     "pull": "몰입 −: 고대~근현대 시대 흐름으로 끌고 감",
+     "gain": "알게 됨 +: 일본사를 객관적으로 설명하는 개설서",
+     "world": "현실 +: 실제 일본의 역사를 다룬 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "시대순 일본사 개설서라 역사에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/4835753",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788991290266",
+   "title": "역사",
+   "author": "헤로도토스 저/천병희 역",
+   "pages": 994,
+   "entry": "leaf",
+   "genre": "역사",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 사건·관습 서술 중심, 끝맺음·어조 신호 약함",
+    "pull": "몰입 −: 왕들의 이야기와 전쟁 배경 서술이 끌고 감",
+    "gain": "알게 됨 +: 과거 사실·관습·지리를 기록해 알려 줌",
+    "world": "현실 +: 실제 고대 세계가 무대인 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "",
+   "evidence": "고대 왕·민족 사건 중심의 서술이라 역사",
+   "confidence": 0.93,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 설명·기록 중심, 맺음말 없고 어조 중립",
+     "pull": "몰입 −: 왕들의 이야기와 사건·전쟁 흐름이 끌고 감",
+     "gain": "알게 됨 +: 사실·관습·지리·역사를 기록해 설명",
+     "world": "현실 +: 실제 고대 세계가 배경인 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "지난 사건과 관습을 기록한 최초의 역사서"
+   },
+   "flags": [],
+   "issues": [
+    "한 줄이 책소개를 베낌"
+   ],
+   "status": "reserve",
+   "link": "https://www.yes24.com/product/goods/3293142",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791139718713",
+   "title": "국화와 칼",
+   "author": "루스 베네딕트 저/왕은철 역",
+   "pages": 408,
+   "entry": "leaf",
+   "genre": "역사",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 분석·설명 중심이라 남는 감정이 드러나지 않음",
+    "pull": "몰입 −: 전쟁 중 연구 배경과 일본인 행동 분석의 흐름이 끌고 감",
+    "gain": "알게 됨 +: 일본 문화의 원리를 분석해 설명하는 책",
+    "world": "현실 +: 실제 일본 사회를 다룬 비소설"
+   },
+   "missing": [],
+   "suggest": "인문",
+   "one_liner_style": "question",
+   "one_liner": "전쟁 중 미국은 일본인의 행동 원리를 어떻게 읽어 냈을까요?",
+   "evidence": "사건 연표가 아닌 문화 분석이 중심이라 인문",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 문화 분석 설명이 중심, 끝맺음·어조 신호 약함",
+     "pull": "몰입 −: 전쟁 중 연구 배경과 일본 문화 분석 흐름이 끌고 감",
+     "gain": "알게 됨 +: 일본 문화의 원리를 분석해 설명",
+     "world": "현실 +: 실제 일본 사회를 다루는 비소설"
+    },
+    "missing": [],
+    "suggest": "인문",
+    "why": "사건 순서가 아닌 문화 분석이 뼈대라 인문에 가깝다"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/140398274",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791139700107",
+   "title": "길가메시 서사시",
+   "author": "앤드류 조지 편역/공경희 역",
+   "pages": 416,
+   "entry": "leaf",
+   "genre": "역사",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "끝맺음 −: 거부당한 영생, 엔키두의 죽음과 장례",
+    "pull": "몰입 −: 원정·싸움이 이어지는 모험 이야기",
+    "gain": "마음 −: 성장과 죽음 앞의 고뇌를 건넴, 형식이 이야기",
+    "world": "딴 세상 −: 신·괴물·저승이 실제로 등장"
+   },
+   "missing": [],
+   "suggest": "외국 소설",
+   "one_liner_style": "question",
+   "one_liner": "죽음 앞에서 영생을 찾아 헤매는 왕의 모험을 따라가 볼까요?",
+   "evidence": "지어낸 신화 서사시라 역사가 아님",
+   "confidence": 0.5,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "끝맺음 −: 거부당한 영생, 엔키두의 죽음·장례",
+     "pull": "",
+     "gain": "마음 −: 소설 형식은 마음 신호, 성장·깨달음을 남김",
+     "world": "딴 세상 −: 신들·대홍수·망자의 세계가 실제로 등장"
+    },
+    "missing": [],
+    "suggest": "외국 소설",
+    "why": "사실 기록이 아닌 고대 신화 서사시라 소설 쪽"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-2 pull)"
+   ],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/104103740",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791193024713",
+   "title": "첫사랑의 침공",
+   "author": "권혁일 저",
+   "pages": 228,
+   "entry": "leaf",
+   "genre": "로맨스",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "어조 +: 엉뚱한 상대를 마음에 두는 사랑 이야기가 가볍고 다정함",
+    "pull": "몰입 −: 소설 형식이 약한 이야기 신호, 문체 칭찬 없음",
+    "gain": "마음 −: 소설 형식 신호, 지식을 앞세우지 않음",
+    "world": "딴 세상 −: 외계인이 실제로 등장함"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "외계인과 간첩에게 마음을 빼앗기는 엉뚱한 사랑 이야기, 어떤 설렘일까요?",
+   "evidence": "사랑이 중심인 단편집이라 로맨스에 맞음",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "어조 +: 사랑 이야기를 엉뚱하고 유쾌하게 들려줌(약함)",
+     "pull": "몰입 −: 외계인 고백 같은 설정과 전개가 끌고 감",
+     "gain": "마음 −: 소설 형식, 지식을 앞세우지 않음",
+     "world": "딴 세상 −: 외계인·신이 실제로 등장"
+    },
+    "missing": [],
+    "suggest": "SF·판타지",
+    "why": "외계인·신이 등장하는 상상이 이야기를 움직임"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/126804414",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791193024928",
+   "title": "사랑은 하트 모양이 아니야",
+   "author": "김효인 저",
+   "pages": 228,
+   "entry": "leaf",
+   "genre": "로맨스",
+   "axes": {
+    "temp": null,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "끝맺음·어조·장면 모두 흐릿함: 출발점 설정만 있음",
+    "pull": "몰입 −: 색다른 전개와 이야기가 끌고 가고 문체 칭찬 없음",
+    "gain": "마음 −: 소설 형식, 인물 이야기가 남기는 것",
+    "world": "현실 +: 딴 세상 신호 없이 여행·이혼 등 현실 배경"
+   },
+   "missing": [
+    "temp"
+   ],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "죽음과 호르몬에서 시작해 사랑으로 번지는 두 편의 색다른 로맨스일까요?",
+   "evidence": "두 수록작 모두 사랑이 중심 줄기인 로맨스",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "끝맺음 +: 두 사람이 로맨스의 주인공임을 보여 주는 전개",
+     "pull": "몰입 −: 색다른 전개가 끌고 감, 문체 칭찬 없음(소설 형식)",
+     "gain": "마음 −: 소설 형식, 지식이 주된 목적이 아님",
+     "world": "현실 +: 딴 세상 신호 없음, 죽음 소식·호르몬은 현실 소재"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "두 수록작 모두 로맨스가 중심 줄기라 맞음"
+   },
+   "flags": [
+    "temp"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/142685882",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788937462184",
+   "title": "세일즈맨의 죽음",
+   "author": "아서 밀러 저/강유나 역",
+   "pages": 198,
+   "entry": "leaf",
+   "genre": "로맨스",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 무너진 꿈과 소시민의 비극, 입지가 잠식됨",
+    "pull": "몰입 −: 윌리의 몰락 과정이 끌고 감, 문체 칭찬 없음",
+    "gain": "마음 −: 인물의 비극이 남기는 것, 희곡 형식은 마음 쪽",
+    "world": "현실 +: 대공황 시기 미국이 배경"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "꿈이 무너져 가는 한 가장의 몰락을 따라가 볼래요?",
+   "evidence": "사랑이 중심이 아닌 가족 비극 희곡",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 무너진 꿈 속 소시민의 비극, 입지 잠식과 실망",
+     "pull": "몰입 −: 인물의 삶과 몰락 이야기가 끌고 감",
+     "gain": "마음 −: 희곡 형식, 인물 이야기가 남기는 것",
+     "world": "현실 +: 대공황기 미국 세일즈맨, 딴 세상 신호 없음"
+    },
+    "missing": [],
+    "suggest": "외국 소설",
+    "why": "사랑이 중심이 아닌 외국 작가의 문학 작품"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/3523842",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791172070786",
+   "title": "동영",
+   "author": "임태리 저",
+   "pages": 292,
+   "entry": "leaf",
+   "genre": "로맨스",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조·장면 −: 목차 '정신과'·'소문'·'거짓', 해설이 처절한 실존의",
+    "pull": "몰입 −: 소설 형식 신호, 문체 칭찬 없고 사랑과 이별 이야기로 끌고 ",
+    "gain": "마음 −: 소설이며 인물의 사랑과 이별 이야기가 남김, 지식이 목적 아님",
+    "world": "현실 +: 열아홉 살 사랑과 이별, 딴 세상 신호 없음"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "열아홉 살의 사랑과 이별을 따라가는 이야기인가요?",
+   "evidence": "열아홉 사랑과 이별이 중심 줄기라 로맨스에 맞음",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 이별을 되짚는 소개, 목차 '정신과'·'소문'·'거짓'이 아픈",
+     "pull": "몰입 −: 소설 형식이 약한 신호, 문체 칭찬 없음",
+     "gain": "마음 −: 소설 형식 신호, 지식을 앞세우지 않음",
+     "world": "현실 +: 열아홉 학교·일상 배경, 딴 세상 신호 없음"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "열아홉 사랑과 이별이 중심 줄기인 소설"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/162915537",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791167376688",
+   "title": "얼지 마, 죽지 마, 사랑하게 될 거야",
+   "author": "권혜영 저",
+   "pages": 276,
+   "entry": "leaf",
+   "genre": "로맨스",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "끝맺음 +: 부활의 자리·사랑의 자리를 마련, 자신을 돌봄",
+    "pull": "몰입 −: 빙의·교차 전개, 문장 칭찬 없음(소설 형식)",
+    "gain": "마음 −: 자신을 마주하는 사랑, 지식이 목적 아님",
+    "world": "딴 세상 −: 웹툰 속 인물로 빙의하는 설정이 실제로 등장"
+   },
+   "missing": [],
+   "suggest": "SF·판타지",
+   "one_liner_style": "question",
+   "one_liner": "웹툰 속에 빙의한 직장인과 만화가가 식어버린 사랑을 되살릴 수 있을까?",
+   "evidence": "빙의 판타지가 중심, 사랑은 주제 축",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "끝맺음 +: 자신을 돌보는 사랑, 부활의 자리를 마련함",
+     "pull": "몰입 −: 빙의·웹툰 교차 전개와 사건이 끌고 감",
+     "gain": "마음 −: 소설 형식, 인물의 자기 돌봄 이야기",
+     "world": "딴 세상 −: 웹툰 속 인물로 빙의하는 설정이 실제로 등장"
+    },
+    "missing": [],
+    "suggest": "SF·판타지",
+    "why": "빙의·웹툰 세계가 중심이고 사랑은 주제 수준이라 판타지"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/192466480",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791175772915",
+   "title": "살아만 있다면",
+   "author": "고사카 루카 저/김지연 역",
+   "pages": 352,
+   "entry": "leaf",
+   "genre": "로맨스",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "장면 −: 사랑 뒤에 남는 깊은 상실, 끝맺음은 알 수 없음",
+    "pull": "몰입 −: 소설 형식, 문체 칭찬 없음, 인물 이야기가 끌고 감",
+    "gain": "마음 −: 소설, 두 사람의 사랑과 상실이 남기는 것",
+    "world": "현실 +: 딴 세상 신호 없는 현실 배경"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "강렬한 이끌림 뒤에 찾아온 깊은 상실을 지나 다시 살아 보는 사랑 이야기일까요?",
+   "evidence": "두 남녀의 사랑과 상실이 중심 줄기",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "",
+     "pull": "몰입 −: 두 남녀의 이끌림과 상실을 따라가는 이야기, 문체 칭찬 없음",
+     "gain": "마음 −: 소설은 형식이 마음 신호, 지식을 앞세우지 않음",
+     "world": "현실 +: 딴 세상 신호 없음, 일상 속 두 남녀의 사랑"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "두 남녀의 사랑과 상실이 중심 줄기"
+   },
+   "flags": [
+    "temp"
+   ],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-2 temp)"
+   ],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/189834727",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791175240377",
+   "title": "초판본 독일인의 사랑",
+   "author": "프리드리히 막스 뮐러 저/배명자 역",
+   "pages": 180,
+   "entry": "leaf",
+   "genre": "로맨스",
+   "axes": {
+    "temp": -1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 사랑의 슬픔을 애절하게 노래하는 시선",
+    "pull": "문장 +: 함축적이고 아름다운 언어를 직접 강조",
+    "gain": "마음 −: 사랑에 대한 성찰과 감수성을 깨움",
+    "world": "현실 +: 딴 세상 신호 없는 1856년 작 소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "",
+   "evidence": "사랑이 중심 줄기, 슬픔 어조, 문장 칭찬",
+   "confidence": 0.7,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "",
+     "pull": "문장 +: 함축적이고 아름다운 언어를 직접 칭찬",
+     "gain": "",
+     "world": "현실 +: 딴 세상 신호 없음, 19세기 독일 배경"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "두 남녀의 사랑 이야기가 중심 줄기인 소설"
+   },
+   "flags": [],
+   "issues": [
+    "한 줄이 책소개를 베낌",
+    "근거가 책소개를 베낌 (AI-2 temp)",
+    "근거가 책소개를 베낌 (AI-2 gain)"
+   ],
+   "status": "reserve",
+   "link": "https://www.yes24.com/product/goods/152318464",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791193262214",
+   "title": "네가 유성처럼 스러지는 모습을 지켜볼 운명이었다",
+   "author": "미나토 쇼 저/황누리 역",
+   "pages": 296,
+   "entry": "leaf",
+   "genre": "로맨스",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "끝맺음 −: 목차가 '앞으로 두 끼'로 줄다 식사 끝, 죽음 예고",
+    "pull": "몰입 −: 남은 끼니 카운트다운이 다음을 궁금하게 함",
+    "gain": "마음 −: 소설이라 형식상 마음, 두 사람의 이야기가 남김",
+    "world": "딴 세상 −: 백 끼 후 죽는 희귀병 '여명백식'이 실제로 등장"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "남은 끼니를 세며 함께 밥을 먹는 두 사람은 어떤 마음에 닿게 될까요?",
+   "evidence": "사랑이 중심 줄기인 소설, 로맨스에 맞음",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "장면 −: 정해진 죽음, 남은 끼니를 세는 목차",
+     "pull": "몰입 −: 소설 형식, 줄어드는 끼니가 끌고 감",
+     "gain": "마음 −: 소설 형식, 두 사람의 이야기가 남김",
+     "world": "딴 세상 −: 백 끼 후 죽는 희귀병 '여명백식'"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "두 사람의 사랑이 이야기의 중심 줄기"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/129054040",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791193024300",
+   "title": "벽사아씨전",
+   "author": "박에스더 저",
+   "pages": 504,
+   "entry": "leaf",
+   "genre": "로맨스",
+   "axes": {
+    "temp": null,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "끝맺음 약함: 인연이 어디로 흐를지만 묻고 결말 없음, 어조·장면 신호 ",
+    "pull": "몰입 −: 자꾸 마주치는 두 사람의 인연이 궁금증으로 끌고 감",
+    "gain": "마음 −: 소설 형식 신호, 지식을 앞세우는 말 없음",
+    "world": "딴 세상 −: 귀신을 보고 벽사하는 오컬트 판타지"
+   },
+   "missing": [
+    "temp"
+   ],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "귀를 보는 남장 소녀와 일등 신랑감의 인연이 어디로 흐를지 궁금해지는 이야기일까요?",
+   "evidence": "두 남녀 인연이 중심 줄기라 로맨스에 맞음",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": null,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "결말·어조·장면 정보 약함: 인연이 어디로 흐를지 미정",
+     "pull": "몰입 −: 운명에 얽히는 전개, 형식상 이야기",
+     "gain": "마음 −: 소설, 지식 목적 신호 없음",
+     "world": "딴 세상 −: 귀신을 보고 벽사하는 오컬트 판타지"
+    },
+    "missing": [
+     "temp"
+    ],
+    "suggest": "SF·판타지",
+    "why": "오컬트 판타지가 중심 줄기, 로맨스는 한 축"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/122785544",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788954622158",
+   "title": "연애소설",
+   "author": "기준영 저",
+   "pages": 200,
+   "entry": "leaf",
+   "genre": "로맨스",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 담담한 시선, 불안 대신 성장으로 변모",
+    "pull": "형식 신호 몰입 −: 문체 직접 칭찬 없음, 소설집",
+    "gain": "마음 −: 소설 형식, 지식 목적 없음, 일상의 무게를 견딤",
+    "world": "현실 +: 일상 해프닝, 딴 세상 신호 없음"
+   },
+   "missing": [],
+   "suggest": "한국 소설",
+   "one_liner_style": "question",
+   "one_liner": "고단한 일상을 담담히 견디는 시선을 일곱 편의 해프닝으로 만나 볼까요?",
+   "evidence": "사랑 중심 소개 없는 한국 작가 문학 소설집",
+   "confidence": 0.7,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 담담하고 차분하게 마음을 가라앉힘, 성장으로 변모",
+     "pull": "",
+     "gain": "마음 −: 소설집 형식, 지식 목적 없음",
+     "world": "현실 +: 일상의 해프닝, 딴 세상 신호 없음"
+    },
+    "missing": [],
+    "suggest": "한국 소설",
+    "why": "사랑 중심이 아닌 일상 단편집, 한국 문학 소설"
+   },
+   "flags": [
+    "fits",
+    "pull"
+   ],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-2 pull)"
+   ],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/9477933",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791130656304",
+   "title": "스토리 혁명",
+   "author": "현유석,정종찬,정다솔 저",
+   "pages": 272,
+   "entry": "target",
+   "topic": "마케팅·브랜딩",
+   "field": "일·커리어",
+   "keywords": [
+    "콘텐츠 마케팅"
+   ],
+   "keywords_regex": [
+    "콘텐츠 마케팅"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "숏폼 시대에 통하는 도파민형 스토리 공식을 콘텐츠 기획에 쓰는 법을 알려줘요.",
+   "evidence": "콘텐츠로 사람을 모으는 스토리 전략이 중심",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "콘텐츠 마케팅"
+    ],
+    "way": "실습",
+    "why": "팔리는 콘텐츠 스토리텔링 공식으로 알리고 파는 법",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "way"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/132372571",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791191053579",
+   "title": "인스타그램 릴스 & 알고리즘 공략법 : 100만 조회수 만들기",
+   "author": "서진원 저 ",
+   "pages": 204,
+   "entry": "target",
+   "topic": "마케팅·브랜딩",
+   "field": "일·커리어",
+   "keywords": [
+    "콘텐츠 마케팅"
+   ],
+   "keywords_regex": [
+    "브랜딩",
+    "콘텐츠 마케팅",
+    "고객 이해"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "릴스 알고리즘 원리부터 기획·후킹·팬덤 소통까지 바로 써먹을 운영법을 얻어요.",
+   "evidence": "SNS 릴스로 사람을 모으는 실무 방법서",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "콘텐츠 마케팅"
+    ],
+    "way": "실습",
+    "why": "인스타 릴스로 사람을 모으고 알리는 법이라 마케팅 맞음",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/184570770",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791170436515",
+   "title": "아무나 쉽게 성공하는 인스타그램 마케팅",
+   "author": "황규진 저",
+   "pages": 244,
+   "entry": "target",
+   "topic": "마케팅·브랜딩",
+   "field": "일·커리어",
+   "keywords": [
+    "콘텐츠 마케팅"
+   ],
+   "keywords_regex": [
+    "콘텐츠 마케팅",
+    "고객 이해"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "",
+   "evidence": "인스타 콘텐츠로 사람을 모으는 방법서",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "콘텐츠 마케팅"
+    ],
+    "way": "실습",
+    "why": "인스타로 고객을 모으고 알리는 마케팅 실무서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [
+    "한 줄이 책소개를 베낌"
+   ],
+   "status": "reserve",
+   "link": "https://www.yes24.com/product/goods/147691421",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788970417912",
+   "title": "결국, 오프라인",
+   "author": "최원석 저",
+   "pages": 264,
+   "entry": "target",
+   "topic": "마케팅·브랜딩",
+   "field": "일·커리어",
+   "keywords": [
+    "브랜딩",
+    "고객 이해"
+   ],
+   "keywords_regex": [
+    "브랜딩",
+    "콘텐츠 마케팅",
+    "고객 이해"
+   ],
+   "way": "개념",
+   "keyword_candidate": "오프라인 마케팅",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "팝업과 오프라인 공간으로 팬덤을 만드는 기획 전략을 배워요",
+   "evidence": "오프라인 공간 기획으로 브랜드·고객 경험 설계",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "브랜딩",
+     "고객 이해"
+    ],
+    "way": "개념",
+    "why": "오프라인 팝업·공간으로 브랜드와 고객을 다루는 마케팅 ",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/126570761",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788993746068",
+   "title": "고릴라는 핸드폰을 미워해",
+   "author": "박경화 저",
+   "pages": 222,
+   "entry": "leaf",
+   "genre": "사회·시사",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 간편하고 즐거운 실천을 독자에게 권함",
+    "pull": "몰입 −: 물건별 구체적 사례로 끌고 감",
+    "gain": "알게 됨 +: 소비가 환경을 해치는 실상을 설명",
+    "world": "현실 +: 비소설, 실제 지구 환경과 생활 물건"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "일상 속 물건이 지구를 어떻게 해치는지 알고 즐겁게 바꿀 길을 만나요?",
+   "evidence": "소비와 환경 문제를 사례로 설명, 실천 제안",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 고발과 간편한 실천 제안이 섞여 반대 방향이 아님",
+     "pull": "몰입 −: 핸드폰·세탁기 등 구체적 사례로 끌고 감",
+     "gain": "알게 됨 +: 소비가 지구를 파괴하는 실상을 설명",
+     "world": "현실 +: 비소설, 실제 지구환경과 생활용품"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "소비와 환경 문제를 다루는 사회 문제 책"
+   },
+   "flags": [
+    "temp"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/5312832",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791172130268",
+   "title": "나, 블루칼라 여자",
+   "author": "박정연 저/황지현 사진",
+   "pages": 232,
+   "entry": "leaf",
+   "genre": "사회·시사",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 자부심·당당함·삶의 용기를 건네는 시선",
+    "pull": "몰입 −: 여성 10인의 삶과 사연이 끌고 감",
+    "gain": "마음 −: 인터뷰로 삶의 용기를 건네는 쪽",
+    "world": "현실 +: 실제 건설·운송 현장의 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "험한 일터에서 차별을 견딘 여성 열 명의 삶을 만나 볼까요?",
+   "evidence": "여성 노동자 인터뷰로 노동 현실을 다룸",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 자부심·당당함, 삶의 용기를 건네는 시선",
+     "pull": "몰입 −: 인터뷰 10인의 삶의 이야기가 끌고 감",
+     "gain": "마음 −: 삶의 용기를 건네고 공감하게 함",
+     "world": "현실 +: 비소설, 실제 노동 현장"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "여성 노동자 10인 인터뷰로 사회 문제를 다룸"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/125228073",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791160560589",
+   "title": "어떻게 민주주의는 무너지는가",
+   "author": "스티븐 레비츠키,대니얼 지블랫 공저/박세연 역",
+   "pages": 352,
+   "entry": "leaf",
+   "genre": "사회·시사",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 경고·비판이 전반에 흐름. 끝맺음은 '구하기'로 약함",
+    "pull": "몰입 −: 사례와 정치 흐름으로 끌고 감",
+    "gain": "알게 됨 +: 붕괴 패턴을 분석해 설명",
+    "world": "현실 +: 비소설, 실제 정치 현실"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "투표장에서 민주주의가 무너지는 이유가 궁금하지 않나요?",
+   "evidence": "오늘의 정치 위기를 분석하는 책이라 사회·시사",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 경고·붕괴·비극 등 판단 실린 장 제목이 이어짐",
+     "pull": "몰입 −: 사례·역사 흐름으로 끌고 감, 문장 칭찬 없음",
+     "gain": "알게 됨 +: 붕괴 패턴을 분석·설명해 알려 줌",
+     "world": "현실 +: 비소설, 실제 정치 현실을 다룸"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "오늘의 민주주의 위기를 다룬 사회·시사서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/64620409",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788925568362",
+   "title": "과몰입 사회",
+   "author": "기타 야코프 저/장혜경 역",
+   "pages": 264,
+   "entry": "leaf",
+   "genre": "사회·시사",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 설명 중심, 마무리는 격려지만 어조는 중립",
+    "pull": "몰입 −: 연구 사례와 이론 흐름으로 끌고 감",
+    "gain": "알게 됨 +: 감정이 작동하는 원리를 설명",
+    "world": "현실 +: 비소설이라 현실"
+   },
+   "missing": [],
+   "suggest": "인문",
+   "one_liner_style": "question",
+   "one_liner": "감정에 휘둘리지 않고 적당히 거리를 두는 관점을 심리학 연구로 알려 줘요?",
+   "evidence": "사회 비판보다 감정의 원리와 대처 중심",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 설명 중심, 끝맺음 격려와 비판 어조가 섞임",
+     "pull": "몰입 −: 연구·사례와 이론 흐름으로 끌고 감",
+     "gain": "알게 됨 +: 감정이 작동하는 원리를 설명",
+     "world": "현실 +: 비소설이라 현실 세계"
+    },
+    "missing": [],
+    "suggest": "인문",
+    "why": "사회 비판보다 감정을 이해하는 심리 탐구가 중심"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/196106728",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791141608026",
+   "title": "젠더 트러블",
+   "author": "주디스 버틀러 저/조현준 역",
+   "pages": 380,
+   "entry": "leaf",
+   "genre": "사회·시사",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 이론 설명 중심, 맺음 어조 불분명",
+    "pull": "몰입 −: 문체 칭찬 없고 논의 흐름으로 이어감",
+    "gain": "알게 됨 +: 젠더 개념·이론을 따지고 설명",
+    "world": "현실 +: 비소설 이론서"
+   },
+   "missing": [],
+   "suggest": "인문",
+   "one_liner_style": "question",
+   "one_liner": "젠더와 욕망을 이론으로 따져 보면 우리가 당연하게 믿던 성별이 달리 보이지 않을까요?",
+   "evidence": "사회 문제보다 젠더 개념·이론 탐구가 중심",
+   "confidence": 0.72,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 이론 설명 중심, 끝맺음·어조 신호 약함",
+     "pull": "몰입 −: 이론 논쟁과 담론 흐름으로 끌고 감, 문체 칭찬 없음",
+     "gain": "알게 됨 +: 젠더 개념·이론을 설명하고 따짐",
+     "world": "현실 +: 비소설, 실제 사상가와 이론 논의"
+    },
+    "missing": [],
+    "suggest": "인문",
+    "why": "젠더 이론 철학서, 사회 문제 해법이 아님"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/138725374",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791168730816",
+   "title": "이것도 제 삶입니다",
+   "author": "박채영 저",
+   "pages": 244,
+   "entry": "leaf",
+   "genre": "사회·시사",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 끝맺음 '나가며'만 있고 어조 신호가 약함",
+    "pull": "몰입 −: 당사자의 삶 이야기와 가족·이별 장면이 끌고 감",
+    "gain": "마음 −: 투병기가 아닌 삶의 경험을 건네 느끼게 함",
+    "world": "현실 +: 비소설, 실제 삶과 사회가 무대"
+   },
+   "missing": [],
+   "suggest": "에세이",
+   "one_liner_style": "question",
+   "one_liner": "섭식장애와 함께 살아온 당사자의 삶을 어떻게 들려줄까요?",
+   "evidence": "저자 자신의 삶과 경험이 뼈대라 에세이",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 편견·의료 공백을 짚는 시선, 상실·아픔 장면 중심",
+     "pull": "몰입 −: 당사자의 삶 이야기가 끌고 감",
+     "gain": "마음 −: 당사자의 경험과 성찰을 건넴",
+     "world": "현실 +: 실제 사회·삶이 배경인 비소설"
+    },
+    "missing": [],
+    "suggest": "에세이",
+    "why": "당사자 자신의 경험이 뼈대인 에세이"
+   },
+   "flags": [
+    "fits",
+    "temp"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/123130451",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788972971290",
+   "title": "나는 선량한 기후파괴자입니다",
+   "author": "토마스 브루더만 저/추미란 역",
+   "pages": 312,
+   "entry": "leaf",
+   "genre": "사회·시사",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 변명 스물다섯 가지를 짚으며 일상의 책임을 비판",
+    "pull": "몰입 −: 변명 25가지 사례와 흐름으로 끌고 감",
+    "gain": "알게 됨 +: 기후위기와 우리 행동의 관계를 설명·논증",
+    "world": "현실 +: 비소설, 지금의 지구와 일상이 무대"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "평범한 일상 속 기후 책임을 변명 하나하나 짚어 보게 될까요?",
+   "evidence": "기후위기를 오늘의 사회 문제로 다루며 변명을 비판",
+   "confidence": 0.82,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 변명 25개를 하나씩 짚는 비판이 목차 전반에 이어짐",
+     "pull": "몰입 −: 변명 사례를 차례로 짚어 가는 전개로 끌고 감",
+     "gain": "알게 됨 +: 기후위기에 대한 우리 행동과 변명의 구조를 설명",
+     "world": "현실 +: 비소설, 지금의 기후위기와 일상이 무대"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "기후위기 속 우리의 책임을 다루는 사회 문제 책"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/126789847",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788985155854",
+   "title": "기후 빅 히스토리",
+   "author": "마이클 E.만 저/박경미 역/조천호 감수",
+   "pages": 512,
+   "entry": "leaf",
+   "genre": "사회·시사",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "끝맺음 +: 해결 가능한 위기라며 희망의 메시지로 닫음",
+    "pull": "몰입 −: 지구 45억 년 시간 흐름과 대멸종 사건이 끌고 감",
+    "gain": "",
+    "world": "현실 +: 비소설, 실제 지구와 기후의 역사"
+   },
+   "missing": [],
+   "suggest": "과학 교양",
+   "one_liner_style": "question",
+   "one_liner": "지구의 오랜 기후 역사를 따라가며 지금의 위기에서 무엇을 할지 배워요?",
+   "evidence": "기후 원리·과거 기록 설명이 중심이라 과학 교양",
+   "confidence": 0.72,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "끝맺음 +: 해결 가능한 위기라는 희망의 메시지",
+     "pull": "몰입: 지구 기후 역사의 시간 흐름이 끌고 감",
+     "gain": "",
+     "world": "현실: 비소설, 실제 지구와 인류의 역사"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "과학 원리·기후 역사 설명이 중심이라 과학 교양에 가깝"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 gain)",
+    "근거가 책소개를 베낌 (AI-2 gain)"
+   ],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/194906101",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788954698344",
+   "title": "헝거",
+   "author": "록산 게이 저/노지양 역",
+   "pages": 368,
+   "entry": "leaf",
+   "genre": "사회·시사",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "",
+    "pull": "몰입 −: 한 사람의 삶의 이야기가 끌고 감",
+    "gain": "마음 −: 경험·감정을 건네는 회고록",
+    "world": "현실: 실제 삶을 쓴 비소설 회고록"
+   },
+   "missing": [],
+   "suggest": "에세이",
+   "one_liner_style": "question",
+   "one_liner": "",
+   "evidence": "저자 자신의 삶·몸 경험이 뼈대인 회고록",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 결핍·고독을 안고 스스로를 망가뜨린 생존의 기록",
+     "pull": "몰입 −: 한 사람의 삶의 이야기가 끌고 감, 솔직한 회고록",
+     "gain": "마음 −: 저자의 아픔과 고백을 건네는 회고",
+     "world": "현실 +: 실제 저자의 삶을 다룬 비소설"
+    },
+    "missing": [],
+    "suggest": "에세이",
+    "why": "저자 자신의 삶과 몸의 경험이 뼈대인 회고록"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [
+    "한 줄이 책소개를 베낌",
+    "근거가 책소개를 베낌 (AI-1 temp)"
+   ],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/125295963",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791167742827",
+   "title": "손절사회",
+   "author": "이승연 저",
+   "pages": 384,
+   "entry": "leaf",
+   "genre": "사회·시사",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 손절 흐름을 경계하고 치료요법 문화를 비판",
+    "pull": "몰입 −: MBTI·캔슬 컬처 등 현상 사례로 끌고 감",
+    "gain": "알게 됨: 손절 현상의 구조를 분석해 설명",
+    "world": "현실: 비소설, 지금 사회와 인간관계가 무대"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "손절이 왜 문화가 됐는지 사회학으로 짚어 보면 어떨까요?",
+   "evidence": "오늘의 관계 문화를 사회학으로 분석·비판",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 책 전체에서 치료요법 문화·신자유주의 비판 (잔인한 약속, 상",
+     "pull": "몰입 −: 예능·MBTI·AI 연애 등 사례와 현상 분석으로 끌고 감",
+     "gain": "알게 됨: 손절 현상을 사회학으로 분석·설명",
+     "world": "현실: 비소설, 오늘의 인간관계와 사회 현상"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "오늘 사회의 관계 문화를 분석하는 사회 비평서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/186511806",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791193712559",
+   "title": "길 위의 뇌",
+   "author": "정세희 저",
+   "pages": 348,
+   "entry": "leaf",
+   "genre": "에세이",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 저자가 달리기의 즐거움을 곁에서 권하는 다정한 시선",
+    "pull": "몰입 −: 환자·러닝 경험 같은 사례와 이야기가 끌고 감",
+    "gain": "알게 됨 +: 뇌와 운동의 관계를 의학 지식으로 설명",
+    "world": "비소설이라 현실: 실제 병원과 달리기 현장"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "의사가 달리며 만난 뇌 이야기를 곁에서 들려주면 어떨까요?",
+   "evidence": "의사 저자의 달리기 경험이 뼈대라 에세이로 봄",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 저자 달리기 경험을 곁에서 권하는 시선, '행복했던 달리기'",
+     "pull": "몰입 −: 저자의 달리기·환자 이야기와 사례가 끌고 감",
+     "gain": "알게 됨 +: 뇌·운동 지식과 데이터를 알려 주는 일",
+     "world": "현실 +: 비소설, 실제 달리기와 진료 현장"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "저자 달리기 경험과 진료 이야기가 뼈대인 에세이"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/134878586",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791169780957",
+   "title": "수원에서의 나날",
+   "author": "고영표,전영민 저",
+   "pages": 224,
+   "entry": "leaf",
+   "genre": "에세이",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "끝맺음 +: 마지막 부 '희망'과 '다가올 그날'로 닫힘",
+    "pull": "몰입 −: 한 선수의 굴곡진 삶의 이야기가 끌고 감",
+    "gain": "마음 −: 흔들리면서도 스스로 길을 찾는 이야기를 건넴",
+    "world": "현실 +: 비소설, 수원과 프로야구 현실 무대"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "",
+   "evidence": "선수 본인의 삶과 경험이 뼈대인 에세이",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "끝맺음 +: 마지막 장 '희망', 스스로 기회를 만든 성장",
+     "pull": "몰입 −: 한 선수의 삶의 이야기가 끌고 감",
+     "gain": "마음 −: 인물의 성장 이야기가 남는 것",
+     "world": "현실 +: 실제 야구단과 선수의 삶"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "저자 자신의 야구 인생이 뼈대라 에세이에 맞음"
+   },
+   "flags": [],
+   "issues": [
+    "한 줄이 책소개를 베낌"
+   ],
+   "status": "reserve",
+   "link": "https://www.yes24.com/product/goods/196279743",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791187297239",
+   "title": "지금 이대로 좋다",
+   "author": "법륜 저/박정은 그림",
+   "pages": 272,
+   "entry": "leaf",
+   "genre": "에세이",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 독자 곁에서 '지금 이대로 좋다'며 다독이는 희망편지",
+    "pull": "몰입 −: 짧은 글과 고민 상담 사례가 이어지며 끌고 감",
+    "gain": "마음 −: 성찰·감정을 건네고 생각을 바꾸게 하는 글",
+    "world": "현실 +: 비소설, 일상의 고민과 인간관계"
+   },
+   "missing": [],
+   "suggest": "인문",
+   "one_liner_style": "question",
+   "one_liner": "일상의 괴로움을 짧은 글로 들여다보고 마음을 내려놓게 돕는 책이에요?",
+   "evidence": "스님의 가르침이 중심이라 저자 일상 에세이 아님",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 독자 곁에서 건네는 희망편지, '이 정도면 괜찮다'",
+     "pull": "몰입 −: 짧은 글과 사연·대화 사례가 이어 끌고 감",
+     "gain": "마음 −: 괴로움·불안을 돌아보게 하는 성찰을 건넴",
+     "world": "현실 +: 비소설, 일상·인간관계 이야기"
+    },
+    "missing": [],
+    "suggest": "인문",
+    "why": "저자 경험보다 삶의 태도를 다루는 생각이 중심이라 인문"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/80739168",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791190807296",
+   "title": "당신은 반드시 잘될 사람",
+   "author": "라파엘 저",
+   "pages": 212,
+   "entry": "leaf",
+   "genre": "에세이",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 독자에게 이제는 당신 차례라며 격려, 끝맺음 희망",
+    "pull": "몰입 쪽: 저자 자신의 무너짐과 다시 일어선 삶의 이야기",
+    "gain": "마음 −: 스스로에게 건네는 말과 성찰, 다짐을 남김",
+    "world": "현실 +: 비소설, 삶과 인간관계가 무대"
+   },
+   "missing": [],
+   "suggest": "인문",
+   "one_liner_style": "question",
+   "one_liner": "무너진 뒤 다시 일어서며 관계와 선택을 돌아보게 하는 격려의 글인가요?",
+   "evidence": "삶의 태도·관계 조언이 중심, 저자 경험은 도입부",
+   "confidence": 0.5,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "",
+     "pull": "몰입 쪽: 조언·사례를 이어 가며 끌고 감, 문장 칭찬 없음",
+     "gain": "마음 쪽: 스스로에게 해 주는 말, 용기·위로를 건넴",
+     "world": "현실: 비소설, 사람과 관계가 무대"
+    },
+    "missing": [],
+    "suggest": "인문",
+    "why": "관계·태도 조언 중심이라 인문 쪽이 맞음"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-2 temp)"
+   ],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/129601763",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791122102505",
+   "title": "내 기분까지 내 책임이라니",
+   "author": "오원 저",
+   "pages": 304,
+   "entry": "leaf",
+   "genre": "에세이",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 회복의 여정과 응원을 곁에서 건네는 시선",
+    "pull": "몰입 −: 저자 삶의 이야기 100편이 끌고 감",
+    "gain": "마음 −: 성찰과 감정을 건네는 글",
+    "world": "현실 +: 요가 매트·일상이 무대인 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "기분의 주도권을 내 안으로 되찾는 길을 요가와 일상 이야기로 들려줄까요?",
+   "evidence": "저자 경험·성찰이 뼈대인 에세이",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 회복의 여정, 주도권을 되찾는 다정한 성찰",
+     "pull": "몰입 −: 저자의 삶 이야기 100편이 끌고 감, 문체 칭찬 없음",
+     "gain": "마음 −: 성찰과 감정을 건네는 글, 지식 전달 아님",
+     "world": "현실 +: 요가·간호학·일상 등 실제 삶이 배경"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "저자 자신의 경험과 성찰이 뼈대인 에세이"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196551468",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791198944047",
+   "title": "좋은 사람 도감",
+   "author": "묘엔 스구루,사사키 히나,마나코 지에미 저/이지수 역",
+   "pages": 132,
+   "entry": "leaf",
+   "genre": "에세이",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "",
+    "pull": "몰입 −: 소소한 사례를 모아 이어 가며 끌고 감",
+    "gain": "마음 −: 읽으면 좋은 사람을 발견하게 되는 쪽",
+    "world": "현실 +: 직장·학교·식사 등 실제 생활이 무대"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "일상 속 작은 친절을 모아 보며 마음이 따뜻해지나요?",
+   "evidence": "일상 속 좋은 사람 사례 모음, 따뜻한 어조",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "",
+     "pull": "몰입 쪽: 사례를 모아 소개하며 끌고 감, 문장 칭찬 없음",
+     "gain": "마음 쪽: 읽으면 행복해지게 됨, 지식 전달이 아님",
+     "world": "현실: 직장·학교·식사 등 실제 일상이 무대"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "일상 속 소소한 순간과 생각을 담은 에세이"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 temp)",
+    "근거가 책소개를 베낌 (AI-2 temp)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/141267438",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791124497074",
+   "title": "누구에게나 가슴을 후벼파는 대사 한마디가 있다",
+   "author": "정덕현 저",
+   "pages": 280,
+   "entry": "leaf",
+   "genre": "에세이",
+   "axes": {
+    "temp": 1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 위로와 평온을 건네는 필사집, 장 제목이 위로로 닫힘",
+    "pull": "문장 +: 명대사를 한 자씩 눌러 쓰는 필사집",
+    "gain": "마음 −: 위로·평온을 건네는 책, 지식 전달 아님",
+    "world": "현실 +: 비소설, 실제 드라마와 삶의 이야기"
+   },
+   "missing": [],
+   "suggest": "예술·여행",
+   "one_liner_style": "question",
+   "one_liner": "드라마 속 명대사를 천천히 따라 쓰며 위로를 받을 수 있을까요?",
+   "evidence": "저자 일상이 아닌 드라마 대사를 보고 느끼는 글",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 위로와 평온을 건네는 명대사 필사집, 장 제목 '위로'",
+     "pull": "문장 +: 명대사를 한 자 한 자 눌러 쓰는 필사집",
+     "gain": "마음 −: 위로·성찰을 건넴, 지식 설명 아님",
+     "world": "현실 +: 비소설, 현실 속 삶과 사랑·가족"
+    },
+    "missing": [],
+    "suggest": "예술·여행",
+    "why": "드라마 명대사 필사집, 저자 일상이 뼈대 아님"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/193848538",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791158161767",
+   "title": "이 지랄맞음이 쌓여 축제가 되겠지",
+   "author": "조승리 저",
+   "pages": 240,
+   "entry": "leaf",
+   "genre": "에세이",
+   "axes": {
+    "temp": 1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 아리지만 기운이 나는 글, 제목도 축제로 닫힘",
+    "pull": "문장 +: 시원시원하고 내면화된 깊은 문장을 앞세움",
+    "gain": "마음 −: 삶의 이야기와 감정을 건네는 에세이",
+    "world": "현실 +: 비소설, 저자의 실제 삶과 장소"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "앞이 캄캄해도 불꽃을 지켜 온 한 사람의 삶을 시원한 글로 만나볼까요?",
+   "evidence": "저자 자신의 삶이 뼈대인 에세이",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 시원시원하게 써내려가며 불꽃을 지켜낸 삶, 위로의 방식",
+     "pull": "문장 +: 추천사가 '훤칠한 글'로 문장을 직접 칭찬",
+     "gain": "마음 −: 저자 삶의 이야기와 감정을 건네는 에세이",
+     "world": "현실 +: 저자의 실제 삶과 일상이 무대인 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "저자 자신의 삶과 경험이 뼈대인 에세이"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/125676599",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791176612647",
+   "title": "딱 알맞은 고독",
+   "author": "가마타 미노루 저/지소연 역",
+   "pages": 344,
+   "entry": "leaf",
+   "genre": "에세이",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 고독을 품고 소중히 하라며 독자에게 제안",
+    "pull": "몰입 −: 저자 경험담과 사례·흐름으로 끌고 감",
+    "gain": "알게 됨 +: 고독력의 원리와 의학적 근거를 설명",
+    "world": "+ 현실: 비소설, 노년 의사의 실제 삶과 사회"
+   },
+   "missing": [],
+   "suggest": "인문",
+   "one_liner_style": "question",
+   "one_liner": "혼자 있는 시간을 힘으로 바꾸는 고독력, 나에게 필요하지 않을까요?",
+   "evidence": "고독을 다루는 삶의 태도·생각 중심이라 인문",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 고독을 품고 즐기라고 독자에게 건네는 제안",
+     "pull": "몰입 −: 저자 삶의 이야기와 사례가 끌고 감",
+     "gain": "마음 −: 고독을 대하는 생각과 태도를 바꾸게 함",
+     "world": "현실 +: 비소설, 고령사회·팬데믹 현실이 무대"
+    },
+    "missing": [],
+    "suggest": "인문",
+    "why": "저자 경험보다 고독을 대하는 생각·태도가 뼈대"
+   },
+   "flags": [
+    "fits",
+    "gain"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/196519480",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791199136632",
+   "title": "매일 행복할 일만 가득할 당신에게",
+   "author": "김태환(장문) 저",
+   "pages": 256,
+   "entry": "leaf",
+   "genre": "에세이",
+   "axes": {
+    "temp": 1,
+    "pull": 0,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 지친 마음을 어루만지는 위로, 독자 곁의 다정한 시선",
+    "pull": "문장·몰입 둘 다 약함: SNS 공감 글 모음, 해당 없음 0",
+    "gain": "마음 −: 위로와 용기를 건네는 글, 읽으면 힘이 나게 돼",
+    "world": "현실 +: 삶·사랑·관계를 다루는 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "지친 날 삶과 사랑, 관계의 상처를 다독이는 글을 만나 볼까요?",
+   "evidence": "저자 경험 담은 위로 글 모음이라 에세이",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 지친 마음을 위로하며 독자 곁에 다정히 있음",
+     "pull": "문장 +: SNS에서 공감 얻은 짧은 글 한 줄이 끄는 힘",
+     "gain": "마음 −: 위로와 성찰을 건네는 글, 읽으면 힘을 얻게 됨",
+     "world": "현실 +: 삶·사랑·관계를 다루는 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "저자 경험과 생각을 담은 위로 글이라 에세이에 맞음"
+   },
+   "flags": [
+    "pull"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/143503946",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788997743728",
+   "title": "의식의 탄생",
+   "author": "오기 오거스,사이 개덤 저/김아림 역",
+   "pages": 472,
+   "entry": "leaf",
+   "genre": "과학 교양",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 설명 중심, 끝맺음·어조 신호가 약함",
+    "pull": "몰입 −: 고세균에서 인간까지 단계별 흐름으로 끌고 감",
+    "gain": "",
+    "world": "현실 +: 비소설, 실제 생물과 인간을 다룸"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "미생물에서 인간까지 마음이 어떻게 생겨났는지 단계별로 따라가 볼래요?",
+   "evidence": "마음의 진화 원리를 설명하는 과학 교양",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 설명이 중심이라 남는 감정이 드러나지 않음",
+     "pull": "몰입 −: 고세균에서 인간까지 진화 단계 흐름으로 끌고 감",
+     "gain": "알게 됨 +: 마음의 출현·작동 방식을 설명하는 책",
+     "world": "현실 +: 비소설이라 실제 세상을 다룸"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "마음의 진화·작동 원리를 설명하는 과학 교양"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 gain)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/188840042",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788995141588",
+   "title": "한국의 새",
+   "author": "이우신,구태회,박진영 저/타니구찌 타카시 그림",
+   "pages": 404,
+   "entry": "leaf",
+   "genre": "과학 교양",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 도감이라 끝맺음·어조 신호가 없음",
+    "pull": "몰입 −: 573종 그림과 정보를 훑어 가며 보는 구성",
+    "gain": "알게 됨 +: 종 식별 정보를 알려 주는 도감",
+    "world": "현실 +: 비소설, 실제 새와 탐조 현장"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "탐조 예절을 익히고 573종의 새를 그림으로 식별해 볼까요?",
+   "evidence": "새 종을 설명하는 조류 도감이라 과학 교양",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 도감이라 끝맺음·어조 신호 없음",
+     "pull": "몰입 −: 573종 사례·정보를 나열하며 끌고 감",
+     "gain": "알게 됨 +: 새의 종·식별법을 알려 주는 도감",
+     "world": "현실 +: 비소설, 실제 국내 조류가 대상"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "자연과학 조류 도감이라 과학 교양에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/96086589",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788955889215",
+   "title": "건물은 물리학이다",
+   "author": "Sho 건축사 저/정문주 역/이나리  감수",
+   "pages": 192,
+   "entry": "leaf",
+   "genre": "과학 교양",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 설명 중심, 끝맺음·판단 어조 없음",
+    "pull": "몰입 −: 건물 사례와 일상 현상으로 끌고 감",
+    "gain": "알게 됨 +: 물리 개념이 건축에 쓰이는 원리 설명",
+    "world": "현실 +: 비소설, 실제 건축물과 생활 공간"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "문과 창문, 지진과 단열 속에 어떤 물리 원리가 숨어 있을까요?",
+   "evidence": "물리 원리를 건축 사례로 설명하는 교양서",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 설명이 중심, 끝맺음·어조 신호 약함",
+     "pull": "몰입 −: 일상 사례·건축물로 끌고 감",
+     "gain": "알게 됨 +: 물리 개념을 건축에 적용해 설명",
+     "world": "현실 +: 실제 건물·세계의 건축물을 다루는 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "물리 개념을 건축으로 설명하는 과학 교양"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196780283",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788950911799",
+   "title": "기억하는 뇌, 망각하는 뇌",
+   "author": "이인아 저",
+   "pages": 252,
+   "entry": "leaf",
+   "genre": "과학 교양",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 설명 중심, 끝맺음·어조 신호 약함",
+    "pull": "몰입 −: 해마·HM 사례와 강의식 흐름으로 끌고 감",
+    "gain": "알게 됨 +: 뇌의 학습·기억 원리를 설명",
+    "world": "현실 +: 비소설, 실제 뇌와 사람을 다룸"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "뇌가 왜 학습하고 기억하는지 원리를 따라가 볼까요?",
+   "evidence": "뇌인지과학 원리 설명 중심의 교양서",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 학습·기억 원리 설명이 중심, 맺음말 어조 뚜렷하지 않음",
+     "pull": "몰입 −: 강의하듯 사례(HM)와 원리 흐름으로 끌고 감",
+     "gain": "알게 됨 +: 뇌의 학습·기억 원리를 설명",
+     "world": "현실 +: 비소설, 현실 세계를 다룸"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "뇌의 학습·기억 원리를 설명하는 과학 교양"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/110708746",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791173327643",
+   "title": "양자 문명",
+   "author": "한정훈 저",
+   "pages": 356,
+   "entry": "leaf",
+   "genre": "과학 교양",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 설명 중심, 끝맺음·어조 신호 약함",
+    "pull": "몰입 −: 문명사 흐름과 발명·인물 이야기로 끌고 감",
+    "gain": "알게 됨 +: 양자역학 원리와 기술을 설명",
+    "world": "현실 +: 비소설, 실제 문명과 기술을 다룸"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "전기에서 양자컴퓨터까지 문명을 바꾼 물리학의 흐름을 따라가 봐요?",
+   "evidence": "양자역학 원리와 기술을 설명하는 물리 교양서",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 설명 중심, 맺음말 제목뿐 어조 신호 약함",
+     "pull": "몰입 −: 문명사 흐름과 사례·사상가 이야기로 끌고 감",
+     "gain": "알게 됨 +: 양자역학·양자컴퓨터 원리와 문명사를 설명",
+     "world": "현실 +: 비소설, 실제 과학·기술과 도시 문명을 다룸"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "양자역학 원리를 설명하는 물리 교양서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/195409178",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788965703112",
+   "title": "모든 순간의 물리학",
+   "author": "카를로 로벨리 저/김현주 역/이중원 감수",
+   "pages": 148,
+   "entry": "leaf",
+   "genre": "과학 교양",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 이론 설명 중심, 끝맺음·어조 판단 말 적음",
+    "pull": "몰입 −: 이론이 탄생·결합하는 흐름이 끌고 감",
+    "gain": "알게 됨 +: 물리학 이론을 설명하는 강의",
+    "world": "현실 +: 비소설, 우주를 다루는 과학 교양"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "20세기 물리학 혁명의 핵심 이론을 일곱 강의로 간결하게 훑어봐요?",
+   "evidence": "물리 이론을 설명하는 강의형 과학 교양",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 설명 중심, 끝맺음·어조 신호 약함",
+     "pull": "몰입 −: 이론이 이어지고 변화하는 흐름이 끌고 감",
+     "gain": "알게 됨 +: 20세기 물리학 이론을 설명하는 강의",
+     "world": "현실 +: 우주를 다룬 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "물리학 이론을 풀어 설명하는 과학 교양서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/24607555",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791141609603",
+   "title": "모든 것은 결정되어 있다",
+   "author": "로버트 M. 새폴스키 저/양병찬 역",
+   "pages": 648,
+   "entry": "leaf",
+   "genre": "과학 교양",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 논증·설명 중심, 끝맺음·어조 방향 불분명",
+    "pull": "몰입 −: 논쟁적 질문과 과학적 논증의 흐름이 끌고 감",
+    "gain": "알게 됨 +: 과학적 탐구로 자유의지 부재를 논증",
+    "world": "현실 +: 비소설, 실제 인간·사회를 다룸"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "내 선택은 정말 내 것일까, 신경과학은 뭐라고 답할까요?",
+   "evidence": "신경과학 논증이 중심인 비소설 교양서",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 논증·설명 중심, 끝맺음·어조 방향 약함",
+     "pull": "몰입 −: 방대한 연구를 논증으로 끌고 가는 흐름",
+     "gain": "알게 됨 +: 자유의지를 과학적으로 논증해 설명",
+     "world": "현실 +: 비소설, 실제 인간과 사회를 다룸"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "신경과학·생물학 원리로 자유의지를 설명하는 과학 교양"
+   },
+   "flags": [],
+   "issues": [
+    "근거 약함(겹치는 단어 1개)"
+   ],
+   "status": "reserve",
+   "link": "https://www.yes24.com/product/goods/183757559",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788934986980",
+   "title": "우리 우주",
+   "author": "조 던클리 저/이강환 역",
+   "pages": 344,
+   "entry": "leaf",
+   "genre": "과학 교양",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 설명이 중심, 에필로그 '앞을 내다보며'는 방향이 흐릿함",
+    "pull": "몰입 −: 일상 사물 비유와 도판으로 원리를 차근차근 이끎",
+    "gain": "",
+    "world": "현실 +: 우주를 다루는 비소설이라 현실"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "",
+   "evidence": "천체물리 원리를 설명하는 교양 강의라 과학 교양",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 설명 중심, 과장 없는 어조라 방향 없음",
+     "pull": "몰입 −: 일상 사물 비유와 도판으로 원리를 차근차근 풀어 끌고 감",
+     "gain": "알게 됨 +: 우주의 원리·물리 지식을 설명하는 입문 강의",
+     "world": "현실 +: 우주를 다룬 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "천체물리 원리를 설명하는 천문학 입문서"
+   },
+   "flags": [],
+   "issues": [
+    "한 줄이 책소개를 베낌",
+    "근거가 책소개를 베낌 (AI-1 gain)"
+   ],
+   "status": "reserve",
+   "link": "https://www.yes24.com/product/goods/102087579",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791170870005",
+   "title": "프린키피아",
+   "author": "아이작 뉴턴 저/박병철 역",
+   "pages": 960,
+   "entry": "leaf",
+   "genre": "과학 교양",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 정리·증명 중심이라 끝맺음·어조 신호 없음",
+    "pull": "몰입 쪽: 문장 칭찬은 번역뿐, 법칙·궤도 설명의 흐름이 끌고 감",
+    "gain": "알게 됨: 운동 법칙·궤도·유체 원리를 설명·증명",
+    "world": "현실: 비소설, 태양계와 자연 현상을 다룸"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "고전역학의 법칙과 태양계 구조를 원전으로 따라가 보면 어떨까요?",
+   "evidence": "운동 법칙·궤도·유체 원리를 다루는 자연과학 고전",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 정리·증명 중심이라 남는 감정이 드러나지 않음",
+     "pull": "몰입 −: 소개가 고전역학 확립과 과학사의 위상으로 끌고 감",
+     "gain": "알게 됨 +: 정의·공리·정리 증명으로 원리를 설명",
+     "world": "현실 +: 비소설, 태양계와 물체 운동을 다룸"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "장마다 정리·증명이 이어지는 전문 원전이라 교양서가 아"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/119652400",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791197599415",
+   "title": "우리는 어쩌다 과학을 믿게 되었을까",
+   "author": "이근희,김갑진 저",
+   "pages": 372,
+   "entry": "leaf",
+   "genre": "과학 교양",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 설명·역사 서술이 중심, 판단 실린 어조 약함",
+    "pull": "몰입 −: 노벨상 수상 사례와 논쟁의 흐름이 끌고 감",
+    "gain": "알게 됨 +: 물리학 발전과 과학 신뢰의 과정을 설명",
+    "world": "현실 +: 비소설, 실제 물리학자와 실험"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "노벨 물리학상 120년의 논쟁과 합의를 따라가며 과학을 믿는 이유를 알게 돼요?",
+   "evidence": "물리학 역사와 원리를 설명하는 교양서",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 과학사 설명이 중심, 끝맺음·어조 신호 약함",
+     "pull": "몰입 −: 논쟁·합의의 결정적 순간을 사건 흐름으로 끌고 감",
+     "gain": "알게 됨 +: 물리학 이론과 과학이 믿을 만한 이유를 설명",
+     "world": "현실 +: 비소설, 실제 물리학자와 실험의 세계"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "노벨 물리학상으로 물리학 원리·역사를 설명하는 과학 교"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/193040664",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791197993480",
+   "title": "마티스×스릴러",
+   "author": "정해연,조영주,정명섭,박산호,박상민 저",
+   "pages": 304,
+   "entry": "leaf",
+   "genre": "추리·스릴러",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "장면 −: 어둠·욕망·위험으로 가득한 이야기",
+    "pull": "몰입 −: 반전과 짜릿한 쾌감으로 끌고 감",
+    "gain": "마음 −: 소설 형식, 지식이 목적 아님",
+    "world": "딴 세상 −: 목차 '좀비 여인의 초상'에 좀비"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "마티스 그림에서 시작된 어둠과 욕망의 반전, 다섯 작가의 스릴러를 만나볼까요?",
+   "evidence": "스릴러 5편 선집, 반전·쾌감 강조",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "장면 −: 어둠·욕망·위험으로 가득 찬 이야기",
+     "pull": "몰입 −: 반전과 짜릿한 쾌감으로 끌고 감",
+     "gain": "마음 −: 소설 선집, 지식 목적 없음",
+     "world": "딴 세상 −: 수록작 '좀비 여인의 초상'에 좀비 등장 추정"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "다섯 편 모두 스릴러로 묶인 선집"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/141387729",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791194655251",
+   "title": "모성",
+   "author": "미나토 가나에 저/김진환 역",
+   "pages": 336,
+   "entry": "leaf",
+   "genre": "추리·스릴러",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조·장면 −: 섬뜩함, 사건의 불편한 진실, 목차 '탄식'·'눈물 항아",
+    "pull": "몰입 −: 엇갈리는 고백·회상, 반전, 긴장감을 늦출 수 없음",
+    "gain": "마음 −: 모성을 묻는 인물 이야기, 지식 목적 없음",
+    "world": "현실: 초자연·우주 신호 없이 모녀 관계의 현실 배경"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "엄마와 딸의 엇갈린 기억 속에서 사건의 진실을 따라가 볼까요?",
+   "evidence": "모녀 사건 풀이가 중심인 미스터리",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조·장면 −: 섬뜩함, 불편한 진실, 탄식·눈물 목차",
+     "pull": "몰입 −: 교차 서술, 반전, 긴장감, 강력한 흡인력",
+     "gain": "마음 −: 소설, 모녀 관계와 모성을 묻는 이야기",
+     "world": "현실 +: 딴 세상 신호 없는 현실 모녀 이야기"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "사건의 진실을 좇는 모녀 미스터리라 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/174751054",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788956601021",
+   "title": "공중그네",
+   "author": "오쿠다 히데오 저/이영미 역",
+   "pages": 309,
+   "entry": "leaf",
+   "genre": "추리·스릴러",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 엽기 콤비가 유쾌하게 곁에서 풀어 주는 사건들",
+    "pull": "몰입 −: 소설 형식, 인물 매력과 사건이 끌고 감",
+    "gain": "마음 −: 소설, 인물 이야기가 남김, 지식 목적 없음",
+    "world": "현실 +: 병원·곡예·야쿠자 등 현실 무대, 딴 세상 신호 없음"
+   },
+   "missing": [],
+   "suggest": "외국 소설",
+   "one_liner_style": "question",
+   "one_liner": "엽기 정신과 의사가 별난 고민을 가진 사람들을 만나는 유쾌한 이야기일까요?",
+   "evidence": "사건 풀이 아닌 정신과 환자들의 유쾌한 연작, 일본 작가",
+   "confidence": 0.85,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 유쾌한 사건과 엉뚱한 의사의 코미디 시선",
+     "pull": "몰입 −: 사건·인물 매력과 이야기꾼 평가로 끌고 감",
+     "gain": "마음 −: 소설 형식, 인물 이야기가 남기는 것",
+     "world": "현실 +: 일본 병원·곡예단 등 현실 배경, 초자연 없음"
+    },
+    "missing": [],
+    "suggest": "외국 소설",
+    "why": "범인·사건 풀이 없는 유쾌한 문학 소설"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [
+    "근거 김(31자)"
+   ],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/1448052",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791193262184",
+   "title": "아이가 없는 집",
+   "author": "알렉스 안도릴 저/유혜인 역",
+   "pages": 304,
+   "entry": "leaf",
+   "genre": "추리·스릴러",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "장면 −: 시체 사진, 살인 용의자가 된 불안한 출발",
+    "pull": "몰입 −: 사진의 정체를 쫓는 사건 전개가 끌고 감",
+    "gain": "마음 쪽: 소설 형식, 지식 목적 없음, 사건 이야기",
+    "world": "현실 +: 저택·탐정 배경, 딴 세상 신호 없음"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "내 휴대폰 속 시체 사진의 주인을 탐정과 함께 쫓아가 볼래요?",
+   "evidence": "탐정이 사건을 푸는 추리물, 현실 배경",
+   "confidence": 0.75,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": null,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "결말·어조·장면 신호 없음: 설정만 소개",
+     "pull": "몰입 −: 시체 사진과 용의자라는 사건 전개가 끌고 감",
+     "gain": "마음 −: 소설 형식 신호, 지식이 목적이라는 말 없음",
+     "world": "현실 +: 딴 세상 신호 없이 저택·탐정의 현실 배경"
+    },
+    "missing": [
+     "temp"
+    ],
+    "suggest": "",
+    "why": "탐정이 시체 사진 사건을 푸는 추리 소설"
+   },
+   "flags": [
+    "temp"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/127086686",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791158792619",
+   "title": "가족극",
+   "author": "미야베 미유키 저/김선영 역",
+   "pages": 264,
+   "entry": "leaf",
+   "genre": "추리·스릴러",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "",
+    "pull": "몰입 −: 소설 형식의 약한 신호, 문체 칭찬 없음, 미스터리로 끌고 감",
+    "gain": "마음 −: 소설 형식 신호, 가족에 대한 질문을 건넴",
+    "world": "현실 +: 가족·뉴스·SNS 등 현실 배경, 딴 세상 신호 없음"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "가족이라고 서로를 진짜 아느냐는 불편한 질문을 던지는 미스터리일까요?",
+   "evidence": "가족 미스터리로 소개, 사건 중심 이야기",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "",
+     "pull": "몰입 −: 소설 형식 신호, 문체 칭찬 없음",
+     "gain": "마음 −: 소설은 형식상 마음, 성찰적 질문을 건넴",
+     "world": "현실 +: 현실 가족 배경, 딴 세상 신호 없음"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "가족 미스터리로 소개돼 추리·스릴러에 둘 만함"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 temp)",
+    "근거가 책소개를 베낌 (AI-2 temp)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196113441",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791163162360",
+   "title": "환",
+   "author": "김시안 저",
+   "pages": 320,
+   "entry": "leaf",
+   "genre": "추리·스릴러",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "어조 −: 신의 경고, 혼란, 세상 질서가 무너짐",
+    "pull": "몰입 −: 미스터리 전개, 진실·퍼즐 장 제목",
+    "gain": "마음 −: 소설 형식이 약한 마음 신호, 지식 목적 없음",
+    "world": ""
+   },
+   "missing": [],
+   "suggest": "SF·판타지",
+   "one_liner_style": "question",
+   "one_liner": "전생을 기억하는 아이들이 태어난 세상에서 어떤 진실이 드러날까요?",
+   "evidence": "환생이라는 없는 존재의 상상이 이야기를 움직임",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "어조 −: 신이 보내는 경고, 혼란과 산산이 부서진 질서",
+     "pull": "몰입 −: 미스터리 스릴러, 진실·퍼즐로 이어지는 전개",
+     "gain": "마음 −: 소설 형식이 약한 마음 신호, 지식이 목적 아님",
+     "world": ""
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "미스터리 스릴러로 소개, 퍼즐·진실로 풀리는 전개"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 world)",
+    "근거가 책소개를 베낌 (AI-2 world)"
+   ],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/106388001",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791158792367",
+   "title": "흉가",
+   "author": "미쓰다 신조 저/현정수 역",
+   "pages": 364,
+   "entry": "leaf",
+   "genre": "호러·괴담",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "장면 −: 집이 끔찍한 무대, 목차에 검은 형체·제물·바닥을 기는 것",
+    "pull": "몰입 −: 소설 형식, 문체 칭찬 없이 호러 미스터리 전개로 끌어감",
+    "gain": "마음 −: 소설 형식, 지식이 주된 목적이라는 말 없음",
+    "world": "딴 세상 −: 검은 형체·검고 긴 것 등 괴이한 존재가 등장"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "가장 편안해야 할 집이 끔찍한 무대로 변할 때 얼마나 견딜 수 있을까요?",
+   "evidence": "집을 무대로 한 괴이 중심 호러 미스터리",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "장면 −: 집이 끔찍한 무대, 제물·검은 형체 등 목차가 서늘함",
+     "pull": "몰입 −: 형식 신호, 문체 칭찬 없고 사건 전개로 끌고 감",
+     "gain": "마음 −: 소설은 형식 신호, 지식이 주된 목적 아님",
+     "world": "딴 세상 −: 검은 형체·놈들 등 괴이가 실제로 등장"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "집에 얽힌 괴이와 공포가 중심인 호러 소설"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/144905239",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791194654902",
+   "title": "퇴마록 혼세편 1",
+   "author": "이우혁 저",
+   "pages": 484,
+   "entry": "leaf",
+   "genre": "호러·괴담",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "",
+    "pull": "몰입 −: 대혈투극·퇴마사의 여정 등 사건 전개가 끌고 감",
+    "gain": "마음 −: 소설 형식, 지식이 목적이라는 말이 없음",
+    "world": "딴 세상 −: 퇴마사와 오컬트 존재가 실제로 등장"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "악인들의 계략에 맞서는 퇴마사들의 여정이 궁금한가요?",
+   "evidence": "퇴마와 오컬트 존재가 중심이라 호러·괴담에 맞음",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "",
+     "pull": "몰입 −: 대혈투극·긴 에피소드 전개, 문체 칭찬 없음",
+     "gain": "마음 −: 소설 형식, 지식이 주된 목적이라는 말 없음",
+     "world": "딴 세상 −: 퇴마사와 오컬트 존재가 실제로 등장"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "퇴마·오컬트 존재가 중심인 소설이라 호러·괴담에 맞음"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 temp)",
+    "근거가 책소개를 베낌 (AI-2 temp)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/147048414",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791166836008",
+   "title": "어두운 물",
+   "author": "전건우 저",
+   "pages": 288,
+   "entry": "leaf",
+   "genre": "호러·괴담",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "장면 −: 익사 사고와 끔찍한 실체 목격, 죽음·흉가",
+    "pull": "몰입 −: 속도감 있는 전개와 긴장감을 앞세움",
+    "gain": "마음: 소설 형식, 지식이 주된 목적 아님",
+    "world": "딴 세상 −: 수귀·물귀신이 실제로 등장"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "강에서 벌어지는 익사 사고의 진상을 쫓다 끔찍한 실체와 마주하면 어떨까요?",
+   "evidence": "수귀가 실제로 나오는 정통 호러",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "장면 −: 익사 사고, 끔찍한 실체 목격, 흉가·죽음",
+     "pull": "몰입 −: 속도감 있는 전개, 긴장감과 몰입감",
+     "gain": "마음 −: 소설 형식, 지식을 앞세우지 않음",
+     "world": "딴 세상 −: 수귀·물귀신이 실제로 등장"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "수귀·물귀신 등 초자연 괴이가 중심인 정통 호러"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/127199042",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788956605562",
+   "title": "오싹한 연애",
+   "author": "김영은 저",
+   "pages": 324,
+   "entry": "leaf",
+   "genre": "호러·괴담",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "어조 +: 사랑을 지키려는 코미디 연애담, 약하게 따뜻함",
+    "pull": "몰입 −: 소설 형식, 목숨 건 연애 전개가 끌고 감",
+    "gain": "마음 −: 소설 형식, 인물 이야기가 남기는 것",
+    "world": "딴 세상 −: 귀신이 실제로 등장하는 이야기"
+   },
+   "missing": [
+    "temp"
+   ],
+   "suggest": "로맨스",
+   "one_liner_style": "question",
+   "one_liner": "귀신 보는 여자와 겁 많은 마술사의 연애, 사랑과 공포 중 무엇이 셀까요?",
+   "evidence": "사랑이 중심 줄기, 호러는 곁들임",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "어조 +: 코미디가 섞인 연애 이야기, 끝맺음은 알 수 없음",
+     "pull": "몰입 −: 목숨을 건 연애 전개가 끌고 가는 소설",
+     "gain": "마음 −: 소설 형식, 사랑과 공포에 대한 질문",
+     "world": "딴 세상 −: 귀신을 보는 인물, 귀신이 실제로 등장"
+    },
+    "missing": [],
+    "suggest": "로맨스",
+    "why": "사랑·연애가 중심 줄기, 호러는 곁들임"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/5924063",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791194979708",
+   "title": "더럽혀진 성지 순례에 대하여",
+   "author": "세스지 저/전선영 역",
+   "pages": 304,
+   "entry": "leaf",
+   "genre": "호러·괴담",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "장면 −: 변태 오두막·천국 병원 등 불길한 장소 제목, 원한·욕망",
+    "pull": "몰입 −: 소설은 형식상 이야기, 문체 칭찬 없음",
+    "gain": "마음 −: 소설 형식, 지식이 주된 목적 아님",
+    "world": "딴 세상 −: 괴이·괴담이 이야기 중심에 등장"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "욕망과 원한이 번지는 괴이한 장소들을 따라가면 어떤 공포를 만나게 될까요?",
+   "evidence": "욕망·원한의 공포 소설, 괴이가 중심",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "장면 −: 변태 오두막·천국 병원 등 아픈 장면, 공포 중심",
+     "pull": "몰입 −: 체험형 호러·압도적 리얼리티, 소설은 몰입이 기본",
+     "gain": "마음 −: 소설이라 형식상 마음, 지식 목적 없음",
+     "world": "딴 세상 −: 괴담·괴이가 중심, 실제로 등장하는 초자연"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "욕망·원한의 공포를 다룬 호러 소설"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/167463386",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788950977795",
+   "title": "보기왕이 온다",
+   "author": "사와무라 이치 저/이선희 역",
+   "pages": 384,
+   "entry": "leaf",
+   "genre": "호러·괴담",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "어조 −: 뒤틀린 인간 심리와 극한의 공포를 끌어냄",
+    "pull": "몰입 −: 소설 형식의 약한 신호, 문체 칭찬은 약함",
+    "gain": "마음 −: 소설 형식, 지식이 주된 목적 아님",
+    "world": "딴 세상 −: 보기왕이라는 괴이가 등장하는 호러"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "평범한 일상에 스며드는 뒤틀린 인간 심리가 극한의 공포가 되는 이야기일까요?",
+   "evidence": "괴이와 공포가 중심인 호러 소설",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "어조 −: 뒤틀린 인간 심리, 극한의 공포. 끝맺음은 알 수 없음",
+     "pull": "몰입 −: 소설 형식 신호, 문체 칭찬은 있으나 충격·공포가 끎",
+     "gain": "마음 −: 소설 형식 신호, 지식이 주된 목적 아님",
+     "world": "딴 세상 −: 보기왕이라는 괴이 존재가 제목·소개에 등장"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "보기왕이라는 괴이와 공포가 중심인 호러 소설"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/65810742",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791170527060",
+   "title": "저 밖에서 비명 소리가",
+   "author": "N. K. 제미신 등저/조던 필 편/이나경 역",
+   "pages": 528,
+   "entry": "leaf",
+   "genre": "호러·괴담",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "어조 −: 섬뜩한 악몽들로 묶인 선집, 목차에 침공·망자의 슬픔",
+    "pull": "몰입 −: 소설 형식, 문체 칭찬 없이 섬뜩한 이야기로 끎",
+    "gain": "마음 −: 소설 선집, 지식이 목적이라는 말 없음",
+    "world": "딴 세상 −: 괴이·주술사·침공 등 초자연 존재가 등장"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "조던 필이 고른 섬뜩한 악몽 열아홉 편, 어떤 공포가 기다릴까요?",
+   "evidence": "전 수록작이 공포로 묶인 앤솔러지",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "장면 −: 섬뜩한 악몽, 망자의 슬픔 등 공포 중심",
+     "pull": "몰입 −: 소설 형식이 약한 몰입 신호, 문체 칭찬 없음",
+     "gain": "마음 −: 소설 형식 신호, 지식이 주목적 아님",
+     "world": "딴 세상 −: 악몽·괴이 같은 공포 앤솔러지, 침공·주술사 제목"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "19편 모두 공포 앤솔러지라 호러·괴담에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/186484899",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791193190364",
+   "title": "당신의 잘린, 손",
+   "author": "배예람,클레이븐 저",
+   "pages": 288,
+   "entry": "leaf",
+   "genre": "호러·괴담",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "장면 −: 바다에서 올라온 거대한 손, 호러 창작 집단 작품",
+    "pull": "몰입 −: 소설 형식, 문체 칭찬 없이 같은 한 줄에서 갈라지는 전개",
+    "gain": "마음 −: 소설은 형식상 마음 쪽, 지식 목적 없음",
+    "world": "딴 세상 −: 바다에서 올라온 거대한 손, 괴이가 실제 등장"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "같은 한 줄에서 시작한 두 편의 호러, 어떻게 달라질까요?",
+   "evidence": "호러 집단 참여, 거대한 손이 올라오는 괴이 중심",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "장면 −: 바다에서 올라온 거대한 손, 잘린 손 같은 괴이한 이미지",
+     "pull": "몰입 −: 문체 칭찬 없음, 소설 형식 신호인 이야기·전개",
+     "gain": "마음 −: 소설 형식, 지식을 앞세우는 말이 없음",
+     "world": ""
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "호러 창작 집단과 환상문학 웹진의 괴이 단편이라 맞음"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-2 world)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/147069442",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791173830334",
+   "title": "조각나고 찢긴,",
+   "author": "조이스 캐럴 오츠 등저",
+   "pages": 400,
+   "entry": "leaf",
+   "genre": "호러·괴담",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "장면 −: 몸이 해부되고 찢기는 바디호러, 서늘한 어조",
+    "pull": "몰입 −: 단편 앤솔러지 형식이 약한 이야기 신호",
+    "gain": "마음 −: 소설 형식, 지식 전달이 주목적 아님",
+    "world": "딴 세상 −: 괴물·환생 등 초자연 요소가 등장하는 단편"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "여성의 몸이 해부되고 다시 조립되는 바디호러를 만나 볼까요?",
+   "evidence": "바디호러 단편 앤솔러지라 호러·괴담에 맞음",
+   "confidence": 0.82,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "어조 −: 여성의 몸을 해부·왜곡하는 시선을 고발, 바디호러 선집",
+     "pull": "몰입 −: 소설 형식 신호, 문체 칭찬 없음",
+     "gain": "마음 −: 소설 선집이라 형식상 마음, 지식 목적 없음",
+     "world": "딴 세상 −: 괴물·환생·영혼 등 초자연 존재 등장"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "바디호러 단편 15편을 묶은 호러 앤솔러지"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/179604338",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791191193695",
+   "title": "푸르게 빛나는",
+   "author": "김혜영 저",
+   "pages": 192,
+   "entry": "leaf",
+   "genre": "호러·괴담",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "어조 −: 불안이 목숨을 잃을 공포로 바뀌는 흐름",
+    "pull": "몰입 −: 소설 형식, 문체 칭찬 없고 낙차 큰 전개",
+    "gain": "마음 −: 소설 형식, 청년의 슬픔·두려움이 남음",
+    "world": "딴 세상 −: 지구 밖 존재를 암시, 무자비한 상대"
+   },
+   "missing": [],
+   "suggest": "SF·판타지",
+   "one_liner_style": "question",
+   "one_liner": "신도시의 평범한 불안이 지구 밖 공포로 번지면 어떤 기분일까요?",
+   "evidence": "지구 밖 존재 암시가 중심, 괴이·초자연 아님",
+   "confidence": 0.5,
+   "fits": false,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "어조 −: 불안이 목숨을 잃을 공포로 바뀜, 슬픔·두려움 포착",
+     "pull": "몰입 −: 형식이 소설, 문체 칭찬 없음, 공포로 끌고 감",
+     "gain": "마음 −: 소설 형식, 청년 세대의 슬픔·두려움을 건넴",
+     "world": "딴 세상 −: 지구 밖 존재를 암시, 무자비한 상대가 등장"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "비현실 존재가 주는 공포가 중심인 단편집"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/115081436",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788956609959",
+   "title": "종의 기원",
+   "author": "정유정 저",
+   "pages": 384,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 악의 점화·어두운 숲, 목차 '포식자'",
+    "pull": "몰입 −: 압도적 서사·이야기의 힘이 끌고 감",
+    "gain": "마음 −: 소설 형식, 인간 본성을 묻는 이야기",
+    "world": "현실 +: 딴 세상 신호 없음, 현실 배경"
+   },
+   "missing": [],
+   "suggest": "추리·스릴러",
+   "one_liner_style": "question",
+   "one_liner": "악이 어떻게 생겨나 깨어나는지 어두운 숲 같은 인간 본성을 따라가 볼래요?",
+   "evidence": "악의 점화와 포식자 구도가 스릴러 줄기",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 악의 점화·어두운 숲, 목차 '포식자'",
+     "pull": "몰입 −: 압도적 서사와 폭발적 이야기의 힘",
+     "gain": "소설 형식상 마음: 지식 목적 신호 없음",
+     "world": "현실: 딴 세상 신호 없음, 소설 기본값"
+    },
+    "missing": [],
+    "suggest": "추리·스릴러",
+    "why": "악의 점화와 포식자 서사가 중심인 스릴러"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/27643793",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788954681179",
+   "title": "밝은 밤",
+   "author": "최은영 저",
+   "pages": 344,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": 1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 사려 깊은 문장, 사랑과 숨을 감싸안는 기록",
+    "pull": "",
+    "gain": "마음 −: 소설 형식, 이야기와 사랑이 남기는 것",
+    "world": "현실: 딴 세상 신호 없음, 백 년 시간의 현실 배경"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "백 년을 건너 이어지는 사랑과 숨을 서정적인 문장으로 만나 볼까요?",
+   "evidence": "한국 작가의 문학 소설, 문장 칭찬이 뚜렷함",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 사려 깊은 문장, 사랑과 숨의 기록이라는 소개",
+     "pull": "",
+     "gain": "0 아님 −: 소설은 인물과 이야기가 남기는 마음",
+     "world": "현실 +: 딴 세상 신호 없음, 현실 배경"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "한국 작가의 문학 소설이라 한국 소설에 맞음"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 pull)",
+    "근거가 책소개를 베낌 (AI-2 pull)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/102687133",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788936439965",
+   "title": "아코디언",
+   "author": "천명관 저",
+   "pages": 308,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "",
+    "pull": "몰입 −: 거대한 서사가 독자를 낯선 세계로 끌고 감",
+    "gain": "마음 −: 소설 형식, 인물의 얼굴이 마음을 붙듦",
+    "world": "현실 +: 한국전쟁 직후 1950년대 서울이 배경"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "전쟁 직후 서울 밑바닥에서 피어나는 사람들의 생명력과 온기를 만나 볼까요?",
+   "evidence": "한국 작가의 문학 소설, 내용 장르 신호 없음",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "",
+     "pull": "몰입 −: 거대한 서사가 독자를 단숨에 끌고 가는 전개",
+     "gain": "마음 −: 소설 형식, 오래 마음을 붙드는 인물들의 얼굴",
+     "world": "현실 +: 한국전쟁 직후 1950년대 서울 해방촌·기지촌"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "한국 작가의 1950년대 서울 배경 문학 소설"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 temp)",
+    "근거가 책소개를 베낌 (AI-2 temp)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/191838559",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788995151228",
+   "title": "난장이가 쏘아올린 작은 공",
+   "author": "조세희 저",
+   "pages": 416,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "",
+    "pull": "문장 +: 소개가 빠른 단문과 아름다운 문체를 직접 칭찬",
+    "gain": "마음 −: 소설 형식, 노동자 이야기가 남기는 것은 마음",
+    "world": "현실 +: 1970년대 도시 노동자, 실제 시대 배경"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "70년대 도시 노동자의 삶을 단문의 호흡으로 마주하게 될까요?",
+   "evidence": "한국 작가의 문학 소설, 노동 현실 고발과 문체 칭찬",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "",
+     "pull": "",
+     "gain": "마음 −: 소설 형식, 지식 전달이 목적 아님",
+     "world": "현실 +: 1970년대 도시 노동자, 은강 등 실제 시대 배경"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "한국 작가의 문학 소설로 내용 장르 없음"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 temp)",
+    "근거가 책소개를 베낌 (AI-2 temp)",
+    "근거가 책소개를 베낌 (AI-2 pull)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/125020220",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791171715503",
+   "title": "죽은 왕녀를 위한 파반느 (양장 특별판)",
+   "author": "박민규 저",
+   "pages": 448,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 외모 이데올로기·자본주의 앞에서 흔들린 청춘의 내면",
+    "pull": "소설 형식의 약한 몰입·이야기 신호, 문체 칭찬 없음",
+    "gain": "소설은 형식상 마음 쪽: 세 인물의 우정과 사랑 이야기",
+    "world": ""
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "외모로 밀려난 사람들의 우정과 사랑이 어떻게 흘러갔을까요?",
+   "evidence": "한국 작가의 현실 배경 문학 소설, 사랑은 곁가지 성격",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 자본주의·외모 이데올로기 앞에 흔들린 청춘의 내면",
+     "pull": "몰입 −: 인물들의 우정과 사랑 이야기가 끌고 감",
+     "gain": "마음 −: 소설 형식, 인물 이야기가 남기는 것",
+     "world": ""
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "한국 작가의 내용 장르 없는 문학 소설"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 world)",
+    "근거가 책소개를 베낌 (AI-2 world)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/166577463",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791167903792",
+   "title": "서성이다",
+   "author": "장강명 저",
+   "pages": 228,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "장면 −: 아내의 발병과 수술 앞에서 두려움·죄책감에 시달림",
+    "pull": "몰입 −: 3일간 사건과 심리 고투로 끌고 감, 문체 칭찬 없음",
+    "gain": "마음 −: 인물의 심리와 이야기가 남는 것, 형식도 마음 쪽",
+    "world": "현실 +: 병원·결혼 생활 배경, 딴 세상 신호 없음"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "아내가 쓰러진 사흘 동안 한 남자가 두려움과 죄책감 사이를 서성이는 이야기일까요?",
+   "evidence": "한국 작가의 문학 소설, 내용 장르 없음",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "장면 −: 아내의 구토·입원, 두려움·자기혐오·죄책감",
+     "pull": "몰입 −: 3일간 심리적 고투를 따라가는 이야기. 문체 칭찬 없음",
+     "gain": "마음 −: 소설 형식, 인물의 심리·죄책감이 남는 것",
+     "world": "현실 +: 병원·결혼 생활, 딴 세상 신호 없음"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "한국 작가의 가족·삶을 다룬 문학 소설"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/194755366",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791171717071",
+   "title": "0000 (리커버)",
+   "author": "임선우 저",
+   "pages": 100,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "장면 −: 외롭고 고요한 죽음에서 시작, 비워내는 연습",
+    "pull": "몰입 −: 형식상 약한 신호, 문체 칭찬 없음, 고양이와의 이야기",
+    "gain": "마음 −: 소설 형식, 지식 목적 없는 인물 이야기",
+    "world": "딴 세상 −: 말하는 특수요원 고양이가 실제로 등장"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "존재감을 지우는 연습을 하며 고요한 외로움을 만나게 될까요?",
+   "evidence": "한국 작가의 문학 소설, 내용 장르 약함",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": null,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "끝맺음·어조 정보 없음: 설정과 출발점만 소개",
+     "pull": "형식 신호 몰입 −: 소설, 문체 칭찬 없음",
+     "gain": "마음 −: 소설, 지식이 목적이라는 말 없음",
+     "world": "딴 세상 −: 특수요원 고양이 '오후'가 말하고 등장"
+    },
+    "missing": [
+     "temp"
+    ],
+    "suggest": "",
+    "why": "한국 작가의 문학 소설이며 내용 장르가 중심은 아님"
+   },
+   "flags": [
+    "temp"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/130499627",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788936439651",
+   "title": "대온실 수리 보고서",
+   "author": "김금희 저",
+   "pages": 416,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": 1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "",
+    "pull": "문장 +: 마음의 무늬를 섬세하게 수놓는 작가, 이야기의 아름다움",
+    "gain": "마음 −: 소설은 형식상 마음, 지식이 목적이라는 말 없음",
+    "world": "현실 +: 창경궁 대온실, 원서동 등 실제 장소와 역사 배경"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "창경궁 대온실에 숨은 비밀과 사람에 대한 믿음을 따라가 볼까요?",
+   "evidence": "한국 작가의 역사 배경 문학 소설, 내용 장르 없음",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "",
+     "pull": "몰입 −: 비밀을 둘러싼 서사. 문체 칭찬은 없어 형식 신호",
+     "gain": "마음 −: 소설 형식, 지식이 주된 목적이라는 말 없음",
+     "world": "현실 +: 창경궁 대온실, 역사 배경, 딴 세상 신호 없음"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "한국 작가의 역사 배경 문학 소설이라 맞음"
+   },
+   "flags": [
+    "pull"
+   ],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 temp)",
+    "근거가 책소개를 베낌 (AI-2 temp)"
+   ],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/133339464",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788936439002",
+   "title": "두고 온 여름",
+   "author": "성해나 저",
+   "pages": 172,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 닿지 못한 인연을 애도하는 여운, 작별의 시선",
+    "pull": "몰입 −: 소설 형식 기본, 문체 직접 칭찬은 없음",
+    "gain": "마음 −: 소설, 인물 관계가 남기는 것이 중심",
+    "world": "현실 +: 재혼 가정의 형제 이야기, 딴 세상 신호 없음"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "닿지 못한 형제의 인연이 어떤 기억으로 남는지 따라가 볼까요?",
+   "evidence": "한국 작가의 가족·관계 중심 문학 소설",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 닿지 못한 진심, 남이 된 형제를 여운 속 안부로 건넴",
+     "pull": "",
+     "gain": "마음 −: 소설이라 형식상 마음, 이해와 작별의 감정이 남는 것",
+     "world": "현실 +: 딴 세상 신호 없음, 재혼 가정의 두 사람 이야기"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "한국 작가의 가족·관계를 다룬 문학 소설"
+   },
+   "flags": [
+    "pull"
+   ],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-2 pull)"
+   ],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/117873525",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791167141644",
+   "title": "서리꽃 1",
+   "author": "조정래 저",
+   "pages": 300,
+   "entry": "leaf",
+   "genre": "한국 소설",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "장면 −: 퀭한 눈빛·피폐한 낯빛, 직업병·밭은기침 목차",
+    "pull": "몰입 −: 재회 뒤 사랑이 이뤄질지 궁금한 전개",
+    "gain": "마음 −: 연인의 삶과 죽음 이야기가 남기는 것",
+    "world": "현실 +: 한국 사회 배경, 두물머리 등 실제 지명"
+   },
+   "missing": [],
+   "suggest": "로맨스",
+   "one_liner_style": "question",
+   "one_liner": "이루지 못한 사랑 뒤 다시 만난 연인의 삶과 죽음, 그 끝은 어떨까요?",
+   "evidence": "연인의 사랑이 중심 줄기라 로맨스",
+   "confidence": 0.7,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 연인의 삶과 죽음으로 사랑에 경종, 피폐해진 재회",
+     "pull": "몰입 −: 소설 형식, 문체 칭찬 없고 사건·인물 전개",
+     "gain": "마음 −: 소설, 사랑과 인생의 의미를 되짚는 성찰",
+     "world": "현실 +: 한국 현대 사회, 두물머리 등 실제 지명"
+    },
+    "missing": [],
+    "suggest": "로맨스",
+    "why": "연인의 사랑과 이별이 이야기의 중심 줄기"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/195252777",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791166571671",
+   "title": "팀장 리더십 수업",
+   "author": "김정현 저",
+   "pages": 316,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
+   "keywords_regex": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "팀장이 목표 공유와 권한위임, 성과관리로 팀을 이끄는 법을 배워요",
+   "evidence": "팀장 대상, 위임·성과관리·코칭 방법 중심",
+   "confidence": 0.93,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ],
+    "way": "실습",
+    "why": "팀장을 위한 위임·성과관리·코칭 방법서라 리더십에 맞음",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/141739869",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791170612230",
+   "title": "팀장은 처음이라",
+   "author": "남관희,윤수환 저",
+   "pages": 312,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "피드백·코칭",
+    "팀 이끌기"
+   ],
+   "keywords_regex": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "초보 팀장이 팀원과 마주하는 여러 상황에서 쓸 대화 스킬을 역할극으로 익혀요.",
+   "evidence": "팀장 독자, 면담·피드백 대화 상황별 방법서",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ],
+    "way": "실습",
+    "why": "초보 팀장이 팀원과 대화하는 법, 리더십 주제에 맞음",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/142253642",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788984075108",
+   "title": "원온원 대화의 기술",
+   "author": "스티븐 로겔버그 저/양민경 감수/이재득 역",
+   "pages": 320,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "피드백·코칭",
+    "팀 이끌기"
+   ],
+   "keywords_regex": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "팀원과 일대일로 대화를 준비하고 진행하고 마무리하는 방법을 단계별로 익혀요.",
+   "evidence": "팀장 대상 원온원 진행법과 체크리스트 중심",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "피드백·코칭",
+     "팀 이끌기"
+    ],
+    "way": "실습",
+    "why": "신임 팀장이 팀원과 하는 원온원 방법서라 리더십에 맞음",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/133818733",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791172540371",
+   "title": "리더의 돕는 법",
+   "author": "에드거 샤인 저김희정 역",
+   "pages": 304,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "팀 이끌기"
+   ],
+   "keywords_regex": [
+    "팀 이끌기"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "도움을 주고받는 관계의 원리로 팀워크를 만드는 리더의 역할을 배워요.",
+   "evidence": "리더가 팀을 돕는 역할과 팀워크가 중심",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭",
+     "조직 문화"
+    ],
+    "way": "개념",
+    "why": "리더가 팀워크를 만들고 구성원을 돕는 법이 중심이라 리",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/138722152",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791193000649",
+   "title": "리더의 원온원",
+   "author": "이인우,유경철 저",
+   "pages": 272,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "피드백·코칭",
+    "팀 이끌기"
+   ],
+   "keywords_regex": [
+    "팀 이끌기",
+    "피드백·코칭",
+    "조직 문화"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "리더가 팀원과 정기 면담을 준비하고 이끌며 성과와 성장을 돕는 방법을 알려 줘요.",
+   "evidence": "리더용 면담 실무서, 피드백·코칭 중심",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "피드백·코칭",
+     "팀 이끌기"
+    ],
+    "way": "실습",
+    "why": "리더가 팀원과 1on1을 하는 법을 알려 주는 리더십 ",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/140406097",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791189430351",
+   "title": "조직문화 통찰",
+   "author": "김성준 저",
+   "pages": 520,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "조직 문화"
+   ],
+   "keywords_regex": [
+    "조직 문화"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "우리 조직의 운영체제를 규명해 문화를 바꾸는 눈을 얻어요",
+   "evidence": "조직문화의 정의·형성·오해를 설명하는 개념서",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "조직 문화"
+    ],
+    "way": "개념",
+    "why": "조직문화의 본질을 규명하는 책이라 리더십 조직 문화에 ",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/78590902",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  }
+ ]
+}
