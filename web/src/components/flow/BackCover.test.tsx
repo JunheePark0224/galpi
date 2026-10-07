@@ -1,4 +1,5 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { forgetStories } from "@/lib/share/storyFile";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ArtCombo } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
@@ -30,7 +31,7 @@ const props = (over: Partial<Props> = {}): Props => ({
 });
 
 describe("BackLaid + BackActions (S-11, F-27 — the back of the book with today's five bookmarks)", () => {
-  afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); });
+  afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); forgetStories(); });
 
   it("lays the five bookmarks on the back cover with the 내가 고른 길 label, and continues to the 궁금해요 books", () => {
     const p = props();
@@ -51,6 +52,21 @@ describe("BackLaid + BackActions (S-11, F-27 — the back of the book with today
     expect(screen.getByRole("button", { name: NEXT_WHEN_NONE })).toBeInTheDocument();
     render(<BackCover {...props({ label: { chips: [], challenge: false } })} />);
     expect(screen.getByText(NO_CHIP_LINE)).toBeInTheDocument();
+  });
+
+  it("asks for the story picture as the book shuts — on a phone that can share pictures only (10-08)", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(new Blob(["png"], { type: "image/png" })));
+    vi.stubGlobal("fetch", fetchMock);
+    vi.stubGlobal("navigator", { ...navigator, userAgent: "Mozilla/5.0 (Linux; Android 14; Pixel 7) Chrome/129.0 Mobile", canShare: () => true });
+    const { unmount } = render(<BackCover {...props()} />);
+    expect(fetchMock).toHaveBeenCalledWith("/s/1~0A~a.b~000000/story");
+    unmount();
+    forgetStories();
+    fetchMock.mockClear();
+    vi.stubGlobal("navigator", { ...navigator, userAgent: "Mozilla/5.0 (Windows NT 10.0) Chrome/129.0", canShare: undefined });
+    render(<BackCover {...props()} />);
+    expect(fetchMock).not.toHaveBeenCalled();
+    await act(async () => {});
   });
 
   it("[↗ 결과 공유하기] opens the share sheet (C-31) and 닫기 closes it", () => {

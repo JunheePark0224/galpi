@@ -1,10 +1,11 @@
 "use client";
-import { useCallback, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { Bookmark } from "@/components/Bookmark";
 import { Button } from "@/components/Button";
 import type { ArtCombo } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
 import { NO_CHIP_LINE, type ShareLabel } from "@/lib/share/label";
+import { canShareImages, storyFile } from "@/lib/share/storyFile";
 import styles from "./BackCover.module.css";
 import { ShareSheet, type ShareMethod } from "./ShareSheet";
 
@@ -94,10 +95,14 @@ interface ActionsProps {
 
 /**
  * S-11 buttons under the shut book: the main button goes on (S-06, or S-08 with no 궁금해요); [↗ 결과 공유하기] opens the
- * share sheet (C-31). Shows only — Flow sends the events (E-42 through onShared).
+ * share sheet (C-31). Shows only — Flow sends the events (E-42 through onShared). Where pictures can be shared (phones),
+ * the story picture is asked for now, as the book shuts, so [인스타 스토리로] is ready when the sheet opens (10-08).
  */
 export function BackActions({ count, curious, shareUrl, onContinue, onShared }: ActionsProps) {
   const [sheet, setSheet] = useState(false);
+  useEffect(() => {
+    if (canShareImages()) void storyFile(`${new URL(shareUrl).pathname}/story`);
+  }, [shareUrl]);
   const opener = useRef<HTMLButtonElement>(null);
   const close = useCallback(() => {
     setSheet(false);

@@ -26,6 +26,7 @@
   padding: var(--space-2); border: 0; border-radius: 14px; background: var(--paper-deep);
   font: inherit; font-size: 13px; line-height: 1.3; color: var(--ink); text-decoration: none; cursor: pointer; word-break: keep-all;
 }
+.tile:disabled { opacity: 0.55; cursor: default; }
 .tile:focus-visible, .close:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
 .icon { width: 30px; height: 30px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #fff; }
 .insta { background: linear-gradient(45deg, #f9ce34, #ee2a7b 55%, #6228d7); }

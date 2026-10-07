@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { forgetStories } from "@/lib/share/storyFile";
 import { COPIED, IMAGE_FAILED, INAPP_HINT, ShareSheet } from "./ShareSheet";
 
 const URL_ = "https://www.galpibook.com/s/1~0A~a.b~000000";
@@ -12,7 +13,7 @@ const png = () => vi.fn().mockResolvedValue(new Response(new Blob(["png"], { typ
 const tile = (name: string) => screen.queryByRole("button", { name }) ?? screen.queryByRole("link", { name });
 
 describe("ShareSheet (C-31, F-27 — 결과 공유하기)", () => {
-  afterEach(() => { vi.unstubAllGlobals(); });
+  afterEach(() => { vi.unstubAllGlobals(); forgetStories(); });
 
   it("where pictures can be shared: preview, then 인스타 스토리로 · 이미지 저장 · 링크 공유 (E-42 image · save_image · native)", async () => {
     const fetchMock = png();
@@ -90,6 +91,27 @@ describe("ShareSheet (C-31, F-27 — 결과 공유하기)", () => {
     await act(async () => { fireEvent.click(screen.getByRole("button", { name: "링크 공유" })); });
     expect(screen.getByRole("textbox", { name: "공유 링크" })).toHaveValue(URL_);
     expect(p.onShared).not.toHaveBeenCalled();
+  });
+
+  it("keeps the 인스타 스토리로 place, greyed, until the picture is here — the tiles never shift (10-08)", async () => {
+    let arrive: (r: Response) => void = () => {};
+    vi.stubGlobal("fetch", vi.fn().mockReturnValue(new Promise<Response>((r) => { arrive = r; })));
+    vi.stubGlobal("navigator", { ...navigator, userAgent: PHONE, share: vi.fn(), canShare: () => true });
+    render(<ShareSheet {...props()} />);
+    const waiting = screen.getByRole("button", { name: "준비 중…" });
+    expect(waiting).toBeDisabled();
+    await act(async () => { arrive(new Response(new Blob(["png"], { type: "image/png" }))); });
+    expect(screen.getByRole("button", { name: "인스타 스토리로" })).toBeEnabled();
+  });
+
+  it("drops the tile when the picture does not come; saving and the link stay", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("", { status: 500 })));
+    vi.stubGlobal("navigator", { ...navigator, userAgent: PHONE, share: vi.fn(), canShare: () => true });
+    render(<ShareSheet {...props()} />);
+    await act(async () => {});
+    expect(tile("준비 중…")).toBeNull();
+    expect(tile("인스타 스토리로")).toBeNull();
+    expect(screen.getByRole("link", { name: "이미지 저장" })).toBeInTheDocument();
   });
 
   it("starts the picture share on the tap itself — nothing awaited first (iOS needs the tap)", async () => {
