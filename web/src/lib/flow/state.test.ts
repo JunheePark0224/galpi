@@ -31,7 +31,7 @@ describe("flowReducer (v2 questions)", () => {
 
   it("asks for a draw once the path ends, then takes no more answers", () => {
     const s = asked();
-    expect(s).toMatchObject({ step: "book", status: "loading", drawId: 1, draw: null, asked: 10, drawnFor: SQL_PATH });
+    expect(s).toMatchObject({ step: "book", status: "loading", drawId: 1, draw: null, asked: 9, drawnFor: SQL_PATH });
     expect(flowReducer(s, { type: "answer", choice: "A" })).toBe(s);
     expect(flowReducer(INITIAL, { type: "answer", choice: "A" })).toBe(INITIAL);
   });
@@ -55,7 +55,7 @@ describe("flowReducer (v2 questions)", () => {
     it("the same answer again: straight back to the first page with the same five books", () => {
       const before = opened();
       const s = run([{ type: "back" }, { type: "answer", choice: "A" }], before);
-      expect(s).toMatchObject({ step: "first", drawId: 1, status: "ready", asked: 11 });
+      expect(s).toMatchObject({ step: "first", drawId: 1, status: "ready", asked: 10 });
       expect(s.draw).toBe(before.draw);
     });
 

@@ -34,14 +34,14 @@ describe("flow path helpers (the real question map)", () => {
   });
 
   it("never asks a mood question the map passes over; one answer back lands on the question shown before it", () => {
-    const toWay = SQL_PATH.slice(0, 9);                                   // … learn-way B (써먹는 쪽)
-    expect(nextQuestion(toWay)?.id).toBe("learn-len");                     // learn-way-use: no 사례 SQL book, passed over
-    expect(nextQuestion(toWay.slice(0, -1))?.id).toBe("learn-way");
-    expect(isPath([...toWay, { node: "learn-way-use", choice: "A" }])).toBe(false);
+    const toWay = SQL_PATH.slice(0, 8);                                   // … learn-data-tool A (DB에서 꺼내기)
+    expect(nextQuestion(toWay)?.id).toBe("learn-len");                     // learn-way: 4 SQL books, all drawn — passed over
+    expect(nextQuestion(toWay.slice(0, -1))?.id).toBe("learn-data-tool");
+    expect(isPath([...toWay, { node: "learn-way", choice: "B" }])).toBe(false);
   });
 
   it("builds E-34 path_completed: the drawn scope as map:coverage keys it, the questions and the unsure answers", () => {
-    expect(completedProps(SQL_PATH)).toEqual({ scope_id: "entry=target;topics=데이터 분석;keywords=SQL", depth: 10, unsure_count: 0 });
+    expect(completedProps(SQL_PATH)).toEqual({ scope_id: "entry=target;topics=데이터 분석;keywords=SQL", depth: 9, unsure_count: 0 });
     expect(completedProps(MIXED_PATH)).toEqual({ scope_id: "all", depth: 3, unsure_count: 1 });
     expect(completedProps(CHALLENGE_PATH)).toEqual({ scope_id: "entry=leaf;genres=시,에세이", depth: 9, unsure_count: 1 });
   });

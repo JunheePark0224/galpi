@@ -1,1 +1,23 @@
-[]
+[
+ {
+  "isbn": "9791167471901",
+  "to_entry": "leaf",
+  "to_slot": "에세이",
+  "from_batch": "library-v3",
+  "date": "2026-10-07"
+ },
+ {
+  "isbn": "9788937417573",
+  "to_entry": "leaf",
+  "to_slot": "인문",
+  "from_batch": "library-v3",
+  "date": "2026-10-07"
+ },
+ {
+  "isbn": "9791141189778",
+  "to_entry": "leaf",
+  "to_slot": "과학 교양",
+  "from_batch": "library-v3",
+  "date": "2026-10-07"
+ }
+]
