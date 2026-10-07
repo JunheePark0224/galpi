@@ -6,7 +6,7 @@ import { named, recordEvents, specMismatches, test, toBookmarks } from "./helper
 // as in library.spec.ts — except the last test, which asks the real server to check a real (and a tampered) ticket.
 // DEX_SHOTS=<folder> also saves the 375-wide phone screenshots of the plan (impl-*.png, and the 10-05 fix's fix-*.png).
 const SHOTS = process.env.DEX_SHOTS;
-/** A draw seed whose first picture is 초판본 (주작 · 은하수 · 네잎클로버) — lib/art/combine artsForDraw(5, 7349)[0]. */
+/** A draw seed whose first picture is 초판본 (주작 · 은하수 — the rim comes from the 초판본 background, 10-07) — lib/art/combine artsForDraw(5, 7349)[0]. */
 const FIRST_EDITION_SEED = 7349;
 /** A common fox on the 한정판 여름밤 (여우 · 여름밤 · 버섯) — artsForDraw(5, 74)[0]: the user's 10-05 case, three parts. */
 const FOX_SUMMER_SEED = 74;
@@ -42,7 +42,7 @@ test("logged out: the 도감 shows every cell as a silhouette and asks for a log
   await page.goto("/library");
   await expect(page.getByRole("heading", { level: 1, name: "도감" })).toBeVisible();
   await expect(page.getByText("로그인하면 만난 책갈피가 도감에 모여요")).toBeVisible();
-  await expect(page.getByText("동물 0 / 16 · 배경 0 / 12 · 소품 0 / 6")).toBeVisible();
+  await expect(page.getByText("동물 0 / 16 · 배경 0 / 12 · 소품 0 / 10")).toBeVisible();
   await expect(page.getByText("아직 만나지 않은 동물")).toHaveCount(16);
   await expect(page.getByText("책과는 상관없이 뽑혀요. 돈으로 뽑는 기능은 없어요.")).toBeAttached();
   if (SHOTS) await page.screenshot({ path: `${SHOTS}/impl-dex-loggedout.png` });
@@ -72,7 +72,7 @@ test("logged in: [막대 | 도감] opens the 도감 — counts, tiers, NEW once,
   await expect(page.getByRole("heading", { level: 1, name: "내 책갈피" })).toBeVisible();
   await expect(page.getByRole("button", { name: "막대", exact: true })).toHaveAttribute("aria-pressed", "true");
   await page.getByRole("button", { name: "도감", exact: true }).click();
-  await expect(page.getByText("동물 5 / 16 · 배경 3 / 12 · 소품 4 / 6")).toBeVisible();
+  await expect(page.getByText("동물 5 / 16 · 배경 3 / 12 · 소품 4 / 10")).toBeVisible();
   const first = page.getByRole("region", { name: "동물 초판본" });
   await expect(first.getByRole("heading")).toHaveText(/초판본\s*1 \/ 4/);
   await expect(first.getByText("백호")).toBeVisible();
@@ -160,7 +160,7 @@ test("logged in on S-05: the shown bookmark is reported with its signed ticket, 
   expect(specMismatches(events)).toEqual([]);
 });
 
-test("a 초판본 bookmark on S-05 wears the gold rim and its effects", async ({ page }) => {
+test("a 초판본 bookmark on S-05 wears its effects, and the gold rim of its 초판본 background", async ({ page }) => {
   await phone(page);
   await account(page, false);
   await page.route("**/api/books/draw", async (route) => {
