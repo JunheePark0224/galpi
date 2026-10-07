@@ -98,13 +98,13 @@ test("[← 이전 질문] drops the last answer; on the first question it goes h
   const { events } = await recordEvents(page);
   await page.goto("/");
   await page.getByRole("button", { name: START }).click();
-  await answerPath(page, SQL_PATH.slice(0, 2));                              // 평소 → 뭔가 배우기
+  await answerPath(page, SQL_PATH.slice(0, 2));                              // 평소 → 지금 필요한 걸 채우기
   await expect(heading(page, "learn-intro")).toBeVisible();
   const back = page.getByRole("button", { name: "이전 질문" });
   expect((await back.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(44);
   await back.click();
   await expect(heading(page, "branch")).toBeVisible();
-  await answerPath(page, [{ node: "branch", choice: "A" }]);                // now 이야기에 빠지기
+  await answerPath(page, [{ node: "branch", choice: "A" }]);                // now 읽는 시간 자체를 즐기기
   await expect(heading(page, "story-intro")).toBeVisible();
 
   await expect.poll(() => named(events, "question_answered").length).toBe(3);

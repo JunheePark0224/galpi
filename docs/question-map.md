@@ -13,6 +13,7 @@
   - 범위(좁히는 질문에서만): `entry=leaf|target`, `genres=a,b`, `topics=a,b`, `keywords=a,b`
   - 기분: `temp=+1|-1`, `way=개념|실습|사례`(쉼표로 여럿 — 그중 하나면 +2점), `len=+1|-1`
   - 모드: `mode=normal|challenge`
+- 선택지에는 효과가 아닌 `hint=설명`을 하나 붙일 수 있다 — 카드 제목 아래 작은 글씨(` / `에서 줄을 바꿈). 카드에만 나오고 S-04 지나온 길에는 제목만 나온다(10-07, 첫 갈래 질문에 씀).
 - `next=`는 다음 질문의 `id`. 마지막 질문은 `next=draw`로 책 뽑기에 들어간다.
 - 기분(`mood`) 노드는 범위를 바꾸지 않는다. 범위 효과는 `narrow` 노드에서만 쓴다.
 - `far` 블록은 도전 길에서 쓰는 규칙으로, `from:`(지금 범위)과 `to:`(멀리 건너갈 범위)를 한 줄씩 쓴다. 블록 바로 위 줄 `N. 제목`이 규칙 번호와 이름이다 — 번호는 규칙마다 하나(겹치면 빌드 실패)이고 **규칙에 붙어 다닌다** — 새 규칙은 번호를 이어서 매기고(10-05: 37~43), 자리는 아래 "첫 규칙이 이긴다"에 맞춰 위쪽에 둘 수 있다. 그래서 문서 순서와 번호 순서가 다를 수 있다(기록된 E-07 `challenge_rule`의 뜻이 바뀌지 않게). 이름은 뽑기 응답의 도전 근거(`challenge.rule`)에 그대로 실린다.
@@ -52,8 +53,8 @@ unsure: next=branch
 id: branch
 kind: narrow
 question: 지금 더 끌리는 건 어느 쪽이에요?
-A: 이야기에 빠지기 | entry=leaf | next=story-intro
-B: 뭔가 배우기 | entry=target | next=learn-intro
+A: 읽는 시간 자체를 즐기기 | entry=leaf | hint=소설·에세이·교양 / 읽는 동안이 좋은 책 | next=story-intro
+B: 지금 필요한 걸 채우기 | entry=target | hint=일·돈·마음·습관 / 내 삶에 써먹는 책 | next=learn-intro
 unsure: next=mix-len
 ```
 

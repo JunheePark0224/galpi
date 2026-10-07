@@ -19,6 +19,16 @@ describe("Question (S-02)", () => {
     expect(container.querySelector("svg, image, img")).toBeNull();
   });
 
+  it("shows a choice's hint under its label, line by line, without changing the button's name", () => {
+    const node = { ...START, a: { ...START.a, hint: "소설·에세이·교양 / 읽는 동안이 좋은 책" } };
+    const { container } = render(<Question node={node} {...handlers()} />);
+    const left = screen.getByRole("button", { name: START.a.label });
+    expect(left).toHaveAccessibleDescription("소설·에세이·교양 읽는 동안이 좋은 책");
+    expect([...container.querySelectorAll('[data-side="left"] [data-part="hint"] > span')].map((s) => s.textContent))
+      .toEqual(["소설·에세이·교양", "읽는 동안이 좋은 책"]);
+    expect(container.querySelector('[data-side="right"] [data-part="hint"]')).toBeNull();
+  });
+
   it("shows no path and no count while answering (design 10절)", () => {
     const { container } = render(<Question node={QUESTION_MAP.nodes["learn-data-tool"]} {...handlers()} />);
     expect(container).not.toHaveTextContent(/\d+\s*\/\s*\d+/);

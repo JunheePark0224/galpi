@@ -38,12 +38,12 @@ describe("pathSummary (S-04 당신이 고른 길)", () => {
 
   it("on the real map: a broad answer made finer by the next one (실제로 써먹는 쪽 → 바로 따라 해 보기) shows the finer one", () => {
     const real = [a("start", "A"), a("branch", "B"), a("learn-intro", "B"), a("learn-way", "B"), a("learn-way-use", "A"), a("learn-len", "unsure")];
-    expect(pathSummary(QUESTION_MAP, real)).toEqual({ crumbs: ["뭔가 배우기"], moods: ["바로 따라 해 보기"], mode: "normal" });
+    expect(pathSummary(QUESTION_MAP, real)).toEqual({ crumbs: ["지금 필요한 걸 채우기"], moods: ["바로 따라 해 보기"], mode: "normal" });
   });
 
   it("on the real map: left broad (못 잡겠어요 next, or the next question passed over), the broad answer shows", () => {
     const real = [a("start", "A"), a("branch", "B"), a("learn-intro", "B"), a("learn-way", "B"), a("learn-way-use", "unsure"), a("learn-len", "B")];
-    expect(pathSummary(QUESTION_MAP, real)).toEqual({ crumbs: ["뭔가 배우기"], moods: ["실제로 써먹는 쪽", "두툼한 책 한 권"], mode: "normal" });
+    expect(pathSummary(QUESTION_MAP, real)).toEqual({ crumbs: ["지금 필요한 걸 채우기"], moods: ["실제로 써먹는 쪽", "두툼한 책 한 권"], mode: "normal" });
     expect(walkPath(QUESTION_MAP, SQL_PATH).skipped).toEqual(["learn-way-use"]);
     expect(pathSummary(QUESTION_MAP, SQL_PATH).moods).toEqual(["실제로 써먹는 쪽", "가볍게 읽히는 얇은 책"]);
   });
@@ -61,12 +61,12 @@ describe("pathSummary (S-04 당신이 고른 길)", () => {
   it("on the real map: the three test paths end, with the summaries S-04 shows", () => {
     for (const p of [SQL_PATH, MIXED_PATH, CHALLENGE_PATH]) expect(walkPath(QUESTION_MAP, p).next).toBeNull();
     expect(pathSummary(QUESTION_MAP, SQL_PATH)).toEqual({
-      crumbs: ["뭔가 배우기", "일을 더 잘하기", "숫자·도구 다루기", "데이터 읽고 분석", "데이터 꺼내는 도구", "DB에서 꺼내기"],
+      crumbs: ["지금 필요한 걸 채우기", "일을 더 잘하기", "숫자·도구 다루기", "데이터 읽고 분석", "데이터 꺼내는 도구", "DB에서 꺼내기"],
       moods: ["실제로 써먹는 쪽", "가볍게 읽히는 얇은 책"], mode: "normal",
     });
     expect(pathSummary(QUESTION_MAP, MIXED_PATH)).toEqual({ crumbs: [], moods: ["가볍게 얇은 책"], mode: "normal" });
     expect(pathSummary(QUESTION_MAP, CHALLENGE_PATH)).toEqual({
-      crumbs: ["이야기에 빠지기", "소설 속으로", "장르의 짜릿함", "여기 없는 딴 세상"],
+      crumbs: ["읽는 시간 자체를 즐기기", "소설 속으로", "장르의 짜릿함", "여기 없는 딴 세상"],
       moods: ["몽글몽글 따뜻함", "쏙 들어가는 얇은 책"], mode: "challenge",
     });
   });

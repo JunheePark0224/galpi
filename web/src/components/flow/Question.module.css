@@ -24,11 +24,16 @@
 .film { flex: 1; gap: 10px; padding: 16px 9px 22px; }
 /* The arched window (arch radius = half its width) holds the choice instead of a picture. P-02 note: keep-all breaks. */
 .window {
-  display: flex; align-items: center; justify-content: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
   width: 100%; aspect-ratio: 1 / 1.1; padding: 22% 10px 10px;
   border-radius: 50% 50% 6px 6px / 45.5% 45.5% 6px 6px;
   background: var(--paper-deep);
   font-family: var(--font-batang), serif; font-size: 16px; font-weight: 700; line-height: 1.45; word-break: keep-all;
+}
+/* question-map hint=: the small explaining line under a choice (10-07, first question) — one span per line */
+.hint {
+  display: flex; flex-direction: column; gap: 2px;
+  font-family: var(--font-dodum), sans-serif; font-size: 12px; font-weight: 400; line-height: 1.4; color: var(--ink-muted);
 }
 .card:active .window { background: var(--paper-line); }
 .vs {

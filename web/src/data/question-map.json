@@ -26,14 +26,16 @@
    "kind": "narrow",
    "question": "지금 더 끌리는 건 어느 쪽이에요?",
    "a": {
-    "label": "이야기에 빠지기",
+    "label": "읽는 시간 자체를 즐기기",
+    "hint": "소설·에세이·교양 / 읽는 동안이 좋은 책",
     "effects": {
      "entry": "leaf"
     },
     "next": "story-intro"
    },
    "b": {
-    "label": "뭔가 배우기",
+    "label": "지금 필요한 걸 채우기",
+    "hint": "일·돈·마음·습관 / 내 삶에 써먹는 책",
     "effects": {
      "entry": "target"
     },
