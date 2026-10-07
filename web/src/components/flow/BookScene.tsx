@@ -8,6 +8,7 @@ import { hasSeenFirstGuide, markFirstGuideSeen } from "@/lib/flow/firstGuide";
 import { BOOKMARK_AWAY, BOOKMARK_DOWN, BOOKMARK_RISE } from "@/lib/motion";
 import type { FoundItem } from "@/lib/collection/types";
 import { EXHAUSTED_NOTICE } from "@/lib/recommend";
+import { BACK_TITLE, BackActions, BackLaid, type ShareMethod } from "./BackCover";
 import { Book, RuledPage } from "./Book";
 import { CoverPeeks } from "./CoverPeeks";
 import { FirstGuide } from "./FirstGuide";
@@ -41,15 +42,26 @@ interface Props {
   onHome: () => void;
   /** 도감 v1: parts of the bookmark now shown that a logged-in person met for the first time ("처음 만난 …!"). */
   found?: readonly FoundItem[] | null;
-  /** S-11 (10-07): the book has shut over the last page — Flow shows the back cover now. */
-  onClosed?: () => void;
+  /** S-11 (10-07): the back cover — the book shuts over the last page and today's bookmarks lie on it. */
+  back?: BackProps;
+}
+
+interface BackProps {
+  /** shut now, after the last reaction; false for a resumed round (already shut, no animation) */
+  shutting: boolean;
+  curious: number;
+  shareUrl: string;
+  onContinue: () => void;
+  onShared: (method: ShareMethod) => void;
+  /** the book has shut and the back cover shows (E-41) */
+  onClosed: () => void;
 }
 
 /**
  * S-03 · S-04 · S-05 share one book so the cover keeps its place between steps. The book fills the column; the bookmark
  * rises out of the gutter, centred between the two pages. Buttons sit below the book; the page count is the folio.
  */
-export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onHome, found = null, onClosed }: Props) {
+export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onHome, found = null, back }: Props) {
   const [busy, setBusy] = useState(true);            // a bookmark is still moving: reactions wait (and frost stays off)
   const [last, setLast] = useState<Reaction>("pass");
   // C-20: the first bookmark of a browser's first round explains itself once (logged in or not)
@@ -63,7 +75,10 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
   const picks = draw?.picks ?? [];
   const pick = step === "bookmarks" ? picks[state.index] : undefined;
   const noBooks = status === "ready" && picks.length === 0;
-  const shutting = step === "back";   // after the last bookmark: the book shuts before the back cover (S-11, 10-07)
+  const shutting = step === "back";   // after the last bookmark: the book shuts onto its back cover (S-11, 10-07)
+  // the bookmarks and buttons come at once when the book has shut (10-07: no screen change, "한 번에 팍") — Flow stops
+  // `shutting` in onClosed; a resumed round is shut from the start
+  const landed = shutting && !!back && !back.shutting;
 
   const react = (reaction: Reaction) => {
     if (busy) return;
@@ -90,7 +105,11 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
           right={right}
           tucked={tucked}
           shut={shutting}
-          onShut={onClosed}
+          shutNow={shutting && !back?.shutting}
+          onShut={back?.onClosed}
+          backFace={shutting && landed && draw ? (
+            <div className={styles.popFace}><BackLaid books={draw.picks} label={draw.label ?? { chips: [], challenge: false }} /></div>
+          ) : null}
         />
         {pick && <p className={styles.folio}>{`${state.index + 1} / ${picks.length}`}</p>}
         {pick && (
@@ -113,6 +132,13 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
           </div>
         )}
       </div>
+
+      {shutting && <h1 className={styles.srOnly}>{BACK_TITLE}</h1>}
+      {shutting && landed && back && draw && (
+        <div className={styles.popActions}>
+          <BackActions count={draw.picks.length} curious={back.curious} shareUrl={back.shareUrl} onContinue={back.onContinue} onShared={back.onShared} />
+        </div>
+      )}
 
       {/* the words moved onto the cover (C-01 tap cue, 10-02); this keeps the room the layout math counts on */}
       {step === "book" && <p className={styles.hint} aria-hidden="true" />}

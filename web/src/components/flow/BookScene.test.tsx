@@ -29,20 +29,42 @@ describe("BookScene", () => {
     expect(screen.getByRole("status")).toHaveTextContent("처음 만난 한정판 레서판다!");
   });
 
-  it("S-11 (10-07): after the last bookmark the right-hand page shuts over the left — the back cover, then onClosed", async () => {
-    MotionGlobalConfig.skipAnimations = true;
-    try {
-      const onClosed = vi.fn();
-      const { container } = render(<BookScene state={{ ...first, step: "back", index: 4 }} {...handlers()} onClosed={onClosed} />);
-      const half = container.querySelector("[data-shut]");
-      expect(half).toHaveAttribute("aria-hidden", "true");
-      expect(screen.queryByRole("button", { name: "궁금해요" })).toBeNull();
-      expect(screen.queryByRole("button", { name: "패스" })).toBeNull();
-      expect(screen.queryByText(/\d \/ 5/)).toBeNull();
-      await waitFor(() => expect(onClosed).toHaveBeenCalledTimes(1));
-    } finally {
-      MotionGlobalConfig.skipAnimations = false;
-    }
+  describe("S-11 (10-07): the book shuts onto its back cover — no screen change", () => {
+    const back = (shutting: boolean) => ({
+      shutting, curious: 1, shareUrl: "https://www.galpibook.com/s/1~0A~b0~000", onContinue: vi.fn(), onShared: vi.fn(), onClosed: vi.fn(),
+    });
+    const done: FlowState = { ...first, step: "back", index: 4 };
+
+    it("after the last bookmark the right-hand page shuts over the left; then the bookmarks and buttons are there at once", async () => {
+      MotionGlobalConfig.skipAnimations = true;
+      try {
+        const b = back(true);
+        const h = handlers();
+        const { container, rerender } = render(<BookScene state={done} {...h} back={b} />);
+        expect(container.querySelector("[data-back-half]")).not.toBeNull();
+        expect(screen.getByRole("heading", { level: 1, name: "오늘 만난 책갈피" })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: "궁금해요" })).toBeNull();
+        expect(screen.queryByText(/\d \/ 5/)).toBeNull();
+        expect(container.querySelectorAll("[data-back-half] article")).toHaveLength(0);   // nothing before it has shut
+        expect(screen.queryByRole("button", { name: "궁금해요 1권 책 정보 보기" })).toBeNull();
+        await waitFor(() => expect(b.onClosed).toHaveBeenCalledTimes(1));
+        rerender(<BookScene state={done} {...h} back={{ ...b, shutting: false }} />);   // Flow: shut
+        expect(container.querySelectorAll("[data-back-half] article")).toHaveLength(5);
+        expect(screen.getByRole("group", { name: "내가 고른 길" })).toBeInTheDocument();
+        fireEvent.click(screen.getByRole("button", { name: "궁금해요 1권 책 정보 보기" }));
+        expect(b.onContinue).toHaveBeenCalledTimes(1);
+      } finally {
+        MotionGlobalConfig.skipAnimations = false;
+      }
+    });
+
+    it("a resumed round is already shut: everything is there, nothing plays and E-41 is not sent again", () => {
+      const b = back(false);
+      const { container } = render(<BookScene state={done} {...handlers()} back={b} />);
+      expect(container.querySelectorAll("[data-back-half] article")).toHaveLength(5);
+      expect(screen.getByRole("button", { name: "궁금해요 1권 책 정보 보기" })).toBeInTheDocument();
+      expect(b.onClosed).not.toHaveBeenCalled();
+    });
   });
 
   it("S-03: the closed book is the thing to press", () => {

@@ -3,7 +3,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ArtCombo } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
 import { NO_CHIP_LINE } from "@/lib/share/label";
-import { BACK_TITLE, BackCover, CHALLENGE_CHIP, COPIED, COPY_FAILED, LABEL_TITLE, NEXT_WHEN_NONE, SHARE } from "./BackCover";
+import { BackActions, BackLaid, CHALLENGE_CHIP, COPIED, COPY_FAILED, LABEL_TITLE, NEXT_WHEN_NONE, SHARE, type ShareMethod } from "./BackCover";
+import type { ShareLabel } from "@/lib/share/label";
 
 const card = (id: string): BookCard => ({
   id, entry: "leaf", title: `책 ${id}`, author: "작가", genre: "에세이", field: null, oneLiner: "한 줄?", oneLinerStyle: "question",
@@ -11,18 +12,29 @@ const card = (id: string): BookCard => ({
 const ART: ArtCombo = { animal: "cat", bg: "peach", ground: "grass", rare: false };
 const BOOKS = ["a", "b", "c", "d", "e"].map((id) => ({ card: card(id), art: ART }));
 const URL_ = "https://www.galpibook.com/s/1~0A~a.b~000000";
-const props = (over: Partial<Parameters<typeof BackCover>[0]> = {}) => ({
+interface Props {
+  books: typeof BOOKS; label: ShareLabel; curious: number; shareUrl: string; onContinue: () => void; onShared: (m: ShareMethod) => void;
+}
+/** S-11 as BookScene shows it once the book has shut: what lies on the back, and the buttons under the book. */
+function BackCover({ books, label, curious, shareUrl, onContinue, onShared }: Props) {
+  return (
+    <>
+      <BackLaid books={books} label={label} />
+      <BackActions count={books.length} curious={curious} shareUrl={shareUrl} onContinue={onContinue} onShared={onShared} />
+    </>
+  );
+}
+const props = (over: Partial<Props> = {}): Props => ({
   books: BOOKS, label: { chips: ["읽는 시간 자체를 즐기기", "몽글몽글 따뜻함"], challenge: false }, curious: 2,
   shareUrl: URL_, onContinue: vi.fn(), onShared: vi.fn(), ...over,
 });
 
-describe("BackCover (S-11, F-27 — the back of the book with today's five bookmarks)", () => {
+describe("BackLaid + BackActions (S-11, F-27 — the back of the book with today's five bookmarks)", () => {
   afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); });
 
   it("lays the five bookmarks on the back cover with the 내가 고른 길 label, and continues to the 궁금해요 books", () => {
     const p = props();
     const { container } = render(<BackCover {...p} />);
-    expect(screen.getByRole("heading", { level: 1, name: BACK_TITLE })).toBeInTheDocument();
     expect(container.querySelectorAll("article")).toHaveLength(5);                     // the real bookmarks, small
     const label = screen.getByRole("group", { name: LABEL_TITLE });
     expect(within(label).getAllByRole("listitem").map((li) => li.textContent)).toEqual(["읽는 시간 자체를 즐기기", "몽글몽글 따뜻함"]);
