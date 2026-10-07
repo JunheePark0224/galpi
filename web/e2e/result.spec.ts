@@ -32,7 +32,7 @@ test("S-06 shows each 궁금해요 book with YES24 facts, folds the intro, links
   await expect(page.getByText("궁금해요 1 / 2")).toBeVisible();
   await expect(page.getByText("★ 9.4 · 14,400원 · 280쪽")).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "책 소개 · 예스24" })).toBeVisible();
-  await expect(page.getByText("정보 제공: 예스24", { exact: true })).toBeVisible();   // the footer says it too
+  await expect(page.getByText("정보 제공: 예스24", { exact: true })).toHaveCount(0);   // 10-07: the heading and the footer credit YES24
   await expect(page.getByText("마지막 문장.")).toHaveCount(0);                 // folded at a sentence end
   await page.getByRole("button", { name: "더 보기" }).click();
   await expect(page.getByText(INTRO)).toBeVisible();
