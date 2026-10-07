@@ -2881,7 +2881,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "유명 애니 속 장면을 실험으로 풀며 과학 개념을 쉽게 알게 돼요?",
+   "one_liner": "좋아하는 애니 속 장면, 실험으로 풀면 어떤 과학이 숨어 있을까요?",
    "evidence": "애니 소재로 과학 원리를 설명하는 교양서",
    "confidence": 0.9,
    "fits": true,
@@ -2908,7 +2908,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/196111194",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "유명 애니 속 장면을 실험으로 풀며 과학 개념을 쉽게 알게 돼요?"
+    }
+   ]
   },
   {
    "isbn": "9791139718560",
@@ -3086,7 +3092,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "동물마다 다른 후각·시각·청각·전기감각의 세계를 사례로 들여다보게 해요?",
+   "one_liner": "동물들은 냄새와 빛, 소리와 전기를 어떻게 느끼며 살까요?",
    "evidence": "동물 감각을 사례로 설명하는 자연과학 교양",
    "confidence": 0.85,
    "fits": true,
@@ -3113,7 +3119,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/118164947",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "동물마다 다른 후각·시각·청각·전기감각의 세계를 사례로 들여다보게 해요?"
+    }
+   ]
   },
   {
    "isbn": "9791194276555",
@@ -3137,7 +3149,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "우주의 탄생부터 생명과 의식까지 과학으로 훑으며 존재의 이유를 생각해 봐요?",
+   "one_liner": "우주의 탄생부터 의식까지 훑으면 존재의 이유가 보일까요?",
    "evidence": "우주·생명·의식을 과학 원리로 설명하는 교양서",
    "confidence": 0.9,
    "fits": true,
@@ -3166,7 +3178,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/139784657",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "우주의 탄생부터 생명과 의식까지 과학으로 훑으며 존재의 이유를 생각해 봐요?"
+    }
+   ]
   },
   {
    "isbn": "9791164051403",
@@ -3244,7 +3262,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "별과 은하부터 생명과 문명까지 만물의 기원을 유쾌하게 훑어봐요?",
+   "one_liner": "별과 은하부터 생명과 문명까지, 만물은 어디서 왔을까요?",
    "evidence": "우주~문명 원리를 설명하는 과학 교양",
    "confidence": 0.88,
    "fits": true,
@@ -3271,7 +3289,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/120230798",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "별과 은하부터 생명과 문명까지 만물의 기원을 유쾌하게 훑어봐요?"
+    }
+   ]
   },
   {
    "isbn": "9791194033400",

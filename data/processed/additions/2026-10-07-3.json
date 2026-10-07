@@ -756,7 +756,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "건축물 500점을 연대순으로 따라가며 세계사의 큰 흐름을 훑어봐요?",
+   "one_liner": "건축물 500점을 따라가면 세계사의 흐름이 어떻게 보일까요?",
    "evidence": "연대순 건축물이 뼈대라 역사에 맞음",
    "confidence": 0.7,
    "fits": true,
@@ -783,7 +783,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/181861178",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "건축물 500점을 연대순으로 따라가며 세계사의 큰 흐름을 훑어봐요?"
+    }
+   ]
   },
   {
    "isbn": "9788952130037",
@@ -909,7 +915,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "왜 어떤 민족은 정복하고 어떤 민족은 정복당했는지 지리와 생물로 풀어줘요?",
+   "one_liner": "왜 어떤 민족은 정복하고 어떤 민족은 정복당했을까요?",
    "evidence": "인류사 흐름을 지역별로 풀어 설명하는 역사서",
    "confidence": 0.8,
    "fits": true,
@@ -936,7 +942,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/120527998",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "왜 어떤 민족은 정복하고 어떤 민족은 정복당했는지 지리와 생물로 풀어줘요?"
+    }
+   ]
   },
   {
    "isbn": "9791139730395",
@@ -1824,7 +1836,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "삶의 마지막 의료·법·돌봄 현실을 알고 나의 뜻을 미리 말하게 돼요?",
+   "one_liner": "삶의 마지막, 나의 뜻을 미리 말해 두려면 무엇을 알아야 할까요?",
    "evidence": "의료·법·돌봄 제도를 다루는 사회 문제서",
    "confidence": 0.8,
    "fits": true,
@@ -1851,7 +1863,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/195765771",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "삶의 마지막 의료·법·돌봄 현실을 알고 나의 뜻을 미리 말하게 돼요?"
+    }
+   ]
   },
   {
    "isbn": "9788936479084",
@@ -1927,7 +1945,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "돈이 도덕을 밀어내는 구체적 사례로 시장의 한계를 짚어 보게 해요?",
+   "one_liner": "돈이 도덕을 밀어낼 때, 시장은 어디까지 맡겨도 될까요?",
    "evidence": "시장 논리의 사회 침투를 사례로 비판해 사회·시사",
    "confidence": 0.8,
    "fits": true,
@@ -1954,7 +1972,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/6779868",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "돈이 도덕을 밀어내는 구체적 사례로 시장의 한계를 짚어 보게 해요?"
+    }
+   ]
   },
   {
    "isbn": "9791155401651",
@@ -2864,7 +2888,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "만화로 세포의 구조와 신호전달 같은 개념을 부담 없이 익혀요?",
+   "one_liner": "세포의 구조와 신호전달, 만화로 보면 덜 어렵지 않을까요?",
    "evidence": "세포 원리를 만화로 설명하는 과학 입문서",
    "confidence": 0.9,
    "fits": true,
@@ -2891,7 +2915,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/115381537",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "만화로 세포의 구조와 신호전달 같은 개념을 부담 없이 익혀요?"
+    }
+   ]
   },
   {
    "isbn": "9791171258659",
@@ -2966,7 +2996,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "양자중력 관점에서 시간이 무엇인지 풀어 보며 익숙한 시간관념이 흔들려요?",
+   "one_liner": "양자중력으로 보면 시간이란 대체 무엇일까요?",
    "evidence": "물리학자가 시간의 본질을 원리로 설명하는 교양서",
    "confidence": 0.9,
    "fits": true,
@@ -2993,7 +3023,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/74031185",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "양자중력 관점에서 시간이 무엇인지 풀어 보며 익숙한 시간관념이 흔들려요?"
+    }
+   ]
   },
   {
    "isbn": "9788925569284",

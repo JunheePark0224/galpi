@@ -12,7 +12,7 @@ problems, else the first — and checks.rule_issues then flags whatever is still
 import json
 from collections import Counter
 
-from check_one_liners import MAX_LEN, MIN_LEN, check_line
+from check_one_liners import MAX_LEN, MIN_LEN, check_line, form_issue
 
 from .tagger import Breaker, Usage, call
 
@@ -34,9 +34,12 @@ def problems(entry: str, line: str, title: str) -> list[str]:
             out.append(f"과장 표현을 빼 주세요({issue.split(': ', 1)[1]})")
         elif issue == "제목 반복":
             out.append("책 제목을 되풀이하지 말아 주세요")
-    if entry == "leaf" and not line.endswith("?"):
+    form = form_issue(entry, line)
+    if form == "질문형인데 ?로 끝나지 않음":
         out.append("질문형이어야 해요(?로 끝나게)")
-    if entry == "target" and line.endswith("?"):
+    elif form == "질문형인데 평서문에 ?만 붙음":
+        out.append("평서문 끝에 ?만 붙이지 말고 읽는 사람에게 묻는 말로 바꿔 주세요(…까요? …나요? …ㄹ래요?)")
+    elif form:
         out.append("요약형이어야 해요(물음표 없이)")
     return out
 

@@ -70,7 +70,7 @@ const splits=b=>(b.flags||[]).filter(f=>f!=="confidence");
 const heldBy=b=>(b.issues||[]).filter(i=>!NOTE.test(i));
 const groupOf=b=>b.sample?"sample":splits(b).includes("fits")?"fits":splits(b).length?"tags":"line";
 function issues(s,b){const out=baseIssues(s,b.title);
- if(b.entry==="leaf"&&!s.trim().endsWith("?"))out.push("질문형은 ?로 끝나요");if(b.entry==="target"&&s.trim().endsWith("?"))out.push("요약형에 물음표");return out}
+ if(b.entry==="leaf"&&!s.trim().endsWith("?"))out.push("질문형은 ?로 끝나요");if(b.entry==="leaf"&&FAKE_Q.test(s.trim()))out.push("평서문에 ?만 붙었어요");if(b.entry==="target"&&s.trim().endsWith("?"))out.push("요약형에 물음표");return out}
 const asks=b=>[...splits(b),...(heldBy(b).length?["line"]:[])];
 // a held line is answered when it passes the rules here AND the person edited it or kept it on purpose ("이대로 괜찮아요"):
 // some rules (근거 약함, the YES24-copy check) need the intro and cannot be checked again on this page

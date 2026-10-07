@@ -318,7 +318,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "중년의 뇌가 어떻게 달라지는지 연구로 풀어 줘서 나이 듦이 덜 불안해져요?",
+   "one_liner": "나이 들수록 뇌가 나빠지기만 한다는 생각, 정말 맞을까요?",
    "evidence": "뇌 연구로 중년 뇌를 설명하는 과학 교양",
    "confidence": 0.82,
    "fits": true,
@@ -345,7 +345,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/4594530",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "중년의 뇌가 어떻게 달라지는지 연구로 풀어 줘서 나이 듦이 덜 불안해져요?"
+    }
+   ]
   },
   {
    "isbn": "9788968331862",
@@ -369,7 +375,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "화가들의 숨은 사연을 따라가며 미술 교양을 쌓게 돼요?",
+   "one_liner": "화가들의 숨은 사연을 알면 그림이 다르게 보이지 않을까요?",
    "evidence": "화가 일화로 미술사를 풀어 설명하는 미술 교양서",
    "confidence": 0.85,
    "fits": true,
@@ -396,7 +402,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/63038113",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "화가들의 숨은 사연을 따라가며 미술 교양을 쌓게 돼요?"
+    }
+   ]
   },
   {
    "isbn": "9791130683324",
@@ -787,7 +799,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "시나리오 구조와 장르 공식을 익혀 흥행하는 영화 이야기를 짜는 법을 알려줘요?",
+   "one_liner": "흥행하는 영화 이야기는 어떤 구조와 공식으로 짜일까요?",
    "evidence": "영화 창작론이라 예술을 만드는 글로 봄",
    "confidence": 0.7,
    "fits": true,
@@ -814,7 +826,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/12248102",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "시나리오 구조와 장르 공식을 익혀 흥행하는 영화 이야기를 짜는 법을 알려줘요?"
+    }
+   ]
   },
   {
    "isbn": "9791193247082",
@@ -2324,7 +2342,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "가난 속에서 자란 여덟 아이의 10년을 따라가며 교육·노동·복지의 틈을 보여 줘요?",
+   "one_liner": "가난 속에서 자란 여덟 아이의 10년은 어떻게 흘러갔을까요?",
    "evidence": "빈곤 청소년 인터뷰로 사회 문제를 다룸",
    "confidence": 0.85,
    "fits": true,
@@ -2351,7 +2369,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/123317793",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "가난 속에서 자란 여덟 아이의 10년을 따라가며 교육·노동·복지의 틈을 보여 줘요?"
+    }
+   ]
   },
   {
    "isbn": "9788934950967",
@@ -2532,7 +2556,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "한 청년과의 대화로 한국 청년 남성의 삶과 좌절을 들여다봐요?",
+   "one_liner": "한 청년과의 대화로 본 한국 청년 남성의 삶은 어떤 모습일까요?",
    "evidence": "청년 남성의 구조적 삶을 다룬 사회 문제 책",
    "confidence": 0.72,
    "fits": true,
@@ -2559,7 +2583,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/140372381",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "한 청년과의 대화로 한국 청년 남성의 삶과 좌절을 들여다봐요?"
+    }
+   ]
   },
   {
    "isbn": "9791130685113",

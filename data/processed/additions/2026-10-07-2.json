@@ -81,7 +81,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "귀여운 SD 캐릭터를 얼굴부터 채색까지 차근차근 그려 봐요?",
+   "one_liner": "귀여운 SD 캐릭터, 얼굴부터 채색까지 차근차근 그려 볼래요?",
    "evidence": "캐릭터 그리기 창작 기법서라 예술 틀",
    "confidence": 0.6,
    "fits": true,
@@ -108,7 +108,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/195142191",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "귀여운 SD 캐릭터를 얼굴부터 채색까지 차근차근 그려 봐요?"
+    }
+   ]
   },
   {
    "isbn": "9788968334177",
@@ -132,7 +138,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "풍속화와 궁중기록화 50여 점으로 조선 후기의 삶을 전시실 따라 구경해요?",
+   "one_liner": "풍속화와 궁중기록화로 조선 후기의 삶을 구경해 볼까요?",
    "evidence": "조선 그림을 보며 감상하는 글이라 예술·여행에 맞음",
    "confidence": 0.85,
    "fits": true,
@@ -161,7 +167,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/117585578",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "풍속화와 궁중기록화 50여 점으로 조선 후기의 삶을 전시실 따라 구경해요?"
+    }
+   ]
   },
   {
    "isbn": "9791173326981",

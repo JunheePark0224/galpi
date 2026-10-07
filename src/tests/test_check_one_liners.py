@@ -29,3 +29,26 @@ def test_a_one_word_title_is_not_a_title_to_repeat():
 
 def test_a_real_title_repeat_is_still_caught():
     assert "제목 반복" in issues("우울 덮기 하나로 감정 다루는 방법을 익혀요", "우울 덮기")
+
+
+# 🍃 질문형 (10-08, user: "…쉽게 알게 돼요?" reads oddly): a question asks the reader; a statement with "?" stuck on is not one
+from check_one_liners import form_issue  # noqa: E402
+
+
+def test_a_real_question_passes():
+    for line in ["고조선부터 현대까지, 한국사의 뼈대를 시대별로 잡아 볼까요?", "어떤 책이 나에게 맞을지 궁금하지 않나요?",
+                 "귀여운 SD 캐릭터, 얼굴부터 채색까지 차근차근 그려 볼래요?", "혼자 있는 시간이 필요하세요?", "다 내려놓고 쉬고 싶다면요?"]:
+        assert form_issue("leaf", line) is None, line
+
+
+def test_a_statement_with_a_question_mark_is_not_a_question():
+    for line in ["유명 애니 속 장면을 실험으로 풀며 과학 개념을 쉽게 알게 돼요?", "고조선부터 현대까지 한국사의 뼈대를 잡아 봐요?",
+                 "왜 어떤 민족은 정복했는지 지리와 생물로 풀어줘요?", "60년 작품 세계를 키워드로 훑어보는 회고전이에요?",
+                 "만화로 세포의 구조와 신호전달 같은 개념을 익혀요?", "돈이 도덕을 밀어내는 사례로 시장의 한계를 짚어 보게 해요?"]:
+        assert form_issue("leaf", line) == "질문형인데 평서문에 ?만 붙음", line
+
+
+def test_the_form_of_each_entry():
+    assert form_issue("leaf", "한국사의 뼈대를 시대별로 잡아 봐요") == "질문형인데 ?로 끝나지 않음"
+    assert form_issue("target", "엑셀로 공공데이터를 불러와 통계 분석까지 해 봐요") is None
+    assert form_issue("target", "엑셀로 통계 분석까지 해 볼까요?") == "요약형인데 물음표로 끝남"
