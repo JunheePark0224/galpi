@@ -139,6 +139,7 @@ async function curiousAboutTwoRecommended(page: Page, events: Sent[]) {
     if (want) curious += 1;
     await page.getByRole("button", { name: want ? "궁금해요" : "패스", exact: true }).click();
   }
+  await page.getByRole("button", { name: "궁금해요 2권 책 정보 보기" }).click();     // past the S-11 뒤표지 (F-27)
 }
 
 test("S-06 C-16: the S-05 bookmark peeks out of the cover, pulls out, flips to 나온 이유, changes with [다음 책] (E-27·E-28)", async ({ page }) => {

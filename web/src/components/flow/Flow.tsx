@@ -15,6 +15,9 @@ import { guestSaves } from "@/lib/library/guest";
 import type { Answer, AnswerChoice } from "@/lib/paths";
 import { setEntry, setMode } from "@/lib/track/common";
 import { track } from "@/lib/track/client";
+import { QUESTION_MAP } from "@/lib/paths";
+import { encodeShare } from "@/lib/share/code";
+import { BackCover, type ShareMethod } from "./BackCover";
 import { BookScene } from "./BookScene";
 import { EndScreen } from "./EndScreen";
 import { Home } from "./Home";
@@ -33,6 +36,13 @@ function syncCommon(answers: readonly Answer[]) {
  * S-01 → S-02 (the question map) → S-03 … S-08. Cross-screen events are sent here, in the handlers (never from effects).
  * library: the F-23 count for S-01 (FlowRoot).
  */
+/** F-27: the link a 뒤표지 is shared with — the answers, the five books and their pictures (lib/share/code). */
+function shareUrl(s: FlowState): string {
+  const picks = s.draw?.picks ?? [];
+  const code = encodeShare(QUESTION_MAP, { answers: s.answers, books: picks.map((p) => p.card.id), arts: picks.map((p) => p.art) });
+  return `${window.location.origin}/s/${code}`;
+}
+
 export function Flow({ library = null }: { library?: LibraryCount | null }) {
   const [state, dispatch] = useReducer(flowReducer, undefined, loadFlow);
   const [shownResult, setShownResult] = useState<string | null>(null);   // the S-06 book whose cover is ready to show
@@ -166,7 +176,18 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     });
     const next = act({ type: "react", reaction });
     if (next.step === "bookmarks") trackShown(next);
+    if (next.step === "back") {
+      track("back_cover_shown", { curious_count: curiousPicks(next).length, label_count: next.draw?.label?.chips.length ?? 0 });
+    }
+  };
+
+  /** S-11 main button: S-06 with something 궁금해요, S-08 without (PRD 2절). */
+  const leaveBack = () => {
+    const next = act({ type: "leaveBack" });
     if (next.step === "result") enterResult(next);
+  };
+  const shared = (method: ShareMethod) => {
+    track("share_clicked", { method, label_count: state.draw?.label?.chips.length ?? 0 });
   };
 
   const nextResult = () => {
@@ -220,6 +241,16 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
         />
       )}
       {resultPick && shownResult !== resultPick.card.id && <ResultLoading />}
+      {state.step === "back" && state.draw && (
+        <BackCover
+          books={state.draw.picks}
+          label={state.draw.label ?? { chips: [], challenge: false }}
+          curious={curious.length}
+          shareUrl={shareUrl(state)}
+          onContinue={leaveBack}
+          onShared={shared}
+        />
+      )}
       {state.step === "end" && <EndScreen onRedraw={redraw} onHome={() => home("end")} />}
     </MotionConfig>
   );

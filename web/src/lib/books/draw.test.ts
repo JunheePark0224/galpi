@@ -6,6 +6,7 @@ import { mulberry32 } from "@/lib/recommend";
 import { applyChallenge, LEARN_CHALLENGE_GENRES, pathReason, QUESTION_MAP, walkPath, type Answer } from "@/lib/paths";
 import { toBook } from "./catalog";
 import { drawPath } from "./draw";
+import { shareLabel } from "@/lib/share/label";
 import { CHALLENGE_PATH, MIXED_PATH, SQL_PATH } from "@/lib/paths/__fixtures__/paths";
 import type { CatalogBook } from "./types";
 
@@ -32,11 +33,21 @@ describe("drawPath (v2: the answers of the question map)", () => {
     expect(Object.keys(res.picks[0]).sort()).toEqual(["card", "kind", "reason"]);
   });
 
+  it("carries the 뒤표지 label (F-27): only choices all five books match — the same as shareLabel on these books", () => {
+    const res = drawPath(SQL_PATH, none, mulberry32(7), BOOKS);
+    const byId = new Map(BOOKS.map((b) => [b.isbn, toBook(b)]));
+    expect(res.label).toEqual(shareLabel(QUESTION_MAP, SQL_PATH, res.picks.map((p) => byId.get(p.card.id)!)));
+    expect(res.label.challenge).toBe(false);
+    expect(res.label.chips).toContain("지금 필요한 걸 채우기");
+    expect(res.label.chips).not.toContain("DB에서 꺼내기");                       // only 2 of the 5 are SQL books
+  });
+
   it("challenge path: 🍃 books from the far side, the route kept for S-04", () => {
     const res = drawPath(CHALLENGE_PATH, none, mulberry32(3), BOOKS);
     expect(res.picks).toHaveLength(5);
     expect(res.picks.every((p) => p.card.entry === "leaf")).toBe(true);
     expect(res.path.mode).toBe("challenge");
+    expect(res.label.challenge).toBe(true);
   });
 
   it("challenge path: reasons come from the flipped scope (after applyChallenge), not the chosen side", () => {
