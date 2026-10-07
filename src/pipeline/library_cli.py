@@ -6,7 +6,8 @@
   intro/TOC), and the counts, per-field change shares and the change table printed. With a person's earlier download
   (`--answers`), those books stay on the page as "answered", their answers seeded as confirmed (and in the next download).
 --apply <download>: library_apply.apply → books_v1.json and the additions files (only files that change are written); a
-  dropped books_v1 book goes to retag/removed.json. Then the person runs `cd web && npm run books:import`.
+  dropped books_v1 book goes to retag/removed.json; a "다른 갈래로" book leaves its slot and gets a row in
+  data/pipeline/requeue.json (record_requeue — the next batch tags it in the other entry first). Then the person runs `cd web && npm run books:import`.
 """
 import json
 import re
@@ -14,7 +15,7 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-from . import ADDITIONS, VOCAB
+from . import ADDITIONS, REQUEUE, VOCAB
 from .candidates import Candidate
 from .config import Config
 from .prompt import system_prompt
@@ -152,6 +153,19 @@ def cmd_page(out: Path, tb_path: Path, answers: dict | None = None) -> int:
     return 0
 
 
+def record_requeue(rows: list[dict], path: Path, today: str) -> list[dict]:
+    """Add the page's "다른 갈래로" books ({isbn, to_entry, to_slot}) to requeue.json; a row already there with the same
+    target is left as it is, so applying the same download again changes nothing. Returns the rows added."""
+    from . import requeue
+    known = {r["isbn"]: r for r in requeue.load(path)}
+    fresh = [{**r, "from_batch": "library-v3", "date": today} for r in rows
+             if (known.get(r["isbn"]) or {}).get("to_entry") != r["to_entry"]
+             or (known.get(r["isbn"]) or {}).get("to_slot") != r["to_slot"]]
+    if fresh:
+        requeue.save(path, requeue.added(list(known.values()), fresh))
+    return fresh
+
+
 def cmd_apply(out: Path, tb_path: Path, removed_path: Path, download: Path, write,
               earlier: dict | None = None) -> int:
     """`earlier`: the answers the page was built with (cmd_page's `answers`) — those books are "answered" on the page; the
@@ -180,6 +194,11 @@ def cmd_apply(out: Path, tb_path: Path, removed_path: Path, download: Path, writ
     if removed:
         old = _read(removed_path, [])
         write([*old, *(r for r in removed if r["isbn"] not in {o["isbn"] for o in old})], removed_path)
+    from datetime import datetime
+
+    from . import KST
+    for r in record_requeue(tally["requeued"], REQUEUE, datetime.now(KST).date().isoformat()):
+        print(f"REQUEUE {r['isbn']}: next batch tags it as {r['to_entry']} {r['to_slot'] or '(topic by the pipeline)'}")
     print(json.dumps(tally, ensure_ascii=False))
     print("next: cd web && npm run books:import && npm test, then commit books_v1.json, the additions files and web/src/data/")
     return 0
