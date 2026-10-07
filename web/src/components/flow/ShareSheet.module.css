@@ -13,13 +13,15 @@
 @media (prefers-reduced-motion: reduce) { .backdrop, .sheet { animation: none; } }
 .grab { width: 40px; height: 4px; border-radius: 2px; background: var(--paper-line); }
 .title { margin: 0; font-size: 16px; outline: none; }
-.story, .storyBig { display: block; height: auto; border-radius: 8px; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18); }
+/* the box keeps the picture's 9 : 16 while it comes, so the sheet never jumps */
+.story, .storyBig { display: block; height: auto; aspect-ratio: 9 / 16; border-radius: 8px; background: var(--paper-deep); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18); }
 .story { width: min(38vw, 150px); }
 .storyBig { width: min(52vw, 200px); -webkit-touch-callout: default; }
 .hint {
   margin: 0; width: 100%; padding: var(--space-2) var(--space-3); border-radius: 10px; background: var(--paper-deep);
   font-size: 13px; line-height: 1.5; text-align: center; color: var(--ink-soft); word-break: keep-all;
 }
+.outside { margin: calc(-1 * var(--space-1)) 0 0; font-size: 12px; line-height: 1.5; text-align: center; color: var(--ink-muted); word-break: keep-all; }
 .tiles { display: flex; gap: var(--space-2); width: 100%; }
 .tile {
   flex: 1; min-height: 76px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;

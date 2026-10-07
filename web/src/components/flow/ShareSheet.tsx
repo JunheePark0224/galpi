@@ -10,6 +10,8 @@ export const COPIED = "링크를 복사했어요";
 export const COPY_FAILED = "링크를 복사하지 못했어요. 아래 링크를 길게 눌러 복사해 주세요";
 export const IMAGE_FAILED = "이미지를 공유하지 못했어요";
 export const INAPP_HINT = "이미지를 길게 눌러 저장한 뒤 인스타 스토리에 올려 주세요";
+/** 10-08 (user): an in-app browser can hand the page to the phone's browser itself — there the story share is one tap. */
+export const OUTSIDE_HINT = "오른쪽 위 ⋯ 메뉴에서 \"외부 브라우저에서 열기\"를 누르면 스토리로 바로 공유할 수 있어요";
 const shareText = (n: number) => `오늘 갈피에서 책갈피 ${n}장을 만났어요. 나도 갈피 잡으러 가기`;
 
 export type ShareMethod = "native" | "copy" | "image" | "save_image";
@@ -121,6 +123,7 @@ export function ShareSheet({ shareUrl, count, onClose, onShared }: Props) {
         {/* eslint-disable-next-line @next/next/no-img-element -- the server-drawn story image, held to save in an in-app browser */}
         <img className={mode === "hold" ? styles.storyBig : styles.story} src={story} alt="스토리 이미지 미리보기" />
         {mode === "hold" && <p className={styles.hint}>{INAPP_HINT}</p>}
+        {mode === "hold" && <p className={styles.outside}>{OUTSIDE_HINT}</p>}
         <div className={styles.tiles}>
           {mode === "files" && image !== null && (
             <button

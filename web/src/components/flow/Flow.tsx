@@ -17,6 +17,7 @@ import { setEntry, setMode } from "@/lib/track/common";
 import { track } from "@/lib/track/client";
 import { QUESTION_MAP } from "@/lib/paths";
 import { encodeShare } from "@/lib/share/code";
+import { storyFile } from "@/lib/share/storyFile";
 import type { ShareMethod } from "./BackCover";
 import { BookScene } from "./BookScene";
 import { EndScreen } from "./EndScreen";
@@ -178,7 +179,11 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     });
     const next = act({ type: "react", reaction });
     if (next.step === "bookmarks") trackShown(next);
-    if (next.step === "back") setClosing(true);
+    if (next.step === "back") {
+      setClosing(true);
+      // the server starts drawing the story picture now, while the book shuts (10-08: the sheet's preview came late)
+      void storyFile(`${new URL(shareUrl(next)).pathname}/story`);
+    }
   };
   /** The book has shut: its back cover shows now (E-41 — when it is seen, taxonomy). */
   const closed = () => {

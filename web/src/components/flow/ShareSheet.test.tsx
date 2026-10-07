@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { forgetStories } from "@/lib/share/storyFile";
-import { COPIED, IMAGE_FAILED, INAPP_HINT, ShareSheet } from "./ShareSheet";
+import { COPIED, IMAGE_FAILED, INAPP_HINT, OUTSIDE_HINT, ShareSheet } from "./ShareSheet";
 
 const URL_ = "https://www.galpibook.com/s/1~0A~a.b~000000";
 const STORY = "/s/1~0A~a.b~000000/story";
@@ -64,6 +64,7 @@ describe("ShareSheet (C-31, F-27 — 결과 공유하기)", () => {
     const p = props();
     render(<ShareSheet {...p} />);
     expect(screen.getByText(INAPP_HINT)).toBeInTheDocument();
+    expect(screen.getByText(OUTSIDE_HINT)).toBeInTheDocument();   // the ⋯ menu way to a one-tap story share
     expect(tile("인스타 스토리로")).toBeNull();
     expect(tile("이미지 저장")).toBeNull();
     expect(fetchMock).not.toHaveBeenCalled();

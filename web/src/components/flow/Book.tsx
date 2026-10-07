@@ -1,8 +1,8 @@
 "use client";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion } from "motion/react";
 import { LogoMark } from "@/components/Logo";
-import { FLIP_PAGE, OPEN_COVER, SHUT_BOOK } from "@/lib/motion";
+import { FLIP_PAGE, OPEN_COVER, SHUT_BOOK, SHUT_SETTLE_MS } from "@/lib/motion";
 import styles from "./Book.module.css";
 
 interface Props {
@@ -28,11 +28,20 @@ interface Props {
  * Transform and opacity only — no filter, no animated shadow. initial={false}: a resumed flow does not replay it.
  * `shut` (S-11, 10-07): the right half (back board + its page) turns over onto the left around the spine — the opening
  * reversed on the other side, so the back cover faces up — while the book slides to the middle and, like the closed front
- * on S-03, settles to a book's proportions (zoomed on a phone); then onShut. The back cover holds `backFace`.
+ * on S-03, settles to a book's proportions (zoomed on a phone) — only once it is shut (10-08: zooming the open spread
+ * sent its tall page off the screen) — then onShut. The back cover holds `backFace`.
  */
 export function Book({ open, onPress, left, right, tucked, shut = false, shutNow = false, onShut, backFace }: Props) {
+  const [settled, setSettled] = useState(false);
+  const wait = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(wait.current), []);
+  const turned = () => {
+    setSettled(true);
+    wait.current = setTimeout(() => onShut?.(), SHUT_SETTLE_MS);   // the zoom (CSS, below) has landed
+  };
+  const closed = !open || (shut && (settled || shutNow));
   return (
-    <div className={styles.zoom} data-closed={open && !shut ? undefined : ""} data-shut={shut ? "" : undefined}>
+    <div className={styles.zoom} data-closed={closed ? "" : undefined} data-shut={shut ? "" : undefined}>
       <motion.div
         className={styles.book}
         initial={false}
@@ -74,7 +83,7 @@ export function Book({ open, onPress, left, right, tucked, shut = false, shutNow
             initial={shutNow ? false : { rotateY: 0 }}
             animate={{ rotateY: -180 }}
             transition={SHUT_BOOK}
-            onAnimationComplete={onShut}
+            onAnimationComplete={turned}
           >
             <div className={styles.backInside} aria-hidden="true"><div className={styles.backPage}><RuledPage /></div></div>
             <div className={styles.backOutside}>
