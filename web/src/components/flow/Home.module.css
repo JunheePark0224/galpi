@@ -3,7 +3,8 @@
 .logo { margin: 0; font-size: 28px; line-height: 1.3; }
 .tagline { margin: var(--space-1) 0 0; color: var(--ink-soft); }
 
-/* P-01 book: landscape cloth cover, spine on the left, two frosted bookmarks peeking above (static — no blur needed). */
+/* P-01 book: landscape cloth cover, spine on the left, two bookmarks peeking above (static). 10-07 (user: they did not show
+   on the cream page): each is tinted with its genre colour, edged and shadowed instead of the frosted white. */
 .shelf { position: relative; width: 224px; height: 176px; margin-top: var(--space-5); padding-top: 32px; }
 .cover {
   position: relative; display: flex; align-items: center; justify-content: center;
@@ -20,18 +21,18 @@
 }
 .spine::before { top: 18px; }
 .spine::after { bottom: 18px; }
-.mark { margin-left: 18px; color: var(--foil); }
+.mark { color: var(--foil); }   /* centred on the whole book, spine included (10-07) */
 .peek {
   position: absolute; top: 6px; width: 34px; height: 48px;
-  border-radius: 17px 17px 2px 2px; background: var(--frost-fallback);
-  border: var(--frost-edge); box-shadow: 0 1px 0 var(--paper-line);
+  border-radius: 17px 17px 2px 2px; background: color-mix(in srgb, var(--tone) 22%, #fffdf8);
+  border: 1px solid color-mix(in srgb, var(--tone) 55%, transparent); box-shadow: 0 2px 5px rgba(43, 39, 36, 0.16);
 }
 .peek::before { /* the string */
   content: ""; position: absolute; top: -14px; left: 50%; width: 1.5px; height: 18px; margin-left: -0.75px; background: var(--tone);
 }
 .peek::after { /* the arched window */
   content: ""; position: absolute; top: 8px; left: 7px; right: 7px; height: 18px; border-radius: 10px 10px 2px 2px;
-  background: var(--tone); opacity: 0.35;
+  background: var(--tone); opacity: 0.55;
 }
 .peek:nth-child(1) { left: 44px; transform: rotate(-4deg); }
 .peek:nth-child(2) { right: 52px; top: 0; transform: rotate(3deg); }
@@ -67,13 +68,14 @@
 .arrow { display: block; }
 
 /* F-23 (시안 B, 10-01): the library count in gold foil on the cover; today's books on a frosted bookmark with "+M". */
-.count { display: flex; flex-direction: column; align-items: center; margin-left: 18px; color: var(--foil); }
+.count { display: flex; flex-direction: column; align-items: center; color: var(--foil); }
 .countLabel { font-size: 11px; letter-spacing: 1px; line-height: 1.4; }
 .countNum { font-family: var(--font-batang), serif; font-weight: 700; font-size: 32px; line-height: 1.15; }
 .countUnit { margin-left: 2px; font-size: 15px; }
 .newTag {
   position: absolute; top: -12px; right: 46px; width: 46px; height: 60px; padding-top: 12px; transform: rotate(4deg);
-  border-radius: 23px 23px 2px 2px; background: var(--frost-fallback); border: var(--frost-edge); box-shadow: 0 1px 0 var(--paper-line);
+  border-radius: 23px 23px 2px 2px; background: color-mix(in srgb, var(--genre-essay) 16%, #fffdf8);
+  border: 1px solid color-mix(in srgb, var(--genre-essay) 50%, transparent); box-shadow: 0 2px 5px rgba(43, 39, 36, 0.16);
   font-family: var(--font-batang), serif; font-weight: 700; font-size: 14px; line-height: 1; text-align: center; color: var(--genre-essay);
 }
 .newTag::before { /* the string */
