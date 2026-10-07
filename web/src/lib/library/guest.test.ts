@@ -11,7 +11,7 @@ const card = (isbn: string) => ({
   oneLiner: "지어낸 한 줄", oneLinerStyle: "question" as const,
 });
 const save = (isbn: string): GuestSave => ({
-  isbn, art: { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false },
+  isbn, art: { animal: "fox", bg: "night", ground: "books", rare: false },
   reason: { label: "나온 이유", items: ["따뜻함"] }, metOn: "2026-10-05", card: card(isbn),
 });
 const ISBN = "9788998441012";

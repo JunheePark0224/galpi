@@ -12,7 +12,7 @@ vi.mock("@/lib/library/client", () => ({ libraryRequest: (...a: unknown[]) => re
 vi.mock("@/lib/auth/browser", () => ({ logout: () => logout() }));
 vi.mock("@/lib/track/amplitude", () => ({ setAmplitudeUser: (...a: unknown[]) => setAmplitudeUser(...a) }));
 
-const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false } as const;
+const ART = { animal: "fox", bg: "night", ground: "books", rare: false } as const;
 const card = (id: string, title: string) => ({ id, entry: "leaf" as const, title, author: "가", genre: "한국 소설", field: null, oneLiner: "?", oneLinerStyle: "question" as const });
 const bm = (isbn: string, title: string) => ({ isbn, art: { ...ART }, reason: { label: "나온 이유" as const, items: ["따뜻함"] }, metOn: "2026-10-01", card: card(isbn, title) });
 const VIEW: LibraryView = {
@@ -43,7 +43,7 @@ describe("Library (S-09)", () => {
     const store = await mount({ enabled: true, loggedIn: false, id: null, count: 0 });
     expect(screen.getByRole("heading", { level: 1, name: "도감" })).toBeInTheDocument();
     expect(screen.getByText("로그인하면 만난 책갈피가 도감에 모여요")).toBeInTheDocument();
-    expect(screen.getByText("동물 0 / 16 · 배경 0 / 11 · 소품 0 / 15")).toBeInTheDocument();
+    expect(screen.getByText("동물 0 / 16 · 배경 0 / 12 · 소품 0 / 6")).toBeInTheDocument();
     expect(screen.getAllByText("아직 만나지 않은 동물")).toHaveLength(16);
     expect(screen.queryByRole("group", { name: "내 책갈피 보기" })).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "로그인하고 모으기" }));
@@ -60,7 +60,7 @@ describe("Library (S-09)", () => {
     expect(screen.getByText("로그인하면 사라지지 않고 휴대폰·PC 어디서나 이어져요. 막대로 정리하고, 도감을 모으고, 책갈피를 꾸밀 수도 있어요.")).toBeInTheDocument();
     expect(screen.getByText("브라우저 기록을 지우면 임시 책갈피도 사라져요")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2, name: "도감" })).toBeInTheDocument();
-    expect(screen.getByText("동물 0 / 16 · 배경 0 / 11 · 소품 0 / 15")).toBeInTheDocument();
+    expect(screen.getByText("동물 0 / 16 · 배경 0 / 12 · 소품 0 / 6")).toBeInTheDocument();
     // the first rod, newest first — no renaming, moving, clearing or adding rods before a login
     const rod = screen.getByRole("list", { name: "첫 막대" });
     expect(within(rod).getAllByRole("button").map((b) => b.getAttribute("aria-label"))).toEqual(["모순 책갈피", "데미안 책갈피"]);
@@ -90,14 +90,14 @@ describe("Library (S-09)", () => {
   });
 
   it("[막대 | 도감] switches between the rods and the 도감 (도감 v1 시안 ①)", async () => {
-    const OTTER = { kind: "animal", value: "otter", firstMetAt: "2026-10-05T00:00:00Z", firstArt: { animal: "otter", bg: "peach", sky: "moon", ground: "none", rare: true }, isNew: true };
+    const OTTER = { kind: "animal", value: "otter", firstMetAt: "2026-10-05T00:00:00Z", firstArt: { animal: "otter", bg: "peach", ground: "none", rare: true }, isNew: true };
     request.mockImplementation(async (_m: string, path: string) => (path === "/api/collection" ? ok({ items: [OTTER] }) : ok(VIEW)));
     await mount(IN);
     const rods = await screen.findByRole("button", { name: "막대" });
     expect(rods).toHaveAttribute("aria-pressed", "true");
     fireEvent.click(screen.getByRole("button", { name: "도감" }));
     expect(screen.getByRole("button", { name: "도감" })).toHaveAttribute("aria-pressed", "true");
-    expect(await screen.findByText("동물 1 / 16 · 배경 0 / 11 · 소품 0 / 15")).toBeInTheDocument();
+    expect(await screen.findByText("동물 1 / 16 · 배경 0 / 12 · 소품 0 / 6")).toBeInTheDocument();
     expect(screen.getByText("수달")).toBeInTheDocument();
     expect(screen.queryByText("2개 · 동물 1종")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "막대" }));

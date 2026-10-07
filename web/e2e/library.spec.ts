@@ -8,7 +8,7 @@ import { answerToClosedBook, named, reactToBookmarks, recordEvents, specMismatch
 test.use({ reducedMotion: "reduce" });
 
 const SUPABASE = "http://supabase.e2e.invalid";
-const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false };
+const ART = { animal: "fox", bg: "night", ground: "books", rare: false };
 
 interface Saved { isbn: string; shelfId: string; title: string }
 interface FakeLibrary {
@@ -190,7 +190,7 @@ test("logged out: saved in this browser → [로그인하고 지키기] → Kaka
   await page.route("**/api/collection/found", (route) => {
     const body = route.request().postDataJSON() as { isbn: string };
     reports.push(body);
-    const art = kept[body.isbn]?.art as { animal: string; bg: string; sky: string; ground: string; rare: boolean };
+    const art = kept[body.isbn]?.art as { animal: string; bg: string; ground: string; rare: boolean };
     const fresh = !!art && !dex.some((d) => d.value === art.animal);
     if (fresh) dex.push({ kind: "animal", value: art.animal, firstMetAt: "2026-10-05T01:00:00.000Z", firstArt: art, isNew: true });
     return route.fulfill({ json: { ok: true, found: fresh ? [{ kind: "animal", value: art.animal }] : [] } });

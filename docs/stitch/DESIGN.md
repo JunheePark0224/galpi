@@ -265,7 +265,7 @@ Almost flat. Depth comes from the physical metaphor, not shadows: the book has a
 ## Components
 
 - **Old book** — cloth-brown cover with the word 갈피 in Gowun Batang; opens to cream pages with faint lines.
-- **Bookmark** — frost film; arched window with sky color, hill, a small animal (about 55% of the window) sitting on the hill, one sky prop (moon, cloud, stars, birds, big star) and one ground prop (grass, flowers, a book stack, a mushroom, or none); under the window a genre name tag, the book title, a one-line first impression, and a dashed stitch line in the genre color; the word 갈피 small at the bottom.
+- **Bookmark** — frost film; arched window with sky color, hill, a small animal (about 55% of the window) sitting on the hill (the sky is the background alone — no sky props, 10-07), and one ground prop (grass, flowers, a book stack, a mushroom, or none); under the window a genre name tag, the book title, a one-line first impression, and a dashed stitch line in the genre color; the word 갈피 small at the bottom.
 - **Pass / Curious buttons** — below the book. Curious is the primary (ink) button, Pass is secondary (outlined).
 - **Balance game card** — two big choice cards side by side with "vs" between them, an icon on each, and a thin progress bar of 9 steps above. Under the cards a small pill "갈피를 못 잡겠어요" that fills like a gauge while pressed and held.
 - **Goal form** — one screen: a required "what do you want to know" row of choice chips plus a "write your own" chip that reveals a text field; optional rows for level, length and reading style; a primary "책 펼치기" button.

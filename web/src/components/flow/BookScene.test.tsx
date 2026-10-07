@@ -5,7 +5,7 @@ import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
 import { INITIAL, type DrawView, type FlowState } from "@/lib/flow/state";
 import { BookScene, DRAW_FAILED } from "./BookScene";
 
-const art = { animal: "owl", bg: "sky", sky: "cloud", ground: "grass", rare: false } as const;
+const art = { animal: "owl", bg: "sky", ground: "grass", rare: false } as const;
 const view = (n: number, mode: "normal" | "challenge" = "normal"): DrawView => ({
   picks: Array.from({ length: n }, (_, i) => ({
     card: { id: `b${i}`, entry: "target" as const, title: `책 ${i}`, author: `저자 ${i}`, genre: "통계", field: "데이터·통계", oneLiner: `한 줄 ${i}`, oneLinerStyle: "summary" as const },

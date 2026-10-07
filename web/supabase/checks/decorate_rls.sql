@@ -15,7 +15,7 @@ insert into auth.users (id, aud, role) values
   ('00000000-0000-4000-8000-0000000000f2', 'authenticated', 'authenticated');
 -- E has met the otter (the server's write): after 0006 the database, too, lets a bookmark use only collected parts.
 insert into public.collection (user_id, kind, value, first_art) values
-  ('00000000-0000-4000-8000-0000000000e1', 'animal', 'otter', '{"animal":"otter","bg":"peach","sky":"moon","ground":"none","rare":true}');
+  ('00000000-0000-4000-8000-0000000000e1', 'animal', 'otter', '{"animal":"otter","bg":"peach","ground":"none","rare":true}');
 
 -- ── Person E keeps a bookmark (the app does not send original_art; one sent anyway is ignored) ──────────────────
 set local role authenticated;
@@ -24,17 +24,17 @@ insert into public.shelves (id, user_id, name, position) values
   ('00000000-0000-4000-8000-00000000e5e5', '00000000-0000-4000-8000-0000000000e1', '첫 막대', 0);
 set local role service_role;                          -- bookmarks are saved by the server only (0007)
 insert into public.saves (user_id, isbn, art, original_art, shelf_id, position, reason, met_on) values
-  ('00000000-0000-4000-8000-0000000000e1', '9788998441012', '{"animal":"fox","bg":"peach","sky":"moon","ground":"none","rare":false}',
+  ('00000000-0000-4000-8000-0000000000e1', '9788998441012', '{"animal":"fox","bg":"peach","ground":"none","rare":false}',
    '{"animal":"bluedragon"}', '00000000-0000-4000-8000-00000000e5e5', 0, '{}', '2026-10-05');
 insert into public.saves (user_id, isbn, art, shelf_id, position, reason, met_on) values
-  ('00000000-0000-4000-8000-0000000000e1', '9788998441029', '{"animal":"cat","bg":"leaf","sky":"cloud","ground":"grass","rare":false}',
+  ('00000000-0000-4000-8000-0000000000e1', '9788998441029', '{"animal":"cat","bg":"leaf","ground":"grass","rare":false}',
    '00000000-0000-4000-8000-00000000e5e5', 1, '{}', '2026-10-05');
 insert into rls_result select 'E1 a new bookmark keeps its art as original_art',
   count(*) = 2 and bool_and(original_art = art) from public.saves;
 set local role authenticated;
 
 -- Decorating: art changes, original_art stays — also when an update tries to set it.
-update public.saves set art = '{"animal":"otter","bg":"peach","sky":"moon","ground":"none","rare":true}' where isbn = '9788998441012';
+update public.saves set art = '{"animal":"otter","bg":"peach","ground":"none","rare":true}' where isbn = '9788998441012';
 update public.saves set original_art = '{"animal":"whitetiger"}' where isbn = '9788998441029';
 insert into rls_result select 'E2 decorating changes art, not original_art',
   art ->> 'animal' = 'otter' and original_art ->> 'animal' = 'fox' from public.saves where isbn = '9788998441012';

@@ -4,7 +4,7 @@ import { memoryStore } from "./__fixtures__/memoryStore";
 import { addShelf, FIRST_SHELF_NAME, libraryView, MAX_SAVES, MAX_SHELVES, moveBookmark, POSITION_STEP, removeAllBookmarks, removeBookmark, removeShelf, removeShelfWithBookmarks, renameShelf, saveBookmark } from "./service";
 import type { SaveRow } from "./types";
 
-const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false } as const;
+const ART = { animal: "fox", bg: "night", ground: "books", rare: false } as const;
 const input = (isbn: string) => ({ isbn, art: { ...ART }, reason: { label: "나온 이유" as const, items: ["데이터 분석"] }, metOn: "2026-10-01" });
 const card = (isbn: string): BookCard => ({ id: isbn, entry: "target", title: `책 ${isbn}`, author: "가", genre: "데이터 분석", field: "데이터·통계", oneLiner: "한 줄", oneLinerStyle: "summary" });
 

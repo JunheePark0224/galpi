@@ -3,8 +3,8 @@ import type { ArtCombo } from "@/lib/art/combine";
 import { memoryStore } from "./__fixtures__/memoryStore";
 import { changedKinds, decorateBookmark, decoratedProps, forbiddenKinds, ownedSet, partAllowed, sameArt } from "./decorate";
 
-const FIRST: ArtCombo = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false };
-const OWNED = ownedSet([{ kind: "animal", value: "otter" }, { kind: "sky", value: "goldmoon" }]);
+const FIRST: ArtCombo = { animal: "fox", bg: "night", ground: "books", rare: false };
+const OWNED = ownedSet([{ kind: "animal", value: "otter" }, { kind: "bg", value: "galaxy" }]);
 
 describe("꾸미기 rule (screen and server)", () => {
   it("allows a collected part, the bookmark's own first part and the empty ground — nothing else", () => {
@@ -12,8 +12,9 @@ describe("꾸미기 rule (screen and server)", () => {
     expect(partAllowed("animal", "fox", FIRST, OWNED)).toBe(true);
     expect(partAllowed("ground", "none", FIRST, OWNED)).toBe(true);
     expect(partAllowed("animal", "bluedragon", FIRST, OWNED)).toBe(false);
-    expect(partAllowed("sky", "otter", FIRST, OWNED)).toBe(false);              // a value is owned per kind
-    expect(forbiddenKinds({ ...FIRST, animal: "bluedragon", sky: "goldmoon", bg: "galaxy" }, FIRST, OWNED)).toEqual(["animal", "bg"]);
+    expect(partAllowed("bg", "otter", FIRST, OWNED)).toBe(false);               // a value is owned per kind
+    expect(partAllowed("bg", "galaxy", FIRST, OWNED)).toBe(true);
+    expect(forbiddenKinds({ ...FIRST, animal: "bluedragon", bg: "aurora" }, FIRST, OWNED)).toEqual(["animal", "bg"]);
   });
 
   it("names the kinds that changed, in picture order", () => {
@@ -36,11 +37,11 @@ describe("꾸미기 rule (screen and server)", () => {
 describe("E-38 bookmark_decorated payload", () => {
   it("names the changed parts with their new tiers, the new picture and whether it went back to the first", () => {
     const now = { ...FIRST, animal: "otter" as const, rare: true };
-    expect(decoratedProps("9788998441012", FIRST, { ...now, ground: "none", sky: "goldmoon", rare: false }, FIRST)).toEqual({
+    expect(decoratedProps("9788998441012", FIRST, { ...now, bg: "galaxy", ground: "none", rare: false }, FIRST)).toEqual({
       book_id: "9788998441012",
-      parts_changed: ["animal", "sky", "ground"],
+      parts_changed: ["animal", "bg", "ground"],
       tiers_changed: ["limited", "first_edition", "common"],
-      art: { animal: "otter", bg: "night", sky: "goldmoon", ground: "none", rare: true },
+      art: { animal: "otter", bg: "galaxy", ground: "none", rare: true },
       is_reset: false,
     });
     expect(decoratedProps("9788998441012", now, FIRST, FIRST)).toEqual({

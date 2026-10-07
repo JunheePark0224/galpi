@@ -207,6 +207,14 @@ describe("도감 routes", () => {
       expect((await found(post("/api/collection/found", { ...issueTicket(isbnsOf(5), { seed: 73, sub: U1 }), index: 0 }))).status).toBe(200);
     });
 
+    it("no longer accepts a v3 ticket (its seed drew four-part pictures — 10-07 A drew three)", async () => {
+      const iat = nowSeconds();
+      const books = isbnsOf(5);
+      const v3 = createHmac("sha256", DEV).update(`galpi-art:v3:82:5:${iat}:${U1}:${books.join(",")}`).digest("base64url");
+      expect((await found(post("/api/collection/found", { seed: 82, count: 5, iat, sub: U1, sig: v3, isbns: books, index: 0 }))).status).toBe(403);
+      expect(store.data.items).toHaveLength(0);
+    });
+
     it("no longer accepts a v2 ticket (signed without the draw's books)", async () => {
       const iat = nowSeconds();
       const v2 = createHmac("sha256", DEV).update(`galpi-art:v2:81:5:${iat}:${U1}`).digest("base64url");

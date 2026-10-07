@@ -10,20 +10,20 @@ const MAX_NAMED = 2;
 /** One line on a 320px phone: 22 characters of the 13px badge stay under about 270px. */
 export const MAX_CHARS = 22;
 
-/** Rarest first (초판본 → 한정판 → 일반판), then 동물 · 배경 · 하늘 · 땅. */
+/** Rarest first (초판본 → 한정판 → 일반판), then 동물 · 배경 · 땅 소품. */
 export function rarestFirst(items: readonly FoundItem[]): FoundItem[] {
   const order = (i: FoundItem) => TIER_RANK[i.tier] * -10 + ART_KINDS.indexOf(i.kind);
   return [...items].sort((a, b) => order(a) - order(b));
 }
 
-/** "여우", "한정판 무지개", "초판본 청룡" — the tier only when it is above 일반판, and only on that part. */
+/** "여우", "한정판 여름밤", "초판본 청룡" — the tier only when it is above 일반판, and only on that part. */
 function partWords(item: FoundItem): string {
   const name = partName(item.kind, item.value);
   return item.tier === "common" ? name : `${TIER_NAMES[item.tier]} ${name}`;
 }
 
 /**
- * "처음 만난 여우 · 한정판 무지개!" — each new part by name, its tier in front only when it is 한정판 or 초판본 (10-05 fix:
+ * "처음 만난 여우 · 한정판 여름밤!" — each new part by name, its tier in front only when it is 한정판 or 초판본 (10-05 fix:
  * the highest tier no longer stands in front of everything, so a common animal never reads as 한정판). More than two parts,
  * or a line too long for a small phone: the rarest one and "외 n개" ("처음 만난 초판본 청룡 외 3개!").
  */

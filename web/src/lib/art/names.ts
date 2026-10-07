@@ -9,15 +9,11 @@ export const PART_NAMES: { readonly [K in ArtKind]: Readonly<Record<string, stri
   },
   bg: {
     peach: "복숭아", leaf: "풀잎", sky: "하늘", butter: "버터", lavender: "라벤더", night: "밤",
-    cherry: "벚꽃 언덕", sunset: "노을", aurora: "오로라", galaxy: "은하수", study: "금박 서재",
-  },
-  sky: {
-    moon: "달", cloud: "구름", stars: "별", birds: "새", bigStar: "큰 별",
-    rainbow: "무지개", shooting: "별똥별", goldmoon: "금빛 초승달",
+    cherry: "벚꽃 언덕", sunset: "노을", aurora: "오로라", summer: "여름밤", galaxy: "은하수", study: "금박 서재",
   },
   ground: {
     grass: "풀", flowers: "꽃", books: "책 더미", mushroom: "버섯",
-    clover: "네잎클로버", firefly: "반딧불", goldbook: "금장 고서",
+    clover: "네잎클로버", goldbook: "금장 고서",
   },
 };
 

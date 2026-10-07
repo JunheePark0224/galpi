@@ -50,7 +50,7 @@ describe("supabaseStore — every statement filtered to the person (RLS says the
   });
 
   it("꾸미기 writes art only (never original_art), for this person's book", async () => {
-    const art = { animal: "otter", bg: "peach", sky: "moon", ground: "none", rare: true } as const;
+    const art = { animal: "otter", bg: "peach", ground: "none", rare: true } as const;
     const { db, calls } = fakeDb([{ data: [{ isbn: "9788998441012" }] }, { data: [] }, { error: { code: "42501" } }]);
     const store = supabaseStore(db, "u1");
     expect(await store.updateArt("9788998441012", art)).toBe(true);

@@ -13,7 +13,7 @@ const MAX_BYTES = 700;
 const NOT_RECORDED_ERROR = "not recorded";
 const NOT_RECORDED = (): Response => json(403, NOT_RECORDED_ERROR);
 
-const samePicture = (a: ArtCombo, b: ArtCombo) => a.animal === b.animal && a.bg === b.bg && a.sky === b.sky && a.ground === b.ground;
+const samePicture = (a: ArtCombo, b: ArtCombo) => a.animal === b.animal && a.bg === b.bg && a.ground === b.ground;
 
 /**
  * 도감 v1: a bookmark was shown on S-05 to a logged-in person. Body { seed, count, iat, sub, sig, isbns, index } — the draw's

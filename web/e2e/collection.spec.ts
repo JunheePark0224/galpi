@@ -6,21 +6,22 @@ import { named, recordEvents, specMismatches, test, toBookmarks } from "./helper
 // as in library.spec.ts — except the last test, which asks the real server to check a real (and a tampered) ticket.
 // DEX_SHOTS=<folder> also saves the 375-wide phone screenshots of the plan (impl-*.png, and the 10-05 fix's fix-*.png).
 const SHOTS = process.env.DEX_SHOTS;
-/** A draw seed whose first picture is 초판본 (주작 · 은하수 · 무지개 · 버섯) — lib/art/combine artsForDraw(5, 7349)[0]. */
+/** A draw seed whose first picture is 초판본 (주작 · 은하수 · 네잎클로버) — lib/art/combine artsForDraw(5, 7349)[0]. */
 const FIRST_EDITION_SEED = 7349;
-/** A common fox with a 한정판 rainbow (여우 · 라벤더 · 무지개 · 풀) — artsForDraw(5, 22)[0]: the user's 10-05 case. */
-const FOX_RAINBOW_SEED = 22;
+/** A common fox on the 한정판 여름밤 (여우 · 여름밤 · 버섯) — artsForDraw(5, 74)[0]: the user's 10-05 case, three parts. */
+const FOX_SUMMER_SEED = 74;
 
-const OTTER = { animal: "otter", bg: "leaf", sky: "cloud", ground: "grass", rare: true };
-const TIGER = { animal: "whitetiger", bg: "night", sky: "moon", ground: "grass", rare: true };
+const OTTER = { animal: "otter", bg: "leaf", ground: "grass", rare: true };
+const TIGER = { animal: "whitetiger", bg: "night", ground: "grass", rare: true };
 const row = (kind: string, value: string, art: object, isNew = false) => ({ kind, value, firstMetAt: "2026-10-05T01:00:00.000Z", firstArt: art, isNew });
 const ITEMS = [
   row("animal", "cat", { ...OTTER, animal: "cat", rare: false }), row("animal", "fox", { ...OTTER, animal: "fox", rare: false }),
   row("animal", "owl", { ...OTTER, animal: "owl", bg: "night", rare: false }), row("animal", "otter", OTTER, true),
-  row("animal", "whitetiger", TIGER, true), row("bg", "leaf", OTTER), row("bg", "night", TIGER), row("sky", "cloud", OTTER),
-  row("ground", "grass", OTTER), row("bg", "galaxy", { ...TIGER, bg: "galaxy" }), row("sky", "rainbow", { ...TIGER, sky: "rainbow" }),
+  row("animal", "whitetiger", TIGER, true), row("bg", "leaf", OTTER), row("bg", "night", TIGER), row("ground", "flowers", OTTER),
+  row("ground", "grass", OTTER), row("bg", "galaxy", { ...TIGER, bg: "galaxy" }), row("ground", "clover", { ...TIGER, ground: "clover" }),
   row("ground", "goldbook", { ...TIGER, ground: "goldbook" }),
   row("ground", "none", OTTER, true),                                       // recorded before the 10-05 fix: never shown or counted
+  row("sky", "cloud", OTTER, true),                                         // a sky prop from before 10-07 A: never shown or counted
 ];
 
 async function phone(page: Page) {
@@ -41,7 +42,7 @@ test("logged out: the 도감 shows every cell as a silhouette and asks for a log
   await page.goto("/library");
   await expect(page.getByRole("heading", { level: 1, name: "도감" })).toBeVisible();
   await expect(page.getByText("로그인하면 만난 책갈피가 도감에 모여요")).toBeVisible();
-  await expect(page.getByText("동물 0 / 16 · 배경 0 / 11 · 소품 0 / 15")).toBeVisible();
+  await expect(page.getByText("동물 0 / 16 · 배경 0 / 12 · 소품 0 / 6")).toBeVisible();
   await expect(page.getByText("아직 만나지 않은 동물")).toHaveCount(16);
   await expect(page.getByText("책과는 상관없이 뽑혀요. 돈으로 뽑는 기능은 없어요.")).toBeAttached();
   if (SHOTS) await page.screenshot({ path: `${SHOTS}/impl-dex-loggedout.png` });
@@ -71,7 +72,7 @@ test("logged in: [막대 | 도감] opens the 도감 — counts, tiers, NEW once,
   await expect(page.getByRole("heading", { level: 1, name: "내 책갈피" })).toBeVisible();
   await expect(page.getByRole("button", { name: "막대", exact: true })).toHaveAttribute("aria-pressed", "true");
   await page.getByRole("button", { name: "도감", exact: true }).click();
-  await expect(page.getByText("동물 5 / 16 · 배경 3 / 11 · 소품 4 / 15")).toBeVisible();
+  await expect(page.getByText("동물 5 / 16 · 배경 3 / 12 · 소품 4 / 6")).toBeVisible();
   const first = page.getByRole("region", { name: "동물 초판본" });
   await expect(first.getByRole("heading")).toHaveText(/초판본\s*1 \/ 4/);
   await expect(first.getByText("백호")).toBeVisible();
@@ -94,8 +95,9 @@ test("logged in: [막대 | 도감] opens the 도감 — counts, tiers, NEW once,
 
   await page.getByRole("button", { name: "소품", exact: true }).click();
   await expect(page.getByRole("button", { name: "소품", exact: true })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.getByRole("region", { name: "소품 일반판" }).getByText("구름")).toBeVisible();
-  await expect(page.getByRole("region", { name: "소품 일반판" }).getByRole("listitem")).toHaveCount(9);   // 하늘 5 + 땅 4, no "none"
+  await expect(page.getByRole("region", { name: "소품 일반판" }).getByText("꽃")).toBeVisible();
+  await expect(page.getByRole("region", { name: "소품 일반판" }).getByRole("listitem")).toHaveCount(4);   // 땅 4, no "none", no sky (10-07 A)
+  await expect(page.getByText("구름")).toHaveCount(0);
   await expect(page.locator("section svg[data-tier]")).toHaveCount(4);
   await expect(page.locator("section svg image")).toHaveCount(0);
   await expect(page.locator("section [data-bare] svg")).toHaveCount(4);                   // 10-07: the props alone, no stage
@@ -116,22 +118,22 @@ test("logged in on S-05: the shown bookmark is reported with its signed ticket, 
   await page.route("**/api/books/draw", async (route) => {
     const res = await route.fetch();
     const body = await res.json();
-    // the fox-and-rainbow seed, so the picture matches the parts this mock calls new (the found route below is mocked too)
-    ticket = { ...body.art, seed: FOX_RAINBOW_SEED };
+    // the fox-on-여름밤 seed, so the picture matches the parts this mock calls new (the found route below is mocked too)
+    ticket = { ...body.art, seed: FOX_SUMMER_SEED };
     await route.fulfill({ response: res, json: { ...body, art: ticket } });
   });
   const reports: { seed: number; count: number; iat: number; sub: string | null; sig: string; index: number }[] = [];
   await page.route("**/api/collection/found", (route) => {
     reports.push(route.request().postDataJSON());
     // an older server's "none" is dropped by the browser: no badge word, no E-36 for it
-    const found = reports.length === 1 ? [{ kind: "animal", value: "fox" }, { kind: "sky", value: "rainbow" }, { kind: "ground", value: "none" }] : [];
+    const found = reports.length === 1 ? [{ kind: "animal", value: "fox" }, { kind: "bg", value: "summer" }, { kind: "ground", value: "none" }] : [];
     return route.fulfill({ json: { ok: true, found } });
   });
   const { events } = await recordEvents(page);
 
   await toBookmarks(page);
-  // 10-05 fix: the common fox is not called 한정판 — only the rainbow is; the colour follows the rarest part
-  const badge = page.getByText("처음 만난 한정판 무지개 · 여우!");
+  // 10-05 fix: the common fox is not called 한정판 — only the 여름밤 is; the colour follows the rarest part
+  const badge = page.getByText("처음 만난 한정판 여름밤 · 여우!");
   await expect(badge).toBeVisible();
   await expect(badge).toHaveAttribute("data-tier", "limited");
   const box = (await badge.boundingBox())!;
@@ -148,7 +150,7 @@ test("logged in on S-05: the shown bookmark is reported with its signed ticket, 
   expect(reports[0]).toEqual({ ...ticket!, count: 5, index: 0 });
   await expect.poll(() => named(events, "collection_item_found").map((e) => e.props)).toEqual([
     { part_kind: "animal", part_value: "fox", tier: "common" },
-    { part_kind: "sky", part_value: "rainbow", tier: "limited" },
+    { part_kind: "bg", part_value: "summer", tier: "limited" },
   ]);
 
   await page.getByRole("button", { name: "패스", exact: true }).click();
@@ -172,6 +174,7 @@ test("a 초판본 bookmark on S-05 wears the gold rim and its effects", async ({
   await expect(page.getByRole("button", { name: "궁금해요" })).toBeEnabled();     // landed: the full effects are on
   await expect(art.locator("[data-part=rim]")).toHaveCount(1);
   await expect(art.locator("image")).toHaveAttribute("href", "/animals/redbird.svg");
+  await expect(art.locator("[data-part=living] circle").first()).toBeAttached();       // the galaxy is living (10-07 A)
   await page.waitForTimeout(900);
   if (SHOTS) await page.screenshot({ path: `${SHOTS}/impl-first-edition.png` });
 });
@@ -186,7 +189,7 @@ test("the server records nothing for a tampered ticket (403) and asks a login fo
   const found = (body: object) => request.post("/api/collection/found", { headers, data: body });
   expect((await found({ ...art, seed: (art.seed + 1) % 2 ** 32, index: 0 })).status()).toBe(403);
   expect((await found({ ...art, count: 6, isbns: [...art.isbns, "9790000000099"], index: 5 })).status()).toBe(403);
-  expect((await found({ ...art, isbns: [...art.isbns].reverse(), index: 0 })).status()).toBe(403);   // v3: the draw's books are signed
+  expect((await found({ ...art, isbns: [...art.isbns].reverse(), index: 0 })).status()).toBe(403);   // v3+: the draw's books are signed
   expect((await found({ ...art, count: 6, index: 5 })).status()).toBe(400);                          // a book short
   expect((await found({ ...art, iat: art.iat - 3 * 60 * 60, index: 0 })).status()).toBe(403);          // re-dated
   expect((await found({ ...art, sub: "11111111-1111-4111-8111-111111111111", index: 0 })).status()).toBe(403);   // re-bound

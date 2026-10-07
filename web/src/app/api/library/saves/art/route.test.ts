@@ -33,7 +33,7 @@ const patch = (body: unknown, origin = ORIGIN) => new Request(`${ORIGIN}/api/lib
 
 const ISBN = "9788998441012";
 const SHELF = "11111111-1111-4111-8111-111111111111";
-const FIRST = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false } as const;
+const FIRST = { animal: "fox", bg: "night", ground: "books", rare: false } as const;
 const row = (art: object, originalArt: object | null | undefined = FIRST) =>
   ({ isbn: ISBN, art: art as never, originalArt: originalArt as never, reason: { label: "이 책은" as const, items: [] }, metOn: "2026-10-05", shelfId: SHELF, position: 0 });
 
@@ -49,7 +49,7 @@ describe("PATCH /api/library/saves/art (책갈피 꾸미기)", () => {
   it("saves a picture made of collected parts, reading the 도감 with the person's session (no server key)", async () => {
     const res = await decorate(patch({ isbn: ISBN, art: { ...FIRST, animal: "otter", bg: "galaxy" } }));
     expect(res.status).toBe(200);
-    const saved = { animal: "otter", bg: "galaxy", sky: "moon", ground: "books", rare: true };
+    const saved = { animal: "otter", bg: "galaxy", ground: "books", rare: true };
     expect(await res.json()).toEqual({ ok: true, art: saved });
     expect(store.data.saves[0].art).toEqual(saved);
     expect(store.data.saves[0].originalArt).toEqual(FIRST);                     // the first picture never changes
@@ -71,7 +71,7 @@ describe("PATCH /api/library/saves/art (책갈피 꾸미기)", () => {
     expect(back.status).toBe(200);
     expect(store.data.saves[0].art).toEqual(FIRST);
     // a part of another bookmark's first picture is not this bookmark's: still refused
-    expect((await decorate(patch({ isbn: ISBN, art: { ...FIRST, sky: "rainbow" } }))).status).toBe(403);
+    expect((await decorate(patch({ isbn: ISBN, art: { ...FIRST, bg: "aurora" } }))).status).toBe(403);
   });
 
   it("works `rare` out again from the parts — a tampered flag is never stored", async () => {

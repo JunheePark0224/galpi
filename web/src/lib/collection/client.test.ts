@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { loadCollection, markCollectionSeen, parseFound, reportMeeting } from "./client";
 
-const ART = { animal: "otter", bg: "peach", sky: "moon", ground: "none", rare: true };
+const ART = { animal: "otter", bg: "peach", ground: "none", rare: true };
 const answer = (status: number, body: unknown) => vi.fn().mockResolvedValue(new Response(JSON.stringify(body), { status }));
 
 const ISBNS = ["9790000000000", "9790000000001", "9790000000002", "9790000000003", "9790000000004"];
