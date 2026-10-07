@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { LibraryView } from "./types";
 import { artLocally, moveLocally, removeLocally } from "./view";
 
-const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false } as const;
+const ART = { animal: "fox", bg: "night", ground: "books", rare: false } as const;
 const bm = (isbn: string, animal: "fox" | "owl" = "fox") => ({
   isbn, art: { ...ART, animal }, reason: { label: "이 책은" as const, items: [] }, metOn: "2026-10-01",
   card: { id: isbn, entry: "leaf" as const, title: isbn, author: "가", genre: "에세이", field: null, oneLiner: "?", oneLinerStyle: "question" as const },

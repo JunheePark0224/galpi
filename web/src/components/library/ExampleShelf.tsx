@@ -5,15 +5,15 @@ import styles from "./ExampleShelf.module.css";
 /** A made-up example: animals only, no titles — nobody's real shelf. */
 const EXAMPLE: readonly { name: string; arts: ArtCombo[] }[] = [
   { name: "읽기 완료!", arts: [
-    { animal: "cat", bg: "butter", sky: "cloud", ground: "flowers", rare: false },
-    { animal: "duck", bg: "lavender", sky: "stars", ground: "none", rare: false },
-    { animal: "fox", bg: "peach", sky: "stars", ground: "grass", rare: false },
-    { animal: "bear", bg: "night", sky: "bigStar", ground: "grass", rare: false },
+    { animal: "cat", bg: "butter", ground: "flowers", rare: false },
+    { animal: "duck", bg: "lavender", ground: "none", rare: false },
+    { animal: "fox", bg: "peach", ground: "grass", rare: false },
+    { animal: "bear", bg: "night", ground: "grass", rare: false },
   ] },
   { name: "서점 가서 볼 책", arts: [
-    { animal: "rabbit", bg: "butter", sky: "moon", ground: "grass", rare: false },
-    { animal: "owl", bg: "night", sky: "cloud", ground: "mushroom", rare: false },
-    { animal: "whale", bg: "sky", sky: "birds", ground: "none", rare: false },
+    { animal: "rabbit", bg: "butter", ground: "grass", rare: false },
+    { animal: "owl", bg: "night", ground: "mushroom", rare: false },
+    { animal: "whale", bg: "sky", ground: "none", rare: false },
   ] },
 ];
 

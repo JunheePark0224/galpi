@@ -15,7 +15,7 @@ async function setup(body: unknown) {
 afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); localStorage.clear(); });
 
 const GUEST = {
-  isbn: "9788998441012", art: { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false }, reason: { label: "나온 이유", items: [] },
+  isbn: "9788998441012", art: { animal: "fox", bg: "night", ground: "books", rare: false }, reason: { label: "나온 이유", items: [] },
   metOn: "2026-10-05",
   card: { id: "9788998441012", entry: "leaf", title: "모순", author: "양귀자", genre: "한국 소설", field: null, oneLiner: "?", oneLinerStyle: "question" },
 };

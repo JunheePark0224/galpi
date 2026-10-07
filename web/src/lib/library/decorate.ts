@@ -31,7 +31,7 @@ export function changedKinds(before: ArtCombo, after: ArtCombo): ArtKind[] {
   return ART_KINDS.filter((kind) => before[kind] !== after[kind]);
 }
 
-/** Same four parts (rare follows from them). */
+/** Same three parts (rare follows from them). */
 export function sameArt(a: ArtCombo, b: ArtCombo): boolean {
   return changedKinds(a, b).length === 0;
 }
@@ -42,7 +42,7 @@ export function sameArt(a: ArtCombo, b: ArtCombo): boolean {
  */
 export function decoratedProps(bookId: string, before: ArtCombo, after: ArtCombo, original: ArtCombo): PropsOf<"bookmark_decorated"> {
   const parts = changedKinds(before, after);
-  const art = { animal: after.animal, bg: after.bg, sky: after.sky, ground: after.ground };
+  const art = { animal: after.animal, bg: after.bg, ground: after.ground };
   return {
     book_id: bookId,
     parts_changed: parts,
@@ -66,7 +66,7 @@ export async function decorateBookmark(
   if (!row) return { ok: false, error: "missing" };
   if (!row.originalArt) return { ok: false, error: "unavailable" };
   if (forbiddenKinds(art, row.originalArt, ownedSet(await owned())).length > 0) return { ok: false, error: "forbidden" };
-  const parts = { animal: art.animal, bg: art.bg, sky: art.sky, ground: art.ground };
+  const parts = { animal: art.animal, bg: art.bg, ground: art.ground };
   const next: ArtCombo = { ...parts, rare: isRare(parts) };
   return (await store.updateArt(isbn, next)) ? { ok: true, art: next } : { ok: false, error: "missing" };
 }

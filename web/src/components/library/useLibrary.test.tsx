@@ -20,7 +20,7 @@ const merged = new Set<() => void>();
 vi.mock("@/lib/library/merge", () => ({ onGuestMerged: (l: () => void) => { merged.add(l); return () => merged.delete(l); } }));
 import { useLibrary } from "./useLibrary";
 
-const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false } as const;
+const ART = { animal: "fox", bg: "night", ground: "books", rare: false } as const;
 const card = (id: string) => ({ id, entry: "leaf" as const, title: id, author: "가", genre: "한국 소설", field: null, oneLiner: "?", oneLinerStyle: "question" as const });
 const VIEW: LibraryView = {
   count: 1, animals: 1,

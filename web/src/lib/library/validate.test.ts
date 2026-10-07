@@ -1,26 +1,27 @@
 import { describe, expect, it } from "vitest";
 import { cleanShelfName, parseArt, parseMetOn, parseReason, SHELF_NAME_MAX } from "./validate";
 
-const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false };
+const ART = { animal: "fox", bg: "night", ground: "books", rare: false };
 
 describe("parseArt — only picture parts we draw (DESIGN A-01~A-04)", () => {
   it("keeps a valid combination and nothing else", () => {
     expect(parseArt({ ...ART, extra: "x" })).toEqual(ART);
   });
   it("refuses unknown parts and wrong shapes", () => {
-    for (const bad of [null, "fox", [], { ...ART, animal: "dragon" }, { ...ART, bg: "red" }, { ...ART, sky: 1 }, { ...ART, ground: "lava" }, { ...ART, rare: "no" }]) {
+    for (const bad of [null, "fox", [], { ...ART, animal: "dragon" }, { ...ART, bg: "red" }, { ...ART, ground: "lava" }, { ...ART, ground: "moon" }, { ...ART, rare: "no" }]) {
       expect(parseArt(bad), JSON.stringify(bad)).toBeNull();
     }
   });
-  it("keeps a picture saved before 도감 v1 exactly as it was", () => {
-    const old = { animal: "whale", bg: "lavender", sky: "bigStar", ground: "none", rare: false };
-    expect(parseArt(old)).toEqual(old);
+  it("reads a four-part picture from before 10-07 A as three parts: the sky prop dropped, fireflies as the empty ground", () => {
+    expect(parseArt({ animal: "whale", bg: "lavender", sky: "bigStar", ground: "none", rare: false }))
+      .toEqual({ animal: "whale", bg: "lavender", ground: "none", rare: false });
+    expect(parseArt({ ...ART, sky: "goldmoon", ground: "firefly", rare: true })).toEqual({ ...ART, ground: "none", rare: false });
   });
   it("accepts the 한정판·초판본 parts and works `rare` out from the parts, whatever the browser said", () => {
-    const first = { animal: "bluedragon", bg: "galaxy", sky: "goldmoon", ground: "goldbook", rare: false };
+    const first = { animal: "bluedragon", bg: "galaxy", ground: "goldbook", rare: false };
     expect(parseArt(first)).toEqual({ ...first, rare: true });
-    expect(parseArt({ animal: "cat", bg: "cherry", sky: "moon", ground: "grass" })).toEqual({ animal: "cat", bg: "cherry", sky: "moon", ground: "grass", rare: true });
-    expect(parseArt({ ...ART, ground: "firefly", rare: false })?.rare).toBe(true);
+    expect(parseArt({ animal: "cat", bg: "summer", ground: "grass" })).toEqual({ animal: "cat", bg: "summer", ground: "grass", rare: true });
+    expect(parseArt({ ...ART, ground: "clover", rare: false })?.rare).toBe(true);
     expect(parseArt({ ...ART, rare: true })?.rare).toBe(false);   // a claimed rare with common parts is not rare
   });
 });

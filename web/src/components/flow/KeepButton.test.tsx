@@ -13,7 +13,7 @@ const ISBN = "9788998441012";
 const pick: PickView = {
   card: { id: ISBN, entry: "leaf", title: "모순", author: "양귀자", genre: "한국 소설", field: null, oneLiner: "?", oneLinerStyle: "question" },
   kind: "recommended",
-  art: { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false },
+  art: { animal: "fox", bg: "night", ground: "books", rare: false },
   reason: { label: "나온 이유", items: ["따뜻함"] },
 };
 const IN = { enabled: true, loggedIn: true, id: "u1", count: 0 };

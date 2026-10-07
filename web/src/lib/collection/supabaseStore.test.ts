@@ -23,7 +23,7 @@ function fakeDb(results: Result[]) {
   return { db, calls };
 }
 
-const ART = { animal: "otter", bg: "peach", sky: "moon", ground: "none", rare: true };
+const ART = { animal: "otter", bg: "peach", ground: "none", rare: true };
 
 describe("supabaseCollection — reads with the session, writes with the server's key, always for this person", () => {
   afterEach(() => vi.unstubAllEnvs());
@@ -61,7 +61,7 @@ describe("supabaseCollection — reads with the session, writes with the server'
     const reader = fakeDb([]);
     const { db: writer, calls } = fakeDb([{ data: [{ kind: "animal", value: "otter" }] }]);
     expect(await supabaseCollection(reader.db, writer, "u1").record(ART as never)).toEqual([{ kind: "animal", value: "otter" }]);
-    const rows = ["animal:otter", "bg:peach", "sky:moon"].map((p) => {
+    const rows = ["animal:otter", "bg:peach"].map((p) => {
       const [kind, value] = p.split(":");
       return { user_id: "u1", kind, value, first_art: ART };
     });

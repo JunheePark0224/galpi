@@ -16,7 +16,7 @@ const only = (art: ArtCombo): SavedArt => ({ art, found: [] });
 
 /**
  * The picture a new bookmark is saved with (F-12, v1.7.1 security review — the browser's art is never trusted while
- * signing is on). `ticket`: the draw's signed ticket (v3) and the bookmark's place in it, from S-06 or a guest bookmark.
+ * signing is on). `ticket`: the draw's signed ticket (v4) and the bookmark's place in it, from S-06 or a guest bookmark.
  * - signing off (production without the secret): the sent picture, as before.
  * - no ticket (a guest bookmark kept before this fix): a picture the server chose.
  * - a ticket that holds — this server's signature, `isbns[index]` is this book, the draw was this person's (sub) or

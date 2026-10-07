@@ -1,4 +1,4 @@
--- 도감 v1: run in the Supabase SQL Editor after 0004, as one script. Like p5_rls.sql it always ends with an error box titled
+-- 도감 v1: run in the Supabase SQL Editor after 0004 (and again after 0008 — no sky kind), as one script. Like p5_rls.sql it always ends with an error box titled
 -- "RLS CHECK RESULT" (that error undoes everything) — every line in it must end in "ok". Any "FAILED" = stop and fix 0004.
 -- If a different error appears instead, the check did not run to the end: send that message to Claude.
 
@@ -10,8 +10,8 @@ insert into auth.users (id, aud, role) values
 
 -- The server (service role, here the editor's own role) records one part for each person.
 insert into public.collection (user_id, kind, value, first_art) values
-  ('00000000-0000-4000-8000-0000000000c1', 'animal', 'fox', '{"animal":"fox","bg":"peach","sky":"moon","ground":"none","rare":false}'),
-  ('00000000-0000-4000-8000-0000000000d2', 'animal', 'cat', '{"animal":"cat","bg":"peach","sky":"moon","ground":"none","rare":false}');
+  ('00000000-0000-4000-8000-0000000000c1', 'animal', 'fox', '{"animal":"fox","bg":"peach","ground":"none","rare":false}'),
+  ('00000000-0000-4000-8000-0000000000d2', 'animal', 'cat', '{"animal":"cat","bg":"peach","ground":"none","rare":false}');
 
 create temp table rls_result (check_name text, ok boolean);
 grant all on rls_result to authenticated, anon, service_role;
@@ -20,9 +20,9 @@ do $$
 begin
   begin
     insert into public.collection (user_id, kind, value, first_art) values ('00000000-0000-4000-8000-0000000000c1', 'hat', 'x', '{}');
-    insert into rls_result values ('S1 only the four kinds', false);
+    insert into rls_result values ('S1 only the three kinds', false);
   exception when check_violation then
-    insert into rls_result values ('S1 only the four kinds', true);
+    insert into rls_result values ('S1 only the three kinds', true);
   end;
   begin
     insert into public.collection (user_id, kind, value, first_art) values ('00000000-0000-4000-8000-0000000000c1', 'animal', 'fox', '{}');
@@ -67,7 +67,7 @@ set local role service_role;
 do $$
 begin
   insert into public.collection (user_id, kind, value, first_art)
-    values ('00000000-0000-4000-8000-0000000000c1', 'sky', 'moon', '{"animal":"fox","bg":"peach","sky":"moon","ground":"none","rare":false}')
+    values ('00000000-0000-4000-8000-0000000000c1', 'ground', 'grass', '{"animal":"fox","bg":"peach","ground":"none","rare":false}')
     on conflict do nothing;
   update public.collection set is_new = false where user_id = '00000000-0000-4000-8000-0000000000c1';
   insert into rls_result select 'S3 service_role can record and clear NEW',

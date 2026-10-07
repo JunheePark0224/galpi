@@ -26,7 +26,7 @@ const IN_APP: Record<keyof typeof UAS, boolean> = {
 };
 const VIEWPORTS = [[320, 568], [360, 740], [375, 667], [390, 844], [412, 915]] as const;
 
-const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false };
+const ART = { animal: "fox", bg: "night", ground: "books", rare: false };
 const card = (isbn: string, title: string) => ({ id: isbn, entry: "leaf", title, author: "지어낸 저자", genre: "한국 소설", field: null, oneLiner: "지어낸 한 줄이에요", oneLinerStyle: "question" });
 const mark = (isbn: string, title: string) => ({ isbn, art: ART, reason: { label: "나온 이유", items: ["따뜻함"] }, metOn: "2026-10-01", card: card(isbn, title) });
 const ITEMS = [
