@@ -3,7 +3,8 @@
 --tiebreak: pass C (tiebreak.py) for every tagged book with a split a majority may settle → retag/library-v3-tiebreak.json,
   saved after every book, resumable, capped at TIEBREAK_MAX in all (the user's $2 tiebreak budget less the gold validation).
 --page: library_review's decisions → the main checkout's data/processed/check/pipeline/library-v3.html (git-ignored: YES24
-  intro/TOC), and the counts, per-field change shares and the change table printed.
+  intro/TOC), and the counts, per-field change shares and the change table printed. With a person's earlier download
+  (`--answers`), those books stay on the page as "answered", their answers seeded as confirmed (and in the next download).
 --apply <download>: library_apply.apply → books_v1.json and the additions files (only files that change are written); a
   dropped books_v1 book goes to retag/removed.json. Then the person runs `cd web && npm run books:import`.
 """
@@ -90,10 +91,10 @@ def cmd_tiebreak(out: Path, tb_path: Path, max_cost: float | None, write) -> int
     return 0 if not summary["stopped"] else 1
 
 
-def review_state(out: Path, tb_path: Path) -> tuple[dict, dict, dict]:
+def review_state(out: Path, tb_path: Path, answered: set[str] = frozenset()) -> tuple[dict, dict, dict]:
     from .library_review import groups
     doc, tb = _read(out), _read(tb_path, {"books": {}})
-    return doc, tb, groups(doc["books"], tb["books"])
+    return doc, tb, groups(doc["books"], tb["books"], answered=answered)
 
 
 def page_entries(doc: dict, tb: dict, decided: dict, text_of) -> list[dict]:
@@ -105,42 +106,45 @@ def page_entries(doc: dict, tb: dict, decided: dict, text_of) -> list[dict]:
             continue
         rec, (intro, toc) = b["record"], text_of(b["isbn"])
         entries.append({k: b[k] for k in ("isbn", "entry", "slot", "title", "source", "current")}
-                       | {k: d[k] for k in ("group", "asks", "settled", "line_issues", "changes", "auto")}
+                       | {k: d[k] for k in ("group", "asks", "settled", "line_issues", "changes", "auto", "emptied")}
                        | {"author": rec["author"], "pages": rec["pages"], "link": rec.get("link") or "",
                           "a": {k: v for k, v in rec.items() if k != "second"}, "b": rec["second"],
                           "c": (tb["books"].get(b["isbn"]) or {}).get("third"),
                           "intro": short_intro(intro, 300), "intro_full": intro, "toc": toc[:1500]})
-    return sorted(entries, key=lambda e: (e["group"] != "person", e["entry"], e["slot"], e["title"]))
+    order = {"person": 0, "sample": 1, "answered": 2}
+    return sorted(entries, key=lambda e: (order[e["group"]], e["entry"], e["slot"], e["title"]))
 
 
-def render(entries: list[dict], table: list[dict], n: dict, titles: dict, vocab: dict) -> str:
+def render(entries: list[dict], table: list[dict], n: dict, titles: dict, vocab: dict, answers: dict | None = None) -> str:
     from build_check_page import js_json
     from build_d4_review import AXIS_LABELS, WAY_LABELS
     from build_pilot_review import keyword_definitions
 
     from .gaps import GENRES
     from .library_page import TEMPLATE
+    from .signals_report import FICTION
     slots = {"__BOOKS__": js_json(entries), "__KW__": js_json({t: list(v.get("kept", {})) for t, v in vocab.items()}),
              "__GENRES__": js_json(list(GENRES)), "__DEFS__": js_json(keyword_definitions()),
-             "__AXES__": js_json(AXIS_LABELS), "__WAYS__": js_json(WAY_LABELS), "__KEY__": js_json("galpi-library-v3"),
+             "__AXES__": js_json(AXIS_LABELS), "__WAYS__": js_json(WAY_LABELS), "__KEY__": js_json("galpi-library-v3.1"),
              "__NAME__": js_json("library-v3"), "__TABLE__": js_json(table), "__COUNTS__": js_json(n),
-             "__TITLES__": js_json(titles)}
+             "__TITLES__": js_json(titles), "__ANSWERS__": js_json(answers or {}), "__FICTION__": js_json(list(FICTION))}
     return re.sub("|".join(slots), lambda m: slots[m.group(0)], TEMPLATE)
 
 
-def cmd_page(out: Path, tb_path: Path) -> int:
+def cmd_page(out: Path, tb_path: Path, answers: dict | None = None) -> int:
     from .gold import detail_dirs, page_text
     from .library_review import change_table, counts, field_shares
     from .review import PAGES
 
-    doc, tb, decided = review_state(out, tb_path)
+    answers = answers or {}
+    doc, tb, decided = review_state(out, tb_path, set(answers))
     vocab, dirs = json.loads(VOCAB.read_text(encoding="utf-8")), detail_dirs()
     entries = page_entries(doc, tb, decided, lambda i: page_text(i, dirs))
     table = change_table(doc["books"], decided)
     n = counts(decided) | {"skipped": len(doc.get("skipped_no_text") or []) + len(doc.get("failed") or {})}
     page = PAGES / "library-v3.html"
     page.parent.mkdir(parents=True, exist_ok=True)
-    page.write_text(render(entries, table, n, {b["isbn"]: b["title"] for b in doc["books"]}, vocab), encoding="utf-8")
+    page.write_text(render(entries, table, n, {b["isbn"]: b["title"] for b in doc["books"]}, vocab, answers), encoding="utf-8")
     print(json.dumps({"counts": n, "asks": dict(Counter(a for d in decided.values() for a in d["asks"])),
                       "field_shares": field_shares(doc["books"], decided),
                       "table": [{k: r[k] for k in ("field", "change", "count")} for r in table]}, ensure_ascii=False, indent=1))
@@ -148,14 +152,17 @@ def cmd_page(out: Path, tb_path: Path) -> int:
     return 0
 
 
-def cmd_apply(out: Path, tb_path: Path, removed_path: Path, download: Path, write) -> int:
+def cmd_apply(out: Path, tb_path: Path, removed_path: Path, download: Path, write,
+              earlier: dict | None = None) -> int:
+    """`earlier`: the answers the page was built with (cmd_page's `answers`) — those books are "answered" on the page; the
+    download repeats them (seeded as confirmed), and a later answer in the download wins."""
     from apply_review import ReviewError, unwrap
 
     from .library import V1, library_files
     from .library_apply import apply
 
-    doc, _, decided = review_state(out, tb_path)
-    answers = unwrap(_read(download))
+    answers = {**(earlier or {}), **unwrap(_read(download))}
+    doc, _, decided = review_state(out, tb_path, set(earlier or {}))
     vocab = json.loads(VOCAB.read_text(encoding="utf-8"))
     paths = {p.name: p for p in library_files(ADDITIONS)}
     docs, v1 = {name: _read(p) for name, p in paths.items()}, _read(V1)

@@ -112,15 +112,18 @@ def changes_of(cur: dict, auto: dict) -> list[dict]:
     return out
 
 
-def groups(books: list[dict], tiebreaks: dict[str, dict], rate: float = SAMPLE_RATE) -> dict[str, dict]:
-    """{isbn: decide(...) + group}: "person", "sample" (seeded share of the auto books) or "auto"."""
+def groups(books: list[dict], tiebreaks: dict[str, dict], rate: float = SAMPLE_RATE,
+           answered: set[str] = frozenset()) -> dict[str, dict]:
+    """{isbn: decide(...) + group}: "answered" (a person's earlier download already decided it — it stays on the page with
+    that answer, 10-07), "person", "sample" (seeded share of the other auto books) or "auto"."""
     out = {b["isbn"]: decide(b, tiebreaks.get(b["isbn"])) for b in books}
-    auto = sorted(i for i, d in out.items() if not d["asks"])
+    auto = sorted(i for i, d in out.items() if not d["asks"] and i not in answered)
     k = min(len(auto), max(1, round(rate * len(auto)))) if auto else 0
     sample = set(random.Random(SEED).sample(auto, k))
     by_third = sorted(i for i in auto if out[i]["slot_by"] == "majority" and i not in sample)
     sample |= set(random.Random(f"{SEED}-slot").sample(by_third, min(TIEBREAK_SAMPLE, len(by_third))))
-    return {i: d | {"group": "person" if d["asks"] else "sample" if i in sample else "auto"} for i, d in out.items()}
+    return {i: d | {"group": "answered" if i in answered else "person" if d["asks"] else "sample" if i in sample else "auto"}
+            for i, d in out.items()}
 
 
 def _label(v) -> str:
@@ -133,7 +136,7 @@ def change_table(books: list[dict], decided: dict[str, dict]) -> list[dict]:
     rows = defaultdict(list)
     for b in books:
         d = decided[b["isbn"]]
-        if d["asks"]:
+        if d["asks"] or d.get("group") == "answered":
             continue
         topic = d["auto"].get("slot") or b["slot"]
         for c in d["changes"]:
@@ -154,7 +157,7 @@ def field_shares(books: list[dict], decided: dict[str, dict]) -> dict[str, dict]
     out = defaultdict(lambda: {"auto": 0, "changed": 0})
     for b in books:
         d = decided[b["isbn"]]
-        if d["asks"]:
+        if d["asks"] or d.get("group") == "answered":
             continue
         changed = {c["field"] for c in d["changes"]}
         for f in d["auto"]:
@@ -164,8 +167,9 @@ def field_shares(books: list[dict], decided: dict[str, dict]) -> dict[str, dict]
 
 
 def counts(decided: dict[str, dict]) -> dict[str, int]:
-    auto = [d for d in decided.values() if not d["asks"]]
-    return {"books": len(decided), "to_person": sum(bool(d["asks"]) for d in decided.values()),
+    auto = [d for d in decided.values() if not d["asks"] and d["group"] != "answered"]
+    return {"books": len(decided), "to_person": sum(d["group"] == "person" for d in decided.values()),
+            "answered": sum(d["group"] == "answered" for d in decided.values()),
             "settled_by_tiebreak": sum(bool(d["settled"]) for d in auto),
             "changed_auto": sum(bool(d["changes"]) for d in auto),
             "moved_auto": sum("slot" in d["auto"] for d in auto),
