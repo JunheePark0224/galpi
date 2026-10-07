@@ -1,10 +1,25 @@
 /* C-26 책갈피 꾸미기 (PRD F-13·F-21, 시안 docs/mockups/2026-10-05-decorate/flow.png ②). */
-.editor { display: flex; flex-direction: column; gap: var(--space-2); }
-.preview { display: flex; justify-content: center; margin: var(--space-2) 0; }
+/* 10-07 (user): the preview and the tabs stay pinned, only the parts scroll — the editor fills the pinned sheet (Sheet `pinned`). */
+.editor { display: flex; flex: 1 1 auto; flex-direction: column; gap: var(--space-2); min-height: 0; }
+/* The front at a scale that fits the screen's height (C-13's front is 160 × 370 before scaling): 0.9 on a tall phone, 0.7 on
+   a 375 × 667–800 one, 0.46 on a 320 × 568 one — so a row of parts or more always shows under the tabs. */
+.preview { --s: 0.9; flex-shrink: 0; display: flex; justify-content: center; margin: var(--space-1) 0 0; }
+@media (max-height: 800px) { .preview { --s: 0.7; } }
+@media (max-height: 640px) { .preview { --s: 0.46; } }
+.previewBox {
+  display: block; width: calc(160px * var(--s)); height: calc(370px * var(--s));
+  filter: drop-shadow(0 0 0.5px rgba(43, 39, 36, 0.6)) drop-shadow(0 3px 6px rgba(43, 39, 36, 0.12));   /* 윤곽 A, as .big */
+}
+.previewBox > * { transform: scale(var(--s)); transform-origin: top left; }
+/* The one scrolling part: edge to edge of the sheet (its scrollbar at the sheet's edge), room for the focus outlines. */
+.parts {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  margin: 0 calc(-1 * var(--space-5)); padding: 6px var(--space-5) var(--space-2);
+}
 .quiet { margin: var(--space-2) 0; font-size: 14px; color: var(--ink-soft); }
 
 /* [동물 | 배경 | 하늘 소품 | 땅 소품]: the 도감's pills (C-25), four in one row on a 320px phone. */
-.tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: var(--space-1) 0; }
+.tabs { flex-shrink: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: var(--space-1) 0; }
 .tab {
   min-height: var(--touch); padding: 0 4px; border: 1px solid var(--paper-line); border-radius: var(--radius-pill);
   background: #fffdf8; color: var(--ink); font: inherit; font-size: 14px; white-space: nowrap; cursor: pointer;
@@ -39,11 +54,10 @@ img.shape { inset: auto; left: 22.5%; top: 15.8%; width: 55%; height: auto; }
   position: absolute; inset: auto 0 6% 0; font-size: 11px; color: var(--ink-soft); text-align: center;
 }
 
-/* [처음 그림으로] [이대로 꽂기]: stays at the bottom of the sheet while the parts scroll. */
+/* [처음 그림으로] [이대로 꽂기]: the bottom of the pinned sheet, under the scrolling parts. */
 .footer {
-  position: sticky; bottom: calc(-1 * (var(--space-5) + env(safe-area-inset-bottom))); z-index: 1;
-  display: flex; flex-direction: column; gap: var(--space-1);
-  margin: var(--space-2) calc(-1 * var(--space-5)) calc(-1 * (var(--space-5) + env(safe-area-inset-bottom)));
+  flex-shrink: 0; display: flex; flex-direction: column; gap: var(--space-1);
+  margin: 0 calc(-1 * var(--space-5));
   padding: var(--space-3) var(--space-5) calc(var(--space-3) + env(safe-area-inset-bottom));
   background: var(--paper); box-shadow: 0 -6px 12px -8px rgba(43, 39, 36, 0.25);
 }

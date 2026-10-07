@@ -82,13 +82,15 @@ test("sheet → [꾸미기] → pick a collected animal → [이대로 꽂기]: 
   await editor.getByRole("button", { name: "배경" }).click();
   await editor.getByRole("button", { name: "벚꽃 언덕, 한정판" }).click();
   await editor.getByRole("button", { name: "동물" }).click();
-  // the footer stays at the bottom of the sheet while the parts scroll
+  // 10-07: only the parts scroll — the preview, the tabs and the footer stay in view
   const save = editor.getByRole("button", { name: "이대로 꽂기" });
   await expect(save).toBeInViewport();
-  if (SHOTS) {
-    await editor.evaluate((el) => el.scrollTo(0, 90));                     // the preview's window, the tabs, the first rows
-    await page.screenshot({ path: `${SHOTS}/impl-editor.png` });
-  }
+  const parts = editor.locator("[data-parts]");
+  await parts.evaluate((el) => el.scrollTo(0, (el.scrollHeight - el.clientHeight) / 2));
+  await expect(editor.locator("svg").first()).toBeInViewport({ ratio: 0.99 });             // the preview's window
+  await expect(editor.getByRole("button", { name: "동물" })).toBeInViewport({ ratio: 0.99 });
+  await expect(save).toBeInViewport({ ratio: 0.99 });
+  if (SHOTS) await page.screenshot({ path: `${SHOTS}/impl-editor.png` });
 
   await save.click();
   await expect(page.getByRole("dialog", { name: TITLE })).toBeVisible();
@@ -104,6 +106,32 @@ test("sheet → [꾸미기] → pick a collected animal → [이대로 꽂기]: 
   ]);
   expect(specMismatches(events)).toEqual([]);
 });
+
+for (const size of [{ width: 375, height: 667 }, { width: 320, height: 568 }]) {
+  test(`on a ${size.width}×${size.height} phone the preview, the tabs and the buttons stay in view; a pick shows at once (10-07)`, async ({ page }) => {
+    await page.setViewportSize(size);
+    await fake(page, { art: FIRST, patches: [], rods: 1 });
+    await page.goto("/library");
+    await page.getByRole("button", { name: `${TITLE} 책갈피` }).click();
+    await page.getByRole("dialog", { name: TITLE }).getByRole("button", { name: "책갈피 꾸미기" }).click();
+    const editor = page.getByRole("dialog", { name: "책갈피 꾸미기" });
+    const parts = editor.locator("[data-parts]");
+    const otter = editor.getByRole("button", { name: "수달, 한정판" });
+    await otter.scrollIntoViewIfNeeded();
+    await otter.click();
+    const preview = editor.locator("svg").first();
+    await expect(preview.locator("image")).toHaveAttribute("href", "/animals/otter.svg");
+    await parts.evaluate((el) => el.scrollTo(0, el.scrollHeight));
+    for (const pinned of [preview, editor.getByRole("button", { name: "땅 소품" }), editor.getByRole("button", { name: "이대로 꽂기" }), editor.getByRole("button", { name: "처음 그림으로" })]) {
+      await expect(pinned).toBeInViewport({ ratio: 0.99 });
+    }
+    const [list, footer] = [await parts.boundingBox(), await editor.getByRole("button", { name: "이대로 꽂기" }).boundingBox()];
+    expect(list!.height).toBeGreaterThanOrEqual(60);                           // a row of parts or more
+    expect(list!.y + list!.height).toBeLessThanOrEqual(footer!.y);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    if (SHOTS && size.width === 320) await page.screenshot({ path: `${SHOTS}/impl-editor-320.png` });
+  });
+}
 
 test("a locked cell cannot be picked; [처음 그림으로] goes back to the first picture (E-38 is_reset)", async ({ page }) => {
   const lib: Fake = { art: { ...FIRST, animal: "otter", rare: true }, patches: [], rods: 1 };

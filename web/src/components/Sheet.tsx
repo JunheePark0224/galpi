@@ -4,15 +4,19 @@ import styles from "./Sheet.module.css";
 
 const FOCUSABLE = "button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled])";
 
-/** stepKey: change it when the sheet shows a new step (S-09 bookmark front → pick a rod) — focus moves to that step's first control. */
-interface Props { title: string; onClose: () => void; children: ReactNode; stepKey?: string }
+/**
+ * stepKey: change it when the sheet shows a new step (S-09 bookmark front → pick a rod) — focus moves to that step's first control.
+ * pinned (C-26 꾸미기, 10-07): the sheet keeps one height and does not scroll itself — its child lays out a part that stays
+ * (the preview) and a part that scrolls (the list), and pads the bottom itself (the editor's footer).
+ */
+interface Props { title: string; onClose: () => void; children: ReactNode; stepKey?: string; pinned?: boolean }
 
 /**
  * A sheet from the bottom over a dimmed page (S-07 C-12, S-09 bookmark front / rod picker). A modal dialog: focus goes to its
  * first control and stays inside (Tab wraps), Escape and a tap outside close it, focus returns to what opened it.
  * Rendered only while open — the parent decides.
  */
-export function Sheet({ title, onClose, children, stepKey }: Props) {
+export function Sheet({ title, onClose, children, stepKey, pinned = false }: Props) {
   const titleId = useId();
   const box = useRef<HTMLDivElement>(null);
   const close = useRef(onClose);
@@ -55,7 +59,10 @@ export function Sheet({ title, onClose, children, stepKey }: Props) {
   return (
     <div className={styles.layer}>
       <div className={styles.backdrop} data-testid="sheet-backdrop" onClick={() => close.current()} aria-hidden="true" />
-      <div ref={box} className={styles.sheet} role="dialog" aria-modal="true" aria-labelledby={titleId} onKeyDown={onKeyDown}>
+      <div
+        ref={box} className={styles.sheet} role="dialog" aria-modal="true" aria-labelledby={titleId} onKeyDown={onKeyDown}
+        data-pinned={pinned ? "" : undefined}
+      >
         <span className={styles.grab} aria-hidden="true" />
         <h2 id={titleId} className={styles.title}>{title}</h2>
         {children}

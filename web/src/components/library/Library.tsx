@@ -12,7 +12,7 @@ import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { setUserId } from "@/lib/track/common";
 import { libraryGuide } from "@/lib/flow/firstGuide";
 import { BookmarkSheet, metLabel } from "./BookmarkSheet";
-import { CLEAR_ALL, ClearSheet } from "./ClearSheet";
+import { CLEAR_ALL, ClearSheet, RemoveRodSheet } from "./ClearSheet";
 import { Dex, LoggedOutDex } from "./Dex";
 import { GuestLibrary } from "./GuestLibrary";
 import { LibraryGuide } from "./LibraryGuide";
@@ -29,6 +29,7 @@ export const MOVE_MODE = "책갈피 옮기기";
 export const MOVE_DONE = "완료";
 export const MOVE_HINT = "책갈피를 끌어서 원하는 자리에 놓으세요";
 const FAILED_MOVE = "옮기지 못했어요. 다시 해 주세요.";
+const FAILED_ROD = "막대를 지우지 못했어요. 다시 해 주세요.";
 interface Open { bookmark: LibraryBookmark; shelfId: string }
 
 /**
@@ -37,7 +38,8 @@ interface Open { bookmark: LibraryBookmark; shelfId: string }
  * bookmark can then be dragged to a place on any rod straight away, taps do nothing, and the rod buttons step aside —
  * until [완료], Escape (when no drag is live) or leaving the page. Or open a bookmark and use [다른 막대로 옮기기] (no
  * dragging needed). No toast for a move that worked (user, 10-04). [모두 제거] (시안 A, 10-04) sits beside [책갈피 옮기기]
- * and asks once more in a sheet; the rods stay. Logged out, it offers the login instead — and since v1.7, when this browser
+ * and asks once more in a sheet; the rods stay. [막대 지우기] (10-07) on every rod but the first: an empty rod goes at once,
+ * one with bookmarks asks first (C-27) and goes with them. Logged out, it offers the login instead — and since v1.7, when this browser
  * keeps bookmarks, shows them first (GuestLibrary).
  */
 export function Library() {
@@ -110,7 +112,9 @@ function Rods({ toggle }: { toggle?: ReactNode }) {
   const [note, setNote] = useState<string | null>(null);
   const [moveMode, setMoveMode] = useState(false);
   const [clearing, setClearing] = useState(false);
-  // after [모두 빼기] the button that opened the sheet is gone: focus lands on the page title instead of the body
+  /** The rod whose [막대 지우기] asked first (it has bookmarks). */
+  const [removingRod, setRemovingRod] = useState<string | null>(null);
+  // after [모두 빼기] / [지우기] the button that opened the sheet is gone: focus lands on the page title instead of the body
   const title = useRef<HTMLHeadingElement>(null);
   const cleared = useRef(false);
   // C-22: the first visit to 내 책갈피 shows a small example shelf once (per browser)
@@ -132,10 +136,10 @@ function Rods({ toggle }: { toggle?: ReactNode }) {
   }, [note]);
 
   useEffect(() => {
-    if (clearing || !cleared.current) return;
+    if (clearing || removingRod || !cleared.current) return;
     cleared.current = false;
     title.current?.focus();
-  }, [clearing]);
+  }, [clearing, removingRod]);
 
   // Escape leaves move mode — but not while a drag is live (there it only puts the bookmark back, useDrag) or a sheet is open
   useEffect(() => {
@@ -230,7 +234,16 @@ function Rods({ toggle }: { toggle?: ReactNode }) {
           onOpen={(bookmark) => setOpen({ bookmark, shelfId: shelf.id })}
           onPick={(bookmark, index, at, box, pointerId) => start(bookmark, { shelfId: shelf.id, index }, at, box, pointerId)}
           onRename={(name) => lib.renameShelf(shelf.id, name)}
-          onRemove={() => void lib.removeShelf(shelf.id)}
+          onRemove={() => {
+            if (shelf.bookmarks.length > 0) {
+              setRemovingRod(shelf.id);
+              return;
+            }
+            void lib.removeShelf(shelf.id).then((ok) => {
+              if (ok) title.current?.focus();
+              else setNote(FAILED_ROD);
+            });
+          }}
         />
       ))}
 
@@ -270,6 +283,17 @@ function Rods({ toggle }: { toggle?: ReactNode }) {
           onRemove={() => lib.remove(open.bookmark.isbn)}
           onDecorate={(art) => lib.decorate(open.bookmark.isbn, art)}
           onClose={() => setOpen(null)}
+        />
+      )}
+      {removingRod && (
+        <RemoveRodSheet
+          count={shelves.find((s) => s.id === removingRod)?.bookmarks.length ?? 0}
+          onRemove={async () => {
+            const ok = await lib.removeShelf(removingRod, true);
+            cleared.current = ok;
+            return ok;
+          }}
+          onClose={() => setRemovingRod(null)}
         />
       )}
       {clearing && (
