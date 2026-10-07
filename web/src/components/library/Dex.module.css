@@ -35,8 +35,9 @@
 img.shape { inset: auto; left: 22.5%; top: 15.8%; width: 55%; height: auto; }   /* the animal sits where the bookmark puts it */
 .mark { position: relative; font-family: var(--font-batang), serif; font-weight: 700; font-size: 18px; color: rgba(122, 96, 72, 0.55); }
 .name { max-width: 100%; font-size: 12px; line-height: 1.3; color: var(--ink-soft); text-align: center; overflow-wrap: anywhere; }
+.frame { position: relative; display: block; width: 100%; }
 .new {
-  position: absolute; top: 6%; right: 4%; padding: 0 5px; border-radius: var(--radius-pill);
+  position: absolute; top: -4px; right: -2px; z-index: 1; padding: 0 5px; border-radius: var(--radius-pill);
   background: var(--genre-korean-fiction); color: #fff; font-size: 10px; font-weight: 700; line-height: 16px;
 }
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

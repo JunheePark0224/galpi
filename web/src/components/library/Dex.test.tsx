@@ -35,6 +35,7 @@ describe("도감 (S-09 [도감])", () => {
     expect(within(first).getByRole("heading", { name: /초판본/ })).toHaveAttribute("data-tier", "first_edition");
     expect(within(first).getByText("백호")).toBeInTheDocument();
     expect(within(first).getByText("NEW")).toBeInTheDocument();
+    expect(within(first).getByText("NEW").closest("[data-tier]")).toBeNull();             // 10-07: outside the clipped arch, never cut
     expect(first.querySelector("svg[data-tier='first_edition']")).not.toBeNull();            // the picture it was met in
     expect(screen.getByText(ODDS_NOTE)).toBeInTheDocument();
     expect(track).toHaveBeenCalledWith("collection_viewed", { collected_count: 3, is_logged_in: true });

@@ -51,8 +51,11 @@ function Cell({ cell }: { cell: DexCell }) {
     const bare = cell.kind !== "bg";
     return (
       <li className={styles.cell}>
-        <span className={styles.win} data-tier={cell.tier} data-bare={bare ? "" : undefined}>
-          <BookmarkArt art={picture.art} parts={picture.parts} clipId={`dex-${cell.kind}-${cell.value}`} fx="light" stage={!bare} />
+        {/* the badge sits on the frame, outside the clipped arch, so the arch never cuts it (10-07) */}
+        <span className={styles.frame}>
+          <span className={styles.win} data-tier={cell.tier} data-bare={bare ? "" : undefined}>
+            <BookmarkArt art={picture.art} parts={picture.parts} clipId={`dex-${cell.kind}-${cell.value}`} fx="light" stage={!bare} />
+          </span>
           {met.isNew && <span className={styles.new}>NEW</span>}
         </span>
         <span className={styles.name}>{partName(cell.kind, cell.value)}</span>
