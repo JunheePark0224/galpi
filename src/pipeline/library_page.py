@@ -8,6 +8,9 @@ marked on the choices; nothing preselected) and ② the seeded 5% sample of the 
 with the v3 values: [확인] or fix a field under "칸 고치기". Same look and helpers as the daily review page
 (build_pilot_review.STYLE / COMMON, review_page.EXTRA_STYLE). Download: {saved_at, file, answers: {isbn: {…, ok: true}}}
 → `python -m src.pipeline.retag_library --apply <download>`. Progress stays in this browser (its own localStorage key).
+v3.1 (10-07): ③ the books a person already answered (an earlier download, `__ANSWERS__`) are seeded as confirmed and go
+into the next download again; an axis both AIs left empty is decided as 비움 (counted on top); a 🍃 novel / poem asked on an
+axis may be answered 비움 (null — rule 8: 비움 only for fiction and poetry).
 """
 from build_pilot_review import COMMON, STYLE
 
@@ -22,14 +25,15 @@ table.chg details summary{cursor:pointer;color:var(--muted)}table.chg ul{margin:
 
 TEMPLATE = """<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>갈피 서재 다시 태그 v3</title>
+<title>갈피 서재 다시 태그 v3.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <style>
 __STYLE__
 </style></head><body><main>
-<h1>갈피 서재 다시 태그 — 정의서 v3</h1>
+<h1>갈피 서재 다시 태그 — 정의서 v3.1</h1>
 <p class="sub">서재의 모든 책을 v3 기준으로 두 AI가 다시 태그했어요. <b>사람이 정해야 하는 것만</b> 물어요 — 두 AI가 갈렸는데 세 번째 AI로도
-안 정해진 칸, 정보 없음, 이 칸이 아니라는 책, 규칙에 걸린 지금 한 줄. 두 AI가 같게 본 값은 묻지 않고 <b>자동으로 들어가요</b>(지금 값은
+안 정해진 칸, 한 AI만 비운 칸, 이 칸이 아니라는 책, 규칙에 걸린 지금 한 줄. 두 AI가 모두 비운 칸은 비움으로 정해져요(묻지 않아요).
+v3.1 규칙에 걸리는 책은 새 기준으로 다시 태그했어요. 지난번에 확인한 책은 그 답 그대로 ③에 있어요. 두 AI가 같게 본 값은 묻지 않고 <b>자동으로 들어가요</b>(지금 값은
 기록으로 남아 되돌릴 수 있어요) — 무엇이 바뀌는지는 아래 표. 표본은 자동으로 들어갈 책 중 5%예요: 맞으면 [확인]만.
 다 하면 <b>검수 결과 내려받기</b> → <code>python -m src.pipeline.retag_library --apply &lt;파일&gt;</code> → <code>cd web &amp;&amp; npm run books:import</code>.</p>
 <div id="counts" class="sub"></div>
@@ -42,15 +46,19 @@ __STYLE__
 <div class="bar"><span id="prog"></span><button id="dl">검수 결과 내려받기</button></div>
 <script>
 const BOOKS=__BOOKS__, KW=__KW__, GENRES=__GENRES__, DEFS=__DEFS__, AXES=__AXES__, WAYS=__WAYS__, KEY=__KEY__, NAME=__NAME__,
- TABLE=__TABLE__, COUNTS=__COUNTS__, TITLES=__TITLES__;
+ TABLE=__TABLE__, COUNTS=__COUNTS__, TITLES=__TITLES__, ANSWERS=__ANSWERS__, FICTION=__FICTION__;
 __COMMON__
 const TOPICS=Object.keys(KW);
 const AXIS_NAME={temp:"온도",pull:"끌림",gain:"얻는 것",world:"세계"};
 const FNAME=k=>k==="slot"?"어디에 둘지":k==="line"?"한 줄":k==="keywords"?"키워드":k==="way"?"방식":AXIS_NAME[k]||k;
 const GROUPS=[["person","① 사람이 정할 책","두 AI가 갈렸는데 다수결로도 안 정해진 칸, 정보 없음, 이 칸이 아니라는 책, 규칙에 걸린 지금 한 줄"],
- ["sample","② 표본 — 자동으로 들어갈 책 5%","v3 값이 채워져 있어요. 맞으면 [확인], 틀리면 아래 '칸 고치기'에서 고쳐 주세요"]];
+ ["sample","② 표본 — 자동으로 들어갈 책 5%","v3 값이 채워져 있어요. 맞으면 [확인], 틀리면 아래 '칸 고치기'에서 고쳐 주세요"],
+ ["answered","③ 이미 확인한 책","지난 검수에서 확인한 답이 그대로 들어가 있어요 — 내려받기에 다시 담겨요. 고칠 때만 열어 보세요"]];
 const leafOf=b=>b.entry==="leaf";
-const side=(k,v)=>{const a=AXES.find(x=>x[0]===k);return v===null||v===undefined?"(비어 있음)":v>0?a[2]:v<0?a[4]:a[3]};
+const side=(k,v)=>{const a=AXES.find(x=>x[0]===k);return v===null||v===undefined?"비움":v>0?a[2]:v<0?a[4]:a[3]};
+const fic=c=>FICTION.includes(c.genre);
+const axisOpts=(k,c,p,z,m)=>[[p,1],[z,0],[m,-1],...(fic(c)?[["비움 (정보 없음)",null]]:[])];
+const axisVal=v=>v==="null"?null:Number(v);
 function init(b){const cur=b.current, au=b.auto;
  const v=leafOf(b)?{genre:au.slot||cur.genre,axes:{...cur.axes,...Object.fromEntries(Object.entries(au).filter(([k])=>AXIS_NAME[k]))}}
   :{topic:au.slot||cur.topic,keywords:[...(au.keywords||cur.keywords||[])],way:au.way||cur.way};
@@ -61,10 +69,10 @@ function issues(s,b){const out=baseIssues(s,b.title);if(leafOf(b)&&!s.trim().end
 const left=(b,c)=>b.asks.filter(k=>k==="line"?(issues(c.one_liner,b).length>0||c.one_liner.trim()===b.current.one_liner.trim()):!(c.answered||[]).includes(k));
 const srcs=b=>[["AI-1",b.a,"ai1"],["AI-2",b.b,"ai2"],["AI-3",b.c,"ai3"]].filter(([,o])=>o);
 const passSlot=(o,slot)=>o.fits?slot:(o.suggest||"");
-function marks(b,k,v){const out=srcs(b).filter(([,o])=>{if(AXIS_NAME[k])return !(o.missing||[]).includes(k)&&(o.axes||{})[k]===v;if(k==="way")return o.way===v;return false}).map(([n,,c])=>`<span class="${c}">${n}</span>`);
+function marks(b,k,v){const out=srcs(b).filter(([,o])=>{if(AXIS_NAME[k])return ((o.axes||{})[k]??null)===v;if(k==="way")return o.way===v;return false}).map(([n,,c])=>`<span class="${c}">${n}</span>`);
  const now=AXIS_NAME[k]?b.current.axes[k]===v:k==="way"?b.current.way===v:false;return out.join("")+(now?'<span class="now">지금</span>':"")}
-function sigs(b,k){return `<p class="sig">${srcs(b).map(([n,o])=>{const line=(o.signals||{})[k]||"", none=(o.missing||[]).includes(k)||(o.axes||{})[k]===null;
- return line||none?`${n}: ${esc(line||"(근거 없음)")}${none?` <span class="none">정보 없음</span>`:""}`:""}).filter(Boolean).join("<br>")}</p>`}
+function sigs(b,k){return `<p class="sig">${srcs(b).map(([n,o])=>{const line=(o.signals||{})[k]||"", empty=((o.axes||{})[k]??null)===null, mark=(o.missing||[]).includes(k);
+ return line||empty||mark?`${n}: ${esc(line||"(근거 없음)")}${empty?` <span class="none">비움</span>`:mark?` <span class="none">정보 없음 표시</span>`:""}`:""}).filter(Boolean).join("<br>")}</p>`}
 function ask(b,c,k){const done=(c.answered||[]).includes(k);
  if(k==="slot"){const slot=b.slot, leaf=leafOf(b), names=leaf?GENRES:TOPICS, now=leaf?c.genre:c.topic, moved=now!==slot;
   const say=srcs(b).map(([n,o])=>`${n} ${o.fits?"맞아요":"안 맞아요"+(o.suggest?` → ${esc(o.suggest)}`:"")}`).join(" · ");
@@ -75,7 +83,7 @@ function ask(b,c,k){const done=(c.answered||[]).includes(k);
   <label><input type="radio" name="s-${b.isbn}" data-act="slot" value="dropped" ${pick==="dropped"?"checked":""}><span>어디에도 안 맞아요<span class="ai0">빼기</span></span></label></div>
   ${pick==="move"||c.moveOpen?`<div class="row"><select data-act="slotto"><option value="">골라 주세요</option>${names.filter(n=>n!==slot).map(n=>`<option ${moved&&n===now?"selected":""}>${esc(n)}</option>`).join("")}</select>${leaf?"":'<span class="cnt">키워드는 아래 "칸 고치기"에서 새 주제에 맞게</span>'}</div>`:""}`}
  if(AXIS_NAME[k]){const [,q,p,z,m,hint]=AXES.find(x=>x[0]===k);
-  return `<p class="q">${esc(q)} <span class="hint">— ${esc(hint)}</span></p><div class="opts">${[[p,1],[z,0],[m,-1]].map(([t,v])=>`<label><input type="radio" name="q-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${done&&c.axes[k]===v?"checked":""}><span>${esc(t)}${marks(b,k,v)}</span></label>`).join("")}</div>${sigs(b,k)}`}
+  return `<p class="q">${esc(q)} <span class="hint">— ${esc(hint)}</span></p><div class="opts">${axisOpts(k,c,p,z,m).map(([t,v])=>`<label><input type="radio" name="q-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${done&&c.axes[k]===v?"checked":""}><span>${esc(t)}${marks(b,k,v)}</span></label>`).join("")}</div>${sigs(b,k)}`}
  if(k==="keywords"){const list=KW[c.topic]||[], has=(o,x)=>(o.keywords||[]).includes(x);
   return `<p class="q">키워드 <span class="hint">— 책의 중심일 때만 · 최대 5개 · ¹ AI-1 ² AI-2 ³ AI-3 · ✓ 지금</span></p><div class="row">${list.map(x=>`<button class="chip ${done&&c.keywords.includes(x)?"on":""}" data-kw="${esc(x)}" title="${esc((DEFS[c.topic]||{})[x]||"")}">${esc(x)}${has(b.a,x)?" ¹":""}${has(b.b,x)?" ²":""}${b.c&&has(b.c,x)?" ³":""}${b.current.keywords.includes(x)?" ✓":""}</button>`).join("")}
   <button class="ghost ${done&&!c.keywords.length?"on":""}" data-act="kwnone">키워드 없음</button></div>`}
@@ -90,10 +98,11 @@ function summary(b,c){const out=[];
  else{out.push(`주제 ${esc(c.topic)}`);if(!b.asks.includes("keywords"))out.push(`키워드 ${c.keywords.map(esc).join(", ")||"(없음)"}`);if(!b.asks.includes("way"))out.push(`방식 ${esc(c.way)}`)}
  if(!b.asks.includes("line"))out.push(`한 줄 “${esc(c.one_liner)}”`);return out.join(" · ")}
 const val=(k,v)=>k==="keywords"?(v||[]).join(", ")||"(없음)":AXIS_NAME[k]?side(k,v):esc(v??"(비어 있음)");
-function autoNote(b){const ch=b.changes.map(x=>`${FNAME(x.field)} ${val(x.field,x.old)} → ${val(x.field,x.new)}`), st=b.settled.map(FNAME);
- return (ch.length?`<p class="auto">자동으로 바뀌는 칸: ${ch.join(" · ")}</p>`:"")+(st.length?`<p class="auto">세 번째 AI 다수결로 정한 칸: ${st.join(" · ")}</p>`:"")}
+function autoNote(b){const ch=b.changes.map(x=>`${FNAME(x.field)} ${val(x.field,x.old)} → ${val(x.field,x.new)}`), st=b.settled.map(FNAME), em=(b.emptied||[]).map(FNAME);
+ return (ch.length?`<p class="auto">자동으로 바뀌는 칸: ${ch.join(" · ")}</p>`:"")+(st.length?`<p class="auto">세 번째 AI 다수결로 정한 칸: ${st.join(" · ")}</p>`:"")
+  +(em.length?`<p class="auto">두 AI 모두 비움 → 비움 확정 (추천 때 점수 0): ${em.join(" · ")}</p>`:"")}
 function fields(b,c){if(leafOf(b))return `<div class="row"><span class="lab">장르</span><select data-act="genre">${GENRES.map(g=>`<option ${g===c.genre?"selected":""}>${esc(g)}</option>`).join("")}</select></div>`
-  +AXES.map(([k,q,p,z,m])=>`<p class="q">${esc(q)}</p><div class="opts">${[[p,1],[z,0],[m,-1]].map(([t,v])=>`<label><input type="radio" name="f-${b.isbn}-${k}" data-axis="${k}" data-fix="1" value="${v}" ${c.axes[k]===v?"checked":""}><span>${esc(t)}${marks(b,k,v)}</span></label>`).join("")}</div>`).join("");
+  +AXES.map(([k,q,p,z,m])=>`<p class="q">${esc(q)}</p><div class="opts">${axisOpts(k,c,p,z,m).map(([t,v])=>`<label><input type="radio" name="f-${b.isbn}-${k}" data-axis="${k}" data-fix="1" value="${v}" ${(c.axes[k]??null)===v?"checked":""}><span>${esc(t)}${marks(b,k,v)}</span></label>`).join("")}</div>`).join("");
  return `<div class="row"><span class="lab">주제</span><select data-act="topic">${TOPICS.map(t=>`<option ${t===c.topic?"selected":""}>${esc(t)}</option>`).join("")}</select></div>
   <div class="row"><span class="lab">키워드</span>${(KW[c.topic]||[]).map(k=>`<button class="chip ${c.keywords.includes(k)?"on":""}" data-kw="${esc(k)}" data-fix="1">${esc(k)}</button>`).join("")||'<span class="cnt">(키워드 없음)</span>'}</div>
   <div class="row"><span class="lab">방식</span><select data-act="way" data-fix="1">${WAYS.map(([w,l])=>`<option value="${w}" ${w===c.way?"selected":""}>${w} — ${esc(l)}</option>`).join("")}</select></div>`}
@@ -109,7 +118,7 @@ function card(b){const c=cur(b), rest=left(b,c), isV1=b.source==="books_v1.json"
   <div class="row"><span class="lab">결정</span><select data-act="status">${status.map(([v,l])=>`<option value="${v}" ${v===c.status?"selected":""}>${l}</option>`).join("")}</select></div></details>
  <div class="row"><button class="ok" data-act="ok" ${rest.length&&!c.ok?"disabled":""}>${c.ok?"확인함 ✓":rest.length?`남은 것 ${rest.length}개`:"확인"}</button></div></div>`}
 function tableOf(rows){return rows.length?`<table class="chg"><tr><th>칸</th><th>지금 → v3</th><th>권</th></tr>${rows.map(r=>`<tr><td>${esc(FNAME(r.field))}</td><td>${esc(r.field==="keywords"||r.field==="slot"?r.change:r.change.split(" → ").map(v=>AXIS_NAME[r.field]&&v!=="(비어 있음)"?`${v} ${side(r.field,Number(v))}`:v).join(" → "))}</td><td><details><summary>${r.count}권</summary><ul>${r.isbns.map(i=>`<li>${esc(TITLES[i]||i)} <small>${i}</small></li>`).join("")}</ul></details></td></tr>`).join("")}</table>`:'<p class="sub">없음</p>'}
-function head(){document.getElementById("counts").innerHTML=`서재 ${COUNTS.books}권 다시 태그 · 사람이 정할 책 <b>${COUNTS.to_person}</b> · 자동으로 칸을 옮기는 책 ${COUNTS.moved_auto} · 키워드를 두 AI 공통으로 정한 책 ${COUNTS.keyword_intersection} · 세 번째 AI 다수결로 정해진 책 ${COUNTS.settled_by_tiebreak} · 자동으로 값이 바뀌는 책 ${COUNTS.changed_auto} · 표본 ${COUNTS.sample} · 그대로 ${COUNTS.unchanged_silent}${COUNTS.skipped?` · 태그 실패 ${COUNTS.skipped}`:""}`;
+function head(){document.getElementById("counts").innerHTML=`서재 ${COUNTS.books}권 다시 태그 · 사람이 정할 책 <b>${COUNTS.to_person}</b> · 이미 확인한 책 ${COUNTS.answered||0} · 비움 확정 ${COUNTS.empty_confirmed_axes||0}칸(${COUNTS.empty_confirmed_books||0}권) · 자동으로 칸을 옮기는 책 ${COUNTS.moved_auto} · 키워드를 두 AI 공통으로 정한 책 ${COUNTS.keyword_intersection} · 세 번째 AI 다수결로 정해진 책 ${COUNTS.settled_by_tiebreak} · 자동으로 값이 바뀌는 책 ${COUNTS.changed_auto} · 표본 ${COUNTS.sample} · 그대로 ${COUNTS.unchanged_silent}${COUNTS.skipped?` · 태그 실패 ${COUNTS.skipped}`:""}`;
  document.getElementById("moves").innerHTML=tableOf(TABLE.filter(r=>r.field==="slot"));
  document.getElementById("table").innerHTML=tableOf(TABLE.filter(r=>r.field!=="slot"))}
 function render(){const open=[...document.querySelectorAll(".card details[open]")].map(d=>d.closest(".card").id+"|"+d.className);
@@ -125,7 +134,7 @@ document.addEventListener("click",e=>{const b=bookOf(e);if(!b)return;const c=cur
  if(act==="v3line"){put(b,{one_liner:b.a.one_liner},"line");return}
  if(act==="ok"){if(left(b,c).length)return;st[b.isbn]={...c,ok:true};save();render()}});
 document.addEventListener("change",e=>{const b=bookOf(e);if(!b)return;const act=e.target.dataset.act, axis=e.target.dataset.axis, v=e.target.value, c=cur(b);
- if(axis){put(b,{axes:{...c.axes,[axis]:Number(v)}},axis);return}
+ if(axis){put(b,{axes:{...c.axes,[axis]:axisVal(v)}},axis);return}
  if(act==="slot"){if(v==="move"){st[b.isbn]={...c,moveOpen:true,ok:false,answered:(c.answered||[]).filter(x=>x!=="slot")};save();render();return}
   put(b,{status:v,moveOpen:false,...(leafOf(b)?{genre:b.slot}:{topic:b.slot,keywords:[...b.current.keywords]})},"slot");return}
  if(act==="slotto"){if(!v)return;const s=srcs(b).find(([,o])=>!o.fits&&o.suggest===v);
@@ -143,6 +152,8 @@ document.getElementById("dl").onclick=()=>{const answers={};
   answers[b.isbn]={entry:b.entry,...a,one_liner:c.one_liner.trim(),status:c.status,ok:true}}}
  const blob=new Blob([JSON.stringify({saved_at:new Date().toISOString(),file:NAME,answers},null,1)],{type:"application/json"});
  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`${NAME}-review.json`;a.click()};
+for(const b of BOOKS){const a=ANSWERS[b.isbn];if(!a||st[b.isbn])continue;
+ st[b.isbn]={...(leafOf(b)?{genre:a.genre,axes:{...a.axes}}:{topic:a.topic,keywords:[...(a.keywords||[])],way:a.way}),one_liner:a.one_liner,status:a.status||"picked",answered:[...b.asks],ok:true}}
 head();render();
 </script></body></html>
 """.replace("__STYLE__", STYLE + EXTRA_STYLE + PAGE_STYLE).replace("__COMMON__", COMMON)

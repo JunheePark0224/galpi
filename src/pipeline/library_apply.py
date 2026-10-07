@@ -85,7 +85,7 @@ def updated(row: dict, entry: str, vals: dict, source: str, answered: bool, rule
 
 def plan(books: list[dict], decided: dict[str, dict], answers: dict[str, dict], kept: dict) -> dict[str, dict]:
     """{isbn: decided values (+ answered flag)} — books left to a person without an answer are not in it."""
-    on_page = {i for i, d in decided.items() if d["group"] in ("person", "sample")}
+    on_page = {i for i, d in decided.items() if d["group"] in ("person", "sample", "answered")}
     stray = sorted(set(answers) - on_page)
     if stray:
         raise ReviewError(f"answers for books not on this page: {stray[:5]}")
