@@ -144,12 +144,15 @@ def system_prompt(vocab: dict, kind: str, docs: Path = DOCS) -> str:
     return "\n".join([*COMMON, *rules, *SIGNAL_RULES, "", "# 기준표", reference(vocab, docs)])
 
 
-def user_message(entry: str, slot: str, title: str, intro: str, toc: str, hints: list[str]) -> str:
+def user_message(entry: str, slot: str, title: str, author: str, intro: str, toc: str, hints: list[str]) -> str:
+    """The book as the tagger reads it. `author`: the line as stored ("유범상 저/유기훈 그림", "유발 하라리 저/김명주 역") —
+    the 한국 소설 / 외국 소설 rule needs it (10-07). It sits in the user message, not the system prompt: the cached prefix
+    stays the same for every book."""
     safe = lambda s: s.replace("<", " ").replace(">", " ")  # noqa: E731 — the book text cannot close its own frame
     lines = [f"entry: {entry}", f"slot: {slot}", f"제목: {safe(title)}"]
     if entry == "target":
         lines.append(f"단어 규칙이 찾은 키워드 후보: {', '.join(hints) or '(없음)'}")
-    return "\n".join([*lines, "<book>", f"책소개: {safe(intro)}", f"목차: {safe(toc)}", "</book>"])
+    return "\n".join([*lines, "<book>", f"저자: {safe(author)}", f"책소개: {safe(intro)}", f"목차: {safe(toc)}", "</book>"])
 
 
 # an axis value, or null with the axis in `missing` (10-06: no signal at all → value left empty, never a 0 filler)

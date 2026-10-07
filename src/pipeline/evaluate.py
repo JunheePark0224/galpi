@@ -75,7 +75,7 @@ def candidate(g: dict, detail_dir: Path) -> Candidate | None:
         return None
     items = (json.loads(path.read_text(encoding="utf-8")).get("data") or {}).get("items") or []
     cd = (items[0].get("contentDetail") or {}) if items else {}
-    return Candidate(g["entry"], g["slot"], g["isbn"], g["title"], "", 0, "", clean(cd.get("bookIntroduction") or "", INTRO_MAX),
+    return Candidate(g["entry"], g["slot"], g["isbn"], g["title"], g.get("author") or "", 0, "", clean(cd.get("bookIntroduction") or "", INTRO_MAX),
                      clean(cd.get("tableOfContents") or "", TOC_MAX))
 
 
@@ -173,7 +173,7 @@ def run_model(client, model: str, second: str, golds: list[dict], vocab: dict, d
             continue
         kept = vocab[cand.slot]["kept"] if cand.entry == "target" else {}
         names = list(kept)
-        user = user_message(cand.entry, cand.slot, cand.title, cand.intro, cand.toc, keyword_hints(cand, kept) if kept else [])
+        user = user_message(cand.entry, cand.slot, cand.title, cand.author, cand.intro, cand.toc, keyword_hints(cand, kept) if kept else [])
         raw_a, ua, why_a = call(client, model, prompts["tag"], user, schema(cand.entry, "tag", all_keywords(vocab)), breaker, "A")
         raw_b, ub, why_b = call(client, second, prompts["check"], user, schema(cand.entry, "check", all_keywords(vocab)), breaker, "B")
         for m, u in ((model, ua), (second, ub)):
@@ -208,7 +208,7 @@ def estimate(golds: list[dict], models: list[str], second: str, vocab: dict, det
             skipped += 1
             continue
         books += 1
-        user = len(user_message(cand.entry, cand.slot, cand.title, cand.intro, cand.toc, []))
+        user = len(user_message(cand.entry, cand.slot, cand.title, cand.author, cand.intro, cand.toc, []))
         for first in models:
             calls += [(first, "tag", user), (second, "check", user)]
     lo, hi = TOKENS_PER_CHAR

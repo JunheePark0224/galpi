@@ -77,7 +77,7 @@ def third(client, cfg, vocab: dict, prompts: dict, cand, breaker, ledger: dict) 
     """Pass C's parsed answer (None when the call failed or the answer was unusable). Raises TaggerStop."""
     kept = vocab.get(cand.slot, {}).get("kept", {}) if cand.entry == "target" else {}
     hints = keyword_hints(cand, kept) if kept else []
-    user = user_message(cand.entry, cand.slot, cand.title, cand.intro, cand.toc, hints)
+    user = user_message(cand.entry, cand.slot, cand.title, cand.author, cand.intro, cand.toc, hints)
     raw, used, _ = call(client, cfg.second_model, prompts["check"], user, schema(cand.entry, "check", all_keywords(vocab)),
                         breaker, PASS)
     _spend(ledger, cfg.second_model, used)
