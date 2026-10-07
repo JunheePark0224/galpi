@@ -1,0 +1,689 @@
+{
+ "date": "2026-10-07",
+ "batch_id": "2026-10-07-2",
+ "batch": "daily",
+ "reviewed": false,
+ "model": "claude-sonnet-5-5",
+ "second_model": "claude-sonnet-5-5",
+ "note": "Daily pipeline: pass A (model) tags, pass B (second_model) checks blind. Our tags only — no YES24 intro/TOC. auto=ai-agree: both passes agreed, accepted without human review (not in the agreement figures).",
+ "books": [
+  {
+   "isbn": "9791139737578",
+   "title": "도둑맞은 미술관",
+   "author": "수지 호지 저/안진이 역 ",
+   "pages": 280,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 사라진 그림과 상실을 안타깝게 짚는 시선",
+    "pull": "몰입 −: 도난 사건 24건의 전개와 추적이 끌고 감",
+    "gain": "알게 됨 +: 사건 전모와 작품 배경지식을 설명함",
+    "world": "현실 +: 실제 일어난 미술품 도난 사건이 배경"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "도둑맞은 명화의 행방을 쫓다 보면 그림 앞에 서는 마음이 달라질까요?",
+   "evidence": "미술품 도난 사건으로 미술사를 다룬 미술 교양서",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 도난으로 사라진 작품·상실을 아파하며 되짚는 시선",
+     "pull": "몰입 −: 24건 도난 사건과 추적이 이야기로 끌고 감",
+     "gain": "알게 됨 +: 도난 사건과 작품 배경지식을 설명",
+     "world": "현실 +: 실제 미술품 도난 사건을 다룬 비소설"
+    },
+    "missing": [],
+    "suggest": "역사",
+    "why": "도난 사건의 사실 기록이 뼈대인 역사 책"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/195277733",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788960885219",
+   "title": "말랑말랑 밋다다의 SD 캐릭터 그리기",
+   "author": "밋다다 저",
+   "pages": 216,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 그리는 방법 설명이 중심",
+    "pull": "몰입 −: 단계별 그리기 흐름으로 끌고 감",
+    "gain": "알게 됨 +: 비율·구조·채색 원리를 익힘",
+    "world": "현실 +: 비소설이라 현실"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "귀여운 SD 캐릭터를 얼굴부터 채색까지 차근차근 그려 봐요?",
+   "evidence": "캐릭터 그리기 창작 기법서라 예술 틀",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 그리는 방법 설명이 중심, 끝맺음·어조 신호 없음",
+     "pull": "몰입 쪽: 단계별 그리기 안내와 사례로 끌고 감",
+     "gain": "알게 됨: 비율·구조·채색 원리를 익히는 기술서",
+     "world": "현실: 비소설이라 현실"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "그림 창작 기법을 다루는 예술 글이라 예술·여행에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/195142191",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788968334177",
+   "title": "조선 미술관",
+   "author": "탁현규 저 ",
+   "pages": 280,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 그림 해설 중심, 끝맺음·어조 신호 약함",
+    "pull": "몰입 쪽: 그림 속 인물과 장면 이야기로 끌고 감",
+    "gain": "",
+    "world": "현실 +: 실제 조선 시대 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "풍속화와 궁중기록화 50여 점으로 조선 후기의 삶을 전시실 따라 구경해요?",
+   "evidence": "조선 그림을 보며 감상하는 글이라 예술·여행에 맞음",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 그림 해설 중심, 끝맺음·어조 신호 약함",
+     "pull": "몰입 −: 그림 속 장면과 사연을 풀어 이야기로 끌고 감",
+     "gain": "알게 됨 +: 조선 풍속화·궁중기록화를 해설해 알려 줌",
+     "world": "현실 +: 실제 조선 시대 풍속과 궁궐 기록을 다룬 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "조선 그림을 보고 해설하는 미술 감상서"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 gain)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/117585578",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791173326981",
+   "title": "매일 떠나는 사람",
+   "author": "태원준 저",
+   "pages": 244,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 실패도 여행의 한 축, 유쾌하게 곁에서 들려줌",
+    "pull": "몰입 −: 좌충우돌 사건과 경험담이 끌고 감",
+    "gain": "마음 −: 왜 떠나는가 묻고 새로운 나를 만나게 함",
+    "world": "현실: 실제 도시·나라를 다닌 비소설 여행기"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "좌충우돌 여행 끝에 지금 내 창밖의 세계를 돌아보게 될까요?",
+   "evidence": "저자 여행 경험담 서른 편, 장소를 보고 느끼는 글",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 좌충우돌을 사는 맛으로 보는 다정한 시선, 만남으로 닫음",
+     "pull": "몰입 −: 사건·모험담 서른 편의 이야기가 끌고 감",
+     "gain": "마음 −: 여행이 남기는 것을 묻고 새 나를 만남",
+     "world": "현실 +: 실제 여행지와 사람을 다룬 산문"
+    },
+    "missing": [],
+    "suggest": "에세이",
+    "why": "저자 자신의 여행 경험담이 뼈대인 에세이"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/193989706",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791191731279",
+   "title": "그림 그리기가 이토록 쉬울 줄이야",
+   "author": "이기주 저",
+   "pages": 232,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 겁내지 말자며 독자 곁에서 다독이는 안내",
+    "pull": "몰입 쪽: 단계별 연습과 따라 그리기로 끌고 감",
+    "gain": "알게 됨: 도구·선 긋기·투시법 등 방법을 알려 줌",
+    "world": "비소설이라 현실"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "도구 고르기부터 나무·사람·풍경까지 차근차근 따라 그려 볼까요?",
+   "evidence": "그리는 법을 단계별로 가르치는 방법서라 🎯 쪽",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 겁내지 말자며 독자 곁에서 다정하게 북돋움",
+     "pull": "몰입 쪽: 단계별 연습과 따라 그리기로 끌고 감",
+     "gain": "알게 됨: 도구·기초·그리는 법을 알려 주는 방법서",
+     "world": "현실: 비소설, 일상과 풍경을 그리는 현실 무대"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "그림 그리기 창작론이라 예술·여행에 맞음"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/110442601",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788971995952",
+   "title": "풍경의 깊이",
+   "author": "강요배 저",
+   "pages": 380,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "",
+    "pull": "문장 +: 소개가 작가의 글이 발걸음을 멈춰 세운다고 칭찬",
+    "gain": "마음 −: 작가의 심상과 성찰을 건네는 산문, 지식 전달 아님",
+    "world": "현실 +: 비소설, 제주·금강산·휴전선 등 실제 장소"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "화가의 글과 그림을 따라 제주의 바람과 시간을 천천히 거닐어 볼까요?",
+   "evidence": "화가의 산문과 풍경을 보고 느끼는 예술 글",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "",
+     "pull": "문장 +: 소개가 강요배의 글이 발길을 멈추게 한다고 칭찬",
+     "gain": "마음 −: 작가의 심상과 예술에 대한 성찰을 건넴",
+     "world": "현실 +: 제주·4·3·금강산 등 실제 장소가 중심인 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "화가의 작품과 풍경·예술을 다룬 산문집이라 예술·여행에"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 temp)",
+    "근거가 책소개를 베낌 (AI-2 temp)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/92425731",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788954626200",
+   "title": "자전거여행 1",
+   "author": "김훈 저/이강빈 사진",
+   "pages": 260,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": null,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 끝맺음·어조 신호가 흐릿하고 방향이 없음",
+    "pull": "문장 +: 소개가 김훈의 문장·문체를 직접 칭찬함",
+    "gain": "마음 −: 풍경과 삶을 보며 느끼게 하는 산문",
+    "world": "현실 +: 남해안·한강·섬진강 등 실제 지명이 무대"
+   },
+   "missing": [
+    "temp"
+   ],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "길과 풍경을 군더더기 없는 문장으로 따라가며 삶을 돌아보게 해요?",
+   "evidence": "실제 길 위의 풍경을 문장으로 풀어낸 여행 산문",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 풍경 속에 삶의 모습이 녹아 있는 시선, 끝맺음 약함",
+     "pull": "문장 +: 소개가 김훈의 문장·언어를 직접 칭찬함",
+     "gain": "마음 −: 길과 풍경을 보고 느끼는 글, 성찰 중심",
+     "world": "현실 +: 비소설, 실제 지명의 길과 강·갯벌"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "길과 풍경을 보고 느끼는 여행 산문"
+   },
+   "flags": [
+    "temp"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/14832157",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791124137390",
+   "title": "모네, 빛의 순간들",
+   "author": "박송이 저",
+   "pages": 272,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 프롤로그가 영원한 위로를 말하고 이야기를 들려주는 톤",
+    "pull": "몰입 −: 연대기 시기 흐름과 삶의 이야기가 끌고 감",
+    "gain": "알게 됨 +: 작품·삶을 소개하고 이해를 돕는 설명 중심",
+    "world": "현실: 실존 화가와 실제 장소를 다룬 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "빛을 좇은 화가의 삶과 대표작을 시기별로 따라가 보고 싶지 않나요?",
+   "evidence": "모네 작품·삶을 시기별로 감상하는 예술 글",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "",
+     "pull": "몰입 −: 연대기 흐름과 삶의 이야기, 도판 몰입감이 끌고 감",
+     "gain": "알게 됨: 작품·삶 연대기를 소개해 이해를 돕는 책",
+     "world": "현실 +: 실제 화가와 실제 장소(지베르니·파리)가 무대"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "모네 작품을 보고 풀어 주는 미술 글이라 예술·여행"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-2 temp)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/187780471",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791170873754",
+   "title": "주말엔 산사",
+   "author": "윤설희 저",
+   "pages": 360,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 느리게 걷는 산책기, 쉬어 가는 다정한 시선",
+    "pull": "문장 +: 섬세한 펜 그림과 감각적 표현이 앞에 나옴",
+    "gain": "마음 −: 내 공간과 삶을 이해하려는 성찰이 중심",
+    "world": "현실 +: 실제 산사 7곳 지명이 목차에 나옴"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "주말마다 산사를 걸으며 나만의 공간을 찾아가는 느린 여정이 궁금하세요?",
+   "evidence": "산사 방문과 그림으로 담은 글, 예술·여행에 맞음",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 느리지만 깊이 있는 산책기, 곁에서 들려줌",
+     "pull": "몰입 약하게: 산사를 찾아다닌 여정과 저자의 경험이 끌고 감",
+     "gain": "마음 쪽: 나만의 공간을 찾는 사유와 쉼",
+     "world": "현실: 실제 산사와 지명이 목차에 나옴"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "산사를 보고 그림으로 담은 예술·여행 글"
+   },
+   "flags": [
+    "pull"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/151971857",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9788956605944",
+   "title": "유럽의 그림책 작가들에게 묻다",
+   "author": "최혜진 저/신창용 사진",
+   "pages": 312,
+   "entry": "leaf",
+   "genre": "예술·여행",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 지금 그대로도 괜찮다며 보듬는 위로",
+    "pull": "몰입 −: 작가 10인의 삶·작업 이야기가 끌고 감",
+    "gain": "마음 −: 상상력·위로를 건네 마음이 달라짐",
+    "world": "현실 +: 프랑스·벨기에 작가 아뜰리에 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "그림책 작가들의 아뜰리에를 거닐며 상상력이 어디서 오는지 들여다볼까요?",
+   "evidence": "작가 인터뷰와 작업 풍경으로 창작을 다룬 예술 글",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 지금 그대로도 괜찮다고 보듬고 위로하는 시선",
+     "pull": "몰입 −: 작가 10인의 인터뷰와 삶의 이야기가 끌고 감",
+     "gain": "마음 −: 위로와 상상력에 대한 영감을 건넴",
+     "world": "현실 +: 비소설, 실제 유럽 작가의 아뜰리에"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "그림책 작가 인터뷰와 작업 풍경, 예술 글"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/32991531",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791194368311",
+   "title": "쓰는 인간",
+   "author": "롤런드 앨런 저/손성화 역",
+   "pages": 544,
+   "entry": "leaf",
+   "genre": "역사",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 사건·인물을 정리하는 설명, 끝맺음 신호 약함",
+    "pull": "몰입 −: 인물·시대별 노트 이야기로 끌고 감",
+    "gain": "알게 됨 +: 노트의 기원과 쓰임을 설명하는 역사서",
+    "world": "현실 +: 실제 인물·도시·시대가 무대인 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "노트가 어떻게 생겨나 생각을 넓혀 왔는지 시대별 인물 이야기로 따라가 볼까요?",
+   "evidence": "시대 순서 목차, 노트의 기원을 짚는 역사서",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 노트의 역사를 정리하는 설명 중심, 맺음말 내용 없음",
+     "pull": "몰입 −: 시대·인물·사례의 이야기 흐름으로 끌고 감",
+     "gain": "알게 됨 +: 노트의 기원과 발전을 설명하는 역사서",
+     "world": "현실 +: 실제 인물·시대·지명이 나오는 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "시대순 장 구성으로 노트의 역사를 다룸"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/147562236",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791139718607",
+   "title": "100가지 식물로 읽는 세계사",
+   "author": "사이먼 반즈 저/이선주 역",
+   "pages": 624,
+   "entry": "leaf",
+   "genre": "역사",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 식물별 항목 나열, 끝맺음·어조 신호 없음",
+    "pull": "몰입 −: 식물 100가지 사례와 사건으로 끌고 감",
+    "gain": "알게 됨 +: 식물이 만든 역사를 설명하는 백과사전식",
+    "world": "현실 +: 비소설, 실제 식물과 인류 역사"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "식물 100가지를 따라가며 인류가 걸어온 길을 새롭게 보게 돼요?",
+   "evidence": "식물별 사례로 인류사를 풀어 사건 흐름이 뼈대",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 식물별 항목 나열, 끝맺음·어조 신호 약함",
+     "pull": "몰입 −: 식물마다 사례·이야기로 역사를 끌고 감",
+     "gain": "알게 됨 +: 식물이 만든 세계사를 설명·소개",
+     "world": "현실 +: 비소설, 실제 식물과 인류 역사"
+    },
+    "missing": [],
+    "suggest": "과학 교양",
+    "why": "식물 항목별 구성, 역사 흐름 아닌 식물 중심 교양"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/139807767",
+   "rules_version": "v3.2"
+  },
+  {
+   "isbn": "9791170614234",
+   "title": "조선범죄실록",
+   "author": "정명섭 저",
+   "pages": 292,
+   "entry": "leaf",
+   "genre": "역사",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 조선의 서늘하고 잔혹한 민낯을 드러내는 시선",
+    "pull": "몰입 −: 범죄 사건·인물 사례로 끌고 감",
+    "gain": "알게 됨 +: 조선의 범죄와 사법 체계를 설명",
+    "world": "현실 +: 실제 조선 시대를 다룬 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "예의의 나라 뒤편, 조선 범죄 현장엔 어떤 사람들이 있었을까요?",
+   "evidence": "조선 범죄 사건·제도가 뼈대인 역사서",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 서늘하고 잔혹한 민낯, 범죄 현장·억울한 죽음을 파헤침",
+     "pull": "몰입 −: 사건·범죄 사례와 사료로 끌고 감",
+     "gain": "알게 됨: 조선 사법 체계와 범죄 실상을 설명",
+     "world": "현실: 실제 조선시대 배경의 비소설"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "조선시대 실제 범죄 사건이 뼈대인 역사책"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/194491862",
+   "auto": "ai-agree",
+   "rules_version": "v3.2"
+  }
+ ]
+}

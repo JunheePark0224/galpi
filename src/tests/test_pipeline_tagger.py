@@ -463,6 +463,6 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_1():
+def test_the_dictionary_is_v3_2():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.1"
+    assert rules_version() == "v3.2"
