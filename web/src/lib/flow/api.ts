@@ -1,10 +1,20 @@
 import { artsForDraw } from "@/lib/art/combine";
+import { MAX_SEEN } from "@/lib/books/request";
 import type { PathDrawResponse } from "@/lib/books/types";
 import type { DrawView, FlowState } from "./state";
 
-/** Body for POST /api/books/draw (checked strictly on the server — a finished path of the question map). */
-export function drawBody(s: Pick<FlowState, "answers" | "seen">): Record<string, unknown> {
-  return { answers: s.answers, seen: s.seen };
+/**
+ * Body for POST /api/books/draw (checked strictly on the server — a finished path of the question map). `seen` is every
+ * book to leave out: the books kept in this browser before logging in (10-07, `saved` — never drawn again) and this tab's
+ * shown books (F-05), once each, at most MAX_SEEN (the server's cap): the saved ones first, then the newest shown.
+ * A logged-in person's 내 책갈피 is not sent — the server takes it from the session.
+ */
+export function drawBody(s: Pick<FlowState, "answers" | "seen">, saved: readonly string[] = []): Record<string, unknown> {
+  const keep = saved.slice(0, MAX_SEEN);
+  const kept = new Set(keep);
+  const shown = s.seen.filter((id) => !kept.has(id));
+  const room = MAX_SEEN - keep.length;
+  return { answers: s.answers, seen: [...keep, ...(room > 0 ? shown.slice(-room) : [])] };
 }
 
 export async function requestDraw(body: Record<string, unknown>): Promise<PathDrawResponse> {

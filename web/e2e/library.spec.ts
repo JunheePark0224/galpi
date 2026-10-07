@@ -178,6 +178,37 @@ test("logged out: 저장 keeps it in this browser — header 내 책갈피 1 →
   expect(specMismatches(events)).toEqual([]);
 });
 
+test("10-07: a book saved logged out is never drawn again — a fresh tab's draws leave it out", async ({ page }) => {
+  const lib: FakeLibrary = { loggedIn: false, shelves: [], saved: [], posts: [] };
+  await fakeAccount(page, lib);
+  await mockBooks(page);
+  await page.goto("/");
+  await toFirstResult(page);
+  await page.getByRole("button", { name: SAVE }).click();
+  await expect(page.getByRole("button", { name: SAVED })).toBeVisible();
+  const isbn = await page.evaluate(() => (JSON.parse(window.localStorage.getItem("galpi.guestSaves") ?? "null") as { items: { isbn: string }[] }).items[0].isbn);
+
+  // a fresh tab: nothing shown in it yet (its own session), only this browser's saved book to leave out
+  const tab = await page.context().newPage();
+  await fakeAccount(tab, lib);
+  const draws: { seen: string[]; picks: string[] }[] = [];
+  tab.on("response", async (res) => {
+    if (!res.url().endsWith("/api/books/draw") || !res.ok()) return;
+    const body = (await res.json()) as { picks: { card: { id: string } }[] };
+    draws.push({ seen: (res.request().postDataJSON() as { seen: string[] }).seen, picks: body.picks.map((p) => p.card.id) });
+  });
+  for (let round = 0; round < 3; round++) {
+    await tab.goto("/");
+    await answerToClosedBook(tab);
+    await expect.poll(() => draws.length).toBe(round + 1);
+  }
+  expect(draws.map((d) => d.seen)).toEqual([[isbn], [isbn], [isbn]]);
+  for (const d of draws) {
+    expect(d.picks).toHaveLength(5);
+    expect(d.picks).not.toContain(isbn);
+  }
+});
+
 test("logged out: saved in this browser → [로그인하고 지키기] → Kakao → moved to the account once, into the 도감 too (E-12 library · 13 · 14 · 36 · 39)", async ({ page }) => {
   const lib: FakeLibrary = { loggedIn: false, shelves: [], saved: [], posts: [] };
   await fakeAccount(page, lib);
