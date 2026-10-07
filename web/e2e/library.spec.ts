@@ -13,7 +13,7 @@ const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: fa
 interface Saved { isbn: string; shelfId: string; title: string }
 interface FakeLibrary {
   loggedIn: boolean; justLoggedIn?: string; shelves: { id: string; name: string; position: number }[]; saved: Saved[]; posts: unknown[]; moves?: unknown[];
-  clears?: unknown[];
+  clears?: unknown[]; rodDeletes?: unknown[];
 }
 
 const ROD_A = "11111111-1111-4111-8111-111111111111";
@@ -67,6 +67,15 @@ async function fakeAccount(page: Page, lib: FakeLibrary) {
     return route.fulfill({ json: { ok: true, removed } });
   });
   await page.route("**/api/library/shelves", (route) => {
+    if (route.request().method() === "DELETE") {             // [막대 지우기]: the rod, and its bookmarks when asked
+      const body = route.request().postDataJSON() as { id: string; withBookmarks?: true };
+      lib.rodDeletes?.push(body);
+      const on = lib.saved.filter((s) => s.shelfId === body.id);
+      if (on.length > 0 && !body.withBookmarks) return route.fulfill({ status: 409, json: { error: "not_empty" } });
+      lib.saved = lib.saved.filter((s) => s.shelfId !== body.id);
+      lib.shelves = lib.shelves.filter((s) => s.id !== body.id);
+      return route.fulfill({ json: body.withBookmarks ? { ok: true, removed: on.length } : { ok: true } });
+    }
     const body = route.request().postDataJSON() as { name: string };
     const shelf = { id: ROD_C, name: body.name.trim(), position: lib.shelves.length };
     lib.shelves.push(shelf);
@@ -446,6 +455,54 @@ test("S-09 [모두 제거]: [그대로 두기] keeps all; [모두 빼기] emptie
   await expect(page.getByRole("button", { name: "책갈피 옮기기" })).toHaveCount(0);
 
   await expect.poll(() => named(events, "library_cleared").map((e) => e.props)).toEqual([{ removed_count: 3 }]);
+  expect(named(events, "book_unsaved")).toEqual([]);
+  expect(JSON.stringify(events)).not.toContain("마음에 남은");
+  expect(specMismatches(events)).toEqual([]);
+});
+
+test("S-09 [막대 지우기]: not on the first rod; an empty rod goes at once, a full one asks first and goes with its bookmarks (E-40, no E-16)", async ({ page }) => {
+  if (SHOTS) await page.setViewportSize({ width: 375, height: 812 });
+  const lib: FakeLibrary = {
+    loggedIn: true,
+    shelves: [{ id: ROD_A, name: "읽을 책", position: 0 }, { id: ROD_B, name: "마음에 남은", position: 1 }, { id: ROD_C, name: "빈 막대", position: 2 }],
+    saved: [
+      { isbn: "9790000000001", shelfId: ROD_A, title: "지어낸 첫째 책" }, { isbn: "9790000000002", shelfId: ROD_B, title: "지어낸 둘째 책" },
+      { isbn: "9790000000003", shelfId: ROD_B, title: "지어낸 셋째 책" },
+    ],
+    posts: [],
+    rodDeletes: [],
+  };
+  await fakeAccount(page, lib);
+  const { events } = await recordEvents(page);
+  await page.goto("/library");
+  await expect(page.getByText("3개 · 동물 1종")).toBeVisible();
+  const removeOf = (name: string) => page.locator("section").filter({ has: page.getByRole("heading", { name }) }).getByRole("button", { name: "막대 지우기" });
+  await expect(removeOf("읽을 책")).toHaveCount(0);                                        // the first rod stays
+  const button = removeOf("마음에 남은");
+  expect((await button.boundingBox())?.height).toBeGreaterThanOrEqual(44);
+
+  // an empty rod: at once, no sheet
+  await removeOf("빈 막대").click();
+  await expect(page.getByRole("heading", { name: "빈 막대" })).toHaveCount(0);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+
+  // a rod with two: [그대로 두기] keeps it, [지우기] takes it and its bookmarks
+  await button.click();
+  const sheet = page.getByRole("dialog", { name: "이 막대와 막대에 꽂힌 책갈피 2개를 지울까요?" });
+  await expect(sheet.getByText("다른 막대와 책갈피는 그대로 남아요.")).toBeVisible();
+  if (SHOTS) await page.screenshot({ path: `${SHOTS}/rod-delete.png` });
+  await sheet.getByRole("button", { name: "그대로 두기" }).click();
+  await expect(sheet).toHaveCount(0);
+  expect(lib.rodDeletes).toEqual([{ id: ROD_C }]);
+  await button.click();
+  await sheet.getByRole("button", { name: "지우기" }).click();
+  await expect(sheet).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "마음에 남은" })).toHaveCount(0);
+  await expect(page.getByText("1개 · 동물 1종")).toBeVisible();
+  await expect(page.getByRole("banner").getByRole("link", { name: "내 책갈피 1개" })).toBeVisible();
+  expect(lib.rodDeletes).toEqual([{ id: ROD_C }, { id: ROD_B, withBookmarks: true }]);
+
+  await expect.poll(() => named(events, "shelf_removed").map((e) => e.props)).toEqual([{ removed_count: 0 }, { removed_count: 2 }]);
   expect(named(events, "book_unsaved")).toEqual([]);
   expect(JSON.stringify(events)).not.toContain("마음에 남은");
   expect(specMismatches(events)).toEqual([]);

@@ -112,6 +112,15 @@ describe("supabaseStore — every statement filtered to the person (RLS says the
     await expect(store.deleteAllSaves()).rejects.toThrow("library unsave all failed: 42501");
   });
 
+  it("takes the bookmarks of one rod only (막대 지우기) and counts them; a failure throws its code", async () => {
+    const { db, calls } = fakeDb([{ data: [{ isbn: "1" }, { isbn: "2" }] }, { data: null }, { error: { code: "42501" } }]);
+    const store = supabaseStore(db, "u1");
+    expect(await store.deleteShelfSaves("s")).toBe(2);
+    expect(calls).toEqual(["from(saves)", "delete()", 'eq("user_id","u1")', 'eq("shelf_id","s")', 'select("isbn")']);
+    expect(await store.deleteShelfSaves("s")).toBe(0);
+    await expect(store.deleteShelfSaves("s")).rejects.toThrow("library unsave rod failed: 42501");
+  });
+
   it("lists the kept ISBNs for the header count", async () => {
     const { db, calls } = fakeDb([{ data: [{ isbn: "1" }, { isbn: "2" }] }]);
     expect(await savedIsbns(db, "u1")).toEqual(["1", "2"]);

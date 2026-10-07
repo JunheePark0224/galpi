@@ -31,6 +31,11 @@ export function memoryStore(init: { shelves?: Shelf[]; saves?: SaveRow[] } = {})
       data.saves = [];
       return removed;
     },
+    deleteShelfSaves: async (shelfId) => {
+      const removed = data.saves.filter((s) => s.shelfId === shelfId).length;
+      data.saves = data.saves.filter((s) => s.shelfId !== shelfId);
+      return removed;
+    },
     updateSave: async (isbn, change) => {
       if (!data.saves.some((s) => s.isbn === isbn)) return false;
       data.saves = data.saves.map((s) => (s.isbn === isbn ? { ...s, ...change } : s));

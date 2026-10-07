@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { BookCard } from "@/lib/books/types";
 import { memoryStore } from "./__fixtures__/memoryStore";
-import { addShelf, FIRST_SHELF_NAME, libraryView, MAX_SAVES, MAX_SHELVES, moveBookmark, POSITION_STEP, removeAllBookmarks, removeBookmark, removeShelf, renameShelf, saveBookmark } from "./service";
+import { addShelf, FIRST_SHELF_NAME, libraryView, MAX_SAVES, MAX_SHELVES, moveBookmark, POSITION_STEP, removeAllBookmarks, removeBookmark, removeShelf, removeShelfWithBookmarks, renameShelf, saveBookmark } from "./service";
 import type { SaveRow } from "./types";
 
 const ART = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false } as const;
@@ -72,6 +72,25 @@ describe("rods (C-17)", () => {
     expect(await removeShelf(store, "b")).toEqual({ ok: false, error: "not_empty" });
     expect(await removeShelf(store, "c")).toEqual({ ok: true });
     expect(await removeShelf(store, "zz")).toEqual({ ok: false, error: "missing" });
+  });
+
+  it("[막대 지우기] (10-07): a rod with its bookmarks — counted, the other rods untouched — never the first", async () => {
+    const store = memoryStore({
+      shelves: [{ id: "a", name: "첫", position: 0 }, { id: "b", name: "둘", position: 1 }, { id: "c", name: "셋", position: 2 }],
+      saves: [
+        { ...input("9790000000001"), shelfId: "a", position: 0 },
+        { ...input("9790000000002"), shelfId: "b", position: 0 },
+        { ...input("9790000000003"), shelfId: "b", position: 1 },
+      ],
+    });
+    expect(await removeShelfWithBookmarks(store, "a")).toEqual({ ok: false, error: "first" });
+    expect(await removeShelfWithBookmarks(store, "zz")).toEqual({ ok: false, error: "missing" });
+    expect(store.data.saves).toHaveLength(3);
+    expect(await removeShelfWithBookmarks(store, "b")).toEqual({ ok: true, removed: 2 });
+    expect(store.data.shelves.map((s) => s.id)).toEqual(["a", "c"]);
+    expect(store.data.saves.map((s) => s.isbn)).toEqual(["9790000000001"]);
+    expect(await removeShelfWithBookmarks(store, "c")).toEqual({ ok: true, removed: 0 });
+    expect(store.data.shelves.map((s) => s.id)).toEqual(["a"]);
   });
 });
 

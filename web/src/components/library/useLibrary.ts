@@ -17,8 +17,8 @@ export type MoveMethod = "drag" | "menu";
 /**
  * S-09's rods from /api/library, and the changes (each sent to the API, then the rods are read again — the server is the
  * one place that orders them). Events go only after a change succeeded: E-17 on the first load, E-16, E-29 (number of
- * rods — the name never), E-30, E-35 ([모두 제거], v1.2), E-38 (꾸미기, v1.6). Renaming and removing a rod have no event
- * (taxonomy v0.8).
+ * rods — the name never), E-30, E-35 ([모두 제거], v1.2), E-38 (꾸미기, v1.6), E-40 ([막대 지우기], v1.8). Renaming a
+ * rod has no event (taxonomy v0.8).
  */
 export function useLibrary() {
   const [status, setStatus] = useState<LibraryStatus>("loading");
@@ -142,6 +142,16 @@ export function useLibrary() {
     addShelf: (name: string) =>
       change("POST", "/api/library/shelves", { name }, () => track("shelf_created", { shelf_count: Math.max(shelfCount, 1) + 1 })),
     renameShelf: (id: string, name: string) => change("PATCH", "/api/library/shelves", { id, name }),
-    removeShelf: (id: string) => change("DELETE", "/api/library/shelves", { id }),
+    /**
+     * [막대 지우기] (10-07): an empty rod (`withBookmarks` false), or the rod and its bookmarks after the confirm sheet —
+     * not at once (a bulk loss shows only after the server took it, like [모두 제거]). Then E-40 with the number of bookmarks
+     * that went (no E-16 per book) and the rods read again (the header count follows).
+     */
+    removeShelf: (id: string, withBookmarks = false) =>
+      change("DELETE", "/api/library/shelves", withBookmarks ? { id, withBookmarks: true } : { id }, (body) => {
+        const removed = (body as { removed?: unknown } | null)?.removed;
+        const shown = current.current?.shelves.find((s) => s.id === id)?.bookmarks.length ?? 0;
+        track("shelf_removed", { removed_count: typeof removed === "number" ? removed : (withBookmarks ? shown : 0) });
+      }),
   };
 }

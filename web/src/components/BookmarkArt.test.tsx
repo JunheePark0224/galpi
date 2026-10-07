@@ -97,6 +97,30 @@ describe("BookmarkArt (C-03, 도감 v1)", () => {
     expect(container.querySelector("svg")).toHaveAttribute("data-tier", "common");           // a gold background is not the cat's
   });
 
+  it("stage={false} (도감 동물·소품 칸, 10-07): no sky, no background details, no hill — the part alone; the moon cut out, not overlaid", () => {
+    const { container, rerender } = render(<BookmarkArt art={FIRST} clipId="p" parts={["animal"]} stage={false} fx="light" />);
+    let svg = container.querySelector("svg")!;
+    expect(svg.querySelector("image")).toHaveAttribute("href", "/animals/bluedragon.svg");
+    expect(svg.querySelector("rect")).toBeNull();                                            // no sky, no galaxy band
+    expect(svg.querySelector("path[d^='M-5 76']")).toBeNull();                                // no hill
+    expect(svg).toHaveAttribute("data-tier", "first_edition");                               // the rim still says 초판본
+    expect(svg.querySelector("[data-part=rim]")).not.toBeNull();
+
+    rerender(<BookmarkArt art={{ ...COMMON, sky: "moon" }} clipId="p" parts={["sky"]} stage={false} fx="light" />);
+    svg = container.querySelector("svg")!;
+    expect(svg.querySelector("g[clip-path] > rect")).toBeNull();                              // no sky (the mask's rect is in defs)
+    const moon = svg.querySelectorAll("g[transform^='translate(50 '] circle");
+    expect(moon).toHaveLength(1);                                                            // one crescent, no sky-coloured disc
+    expect(moon[0].getAttribute("mask")).toMatch(/^url\(#p-.*-cut\)$/);
+    expect(svg.querySelector("mask circle")).toHaveAttribute("fill", "black");
+
+    rerender(<BookmarkArt art={{ ...COMMON, ground: "books" }} clipId="p" parts={["ground"]} stage={false} fx="light" />);
+    svg = container.querySelector("svg")!;
+    expect(svg.querySelector("g[transform^='translate(50 '] rect")).not.toBeNull();            // the books themselves
+    expect(svg.querySelector("path[d^='M-5 76']")).toBeNull();
+    expect(svg.querySelector("mask")).toBeNull();
+  });
+
   it("draws a part's silhouette shape for the 도감 (animals as the image, props as their shape, none for backgrounds)", () => {
     const { container, rerender } = render(<PartShape kind="animal" value="otter" />);
     expect(container.querySelector("img")).toHaveAttribute("src", "/animals/otter.svg");

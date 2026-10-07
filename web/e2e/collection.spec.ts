@@ -80,6 +80,9 @@ test("logged in: [막대 | 도감] opens the 도감 — counts, tiers, NEW once,
   await expect(page.getByRole("region", { name: "동물 일반판" }).getByText("아직 만나지 않은 동물")).toHaveCount(4);
   await expect.poll(() => seen).toEqual(["POST"]);
   await expect.poll(() => named(events, "collection_viewed").map((e) => e.props)).toEqual([{ collected_count: 12, is_logged_in: true }]);
+  // 10-07: a met animal alone — no sky or hill behind it
+  await expect(page.locator("section [data-bare] svg image")).toHaveCount(5);
+  await expect(page.locator("section [data-bare] svg g[clip-path] > rect")).toHaveCount(0);
   if (SHOTS) await page.screenshot({ path: `${SHOTS}/impl-dex.png` });
 
   // 10-05 fix: a background cell draws its sky and hill only, a prop cell the prop alone — no animals on these tabs
@@ -95,6 +98,8 @@ test("logged in: [막대 | 도감] opens the 도감 — counts, tiers, NEW once,
   await expect(page.getByRole("region", { name: "소품 일반판" }).getByRole("listitem")).toHaveCount(9);   // 하늘 5 + 땅 4, no "none"
   await expect(page.locator("section svg[data-tier]")).toHaveCount(4);
   await expect(page.locator("section svg image")).toHaveCount(0);
+  await expect(page.locator("section [data-bare] svg")).toHaveCount(4);                   // 10-07: the props alone, no stage
+  await expect(page.locator("section [data-bare] svg g[clip-path] > rect")).toHaveCount(0);
   if (SHOTS) {
     await page.getByRole("region", { name: "소품 한정판" }).scrollIntoViewIfNeeded();
     await page.screenshot({ path: `${SHOTS}/fix-dex-props.png` });

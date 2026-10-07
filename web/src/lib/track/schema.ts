@@ -105,6 +105,8 @@ export const EVENT_SPEC = {
   },
   // v1.7: the bookmarks kept in this browser before logging in, moved to the account — once per attempt
   guest_saves_merged: { guest_count: { type: "number" }, merged_count: { type: "number" } },
+  // v1.8: S-09 [막대 지우기] after the server took the rod and its bookmarks — one event, never E-16 per book
+  shelf_removed: { removed_count: { type: "number" } },
 } as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
 
 type Spec = typeof EVENT_SPEC;

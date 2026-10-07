@@ -2,6 +2,7 @@
 import { useId, useState, type FormEvent } from "react";
 import { SHELF_NAME_MAX } from "@/lib/library/validate";
 import type { LibraryBookmark, LibraryShelf } from "@/lib/library/types";
+import { REMOVE_ROD } from "./ClearSheet";
 import styles from "./Library.module.css";
 import { ShelfBookmark } from "./ShelfBookmark";
 import type { Point } from "./useDrag";
@@ -10,7 +11,7 @@ export const EMPTY_SHELF = "아직 비어 있어요";
 
 interface Props {
   shelf: LibraryShelf;
-  /** Move mode (10-04): the bookmarks can be picked up; renaming and clearing the rod are hidden. */
+  /** Move mode (10-04): the bookmarks can be picked up; renaming and removing the rod are hidden. */
   moving: boolean;
   /** 로그인 전 내 책갈피 (v1.7): a rod to look at only — no renaming (rods are the account's). */
   fixed?: boolean;
@@ -21,14 +22,16 @@ interface Props {
   onOpen: (bookmark: LibraryBookmark) => void;
   onPick: (bookmark: LibraryBookmark, index: number, at: Point, box: DOMRect, pointerId: number) => void;
   onRename: (name: string) => Promise<boolean>;
+  /** [막대 지우기] (10-07, not on the first rod): the parent removes an empty rod at once, or asks first (C-27). */
   onRemove: () => void;
 }
 
 /**
  * C-17 rod: its name (the person's own words — shown as text only, masked in replays, never put in an attribute), a
  * leather rod, and the bookmarks hanging from it in a row that scrolls sideways. While a bookmark is dragged over it, a
- * dashed gap opens where it would land (`data-rod` / `data-slot` are what useDrag measures). In move mode the ✎ and
- * [막대 치우기] are hidden (a calm screen — only moving).
+ * dashed gap opens where it would land (`data-rod` / `data-slot` are what useDrag measures). Every rod but the first has
+ * a small [막대 지우기] at the end of its name row (10-07). In move mode the ✎ and [막대 지우기] are hidden (a calm screen —
+ * only moving).
  */
 export function Shelf({ shelf, moving, fixed = false, dragged, gap, onOpen, onPick, onRename, onRemove }: Props) {
   const nameId = useId();
@@ -75,13 +78,15 @@ export function Shelf({ shelf, moving, fixed = false, dragged, gap, onOpen, onPi
         <div className={styles.shelfHead}>
           <h2 id={nameId} className={styles.shelfName} data-amp-mask="">{shelf.name}</h2>
           {!moving && !fixed && <button type="button" className={styles.iconButton} aria-label="막대 이름 고치기" onClick={() => { setDraft(shelf.name); setEditing(true); }}>✎</button>}
+          {shelf.position > 0 && !moving && !fixed && (
+            <button type="button" className={`${styles.textButton} ${styles.removeRod}`} aria-describedby={nameId} onClick={onRemove}>{REMOVE_ROD}</button>
+          )}
         </div>
       )}
       <div className={styles.rod} aria-hidden="true" />
       {slots.length === 0 ? (
         <div className={styles.empty}>
           <p>{EMPTY_SHELF}</p>
-          {shelf.position > 0 && !moving && <button type="button" className={styles.textButton} aria-describedby={nameId} onClick={onRemove}>막대 치우기</button>}
         </div>
       ) : (
         <ul className={styles.row} aria-labelledby={nameId} data-row="">

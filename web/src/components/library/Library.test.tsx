@@ -156,7 +156,7 @@ describe("Library (S-09)", () => {
     expect(screen.queryByRole("button", { name: "모두 제거" })).toBeNull();
     expect(screen.getByText("책갈피를 끌어서 원하는 자리에 놓으세요")).toBeInTheDocument();
     expect(document.querySelector("[data-move-mode]")).not.toBeNull();
-    for (const name of ["막대 이름 고치기", "막대 치우기", "＋ 막대 추가"]) expect(screen.queryByRole("button", { name })).toBeNull();
+    for (const name of ["막대 이름 고치기", "막대 지우기", "＋ 막대 추가"]) expect(screen.queryByRole("button", { name })).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "완료" }));
     expect(screen.getByRole("button", { name: "책갈피 옮기기" })).toBeInTheDocument();
     expect(screen.queryByText("책갈피를 끌어서 원하는 자리에 놓으세요")).toBeNull();
@@ -446,9 +446,78 @@ describe("Library (S-09)", () => {
     fireEvent.click(screen.getByRole("button", { name: "저장" }));
     await waitFor(() => expect(request).toHaveBeenCalledWith("PATCH", "/api/library/shelves", { id: "b", name: "다시 읽기" }));
 
+    // [막대 지우기] on an empty rod: no sheet, the plain delete, E-40 with 0; the first rod has none
+    expect(screen.getAllByRole("button", { name: "막대 지우기" })).toHaveLength(1);
     request.mockResolvedValueOnce(ok()).mockResolvedValueOnce(ok(VIEW));
-    fireEvent.click(await screen.findByRole("button", { name: "막대 치우기" }));
+    fireEvent.click(screen.getByRole("button", { name: "막대 지우기" }));
+    expect(screen.queryByRole("dialog")).toBeNull();
     await waitFor(() => expect(request).toHaveBeenCalledWith("DELETE", "/api/library/shelves", { id: "b" }));
+    await waitFor(() => expect(track).toHaveBeenCalledWith("shelf_removed", { removed_count: 0 }));
+  });
+
+  describe("[막대 지우기] on a rod with bookmarks (10-07, C-27)", () => {
+    const FULL: LibraryView = {
+      count: 3, animals: 1,
+      shelves: [
+        { id: "a", name: "읽을 책", position: 0, bookmarks: [bm("9788998441012", "모순")] },
+        { id: "b", name: "마음에 남은", position: 1, bookmarks: [bm("9788937460449", "데미안"), bm("9788954651134", "채식주의자")] },
+      ],
+    };
+    const AFTER: LibraryView = { count: 1, animals: 1, shelves: [FULL.shelves[0]] };
+    const rodSheet = () => screen.getByRole("dialog", { name: "이 막대와 막대에 꽂힌 책갈피 2개를 지울까요?" });
+
+    it("asks with the count; [그대로 두기] sends nothing", async () => {
+      request.mockResolvedValue(ok(FULL));
+      await mount(IN);
+      const remove = await screen.findByRole("button", { name: "막대 지우기" });
+      expect(remove).toHaveAttribute("aria-describedby");
+      fireEvent.click(remove);
+      const sheet = rodSheet();
+      expect(within(sheet).getByText(/지우면 되돌릴 수 없어요\. 다시 꽂으려면 책을 다시 만나야 해요\./)).toBeInTheDocument();
+      expect(within(sheet).getByText(/다른 막대와 책갈피는 그대로 남아요\./)).toBeInTheDocument();
+      expect(within(sheet).getByRole("button", { name: "지우기" })).toHaveFocus();
+      expect(sheet.textContent).not.toContain("마음에 남은");                     // the rod's name never in the sheet's title
+      const calls = request.mock.calls.length;
+      fireEvent.click(within(sheet).getByRole("button", { name: "그대로 두기" }));
+      expect(screen.queryByRole("dialog")).toBeNull();
+      expect(request.mock.calls.length).toBe(calls);
+      expect(track).not.toHaveBeenCalledWith("shelf_removed", expect.anything());
+    });
+
+    it("[지우기] waits for the server, then the rod is gone, the header count follows and E-40 goes once (no E-16)", async () => {
+      request.mockResolvedValue(ok(FULL));
+      const store = await mount(IN);
+      fireEvent.click(await screen.findByRole("button", { name: "막대 지우기" }));
+      let answer!: (v: unknown) => void;
+      request.mockReset();
+      request.mockImplementationOnce(() => new Promise((r) => { answer = r; })).mockResolvedValue(ok(AFTER));
+      const button = within(rodSheet()).getByRole("button", { name: "지우기" });
+      fireEvent.click(button);
+      fireEvent.click(button);
+      expect(request).toHaveBeenCalledTimes(1);
+      expect(request).toHaveBeenLastCalledWith("DELETE", "/api/library/shelves", { id: "b", withBookmarks: true });
+      expect(screen.getByRole("heading", { name: "마음에 남은" })).toBeInTheDocument();     // not before the server says yes
+      expect(within(rodSheet()).getByRole("button", { name: "지우기" })).toBeDisabled();
+      await act(async () => { answer(ok({ ok: true, removed: 2 })); });
+      await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+      expect(screen.queryByRole("heading", { name: "마음에 남은" })).toBeNull();
+      expect(screen.getByText("1개 · 동물 1종")).toBeInTheDocument();
+      expect(store.accountSnapshot().count).toBe(1);
+      expect(track.mock.calls.filter(([name]) => name === "shelf_removed")).toEqual([["shelf_removed", { removed_count: 2 }]]);
+      expect(track).not.toHaveBeenCalledWith("book_unsaved", expect.anything());
+      expect(screen.getByRole("heading", { level: 1, name: "내 책갈피" })).toHaveFocus();
+    });
+
+    it("refused: the sheet stays with the reason, the rod stays, no event", async () => {
+      request.mockResolvedValue(ok(FULL));
+      await mount(IN);
+      fireEvent.click(await screen.findByRole("button", { name: "막대 지우기" }));
+      request.mockResolvedValueOnce({ ok: false, status: 500, body: null });
+      fireEvent.click(within(rodSheet()).getByRole("button", { name: "지우기" }));
+      expect(await within(rodSheet()).findByRole("alert")).toHaveTextContent("막대를 지우지 못했어요. 다시 해 주세요.");
+      expect(screen.getByRole("heading", { name: "마음에 남은" })).toBeInTheDocument();
+      expect(track).not.toHaveBeenCalledWith("shelf_removed", expect.anything());
+    });
   });
 
   it("logs out of this browser: Amplitude forgets the person, then the start page", async () => {
