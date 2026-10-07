@@ -166,10 +166,31 @@ def test_the_sample_counts_reach_the_csv(tmp_path):
 
 def test_which_books_need_a_look_and_how_the_trial_sample_is_drawn():
     assert [b["isbn"] for b in DOC["books"] if review.needs_look(b)] == ["1", "3", "4"]
+    notes_only = [target("5", status="reserve", flags=["confidence"], issues=["근거 김(33자)", "판단 이유가 책소개를 베낌"])]
+    assert [b["isbn"] for b in notes_only if review.needs_look(b)] == []   # 10-05: nothing there for a person to decide
     assert review.trial_sample is sample.trial_sample                       # one implementation, two callers
     many = {"date": "2026-10-05", "books": [target(str(i), auto="ai-agree", flags=[]) for i in range(20)]}
     assert len(sample.trial_sample(many, 0.1)) == 2 and sample.trial_sample(many, 0.1) == sample.trial_sample(many, 0.1)
     assert sample.trial_sample(many, 0.0) == [] and sample.trial_sample(DOC, 0.1) == ["2"]
+    assert sample.trial_sample({**many, "trial_sample": ["7"]}, 0.1) == ["7"]   # a frozen draw wins
+
+
+def test_resorted_applies_todays_rules_and_keeps_the_sample_a_person_may_have_started():
+    doc = {"date": "2026-10-05", "batch_id": "2026-10-05-2", "books": [
+        target(str(i), auto="ai-agree", flags=[]) for i in range(10)] + [
+        target("n", status="reserve", flags=["confidence"], issues=["근거 김(33자)"]),
+        target("w", status="reserve", flags=["way"], issues=["근거 김(33자)"]),
+        target("d", status="review", flags=["confidence"], reviewed=True)]}
+    drawn = sample.trial_sample(doc, 0.1)
+    new = review.resorted(doc, auto_merge=False, rate=0.1)
+    by = {b["isbn"]: b for b in new["books"]}
+    assert (by["n"]["status"], by["n"]["auto"]) == ("picked", "ai-agree")
+    assert by["w"]["status"] == "review" and "auto" not in by["w"]
+    assert by["d"] == doc["books"][-1]                                       # a book a person answered stays as it is
+    assert new["trial_sample"] == drawn and sample.trial_sample(new, 0.1) == drawn
+    assert doc["books"][10]["status"] == "reserve"                           # the input is not changed
+    assert review.resorted(new, auto_merge=False, rate=0.1) == new           # running it again changes nothing
+    assert review.resorted(doc, auto_merge=False, rate=0.0)["trial_sample"] == []   # --no-sample freezes no sample
 
 
 @pytest.fixture
@@ -206,7 +227,9 @@ def test_the_page_has_the_sample_by_default_and_not_with_no_sample(files, capsys
     assert [(b["isbn"], b["sample"]) for b in books] == [("1", False), ("2", True), ("3", False), ("4", False)]
     assert "1 of them sample" in capsys.readouterr().out
     assert books[2]["second"]["axes"]["world"] == 0 and books[0]["second"]["way"] == "실습"   # AI-2 side by side
-    assert "따뜻함" in html and "딴 세상" in html and "AI-1이 맞아요" in html and "AI-2가 맞아요" in html
+    assert "signals" in books[2] and "missing" in books[2]                                     # 10-06 per-axis evidence
+    assert "따뜻함" in html and "딴 세상" in html and "사람이 정해야 하는 것만" in html and "같게 본 칸도 고치기" in html
+    assert "근거 김" not in html.split("<script>")[0]                                          # 10-05: only what a person decides
     assert review.main(["2026-10-05", "--no-sample"]) == 0
     html = (tmp / "pages" / "2026-10-05.html").read_text(encoding="utf-8")
     assert [b["isbn"] for b in json.loads(re.search(r"const BOOKS=(.*?), KW=", html, re.S).group(1))] == ["1", "3", "4"]
@@ -221,6 +244,63 @@ def test_the_page_script_is_valid_javascript(files):
     script.write_text(re.search(r"<script>(.*)</script>", html, re.S).group(1), encoding="utf-8")
     done = subprocess.run(["node", "--check", str(script)], capture_output=True, text=True, check=False)
     assert done.returncode == 0, done.stderr
+
+
+STUB = """const _el=()=>({textContent:"",innerHTML:"",onclick:null});const _els={};
+globalThis.document={getElementById:id=>_els[id]||(_els[id]=_el()),querySelectorAll:()=>[],addEventListener:()=>{}};
+globalThis.localStorage={getItem:()=>null,setItem:()=>{}};
+"""
+PROBE = r"""
+const B=(over)=>({isbn:"x",title:"아무 책",entry:"leaf",genre:"SF·판타지",axes:{temp:1,pull:0,gain:0,world:-1},one_liner:"다른 별에서 집은 어떤 모습일까요?",
+ fits:true,second:{fits:true,axes:{temp:0,pull:0,gain:0,world:-1}},flags:["temp"],issues:[],...over});
+const out={};
+let b=B({flags:[],issues:["근거 약함(겹치는 단어 1개)"]});                      // a line held for a rule the page cannot recheck
+out.grounding_untouched=left(b,cur(b));
+st[b.isbn]={...cur(b),answered:["line"]}; out.grounding_kept=left(b,cur(b)); delete st[b.isbn];
+st[b.isbn]={...cur(b),one_liner:"우주 정거장에서 집을 짓는 사람은 무엇을 그리워할까요?"}; out.grounding_edited=left(b,cur(b)); delete st[b.isbn];
+b=B({flags:["temp","confidence"],issues:["근거 김(33자)"]}); out.notes_not_asked=asks(b);
+b=B({flags:["fits"]}); put(b,{status:"dropped"},decisionKey(b)); out.fits_by_select=left(b,cur(b));
+const t={isbn:"t",title:"책",entry:"target",topic:"돈 관리·투자",keywords:["주식"],way:"개념",one_liner:"주식의 기본을 쉽게 알려줘요",fits:true,
+ second:{fits:true,keywords:["ETF·펀드"],way:"개념"},flags:["keywords"],issues:[]};
+put(t,{keywords:["주식"]},"keywords"); put(t,{topic:"경제 상식",keywords:[]},null,"keywords"); out.topic_resets=left(t,cur(t));
+out.chips_after_topic=chipsOf(t,cur(t));
+b=B({signals:{temp:"끝맺음 +: 화해로 닫힘",pull:"",gain:"",world:""},missing:["temp"],
+ second:{fits:true,axes:{temp:0,pull:0,gain:0,world:-1},signals:{temp:"0 반반: 상실과 위로",pull:"",gain:"",world:""},missing:[]}});
+out.signals_temp=signalsOf(b,"temp"); out.signals_old=signalsOf(B({}),"temp");
+out.missing_only=asks(B({flags:["gain"],missing:["gain"]}));
+const mv={...t,fits:false,suggest:"경제 상식",suggest_keywords:["금리·환율","주식"],flags:["fits"],second:{fits:false,keywords:[],way:"개념",suggest:"",suggest_keywords:[]}};
+put(mv,{status:"picked",moveOpen:false,...moveTo(mv,"경제 상식")},"fits"); out.moved_keywords=cur(mv).keywords;
+out.other_topic=moveTo(mv,"글쓰기").keywords;
+st[mv.isbn]={...cur(mv),moveOpen:true}; out.suggest_hint=ask(mv,cur(mv),"fits");
+console.log(JSON.stringify(out));
+"""
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_the_page_gates_confirm_on_what_a_person_must_decide(files):
+    """Runs the page's own script in node (DOM stubbed): which questions a card asks and when [확인] turns on."""
+    tmp, _ = files
+    review.main(["2026-10-05"])
+    html = (tmp / "pages" / "2026-10-05.html").read_text(encoding="utf-8")
+    script = tmp / "probe.js"
+    script.write_text(STUB + re.search(r"<script>(.*)</script>", html, re.S).group(1) + PROBE, encoding="utf-8")
+    done = subprocess.run(["node", str(script)], capture_output=True, text=True, encoding="utf-8", check=False)
+    assert done.returncode == 0, done.stderr
+    out = json.loads(done.stdout.strip().splitlines()[-1])
+    assert out["grounding_untouched"] == ["line"]        # an unedited line held for 근거 약함 is never confirmed by accident
+    assert out["grounding_kept"] == [] and out["grounding_edited"] == []   # "이대로 괜찮아요" or a passing edit answers it
+    assert out["notes_not_asked"] == ["temp"]
+    assert out["fits_by_select"] == []                   # choosing 빼기 in the decision box answers "넣을지"
+    assert out["topic_resets"] == ["keywords"]           # a new topic asks the keywords again
+    assert out["chips_after_topic"] == ["금리·환율"]      # no keyword left over from the old topic
+    sig = out["signals_temp"]                            # 10-06: both AIs' signal line under an asked axis
+    assert "AI-1" in sig and "끝맺음 +: 화해로 닫힘" in sig and "AI-2" in sig and "0 반반: 상실과 위로" in sig
+    assert "정보 없음 (AI-1)" in sig and "정보 없음 (AI-2)" not in sig
+    assert out["signals_old"] == ""                       # a book tagged before 10-06 has no lines: nothing shown
+    assert out["missing_only"] == ["gain"]                # an axis asked only because a pass found no info
+    assert out["moved_keywords"] == ["금리·환율"]          # 10-06: moving to the suggested topic starts from its keywords
+    assert out["other_topic"] == []                       # another topic starts empty, as before
+    assert "AI 제안: <b>경제 상식</b> (AI-1)" in out["suggest_hint"] and "경제 상식 (AI 제안)" in out["suggest_hint"]
 
 
 def test_the_pilot_page_still_renders_from_the_shared_parts():
@@ -343,12 +423,16 @@ def test_a_pick_with_a_failing_line_is_refused_but_the_rest_of_the_download_is_a
     assert review.main(["2026-10-05", "--apply", str(tmp / "dl3.json")]) == 0 and "REFUSED 2" in capsys.readouterr().out
 
 
-def test_the_pick_buttons_never_promote_a_held_book_and_the_page_keeps_open_details(files):
+def test_the_page_asks_only_the_split_fields_with_nothing_preselected_and_keeps_open_details(files):
+    """10-05: a split field has no answer until the person picks one, and [확인] stays off until every question is answered
+    (a one-liner question is answered when the line passes the rules)."""
     tmp, _ = files
     review.main(["2026-10-05"])
     script = (tmp / "pages" / "2026-10-05.html").read_text(encoding="utf-8")
-    assert 'status:o.fits===false?"dropped":cur(b).status' in script                  # keep the decision, drop only when AI says no fit
-    assert 'status:o.fits===false?"dropped":"picked"' not in script
+    assert 'status:"picked",answered:[]' in script and '${done&&c.axes[k]===v?"checked":""}' in script
+    assert 'k==="line"?lineLeft(b,c):!(c.answered||[]).includes(k)' in script   # behaviour: test_the_page_gates_confirm…
+    assert 'if(act==="ok"){if(left(b,c).length)return;' in script
+    assert 'filter(f=>f!=="confidence")' in script and "근거 김|" in script                     # not asked (checks.needs_person)
     assert 'querySelectorAll("details[open]")' in script and "d.open=true" in script   # a re-render keeps the open details
 
 
@@ -375,7 +459,7 @@ def test_the_page_defaults_a_waiting_book_to_picked_so_one_confirm_puts_it_in(fi
     tmp, _ = files
     review.main(["2026-10-05"])
     script = (tmp / "pages" / "2026-10-05.html").read_text(encoding="utf-8")
-    assert 'status:b.status==="reserve"?"reserve":"picked"' in script                 # review → picked in the form
+    assert 'one_liner:b.one_liner,status:"picked"' in script        # a held book goes in once its line is fixed and confirmed
 
 
 def test_the_weekly_issue_table_escapes_pipes_and_line_breaks():
@@ -486,19 +570,43 @@ def test_review_pages_go_to_the_main_checkout_even_from_a_worktree(tmp_path):
     assert review.PAGES.parts[-4:] == ("data", "processed", "check", "pipeline")
 
 
-def _world_row() -> str:
+def _world_section() -> str:
     from pipeline import ROOT
-    text = (ROOT / "docs" / "balance-game.md").read_text(encoding="utf-8")
-    rows = [line for line in text.splitlines() if line.startswith("| 세계 |")]
-    assert len(rows) == 1
-    return rows[0]
+    text = (ROOT / "docs" / "label-dictionary.md").read_text(encoding="utf-8")
+    start = text.index("### 1-4. 세계")
+    return text[start:text.index("\n## ", start)]
 
 
-def test_the_world_hint_on_the_review_pages_follows_the_balance_game_rule():
-    """10-05: the dropped "이야기가 없는 책은 중간" hint is gone, and the hint's rule words are the source row's."""
+def test_the_world_hint_on_the_review_pages_follows_the_label_dictionary():
+    """10-06 (label-dictionary.md 1-4, user's afternoon rule): non-fiction is 현실 even in space; a novel or fable where a
+    being that does not exist (ghosts too) really appears is 딴 세상 even in a real setting; the middle is only a book with
+    neither people nor a world; no 'not applicable' middle — the review hint says the same words as the dictionary."""
     from build_d4_review import AXIS_LABELS
-    hint, row = dict((a[0], a[5]) for a in AXIS_LABELS)["world"], _world_row()
-    assert "이야기가 없는" not in hint and "이야기가 없는" not in row
-    for word in ("소설", "철학적이거나 실험적이어도", "비소설", "사람·삶·사회", "정말 섞", "사람도 세계도 없는"):
-        assert word in hint and word in row, word
-    assert "평범한 인생" in row and "톨스토이 우화" in row
+    hint, rule = dict((a[0], a[5]) for a in AXIS_LABELS)["world"], _world_section()
+    for word in ("비소설", "우주여도 현실", "있었던 세상", "귀신·괴이", "우화", "실제로 등장", "사람·장소가 전혀 보이지 않는 책만", "해당 없음"):
+        assert word in hint and word in rule, word
+    assert "평범한 인생" in rule and "톨스토이 우화 → −1" in rule
+
+
+def test_a_retagged_file_has_its_own_page_and_progress_key(files):
+    """10-06: `review 2026-10-05-2.v2` builds the re-tagged batch's page next to the original's (own localStorage key)."""
+    tmp, path = files
+    (path.parent / "2026-10-05.v2.json").write_text(path.read_text(encoding="utf-8"), encoding="utf-8")
+    assert review.main(["2026-10-05.v2"]) == 0
+    html = (tmp / "pages" / "2026-10-05.v2.html").read_text(encoding="utf-8")
+    assert '"galpi-pipeline-2026-10-05.v2"' in html and not (tmp / "pages" / "2026-10-05.html").exists()
+
+
+def test_the_story_hints_on_the_review_pages_follow_dictionary_v3_1():
+    """10-07 (label-dictionary.md v3.1): the hints a reviewer reads say what the tagger reads — 비움 only for fiction and
+    poetry, non-fiction's 'no signal' is the middle; settings and words of how much the heart moves are not temperature;
+    fiction pulls by story and poetry by sentences unless told otherwise; fiction and poetry leave a feeling unless
+    teaching is the stated main aim."""
+    from build_d4_review import AXIS_LABELS
+    hint = {a[0]: a[5] for a in AXIS_LABELS}
+    for word in ("비움", "흐릿", "세상의 설정", "눈물·울림", "비소설", "해당 없음"):
+        assert word in hint["temp"], word
+    for word in ("소설은", "시집은", "몰입", "문장"):
+        assert word in hint["pull"], word
+    for word in ("소설·시", "주된 목적", "마음"):
+        assert word in hint["gain"], word

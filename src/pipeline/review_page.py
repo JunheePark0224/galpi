@@ -2,12 +2,17 @@
 
 One page for both entries, built on the pilot page's look and script helpers (build_pilot_review.STYLE / COMMON — no second
 copy) and the D4 page's axis labels (build_d4_review.AXIS_LABELS). Same download format ({saved_at, file, answers:
-{isbn: {…, ok}}}). Per book: why it is here (flags / rule issues / "표본"), the YES24 intro and TOC, AI-1 and AI-2 side by
-side — 🎯 keywords and way, 🍃 the four axes — with [AI-1이 맞아요] / [AI-2가 맞아요] (copy that opinion into the form,
-confirm, and a "doesn't fit" opinion moves the book out), and the editable form: 🎯 topic · keyword chips (closed list) ·
-way · a keyword candidate (a short name missing from the list, 12 characters — pipeline/keyword_candidates.py), 🍃 genre · four axes as three-way choices (the D4 wording), the one-liner with a live rule check, and a decision
-(넣기 / 대기 / 빼기 / 다른 갈래로 — a 🎯 book that is really a 🍃 genre book, or the other way round, goes back in as
-the other entry: 🎯 → 🍃 asks for the genre, 🍃 → 🎯 may name a topic or leave it to the pipeline; pipeline/requeue.py).
+{isbn: {…, ok}}}). 10-05: only what a person must decide — books grouped as ① fits (one pass says the book does not fit
+its slot), ② fields the two passes answered differently, ③ a one-liner that breaks a rule, ④ the trial sample — and per
+book only those questions, with AI-1 / AI-2 marked on the choices and nothing preselected; [확인] stays off until each is
+answered. Fields both passes agreed on are one summary line, editable under "같게 본 칸도 고치기", which also holds the
+other decisions (대기 / 다른 갈래로 — a 🎯 book that is really a 🍃 genre book, or the other way round, goes back in as the
+other entry; pipeline/requeue.py). Notes the app never shows (the evidence / pass B reason checks) and "AI-1 unsure" on
+agreed books are not asked (checks.needs_person). 10-06: a 🍃 axis is also asked when either pass marked it as having no
+info (`missing`); under each asked axis the page shows both AIs' signal line for it and "정보 없음 (AI-n)" (signalsOf).
+10-06 evening: a pass that says the book does not fit names the slot it belongs to (`suggest`); the fits question shows it
+as a suggestion ("AI 제안"), marks it in the move list, and moving a 🎯 book to the suggested topic starts its keywords
+from that pass's `suggest_keywords` (moveTo).
 Progress stays in this browser (localStorage).
 """
 from build_pilot_review import COMMON, STYLE
@@ -21,7 +26,13 @@ EXTRA_STYLE = """
 .opts label:has(input:focus-visible){outline:3px solid #3A6684;outline-offset:2px}
 .ai ul{margin:4px 0 0;padding-left:16px}.ai .diff{background:#F6DCE2;border-radius:4px;padding:0 3px}
 .opts .ai1,.opts .ai2{display:block;font-size:11px;color:var(--muted)}
-.opts label:has(input:checked) .ai1,.opts label:has(input:checked) .ai2{color:var(--line)}
+.opts label:has(input:checked) .ai1,.opts label:has(input:checked) .ai2,.opts label:has(input:checked) .ai0{color:var(--line)}
+.opts .ai0{display:block;font-size:11px;color:var(--muted)}.opts.two{grid-template-columns:1fr 1fr}
+h2{font-family:'Gowun Batang',serif;font-size:17px;margin:22px 0 2px}h2 small{font-size:12px;color:var(--muted);font-weight:400}
+#toc{font-size:13px;margin:4px 0 8px}#toc a{color:var(--ink)}
+.agreed{font-size:12.5px;color:var(--soft);margin:10px 0 4px;line-height:1.6}.agreed b{color:var(--ok)}
+.sig{font-size:12.5px;color:var(--soft);margin:6px 0 0;line-height:1.6}.sig .none{color:#9A3B4E;font-weight:700}
+.fix summary{font-size:12.5px;color:var(--muted);cursor:pointer}.ghost.on{background:var(--ink);color:var(--paper)}.ok:disabled{opacity:.45;cursor:not-allowed}
 """
 
 TEMPLATE = """<!doctype html>
@@ -32,36 +43,81 @@ TEMPLATE = """<!doctype html>
 __STYLE__
 </style></head><body><main>
 <h1>갈피 오늘의 새 책 검수 — <span id="name"></span></h1>
-<p class="sub">두 AI가 다르게 봤거나 규칙 검사에 걸린 책, 그리고 두 AI가 같게 본 책 중 <b>표본</b>으로 뽑힌 책이에요(주간 표본 검수면 뽑힌 책 전부).
-질문 하나: <b>이 칸으로 찾아온 사람에게 이 책을 줘도 되나?</b> 두 AI 중 하나가 맞으면 <b>AI-1이 맞아요</b> / <b>AI-2가 맞아요</b>,
-아니면 고칠 곳만 고치고 <b>맞아요</b>. 다 하면 아래 <b>검수 결과 내려받기</b> → <code>python -m src.pipeline.review … --apply &lt;파일&gt;</code>.
-일치율은 여기서 사람이 확인한 책만으로 계산해요 — 두 AI가 같게 봐서 이 페이지에 없는 책은 사람이 보지 않았고 따로 세요.</p>
+<p class="sub"><b>사람이 정해야 하는 것만</b> 모았어요. 카드마다 <b>두 AI가 다르게 본 칸</b>과 <b>규칙에 걸린 한 줄</b>만 물어요 —
+같게 본 칸은 그대로 들어가요(고치고 싶으면 카드의 "같게 본 칸도 고치기"). 여기 답이 쌓이면 두 AI가 같게 볼 때 얼마나 맞는지 재고,
+충분히 맞으면 사람 확인 없이 들어가요(자동화). 근거 메모의 길이·베낌, AI-1 확신 낮음처럼 앱에 나가지 않는 것은 묻지 않아요.
+다 하면 아래 <b>검수 결과 내려받기</b> → <code>python -m src.pipeline.review … --apply &lt;파일&gt;</code>.</p>
+<nav id="toc"></nav>
 <div id="app"></div></main>
 <div class="bar"><span id="prog"></span><button id="dl">검수 결과 내려받기</button></div>
 <script>
 const BOOKS=__BOOKS__, KW=__KW__, GENRES=__GENRES__, DEFS=__DEFS__, AXES=__AXES__, WAYS=__WAYS__, KEY=__KEY__, NAME=__NAME__;
 __COMMON__
 const TOPICS=Object.keys(KW);
-const FLAG={fits:"두 AI 중 하나가 이 칸에 안 맞을 수 있다고 봐요",keywords:"키워드가 달라요",way:"읽는 방식이 달라요",temp:"온도가 달라요",
- pull:"끌림이 달라요",gain:"얻는 것이 달라요",world:"세계가 달라요",confidence:"AI-1 확신이 낮아요"};
 const STATUS=[["picked","넣기"],["reserve","대기"],["dropped","빼기"],["requeue","다른 갈래로 (다시 태그)"]];
-const SAMPLE_WHY="표본 — 두 AI가 같게 봤어요. 사람이 한 번 확인해 두 AI가 같아도 틀리는지 재요";
+const AXIS_NAME={temp:"온도",pull:"끌림",gain:"얻는 것",world:"세계"};
+const NOTE=/^(근거 없음|근거 김|근거가 |판단 이유)/;
+const GROUPS=[["fits","① 넣을지 정하기","두 AI 중 하나가 이 책이 이 칸에 안 맞는다고 봤어요"],
+ ["tags","② 두 AI가 다르게 본 칸 · 정보 없는 칸","다르게 본 칸, 또는 책소개·목차에 판단할 정보가 없다고 한 칸만 골라 주세요"],
+ ["line","③ 한 줄 고치기","이용자에게 보이는 한 줄이 규칙에 걸렸어요"],
+ ["sample","④ 표본 — 두 AI가 같게 본 책","자동으로 들어갈 책이 정말 맞는지 재요. 맞으면 [확인]만 누르면 돼요"]];
 const side=(k,v)=>{const a=AXES.find(x=>x[0]===k);return v>0?a[2]:v<0?a[4]:a[3]};
 const base=b=>b.entry==="target"?{topic:b.topic,keywords:[...(b.keywords||[])],way:b.way,keyword_candidate:b.keyword_candidate||""}:{genre:b.genre,axes:{...b.axes}};
-const cur=b=>st[b.isbn]||{...base(b),one_liner:b.one_liner,status:b.status==="reserve"?"reserve":"picked",ok:false};
-const put=(b,patch)=>{st[b.isbn]={...cur(b),...patch,ok:false,pick:null};save();render()};
+const cur=b=>st[b.isbn]||{...base(b),one_liner:b.one_liner,status:"picked",answered:[],ok:false};
+const put=(b,patch,key,undo)=>{const c=cur(b), was=(c.answered||[]).filter(k=>k!==undo);st[b.isbn]={...c,...patch,answered:key&&!was.includes(key)?[...was,key]:was,ok:false};save();render()};
 const kw=l=>l&&l.length?l.map(esc).join(", "):"(없음)";
-const sameSet=(a,c)=>JSON.stringify([...(a||[])].sort())===JSON.stringify([...(c||[])].sort());
+const splits=b=>(b.flags||[]).filter(f=>f!=="confidence");
+const heldBy=b=>(b.issues||[]).filter(i=>!NOTE.test(i));
+const groupOf=b=>b.sample?"sample":splits(b).includes("fits")?"fits":splits(b).length?"tags":"line";
 function issues(s,b){const out=baseIssues(s,b.title);
  if(b.entry==="leaf"&&!s.trim().endsWith("?"))out.push("질문형은 ?로 끝나요");if(b.entry==="target"&&s.trim().endsWith("?"))out.push("요약형에 물음표");return out}
-function opinion(b,n){const o=n===1?b:b.second||{}, d=n===1?b.second||{}:b, mark=(same,t)=>same?t:`<span class="diff">${t}</span>`;
- const fit=`맞음 ${o.fits?"예":"아니요"}`, tail=n===1?` · 확신 ${b.confidence}`:o.why?` — ${esc(o.why)}`:"";
- if(b.entry==="target")return `<div class="ai"><b>AI-${n}</b>키워드 ${mark(sameSet(o.keywords,d.keywords),kw(o.keywords))}<br>방식 ${mark(o.way===d.way,esc(o.way))}<br>${fit}${tail}</div>`;
- const lines=AXES.map(([k,q])=>`<li>${esc(q)}: ${mark((o.axes||{})[k]===(d.axes||{})[k],esc(side(k,(o.axes||{})[k])))}</li>`).join("");
- return `<div class="ai"><b>AI-${n}</b><ul>${lines}</ul>${fit}${tail}</div>`}
-function picks(b,c){const two=b.second||{}, drop2=two.fits===false;
- return `<div class="cmp">${opinion(b,1)}${opinion(b,2)}</div><div class="picks"><button data-act="pick1" class="${c.ok&&c.pick==="ai1"?"chosen":""}">AI-1이 맞아요${b.fits===false?" (빼기)":""}</button>
-  <button data-act="pick2" class="${c.ok&&c.pick==="ai2"?"chosen":""}" title="${drop2?"AI-2가 이 칸에 안 맞다고 봐요: 누르면 이 책을 빼요":"AI-2의 태그를 폼에 넣고 확인"}">AI-2가 맞아요${drop2?" (빼기)":""}</button></div>`}
+const asks=b=>[...splits(b),...(heldBy(b).length?["line"]:[])];
+// a held line is answered when it passes the rules here AND the person edited it or kept it on purpose ("이대로 괜찮아요"):
+// some rules (근거 약함, the YES24-copy check) need the intro and cannot be checked again on this page
+const lineLeft=(b,c)=>issues(c.one_liner,b).length>0||(c.one_liner.trim()===(b.one_liner||"").trim()&&!(c.answered||[]).includes("line"));
+const left=(b,c)=>asks(b).filter(k=>k==="line"?lineLeft(b,c):!(c.answered||[]).includes(k));
+const decisionKey=b=>asks(b).includes("fits")?"fits":null;  // any decision in the box also answers "넣을지"
+// 10-06: the slot each AI named for a book it says does not fit ("" or absent = none); AI-1's first
+const suggestions=b=>[[1,b],[2,b.second||{}]].filter(([,o])=>o.fits===false&&o.suggest).map(([n,o])=>({who:n,slot:o.suggest,keywords:o.suggest_keywords||[]}));
+const moveTo=(b,v)=>{if(b.entry==="leaf")return {genre:v};const s=suggestions(b).find(x=>x.slot===v);return {topic:v,keywords:s?s.keywords.filter(k=>(KW[v]||[]).includes(k)):[]}};
+const chipsOf=(b,c)=>{const kept=KW[c.topic]||[], two=b.second||{};
+ return [...new Set([...(b.keywords||[]),...(two.keywords||[]),...kept])].filter(x=>kept.includes(x))};
+const marks=(on1,on2)=>`${on1?'<span class="ai1">AI-1</span>':""}${on2?'<span class="ai2">AI-2</span>':""}`;
+const NAME_OF=k=>k==="fits"?"어디에 둘지":k==="line"?"한 줄":k==="keywords"?"키워드":k==="way"?"방식":AXIS_NAME[k]||k;
+// 10-06: each AI's signal line for an asked 🍃 axis, and which AI found no info for it (books tagged before have neither)
+function signalsOf(b,k){const two=b.second||{}, rows=[[1,b],[2,two]].map(([n,o])=>{const line=(o.signals||{})[k]||"", none=(o.missing||[]).includes(k);
+  return line||none?`<span>AI-${n} 근거: ${esc(line||"(없음)")}${none?` <span class="none">정보 없음 (AI-${n})</span>`:""}</span>`:""}).filter(Boolean);
+ return rows.length?`<p class="sig">${rows.join("<br>")}</p>`:""}
+function ask(b,c,k){const two=b.second||{}, done=(c.answered||[]).includes(k);
+ if(k==="fits"){const leaf=b.entry==="leaf", slot=leaf?b.genre:b.topic, now=leaf?c.genre:c.topic, moved=now!==slot, yes=o=>o.fits===false?"안 맞아요":"맞아요";
+  const pick=!done?"":c.status==="dropped"?"dropped":moved?"move":"picked", open=pick==="move"||c.moveOpen;
+  const names=leaf?GENRES:TOPICS, kind=leaf?"장르":"주제";
+  const sug=suggestions(b), named=new Set(sug.map(x=>x.slot));
+  return `<p class="q">이 책을 어디에 둘까요? <span class="hint">— AI가 <b>${esc(slot)}</b> 칸으로 가져왔어요 · AI-1 ${yes(b)} · AI-2 ${yes(two)}${two.why?` (AI-2: ${esc(two.why)})`:""}${sug.length?` · AI 제안: ${sug.map(x=>`<b>${esc(x.slot)}</b> (AI-${x.who})`).join(", ")}`:""}</span></p>
+   <div class="opts"><label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="picked" ${pick==="picked"?"checked":""}><span>${esc(slot)} 맞아요<span class="ai0">이대로 넣기</span></span></label>
+   <label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="move" ${open?"checked":""}><span>다른 ${kind}예요<span class="ai0">옮겨서 넣기</span></span></label>
+   <label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="dropped" ${pick==="dropped"?"checked":""}><span>어디에도 안 맞아요<span class="ai0">빼기</span></span></label></div>
+   ${open?`<div class="row"><span class="lab">${kind}</span><select data-act="fitto"><option value="">${kind}를 골라 주세요</option>${names.filter(n=>n!==slot).map(n=>`<option value="${esc(n)}" ${moved&&n===now?"selected":""}>${esc(n)}${named.has(n)?" (AI 제안)":""}</option>`).join("")}</select>
+   ${leaf?"":'<span class="cnt">키워드는 아래 "같게 본 칸도 고치기"에서 새 주제에 맞게 골라 주세요</span>'}</div>`:""}`}
+ if(AXIS_NAME[k]){const [,q,p,z,m,hint]=AXES.find(x=>x[0]===k), ax2=two.axes||{};
+  return `<p class="q">${esc(q)} <span class="hint">— ${esc(hint)}</span></p><div class="opts">${[[p,1],[z,0],[m,-1]].map(([t,v])=>`<label><input type="radio" name="q-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${done&&c.axes[k]===v?"checked":""}><span>${esc(t)}
+   ${marks(b.axes[k]===v,ax2[k]===v)}</span></label>`).join("")}</div>${signalsOf(b,k)}`}
+ if(k==="keywords"){const k1=b.keywords||[], k2=two.keywords||[], list=chipsOf(b,c);
+  return `<p class="q">키워드 <span class="hint">— 책의 중심일 때만 · 눌러서 켜고 끄기 (최대 5개) · ¹ AI-1이 붙임 · ² AI-2가 붙임</span></p>
+   <div class="row">${list.map(x=>`<button class="chip ${done&&c.keywords.includes(x)?"on":""}" data-kw="${esc(x)}" title="${esc((DEFS[c.topic]||{})[x]||"")}">${esc(x)}${k1.includes(x)?" ¹":""}${k2.includes(x)?" ²":""}</button>`).join("")}
+   <button class="ghost" data-act="kwnone">키워드 없음</button></div>`}
+ if(k==="way"){return `<p class="q">읽는 방식</p><div class="opts">${WAYS.map(([w,l])=>`<label><input type="radio" name="way-${b.isbn}" data-act="way" value="${w}" ${done&&c.way===w?"checked":""}><span>${w}<span class="ai0">${esc(l)}</span>${marks(b.way===w,two.way===w)}</span></label>`).join("")}</div>`}
+ if(k==="line"){const li=issues(c.one_liner,b);
+  return `<p class="q">한 줄 고치기 <span class="hint">— 걸린 이유: ${heldBy(b).map(esc).join(" · ")}${b.one_liner?"":" (책소개를 베껴서 지웠어요 — 새로 써 주세요)"}</span></p>
+   <div class="row"><input type="text" data-act="line" value="${esc(c.one_liner)}" placeholder="${b.entry==="leaf"?"질문형 — ?로 끝나요":"요약형 — 물음표 없이"} · 공백 빼고 12~36자"></div>
+   <div class="row"><span class="cnt ${li.length?"bad":""}">${len(c.one_liner)}자 ${li.join(" · ")}</span>
+   ${b.one_liner&&!li.length?`<button class="ghost ${(c.answered||[]).includes("line")?"on":""}" data-act="linekeep">이대로 괜찮아요</button>`:""}</div>`}
+ return ""}
+function agreed(b,c){const s=new Set(splits(b)), out=[];
+ if(b.entry==="target"){out.push(`주제 ${esc(c.topic)}`);if(!s.has("keywords"))out.push(`키워드 ${kw(c.keywords)}`);if(!s.has("way"))out.push(`방식 ${esc(c.way)}`)}
+ else{out.push(`장르 ${esc(c.genre)}`);for(const k of Object.keys(AXIS_NAME))if(!s.has(k))out.push(`${AXIS_NAME[k]} ${esc(side(k,c.axes[k]))}`)}
+ if(!heldBy(b).length)out.push(`한 줄 “${esc(c.one_liner)}”`);
+ return out.join(" · ")}
 function fields(b,c){
  if(b.entry==="target"){const kws=(KW[c.topic]||[]).map(k=>`<button class="chip ${c.keywords.includes(k)?"on":""}" data-kw="${esc(k)}" title="${esc((DEFS[c.topic]||{})[k]||"")}">${esc(k)}</button>`).join("");
   const defs=Object.entries(DEFS[c.topic]||{}).map(([k,d])=>`<li><b>${esc(k)}</b> — ${esc(d)}</li>`).join("");
@@ -74,15 +130,17 @@ function fields(b,c){
  return `<div class="row"><span class="lab">장르</span><select data-act="genre">${GENRES.map(g=>`<option ${g===c.genre?"selected":""}>${esc(g)}</option>`).join("")}</select></div>`
   +AXES.map(([k,q,p,z,m,hint])=>`<p class="q">${esc(q)} <span class="hint">— ${esc(hint)}</span></p><div class="opts">${[[p,1],[z,0],[m,-1]].map(([t,v])=>`<label><input type="radio" name="ax-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${c.axes[k]===v?"checked":""}><span>${esc(t)}
    ${b.axes[k]===v?'<span class="ai1">AI-1</span>':""}${two.axes[k]===v?'<span class="ai2">AI-2</span>':""}</span></label>`).join("")}</div>`).join("")}
-function card(b){const c=cur(b), why=[...(b.flags||[]).map(f=>FLAG[f]||f),...(b.issues||[])], li=issues(c.one_liner,b);
+function card(b){const c=cur(b), q=asks(b), rest=left(b,c), lineAsked=q.includes("line");
  return `<div class="card ${c.ok?"done":""} ${c.status==="dropped"?"dropped":""}" id="b${b.isbn}"><p class="t">${b.entry==="target"?"🎯":"🍃"} ${esc(b.title)}${b.sample?'<span class="badge">표본</span>':""}</p>
-  <p class="meta">${esc(b.author)} · ${b.pages}쪽 · <a href="${esc(b.link)}" target="_blank" rel="noopener">예스24</a> · ${esc(b.file)}</p>
+  <p class="meta">${esc(b.author)} · ${b.pages}쪽 · <a href="${esc(b.link)}" target="_blank" rel="noopener">예스24</a></p>
   <div class="intro">${esc(b.intro)}</div><details><summary>책소개 전체 · 목차</summary><pre>${esc(b.intro_full)}</pre><pre>${esc(b.toc)}</pre></details>
-  <p class="why">왜 보나: ${why.length?why.map(esc).join(" · "):SAMPLE_WHY}</p><p class="ev">근거(우리 말): ${esc(b.evidence)}</p>${picks(b,c)}
-  ${fields(b,c)}<div class="row"><span class="lab">한 줄</span><input type="text" data-act="line" value="${esc(c.one_liner)}"></div>
-  <div class="row"><span class="cnt ${li.length?"bad":""}">${len(c.one_liner)}자 ${li.join(" · ")}</span></div>
-  <div class="row"><span class="lab">결정</span><select data-act="status">${STATUS.map(([v,l])=>`<option value="${v}" ${v===c.status?"selected":""}>${l}</option>`).join("")}</select>
-  <button class="ok" data-act="ok">${c.ok?"확인함 ✓":"맞아요"}</button></div>${requeueRow(b,c)}</div>`}
+  ${q.length?`<p class="why">정할 것 ${q.length}개: ${q.map(NAME_OF).join(" · ")}</p>`:""}
+  ${q.map(k=>ask(b,c,k)).join("")}
+  <p class="agreed"><b>${q.length?"같게 본 칸":"두 AI가 같게 봤어요"}</b> ${agreed(b,c)}</p>
+  <details class="fix"><summary>같게 본 칸도 고치기 · 다른 결정</summary>${fields(b,c)}
+   ${lineAsked?"":`<div class="row"><span class="lab">한 줄</span><input type="text" data-act="line" value="${esc(c.one_liner)}"></div><div class="row"><span class="cnt"></span></div>`}
+   <div class="row"><span class="lab">결정</span><select data-act="status">${STATUS.map(([v,l])=>`<option value="${v}" ${v===c.status?"selected":""}>${l}</option>`).join("")}</select></div>${requeueRow(b,c)}</details>
+  <div class="row"><button class="ok" data-act="ok" ${rest.length&&!c.ok?"disabled":""}>${c.ok?"확인함 ✓":rest.length?`남은 것 ${rest.length}개`:"확인"}</button></div></div>`}
 function requeueRow(b,c){if(c.status!=="requeue")return "";
  if(b.entry==="target")return `<div class="row"><span class="lab">🍃 장르</span><select data-act="to_slot"><option value="">장르를 골라 주세요</option>${GENRES.map(g=>`<option ${g===c.to_slot?"selected":""}>${esc(g)}</option>`).join("")}</select>
   <span class="cnt">이 책을 🍃 이야기 책으로 다시 태그해요 (다음 묶음)</span></div>`;
@@ -90,33 +148,38 @@ function requeueRow(b,c){if(c.status!=="requeue")return "";
   <span class="cnt">이 책을 🎯 배우기 책으로 다시 태그해요 (다음 묶음)</span></div>`}
 function render(){
  const open=[...document.querySelectorAll("details[open]")].map(d=>(d.closest(".card")||{}).id+"|"+d.className);
- document.getElementById("app").innerHTML=BOOKS.map(card).join("");
+ document.getElementById("app").innerHTML=GROUPS.map(([g,t,d])=>{const list=BOOKS.filter(b=>groupOf(b)===g); if(!list.length)return "";
+  return `<h2 id="g-${g}">${esc(t)} <small>${list.filter(b=>cur(b).ok).length}/${list.length} 확인</small></h2><p class="sub">${esc(d)}</p>${list.map(card).join("")}`}).join("");
+ document.getElementById("toc").innerHTML=GROUPS.map(([g,t])=>{const n=BOOKS.filter(b=>groupOf(b)===g).length;return n?`<a href="#g-${g}">${esc(t)} ${n}권</a>`:""}).filter(Boolean).join(" · ");
  document.querySelectorAll("details").forEach(d=>{if(open.includes((d.closest(".card")||{}).id+"|"+d.className))d.open=true});
  document.getElementById("prog").textContent=`확인 ${BOOKS.filter(b=>cur(b).ok).length}/${BOOKS.length}`}
 const bookOf=e=>{const el=e.target.closest(".card");return el&&BOOKS.find(x=>"b"+x.isbn===el.id)};
 const toEntry=b=>b.entry==="target"?"leaf":"target";
-const fromAi=(b,n)=>{const o=n===1?b:b.second||{};
- return {...(b.entry==="target"?{keywords:[...(o.keywords||[])],way:o.way}:{axes:{...o.axes}}),status:o.fits===false?"dropped":cur(b).status}};  // never promotes a held book: the decision stays as it is
 document.addEventListener("click",e=>{const b=bookOf(e); if(!b)return; const c=cur(b), k=e.target.dataset.kw, act=e.target.dataset.act;
- if(k!==undefined){put(b,{keywords:c.keywords.includes(k)?c.keywords.filter(x=>x!==k):[...c.keywords,k].slice(0,5)});return}
- if(act==="pick1"||act==="pick2"){st[b.isbn]={...c,...fromAi(b,act==="pick1"?1:2),ok:true,pick:act==="pick1"?"ai1":"ai2"};save();render();return}
- if(act==="ok"){if(c.status==="requeue"&&b.entry==="target"&&!c.to_slot){alert("어느 🍃 장르 책인지 골라 주세요");return}
+ if(k!==undefined){put(b,{keywords:c.keywords.includes(k)?c.keywords.filter(x=>x!==k):[...c.keywords,k].slice(0,5)},"keywords");return}
+ if(act==="kwnone"){put(b,{keywords:[]},"keywords");return}
+ if(act==="linekeep"){put(b,{one_liner:b.one_liner},"line");return}
+ if(act==="ok"){if(left(b,c).length)return; if(c.status==="requeue"&&b.entry==="target"&&!c.to_slot){alert("어느 🍃 장르 책인지 골라 주세요");return}
   st[b.isbn]={...c,ok:true};save();render()}});
 document.addEventListener("change",e=>{const b=bookOf(e); if(!b)return; const act=e.target.dataset.act, axis=e.target.dataset.axis, v=e.target.value;
- if(axis){put(b,{axes:{...cur(b).axes,[axis]:Number(v)}});return}
- if(act==="topic")put(b,{topic:v,keywords:[]}); if(act==="way")put(b,{way:v}); if(act==="genre")put(b,{genre:v});
- if(act==="status")put(b,v==="requeue"?{status:v,to_entry:toEntry(b),to_slot:cur(b).to_slot||""}:{status:v});
+ if(axis){put(b,{axes:{...cur(b).axes,[axis]:Number(v)}},axis);return}
+ if(act==="fit"){const slot=b.entry==="leaf"?{genre:b.genre}:{topic:b.topic,keywords:[...(b.keywords||[])]};
+  if(v==="move"){st[b.isbn]={...cur(b),moveOpen:true,ok:false,answered:(cur(b).answered||[]).filter(x=>x!=="fits")};save();render();return}
+  put(b,{status:v,moveOpen:false,...slot},"fits");return}
+ if(act==="fitto"){if(!v)return; put(b,{status:"picked",moveOpen:false,...moveTo(b,v)},"fits");return}
+ if(act==="topic")put(b,{topic:v,keywords:[]},null,"keywords"); if(act==="way")put(b,{way:v},"way"); if(act==="genre")put(b,{genre:v,status:"picked"},asks(b).includes("fits")?"fits":null);
+ if(act==="status")put(b,v==="requeue"?{status:v,to_entry:toEntry(b),to_slot:cur(b).to_slot||""}:{status:v},decisionKey(b));
  if(act==="to_slot")put(b,{to_slot:v})});  // the one-liner is stored by the input handler (a re-render here would swallow the next click)
 document.addEventListener("input",e=>{if(e.target.dataset.act==="cand"){const b=bookOf(e), el=e.target.closest(".card");
-  st[b.isbn]={...cur(b),keyword_candidate:e.target.value,ok:false,pick:null};save();
-  el.classList.remove("done"); const ok=el.querySelector(".ok"); if(ok)ok.textContent="맞아요"; return}
+  st[b.isbn]={...cur(b),keyword_candidate:e.target.value,ok:false};save(); el.classList.remove("done"); return}
  if(e.target.dataset.act!=="line")return; const b=bookOf(e), el=e.target.closest(".card");
- st[b.isbn]={...cur(b),one_liner:e.target.value,ok:false,pick:null};save();
- const li=issues(e.target.value,b), cnt=e.target.parentElement.nextElementSibling.firstElementChild;
- cnt.textContent=`${len(e.target.value)}자 ${li.join(" · ")}`; cnt.className="cnt"+(li.length?" bad":"");
- el.classList.remove("done"); const ok=el.querySelector(".ok"); if(ok)ok.textContent="맞아요"});
+ st[b.isbn]={...cur(b),one_liner:e.target.value,ok:false};save();
+ const c=cur(b), li=issues(e.target.value,b), nx=e.target.parentElement.nextElementSibling, cnt=nx&&nx.querySelector(".cnt");
+ if(cnt){cnt.textContent=`${len(e.target.value)}자 ${li.join(" · ")}`; cnt.className="cnt"+(li.length?" bad":"")}
+ st[b.isbn]={...c,answered:(c.answered||[]).filter(k=>k!=="line")};save();  // an edit replaces "이대로 괜찮아요"
+ el.classList.remove("done"); const ok=el.querySelector(".ok"), rest=left(b,cur(b)); if(ok){ok.disabled=rest.length>0; ok.textContent=rest.length?`남은 것 ${rest.length}개`:"확인"}});
 document.getElementById("dl").onclick=()=>{const answers={};
- for(const b of BOOKS){const c=st[b.isbn]; if(c&&c.ok){const a={...c,one_liner:c.one_liner.trim(),...(typeof c.keyword_candidate==="string"?{keyword_candidate:c.keyword_candidate.trim()}:{})}; if(!a.pick)delete a.pick; answers[b.isbn]=a}}
+ for(const b of BOOKS){const c=st[b.isbn]; if(c&&c.ok){const a={...c,one_liner:c.one_liner.trim(),...(typeof c.keyword_candidate==="string"?{keyword_candidate:c.keyword_candidate.trim()}:{})}; if(!a.pick)delete a.pick; delete a.answered; delete a.moveOpen; answers[b.isbn]=a}}
  const blob=new Blob([JSON.stringify({saved_at:new Date().toISOString(),file:NAME,answers},null,1)],{type:"application/json"});
  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`${NAME}-review.json`;a.click()};
 document.getElementById("name").textContent=NAME; render();

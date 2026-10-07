@@ -151,3 +151,11 @@ def test_a_later_batch_names_its_id_in_the_heading_and_the_review_command(tmp_pa
     out = tmp_path / "pr.md"
     assert report.main(["--batch", "2026-10-05-2", "--out", str(out)]) == 0
     assert out.read_text(encoding="utf-8").startswith("## 오늘의 새 책 2026-10-05-2")
+
+
+def test_an_empty_axis_neither_breaks_the_shares_nor_the_book_line():
+    """10-06: a 🍃 axis may be null (no info); such a book waits for review, but a report row must still render."""
+    books = LEAF + [{"entry": "leaf", "genre": "SF·판타지", "axes": {"temp": None, "pull": -1, "gain": 1, "world": -1}}]
+    assert report.axis_shares(books)["temp"] == (40.0, 20.0)
+    line = report.book_line({**books[-1], "title": "책", "one_liner": "왜일까요?", "flags": ["temp"]})
+    assert "temp?" in line and "pull-1" in line

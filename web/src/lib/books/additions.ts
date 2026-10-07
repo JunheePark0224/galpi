@@ -32,7 +32,8 @@ function toRow(b: Row, vocab: Vocab): Row {
 /**
  * books_v1 rows + the picked books of every additions file (the 10-01 pilot, then the daily pipeline) → rows and bib
  * for normalizeCatalog. Base rows keep their order and content; additions come after, file by file. Review, reserve and
- * dropped books stay out. Only our tags, titles and authors are in these files — no YES24 text.
+ * dropped books stay out. A 🍃 book with an empty (null, 비움) axis comes in: label-dictionary v3.1 rule 9 — the score
+ * counts that axis 0 (recommend/score.ts). Only our tags, titles and authors are in these files — no YES24 text.
  */
 export function mergeAdditions(baseRows: readonly Row[], baseBib: ReadonlyMap<string, Bib>, files: readonly unknown[], vocab: Vocab) {
   const rows: Row[] = [...baseRows];

@@ -8,7 +8,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from pipeline.candidates import Candidate  # noqa: E402
-from pipeline.checks import AUTO, copied_run, decide, disagreements, rule_issues, scrub, split_issues  # noqa: E402
+from pipeline.checks import AUTO, copied_run, decide, disagreements, needs_person, redecide, rule_issues, scrub, split_issues  # noqa: E402
 from pipeline.merge import additions_doc, keyword_hints, record, write_doc  # noqa: E402
 from pipeline.tagger import parse  # noqa: E402
 from pipeline_fakes import INTRO, TOC, check_answer, tag_answer  # noqa: E402
@@ -51,7 +51,7 @@ def test_disagreements_name_each_field():
     assert disagreements("target", a, check_answer("target", keywords=["ETF·펀드"], way="실습", fits=False)) == ["fits", "keywords", "way"]
     leaf_a = parse(tag_answer("leaf", confidence=0.5), "leaf", "tag", [])
     leaf_b = parse(check_answer("leaf", world=-1), "leaf", "check", [])
-    assert disagreements("leaf", leaf_a, leaf_b) == ["world", "confidence"]
+    assert disagreements("leaf", leaf_a, leaf_b) == ["world"]                     # 10-06: pass A unsure is no reason
 
 
 def test_decide():
@@ -61,13 +61,31 @@ def test_decide():
     assert decide(a, b, ["way"], [], auto_merge=True) == ("reserve", None)      # nobody looks before merge → waits
     assert decide(a, b, [], ["짧음(5자)"], auto_merge=False) == ("reserve", None)
     assert decide({**a, "fits": False}, {**b, "fits": False}, ["fits"], [], False) == ("dropped", None)
+    # 10-05: a person is not asked about notes nobody reads (evidence / pass B reason) or about "AI-1 unsure" when both agree
+    assert decide(a, b, [], ["근거 김(33자)", "판단 이유가 책소개를 베낌"], auto_merge=False) == ("picked", AUTO)
+    assert decide(a, b, ["confidence"], [], auto_merge=False) == ("picked", AUTO)
+    assert decide(a, b, ["confidence", "way"], ["근거 김(33자)"], auto_merge=False) == ("review", None)
+    assert decide(a, b, [], ["근거 김(33자)", "한 줄이 책소개를 베낌"], auto_merge=False) == ("reserve", None)
+
+
+def test_needs_person_names_only_what_a_person_must_decide():
+    assert needs_person(["confidence"], ["근거 김(31자)", "근거 없음", "근거가 책소개를 베낌", "판단 이유가 책소개를 베낌"]) == ([], [])
+    assert needs_person(["temp", "confidence"], ["근거 김(31자)", "과장 표현: 미친"]) == (["temp"], ["과장 표현: 미친"])
+
+
+def test_redecide_a_stored_book_with_todays_rules():
+    stored = {"fits": True, "second": {"fits": True}, "flags": ["confidence"], "issues": ["근거 김(31자)"], "status": "reserve"}
+    assert redecide(stored, auto_merge=False) == ("picked", AUTO)
+    assert redecide({**stored, "flags": ["fits"], "second": {"fits": False}}, auto_merge=False) == ("review", None)
 
 
 def test_record_holds_our_tags_only(tmp_path):
     a, b = tag_answer("target"), check_answer("target", way="실습")
     rec = record(CAND, a, b, ["way"], [], "picked", None, keyword_hints(CAND, {"주식": {"pattern": "주식"}, "연금·노후": {"pattern": "연금"}}))
     assert rec["topic"] == "돈 관리·투자" and rec["field"] == "돈·경제" and rec["keywords_regex"] == ["주식"]
-    assert rec["second"] == {"fits": True, "keywords": ["주식"], "way": "실습", "why": "주식 입문서"} and "auto" not in rec
+    assert rec["second"] == {"fits": True, "keywords": ["주식"], "way": "실습", "why": "주식 입문서", "suggest": "",
+                             "suggest_keywords": []} and "auto" not in rec
+    assert rec["suggest"] == "" and rec["suggest_keywords"] == []
     path = tmp_path / "2026-10-05.json"
     write_doc(path, additions_doc("2026-10-05", "claude-haiku-4-5", "claude-haiku-4-5", [rec]))
     text = path.read_text(encoding="utf-8")
@@ -103,3 +121,42 @@ def test_split_issues_separates_the_one_liner_rules_from_the_evidence_rules():
     assert line == ["짧음(5자)", "근거 약함(겹치는 단어 1개)", "한 줄이 책소개를 베낌", "과장 표현: 최고"]   # 근거 약함 = the line is not grounded
     assert evidence == ["근거 김(41자)", "근거 없음", "근거가 책소개를 베낌", "판단 이유가 책소개를 베낌"]
     assert split_issues([]) == ([], [])
+
+
+# --- 10-06 label signals: who asks a person, per-axis evidence and its copy check ---
+
+def test_an_axis_is_asked_when_the_passes_differ_or_one_left_it_empty_never_for_low_confidence():
+    """v3.1 rule 9 (10-07): one pass empty (null) or two different values → a person; both empty → decided as empty;
+    a no-info mark on a value both passes gave asks nothing."""
+    a = parse(tag_answer("leaf", confidence=0.3), "leaf", "tag", [])
+    b = parse(check_answer("leaf"), "leaf", "check", [])
+    assert disagreements("leaf", a, b) == []                                      # unsure alone asks nothing
+    a2 = parse(tag_answer("leaf", missing=["temp"]), "leaf", "tag", [])
+    b2 = parse(check_answer("leaf", world=-1, missing=["gain", "temp"]), "leaf", "check", [])
+    assert disagreements("leaf", a2, b2) == ["world"]                             # the marks alone ask nothing
+    a3 = parse(tag_answer("leaf", temp=None, pull=None, missing=["temp", "pull"]), "leaf", "tag", [])
+    b3 = parse(check_answer("leaf", temp=None, world=-1, missing=["temp"]), "leaf", "check", [])
+    assert disagreements("leaf", a3, b3) == ["pull", "world"]                     # AXES order; temp both empty
+    assert disagreements("target", tag_answer("target", confidence=0.1), check_answer("target")) == []
+
+
+def test_a_copied_signal_line_is_an_evidence_issue_and_is_never_stored():
+    copied = {"temp": "계좌 만들기부터 배당과 분산", "pull": "몰입: 실패담", "gain": "0", "world": "현실"}
+    a, b = tag_answer("leaf"), check_answer("leaf", signals=copied)
+    issues = rule_issues("leaf", a, "제목", MATERIAL, b)
+    assert issues == ["근거가 책소개를 베낌 (AI-2 temp)"]
+    assert split_issues(issues) == ([], issues) and needs_person([], issues) == ([], [])   # a note, not a question
+    safe_a, safe_b = scrub(a, b, issues)
+    assert safe_b["signals"] == {**copied, "temp": ""} and safe_a == a and b["signals"]["temp"]   # inputs unchanged
+    leaf_cand = Candidate("leaf", "에세이", "9790000000028", "투자 이야기", "이둘 저", 220, "https://y/2", INTRO, TOC)
+    rec = record(leaf_cand, parse(a, "leaf", "tag", []), parse(b, "leaf", "check", []), [], issues, "picked", AUTO, [])
+    assert "계좌 만들기" not in json.dumps(rec, ensure_ascii=False)
+
+
+def test_record_keeps_both_passes_signals_and_missing_axes():
+    leaf_cand = Candidate("leaf", "에세이", "9790000000028", "투자 이야기", "이둘 저", 220, "https://y/2", INTRO, TOC)
+    a = parse(tag_answer("leaf", missing=["temp"]), "leaf", "tag", [])
+    b = parse(check_answer("leaf"), "leaf", "check", [])
+    rec = record(leaf_cand, a, b, ["temp"], [], "review", None, [])
+    assert rec["signals"] == a["signals"] and rec["missing"] == ["temp"]
+    assert rec["second"]["signals"] == b["signals"] and rec["second"]["missing"] == []

@@ -7,7 +7,7 @@ import type { Book, LeafBook } from "./types";
 const mk = (id: string, genre: string, score: number): LeafBook =>
   ({ id, entry: "leaf", genre, pages: 300, axes: { temp: score as -1 | 0 | 1, pull: 0, gain: 0, world: 0 } });
 // score function reads the planted score from axes.temp scaled by 3 so we can control it
-const byTemp = (b: Book) => (b.entry === "leaf" ? b.axes.temp * 3 : null);
+const byTemp = (b: Book) => (b.entry === "leaf" ? (b.axes.temp ?? 0) * 3 : null);
 const opts = (o: Partial<Parameters<typeof drawBookmarks>[2]> = {}) =>
   ({ seen: new Set<string>(), ...LEAF_PARAMS, rng: mulberry32(1), inRandomPool: () => true, ...o });
 

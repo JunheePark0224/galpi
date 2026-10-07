@@ -73,6 +73,15 @@ describe("mergeAdditions", () => {
     }
   });
 
+  it("takes a picked 🍃 book with an empty axis (비움, label-dictionary v3.1 rule 9) — the score counts it 0", () => {
+    const leaf = book({ isbn: "9795555555555", entry: "leaf", genre: "한국 소설", topic: undefined, keywords: undefined,
+      way: undefined, axes: { temp: 1, pull: null, gain: -1, world: 1 }, one_liner: "그날 밤 두 사람은 무엇을 놓쳤을까요?",
+      one_liner_style: "question" });
+    const { rows, bib } = mergeAdditions(BASE_ROWS, BASE_BIB, [file([leaf, book()])], VOCAB);
+    expect(rows.map((r) => r.isbn)).toEqual(["9790000000001", "9795555555555", "9791111111111"]);
+    expect(normalizeCatalog(rows, bib).find((b) => b.isbn === "9795555555555")?.axes).toEqual({ temp: 1, pull: null, gain: -1, world: 1 });
+  });
+
   it("rejects an unknown status, a missing title and an unknown entry", () => {
     expect(() => mergeAdditions([], new Map(), [file([book({ status: "maybe" })])], VOCAB)).toThrow("unknown status maybe");
     expect(() => mergeAdditions([], new Map(), [file([book({ title: "" })])], VOCAB)).toThrow("needs title and author");

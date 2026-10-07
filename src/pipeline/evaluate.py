@@ -43,7 +43,7 @@ from .candidates import INTRO_MAX, TOC_MAX, Candidate
 from .checks import disagreements, rule_issues, scrub, split_issues
 from .config import MODELS
 from .merge import keyword_hints
-from .prompt import AXES, MAX_KEYWORDS, schema, system_prompt, user_message
+from .prompt import AXES, MAX_KEYWORDS, all_keywords, schema, system_prompt, user_message
 from .tagger import CACHE_READ, CACHE_WRITE, PRICES, Breaker, TaggerStop, Usage, call, parse
 
 PROCESSED = ROOT / "data" / "processed"
@@ -75,7 +75,7 @@ def candidate(g: dict, detail_dir: Path) -> Candidate | None:
         return None
     items = (json.loads(path.read_text(encoding="utf-8")).get("data") or {}).get("items") or []
     cd = (items[0].get("contentDetail") or {}) if items else {}
-    return Candidate(g["entry"], g["slot"], g["isbn"], g["title"], "", 0, "", clean(cd.get("bookIntroduction") or "", INTRO_MAX),
+    return Candidate(g["entry"], g["slot"], g["isbn"], g["title"], g.get("author") or "", 0, "", clean(cd.get("bookIntroduction") or "", INTRO_MAX),
                      clean(cd.get("tableOfContents") or "", TOC_MAX))
 
 
@@ -173,9 +173,9 @@ def run_model(client, model: str, second: str, golds: list[dict], vocab: dict, d
             continue
         kept = vocab[cand.slot]["kept"] if cand.entry == "target" else {}
         names = list(kept)
-        user = user_message(cand.entry, cand.slot, cand.title, cand.intro, cand.toc, keyword_hints(cand, kept) if kept else [])
-        raw_a, ua, why_a = call(client, model, prompts["tag"], user, schema(cand.entry, "tag", names), breaker, "A")
-        raw_b, ub, why_b = call(client, second, prompts["check"], user, schema(cand.entry, "check", names), breaker, "B")
+        user = user_message(cand.entry, cand.slot, cand.title, cand.author, cand.intro, cand.toc, keyword_hints(cand, kept) if kept else [])
+        raw_a, ua, why_a = call(client, model, prompts["tag"], user, schema(cand.entry, "tag", all_keywords(vocab)), breaker, "A")
+        raw_b, ub, why_b = call(client, second, prompts["check"], user, schema(cand.entry, "check", all_keywords(vocab)), breaker, "B")
         for m, u in ((model, ua), (second, ub)):
             usage[m] = usage.get(m, Usage()).plus(u)
         a = parse(raw_a, cand.entry, "tag", names) if raw_a else None
@@ -208,7 +208,7 @@ def estimate(golds: list[dict], models: list[str], second: str, vocab: dict, det
             skipped += 1
             continue
         books += 1
-        user = len(user_message(cand.entry, cand.slot, cand.title, cand.intro, cand.toc, []))
+        user = len(user_message(cand.entry, cand.slot, cand.title, cand.author, cand.intro, cand.toc, []))
         for first in models:
             calls += [(first, "tag", user), (second, "check", user)]
     lo, hi = TOKENS_PER_CHAR

@@ -7,6 +7,7 @@ proposal.md (왜 — 고객·문제·분석)
    ↓
 PRD.md (무엇을 — 기능 F · 화면 S · 이벤트 E · 데이터 D)
    ├→ balance-game.md · target-chips.md · book-pool.md (추천 규칙 — 입력·점수·뽑기)
+   ├→ label-dictionary.md (라벨 정의서 — 축·장르·주제·방식 판단 순서, 사람·태거 공통)
    ├→ PHASES.md (언제·어떤 순서로 — Phase P, 데이터 D1~D4)
    └→ DESIGN.md (어떻게 보이나 — 토큰 T · 컴포넌트 C · 에셋 A)
 process.md (Reference 순서와 단계별 기록) · context.md (결정 기록) · tasks.md (체크리스트)

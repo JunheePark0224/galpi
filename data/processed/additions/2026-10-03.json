@@ -113,7 +113,8 @@
     "status": "picked"
    },
    "reviewed": true,
-   "sampled": true
+   "sampled": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791169087599",
@@ -164,7 +165,8 @@
     "one_liner": "완벽주의 뒤에 숨은 우울을 알아보고 억눌러온 감정을 다루는 단계별 방법을 얻어요",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791155501658",
@@ -200,7 +202,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/31996464",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "대화·관계",
+    "keywords": [
+     "발표"
+    ],
+    "way": "실습",
+    "one_liner": "발표의 도입부터 종결까지 차근차근 익혀서 또렷하게 발표하는 힘을 길러요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791161690728",
@@ -238,7 +250,18 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/68374822",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "대화·관계",
+    "keywords": [
+     "거리 두기",
+     "호감·사회생활"
+    ],
+    "way": "실습",
+    "one_liner": "가까워도 멀어도 탈 나는 사이에서 선 긋고 어울리는 감을 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791197031731",
@@ -310,7 +333,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/163289126",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "직장 생활"
+    ],
+    "way": "사례",
+    "one_liner": "신입부터 팀장까지 직급별로 겪는 상사·동료 관계와 성과 전략을 배워요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788963222189",
@@ -375,8 +408,7 @@
    "topic": "통계",
    "field": "데이터·통계",
    "keywords": [
-    "기초 통계",
-    "가설검정"
+    "기초 통계"
    ],
    "keywords_regex": [
     "가설검정"
@@ -413,7 +445,20 @@
     "one_liner": "",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "통계",
+     "keywords": [
+      "기초 통계",
+      "가설검정"
+     ],
+     "way": "개념",
+     "one_liner": "숫자로 된 주장을 그대로 믿지 않고 통계를 따져 읽는 법을 익혀요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791124516492",
@@ -505,7 +550,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/187703288",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "AI 에이전트"
+    ],
+    "way": "실습",
+    "one_liner": "랭그래프로 싱글·멀티 에이전트를 직접 구현하며 설계 감각을 키워요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791192040097",
@@ -567,8 +622,7 @@
    "topic": "AI 활용",
    "field": "AI·IT 활용",
    "keywords": [
-    "챗GPT",
-    "이미지·영상 생성"
+    "챗GPT"
    ],
    "keywords_regex": [
     "챗GPT",
@@ -606,7 +660,20 @@
     "status": "picked"
    },
    "reviewed": true,
-   "sampled": true
+   "sampled": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "AI 활용",
+     "keywords": [
+      "챗GPT",
+      "이미지·영상 생성"
+     ],
+     "way": "실습",
+     "one_liner": "검색, 이미지·영상 만들기, 일정 관리까지 챗GPT 쓰는 법을 예제로 따라 해 봐요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791163038979",
@@ -736,7 +803,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/195074826",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "업무 자동화",
+    "keywords": [
+     "AI 업무 활용"
+    ],
+    "way": "실습",
+    "one_liner": "자료 조사부터 SNS 글, 카드뉴스까지 알아서 돌아가는 나만의 시스템을 만들어 봐요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788960884618",
@@ -771,7 +848,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/129445293",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "업무 자동화",
+    "keywords": [
+     "코파일럿·M365"
+    ],
+    "way": "실습",
+    "one_liner": "코파일럿에게 시켜서 엑셀 필터, 수식, 보고서 만드는 일을 빠르게 끝내는 법을 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791140703791",
@@ -811,11 +898,11 @@
    "author": "김대영 저",
    "pages": 336,
    "entry": "target",
-   "topic": "습관·집중",
+   "topic": "건강·운동",
    "field": "습관·자기계발",
    "keywords": [
-    "습관",
-    "뇌과학"
+    "운동 습관",
+    "달리기·근력"
    ],
    "keywords_regex": [
     "습관",
@@ -842,7 +929,30 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/189628243",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "습관",
+     "뇌과학"
+    ],
+    "way": "실습",
+    "one_liner": "뇌가 운동을 피하는 원리를 알고 달리기를 꾸준히 이어 가는 방법을 익혀요.",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "습관·집중",
+     "keywords": [
+      "습관",
+      "뇌과학"
+     ],
+     "way": "실습",
+     "one_liner": "뇌가 운동을 피하는 원리를 알고 달리기를 꾸준히 이어 가는 방법을 익혀요."
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791141189778",
@@ -879,9 +989,23 @@
    },
    "flags": [],
    "issues": [],
-   "status": "picked",
+   "status": "dropped",
    "link": "https://www.yes24.com/product/goods/195234740",
-   "auto": "ai-agree"
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "과학 교양"
+   },
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "집중력",
+     "뇌과학"
+    ],
+    "way": "개념",
+    "one_liner": "스마트폰에 흩어지는 주의력이 왜 무너지는지 뇌의 작동 방식으로 이해해요",
+    "status": "picked"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788956055008",
@@ -1024,7 +1148,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/195274150",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "시간·생산성",
+    "keywords": [
+     "일하는 법"
+    ],
+    "way": "실습",
+    "one_liner": "불필요한 시간을 버리고 맡기고 허무는 법으로 마음이 편한 하루를 되찾아요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791167600936",
@@ -1066,7 +1200,8 @@
     "one_liner": "메타인지로 약점을 짚고 회독과 시간 기록으로 공부 효율을 높이는 방법을 익혀요",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788965705048",
@@ -1112,7 +1247,8 @@
     "one_liner": "야근 대신 업무의 질과 빈 시간으로 조직의 생산성을 높이는 길을 짚어 줘요",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791190955423",
@@ -1179,7 +1315,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/3388124",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "커리어 설계"
+    ],
+    "way": "개념",
+    "one_liner": "금융권 부서별 업무와 진로를 살펴보며 취업 준비의 방향을 잡아요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788967999568",
@@ -1215,7 +1361,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/192703174",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "자소서·면접"
+    ],
+    "way": "실습",
+    "one_liner": "채용 흐름을 짚고 자기소개서 쓰는 법과 면접 답변 전략까지 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   }
  ]
 }
