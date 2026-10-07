@@ -8543,5 +8543,5447 @@
    "world": 1
   },
   "keywords": []
+ },
+ {
+  "isbn": "9788960885219",
+  "title": "말랑말랑 밋다다의 SD 캐릭터 그리기",
+  "author": "밋다다",
+  "pages": 216,
+  "one_liner": "귀여운 SD 캐릭터를 얼굴부터 채색까지 차근차근 그려 봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788968334177",
+  "title": "조선 미술관",
+  "author": "탁현규",
+  "pages": 280,
+  "one_liner": "풍속화와 궁중기록화 50여 점으로 조선 후기의 삶을 전시실 따라 구경해요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788971995952",
+  "title": "풍경의 깊이",
+  "author": "강요배",
+  "pages": 380,
+  "one_liner": "화가의 글과 그림을 따라 제주의 바람과 시간을 천천히 거닐어 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791124137390",
+  "title": "모네, 빛의 순간들",
+  "author": "박송이",
+  "pages": 272,
+  "one_liner": "빛을 좇은 화가의 삶과 대표작을 시기별로 따라가 보고 싶지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788956605944",
+  "title": "유럽의 그림책 작가들에게 묻다",
+  "author": "최혜진",
+  "pages": 312,
+  "one_liner": "그림책 작가들의 아뜰리에를 거닐며 상상력이 어디서 오는지 들여다볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194368311",
+  "title": "쓰는 인간",
+  "author": "롤런드 앨런",
+  "pages": 544,
+  "one_liner": "노트가 어떻게 생겨나 생각을 넓혀 왔는지 시대별 인물 이야기로 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791170614234",
+  "title": "조선범죄실록",
+  "author": "정명섭",
+  "pages": 292,
+  "one_liner": "예의의 나라 뒤편, 조선 범죄 현장엔 어떤 사람들이 있었을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791167822499",
+  "title": "잠시 시간이 멈추는 곳으로 가겠습니다",
+  "author": "유철상",
+  "pages": 264,
+  "one_liner": "바삐 달리다 지친 마음에 세계 곳곳의 멈춘 시간을 건네는 여행은 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791171712304",
+  "title": "무정형의 삶",
+  "author": "김민철",
+  "pages": 336,
+  "one_liner": "퇴사 뒤 파리에서 보낸 두 달의 일상과 사색이 궁금하다면요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788970593029",
+  "title": "디자인의 디자인",
+  "author": "하라 켄야",
+  "pages": 241,
+  "one_liner": "무인양품과 올림픽 같은 실제 프로젝트로 디자인의 뜻을 새로 보게 해 줄까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791124336861",
+  "title": "내 손으로, 치앙마이",
+  "author": "이다",
+  "pages": 576,
+  "one_liner": "손글씨와 그림으로 담은 치앙마이 두 달 살기를 같이 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788940804322",
+  "title": "연필 스케치",
+  "author": "권영애",
+  "pages": 120,
+  "one_liner": "연필 하나로 선 연습부터 명암, 원근, 풍경까지 차근차근 익혀 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791166894312",
+  "title": "기후로 보는 한국사",
+  "author": "박정재",
+  "pages": 312,
+  "one_liner": "기후가 흔들릴 때 한국사의 장면들은 어떻게 달라졌을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791188850624",
+  "title": "세계사를 바꾼 12가지 신소재",
+  "author": "사토 겐타로",
+  "pages": 280,
+  "one_liner": "금·철·종이 같은 재료로 문명의 흐름을 따라가 보면 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788901214924",
+  "title": "한 권으로 읽는 조선왕조실록",
+  "author": "박영규",
+  "pages": 680,
+  "one_liner": "태조부터 왕별로 조선의 사건과 인물을 차례로 짚어 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791139732245",
+  "title": "500명의 인물로 읽는 세계사",
+  "author": "찰스 필립스",
+  "pages": 416,
+  "one_liner": "500명의 얼굴과 인생 이야기를 따라가다 보면 세계사의 큰 그림이 그려질까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791139729719",
+  "title": "500가지 건축으로 읽는 세계사",
+  "author": "소피 콜린스",
+  "pages": 424,
+  "one_liner": "건축물 500점을 연대순으로 따라가며 세계사의 큰 흐름을 훑어봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788952130037",
+  "title": "인류 최초의 문명과 이스라엘",
+  "author": "주원준",
+  "pages": 336,
+  "one_liner": "그리스 이전의 세계를 메소포타미아와 이집트의 시대 흐름으로 차분히 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791157068753",
+  "title": "밥 국 찬, 한식의 탄생",
+  "author": "홍대선",
+  "pages": 232,
+  "one_liner": "우리는 왜 밥과 국, 반찬을 매일 먹게 됐을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788934951711",
+  "title": "총, 균, 쇠",
+  "author": "재레드 다이아몬드",
+  "pages": 784,
+  "one_liner": "왜 어떤 민족은 정복하고 어떤 민족은 정복당했는지 지리와 생물로 풀어줘요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791197378270",
+  "title": "교감완역 난중일기",
+  "author": "이순신",
+  "pages": 500,
+  "one_liner": "임진왜란 7년의 해전과 장수의 속내를 날짜별 기록으로 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193358146",
+  "title": "오늘 밤, 거짓말의 세계에서 잊을 수 없는 사랑을",
+  "author": "이치조 미사키",
+  "pages": 416,
+  "one_liner": "시한부를 선고받은 고등학생의 풋풋한 사랑이 아릿한 여운을 남길까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791175910928",
+  "title": "첫사랑",
+  "author": "이반 투르게네프",
+  "pages": 184,
+  "one_liner": "한 편의 단편으로 만나는 고전 속 사랑 이야기가 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193939529",
+  "title": "처음 하는 브랜딩 공부",
+  "author": "권정훈, 김도현",
+  "pages": 272,
+  "one_liner": "작은 가게도 적용할 수 있는 브랜드 법칙을 콘셉트부터 실전까지 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "브랜딩"
+  ]
+ },
+ {
+  "isbn": "9791169214100",
+  "title": "구스마일의 월 1,000만 원 버는 유튜브 첫걸음 가이드북",
+  "author": "구스마일",
+  "pages": 240,
+  "one_liner": "휴대폰만으로 채널을 만들고 주제를 골라 수익까지 이어 가는 순서를 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "콘텐츠 마케팅"
+  ]
+ },
+ {
+  "isbn": "9791193690192",
+  "title": "연명치료는 사양하겠습니다",
+  "author": "양성관",
+  "pages": 212,
+  "one_liner": "삶의 마지막 의료·법·돌봄 현실을 알고 나의 뜻을 미리 말하게 돼요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937833663",
+  "title": "돈으로 살 수 없는 것들",
+  "author": "마이클 샌델",
+  "pages": 336,
+  "one_liner": "돈이 도덕을 밀어내는 구체적 사례로 시장의 한계를 짚어 보게 해요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791155401651",
+  "title": "2050 거주불능 지구",
+  "author": "데이비드 월러스 웰스",
+  "pages": 424,
+  "one_liner": "기후변화가 일상과 경제를 어떻게 무너뜨릴지 열두 가지 재난으로 알아볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788962623871",
+  "title": "미쳐있고 괴상하며 오만하고 똑똑한 여자들",
+  "author": "하미나",
+  "pages": 332,
+  "one_liner": "우울증을 여성의 경험과 사회 구조로 다시 읽어 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937463952",
+  "title": "월든",
+  "author": "헨리 데이비드 소로",
+  "pages": 516,
+  "one_liner": "숲속 호숫가에서 보내며 삶의 본질을 되묻게 되는 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791199405813",
+  "title": "슬픈 세상의 기쁜 말",
+  "author": "정혜윤",
+  "pages": 280,
+  "one_liner": "슬픈 세상에서 새로운 말과 이야기가 우리를 구한다고 믿게 해 줄까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791188469994",
+  "title": "당신은 결국 무엇이든 해내는 사람",
+  "author": "김상현",
+  "pages": 208,
+  "one_liner": "흔들리는 날에도 나만의 속도를 믿게 해 주는 위로의 문장들을 만나볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791192559742",
+  "title": "좋은 일이 오려고 그러나 보다 (리커버판)",
+  "author": "박여름",
+  "pages": 244,
+  "one_liner": "불안과 이별 앞에서 마음을 다독여 줄 다정한 말이 필요하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198210852",
+  "title": "처음부터 끝까지 고백",
+  "author": "주또",
+  "pages": 248,
+  "one_liner": "사랑의 설렘부터 이별 뒤 애틋함까지, 어떤 고백이 내 마음을 닮았을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791189198862",
+  "title": "종의 기원",
+  "author": "찰스 다윈",
+  "pages": 656,
+  "one_liner": "자연 선택으로 생물이 어떻게 변해 왔는지 초판 논증을 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788931558982",
+  "title": "날로 먹는 분자세포생물학",
+  "author": "신인철",
+  "pages": 240,
+  "one_liner": "만화로 세포의 구조와 신호전달 같은 개념을 부담 없이 익혀요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791171258659",
+  "title": "위험한 과학책 (10주년 기념판)",
+  "author": "랜들 먼로",
+  "pages": 420,
+  "one_liner": "엉뚱한 질문에 과학으로 진지하게 답하면 어떤 일이 벌어질까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788965708063",
+  "title": "시간은 흐르지 않는다",
+  "author": "카를로 로벨리",
+  "pages": 240,
+  "one_liner": "양자중력 관점에서 시간이 무엇인지 풀어 보며 익숙한 시간관념이 흔들려요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791139724936",
+  "title": "드디어 만나는 해부학 수업",
+  "author": "케빈 랭포드",
+  "pages": 416,
+  "one_liner": "세포에서 장기까지 내 몸이 어떻게 움직이는지 해부도로 쉽게 이해해 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791165215842",
+  "title": "이토록 뜻밖의 뇌과학",
+  "author": "리사 펠드먼 배럿",
+  "pages": 244,
+  "one_liner": "뇌가 생각하려고 있는 게 아니라면, 대체 무엇을 위해 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791190030540",
+  "title": "정재승의 과학콘서트",
+  "author": "정재승",
+  "pages": 388,
+  "one_liner": "일상 속 현상에 숨은 복잡계 과학의 원리가 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791187011750",
+  "title": "살인자 외",
+  "author": "어니스트 헤밍웨이 외",
+  "pages": 408,
+  "one_liner": "짧은 분량에 압축된 고전 미스터리 아홉 편으로 긴장감을 맛보고 싶다면요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791171713721",
+  "title": "나의 작은 무법자",
+  "author": "크리스 휘타커",
+  "pages": 572,
+  "one_liner": "출소한 살인자가 돌아오자 소녀는 어떤 선택을 하게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791163165026",
+  "title": "행복배틀",
+  "author": "주영하",
+  "pages": 376,
+  "one_liner": "살인사건의 실마리를 쫓다 행복 경쟁의 한가운데 서게 되면 무엇을 보게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791175773431",
+  "title": "내가 죽이지 않았다",
+  "author": "정해연",
+  "pages": 420,
+  "one_liner": "숨겨진 음모를 쫓다 보면 진실이 어디까지 뒤집힐까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791158790769",
+  "title": "연쇄 살인마 개구리 남자",
+  "author": "나카야마 시치리",
+  "pages": 352,
+  "one_liner": "심신 상실자의 죄를 묻는 논쟁 속에서 사이코 살인을 쫓는 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788934980292",
+  "title": "쾌 : 젓가락 괴담 경연",
+  "author": "미쓰다 신조 외",
+  "pages": 696,
+  "one_liner": "젓가락 미신과 금기가 다섯 편의 괴담으로 이어지면 어떤 이야기가 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194654810",
+  "title": "퇴마록 외전 1",
+  "author": "이우혁",
+  "pages": 324,
+  "one_liner": "보이지 않는 적과 생령에 맞서는 퇴마 이야기가 이어질까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791190974882",
+  "title": "검은 수녀들 : 오컬트 연대기",
+  "author": "퍼시벌 랜던 외",
+  "pages": 210,
+  "one_liner": "수녀원의 유령과 분신이 들려주는 고딕 단편을 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791124028438",
+  "title": "어두운 집",
+  "author": "전건우",
+  "pages": 256,
+  "one_liner": "집이라는 안전한 곳이 저주의 무대가 되면 어떤 일이 벌어질까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791141606442",
+  "title": "귀매",
+  "author": "유은지",
+  "pages": 420,
+  "one_liner": "한국 귀신과 도깨비가 도사린 섬뜩한 오컬트 세계로 들어가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791170613831",
+  "title": "열람 엄금",
+  "author": "치넨 미키토",
+  "pages": 288,
+  "one_liner": "인터뷰 기록을 따라 사건의 진상을 파고드는 공포를 견딜 수 있나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791197377143",
+  "title": "어서 오세요, 휴남동 서점입니다",
+  "author": "황보름",
+  "pages": 364,
+  "one_liner": "동네 서점에서 사람들이 서로 받아들여지며 마음을 여는 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193235966",
+  "title": "윗집 부부",
+  "author": "황보름",
+  "pages": 328,
+  "one_liner": "내 곁에 사는 이웃은 어떤 사람일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791172134686",
+  "title": "끝나지 않는 노래",
+  "author": "최진영",
+  "pages": 352,
+  "one_liner": "여성 3대가 100년 동안 겪은 질곡을 따라가며 사랑을 묻게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788954687041",
+  "title": "새의 선물",
+  "author": "은희경",
+  "pages": 440,
+  "one_liner": "열두 살 여자아이의 눈으로 삶을 바라보는 성장 이야기가 궁금하세요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791168322769",
+  "title": "조직문화 트렌드 2027",
+  "author": "정진호 외",
+  "pages": 323,
+  "one_liner": "AI 시대 조직이 어떤 신호로 흔들리는지 읽고 일하는 방식을 다시 생각해 봐요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "조직 문화"
+  ]
+ },
+ {
+  "isbn": "9791170612735",
+  "title": "원팀을 만드는 원온원",
+  "author": "남관희, 윤수환",
+  "pages": 292,
+  "one_liner": "팀장이 원온원으로 팀원 유형별 대화와 목표 설정을 해 보는 방법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "피드백·코칭",
+   "팀 이끌기"
+  ]
+ },
+ {
+  "isbn": "9791194966425",
+  "title": "조직은 설계된다",
+  "author": "조현철",
+  "pages": 312,
+  "one_liner": "리더십·소통·제도를 따로 고치지 않고 하나의 설계로 보는 눈을 줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "조직 문화"
+  ]
+ },
+ {
+  "isbn": "9791168321038",
+  "title": "원온원",
+  "author": "백종화",
+  "pages": 411,
+  "one_liner": "팀장이 구성원과 성과 대화를 나누는 실행 방법과 질문을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "피드백·코칭",
+   "팀 이끌기"
+  ]
+ },
+ {
+  "isbn": "9791175910249",
+  "title": "모든 요일의 여행 (10주년 개정증보판)",
+  "author": "김민철",
+  "pages": 312,
+  "one_liner": "낯선 곳에서 내 취향과 속도를 찾고 일상도 여행처럼 살게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788970415857",
+  "title": "다시, 그림이다",
+  "author": "마틴 게이퍼드",
+  "pages": 248,
+  "one_liner": "호크니와 나눈 대담으로 그림이 세상을 어떻게 보여 주는지 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788925568560",
+  "title": "미야자키 하야오라는 세계",
+  "author": "니콜라스 라폴드",
+  "pages": 224,
+  "one_liner": "감독의 세계가 어디서 왔는지 영감의 원천을 따라가 보고 싶지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788979294408",
+  "title": "컬러 앤 라이트",
+  "author": "제임스 거니",
+  "pages": 224,
+  "one_liner": "빛과 색의 원리를 관찰로 익혀 그림에 쓰고 싶지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791155818992",
+  "title": "일본 책방 도감",
+  "author": "마사키 데쓰야",
+  "pages": 192,
+  "one_liner": "줄자로 잰 도면 속 책방을 거닐며 나만의 공간 취향을 찾아볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194777786",
+  "title": "지도로 보는 세계의 역사",
+  "author": "크리스티앙 그라탈루",
+  "pages": 784,
+  "one_liner": "지도 위에서 문명의 흐름을 따라가며 사건의 맥락을 짚어 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788901241630",
+  "title": "사진과 그림으로 보는 한국현대사",
+  "author": "서중석",
+  "pages": 504,
+  "one_liner": "해방부터 민주화까지 한국 현대사의 굵직한 장면을 차례로 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788958285236",
+  "title": "아틀라스 일본사",
+  "author": "일본사학회",
+  "pages": 235,
+  "one_liner": "고대부터 근현대까지 일본사의 흐름을 균형 잡힌 시선으로 훑어볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791172070786",
+  "title": "동영",
+  "author": "임태리",
+  "pages": 292,
+  "one_liner": "열아홉 살의 사랑과 이별을 따라가는 이야기인가요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193262214",
+  "title": "네가 유성처럼 스러지는 모습을 지켜볼 운명이었다",
+  "author": "미나토 쇼",
+  "pages": 296,
+  "one_liner": "남은 끼니를 세며 함께 밥을 먹는 두 사람은 어떤 마음에 닿게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791191053579",
+  "title": "인스타그램 릴스 & 알고리즘 공략법 : 100만 조회수 만들기",
+  "author": "서진원",
+  "pages": 204,
+  "one_liner": "릴스 알고리즘 원리부터 기획·후킹·팬덤 소통까지 바로 써먹을 운영법을 얻어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "콘텐츠 마케팅"
+  ]
+ },
+ {
+  "isbn": "9788970417912",
+  "title": "결국, 오프라인",
+  "author": "최원석",
+  "pages": 264,
+  "one_liner": "팝업과 오프라인 공간으로 팬덤을 만드는 기획 전략을 배워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "브랜딩",
+   "고객 이해"
+  ]
+ },
+ {
+  "isbn": "9791172130268",
+  "title": "나, 블루칼라 여자",
+  "author": "박정연",
+  "pages": 232,
+  "one_liner": "험한 일터에서 차별을 견딘 여성 열 명의 삶을 만나 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791160560589",
+  "title": "어떻게 민주주의는 무너지는가",
+  "author": "스티븐 레비츠키 외",
+  "pages": 352,
+  "one_liner": "투표장에서 민주주의가 무너지는 이유가 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788972971290",
+  "title": "나는 선량한 기후파괴자입니다",
+  "author": "토마스 브루더만",
+  "pages": 312,
+  "one_liner": "평범한 일상 속 기후 책임을 변명 하나하나 짚어 보게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791167742827",
+  "title": "손절사회",
+  "author": "이승연",
+  "pages": 384,
+  "one_liner": "손절이 왜 문화가 됐는지 사회학으로 짚어 보면 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193712559",
+  "title": "길 위의 뇌",
+  "author": "정세희",
+  "pages": 348,
+  "one_liner": "의사가 달리며 만난 뇌 이야기를 곁에서 들려주면 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791122102505",
+  "title": "내 기분까지 내 책임이라니",
+  "author": "오원",
+  "pages": 304,
+  "one_liner": "기분의 주도권을 내 안으로 되찾는 길을 요가와 일상 이야기로 들려줄까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198944047",
+  "title": "좋은 사람 도감",
+  "author": "묘엔 스구루 외",
+  "pages": 132,
+  "one_liner": "일상 속 작은 친절을 모아 보며 마음이 따뜻해지나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791158161767",
+  "title": "이 지랄맞음이 쌓여 축제가 되겠지",
+  "author": "조승리",
+  "pages": 240,
+  "one_liner": "앞이 캄캄해도 불꽃을 지켜 온 한 사람의 삶을 시원한 글로 만나볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788997743728",
+  "title": "의식의 탄생",
+  "author": "오기 오거스 외",
+  "pages": 472,
+  "one_liner": "미생물에서 인간까지 마음이 어떻게 생겨났는지 단계별로 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788995141588",
+  "title": "한국의 새",
+  "author": "이우신 외",
+  "pages": 404,
+  "one_liner": "탐조 예절을 익히고 573종의 새를 그림으로 식별해 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788955889215",
+  "title": "건물은 물리학이다",
+  "author": "Sho 건축사",
+  "pages": 192,
+  "one_liner": "문과 창문, 지진과 단열 속에 어떤 물리 원리가 숨어 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788950911799",
+  "title": "기억하는 뇌, 망각하는 뇌",
+  "author": "이인아",
+  "pages": 252,
+  "one_liner": "뇌가 왜 학습하고 기억하는지 원리를 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791173327643",
+  "title": "양자 문명",
+  "author": "한정훈",
+  "pages": 356,
+  "one_liner": "전기에서 양자컴퓨터까지 문명을 바꾼 물리학의 흐름을 따라가 봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788965703112",
+  "title": "모든 순간의 물리학",
+  "author": "카를로 로벨리",
+  "pages": 148,
+  "one_liner": "20세기 물리학 혁명의 핵심 이론을 일곱 강의로 간결하게 훑어봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791197599415",
+  "title": "우리는 어쩌다 과학을 믿게 되었을까",
+  "author": "이근희, 김갑진",
+  "pages": 372,
+  "one_liner": "노벨 물리학상 120년의 논쟁과 합의를 따라가며 과학을 믿는 이유를 알게 돼요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791197993480",
+  "title": "마티스×스릴러",
+  "author": "정해연 외",
+  "pages": 304,
+  "one_liner": "마티스 그림에서 시작된 어둠과 욕망의 반전, 다섯 작가의 스릴러를 만나볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194655251",
+  "title": "모성",
+  "author": "미나토 가나에",
+  "pages": 336,
+  "one_liner": "엄마와 딸의 엇갈린 기억 속에서 사건의 진실을 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791158792619",
+  "title": "가족극",
+  "author": "미야베 미유키",
+  "pages": 264,
+  "one_liner": "가족이라고 서로를 진짜 아느냐는 불편한 질문을 던지는 미스터리일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791158792367",
+  "title": "흉가",
+  "author": "미쓰다 신조",
+  "pages": 364,
+  "one_liner": "가장 편안해야 할 집이 끔찍한 무대로 변할 때 얼마나 견딜 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194654902",
+  "title": "퇴마록 혼세편 1",
+  "author": "이우혁",
+  "pages": 484,
+  "one_liner": "악인들의 계략에 맞서는 퇴마사들의 여정이 궁금한가요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791166836008",
+  "title": "어두운 물",
+  "author": "전건우",
+  "pages": 288,
+  "one_liner": "강에서 벌어지는 익사 사고의 진상을 쫓다 끔찍한 실체와 마주하면 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194979708",
+  "title": "더럽혀진 성지 순례에 대하여",
+  "author": "세스지",
+  "pages": 304,
+  "one_liner": "욕망과 원한이 번지는 괴이한 장소들을 따라가면 어떤 공포를 만나게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788950977795",
+  "title": "보기왕이 온다",
+  "author": "사와무라 이치",
+  "pages": 384,
+  "one_liner": "평범한 일상에 스며드는 뒤틀린 인간 심리가 극한의 공포가 되는 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791170527060",
+  "title": "저 밖에서 비명 소리가",
+  "author": "N. K. 제미신 외",
+  "pages": 528,
+  "one_liner": "조던 필이 고른 섬뜩한 악몽 열아홉 편, 어떤 공포가 기다릴까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193190364",
+  "title": "당신의 잘린, 손",
+  "author": "배예람, 클레이븐",
+  "pages": 288,
+  "one_liner": "같은 한 줄에서 시작한 두 편의 호러, 어떻게 달라질까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791173830334",
+  "title": "조각나고 찢긴,",
+  "author": "조이스 캐럴 오츠 외",
+  "pages": 400,
+  "one_liner": "여성의 몸이 해부되고 다시 조립되는 바디호러를 만나 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788954681179",
+  "title": "밝은 밤",
+  "author": "최은영",
+  "pages": 344,
+  "one_liner": "백 년을 건너 이어지는 사랑과 숨을 서정적인 문장으로 만나 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788936439965",
+  "title": "아코디언",
+  "author": "천명관",
+  "pages": 308,
+  "one_liner": "전쟁 직후 서울 밑바닥에서 피어나는 사람들의 생명력과 온기를 만나 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788995151228",
+  "title": "난장이가 쏘아올린 작은 공",
+  "author": "조세희",
+  "pages": 416,
+  "one_liner": "70년대 도시 노동자의 삶을 단문의 호흡으로 마주하게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791171715503",
+  "title": "죽은 왕녀를 위한 파반느 (양장 특별판)",
+  "author": "박민규",
+  "pages": 448,
+  "one_liner": "외모로 밀려난 사람들의 우정과 사랑이 어떻게 흘러갔을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791167903792",
+  "title": "서성이다",
+  "author": "장강명",
+  "pages": 228,
+  "one_liner": "아내가 쓰러진 사흘 동안 한 남자가 두려움과 죄책감 사이를 서성이는 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791166571671",
+  "title": "팀장 리더십 수업",
+  "author": "김정현",
+  "pages": 316,
+  "one_liner": "팀장이 목표 공유와 권한위임, 성과관리로 팀을 이끄는 법을 배워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "피드백·코칭"
+  ]
+ },
+ {
+  "isbn": "9791170612230",
+  "title": "팀장은 처음이라",
+  "author": "남관희, 윤수환",
+  "pages": 312,
+  "one_liner": "초보 팀장이 팀원과 마주하는 여러 상황에서 쓸 대화 스킬을 역할극으로 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "피드백·코칭",
+   "팀 이끌기"
+  ]
+ },
+ {
+  "isbn": "9788984075108",
+  "title": "원온원 대화의 기술",
+  "author": "스티븐 로겔버그",
+  "pages": 320,
+  "one_liner": "팀원과 일대일로 대화를 준비하고 진행하고 마무리하는 방법을 단계별로 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "피드백·코칭",
+   "팀 이끌기"
+  ]
+ },
+ {
+  "isbn": "9791193000649",
+  "title": "리더의 원온원",
+  "author": "이인우, 유경철",
+  "pages": 272,
+  "one_liner": "리더가 팀원과 정기 면담을 준비하고 이끌며 성과와 성장을 돕는 방법을 알려 줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "피드백·코칭",
+   "팀 이끌기"
+  ]
+ },
+ {
+  "isbn": "9791189430351",
+  "title": "조직문화 통찰",
+  "author": "김성준",
+  "pages": 520,
+  "one_liner": "우리 조직의 운영체제를 규명해 문화를 바꾸는 눈을 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "조직 문화"
+  ]
+ },
+ {
+  "isbn": "9788971990933",
+  "title": "나무야 나무야",
+  "author": "신영복",
+  "pages": 160,
+  "one_liner": "사연 깊은 곳을 걸으며 국토와 역사를 되새겨 보고 싶지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788960908024",
+  "title": "평온한 날",
+  "author": "김보희",
+  "pages": 212,
+  "one_liner": "제주의 초록 속 일상과 그림으로 마음이 느긋해지는 책일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193217511",
+  "title": "데이비드 호크니, 무엇이든 예술이 된다",
+  "author": "데이비드 호크니",
+  "pages": 176,
+  "one_liner": "호크니의 어록과 대표작으로 그가 삶과 예술을 보는 눈을 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": 0,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791197518546",
+  "title": "테이트 유화 수업",
+  "author": "셀윈 리미",
+  "pages": 144,
+  "one_liner": "명작 30점을 따라가며 유화의 재료와 기법을 하나씩 익혀 볼 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788994796086",
+  "title": "쉽게 배우는 인체 드로잉 (리커버)",
+  "author": "앤드류 루미스",
+  "pages": 204,
+  "one_liner": "인체 비례와 해부학, 움직임 묘사를 차근차근 익혀 그림의 기본기를 다져 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788972916529",
+  "title": "나를 부르는 숲",
+  "author": "빌 브라이슨",
+  "pages": 399,
+  "one_liner": "배낭을 메고 긴 숲길에 나선 유쾌한 고군분투기를 함께 걷고 싶지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194273523",
+  "title": "경성기담",
+  "author": "전봉관",
+  "pages": 872,
+  "one_liner": "100년 전 경성을 뒤흔든 실제 사건들로 식민지 조선의 모습을 엿볼 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193154069",
+  "title": "신의 역사",
+  "author": "카렌 암스트롱",
+  "pages": 736,
+  "one_liner": "유일신의 탄생부터 신의 죽음까지, 신 관념은 어떻게 바뀌어 왔을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788925577883",
+  "title": "썬킴의 세계사 완전 정복",
+  "author": "썬킴",
+  "pages": 256,
+  "one_liner": "미국과 러시아가 패권국이 되기까지의 흐름을 이야기하듯 풀어 줄까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791170611707",
+  "title": "기묘한 밤",
+  "author": "기묘한 밤",
+  "pages": 356,
+  "one_liner": "고대 유적과 잃어버린 도시의 수수께끼를 하나씩 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791158523824",
+  "title": "샤먼 바이블",
+  "author": "김정민",
+  "pages": 272,
+  "one_liner": "민족 이동과 천문 기록으로 문명과 종교의 뿌리를 좇아가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788936437978",
+  "title": "대도시의 사랑법",
+  "author": "박상영",
+  "pages": 376,
+  "one_liner": "청춘의 사랑과 이별이 도시의 여름밤에 어떻게 남을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791155818084",
+  "title": "스타트업 설계자",
+  "author": "제프 워커",
+  "pages": 352,
+  "one_liner": "이메일 리스트와 세일즈 레터로 온라인 제품 런칭을 설계하는 방법을 배워요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "콘텐츠 마케팅",
+   "고객 이해"
+  ]
+ },
+ {
+  "isbn": "9788931583908",
+  "title": "인스타그램 마케팅으로 돈벌기",
+  "author": "최영인",
+  "pages": 328,
+  "one_liner": "계정 설정부터 게시물 올리기까지 따라 하며 브랜드를 알리는 방법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "콘텐츠 마케팅",
+   "브랜딩"
+  ]
+ },
+ {
+  "isbn": "9791198295477",
+  "title": "그래서 3km 동네 광고",
+  "author": "그래서노벰버",
+  "pages": 228,
+  "one_liner": "하루 소액으로 인스타·당근 광고를 돌려 동네 손님을 문의로 잇는 법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "콘텐츠 마케팅",
+   "고객 이해"
+  ]
+ },
+ {
+  "isbn": "9788934973331",
+  "title": "문명의 충돌",
+  "author": "새뮤얼 헌팅턴",
+  "pages": 600,
+  "one_liner": "문명 간 갈등으로 앞으로의 국제 질서를 읽어 보면 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791168731035",
+  "title": "돌봄의 사회학",
+  "author": "우에노 지즈코",
+  "pages": 944,
+  "one_liner": "고령사회에서 돌봄은 누가 어떻게 맡아야 할지 생각해 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788989566823",
+  "title": "각자도생의 세계와 지정학",
+  "author": "피터 자이한",
+  "pages": 496,
+  "one_liner": "미국 주도 질서가 무너진 뒤 나라별 운명은 어떻게 갈릴까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791186757628",
+  "title": "내 안의 차별주의자",
+  "author": "라우라 비스뵈크",
+  "pages": 260,
+  "one_liner": "내가 몰랐던 차별적 시선을 일과 성, 이주 이야기로 짚어 줄까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791188941582",
+  "title": "바퀴의 이동",
+  "author": "존 로산트 외",
+  "pages": 336,
+  "one_liner": "이동 수단의 변화가 도시와 삶을 어떻게 바꾸는지 사례로 살펴볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791164846610",
+  "title": "초고령사회 일본이 사는 법",
+  "author": "김웅철",
+  "pages": 272,
+  "one_liner": "치매카페와 주문형 교통을 먼저 만난 일본에서 우리 고령화의 미래가 보일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194184560",
+  "title": "엄마와 딸들의 미친년의 역사",
+  "author": "이랑",
+  "pages": 264,
+  "one_liner": "언니의 죽음과 가족 안의 슬픔을 저자의 목소리로 마주하는 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791162146170",
+  "title": "이런 말을 듣고 싶었나 보다",
+  "author": "권지은",
+  "pages": 256,
+  "one_liner": "지친 마음에 건네는 다정한 응원이 필요한 날이 있나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194741978",
+  "title": "혼잣말까지 다정한 사람",
+  "author": "황예현",
+  "pages": 218,
+  "one_liner": "스스로에게 건네는 말을 부드럽게 바꿔 보고 싶을 때 곁에 두면 좋을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791199447806",
+  "title": "위로는 서툴수록 좋다",
+  "author": "이정훈",
+  "pages": 288,
+  "one_liner": "오십 문턱에서 일상과 관계를 돌아본 기록, 어떤 위로가 남을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788962452495",
+  "title": "공무원 어휘도감",
+  "author": "서은희, 전소영",
+  "pages": 240,
+  "one_liner": "공직사회 용어에 숨은 풍경과 일하는 사람의 마음을 웃으며 만나 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791141609597",
+  "title": "몸, 내 안의 우주",
+  "author": "남궁인",
+  "pages": 516,
+  "one_liner": "응급실 환자 이야기를 따라가다 보면 장기마다 어떤 일을 하는지 쉽게 알게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791122025521",
+  "title": "어쩐지 애니에서 과학이 보인다",
+  "author": "류상진",
+  "pages": 324,
+  "one_liner": "유명 애니 속 장면을 실험으로 풀며 과학 개념을 쉽게 알게 돼요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788972917359",
+  "title": "그림으로 보는 시간의 역사",
+  "author": "스티븐 호킹",
+  "pages": 270,
+  "one_liner": "블랙홀과 시간여행 너머 우주의 원리가 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791196155636",
+  "title": "크리스퍼가 온다",
+  "author": "제니퍼 다우드나 외",
+  "pages": 372,
+  "one_liner": "유전자를 정밀하게 고치는 기술은 어떻게 만들어졌을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791167740946",
+  "title": "이토록 굉장한 세계",
+  "author": "에드 용",
+  "pages": 624,
+  "one_liner": "동물마다 다른 후각·시각·청각·전기감각의 세계를 사례로 들여다보게 해요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194276555",
+  "title": "존재의 역사",
+  "author": "팀 콜슨",
+  "pages": 575,
+  "one_liner": "우주의 탄생부터 생명과 의식까지 과학으로 훑으며 존재의 이유를 생각해 봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791164051403",
+  "title": "퀀텀의 세계",
+  "author": "이순칠",
+  "pages": 368,
+  "one_liner": "사칙연산만 알아도 양자컴퓨터의 원리와 쓰임을 비유로 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791159319594",
+  "title": "모든 것의 기원",
+  "author": "데이비드 버코비치",
+  "pages": 296,
+  "one_liner": "별과 은하부터 생명과 문명까지 만물의 기원을 유쾌하게 훑어봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": 1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194033400",
+  "title": "엉뚱한 과학책",
+  "author": "김진우",
+  "pages": 336,
+  "one_liner": "엉뚱한 궁금증을 하나씩 풀다 보면 일상 속 과학 원리가 궁금해지나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791170525912",
+  "title": "13계단",
+  "author": "다카노 가즈아키",
+  "pages": 416,
+  "one_liner": "누명 쓴 사형수를 구하려는 전과자와 교도관의 재수사를 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791188504169",
+  "title": "청계산장의 재판",
+  "author": "박은우",
+  "pages": 403,
+  "one_liner": "산장 인질극과 협상, 재판이 이어지면 누가 살아남을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791170528388",
+  "title": "절대 쫄지 마",
+  "author": "스티븐 킹",
+  "pages": 608,
+  "one_liner": "스토커의 위협 속에서 탐정이 경호에 나서는데, 어떤 위기가 닥칠까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791158792398",
+  "title": "화가",
+  "author": "미쓰다 신조",
+  "pages": 364,
+  "one_liner": "낯선 마을로 이사한 아이가 괴이한 일에 휘말리면 어떤 공포를 겪게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791159256592",
+  "title": "오래된 신들이 섬에 내려오시니",
+  "author": "전건우 외",
+  "pages": 352,
+  "one_liner": "제주 설화 속 오래된 신들이 낯선 공포로 다시 깨어난다면 어떤 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791191193534",
+  "title": "도시, 청년, 호러",
+  "author": "이시우 외",
+  "pages": 248,
+  "one_liner": "익숙한 도시 공간에서 벌어지는 섬뜩한 일에 소름이 돋을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791124712016",
+  "title": "어느 영화의 이변에 대한 목격 정보를 모집합니다",
+  "author": "카이토 모지",
+  "pages": 272,
+  "one_liner": "그 영화를 본 뒤 하얀 남자가 다가온다면, 끝까지 모른 척할 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791124612750",
+  "title": "무서운 괴담",
+  "author": "마츠바라 타니시",
+  "pages": 320,
+  "one_liner": "설명할 수 없는 섬뜩한 일들을 짧게 이어서 만나볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791170523550",
+  "title": "직장 상사 악령 퇴치부",
+  "author": "이사구",
+  "pages": 336,
+  "one_liner": "악귀 붙은 직장 일상을 무당 콤비와 유쾌하게 풀어낼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788932045726",
+  "title": "소설 보다 : 가을 2026",
+  "author": "박우연 외",
+  "pages": 172,
+  "one_liner": "젊은 작가 세 사람의 가을 단편과 작가 인터뷰를 만나 볼 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788932020938",
+  "title": "눈길",
+  "author": "이청준",
+  "pages": 421,
+  "one_liner": "억압의 시대를 사는 인물들의 품위와 고뇌를 만나게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788936439880",
+  "title": "할매",
+  "author": "황석영",
+  "pages": 224,
+  "one_liner": "사라지는 것들의 육백년을 따라가다 보면 마음은 어디에 닿을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788998199036",
+  "title": "무엇이 조직을 움직이는가",
+  "author": "패트릭 렌치오니",
+  "pages": 255,
+  "one_liner": "리더가 명료함을 만들고 전하는 네 가지 원칙과 실천 방안을 얻어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "조직 문화",
+   "팀 이끌기"
+  ]
+ },
+ {
+  "isbn": "9791187400349",
+  "title": "어서 와, 리더는 처음이지?",
+  "author": "장영학",
+  "pages": 263,
+  "one_liner": "처음 팀을 맡은 리더가 채용·평가·피드백과 팀 분위기를 만드는 방법을 알게 돼요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "피드백·코칭",
+   "조직 문화"
+  ]
+ },
+ {
+  "isbn": "9791130670829",
+  "title": "팀장의 시대",
+  "author": "류랑도",
+  "pages": 312,
+  "one_liner": "팀장의 역할과 위임, 성과 코칭, 평가 방법을 단계별로 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "피드백·코칭"
+  ]
+ },
+ {
+  "isbn": "9791172540470",
+  "title": "리더의 덕목",
+  "author": "피터 샤인 외",
+  "pages": 248,
+  "one_liner": "겸손한 리더십으로 관계를 쌓고 조직 문화를 바꾸는 길을 사례와 함께 배워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "조직 문화",
+   "팀 이끌기"
+  ]
+ },
+ {
+  "isbn": "9788970639468",
+  "title": "하늘 호수로 떠난 여행",
+  "author": "류시화",
+  "pages": 268,
+  "one_liner": "인도 길에서 만난 뜻밖의 스승과 웃음 나는 일화로 삶을 돌아보게 하는 여행기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788947549417",
+  "title": "명화의 탄생, 그때 그 사람",
+  "author": "성수영",
+  "pages": 344,
+  "one_liner": "화가의 삶을 따라가다 보면 낯설던 그림이 가까워질까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791199117600",
+  "title": "그림책 작가와 함께하는 그림책 만들기 7단계",
+  "author": "이서연, 윤나라",
+  "pages": 210,
+  "one_liner": "구상부터 그림, 제작까지 단계별로 따라 하며 나만의 책을 만들어 보나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788960536593",
+  "title": "호크니의 그림들",
+  "author": "데이비드 호크니",
+  "pages": 496,
+  "one_liner": "60년 작품 세계를 장마다 키워드로 훑어보는 회고전이에요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791169298896",
+  "title": "세상의 끝, 포르투갈의 숨결",
+  "author": "고경일",
+  "pages": 396,
+  "one_liner": "포르투갈에서 한 달 살며 은퇴 후 삶을 그려 보게 되는 여행 기록일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194033363",
+  "title": "365일 명화 일력 (미니멀 리커버 에디션)",
+  "author": "김영숙",
+  "pages": 384,
+  "one_liner": "하루 한 점 명화를 보며 일상에 작은 빛을 더해 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791173572791",
+  "title": "두선생의 지도로 읽는 세계사 : 동양 편",
+  "author": "한영준",
+  "pages": 254,
+  "one_liner": "지도를 펴면 아시아 나라들의 역사가 왜 서로 달랐는지 보이지 않을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788920049132",
+  "title": "DK 지도로 보는 세계사",
+  "author": "DK 세계사 편집위원회",
+  "pages": 368,
+  "one_liner": "선사 시대부터 오늘까지 세계사를 지도 위에서 훑어봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791130683331",
+  "title": "도구는 어떻게 권력이 되는가",
+  "author": "신무연",
+  "pages": 416,
+  "one_liner": "발명 50가지로 권력이 어떻게 옮겨 갔는지 알고 싶지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788991799561",
+  "title": "축의 시대",
+  "author": "카렌 암스트롱",
+  "pages": 740,
+  "one_liner": "공자와 소크라테스, 싯다르타가 나란히 살던 고대 문명의 흐름을 따라가 봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791157063734",
+  "title": "한국인의 탄생",
+  "author": "홍대선",
+  "pages": 384,
+  "one_liner": "산성과 전쟁, 밥상의 유전자로 한국인이 만들어진 과정이 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791124241042",
+  "title": "진보를 위한 현대사 수업",
+  "author": "배기성",
+  "pages": 340,
+  "one_liner": "해방 뒤 건국기의 결정적 장면을 스무 번의 특강으로 짚어 보면 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193024652",
+  "title": "로맨스 도파민",
+  "author": "최영원 외",
+  "pages": 318,
+  "one_liner": "새로운 사랑 이야기로 연애 세포를 깨워 줄 단편집일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791191043532",
+  "title": "네가 마지막으로 남긴 노래",
+  "author": "이치조 미사키",
+  "pages": 368,
+  "one_liner": "시를 쓰는 소년과 음악 천재 소녀의 애절한 사랑에 마음이 젖어들까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788989420972",
+  "title": "콘텐츠 플랫폼 마케팅",
+  "author": "김귀현",
+  "pages": 240,
+  "one_liner": "스토리펀딩·브런치 같은 플랫폼에서 콘텐츠가 팔리는 방식을 사례로 살펴봐요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "사례",
+  "axes": null,
+  "keywords": [
+   "콘텐츠 마케팅"
+  ]
+ },
+ {
+  "isbn": "9791194534815",
+  "title": "글로벌 브랜딩",
+  "author": "양문성",
+  "pages": 268,
+  "one_liner": "컬처코드와 소비코드로 해외 소비자를 읽고 K-제품을 브랜드로 키우게 돼요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "브랜딩"
+  ]
+ },
+ {
+  "isbn": "9791172134457",
+  "title": "머릿속 노동은 누가 하는가",
+  "author": "앨리슨 데이밍거",
+  "pages": 436,
+  "one_liner": "평등한 가정에서도 머릿속 부담은 왜 한쪽에 쏠릴까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198850263",
+  "title": "커뮤니티에 입장하셨습니다",
+  "author": "권성민",
+  "pages": 356,
+  "one_liner": "정치·젠더·계급 쟁점을 균형 잡힌 시선으로 읽으며 공존의 길을 생각해 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791167741509",
+  "title": "어떻게 극단적 소수가 다수를 지배하는가",
+  "author": "대니얼 지블랫 외",
+  "pages": 440,
+  "one_liner": "소수가 권력을 쥐는 제도의 허점을 짚으며 민주주의의 위기를 살펴보는 책일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791168260597",
+  "title": "납작하고 투명한 사람들",
+  "author": "백세희",
+  "pages": 224,
+  "one_liner": "드라마와 영화 속 소수자는 어떻게 그려지고 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788901229614",
+  "title": "초예측",
+  "author": "유발 하라리",
+  "pages": 232,
+  "one_liner": "석학 여덟 명이 기술과 민주주의, 인류의 앞날을 짚어 줘요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788934991366",
+  "title": "빌 게이츠, 기후재앙을 피하는 법",
+  "author": "빌 게이츠",
+  "pages": 356,
+  "one_liner": "온실가스 배출을 부문별로 짚고 정부·기업·개인이 할 일을 알려 줄까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791196394509",
+  "title": "죽고 싶지만 떡볶이는 먹고 싶어",
+  "author": "백세희",
+  "pages": 208,
+  "one_liner": "겉은 멀쩡한데 속이 곪은 날, 상담 기록 속에서 내 마음을 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791192638980",
+  "title": "치부노트",
+  "author": "정성은",
+  "pages": 352,
+  "one_liner": "수치심과 실패한 사랑을 코미디로 풀어낸 저자의 솔직한 기록이 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193937655",
+  "title": "우리의 낙원에서 만나자",
+  "author": "하태완",
+  "pages": 300,
+  "one_liner": "관계와 하루를 다정한 문장으로 다독여 주는 낙원 같은 글이 곁에 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791169852166",
+  "title": "불행에 몰두하지 않는다",
+  "author": "정지우",
+  "pages": 272,
+  "one_liner": "비교와 결핍 속에서도 오늘의 행복을 누리는 마음을 건네는 책일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791199327887",
+  "title": "나의 지옥은 나를 죽이지 못했다",
+  "author": "김강우",
+  "pages": 368,
+  "one_liner": "어머니를 구하려 다시 압록강을 건넌 청년의 22일을 따라가며 존엄을 묻게 돼요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788960518025",
+  "title": "노화의 종말",
+  "author": "데이비드 A. 싱클레어 외",
+  "pages": 624,
+  "one_liner": "노화를 질병으로 보고 늦추고 되돌리는 연구를 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788925573939",
+  "title": "블랙홀",
+  "author": "브라이언 콕스 외",
+  "pages": 392,
+  "one_liner": "시공간과 호킹 복사로 블랙홀 물리를 차근차근 알아볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788956054865",
+  "title": "물리법칙의 특성",
+  "author": "리처드 파인만",
+  "pages": 264,
+  "one_liner": "보존원리와 대칭성 같은 물리법칙의 성격을 쉬운 비유로 풀어 주는 강의일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788983717771",
+  "title": "날마다 천체 물리",
+  "author": "닐 디그래스 타이슨",
+  "pages": 232,
+  "one_liner": "암흑 물질부터 지구의 쌍둥이 찾기까지 우주를 차근차근 알려 줄까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791173320873",
+  "title": "특이점이 온다",
+  "author": "레이 커즈와일",
+  "pages": 852,
+  "one_liner": "기술이 기하급수로 빨라질 때 인간과 몸, 뇌가 어떻게 바뀔지 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788998274931",
+  "title": "봉제인형 살인사건",
+  "author": "다니엘 콜",
+  "pages": 400,
+  "one_liner": "반전을 거듭하는 살인 사건의 끝이 궁금해 책장을 멈추기 어렵지 않을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791169448550",
+  "title": "아르키메데스는 손을 더럽히지 않는다",
+  "author": "고미네 하지메",
+  "pages": 360,
+  "one_liner": "소녀의 마지막 말과 독이 든 도시락, 풀리지 않는 사건이 궁금해지나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791158792527",
+  "title": "괴담의 숲",
+  "author": "미쓰다 신조",
+  "pages": 332,
+  "one_liner": "고저택 뒤 숲의 비밀에서 시작된 괴담들이 서로 얽히며 번져 가면 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193367155",
+  "title": "귀신이 오는 낮",
+  "author": "김이삭 외",
+  "pages": 200,
+  "one_liner": "귀신날 낮에도 짙어지는 그림자 속에서 다섯 가지 공포를 만나 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791191842517",
+  "title": "한밤의 시간표",
+  "author": "정보라",
+  "pages": 260,
+  "one_liner": "정체불명의 물건이 쌓인 연구소에서 밤마다 무슨 일이 벌어질까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791175774094",
+  "title": "온고쿠",
+  "author": "기타자와 도",
+  "pages": 320,
+  "one_liner": "죽은 아내를 불러낸 뒤 집에 깃든 괴이가 깨어나면 어떤 일이 벌어질까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791170614067",
+  "title": "생가",
+  "author": "신재민",
+  "pages": 408,
+  "one_liner": "독재의 어두운 역사와 수목 신앙이 얽힌 한국형 오컬트가 궁금하세요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788972706113",
+  "title": "한국의 괴담",
+  "author": "안길환",
+  "pages": 333,
+  "one_liner": "원혼과 구렁이, 도술이 얽힌 옛 괴이담을 한자리에서 만나 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937477317",
+  "title": "꽤 낙천적인 아이",
+  "author": "원소윤",
+  "pages": 272,
+  "one_liner": "고된 무대에서 농담과 침묵을 익혀 가는 풋내기 코미디언의 성장담이 궁금하세요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788932035710",
+  "title": "아홉 켤레의 구두로 남은 사내",
+  "author": "윤흥길",
+  "pages": 496,
+  "one_liner": "70년대 한국 사회의 변화 속 사람들을 중단편으로 만나볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788954695053",
+  "title": "아주 희미한 빛으로도",
+  "author": "최은영",
+  "pages": 352,
+  "one_liner": "고요하게 휘몰아치는 세계 속에서 인물들의 마음을 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791130676029",
+  "title": "김약국의 딸들 (한국문학의 거장 박경리 탄생 100주년 기념 특별판)",
+  "author": "박경리",
+  "pages": 504,
+  "one_liner": "몰락해 가는 집안의 여성들이 겪는 욕망과 운명을 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198318039",
+  "title": "좋은 조직문화란 무엇인가",
+  "author": "장석류",
+  "pages": 300,
+  "one_liner": "두 문화도시의 일하는 방식과 사람 키우기로 조직문화를 바꾸는 법을 살펴봐요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "사례",
+  "axes": null,
+  "keywords": [
+   "조직 문화"
+  ]
+ },
+ {
+  "isbn": "9791193639238",
+  "title": "위임의 기술",
+  "author": "김진영",
+  "pages": 200,
+  "one_liner": "맡기기 어려운 리더가 업무 지시 단계와 소통·코칭 기술을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "피드백·코칭"
+  ]
+ },
+ {
+  "isbn": "9791194508458",
+  "title": "실무형 팀장",
+  "author": "임희걸",
+  "pages": 324,
+  "one_liner": "실무와 관리를 함께 맡은 팀장이 팀 운영 체계와 성과 관리, 성장 지원을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "조직 문화"
+  ]
+ },
+ {
+  "isbn": "9791189580056",
+  "title": "조직문화가 전략을 살린다",
+  "author": "안근용 외",
+  "pages": 364,
+  "one_liner": "조직문화를 제대로 이해하고 우리 조직에 맞게 만드는 길을 짚어 줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "조직 문화"
+  ]
+ },
+ {
+  "isbn": "9791158161996",
+  "title": "좋아서 그래",
+  "author": "이병률",
+  "pages": 112,
+  "one_liner": "시인이 파리의 골목과 카페에서 건진 사랑의 장면을 그림과 함께 만나볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791191602609",
+  "title": "엄마는 시코쿠",
+  "author": "원대한",
+  "pages": 324,
+  "one_liner": "엄마와 네 계절 동안 순례길을 걸으며 마음을 돌아보게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791124307090",
+  "title": "우리는 목적지를 묻지 않기로 했다",
+  "author": "이정기",
+  "pages": 304,
+  "one_liner": "유럽 소도시를 걸으며 작은 회사를 버텨 온 10년을 돌아볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788952739148",
+  "title": "예술, 도시를 만나다",
+  "author": "전원경",
+  "pages": 556,
+  "one_liner": "도시의 풍경과 빛은 예술가의 작품에 어떻게 스며들었을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788947501736",
+  "title": "명화의 비밀, 그때 그 사람",
+  "author": "성수영",
+  "pages": 356,
+  "one_liner": "화가 스물다섯 명의 삶과 사연으로 명화를 가깝게 만나볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791130646299",
+  "title": "외우지 않고 통째로 이해하는 통세계사 1",
+  "author": "김성훈",
+  "pages": 532,
+  "one_liner": "세계사 흐름을 이야기처럼 따라가면 외우지 않아도 맥락이 잡힐까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788965967835",
+  "title": "로빈의 다시 쓰는 세계사",
+  "author": "로빈의 역사 기록",
+  "pages": 476,
+  "one_liner": "외우지 않고 사건의 맥락을 이어 세계사의 흐름을 잡아 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194096238",
+  "title": "세계사를 바꾼 13가지 식물",
+  "author": "이나가키 히데히로",
+  "pages": 300,
+  "one_liner": "감자와 후추가 세계지도를 어떻게 바꿨는지 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193130094",
+  "title": "처음 읽는 술의 세계사",
+  "author": "미야자키 마사카츠",
+  "pages": 248,
+  "one_liner": "술이 태어나 세계로 퍼진 길을 따라가며 문명의 흐름을 볼 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791165700171",
+  "title": "가슴 뛰는 소설 : 사랑이 움직이는 순간",
+  "author": "최진영 외",
+  "pages": 328,
+  "one_liner": "첫사랑부터 노년의 사랑까지, 여러 작가가 그린 사랑의 순간을 만나 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193635100",
+  "title": "사랑의 갈증",
+  "author": "미시마 유키오",
+  "pages": 250,
+  "one_liner": "시골 마을에 갇힌 여인의 아슬아슬한 감정은 어디로 향할까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788954644808",
+  "title": "보이지 않는 영향력",
+  "author": "조나 버거",
+  "pages": 328,
+  "one_liner": "사람들이 남을 따라 고르는 이유를 알면 소비자의 선택과 입소문이 보여요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "고객 이해"
+  ]
+ },
+ {
+  "isbn": "9788931558968",
+  "title": "콘텐츠와 글쓰기로 매출 올리는 SNS 마케팅",
+  "author": "플렌스페이스",
+  "pages": 448,
+  "one_liner": "SNS 플랫폼별 활용법과 블로그 글쓰기 요령으로 매출으로 잇는 길을 알려줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "콘텐츠 마케팅"
+  ]
+ },
+ {
+  "isbn": "9788931556148",
+  "title": "내레이션 최강 영화 유튜버 고몽의 유튜브 이야기",
+  "author": "고몽",
+  "pages": 464,
+  "one_liner": "직장인에서 유튜브 사업자가 된 과정과 조회수·구독자 늘리는 노하우를 만나요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "사례",
+  "axes": null,
+  "keywords": [
+   "콘텐츠 마케팅"
+  ]
+ },
+ {
+  "isbn": "9788954448413",
+  "title": "가짜 노동",
+  "author": "데니스 뇌르마르크 외",
+  "pages": 412,
+  "one_liner": "일하는 척하는 시간이 왜 늘었는지 통계와 인터뷰로 짚어 줘요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194880868",
+  "title": "탁월한 피해자",
+  "author": "곽아람",
+  "pages": 452,
+  "one_liner": "스토킹 피해자가 수사와 재판 속에서 버텨 낸 기록이 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791187038924",
+  "title": "‘좋아요’는 어떻게 지구를 파괴하는가",
+  "author": "기욤 피트롱",
+  "pages": 364,
+  "one_liner": "좋아요가 지나는 길을 따라가며 디지털 세계의 숨은 환경 비용을 살펴봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791187875550",
+  "title": "쾌적한 사회의 불쾌함",
+  "author": "구마시로 도루",
+  "pages": 336,
+  "one_liner": "쾌적함을 좇는 사회가 어떻게 배제와 통제를 낳는지 짚어 봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791175488762",
+  "title": "우정과 허기를 버무린 우리들의 시간",
+  "author": "파뿌리",
+  "pages": 288,
+  "one_liner": "웃다가 어느새 마음이 풀리는 세 친구의 십 년 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791190631211",
+  "title": "괴테 자서전",
+  "author": "요한 볼프강 폰 괴테",
+  "pages": 1032,
+  "one_liner": "한 천재의 삶을 따라가며 혼탁한 시대를 읽는 눈을 얻을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791173327810",
+  "title": "우리는 서로의 말로 살아간다",
+  "author": "여성시대",
+  "pages": 324,
+  "one_liner": "누군가 건넨 한마디가 삶을 붙들어 준 사연들을 만나 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791167471901",
+  "title": "직업으로서의 PD",
+  "author": "정영택",
+  "pages": 208,
+  "one_liner": "방송 현장에서 20년을 버틴 낯가리는 PD의 청춘 기록, 어떤 마음으로 읽게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791141189778",
+  "title": "도파민 과잉 시대, 당신의 뇌가 무너진다",
+  "author": "리처드 사이토윅",
+  "pages": 500,
+  "one_liner": "스마트폰에서 눈을 못 떼는 게 정말 의지력 탓일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791192372754",
+  "title": "각성",
+  "author": "김요한",
+  "pages": 224,
+  "one_liner": "무뎌진 감정과 흐릿한 중심을 정리하고 기준을 세우는 훈련을 건네요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "감정 다루기",
+   "번아웃·스트레스"
+  ]
+ },
+ {
+  "isbn": "9788956055008",
+  "title": "가장 뛰어난 중년의 뇌",
+  "author": "바버라 스트로치",
+  "pages": 332,
+  "one_liner": "중년의 뇌가 어떻게 달라지는지 연구로 풀어 줘서 나이 듦이 덜 불안해져요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788968331862",
+  "title": "방구석 미술관",
+  "author": "조원재",
+  "pages": 344,
+  "one_liner": "화가들의 숨은 사연을 따라가며 미술 교양을 쌓게 돼요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788931588507",
+  "title": "김락희의 인체 드로잉",
+  "author": "김락희",
+  "pages": 392,
+  "one_liner": "도형화로 뼈대를 잡고 근육과 동세까지 단계별로 익히는 건 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788997716395",
+  "title": "SAVE THE CAT!",
+  "author": "블레이크 스나이더",
+  "pages": 222,
+  "one_liner": "시나리오 구조와 장르 공식을 익혀 흥행하는 영화 이야기를 짜는 법을 알려줘요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791189328870",
+  "title": "사라진 근대사 100장면 ① 몰락의 시대",
+  "author": "박종인",
+  "pages": 368,
+  "one_liner": "조선과 유럽을 같은 해에 나란히 놓고 몰락의 갈림길을 짚어 줄까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788934991328",
+  "title": "사피엔스 : 그래픽 히스토리 Vol.1",
+  "author": "유발 하라리 원저",
+  "pages": 248,
+  "one_liner": "인류가 허구의 힘으로 문명을 세운 과정을 만화로 훑어볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788933870693",
+  "title": "설민석의 조선왕조실록",
+  "author": "설민석",
+  "pages": 504,
+  "one_liner": "스물일곱 임금의 핵심 사건을 강연 듣듯 재미있게 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791124789070",
+  "title": "히틀러의 복지국가",
+  "author": "괴츠 알리",
+  "pages": 464,
+  "one_liner": "나치 정권이 12년간 유지된 까닭을 약탈과 복지의 계산으로 풀어 줄까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198593283",
+  "title": "황현필의 진보를 위한 역사",
+  "author": "황현필",
+  "pages": 550,
+  "one_liner": "식민지근대화론 같은 역사 왜곡 주장을 하나씩 짚어 보는 건 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791190908535",
+  "title": "누가 봐도 연애소설",
+  "author": "이기호",
+  "pages": 232,
+  "one_liner": "아픈 사람들이 각자의 최선으로 하는 사랑을 들려주는 이야기가 궁금하세요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791190938044",
+  "title": "있을 법한 연애소설",
+  "author": "조윤성",
+  "pages": 272,
+  "one_liner": "공감과 위로로 사랑의 질문을 따라가는 연애 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791175772229",
+  "title": "내가 마지막으로 남긴 노래",
+  "author": "이치조 미사키",
+  "pages": 420,
+  "one_liner": "두 사람의 시점이 번갈아 이어지며 전하지 못한 감정을 들려줄까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788925577128",
+  "title": "해피엔딩에서 너를 기다릴게",
+  "author": "산다 치에",
+  "pages": 284,
+  "one_liner": "시한부 소녀와 방황하는 소년의 엇갈린 사랑에서, 어떤 마음이 남을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791190749978",
+  "title": "고백은 이미 본 장면",
+  "author": "김동식",
+  "pages": 360,
+  "one_liner": "사랑의 공식을 비튼 스물두 편 초단편이 로맨스를 새롭게 묻는 걸까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788954622431",
+  "title": "컨테이저스 전략적 입소문",
+  "author": "조나 버거",
+  "pages": 368,
+  "one_liner": "입소문이 퍼지는 여섯 가지 원리를 사례로 이해하고 제품 알리는 법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "콘텐츠 마케팅",
+   "고객 이해"
+  ]
+ },
+ {
+  "isbn": "9791193084571",
+  "title": "브랜드 팬덤 콘텐츠 마케팅",
+  "author": "박정재",
+  "pages": 126,
+  "one_liner": "팬덤을 키우는 콘텐츠 전략과 스토리텔링, 팬 커뮤니티 운영을 폭넓게 살펴봐요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "콘텐츠 마케팅",
+   "브랜딩"
+  ]
+ },
+ {
+  "isbn": "9791155816875",
+  "title": "트래픽 설계자",
+  "author": "러셀 브런슨",
+  "pages": 350,
+  "one_liner": "꿈의 고객을 찾아 어떤 플랫폼에서든 트래픽을 모으는 방법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "고객 이해",
+   "콘텐츠 마케팅"
+  ]
+ },
+ {
+  "isbn": "9791164136452",
+  "title": "공정하다는 착각",
+  "author": "마이클 샌델",
+  "pages": 420,
+  "one_liner": "능력주의가 불평등과 굴욕을 낳는 과정을 짚어 보는 책일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788936477196",
+  "title": "선량한 차별주의자",
+  "author": "김지혜",
+  "pages": 244,
+  "one_liner": "일상 속에 숨은 차별을 알아차리고 평등으로 함께 나아갈 길이 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788962632729",
+  "title": "침묵의 봄",
+  "author": "레이첼 카슨",
+  "pages": 504,
+  "one_liner": "살충제가 자연과 사람에게 남긴 피해를 따라가며 환경을 다시 생각해 보게 하나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791192836355",
+  "title": "가난한 아이들은 어떻게 어른이 되는가",
+  "author": "강지나",
+  "pages": 280,
+  "one_liner": "가난 속에서 자란 여덟 아이의 10년을 따라가며 교육·노동·복지의 틈을 보여 줘요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791124755044",
+  "title": "불꽃이 꺼지지 않게",
+  "author": "원은지",
+  "pages": 316,
+  "one_liner": "N번방 이후에도 이어진 디지털 성범죄를 취재와 연대의 기록으로 마주해 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791191716368",
+  "title": "증명과 변명",
+  "author": "안희제",
+  "pages": 316,
+  "one_liner": "한 청년과의 대화로 한국 청년 남성의 삶과 좌절을 들여다봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791162143605",
+  "title": "잘했고 잘하고 있고 잘 될 것이다 (아마존 베스트셀러 기념 전면 개정판)",
+  "author": "정영욱",
+  "pages": 304,
+  "one_liner": "지친 마음을 다독이는 짧은 글을 곁에 두고 싶다면 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194374299",
+  "title": "요리를 한다는 것",
+  "author": "최강록",
+  "pages": 224,
+  "one_liner": "요리와 식당 일상을 솔직한 유머로 들려주는 셰프의 하루가 궁금하세요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788901297453",
+  "title": "나는 메트로폴리탄 미술관의 경비원입니다 (25만 부 기념 전면 개정판)",
+  "author": "패트릭 브링리",
+  "pages": 368,
+  "one_liner": "형을 떠나보낸 뒤 미술관에서 조용히 서 있던 시간은 어떤 위로가 되었을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791124468050",
+  "title": "다정한 사람이 이긴다 (스페셜 리커버)",
+  "author": "이해인",
+  "pages": 284,
+  "one_liner": "다정함으로 나와 관계를 지키는 법을 에피소드로 만나 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791167601414",
+  "title": "말랑캣 뭉치의 일상",
+  "author": "수지니",
+  "pages": 240,
+  "one_liner": "고양이와 보내는 평범한 하루가 얼마나 사랑스러운지 느껴 본 적 있나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791162544259",
+  "title": "마침내 특이점이 시작된다",
+  "author": "레이 커즈와일",
+  "pages": 552,
+  "one_liner": "인공지능과 나노기술이 삶을 어떻게 바꿀지 사례로 따라가 보면 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791187295686",
+  "title": "부분과 전체",
+  "author": "베르너 하이젠베르크",
+  "pages": 504,
+  "one_liner": "양자역학을 세운 물리학자가 동료들과 나눈 대화로 현대 물리학의 흐름을 만나볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791130669311",
+  "title": "무의식의 뇌과학",
+  "author": "엘리에저 J. 스턴버그",
+  "pages": 432,
+  "one_liner": "무의식이 지각과 기억을 어떻게 만드는지 사례로 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788988907412",
+  "title": "파인만의 여섯가지 물리 이야기",
+  "author": "리처드 필립 파인만",
+  "pages": 248,
+  "one_liner": "원자부터 양자까지 물리의 핵심을 쉬운 강의로 짚어 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791199327856",
+  "title": "만화로 보는 과학을 보다",
+  "author": "과학을 보다 원저",
+  "pages": 284,
+  "one_liner": "엉뚱한 질문 하나로 일상 속 물리·화학·우주의 숨은 원리를 만나볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791189571894",
+  "title": "방주",
+  "author": "유키 하루오",
+  "pages": 356,
+  "one_liner": "지진으로 지하에 갇힌 사람들 사이에서 벌어지는 일이 궁금해지나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791192313917",
+  "title": "리볼버",
+  "author": "하라다 마하",
+  "pages": 320,
+  "one_liner": "녹슨 권총의 진위를 쫓다 보면 고흐의 죽음에 숨은 의문과 마주할까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791199956025",
+  "title": "오마리가 살인사건",
+  "author": "아시베 다쿠",
+  "pages": 560,
+  "one_liner": "폭격 직전 오사카 상가 저택에서 벌어지는 연쇄 살인, 그 비밀이 궁금한가요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791170610182",
+  "title": "이상한 그림",
+  "author": "우케쓰",
+  "pages": 328,
+  "one_liner": "그림에 숨은 비밀을 하나씩 따라가며 풀어 가는 재미가 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791160078572",
+  "title": "13.67",
+  "author": "찬호께이",
+  "pages": 680,
+  "one_liner": "역순으로 펼쳐지는 여섯 사건의 퍼즐을 따라가면 어떤 진실에 닿게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "추리·스릴러",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791199327894",
+  "title": "수살귀",
+  "author": "쌈무이",
+  "pages": 400,
+  "one_liner": "평범한 집과 일터에서 시작된 제보 실화 괴담을 읽다 보면 어떤 기분일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194654933",
+  "title": "퇴마록 세계편 1",
+  "author": "이우혁",
+  "pages": 504,
+  "one_liner": "세계 곳곳의 신화와 악인에 맞서는 퇴마사들의 싸움이 궁금하신가요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791130687001",
+  "title": "눈알이 제일 맛있단다",
+  "author": "모니카 김",
+  "pages": 476,
+  "one_liner": "엄마의 말 한마디가 가족을 위한 집착으로 번지면 어디까지 가게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791168340947",
+  "title": "저주토끼",
+  "author": "정보라",
+  "pages": 356,
+  "one_liner": "분노와 기괴함이 뒤엉킨 이야기들, 어디까지 낯설어질 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791176101059",
+  "title": "측백나무성의 라푼젤",
+  "author": "배명은",
+  "pages": 304,
+  "one_liner": "돌이킬 수 없는 상실 끝에서 어떤 공포가 피어날까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791171211333",
+  "title": "고딕 × 호러 × 제주",
+  "author": "빗물 외",
+  "pages": 316,
+  "one_liner": "제주의 신화와 역사 속 그림자를 호러로 만나면 어떤 이야기가 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791191714425",
+  "title": "가시고기",
+  "author": "조창인",
+  "pages": 360,
+  "one_liner": "아들을 살리려는 아버지의 희생은 어떤 모습일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
  }
 ]
