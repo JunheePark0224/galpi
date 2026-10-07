@@ -102,7 +102,7 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
         return None, "incomplete_candidate"
     kept = vocab.get(cand.slot, {}).get("kept", {}) if cand.entry == "target" else {}  # a new topic may have no list yet
     names, hints = list(kept), keyword_hints(cand, kept) if kept else []
-    user = user_message(cand.entry, cand.slot, cand.title, cand.intro, cand.toc, hints)
+    user = user_message(cand.entry, cand.slot, cand.title, cand.author, cand.intro, cand.toc, hints)
     raw_a, used, why = call(client, cfg.model, prompts["tag"], user, schema(cand.entry, "tag", all_keywords(vocab)), breaker, "A")
     _spend(ledger, cfg.model, used)
     left_out = excluded_names(vocab.get(cand.slot, {})) if cand.entry == "target" else []
