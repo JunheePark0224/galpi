@@ -8,13 +8,16 @@ refused). A "person" book without an answer is left as it is. Every written book
 values change, the old ones are appended to `history` (so the change can be undone) and an additions record keeps its
 pre-review `draft`. An additions book still waiting (review / unreviewed reserve) becomes picked — `auto: "ai-agree"`
 when no person answered. A books_v1 book a person drops leaves books_v1.json and is kept in retag/removed.json.
+A "다른 갈래로" answer (`status: "requeue"`, 10-07) sends the book to the other entry like the daily review page's
+(agreement.requeue_target, pipeline/requeue.py): it leaves its slot — a books_v1 book goes to retag/removed.json, an
+additions book becomes `dropped` — with `requeued_to` {entry, slot}, and the tally lists the rows for requeue.json.
 A source row whose values are neither the ones the re-tag saw nor the decided ones (edited since) is skipped and named.
 Applying the same download again changes nothing.
 """
 from apply_review import FIELD_OF_TOPIC, ReviewError, draft_of
 from apply_review import checked_answer as checked_target
 
-from .agreement import AUTO, checked_leaf, line_problems
+from .agreement import AUTO, checked_leaf, line_problems, requeue_target
 from .library import V1_SOURCE, values_of
 from .prompt import AXES
 
@@ -23,6 +26,8 @@ WAITING = ("review", "reserve")
 
 
 def from_answer(book: dict, ans: dict, kept: dict) -> dict:
+    if ans.get("status") == "requeue":
+        return {"status": "requeue", "requeued_to": requeue_target(book, ans)}
     if book["entry"] == "leaf":
         out = checked_leaf(book["isbn"], ans)
     else:
@@ -104,12 +109,21 @@ def apply(books: list[dict], decided: dict[str, dict], answers: dict[str, dict],
     """(new books_v1 rows, new additions docs by file name, books_v1 rows removed, tally). Inputs are not changed."""
     decided_vals = plan(books, decided, answers, kept)
     by_isbn = {b["isbn"]: b for b in books}
-    tally = {"written": 0, "changed": 0, "unchanged": 0, "dropped": 0, "skipped_edited": []}
+    tally = {"written": 0, "changed": 0, "unchanged": 0, "dropped": 0, "skipped_edited": [], "requeued": []}
+
+    def requeued(row: dict, source: str, to: dict) -> dict:
+        tally["requeued"].append({"isbn": row["isbn"], "to_entry": to["entry"], "to_slot": to["slot"]})
+        if source == V1_SOURCE:
+            return {**row, "requeued_to": to, "removed": True}
+        out = {k: v for k, v in row.items() if k != "auto"}
+        return {**out, "status": "dropped", "requeued_to": to, "draft": row.get("draft") or draft_of(row), "reviewed": True}
 
     def one(row: dict, source: str) -> dict:
         b, vals = by_isbn.get(row["isbn"]), decided_vals.get(row["isbn"])
         if b is None or vals is None:
             return row
+        if vals["status"] == "requeue":
+            return requeued(row, source, vals["requeued_to"])
         entry, now = b["entry"], values_of(row)
         target = _values(vals, entry)
         if not vals["answered"] and not (_same(now, b["current"], entry) or _same(now, target, entry)):
