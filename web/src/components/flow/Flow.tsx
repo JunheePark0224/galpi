@@ -47,6 +47,8 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
   const [state, dispatch] = useReducer(flowReducer, undefined, loadFlow);
   const [shownResult, setShownResult] = useState<string | null>(null);   // the S-06 book whose cover is ready to show
   const [found, setFound] = useState<{ at: string; items: FoundItem[] } | null>(null);   // 도감 v1 badge, per bookmark
+  // S-11 (10-07): after the last reaction the book shuts before the back cover shows (not on a resumed round)
+  const [closing, setClosing] = useState(false);
 
   useEffect(() => { saveFlow(state); }, [state]);
   useEffect(() => { window.scrollTo(0, 0); }, [state.step, state.result, state.answers.length]);
@@ -176,9 +178,12 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     });
     const next = act({ type: "react", reaction });
     if (next.step === "bookmarks") trackShown(next);
-    if (next.step === "back") {
-      track("back_cover_shown", { curious_count: curiousPicks(next).length, label_count: next.draw?.label?.chips.length ?? 0 });
-    }
+    if (next.step === "back") setClosing(true);
+  };
+  /** The book has shut: the back cover shows now (E-41 — when it is seen, taxonomy). */
+  const closed = () => {
+    setClosing(false);
+    track("back_cover_shown", { curious_count: curiousPicks(state).length, label_count: state.draw?.label?.chips.length ?? 0 });
   };
 
   /** S-11 main button: S-06 with something 궁금해요, S-08 without (PRD 2절). */
@@ -203,7 +208,8 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     act({ type: "redraw" });
   };
 
-  const inBook = state.step === "book" || state.step === "first" || state.step === "bookmarks";
+  const shutting = state.step === "back" && closing;
+  const inBook = state.step === "book" || state.step === "first" || state.step === "bookmarks" || shutting;
   const curious = curiousPicks(state);
   const resultPick = state.step === "result" ? curious[state.result] : undefined;
   // 10-02 (user): between screens, wait (≤ 3 s) for the book's cover so S-06 appears with its printed cover already there
@@ -232,6 +238,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
           onReact={react}
           onHome={() => home("first_page")}
           found={found?.at === `${state.drawId}:${state.index}:${state.draw?.picks[state.index]?.card.id}` ? found.items : null}
+          onClosed={closed}
         />
       )}
       {resultPick && shownResult === resultPick.card.id && (
@@ -241,7 +248,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
         />
       )}
       {resultPick && shownResult !== resultPick.card.id && <ResultLoading />}
-      {state.step === "back" && state.draw && (
+      {state.step === "back" && !closing && state.draw && (
         <BackCover
           books={state.draw.picks}
           label={state.draw.label ?? { chips: [], challenge: false }}

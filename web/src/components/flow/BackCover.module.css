@@ -1,6 +1,10 @@
 /* S-11 뒤표지 (F-27, 시안 A 10-07, DESIGN C-29): the back board of the same leather as the front (C-01), its spine on the
    right — this is the back. Bookmarks lie on it, a little askew, with the paper label "내가 고른 길" below. */
 .back { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); padding-top: var(--space-2); }
+/* after the book shuts (10-07) the back cover comes in softly: today's bookmarks and the label are simply there */
+.back { animation: back-in 400ms ease both; }
+@keyframes back-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .back { animation: none; } }
 .title { margin: 0; font-size: 18px; text-align: center; }
 .cover {
   position: relative; width: min(100%, 320px); aspect-ratio: 1 / 1.45;

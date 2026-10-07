@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { MotionGlobalConfig } from "motion/react";
 import { describe, expect, it, vi } from "vitest";
 import { EXHAUSTED_NOTICE } from "@/lib/recommend";
 import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
@@ -26,6 +27,22 @@ describe("BookScene", () => {
     expect(screen.getByRole("status")).toBeEmptyDOMElement();
     rerender(<BookScene state={shown} {...handlers()} found={[{ kind: "animal", value: "redpanda", tier: "limited" }]} />);
     expect(screen.getByRole("status")).toHaveTextContent("처음 만난 한정판 레서판다!");
+  });
+
+  it("S-11 (10-07): after the last bookmark the right-hand page shuts over the left — the back cover, then onClosed", async () => {
+    MotionGlobalConfig.skipAnimations = true;
+    try {
+      const onClosed = vi.fn();
+      const { container } = render(<BookScene state={{ ...first, step: "back", index: 4 }} {...handlers()} onClosed={onClosed} />);
+      const half = container.querySelector("[data-shut]");
+      expect(half).toHaveAttribute("aria-hidden", "true");
+      expect(screen.queryByRole("button", { name: "궁금해요" })).toBeNull();
+      expect(screen.queryByRole("button", { name: "패스" })).toBeNull();
+      expect(screen.queryByText(/\d \/ 5/)).toBeNull();
+      await waitFor(() => expect(onClosed).toHaveBeenCalledTimes(1));
+    } finally {
+      MotionGlobalConfig.skipAnimations = false;
+    }
   });
 
   it("S-03: the closed book is the thing to press", () => {

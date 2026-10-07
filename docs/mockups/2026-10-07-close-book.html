@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>책 덮기 시안</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  :root { --paper: #FAF5EA; --ink: #2B2724; --muted: #7a6f63; --cloth: #7a4a2e; --edge: #5a3420; --rule: #e7dccb; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Gowun Dodum", sans-serif; }
+  h1 { font-family: "Gowun Batang", serif; font-size: 20px; text-align: center; margin: 24px 16px 4px; }
+  .lead { text-align: center; color: var(--muted); font-size: 13px; margin: 0 16px 16px; }
+  .wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; padding-bottom: 40px; }
+  .stage { position: relative; width: 300px; height: 320px; perspective: 1400px; }
+  button { min-height: 44px; padding: 0 20px; border-radius: 999px; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); font: inherit; cursor: pointer; }
+  .steps { font-size: 12px; color: var(--muted); line-height: 1.7; max-width: 300px; margin: 0; padding-left: 18px; }
+
+  /* the open book: left = inside of the front cover, right = the back board's inside (the page we read) */
+  .book { position: absolute; left: 30px; top: 40px; width: 240px; height: 230px; transform-style: preserve-3d; }
+  .left { position: absolute; left: 0; top: -4px; bottom: -4px; width: calc(50% + 4px); left: -4px; border-radius: 8px 3px 3px 8px; background: var(--cloth); padding: 4px 0 4px 4px; }
+  .page { height: 100%; background: repeating-linear-gradient(to bottom, var(--paper) 0 13px, var(--rule) 13px 14px); }
+  .left .page { border-radius: 6px 0 0 6px; box-shadow: inset -8px 0 8px -6px rgba(0,0,0,.25); }
+  /* the right half turns over onto the left around the spine: its inside is the page, its outside the back cover */
+  .right { position: absolute; top: -4px; bottom: -4px; left: 50%; width: calc(50% + 4px); transform-origin: left center; transform-style: preserve-3d; }
+  .inside, .outside { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  .inside { background: var(--cloth); border-radius: 3px 8px 8px 3px; padding: 4px 4px 4px 0; }
+  .inside .page { border-radius: 0 6px 6px 0; box-shadow: inset 8px 0 8px -6px rgba(0,0,0,.25); }
+  .outside { transform: rotateY(180deg); border-radius: 8px 3px 3px 8px; background: radial-gradient(circle at 70% 20%, rgba(255,255,255,.12), transparent 60%), var(--cloth); box-shadow: inset 0 0 0 1px var(--edge), 0 8px 18px rgba(0,0,0,.25); }
+  .outside::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 12px; background: var(--edge); border-radius: 0 3px 3px 0; }
+  .mark { position: absolute; left: 50%; top: 34px; width: 46px; height: 124px; margin-left: -23px; background: #fffdf8; border-radius: 4px 4px 0 0; box-shadow: 0 3px 6px rgba(0,0,0,.2); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 88%, 0 100%); }
+  .mark::before { content: ""; position: absolute; left: 6px; right: 6px; top: 6px; height: 34px; border-radius: 20px 20px 2px 2px; background: #f6d9c6; }
+
+  /* what lies on the back cover once it is shut (S-11) */
+  .card { position: absolute; width: 30px; height: 62px; background: #fffdf8; border-radius: 3px; box-shadow: 0 2px 3px rgba(0,0,0,.3); opacity: 0; }
+  .card::before { content: ""; position: absolute; left: 4px; right: 4px; top: 4px; height: 18px; border-radius: 10px 10px 1px 1px; background: #f6d9c6; }
+  .label { position: absolute; left: 10px; right: 20px; bottom: 12px; height: 46px; background: var(--paper); border-radius: 3px; font-size: 9px; text-align: center; padding-top: 6px; font-family: "Gowun Batang", serif; opacity: 0; }
+  .c1 { left: 6px; top: 8px; rotate: -8deg; } .c2 { left: 40px; top: 4px; rotate: 4deg; } .c3 { left: 72px; top: 10px; rotate: -3deg; }
+  .c4 { left: 20px; top: 74px; rotate: 6deg; } .c5 { left: 56px; top: 78px; rotate: -6deg; }
+
+  /* ① the last bookmark goes  ② the right half shuts over the left (1 s, the open timing)  ③ the closed book slides to the middle
+     ④ today's bookmarks and the label are simply there (a soft fade) */
+  .run .mark { animation: markout .4s ease-in forwards; }
+  .run .right { animation: shut 1s cubic-bezier(.6,.05,.25,1) .35s forwards; }
+  .run .book { animation: centre .6s cubic-bezier(.6,.05,.25,1) 1.25s forwards; }
+  .run .card, .run .label { animation: appear .4s ease 1.9s forwards; }
+  @keyframes markout { to { transform: translateY(170px); opacity: 0; } }
+  @keyframes shut { from { transform: rotateY(0deg); } to { transform: rotateY(-180deg); } }
+  @keyframes centre { to { transform: translateX(60px); } }
+  @keyframes appear { to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .run * { animation-duration: .01s !important; animation-delay: 0s !important; } }
+</style>
+</head>
+<body>
+<h1>마지막 책갈피 뒤 — 그냥 덮기</h1>
+<p class="lead">오른쪽 장을 왼쪽으로 덮으면 바로 뒤표지 · 약 2.3초</p>
+<div class="wrap">
+  <div class="stage" id="s"></div>
+  <button onclick="play()">▶ 다시</button>
+  <ol class="steps">
+    <li>마지막 책갈피가 내려감 (지금과 같음)</li>
+    <li>오른쪽 장이 왼쪽으로 덮임 — 펼칠 때와 같은 1초</li>
+    <li>덮인 책이 가운데로</li>
+    <li>그 위에 오늘 만난 책갈피 5장과 "내가 고른 길"이 스르르</li>
+  </ol>
+</div>
+<template id="t">
+  <div class="book">
+    <div class="left"><div class="page"></div></div>
+    <div class="right">
+      <div class="inside"><div class="page"></div></div>
+      <div class="outside">
+        <div class="card c1"></div><div class="card c2"></div><div class="card c3"></div><div class="card c4"></div><div class="card c5"></div>
+        <div class="label">내가 고른 길</div>
+      </div>
+    </div>
+    <div class="mark"></div>
+  </div>
+</template>
+<script>
+  function play() {
+    const el = document.getElementById("s");
+    el.classList.remove("run");
+    el.innerHTML = document.getElementById("t").innerHTML;
+    void el.offsetWidth;
+    el.classList.add("run");
+  }
+  play();
+</script>
+</body>
+</html>
