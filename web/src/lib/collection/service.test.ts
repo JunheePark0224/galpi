@@ -12,7 +12,7 @@ vi.mock("server-only", () => ({}));
 import { isbnsOf } from "./__fixtures__/isbns";
 import { isFresh, issueTicket, MIN_SECRET_LENGTH, parseFoundRequest, signingSecret, TICKET_TTL_SECONDS, verifyTicket } from "./ticket";
 
-const ART = { animal: "otter", bg: "galaxy", sky: "moon", ground: "none", rare: true } as const;
+const ART = { animal: "otter", bg: "galaxy", ground: "none", rare: true } as const;
 const item = (kind: CollectionItem["kind"], value: string, isNew = false): CollectionItem =>
   ({ kind, value, firstMetAt: "2026-10-05T00:00:00Z", firstArt: { ...ART }, isNew });
 
@@ -31,17 +31,17 @@ describe("도감 service", () => {
     const art = artsForDraw(1, seed)[0];
     const store = memoryCollection();
     const found = await recordMeeting(store, { seed, count: 1 }, 0);
-    expect(found.map((f) => f.kind)).toEqual(["animal", "bg", "sky"]);
-    expect(store.data.items.map((i) => i.kind)).toEqual(["animal", "bg", "sky"]);
-    expect(store.data.items.map((i) => i.firstArt)).toEqual([art, art, art]);
-    expect(partsOf(art)[3]).toEqual({ kind: "ground", value: "none" });
+    expect(found.map((f) => f.kind)).toEqual(["animal", "bg"]);
+    expect(store.data.items.map((i) => i.kind)).toEqual(["animal", "bg"]);
+    expect(store.data.items.map((i) => i.firstArt)).toEqual([art, art]);
+    expect(partsOf(art)[2]).toEqual({ kind: "ground", value: "none" });
     // a store that still answers "none" (a row from before the fix): not passed on, so no badge and no E-36
     const old = { items: async () => [], record: async () => [{ kind: "ground" as const, value: "none" }], markSeen: async () => 0, claimKept: async () => true };
     expect(await recordMeeting(old, { seed, count: 1 }, 0)).toEqual([]);
     // old "none" rows in production are ignored on read: not shown, not counted
     const rows = [item("ground", "none"), item("ground", "grass")];
     expect(knownItems(rows)).toEqual([item("ground", "grass")]);
-    expect(dexCounts(knownItems(rows)).prop).toEqual({ found: 1, total: 15 });
+    expect(dexCounts(knownItems(rows)).prop).toEqual({ found: 1, total: 6 });
     expect(dexSections("prop", rows).flatMap((s) => s.cells).some((c) => c.value === "none")).toBe(false);
   });
 
@@ -51,15 +51,21 @@ describe("도감 service", () => {
     expect(knownItems([item("animal", "dragon"), item("bg", "galaxy")])).toEqual([item("bg", "galaxy")]);
   });
 
-  it("lays the tabs out by tier, props = sky + ground, with the person's rows in place", () => {
-    const items = [item("animal", "cat"), item("animal", "bluedragon", true), item("sky", "rainbow"), item("ground", "goldbook")];
+  it("lays the tabs out by tier, props = the ground props (10-07 A), with the person's rows in place", () => {
+    const items = [item("animal", "cat"), item("animal", "bluedragon", true), item("bg", "summer"), item("ground", "goldbook")];
     const animals = dexSections("animal", items);
     expect(animals.map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 7, 1], ["limited", 5, 0], ["first_edition", 4, 1]]);
     expect(animals[2].cells.find((c) => c.value === "bluedragon")?.met?.isNew).toBe(true);
     const props = dexSections("prop", items);
-    expect(props.map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 9, 0], ["limited", 4, 1], ["first_edition", 2, 1]]);
-    expect(props[0].cells.map((c) => c.kind)).toEqual([...Array(5).fill("sky"), ...Array(4).fill("ground")]);
-    expect(dexCounts(items)).toEqual({ animal: { found: 2, total: 16 }, bg: { found: 0, total: 11 }, prop: { found: 2, total: 15 } });
+    expect(props.map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 4, 0], ["limited", 1, 0], ["first_edition", 1, 1]]);
+    expect(props.flatMap((s) => s.cells).every((c) => c.kind === "ground")).toBe(true);
+    expect(dexSections("bg", items).map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 6, 0], ["limited", 4, 1], ["first_edition", 2, 0]]);
+    expect(dexCounts(items)).toEqual({ animal: { found: 2, total: 16 }, bg: { found: 1, total: 12 }, prop: { found: 1, total: 6 } });
+  });
+
+  it("leaves out a sky row recorded before 10-07 A (not a part any more)", () => {
+    const old = { ...item("ground", "grass"), kind: "sky" } as unknown as ReturnType<typeof item>;
+    expect(knownItems([old, item("ground", "grass")])).toEqual([item("ground", "grass")]);
   });
 
   it("records exactly the picture the browser showed: toDrawView's art = recordMeeting's art, 200 seeds × every index", async () => {

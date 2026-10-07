@@ -9,7 +9,7 @@ vi.mock("./client", () => ({ libraryRequest: (...a: unknown[]) => request(...a) 
 
 const ISBN = "9788998441012";
 const CARD = { id: ISBN, entry: "leaf", title: "모순", author: "양귀자", genre: "한국 소설", field: null, oneLiner: "?", oneLinerStyle: "question" } as const;
-const INPUT: SaveInput = { isbn: ISBN, art: { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false }, reason: { label: "나온 이유", items: [] }, metOn: "2026-10-01" };
+const INPUT: SaveInput = { isbn: ISBN, art: { animal: "fox", bg: "night", ground: "books", rare: false }, reason: { label: "나온 이유", items: [] }, metOn: "2026-10-01" };
 const item = (): GuestSave => ({ ...INPUT, art: { ...INPUT.art }, reason: { ...INPUT.reason }, card: { ...CARD } });
 const IN = { enabled: true, loggedIn: true, id: "u1", count: 2 };
 const OUT = { enabled: true, loggedIn: false, id: null, count: 0 };

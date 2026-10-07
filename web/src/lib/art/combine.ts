@@ -14,8 +14,9 @@ const ANIMALS_FIRST = ["bluedragon", "whitetiger", "redbird", "blacktortoise"] a
 export const ANIMALS = [...ANIMALS_COMMON, ...ANIMALS_LIMITED, ...ANIMALS_FIRST] as const;
 
 /**
- * DESIGN A-02 — sky + hill pairs (시안 이름: 복숭아·풀잎·하늘·버터·라벤더·밤 / 벚꽃 언덕·노을·오로라 / 은하수·금박 서재).
- * The rarer ones add drawn details in BookmarkArt (rare-art.html); `sky` is also the colour a moon's cut-out takes.
+ * DESIGN A-02 — sky + hill pairs (시안 이름: 복숭아·풀잎·하늘·버터·라벤더·밤 / 벚꽃 언덕·노을·오로라·여름밤 / 은하수·금박 서재).
+ * 10-07 A (사용자 결정, 시안 `deco/sky.html` A): the sky belongs to the background alone — 일반판 backgrounds are a clean
+ * plain sky, 한정판·초판본 ones are "living" (their own gentle motion in BookmarkArt). `sky` here is the sky's colour.
  */
 export const BACKGROUNDS = {
   peach: { sky: "#F9DCCB", hill: "#E7B597" },
@@ -27,45 +28,42 @@ export const BACKGROUNDS = {
   cherry: { sky: "#FBE3EA", hill: "#E8A9BC" },
   sunset: { sky: "#F09A7A", hill: "#7E5A6E" },
   aurora: { sky: "#1D2E4A", hill: "#2C4440" },
+  summer: { sky: "#1F2A44", hill: "#33503F" },
   galaxy: { sky: "#141936", hill: "#2E3456" },
   study: { sky: "#7A4A2E", hill: "#5A3420" },
 } as const;
 export type Background = keyof typeof BACKGROUNDS;
 const BG_TIERS: Record<Tier, readonly Background[]> = {
   common: ["peach", "leaf", "sky", "butter", "lavender", "night"],
-  limited: ["cherry", "sunset", "aurora"],
+  limited: ["cherry", "sunset", "aurora", "summer"],
   first_edition: ["galaxy", "study"],
 };
+/** The backgrounds with their own motion (every 한정판·초판본 one, 10-07 A). */
+export const LIVING_BACKGROUNDS: ReadonlySet<Background> = new Set([...BG_TIERS.limited, ...BG_TIERS.first_edition]);
 
-const SKY_COMMON = ["moon", "cloud", "stars", "birds", "bigStar"] as const;
-const SKY_LIMITED = ["rainbow", "shooting"] as const;
-const SKY_FIRST = ["goldmoon"] as const;
-/** DESIGN A-03 */
-export const SKY_PROPS = [...SKY_COMMON, ...SKY_LIMITED, ...SKY_FIRST] as const;
+/** DESIGN A-03 — ground props only (10-07 A: the sky props are gone; the fireflies became the 여름밤 background). */
 const GROUND_COMMON = ["grass", "flowers", "books", "mushroom", "none"] as const;
-const GROUND_LIMITED = ["clover", "firefly"] as const;
+const GROUND_LIMITED = ["clover"] as const;
 const GROUND_FIRST = ["goldbook"] as const;
 export const GROUND_PROPS = [...GROUND_COMMON, ...GROUND_LIMITED, ...GROUND_FIRST] as const;
 
 export type Animal = (typeof ANIMALS)[number];
-export type SkyProp = (typeof SKY_PROPS)[number];
 export type GroundProp = (typeof GROUND_PROPS)[number];
 
 /**
  * PRD D-05: saved with a bookmark so the library redraws it as it was. `rare` (kept for old records and events): true when
- * any of the four parts is 한정판 or 초판본. The tier of each part is looked up from its value (tierOf) — no stored field.
+ * any of the three parts is 한정판 or 초판본. The tier of each part is looked up from its value (tierOf) — no stored field.
  */
-export interface ArtCombo { animal: Animal; bg: Background; sky: SkyProp; ground: GroundProp; rare: boolean }
+export interface ArtCombo { animal: Animal; bg: Background; ground: GroundProp; rare: boolean }
 
-/** The four parts a picture is made of — the 도감's kinds (sky and ground props share the 소품 tab). */
-export const ART_KINDS = ["animal", "bg", "sky", "ground"] as const;
+/** The three parts a picture is made of (10-07 A) — the 도감's kinds and tabs (동물 · 배경 · 소품 = ground props). */
+export const ART_KINDS = ["animal", "bg", "ground"] as const;
 export type ArtKind = (typeof ART_KINDS)[number];
 
 /** Every value of a kind, by tier, in the 도감's order. */
 export const KIND_TIERS: { readonly [K in ArtKind]: Record<Tier, readonly string[]> } = {
   animal: { common: ANIMALS_COMMON, limited: ANIMALS_LIMITED, first_edition: ANIMALS_FIRST },
   bg: BG_TIERS,
-  sky: { common: SKY_COMMON, limited: SKY_LIMITED, first_edition: SKY_FIRST },
   ground: { common: GROUND_COMMON, limited: GROUND_LIMITED, first_edition: GROUND_FIRST },
 };
 
@@ -82,7 +80,7 @@ export function isCollectible(kind: ArtKind, value: string): boolean {
   return !(kind === "ground" && value === EMPTY_GROUND) && TIER_OF.has(`${kind}:${value}`);
 }
 
-/** The 도감's cells: KIND_TIERS without the empty ground. 동물 16 · 배경 11 · 소품 15 (하늘 8 + 땅 7). */
+/** The 도감's cells: KIND_TIERS without the empty ground. 동물 16 · 배경 12 · 소품 6 (땅 소품). */
 export const DEX_TIERS: { readonly [K in ArtKind]: Record<Tier, readonly string[]> } = {
   ...KIND_TIERS,
   ground: { ...KIND_TIERS.ground, common: KIND_TIERS.ground.common.filter((v) => v !== EMPTY_GROUND) },
@@ -93,7 +91,7 @@ export function tierOf(kind: ArtKind, value: string): Tier | null {
   return TIER_OF.get(`${kind}:${value}`) ?? null;
 }
 
-/** The four parts of a picture as (kind, value) pairs. */
+/** The three parts of a picture as (kind, value) pairs. */
 export function partsOf(art: Pick<ArtCombo, ArtKind>): { kind: ArtKind; value: string }[] {
   return ART_KINDS.map((kind) => ({ kind, value: art[kind] }));
 }
@@ -135,7 +133,9 @@ function shuffled<T>(items: readonly T[], rng: Rng): T[] {
 
 /**
  * Pictures for one draw, reproducible from the seed (the server makes the seed — lib/collection/ticket). Each part:
- * tier by tierFor, then evenly inside the tier. Common animals do not repeat while there are enough of them.
+ * tier by tierFor, then evenly inside the tier. Common animals do not repeat while there are enough of them. The browser
+ * and the server run this same function on the same seed; changing what it draws changes every seed's picture, so the
+ * ticket's signed version (ticket.ts) goes up with it — an older ticket can never vouch for a picture drawn the old way.
  */
 export function artsForDraw(count: number, seed: number): ArtCombo[] {
   const rng = mulberry32(seed);
@@ -148,9 +148,8 @@ export function artsForDraw(count: number, seed: number): ArtCombo[] {
       ? pick(KIND_TIERS.animal[animalTier]) as Animal
       : nextCommon < commons.length ? commons[nextCommon++] : pick(ANIMALS_COMMON);
     const bg = pick(BG_TIERS[tierFor(rng())]);
-    const sky = pick(KIND_TIERS.sky[tierFor(rng())]) as SkyProp;
     const ground = pick(KIND_TIERS.ground[tierFor(rng())]) as GroundProp;
-    const parts = { animal, bg, sky, ground };
+    const parts = { animal, bg, ground };
     return { ...parts, rare: isRare(parts) };
   });
 }

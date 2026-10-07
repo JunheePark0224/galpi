@@ -18,8 +18,8 @@
 }
 .quiet { margin: var(--space-2) 0; font-size: 14px; color: var(--ink-soft); }
 
-/* [동물 | 배경 | 하늘 소품 | 땅 소품]: the 도감's pills (C-25), four in one row on a 320px phone. */
-.tabs { flex-shrink: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: var(--space-1) 0; }
+/* [동물 | 배경 | 땅 소품] (10-07 A — three parts): the 도감's pills (C-25), three in one row on a 320px phone. */
+.tabs { flex-shrink: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: var(--space-1) 0; }
 .tab {
   min-height: var(--touch); padding: 0 4px; border: 1px solid var(--paper-line); border-radius: var(--radius-pill);
   background: #fffdf8; color: var(--ink); font: inherit; font-size: 14px; white-space: nowrap; cursor: pointer;

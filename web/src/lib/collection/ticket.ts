@@ -40,10 +40,11 @@ export const nowSeconds = (): number => Math.floor(Date.now() / 1000);
 
 /**
  * v2 (security review 10-05): the issue time and, for a logged-in draw, the person are signed with the seed. v3 (security
- * review of the guest 도감 fix): the draw's books in order too, so a ticket can only ever vouch for those books.
+ * review of the guest 도감 fix): the draw's books in order too, so a ticket can only ever vouch for those books. v4 (10-07 A,
+ * three-part pictures): artsForDraw draws differently from the same seed, so an older ticket must not vouch for a picture.
  */
 const mac = (secret: string, t: { seed: number; count: number; iat: number; sub: string | null; isbns: readonly string[] }): string =>
-  createHmac("sha256", secret).update(`galpi-art:v3:${t.seed}:${t.count}:${t.iat}:${t.sub ?? ""}:${t.isbns.join(",")}`).digest("base64url");
+  createHmac("sha256", secret).update(`galpi-art:v4:${t.seed}:${t.count}:${t.iat}:${t.sub ?? ""}:${t.isbns.join(",")}`).digest("base64url");
 
 /** A new ticket for a draw of these books (one picture each): a fresh random seed, now, the logged-in person (or null), signed. */
 export function issueTicket(isbns: readonly string[], opts: { sub?: string | null; seed?: number; iat?: number } = {}): ArtTicket {
@@ -52,7 +53,7 @@ export function issueTicket(isbns: readonly string[], opts: { sub?: string | nul
   return { ...t, sig: secret ? mac(secret, t) : null };
 }
 
-/** True only when `sig` is this server's v3 signature over seed, count, iat, sub and the books (constant-time compare). */
+/** True only when `sig` is this server's v4 signature over seed, count, iat, sub and the books (constant-time compare). */
 export function verifyTicket(
   ticket: { seed: number; count: number; iat: number; sub: string | null; sig: string; isbns: readonly string[] }, secret: string,
 ): boolean {

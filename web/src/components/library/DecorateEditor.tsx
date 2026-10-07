@@ -20,7 +20,7 @@ export const RESET = "처음 그림으로";
 export const SAVE_ART = "이대로 꽂기";
 export const DEX_FAILED = "도감을 불러오지 못했어요";
 const SAVE_FAILED = "꽂지 못했어요. 다시 해 주세요.";
-const TAB_NAMES: Record<ArtKind, string> = { animal: "동물", bg: "배경", sky: "하늘 소품", ground: "땅 소품" };
+const TAB_NAMES: Record<ArtKind, string> = { animal: "동물", bg: "배경", ground: "땅 소품" };
 /** The empty ground is a choice, not a collectible — it has no 도감 name. */
 const NONE_NAME = "없음";
 const nameOf = (kind: ArtKind, value: string) => (kind === "ground" && value === EMPTY_GROUND ? NONE_NAME : partName(kind, value));
@@ -66,8 +66,8 @@ interface Props {
 }
 
 /**
- * C-26 책갈피 꾸미기 (PRD F-13·F-21, 시안 flow.png ②): the bookmark's front, live, at the top; [동물 | 배경 | 하늘 소품 |
- * 땅 소품]; the parts by tier (일반판 · 한정판 · 초판본). The preview and the tabs stay pinned (10-07 user: every pick shows
+ * C-26 책갈피 꾸미기 (PRD F-13·F-21, 시안 flow.png ②): the bookmark's front, live, at the top; [동물 | 배경 | 땅 소품]
+ * (10-07 A: no 하늘 소품); the parts by tier (일반판 · 한정판 · 초판본). The preview and the tabs stay pinned (10-07 user: every pick shows
  * in view) — only the list of parts scrolls (`data-parts`), back to its top on a new tab; the sheet (`pinned`) keeps one height. Only parts in the person's 도감, the bookmark's own first parts and
  * the empty ground can be picked (the server checks the same rule) — the rest are 🔒 silhouettes. A footer that stays at
  * the bottom: [처음 그림으로] (the picture it was kept with, in the preview) and [이대로 꽂기]. The 도감 not loading: a
@@ -91,7 +91,7 @@ export function DecorateEditor({ bookmark, met, onSave, onBack }: Props) {
   const ready = load?.status === "ready";
   const owned = useMemo(() => ownedSet(load?.status === "ready" ? load.items : []), [load]);
   const pick = (kind: ArtKind, value: string) => {
-    const parts = { animal: draft.animal, bg: draft.bg, sky: draft.sky, ground: draft.ground, [kind]: value } as Omit<ArtCombo, "rare">;
+    const parts = { animal: draft.animal, bg: draft.bg, ground: draft.ground, [kind]: value } as Omit<ArtCombo, "rare">;
     setDraft({ ...parts, rare: isRare(parts) });
   };
   const save = async () => {

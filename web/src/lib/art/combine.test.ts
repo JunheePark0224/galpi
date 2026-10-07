@@ -3,25 +3,34 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
-  ANIMALS, ART_KINDS, BACKGROUNDS, DEX_TIERS, GROUND_PROPS, KIND_TIERS, SKY_PROPS, TIERS, artFromSeed, artTier, artsForDraw,
-  collectibleParts, highestTier, isCollectible, isRare, newArtSeed, partsOf, tierFor, tierOf, type Tier,
+  ANIMALS, ART_KINDS, BACKGROUNDS, DEX_TIERS, GROUND_PROPS, KIND_TIERS, LIVING_BACKGROUNDS, TIERS, artFromSeed, artTier, artsForDraw,
+  collectibleParts, highestTier, isCollectible, isRare, newArtSeed, partsOf, tierFor, tierOf, type Background, type Tier,
 } from "./combine";
 import { PART_NAMES } from "./names";
 
 describe("bookmark art", () => {
-  it("has the 도감 v1 lists — 16 animals, 11 backgrounds, 8 + 8 props", () => {
+  it("has the three-part lists (10-07 A) — 16 animals, 12 backgrounds, 7 ground props; no sky props", () => {
+    expect(ART_KINDS).toEqual(["animal", "bg", "ground"]);
     expect(ANIMALS).toHaveLength(16);
-    expect(Object.keys(BACKGROUNDS)).toHaveLength(11);
-    expect(SKY_PROPS).toHaveLength(8);
-    expect(GROUND_PROPS).toHaveLength(8);
+    expect(Object.keys(BACKGROUNDS)).toHaveLength(12);
+    expect(GROUND_PROPS).toHaveLength(7);
+    expect(GROUND_PROPS).not.toContain("firefly");
+    expect(KIND_TIERS.bg.limited).toEqual(["cherry", "sunset", "aurora", "summer"]);
+    expect(KIND_TIERS.ground.limited).toEqual(["clover"]);
+    expect(KIND_TIERS.ground.first_edition).toEqual(["goldbook"]);
     expect(KIND_TIERS.animal.limited).toEqual(["redpanda", "fennec", "otter", "panda", "koala"]);
     expect(KIND_TIERS.animal.first_edition).toEqual(["bluedragon", "whitetiger", "redbird", "blacktortoise"]);
     expect(KIND_TIERS.bg.first_edition).toEqual(["galaxy", "study"]);
     expect(KIND_TIERS.ground.common).toContain("none");
   });
 
+  it("makes every 한정판·초판본 background a living one, and no 일반판 background", () => {
+    expect([...LIVING_BACKGROUNDS].sort()).toEqual([...KIND_TIERS.bg.limited, ...KIND_TIERS.bg.first_edition].sort());
+    for (const bg of KIND_TIERS.bg.common) expect(LIVING_BACKGROUNDS.has(bg as Background)).toBe(false);
+  });
+
   it("lists every value once, in exactly one tier, with a 도감 name", () => {
-    const all: Record<string, readonly string[]> = { animal: ANIMALS, bg: Object.keys(BACKGROUNDS), sky: SKY_PROPS, ground: GROUND_PROPS };
+    const all: Record<string, readonly string[]> = { animal: ANIMALS, bg: Object.keys(BACKGROUNDS), ground: GROUND_PROPS };
     for (const kind of ART_KINDS) {
       const byTier = TIERS.flatMap((t) => KIND_TIERS[kind][t]);
       expect([...byTier].sort()).toEqual([...all[kind]].sort());
@@ -29,32 +38,34 @@ describe("bookmark art", () => {
     }
   });
 
-  it("collects every part but the empty ground — 16 + 11 + 15 cells (10-05 fix)", () => {
+  it("collects every part but the empty ground — 16 + 12 + 6 cells", () => {
     expect(isCollectible("ground", "none")).toBe(false);
     expect(isCollectible("ground", "grass")).toBe(true);
-    expect(isCollectible("sky", "none")).toBe(false);                        // not a sky value at all
+    expect(isCollectible("sky" as never, "moon")).toBe(false);                // sky props are gone (10-07 A)
+    expect(isCollectible("ground", "firefly")).toBe(false);                    // now the 여름밤 background
     expect(isCollectible("animal", "dragon")).toBe(false);
     expect(DEX_TIERS.ground.common).toEqual(["grass", "flowers", "books", "mushroom"]);
     expect(KIND_TIERS.ground.common).toContain("none");                       // still drawn
     const cells = (kind: (typeof ART_KINDS)[number]) => TIERS.flatMap((t) => DEX_TIERS[kind][t]).length;
-    expect([cells("animal"), cells("bg"), cells("sky") + cells("ground")]).toEqual([16, 11, 15]);
-    const art = { animal: "cat", bg: "peach", sky: "moon", ground: "none" } as const;
-    expect(collectibleParts(art)).toEqual(partsOf(art).slice(0, 3));
+    expect([cells("animal"), cells("bg"), cells("ground")]).toEqual([16, 12, 6]);
+    const art = { animal: "cat", bg: "peach", ground: "none" } as const;
+    expect(collectibleParts(art)).toEqual(partsOf(art).slice(0, 2));
     expect(collectibleParts({ ...art, ground: "clover" })).toEqual(partsOf({ ...art, ground: "clover" }));
   });
 
   it("looks a part's tier up from its value", () => {
     expect(tierOf("animal", "cat")).toBe("common");
     expect(tierOf("animal", "otter")).toBe("limited");
-    expect(tierOf("sky", "goldmoon")).toBe("first_edition");
+    expect(tierOf("bg", "summer")).toBe("limited");
+    expect(tierOf("ground", "goldbook")).toBe("first_edition");
     expect(tierOf("ground", "none")).toBe("common");
     expect(tierOf("bg", "dragon")).toBeNull();
     expect(highestTier([])).toBe("common");
     expect(highestTier(["limited", "common"])).toBe("limited");
-    const art = { animal: "cat", bg: "aurora", sky: "moon", ground: "goldbook" } as const;
-    expect(partsOf(art)).toEqual([{ kind: "animal", value: "cat" }, { kind: "bg", value: "aurora" }, { kind: "sky", value: "moon" }, { kind: "ground", value: "goldbook" }]);
+    const art = { animal: "cat", bg: "aurora", ground: "goldbook" } as const;
+    expect(partsOf(art)).toEqual([{ kind: "animal", value: "cat" }, { kind: "bg", value: "aurora" }, { kind: "ground", value: "goldbook" }]);
     expect(artTier(art)).toBe("first_edition");
-    expect(isRare({ animal: "cat", bg: "peach", sky: "moon", ground: "none" })).toBe(false);
+    expect(isRare({ animal: "cat", bg: "peach", ground: "none" })).toBe(false);
   });
 
   it("splits the 0–1 roll 1 / 9 / 90", () => {
@@ -83,7 +94,19 @@ describe("bookmark art", () => {
   it("reaches every value of every kind", () => {
     const seen = new Set<string>();
     for (let seed = 0; seed < 4000; seed++) for (const a of artsForDraw(5, seed)) for (const p of partsOf(a)) seen.add(`${p.kind}:${p.value}`);
-    expect(seen.size).toBe(16 + 11 + 8 + 8);
+    expect(seen.size).toBe(16 + 12 + 7);
+  });
+
+  it("draws a fixed picture for a fixed seed (the browser and the server must agree — a change here bumps the ticket version)", () => {
+    expect(artsForDraw(3, 42)).toEqual([
+      { animal: "fox", bg: "night", ground: "flowers", rare: false },
+      { animal: "bear", bg: "leaf", ground: "books", rare: false },
+      { animal: "cat", bg: "peach", ground: "none", rare: false },
+    ]);
+  });
+
+  it("draws three parts only — no `sky` key on any picture", () => {
+    for (let seed = 0; seed < 200; seed++) expect(Object.keys(artFromSeed(seed)).sort()).toEqual(["animal", "bg", "ground", "rare"]);
   });
 
   it("redraws the same pictures from the same seed, `rare` true exactly when a part is 한정판 or 초판본", () => {

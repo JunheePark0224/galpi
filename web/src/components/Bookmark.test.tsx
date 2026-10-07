@@ -12,7 +12,7 @@ const target: BookCard = {
   id: "9790000000101", entry: "target", title: "처음 만나는 쿼리", author: "김쿼리", genre: "데이터 분석", field: "데이터·통계",
   oneLiner: "표에서 원하는 줄만 꺼내는 쿼리를 익혀요", oneLinerStyle: "summary",
 };
-const art: ArtCombo = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false };
+const art: ArtCombo = { animal: "fox", bg: "night", ground: "books", rare: false };
 
 describe("Bookmark", () => {
   it("reads title, author, one-liner and genre as one label", () => {

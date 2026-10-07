@@ -25,7 +25,7 @@ const DETAIL: BookDetail = {
 const pick: PickView = {
   card: { id: ISBN, entry: "leaf", title: "여름의 우편함", author: "한여름", genre: "한국 소설", field: null, oneLiner: "?", oneLinerStyle: "question" },
   kind: "random",
-  art: { animal: "cat", bg: "peach", sky: "moon", ground: "none", rare: false },
+  art: { animal: "cat", bg: "peach", ground: "none", rare: false },
   reason: { label: "나온 이유", items: ["따뜻함", "현실"] },
 };
 const show = (detail: BookDetail, position = 1, total = 2, onNext = vi.fn()) => {

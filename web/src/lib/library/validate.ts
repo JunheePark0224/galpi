@@ -1,8 +1,10 @@
-import { ANIMALS, BACKGROUNDS, GROUND_PROPS, SKY_PROPS, isRare, type ArtCombo } from "@/lib/art/combine";
+import { ANIMALS, BACKGROUNDS, EMPTY_GROUND, GROUND_PROPS, isRare, type ArtCombo } from "@/lib/art/combine";
 import type { Reason } from "@/lib/recommend";
 
 /** PRD F-13: a rod's name, the person's own words — at most this many characters (DB check matches, 0003). */
 export const SHELF_NAME_MAX = 12;
+/** The ground prop that left the lists (10-07 A — it became the 여름밤 background). */
+const RETIRED_GROUND = "firefly";
 const REASON_LABELS = ["나온 이유", "이 책은"] as const;
 const REASON_ITEMS_MAX = 5;
 const REASON_ITEM_MAX = 40;
@@ -13,14 +15,17 @@ const oneOf = <T extends string>(list: readonly T[], v: unknown): v is T => type
 /**
  * The saved picture (D-05), rebuilt from known parts only — never the object the browser sent. 도감 v1: the 한정판·초판본
  * values are known parts too, and `rare` is worked out from the parts (an old picture saved before them stays valid — its
- * parts are all 일반판 and its `rare` was false).
+ * parts are all 일반판 and its `rare` was false). 10-07 A (three parts): any other key — the old `sky` prop — is dropped,
+ * and the retired ground "firefly" (now the 여름밤 background) reads as the empty ground, so a picture a browser kept
+ * from before still opens.
  */
 export function parseArt(v: unknown): ArtCombo | null {
   if (!isRecord(v)) return null;
-  const { animal, bg, sky, ground, rare } = v;
+  const { animal, bg, rare } = v;
+  const ground = v.ground === RETIRED_GROUND ? EMPTY_GROUND : v.ground;
   if (!oneOf(ANIMALS, animal) || !oneOf(Object.keys(BACKGROUNDS) as (keyof typeof BACKGROUNDS)[], bg)
-    || !oneOf(SKY_PROPS, sky) || !oneOf(GROUND_PROPS, ground) || (rare !== undefined && typeof rare !== "boolean")) return null;
-  const parts = { animal, bg, sky, ground };
+    || !oneOf(GROUND_PROPS, ground) || (rare !== undefined && typeof rare !== "boolean")) return null;
+  const parts = { animal, bg, ground };
   return { ...parts, rare: isRare(parts) };
 }
 

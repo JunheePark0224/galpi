@@ -13,7 +13,7 @@ vi.mock("@/lib/track/amplitude", () => ({ setAmplitudeUser: vi.fn() }));
 
 import { BookmarkSheet } from "./BookmarkSheet";
 
-const FIRST: ArtCombo = { animal: "fox", bg: "night", sky: "moon", ground: "books", rare: false };
+const FIRST: ArtCombo = { animal: "fox", bg: "night", ground: "books", rare: false };
 const card = { id: "9788998441012", entry: "leaf" as const, title: "물고기는 존재하지 않는다", author: "룰루 밀러", genre: "에세이", field: null, oneLiner: "?", oneLinerStyle: "question" as const };
 const bookmark = (art: ArtCombo = FIRST, originalArt: ArtCombo | null = FIRST): LibraryBookmark =>
   ({ isbn: card.id, art, originalArt, reason: { label: "나온 이유", items: [] }, metOn: "2026-10-04", card });
@@ -116,14 +116,22 @@ describe("C-26 책갈피 꾸미기 editor", () => {
     expect(screen.getByRole("button", { name: "처음 그림으로" })).toBeDisabled();
   });
 
+  it("has three tabs — 동물 · 배경 · 땅 소품, no 하늘 소품 (10-07 A)", async () => {
+    await openEditor();
+    const tabs = within(screen.getByRole("group", { name: "꾸밀 부분" })).getAllByRole("button").map((b) => b.textContent);
+    expect(tabs).toEqual(["동물", "배경", "땅 소품"]);
+    fireEvent.click(screen.getByRole("button", { name: "배경" }));
+    expect(screen.getByRole("button", { name: "여름밤, 잠김" })).toBeDisabled();
+  });
+
   it("땅 소품 '없음' is always there to pick, and the bookmark's own first parts too (even outside the 도감)", async () => {
     await openEditor();
     fireEvent.click(screen.getByRole("button", { name: "땅 소품" }));
     expect(screen.getByRole("button", { name: "없음, 일반판" })).toBeEnabled();
     expect(screen.getByRole("button", { name: "책 더미, 일반판" })).toHaveAttribute("aria-pressed", "true");   // first picture's
     expect(screen.getByRole("button", { name: "풀, 잠김" })).toBeDisabled();
-    fireEvent.click(screen.getByRole("button", { name: "하늘 소품" }));
-    expect(screen.getByRole("button", { name: "달, 일반판" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "네잎클로버, 잠김" })).toBeDisabled();
+    expect(screen.queryByRole("button", { name: "반딧불, 잠김" })).toBeNull();                       // now the 여름밤 background
     fireEvent.click(screen.getByRole("button", { name: "배경" }));
     expect(screen.getByRole("button", { name: "은하수, 초판본" })).toBeEnabled();
   });
