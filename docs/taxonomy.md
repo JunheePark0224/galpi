@@ -225,7 +225,7 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | `user_id` | 같음 | String \| null | 로그인 후 Supabase Auth UUID (P5) | common | **user_id** — `/api/track`이 로그인 세션으로 채움, 브라우저 값은 버림 (3-2, v0.8) |
 | `session_id` | 같음 | String | 탭 단위 세션 (sessionStorage) | common | 보내지 않음 — Amplitude는 자체 세션(30분 규칙)을 쓴다. 두 세션 수는 다를 수 있다 |
 | `round` | 같음 | Number | 회차 = 판 번호 (1부터, 탭마다). **+1 규칙은 3-1a** | common | 이벤트 속성 |
-| `entry` | v1.0: 뜻만 바뀜 | String \| null | **갈래** — 두 번째 질문의 답. `leaf`=이야기에 빠지기, `target`=뭔가 배우기. 고르기 전·갈피를 못 잡겠어요(섞어서)·처음으로 뒤는 null. 도전이어도 고른 갈래 그대로. 값이 v1 입구(🍃=leaf, 🎯=target)와 같아 v1 기록과 이어 볼 수 있다 | common | 이벤트 속성 (null이면 생략) |
+| `entry` | v1.0: 뜻만 바뀜 | String \| null | **갈래** — 두 번째 질문의 답. `leaf`=읽는 시간 자체를 즐기기(10-07 전 "이야기에 빠지기"), `target`=지금 필요한 걸 채우기(10-07 전 "뭔가 배우기"). 고르기 전·갈피를 못 잡겠어요(섞어서)·처음으로 뒤는 null. 도전이어도 고른 갈래 그대로. 값이 v1 입구(🍃=leaf, 🎯=target)와 같아 v1 기록과 이어 볼 수 있다 | common | 이벤트 속성 (null이면 생략) |
 | `mode` | 추가 (v1.0) | String \| null | **길의 모드** — 첫 질문의 답. `normal`=평소 끌리는 쪽(갈피를 못 잡겠어요도), `challenge`=오늘은 낯선 쪽으로 도전. 첫 답 전·처음으로 뒤는 null | common | 이벤트 속성 (null이면 생략) |
 | `screen_version` | 같음 | String | 화면 버전 `v1` → 2단계 `v2` (F-18) — v1.0부터 `v2` | common | 이벤트 속성 |
 | `referrer` | v1.4: 호스트만 | String | 들어온 곳의 **호스트**(`l.instagram.com`), 없으면 "". v1.4 전 기록은 주소 전체(500자) — 3-1b | common | 보내지 않음 — Amplitude는 자동 수집(최초 유입)으로 따로 가진다 |

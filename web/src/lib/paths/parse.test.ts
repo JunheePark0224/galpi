@@ -29,6 +29,16 @@ describe("parseQuestionMap", () => {
     expect(() => parseQuestionMap(node("실습,요약"))).toThrow(/w.*way=실습,요약/);
   });
 
+  it("reads a choice's hint (the small line under its label) and refuses an empty one or one outside a choice", () => {
+    const node = (a: string, unsure = "next=draw") => `\`\`\`node\nid: h\nkind: narrow\nquestion: q\nA: ${a}\nB: b | next=draw\nunsure: ${unsure}\n\`\`\``;
+    expect(parseQuestionMap(node("a | entry=leaf | hint=소설·교양 / 읽는 동안이 좋은 책 | next=draw")).nodes.h.a)
+      .toEqual({ label: "a", hint: "소설·교양 / 읽는 동안이 좋은 책", effects: { entry: "leaf" }, next: "draw" });
+    expect(parseQuestionMap(node("a | next=draw")).nodes.h.a).not.toHaveProperty("hint");
+    expect(() => parseQuestionMap(node("a | hint= | next=draw"))).toThrow(/h.*hint is empty/);
+    expect(() => parseQuestionMap(node("a | next=draw", "hint=x | next=draw"))).toThrow(/h.*unsure may only have next=/);
+    expect(() => parseQuestionMap("```far\nfrom: entry=leaf | hint=x\nto: genres=인문\n```")).toThrow(/hint/);
+  });
+
   it("refuses a node with a missing line, an unknown effect, or a repeated id — naming the node", () => {
     const missing = "```node\nid: x\nkind: mood\nquestion: q\nA: a | next=draw\nunsure: next=draw\n```";
     expect(() => parseQuestionMap(missing)).toThrow(MapParseError);

@@ -13,8 +13,11 @@ export interface Effects {
   mode?: "normal" | "challenge";
 }
 
-/** One side of a question: its words, what it sets, and the next node id ("draw" = the path ends). */
-export interface Choice { label: string; effects: Effects; next: string }
+/**
+ * One side of a question: its words, what it sets, and the next node id ("draw" = the path ends).
+ * `hint`: a small line under the label on the card only (not in the path crumbs); " / " breaks it into lines.
+ */
+export interface Choice { label: string; hint?: string; effects: Effects; next: string }
 
 export interface QNode {
   id: string;

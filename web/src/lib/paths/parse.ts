@@ -18,17 +18,22 @@ function tag(id: string, name: string, v: string): Tag {
   throw new MapParseError(`node ${id}: ${name} must be +1 or -1, got "${v}"`);
 }
 
-/** "label | k=v | k=v" → effects + next. Scope-only parts are allowed in far rules (withNext = false). */
-function parts(id: string, text: string, withNext: boolean): { label: string; effects: Effects; next: string | null } {
+/** "label | k=v | k=v" → effects + next (+ hint). Scope-only parts are allowed in far rules (withNext = false). */
+function parts(id: string, text: string, withNext: boolean): { label: string; effects: Effects; next: string | null; hint: string | null } {
   const [label, ...rest] = text.split("|").map((s) => s.trim());
   const effects: Effects = {};
   let next: string | null = null;
+  let hint: string | null = null;
   for (const p of rest) {
     const eq = p.indexOf("=");
     if (eq < 0) throw new MapParseError(`node ${id}: "${p}" is not key=value`);
     const key = p.slice(0, eq).trim();
     const value = p.slice(eq + 1).trim();
     if (key === "next" && withNext) next = value;
+    else if (key === "hint" && withNext) {
+      if (!value) throw new MapParseError(`node ${id}: hint is empty`);
+      hint = value;
+    }
     else if (key === "entry" && (value === "leaf" || value === "target")) effects.entry = value as Entry;
     else if (key === "topics") effects.topics = list(id, key, value);
     else if (key === "keywords") effects.keywords = list(id, key, value);
@@ -39,7 +44,7 @@ function parts(id: string, text: string, withNext: boolean): { label: string; ef
     else if (key === "mode" && (value === "normal" || value === "challenge")) effects.mode = value;
     else throw new MapParseError(`node ${id}: unknown effect "${key}=${value}"`);
   }
-  return { label, effects, next };
+  return { label, effects, next, hint };
 }
 
 function field(id: string, lines: Map<string, string>, key: string): string {
@@ -49,10 +54,10 @@ function field(id: string, lines: Map<string, string>, key: string): string {
 }
 
 function choice(id: string, text: string): Choice {
-  const { label, effects, next } = parts(id, text, true);
+  const { label, effects, next, hint } = parts(id, text, true);
   if (!label) throw new MapParseError(`node ${id}: a choice has no label`);
   if (!next) throw new MapParseError(`node ${id}: choice "${label}" has no next=`);
-  return { label, effects, next };
+  return { label, ...(hint ? { hint } : {}), effects, next };
 }
 
 /** "key: value" lines of a block, and the keys given more than once. */
@@ -132,7 +137,7 @@ export function parseQuestionMap(markdown: string): QuestionMap {
     if (kind !== "narrow" && kind !== "mood") throw new MapParseError(`node ${id}: kind must be narrow or mood`);
     const unsure = parts(id, `unsure | ${field(id, lines, "unsure")}`, true);
     if (!unsure.next) throw new MapParseError(`node ${id}: unsure has no next=`);
-    if (Object.keys(unsure.effects).length) throw new MapParseError(`node ${id}: unsure may only have next=`);
+    if (Object.keys(unsure.effects).length || unsure.hint) throw new MapParseError(`node ${id}: unsure may only have next=`);
     nodes[id] = {
       id, kind, question: field(id, lines, "question"),
       a: choice(id, field(id, lines, "A")), b: choice(id, field(id, lines, "B")), unsureNext: unsure.next,

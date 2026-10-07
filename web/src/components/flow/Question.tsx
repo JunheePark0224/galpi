@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import type { AnswerChoice, QNode } from "@/lib/paths";
 import frame from "@/components/BookmarkFrame.module.css";
 import { HoldButton } from "./HoldButton";
@@ -19,14 +19,28 @@ interface Props {
   onBack: () => void;
 }
 
-/** C-07: the bookmark shape with the choice in the arched window instead of a picture. The whole card is the button. */
-function ChoiceCard({ side, label, onChoose }: { side: "left" | "right"; label: string; onChoose: () => void }) {
+/**
+ * C-07: the bookmark shape with the choice in the arched window instead of a picture. The whole card is the button.
+ * A hint (question-map `hint=`) sits small under the label; the button's name stays the label, the hint is its description.
+ */
+function ChoiceCard({ side, label, hint, onChoose }: { side: "left" | "right"; label: string; hint?: string; onChoose: () => void }) {
+  const hintId = useId();
   return (
-    <button type="button" className={`${frame.frame} ${styles.card}`} data-side={side} onClick={onChoose}>
+    <button
+      type="button" className={`${frame.frame} ${styles.card}`} data-side={side} onClick={onChoose}
+      {...(hint ? { "aria-label": label, "aria-describedby": hintId } : {})}
+    >
       <span className={frame.string} aria-hidden="true" />
       <span className={`${frame.film} ${styles.film}`}>
         <span className={frame.hole} aria-hidden="true" />
-        <span className={styles.window}>{label}</span>
+        <span className={styles.window}>
+          <span>{label}</span>
+          {hint && (
+            <span id={hintId} className={styles.hint} data-part="hint">
+              {hint.split(" / ").flatMap((line, i) => [i > 0 ? " " : null, <span key={i}>{line}</span>])}
+            </span>
+          )}
+        </span>
         <span className={frame.stitch} aria-hidden="true" />
       </span>
     </button>
@@ -59,9 +73,9 @@ export function Question({ node, onAnswer, onHoldCancel, onBack }: Props) {
       </button>
       <h1 id="question-text" ref={heading} tabIndex={-1} className={styles.question}>{node.question}</h1>
       <div className={styles.pair}>
-        <ChoiceCard side="left" label={node.a.label} onChoose={() => choose("A")} />
+        <ChoiceCard side="left" label={node.a.label} hint={node.a.hint} onChoose={() => choose("A")} />
         <span className={styles.vs} aria-hidden="true">vs</span>
-        <ChoiceCard side="right" label={node.b.label} onChoose={() => choose("B")} />
+        <ChoiceCard side="right" label={node.b.label} hint={node.b.hint} onChoose={() => choose("B")} />
       </div>
       <HoldButton label={UNSURE} hint={HOLD_HINT} onHold={() => onAnswer("unsure", elapsed())} onCancel={onHoldCancel} />
     </section>
