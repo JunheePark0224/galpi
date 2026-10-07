@@ -7,7 +7,7 @@
   color: var(--ink-muted); font: inherit; font-size: 14px; cursor: pointer;
 }
 .back:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
-.question { margin: 0 0 var(--space-3); font-size: 20px; line-height: 1.5; text-align: center; word-break: keep-all; }
+.question { margin: 0 0 var(--space-3); font-size: 20px; line-height: 1.5; text-align: center; word-break: keep-all; text-wrap: balance; }
 /* focused by script when a question appears (tabIndex -1, not a stop in the Tab order): no ring around a heading */
 .question:focus { outline: none; }
 /* C-07 (09-30): two bookmark-shaped cards, "vs" in a small seal between — about 150–160px each, so they fit a 375px phone. */
@@ -29,6 +29,7 @@
   border-radius: 50% 50% 6px 6px / 45.5% 45.5% 6px 6px;
   background: var(--paper-deep);
   font-family: var(--font-batang), serif; font-size: 16px; font-weight: 700; line-height: 1.45; word-break: keep-all;
+  text-wrap: balance;   /* 10-07: lines of even length ("뭔가 하나 / 알게 된 나"), never one word left alone */
 }
 /* question-map hint=: the small explaining line under a choice (10-07, first question) — one span per line */
 .hint {
