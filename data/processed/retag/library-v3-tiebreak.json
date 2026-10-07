@@ -1,6 +1,6 @@
 {
  "note": "pass C (tiebreak.py) per book: values and signal lines only",
- "cost_usd": 0.7971,
+ "cost_usd": 0.8381,
  "books": {
   "9791124668016": {
    "splits": [
@@ -603,31 +603,6 @@
     "keywords": null
    }
   },
-  "9788937460708": {
-   "splits": [
-    "pull"
-   ],
-   "third": {
-    "fits": true,
-    "suggest": "",
-    "axes": {
-     "temp": 1,
-     "pull": 1,
-     "gain": -1,
-     "world": 1
-    },
-    "signals": {
-     "temp": "어조 +: 삶의 비극성을 감싸 안는 따뜻한 리얼리즘",
-     "pull": "문장 +: 우수 어린 서정적 미학을 앞세워 소개",
-     "gain": "마음 −: 소설 형식, 일상과 삶의 아이러니를 포착",
-     "world": "현실 +: 19세기 러시아 일상사를 재현하는 단편들"
-    },
-    "missing": []
-   },
-   "settled": {
-    "pull": 1
-   }
-  },
   "9791197647666": {
    "splits": [
     "slot"
@@ -861,31 +836,6 @@
     "temp": 1
    }
   },
-  "9791198138729": {
-   "splits": [
-    "slot"
-   ],
-   "third": {
-    "fits": false,
-    "suggest": "외국 소설",
-    "axes": {
-     "temp": 1,
-     "pull": -1,
-     "gain": -1,
-     "world": -1
-    },
-    "signals": {
-     "temp": "어조 +: 존중받는 공동체를 향한 독자 곁의 제안",
-     "pull": "몰입 −: 마중이의 좌충우돌 우화 줄거리가 끌고 감",
-     "gain": "마음 −: 우화로 인권을 생각하고 느끼게 하는 책",
-     "world": "딴 세상 −: 민달팽이·곤충이 말하는 우화"
-    },
-    "missing": []
-   },
-   "settled": {
-    "slot": null
-   }
-  },
   "9788932919584": {
    "splits": [
     "slot",
@@ -937,6 +887,108 @@
    "settled": {
     "slot": null,
     "keywords": null
+   }
+  },
+  "9791169087520": {
+   "splits": [
+    "world"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "추리·스릴러",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "장면 −: 집단 자살·복수, 악몽 등 아픈 장면",
+     "pull": "몰입 −: 복수와 반전, 사건의 진실을 좇는 전개",
+     "gain": "마음 −: 소설 형식, 인물과 이야기가 남기는 것",
+     "world": "딴 세상 −: 얼굴이 낯설게 보이는 기이한 후유증, 사이비 종교의 괴이"
+    },
+    "missing": []
+   },
+   "settled": {
+    "world": -1
+   }
+  },
+  "9791175772892": {
+   "splits": [
+    "pull"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 선의·친절·유대를 다정하게 복원, 금빛 물결로 번짐",
+     "pull": "문장 +: 가치들을 문장 사이사이에 섬세하게 복원한다는 소개",
+     "gain": "마음 −: 소설 형식, 다정함·그리움을 건네는 이야기",
+     "world": "현실 +: 소도시 골든, 마법 같은 변화는 비유일 뿐 실제 초자연 없음"
+    },
+    "missing": []
+   },
+   "settled": {
+    "pull": 1
+   }
+  },
+  "9791198138729": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "한국 소설",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "끝맺음 +: 4부 '우정', 공동체를 만드는 연대로 닫힘",
+     "pull": "몰입 −: 마중이의 좌충우돌 우화 전개가 끌고 감",
+     "gain": "마음 −: 우화로 권리를 느끼고 생각해 보게 함",
+     "world": "딴 세상 −: 민달팽이·곤충이 말하는 우화"
+    },
+    "missing": []
+   },
+   "settled": {
+    "slot": null
+   }
+  },
+  "9788937434488": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 기억해 달라는 인용, 상실의 시대라는 제명의 약한 신호",
+     "pull": "소설 형식 신호: 몰입·이야기, 문체 직접 칭찬 없음",
+     "gain": "소설 형식 신호: 청춘의 감성을 전하는 마음 쪽",
+     "world": "현실 +: 1980년대 청춘의 실제 세상, 비현실 존재 없음"
+    },
+    "missing": [
+     "temp"
+    ]
+   },
+   "settled": {
+    "slot": "외국 소설"
    }
   }
  }

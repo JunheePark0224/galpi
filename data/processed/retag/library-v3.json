@@ -3,8 +3,8 @@
  "rules_version": "v3.1",
  "model": "claude-sonnet-5-5",
  "second_model": "claude-sonnet-5-5",
- "note": "v3 re-tag of the whole library (plans/2026-10-06-calibration.md 5). `current` = the library's value when tagged, `record` = run_daily.tag_one's record. Our tags only — no YES24 intro/TOC. v3.1 (10-07): the books the new rules can change were re-tagged (`rules_version` v3.1, the v3 answer under `v3`); the others keep their v3 tags.",
- "cost_usd": 14.3127,
+ "note": "v3 re-tag of the whole library (plans/2026-10-06-calibration.md 5). `current` = the library's value when tagged, `record` = run_daily.tag_one's record. Our tags only — no YES24 intro/TOC. v3.1 (10-07): the books the new rules can change were re-tagged (`rules_version` v3.1, the v3 answer under `v3`); the others keep their v3 tags. Author line (10-07): the 한국 / 외국 소설 books were re-tagged with the author line (`retag_reasons` \"author\", the replaced answer under `before_author` or `v3`).",
+ "cost_usd": 15.1227,
  "runs": [
   {
    "started": "2026-10-06T22:22:48+09:00",
@@ -128,23 +128,25 @@
     "entry": "leaf",
     "genre": "한국 소설",
     "axes": {
-     "temp": -1,
+     "temp": null,
      "pull": -1,
      "gain": -1,
      "world": 1
     },
     "signals": {
-     "temp": "장면 −: 슬픈 일몰의 아버지, 불행의 과장법, 헤어진 다음날",
-     "pull": "몰입 −: 인물 안진진과 가족·이모의 삶의 이야기가 끌고 감",
-     "gain": "0 아님, 마음 −: 소설 형식이고 인물 이야기가 남기는 것",
-     "world": "현실 +: 시장·가족이 나오는 현실 배경"
+     "temp": "끝맺음·어조·장면 모두 흐릿해 방향 없음",
+     "pull": "몰입 −: 인물과 가족 삶의 이야기가 끌고 감, 문체 칭찬 없음",
+     "gain": "마음 −: 소설 형식, 인물 이야기가 남는 것",
+     "world": "현실 +: 시장·가족 등 실제 생활 배경"
     },
-    "missing": [],
+    "missing": [
+     "temp"
+    ],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "쌍둥이 자매의 엇갈린 삶을 따라가며 인생의 양면을 곱씹게 될까요?",
-    "evidence": "한국 문학 소설, 가족·삶 중심, 내용 장르 없음",
-    "confidence": 0.8,
+    "one_liner": "쌍둥이 자매의 엇갈린 삶 곁에서 사랑과 가족을 곱씹게 될까요?",
+    "evidence": "한국 작가의 가족·삶 중심 문학 소설",
+    "confidence": 0.7,
     "fits": true,
     "second": {
      "fits": true,
@@ -155,25 +157,27 @@
       "world": 1
      },
      "signals": {
-      "temp": "장면 −: 행방불명 아버지·슬픈 일몰, 불행의 과장법 등 아픈 장면",
-      "pull": "몰입 −: 인물·가족 삶의 이야기가 끌고 감, 문체 칭찬 없음",
-      "gain": "마음 −: 소설 형식, 인물 이야기와 재독의 의미가 남김",
-      "world": "현실 +: 시장·가족 등 실제 현실 배경의 소설"
+      "temp": "장면 −: 행방불명 아버지·불행의 과장법, 슬픈 일몰 등 아픈 장면",
+      "pull": "몰입 −: 문체 칭찬 없음, 인물·가족 삶의 이야기가 끌고 감",
+      "gain": "마음 −: 소설 형식, 인물과 삶이 남기는 것, 거듭 읽는 독자",
+      "world": "현실 +: 시장·가족·이모 등 현실 배경의 인물들"
      },
      "missing": [],
      "suggest": "",
-     "why": "가족·삶을 다룬 한국 작가의 문학 소설"
+     "why": "한국 작가의 가족·삶 문학 소설이라 맞음"
     },
-    "flags": [],
+    "flags": [
+     "temp"
+    ],
     "issues": [],
-    "status": "picked",
+    "status": "review",
     "link": "https://www.yes24.com/product/goods/8759796",
-    "auto": "ai-agree",
     "rules_version": "v3.1"
    },
    "rules_version": "v3.1",
    "retag_reasons": [
-    "sample"
+    "sample",
+    "author"
    ],
    "v3": {
     "record": {
@@ -227,6 +231,59 @@
      "auto": "ai-agree",
      "rules_version": "v3"
     }
+   },
+   "before_author": {
+    "record": {
+     "isbn": "9788998441012",
+     "title": "모순",
+     "author": "양귀자 저",
+     "pages": 308,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "장면 −: 슬픈 일몰의 아버지, 불행의 과장법, 헤어진 다음날",
+      "pull": "몰입 −: 인물 안진진과 가족·이모의 삶의 이야기가 끌고 감",
+      "gain": "0 아님, 마음 −: 소설 형식이고 인물 이야기가 남기는 것",
+      "world": "현실 +: 시장·가족이 나오는 현실 배경"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "쌍둥이 자매의 엇갈린 삶을 따라가며 인생의 양면을 곱씹게 될까요?",
+     "evidence": "한국 문학 소설, 가족·삶 중심, 내용 장르 없음",
+     "confidence": 0.8,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "장면 −: 행방불명 아버지·슬픈 일몰, 불행의 과장법 등 아픈 장면",
+       "pull": "몰입 −: 인물·가족 삶의 이야기가 끌고 감, 문체 칭찬 없음",
+       "gain": "마음 −: 소설 형식, 인물 이야기와 재독의 의미가 남김",
+       "world": "현실 +: 시장·가족 등 실제 현실 배경의 소설"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "가족·삶을 다룬 한국 작가의 문학 소설"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/8759796",
+     "auto": "ai-agree",
+     "rules_version": "v3.1"
+    }
    }
   },
   {
@@ -260,16 +317,16 @@
      "world": -1
     },
     "signals": {
-     "temp": "어조·장면 −: 탐욕이 낳은 풍요가 어긋나는 과정, 가격 폭락",
-     "pull": "몰입 −: 규칙 위반 뒤 국면이 바뀌는 전개가 끌고 감",
-     "gain": "마음 −: 인물의 몰락과 탐욕 이야기가 남음",
-     "world": "딴 세상 −: 소금빵 닮은 식용 애벌레가 실제로 등장"
+     "temp": "",
+     "pull": "몰입 −: 규칙 위반 뒤 국면이 달라지는 전개",
+     "gain": "마음 −: 소설 형식, 인물 이야기가 남김",
+     "world": "딴 세상 −: 신종 식용 애벌레 빵충이 실제로 등장"
     },
     "missing": [],
     "suggest": "SF·판타지",
     "one_liner_style": "question",
-    "one_liner": "달콤한 풍요가 어디서부터 어긋나는지 따라가 보고 싶지 않나요?",
-    "evidence": "없는 생물 사육이 사건을 움직이는 이야기",
+    "one_liner": "달콤한 인생 역전이 규칙 위반으로 어긋나는 과정을 따라가 볼까요?",
+    "evidence": "없는 생물 빵충이 사건을 움직여 SF",
     "confidence": 0.6,
     "fits": false,
     "second": {
@@ -281,22 +338,82 @@
       "world": -1
      },
      "signals": {
-      "temp": "끝맺음 약함. 장면 −: 가격 폭락·규칙 위반으로 어긋나는 농촌",
-      "pull": "몰입 −: 인생 역전이 어긋나는 전개가 끌고 감",
-      "gain": "마음 −: 탐욕과 풍요가 미끄러지는 이야기가 남김",
-      "world": "딴 세상 −: 소금빵 같은 식용 애벌레 '빵충'이 실제 등장"
+      "temp": "끝맺음 −: 풍요가 어긋나 미끄러지는 과정, 예기치 못한 국면",
+      "pull": "몰입 −: 인생 역전이 어긋나는 전개, 규칙 위반의 궁금증",
+      "gain": "마음 −: 소설 형식, 인물 정한의 이야기가 남기는 것",
+      "world": "딴 세상 −: 소금빵 같은 식용 애벌레 빵충이 실제로 등장"
      },
      "missing": [],
      "suggest": "SF·판타지",
-     "why": "신종 식용 애벌레 상상이 이야기를 움직이는 SF"
+     "why": "없는 생물 빵충이 이야기를 움직여 SF·판타지"
     },
     "flags": [
      "fits"
     ],
-    "issues": [],
+    "issues": [
+     "근거가 책소개를 베낌 (AI-1 temp)"
+    ],
     "status": "dropped",
     "link": "https://www.yes24.com/product/goods/193459475",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9791194891178",
+     "title": "빵충 사육 준수 사항",
+     "author": "김혜영 저",
+     "pages": 388,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": -1
+     },
+     "signals": {
+      "temp": "어조·장면 −: 탐욕이 낳은 풍요가 어긋나는 과정, 가격 폭락",
+      "pull": "몰입 −: 규칙 위반 뒤 국면이 바뀌는 전개가 끌고 감",
+      "gain": "마음 −: 인물의 몰락과 탐욕 이야기가 남음",
+      "world": "딴 세상 −: 소금빵 닮은 식용 애벌레가 실제로 등장"
+     },
+     "missing": [],
+     "suggest": "SF·판타지",
+     "one_liner_style": "question",
+     "one_liner": "달콤한 풍요가 어디서부터 어긋나는지 따라가 보고 싶지 않나요?",
+     "evidence": "없는 생물 사육이 사건을 움직이는 이야기",
+     "confidence": 0.6,
+     "fits": false,
+     "second": {
+      "fits": false,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": -1
+      },
+      "signals": {
+       "temp": "끝맺음 약함. 장면 −: 가격 폭락·규칙 위반으로 어긋나는 농촌",
+       "pull": "몰입 −: 인생 역전이 어긋나는 전개가 끌고 감",
+       "gain": "마음 −: 탐욕과 풍요가 미끄러지는 이야기가 남김",
+       "world": "딴 세상 −: 소금빵 같은 식용 애벌레 '빵충'이 실제 등장"
+      },
+      "missing": [],
+      "suggest": "SF·판타지",
+      "why": "신종 식용 애벌레 상상이 이야기를 움직이는 SF"
+     },
+     "flags": [
+      "fits"
+     ],
+     "issues": [],
+     "status": "dropped",
+     "link": "https://www.yes24.com/product/goods/193459475",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -331,16 +448,16 @@
     },
     "signals": {
      "temp": "어조 −: 이전보다 서늘하고 비정해졌다는 소개",
-     "pull": "형식 신호 몰입 −: 문체 직접 칭찬 없고 단편 소설",
-     "gain": "형식 신호 마음 −: 감정 포착, 지식이 목적 아님",
-     "world": "현실: 사회적 공간·이웃·홈 파티 등 현실 배경"
+     "pull": "형식 신호 몰입: 단편집, 문체 직접 칭찬은 없음",
+     "gain": "형식상 마음 쪽: 감정의 입자를 포착하는 소설",
+     "world": "현실: 사회적 공간·이웃·집이 배경"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "사회적 공간 속 감정을 짚어 내는 서늘한 일곱 단편이 궁금하세요?",
-    "evidence": "한국 작가의 문학 단편집, 내용 장르 없음",
-    "confidence": 0.75,
+    "one_liner": "공간과 이웃 사이를 떠다니는 감정을 서늘하게 포착한 단편집일까요?",
+    "evidence": "한국 작가 문학 단편집, 서늘한 어조",
+    "confidence": 0.72,
     "fits": true,
     "second": {
      "fits": true,
@@ -352,9 +469,9 @@
      },
      "signals": {
       "temp": "어조 −: 소개가 이전보다 서늘하고 비정해졌다고 함",
-      "pull": "소설 형식의 몰입 −: 문체 직접 칭찬 없음, 정서적 호소·딜레마 물음",
-      "gain": "소설 형식상 마음 −: 지식 목적 없이 공간 속 감정을 포착",
-      "world": "현실 +: 사회적 공간·이웃 등 현실 배경, 비현실 존재 없음"
+      "pull": "소설 형식의 약한 몰입 신호, 문체 칭찬 아님(평은 감정 포착)",
+      "gain": "소설 형식상 마음: 지식 목적 없음, 단편 일곱 편",
+      "world": "현실: 공간·이웃·홈 파티 등 현실 생활이 배경"
      },
      "missing": [],
      "suggest": "",
@@ -369,7 +486,8 @@
    },
    "rules_version": "v3.1",
    "retag_reasons": [
-    "fiction"
+    "fiction",
+    "author"
    ],
    "v3": {
     "record": {
@@ -451,6 +569,59 @@
       "pull": -1
      }
     }
+   },
+   "before_author": {
+    "record": {
+     "isbn": "9791141602376",
+     "title": "안녕이라 그랬어",
+     "author": "김애란 저",
+     "pages": 320,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "어조 −: 이전보다 서늘하고 비정해졌다는 소개",
+      "pull": "형식 신호 몰입 −: 문체 직접 칭찬 없고 단편 소설",
+      "gain": "형식 신호 마음 −: 감정 포착, 지식이 목적 아님",
+      "world": "현실: 사회적 공간·이웃·홈 파티 등 현실 배경"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "사회적 공간 속 감정을 짚어 내는 서늘한 일곱 단편이 궁금하세요?",
+     "evidence": "한국 작가의 문학 단편집, 내용 장르 없음",
+     "confidence": 0.75,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "어조 −: 소개가 이전보다 서늘하고 비정해졌다고 함",
+       "pull": "소설 형식의 몰입 −: 문체 직접 칭찬 없음, 정서적 호소·딜레마 물음",
+       "gain": "소설 형식상 마음 −: 지식 목적 없이 공간 속 감정을 포착",
+       "world": "현실 +: 사회적 공간·이웃 등 현실 배경, 비현실 존재 없음"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "한국 작가의 문학 단편집, 내용 장르 없음"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/147560984",
+     "auto": "ai-agree",
+     "rules_version": "v3.1"
+    }
    }
   },
   {
@@ -484,17 +655,17 @@
      "world": 1
     },
     "signals": {
-     "temp": "장면 −: 보육 시설의 상처, 서로의 숨을 훔치는 관계",
-     "pull": "몰입 −: 두 인물의 만남과 겪는 일이 끌고 감",
-     "gain": "마음 쪽: 인물의 상처와 바다를 향한 꿈이 남음",
-     "world": "현실: 보육 시설과 오키나와 등 실제 장소가 배경"
+     "temp": "어조 −: 헤어나올 수 없는 과거·상처, 서로의 숨을 훔치는 장면",
+     "pull": "몰입 −: 소개가 문체 칭찬 없이 두 인물의 이야기로 끎",
+     "gain": "마음 −: 소설 형식, 인물의 상처와 꿈이 남기는 것",
+     "world": "현실 +: 보육 시설·오키나와 등 실제 세상이 배경"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "과거라는 수족관에 갇힌 두 사람은 바다에 닿을 수 있을까?",
-    "evidence": "문학 소설, 내용 장르 없음, 한국 작가 기준 적합",
-    "confidence": 0.7,
+    "one_liner": "과거라는 수족관을 벗어나 바다에 닿을 수 있을까?",
+    "evidence": "한국 작가의 문학 소설, 내용 장르 없음",
+    "confidence": 0.8,
     "fits": true,
     "second": {
      "fits": true,
@@ -505,10 +676,10 @@
       "world": 1
      },
      "signals": {
-      "temp": "장면 −: 보육 시설의 상처, 서로의 숨을 훔치는 관계. 결말은 안 나옴",
-      "pull": "몰입 −: 두 인물의 만남과 겪는 일이 끌고 감. 문장 칭찬은 없음",
-      "gain": "마음 −: 인물의 상처와 꿈이 남기는 정서, 설명 신호 없음",
-      "world": "현실 +: 보육 시설·오키나와 바다 등 실제 세상이 배경"
+      "temp": "어조·장면 −: 과거·상처에서 헤어나오지 못하는 인물, 결말은 열려 있음",
+      "pull": "몰입 −: 소설 형식 신호, 두 인물이 겪는 일이 끌고 감",
+      "gain": "마음 −: 소설 형식, 인물과 상처의 이야기가 남김",
+      "world": "현실 +: 보육 시설·오키나와 등 실제 세상, 비현실 존재 없음"
      },
      "missing": [],
      "suggest": "",
@@ -519,7 +690,64 @@
     "status": "picked",
     "link": "https://www.yes24.com/product/goods/124235834",
     "auto": "ai-agree",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9791198547514",
+     "title": "수족관",
+     "author": "유래혁 저",
+     "pages": 376,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "장면 −: 보육 시설의 상처, 서로의 숨을 훔치는 관계",
+      "pull": "몰입 −: 두 인물의 만남과 겪는 일이 끌고 감",
+      "gain": "마음 쪽: 인물의 상처와 바다를 향한 꿈이 남음",
+      "world": "현실: 보육 시설과 오키나와 등 실제 장소가 배경"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "과거라는 수족관에 갇힌 두 사람은 바다에 닿을 수 있을까?",
+     "evidence": "문학 소설, 내용 장르 없음, 한국 작가 기준 적합",
+     "confidence": 0.7,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "장면 −: 보육 시설의 상처, 서로의 숨을 훔치는 관계. 결말은 안 나옴",
+       "pull": "몰입 −: 두 인물의 만남과 겪는 일이 끌고 감. 문장 칭찬은 없음",
+       "gain": "마음 −: 인물의 상처와 꿈이 남기는 정서, 설명 신호 없음",
+       "world": "현실 +: 보육 시설·오키나와 바다 등 실제 세상이 배경"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "한국 작가의 내용 장르 없는 문학 소설"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/124235834",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -547,60 +775,62 @@
     "entry": "leaf",
     "genre": "한국 소설",
     "axes": {
-     "temp": -1,
+     "temp": null,
      "pull": -1,
      "gain": -1,
      "world": null
     },
     "signals": {
-     "temp": "",
-     "pull": "형식 신호: 소설이라 몰입, 문체 칭찬 없음",
-     "gain": "형식 신호: 소설이라 마음, 지식 목적 없음",
-     "world": "배경·비현실 존재 정보 없음"
+     "temp": "끝맺음·어조·장면 모두 소개에 없음, 작가 이력뿐",
+     "pull": "소설 형식의 약한 몰입 신호, 문체 칭찬 없음",
+     "gain": "소설 형식 기본값 마음, 지식 목적 없음",
+     "world": "배경·등장 존재가 소개에 드러나지 않음"
     },
     "missing": [
+     "temp",
      "world"
     ],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "상처로 사람을 읽는 한 여인을 따라가는 이야기인가요?",
+    "one_liner": "",
     "evidence": "한국 작가의 문학 소설, 내용 장르 신호 없음",
-    "confidence": 0.5,
+    "confidence": 0.6,
     "fits": true,
     "second": {
      "fits": true,
      "axes": {
-      "temp": null,
+      "temp": -1,
       "pull": -1,
       "gain": -1,
       "world": null
      },
      "signals": {
-      "temp": "끝맺음·어조·장면 신호 없음: 소개가 작가 이력뿐",
-      "pull": "몰입 −: 소설 형식 신호, 문체 칭찬 없음",
-      "gain": "마음 −: 소설 형식 신호, 지식 목적 없음",
-      "world": "배경·존재가 소개·목차에 안 보임"
+      "temp": "",
+      "pull": "소설 형식 신호: 몰입·이야기, 문체 칭찬 없음",
+      "gain": "소설 형식 신호: 인물 이야기가 남기는 마음",
+      "world": "배경·비현실 존재 정보가 소개에 없음"
      },
      "missing": [
-      "temp",
       "world"
      ],
      "suggest": "",
-     "why": "한국 작가의 문학 장편, 내용 장르 신호 없음"
+     "why": "한국 작가의 문학 소설, 내용 장르 없음"
     },
     "flags": [
      "temp"
     ],
     "issues": [
-     "근거가 책소개를 베낌 (AI-1 temp)"
+     "한 줄이 책소개를 베낌",
+     "근거가 책소개를 베낌 (AI-2 temp)"
     ],
-    "status": "review",
+    "status": "reserve",
     "link": "https://www.yes24.com/product/goods/153497469",
     "rules_version": "v3.1"
    },
    "rules_version": "v3.1",
    "retag_reasons": [
-    "person"
+    "person",
+    "author"
    ],
    "v3": {
     "record": {
@@ -661,6 +891,67 @@
      "link": "https://www.yes24.com/product/goods/153497469",
      "rules_version": "v3"
     }
+   },
+   "before_author": {
+    "record": {
+     "isbn": "9791141602451",
+     "title": "절창 切創 (화이트 에디션)",
+     "author": "구병모 저",
+     "pages": 352,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": null
+     },
+     "signals": {
+      "temp": "",
+      "pull": "형식 신호: 소설이라 몰입, 문체 칭찬 없음",
+      "gain": "형식 신호: 소설이라 마음, 지식 목적 없음",
+      "world": "배경·비현실 존재 정보 없음"
+     },
+     "missing": [
+      "world"
+     ],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "상처로 사람을 읽는 한 여인을 따라가는 이야기인가요?",
+     "evidence": "한국 작가의 문학 소설, 내용 장르 신호 없음",
+     "confidence": 0.5,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": null,
+       "pull": -1,
+       "gain": -1,
+       "world": null
+      },
+      "signals": {
+       "temp": "끝맺음·어조·장면 신호 없음: 소개가 작가 이력뿐",
+       "pull": "몰입 −: 소설 형식 신호, 문체 칭찬 없음",
+       "gain": "마음 −: 소설 형식 신호, 지식 목적 없음",
+       "world": "배경·존재가 소개·목차에 안 보임"
+      },
+      "missing": [
+       "temp",
+       "world"
+      ],
+      "suggest": "",
+      "why": "한국 작가의 문학 장편, 내용 장르 신호 없음"
+     },
+     "flags": [
+      "temp"
+     ],
+     "issues": [
+      "근거가 책소개를 베낌 (AI-1 temp)"
+     ],
+     "status": "review",
+     "link": "https://www.yes24.com/product/goods/153497469",
+     "rules_version": "v3.1"
+    }
    }
   },
   {
@@ -694,16 +985,16 @@
      "world": 1
     },
     "signals": {
-     "temp": "",
-     "pull": "몰입 −: 산골 마을 이웃들의 이야기와 인물이 끌고 감",
-     "gain": "",
-     "world": "현실 +: 평균 연령 일흔여덟의 산골 수평마을이 무대"
+     "temp": "어조 +: 따뜻하고 뜨거운 인간애, 이웃과 밥을 나눔",
+     "pull": "몰입 −: 입말로 풀어내는 이야기꾼, 인물 이야기가 끌고 감",
+     "gain": "마음 −: 소설 형식, 사람을 다시 바라보게 함",
+     "world": "현실 +: 평균 일흔여덟 살 산골마을이 무대"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "낯선 이웃과 밥을 나누다 보면 사람이 다시 보일까요?",
-    "evidence": "한국 작가의 문학 소설, 산골 마을 이웃 이야기",
+    "one_liner": "산골 마을 노인들과 밥을 나누며 사람을 다시 보게 되는 이야기일까요?",
+    "evidence": "한국 작가의 문학 소설, 내용 장르 없음",
     "confidence": 0.8,
     "fits": true,
     "second": {
@@ -715,26 +1006,85 @@
       "world": 1
      },
      "signals": {
-      "temp": "어조 +: 뜨거운 인간애, 낯선 이웃과 밥을 나누는 이야기",
-      "pull": "몰입 −: 이야기꾼의 해학과 마을 인물들의 이야기가 끌고 감",
+      "temp": "어조 +: 더 따뜻하고 뜨거운 인간애로 풀어냄, 이웃과 밥을 나눔",
+      "pull": "몰입 −: 문체 칭찬 없음, 이웃 인물들의 이야기가 끌고 감",
       "gain": "",
-      "world": ""
+      "world": "현실 +: 평균 연령 일흔여덟 산골 마을이 무대"
      },
      "missing": [],
      "suggest": "",
-     "why": "한국 작가의 문학 소설, 마을 이웃 이야기"
+     "why": "한국 작가의 문학 소설, 내용 장르 없음"
     },
     "flags": [],
     "issues": [
-     "근거가 책소개를 베낌 (AI-1 temp)",
-     "근거가 책소개를 베낌 (AI-1 gain)",
-     "근거가 책소개를 베낌 (AI-2 gain)",
-     "근거가 책소개를 베낌 (AI-2 world)"
+     "근거가 책소개를 베낌 (AI-2 gain)"
     ],
     "status": "picked",
     "link": "https://www.yes24.com/product/goods/195026262",
     "auto": "ai-agree",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9788936439996",
+     "title": "찌니주의보",
+     "author": "정지아 저",
+     "pages": 232,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "",
+      "pull": "몰입 −: 산골 마을 이웃들의 이야기와 인물이 끌고 감",
+      "gain": "",
+      "world": "현실 +: 평균 연령 일흔여덟의 산골 수평마을이 무대"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "낯선 이웃과 밥을 나누다 보면 사람이 다시 보일까요?",
+     "evidence": "한국 작가의 문학 소설, 산골 마을 이웃 이야기",
+     "confidence": 0.8,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": 1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "어조 +: 뜨거운 인간애, 낯선 이웃과 밥을 나누는 이야기",
+       "pull": "몰입 −: 이야기꾼의 해학과 마을 인물들의 이야기가 끌고 감",
+       "gain": "",
+       "world": ""
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "한국 작가의 문학 소설, 마을 이웃 이야기"
+     },
+     "flags": [],
+     "issues": [
+      "근거가 책소개를 베낌 (AI-1 temp)",
+      "근거가 책소개를 베낌 (AI-1 gain)",
+      "근거가 책소개를 베낌 (AI-2 gain)",
+      "근거가 책소개를 베낌 (AI-2 world)"
+     ],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/195026262",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -768,17 +1118,17 @@
      "world": 1
     },
     "signals": {
-     "temp": "어조 −: 서늘한 서사, 강렬하고 서늘하다는 표현",
-     "pull": "몰입 −: 몰입의 파티, 강렬한 서사와 캐릭터",
-     "gain": "마음 −: 소설집이라 인물과 이야기가 남기는 것",
-     "world": ""
+     "temp": "어조 −: 강렬하고 서늘한 서사라는 소개 문장",
+     "pull": "몰입 −: 몰입의 파티, 개성적 캐릭터와 서사",
+     "gain": "마음 −: 소설 형식이 남기는 약한 마음 신호",
+     "world": "현실 +: 리얼리즘, 갈월동 98번지 등 실제 장소"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "치밀한 취재로 빚은 개성적인 인물들이 서늘하게 이끄는 이야기가 궁금하지 않나요?",
-    "evidence": "소설집, 서늘한 서사와 몰입, 리얼리즘 신호",
-    "confidence": 0.6,
+    "one_liner": "치밀한 취재와 강렬한 캐릭터로 서늘한 현실을 비추는 소설집일까요?",
+    "evidence": "한국 작가 소설집, 내용 장르 없는 리얼리즘",
+    "confidence": 0.7,
     "fits": true,
     "second": {
      "fits": true,
@@ -789,23 +1139,82 @@
       "world": 1
      },
      "signals": {
-      "temp": "어조 −: 서늘한 서사, 리얼리즘. 약한 신호",
-      "pull": "몰입 −: 추천사가 '몰입의 파티', 강렬한 서사",
-      "gain": "마음 −: 소설집이라 인물·이야기가 남기는 것",
-      "world": "현실 +: 리얼리즘, 갈월동 같은 실제 장소"
+      "temp": "어조 −: 서늘한 서사, 리얼리즘 — 약한 신호",
+      "pull": "몰입 −: 몰입의 파티, 강렬한 서사, 캐릭터",
+      "gain": "마음 −: 소설집 형식, 지식 목적 없음",
+      "world": "현실 +: 리얼리즘, 현실 배경 소설집"
      },
-     "missing": [],
+     "missing": [
+      "temp"
+     ],
      "suggest": "",
      "why": "한국 작가의 문학 소설집, 내용 장르 없음"
     },
     "flags": [],
-    "issues": [
-     "근거가 책소개를 베낌 (AI-1 world)"
-    ],
+    "issues": [],
     "status": "picked",
     "link": "https://www.yes24.com/product/goods/143911524",
     "auto": "ai-agree",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9788936439743",
+     "title": "혼모노",
+     "author": "성해나 저",
+     "pages": 368,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "어조 −: 서늘한 서사, 강렬하고 서늘하다는 표현",
+      "pull": "몰입 −: 몰입의 파티, 강렬한 서사와 캐릭터",
+      "gain": "마음 −: 소설집이라 인물과 이야기가 남기는 것",
+      "world": ""
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "치밀한 취재로 빚은 개성적인 인물들이 서늘하게 이끄는 이야기가 궁금하지 않나요?",
+     "evidence": "소설집, 서늘한 서사와 몰입, 리얼리즘 신호",
+     "confidence": 0.6,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "어조 −: 서늘한 서사, 리얼리즘. 약한 신호",
+       "pull": "몰입 −: 추천사가 '몰입의 파티', 강렬한 서사",
+       "gain": "마음 −: 소설집이라 인물·이야기가 남기는 것",
+       "world": "현실 +: 리얼리즘, 갈월동 같은 실제 장소"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "한국 작가의 문학 소설집, 내용 장르 없음"
+     },
+     "flags": [],
+     "issues": [
+      "근거가 책소개를 베낌 (AI-1 world)"
+     ],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/143911524",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -836,23 +1245,23 @@
      "temp": -1,
      "pull": -1,
      "gain": -1,
-     "world": 1
+     "world": -1
     },
     "signals": {
-     "temp": "장면 −: 집단 자살, 악몽, 복수와 반전의 서늘한 분위기",
-     "pull": "몰입 −: 사건의 진실과 복수·반전이 끌고 감",
-     "gain": "마음 −: 인물의 이야기가 남기는 것, 설명이 아님",
-     "world": "현실 +: 외딴 산골 고등학교와 사이비 종교 사건이 배경"
+     "temp": "장면 −: 집단 자살 사건과 복수, 악몽 같은 일",
+     "pull": "몰입 −: 복수와 반전, 사건의 진실이 끄는 전개",
+     "gain": "마음 −: 소설 형식, 인물의 이야기가 남는 것",
+     "world": ""
     },
     "missing": [],
-    "suggest": "",
+    "suggest": "추리·스릴러",
     "one_liner_style": "question",
-    "one_liner": "집단 자살의 진실을 따라가다 보면 어디까지 닿게 될까요?",
-    "evidence": "한국 작가 장편, 현실 배경의 사건 중심 이야기",
+    "one_liner": "사이비 종교의 집단 자살 뒤 숨은 진실을 쫓는 이야기일까요?",
+    "evidence": "집단 자살 사건의 진실과 복수·반전이 중심",
     "confidence": 0.6,
-    "fits": true,
+    "fits": false,
     "second": {
-     "fits": true,
+     "fits": false,
      "axes": {
       "temp": -1,
       "pull": -1,
@@ -860,21 +1269,82 @@
       "world": 1
      },
      "signals": {
-      "temp": "장면 −: 집단 자살·악몽·복수로 이어지는 아픈 전개",
-      "pull": "몰입 −: 사건의 진실, 복수와 반전이 끌고 감",
-      "gain": "마음 −: 인물과 이야기가 남기는 감정 중심",
-      "world": "현실 +: 산골 학교·사이비 종교 사건, 초자연 존재 없음"
+      "temp": "장면 −: 집단 자살·복수·악몽, 서늘한 분위기",
+      "pull": "몰입 −: 복수와 반전, 진실이 밝혀지는 전개",
+      "gain": "마음 −: 소설 형식, 인물의 이야기가 남김",
+      "world": "현실 +: 산골 학교와 사이비 종교, 초자연 존재 없음"
+     },
+     "missing": [],
+     "suggest": "추리·스릴러",
+     "why": "사건 진실과 반전이 중심인 스릴러"
+    },
+    "flags": [
+     "fits",
+     "world"
+    ],
+    "issues": [
+     "근거가 책소개를 베낌 (AI-1 world)"
+    ],
+    "status": "dropped",
+    "link": "https://www.yes24.com/product/goods/195804454",
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9791169087520",
+     "title": "녹색 절벽의 신자들",
+     "author": "조예은 저",
+     "pages": 388,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "장면 −: 집단 자살, 악몽, 복수와 반전의 서늘한 분위기",
+      "pull": "몰입 −: 사건의 진실과 복수·반전이 끌고 감",
+      "gain": "마음 −: 인물의 이야기가 남기는 것, 설명이 아님",
+      "world": "현실 +: 외딴 산골 고등학교와 사이비 종교 사건이 배경"
      },
      "missing": [],
      "suggest": "",
-     "why": "한국 작가의 사이비 종교 사건을 다룬 문학 장편"
-    },
-    "flags": [],
-    "issues": [],
-    "status": "picked",
-    "link": "https://www.yes24.com/product/goods/195804454",
-    "auto": "ai-agree",
-    "rules_version": "v3"
+     "one_liner_style": "question",
+     "one_liner": "집단 자살의 진실을 따라가다 보면 어디까지 닿게 될까요?",
+     "evidence": "한국 작가 장편, 현실 배경의 사건 중심 이야기",
+     "confidence": 0.6,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "장면 −: 집단 자살·악몽·복수로 이어지는 아픈 전개",
+       "pull": "몰입 −: 사건의 진실, 복수와 반전이 끌고 감",
+       "gain": "마음 −: 인물과 이야기가 남기는 감정 중심",
+       "world": "현실 +: 산골 학교·사이비 종교 사건, 초자연 존재 없음"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "한국 작가의 사이비 종교 사건을 다룬 문학 장편"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/195804454",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -908,17 +1378,17 @@
      "world": 1
     },
     "signals": {
-     "temp": "어조 −: 아이들을 내모는 잔인한 현실 직시·고발. 장면 −: 죽고 싶은",
-     "pull": "몰입 −: 네 아이의 사연이 장별로 이어지는 이야기",
-     "gain": "마음 −: 인물의 이야기가 남기는 감정과 공감",
-     "world": "현실 +: 대한민국 사회 속 청춘과 아이들이 무대"
+     "temp": "어조 −: 아이들을 내모는 잔인한 현실을 직시·고발",
+     "pull": "몰입 −: 소설 형식 신호, 문체 칭찬 없음",
+     "gain": "마음 −: 소설 형식, 인물 이야기가 남김",
+     "world": "현실 +: 한국 사회 속 아이들이 배경"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "벼랑 끝에 선 아이들의 이야기를 따라가며 우리 사회의 그림자를 마주해 볼까요?",
-    "evidence": "한국 작가의 현실 배경 문학 소설, 내용 장르 없음",
-    "confidence": 0.82,
+    "one_liner": "벼랑 끝에 선 아이들이 서로를 붙드는 이야기를 만나 볼래요?",
+    "evidence": "한국 작가의 사회 현실 소설, 내용 장르 없음",
+    "confidence": 0.85,
     "fits": true,
     "second": {
      "fits": true,
@@ -929,21 +1399,78 @@
       "world": 1
      },
      "signals": {
-      "temp": "어조 −: 아이들을 내모는 잔인한 현실 직시·고발. 장면 −: 죽고 싶은",
-      "pull": "몰입 −: 네 아이의 사연이 인물별로 이어지며 끌고 감",
-      "gain": "마음 −: 인물 이야기로 감정·성찰을 건넴",
-      "world": "현실 +: 대한민국 사회 속 청춘·아이들이 배경"
+      "temp": "어조 −: 아이들을 내모는 잔인한 현실을 고발·직시. 장면 −: 죽고 싶",
+      "pull": "몰입 −: 소설 형식 신호, 문체 칭찬 없음. 네 인물의 이야기가 끌고 ",
+      "gain": "마음 −: 소설 형식, 인물 이야기가 남기는 것. 지식이 목적 아님",
+      "world": "현실 +: 대한민국 사회 속 청춘과 아이들이 배경, 비현실 존재 없음"
      },
      "missing": [],
      "suggest": "",
-     "why": "한국 작가의 사회·삶을 다룬 문학 소설이라 맞음"
+     "why": "한국 작가의 내용 장르 없는 문학 소설"
     },
     "flags": [],
     "issues": [],
     "status": "picked",
     "link": "https://www.yes24.com/product/goods/149385533",
     "auto": "ai-agree",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9791199305304",
+     "title": "자몽살구클럽",
+     "author": "한로로 저",
+     "pages": 199,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "어조 −: 아이들을 내모는 잔인한 현실 직시·고발. 장면 −: 죽고 싶은",
+      "pull": "몰입 −: 네 아이의 사연이 장별로 이어지는 이야기",
+      "gain": "마음 −: 인물의 이야기가 남기는 감정과 공감",
+      "world": "현실 +: 대한민국 사회 속 청춘과 아이들이 무대"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "벼랑 끝에 선 아이들의 이야기를 따라가며 우리 사회의 그림자를 마주해 볼까요?",
+     "evidence": "한국 작가의 현실 배경 문학 소설, 내용 장르 없음",
+     "confidence": 0.82,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "어조 −: 아이들을 내모는 잔인한 현실 직시·고발. 장면 −: 죽고 싶은",
+       "pull": "몰입 −: 네 아이의 사연이 인물별로 이어지며 끌고 감",
+       "gain": "마음 −: 인물 이야기로 감정·성찰을 건넴",
+       "world": "현실 +: 대한민국 사회 속 청춘·아이들이 배경"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "한국 작가의 사회·삶을 다룬 문학 소설이라 맞음"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/149385533",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -977,17 +1504,17 @@
      "world": -1
     },
     "signals": {
-     "temp": "끝맺음 약함: 결말 언급 없음. 어조 +: 밤을 따스하게 채워줄 이야기",
-     "pull": "몰입 −: 엄마의 실종·불면증의 진짜 이유를 좇는 전개",
-     "gain": "마음 −: 젊은 달러구트의 성장 이야기가 남기는 것",
-     "world": "딴 세상 −: 꿈 백화점·양치기 소년이 꿈속에서 실제 등장"
+     "temp": "어조 +: 밤을 따스하게 채워 줄 이야기라며 독자에게 건넴",
+     "pull": "몰입 −: 엄마의 실종과 불면증의 이유를 쫓는 전개",
+     "gain": "마음 −: 소설이라 형식상 마음, 지식이 목적 아님",
+     "world": "딴 세상 −: 꿈 가게와 양치기 소년이 실제로 등장"
     },
     "missing": [],
     "suggest": "SF·판타지",
     "one_liner_style": "question",
-    "one_liner": "사라진 엄마와 불면의 비밀을 좇는 청년의 꿈속 모험이 궁금하지 않나요?",
-    "evidence": "꿈 가게라는 상상의 세계가 이야기를 움직임",
-    "confidence": 0.82,
+    "one_liner": "사라진 엄마와 불면의 이유를 따라가는 꿈 가게 청년의 성장담이 궁금하세요?",
+    "evidence": "꿈 가게라는 비현실 세계가 이야기를 움직임",
+    "confidence": 0.85,
     "fits": false,
     "second": {
      "fits": false,
@@ -998,10 +1525,10 @@
       "world": -1
      },
      "signals": {
-      "temp": "끝맺음 약함, 어조 +: 시리즈 피날레, 밤을 따스하게 채워 줌",
-      "pull": "몰입: 엄마 실종·불면증의 진짜 이유를 쫓는 전개",
-      "gain": "",
-      "world": "딴 세상: 꿈 백화점·양치기 소년이 꿈속에 실제 등장"
+      "temp": "어조 +: 밤을 따스하게 채워줄 이야기, 독자 곁의 다정한 시선",
+      "pull": "몰입 −: 엄마의 실종·빚·불면의 이유를 쫓는 전개",
+      "gain": "마음 −: 소설, 지식 목적 없이 인물의 성장 이야기가 남김",
+      "world": "딴 세상 −: 꿈 가게·양치기 소년이 꿈속에서 실제 등장"
      },
      "missing": [],
      "suggest": "SF·판타지",
@@ -1010,12 +1537,70 @@
     "flags": [
      "fits"
     ],
-    "issues": [
-     "근거가 책소개를 베낌 (AI-2 gain)"
-    ],
+    "issues": [],
     "status": "dropped",
     "link": "https://www.yes24.com/product/goods/192468942",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9791124575178",
+     "title": "달러구트 꿈 백화점 0",
+     "author": "이미예 저",
+     "pages": 300,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": -1,
+      "world": -1
+     },
+     "signals": {
+      "temp": "끝맺음 약함: 결말 언급 없음. 어조 +: 밤을 따스하게 채워줄 이야기",
+      "pull": "몰입 −: 엄마의 실종·불면증의 진짜 이유를 좇는 전개",
+      "gain": "마음 −: 젊은 달러구트의 성장 이야기가 남기는 것",
+      "world": "딴 세상 −: 꿈 백화점·양치기 소년이 꿈속에서 실제 등장"
+     },
+     "missing": [],
+     "suggest": "SF·판타지",
+     "one_liner_style": "question",
+     "one_liner": "사라진 엄마와 불면의 비밀을 좇는 청년의 꿈속 모험이 궁금하지 않나요?",
+     "evidence": "꿈 가게라는 상상의 세계가 이야기를 움직임",
+     "confidence": 0.82,
+     "fits": false,
+     "second": {
+      "fits": false,
+      "axes": {
+       "temp": 1,
+       "pull": -1,
+       "gain": -1,
+       "world": -1
+      },
+      "signals": {
+       "temp": "끝맺음 약함, 어조 +: 시리즈 피날레, 밤을 따스하게 채워 줌",
+       "pull": "몰입: 엄마 실종·불면증의 진짜 이유를 쫓는 전개",
+       "gain": "",
+       "world": "딴 세상: 꿈 백화점·양치기 소년이 꿈속에 실제 등장"
+      },
+      "missing": [],
+      "suggest": "SF·판타지",
+      "why": "꿈 가게라는 상상 세계가 이야기를 움직이는 판타지"
+     },
+     "flags": [
+      "fits"
+     ],
+     "issues": [
+      "근거가 책소개를 베낌 (AI-2 gain)"
+     ],
+     "status": "dropped",
+     "link": "https://www.yes24.com/product/goods/192468942",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -1049,17 +1634,17 @@
      "world": 1
     },
     "signals": {
-     "temp": "장면 −: 광주의 상처, 목차 '검은 숨'·'쇠와 피'. 끝맺음은 흐릿",
-     "pull": "몰입 −: 문체 칭찬이 없어 소설 형식 신호인 이야기",
-     "gain": "마음 −: 소설 형식 신호, 함께 아파하는 헌사",
-     "world": "현실 +: 광주라는 실제 있었던 사건이 배경"
+     "temp": "장면 −: 목차 '검은 숨', '쇠와 피'. 상처에 함께 아파함",
+     "pull": "몰입 −: 문체 칭찬 없음, 소설 형식 신호",
+     "gain": "마음 −: 상처를 함께 아파하는 헌사, 소설 형식",
+     "world": "현실 +: 광주라는 실제 있었던 세상이 배경"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "광주의 상처를 여러 목소리로 마주하며 함께 아파하게 되는 이야기일까요?",
-    "evidence": "광주 배경 문학 소설, 한국 작가라 한국 소설",
-    "confidence": 0.75,
+    "one_liner": "광주의 상처를 한 장 한 장 따라가며 함께 아파하게 되는 이야기일까요?",
+    "evidence": "광주 상처를 함께 아파함, 목차 장면 어두움",
+    "confidence": 0.72,
     "fits": true,
     "second": {
      "fits": true,
@@ -1070,14 +1655,14 @@
       "world": 1
      },
      "signals": {
-      "temp": "장면 −: 목차 '검은 숨'·'쇠와 피'·'일곱개의 뺨'이 아픔",
-      "pull": "소설 형식 신호 몰입 −: 문체 직접 칭찬 없음, 수상·찬사뿐",
-      "gain": "마음 −: 광주의 상처에 함께 아파하는 헌사, 소설 형식",
-      "world": "현실 +: 광주라는 실제 있었던 세상이 배경"
+      "temp": "장면 −: 장 제목 '검은 숨','쇠와 피' 등 아픔. 상처를 함께 아파",
+      "pull": "몰입 −: 소설 형식 신호, 문체 직접 칭찬은 없음",
+      "gain": "마음 −: 소설, 지식이 목적이라는 말 없음",
+      "world": "현실 +: 광주라는 실제 역사 배경"
      },
      "missing": [],
      "suggest": "",
-     "why": "한국 작가의 광주를 다룬 문학 소설"
+     "why": "한국 작가의 문학 소설로 내용 장르 없음"
     },
     "flags": [],
     "issues": [],
@@ -1088,7 +1673,8 @@
    },
    "rules_version": "v3.1",
    "retag_reasons": [
-    "person"
+    "person",
+    "author"
    ],
    "v3": {
     "record": {
@@ -1147,6 +1733,59 @@
      "link": "https://www.yes24.com/product/goods/13137546",
      "rules_version": "v3"
     }
+   },
+   "before_author": {
+    "record": {
+     "isbn": "9788936434120",
+     "title": "소년이 온다",
+     "author": "한강 저",
+     "pages": 216,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "장면 −: 광주의 상처, 목차 '검은 숨'·'쇠와 피'. 끝맺음은 흐릿",
+      "pull": "몰입 −: 문체 칭찬이 없어 소설 형식 신호인 이야기",
+      "gain": "마음 −: 소설 형식 신호, 함께 아파하는 헌사",
+      "world": "현실 +: 광주라는 실제 있었던 사건이 배경"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "광주의 상처를 여러 목소리로 마주하며 함께 아파하게 되는 이야기일까요?",
+     "evidence": "광주 배경 문학 소설, 한국 작가라 한국 소설",
+     "confidence": 0.75,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "장면 −: 목차 '검은 숨'·'쇠와 피'·'일곱개의 뺨'이 아픔",
+       "pull": "소설 형식 신호 몰입 −: 문체 직접 칭찬 없음, 수상·찬사뿐",
+       "gain": "마음 −: 광주의 상처에 함께 아파하는 헌사, 소설 형식",
+       "world": "현실 +: 광주라는 실제 있었던 세상이 배경"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "한국 작가의 광주를 다룬 문학 소설"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/13137546",
+     "auto": "ai-agree",
+     "rules_version": "v3.1"
+    }
    }
   },
   {
@@ -1181,16 +1820,16 @@
     },
     "signals": {
      "temp": "",
-     "pull": "문장 +: 감각적 표현과 '감수성의 혁명'이라는 문체 평가",
-     "gain": "마음 −: 주인공 내면의 갈등을 섬세하게 건네는 단편들",
-     "world": "현실 +: 서울·무진 등 실제 공간과 1960년대 일상이 배경"
+     "pull": "문장 +: 감각적 표현, 감수성의 혁명이라는 문체 평가",
+     "gain": "마음 −: 소설 형식, 내면 갈등을 섬세히 그려 마음에 남김",
+     "world": "현실 +: 서울과 무진, 1960년대 실제 배경의 단편들"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "서울과 무진 사이에서 흔들리는 내면을 감각적 문장으로 따라가 볼까요?",
+    "one_liner": "서울과 무진 사이에서 흔들리는 마음을 감각적인 문장으로 따라가 볼까요?",
     "evidence": "한국 작가의 문학 단편집, 내용 장르 없음",
-    "confidence": 0.8,
+    "confidence": 0.72,
     "fits": true,
     "second": {
      "fits": true,
@@ -1201,10 +1840,10 @@
       "world": 1
      },
      "signals": {
-      "temp": "",
-      "pull": "문장 +: 감각적 표현, 감수성의 혁명이라는 문체 평가",
-      "gain": "마음 −: 주인공 내면의 갈등과 성찰이 남는 것",
-      "world": "현실 +: 1960년대 서울·무진이 배경인 소설"
+      "temp": "어조 −: 갈등하는 주인공 내면, 서울의 우울 등 서늘한 시선",
+      "pull": "문장 +: 감수성의 혁명, 감각적으로 표현했다는 문체 칭찬",
+      "gain": "마음 −: 소설은 형식이 마음 신호, 내면 갈등이 남김",
+      "world": "현실 +: 서울·무진 등 실제 1960년대 배경"
      },
      "missing": [],
      "suggest": "",
@@ -1212,13 +1851,72 @@
     },
     "flags": [],
     "issues": [
-     "근거가 책소개를 베낌 (AI-1 temp)",
-     "근거가 책소개를 베낌 (AI-2 temp)"
+     "근거가 책소개를 베낌 (AI-1 temp)"
     ],
     "status": "picked",
     "link": "https://www.yes24.com/product/goods/2661477",
     "auto": "ai-agree",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9788937461491",
+     "title": "무진기행",
+     "author": "김승옥 저",
+     "pages": 405,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "",
+      "pull": "문장 +: 감각적 표현과 '감수성의 혁명'이라는 문체 평가",
+      "gain": "마음 −: 주인공 내면의 갈등을 섬세하게 건네는 단편들",
+      "world": "현실 +: 서울·무진 등 실제 공간과 1960년대 일상이 배경"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "서울과 무진 사이에서 흔들리는 내면을 감각적 문장으로 따라가 볼까요?",
+     "evidence": "한국 작가의 문학 단편집, 내용 장르 없음",
+     "confidence": 0.8,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": 1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "",
+       "pull": "문장 +: 감각적 표현, 감수성의 혁명이라는 문체 평가",
+       "gain": "마음 −: 주인공 내면의 갈등과 성찰이 남는 것",
+       "world": "현실 +: 1960년대 서울·무진이 배경인 소설"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "한국 작가의 문학 단편집이라 한국 소설에 맞음"
+     },
+     "flags": [],
+     "issues": [
+      "근거가 책소개를 베낌 (AI-1 temp)",
+      "근거가 책소개를 베낌 (AI-2 temp)"
+     ],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/2661477",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -1252,16 +1950,16 @@
      "world": -1
     },
     "signals": {
-     "temp": "끝맺음 −: 개인이 저항하다 파멸해 가는 과정, 감시 사회",
-     "pull": "몰입 −: 저항과 파멸로 이어지는 전개가 끌고 감",
-     "gain": "마음 −: 인물의 저항·파멸 이야기가 남기는 것",
-     "world": "딴 세상 −: 가상 국가 오세아니아, 텔레스크린 감시"
+     "temp": "끝맺음 −: 저항하다 파멸해 가는 과정, 감시·통제 장면",
+     "pull": "몰입 −: 감시 속 한 개인의 저항과 파멸이 끌고 감",
+     "gain": "마음 −: 소설 형식, 인물 이야기가 남기는 것",
+     "world": "딴 세상 −: 오세아니아라는 가상 전체주의 국가"
     },
     "missing": [],
     "suggest": "SF·판타지",
     "one_liner_style": "question",
-    "one_liner": "감시와 통제 속에서 한 사람이 무너지는 과정을 따라가 볼래요?",
-    "evidence": "가상 전체주의 국가와 감시 기술이 중심인 디스토피아",
+    "one_liner": "감시 체제 속에서 저항하던 한 사람은 어디까지 무너질까요?",
+    "evidence": "가상 전체주의 국가가 무대인 디스토피아 소설",
     "confidence": 0.8,
     "fits": false,
     "second": {
@@ -1273,14 +1971,14 @@
       "world": -1
      },
      "signals": {
-      "temp": "끝맺음 −: 저항하던 개인이 파멸해 가는 과정",
-      "pull": "몰입 −: 저항과 감시 속 개인의 전개가 끌고 감",
-      "gain": "마음 −: 인물과 이야기가 남기는 것이 중심",
-      "world": "딴 세상 −: 가상국 오세아니아, 텔레스크린 감시 체제"
+      "temp": "끝맺음 −: 개인이 저항하다 파멸해 가는 과정, 감시 체제",
+      "pull": "몰입 −: 소설 형식, 저항과 파멸로 이어지는 전개",
+      "gain": "마음 −: 소설, 인물의 저항과 파멸이 남기는 것",
+      "world": "딴 세상 −: 오세아니아, 텔레스크린·빅 브라더가 지배하는 디스토피아"
      },
      "missing": [],
      "suggest": "SF·판타지",
-     "why": "가상 전체주의 국가를 상상한 디스토피아라 SF"
+     "why": "존재하지 않는 감시 체제를 상상한 디스토피아"
     },
     "flags": [
      "fits"
@@ -1288,7 +1986,65 @@
     "issues": [],
     "status": "dropped",
     "link": "https://www.yes24.com/product/goods/372300",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9788937460777",
+     "title": "1984",
+     "author": "조지 오웰 저/정회성 역",
+     "pages": 444,
+     "entry": "leaf",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": -1
+     },
+     "signals": {
+      "temp": "끝맺음 −: 개인이 저항하다 파멸해 가는 과정, 감시 사회",
+      "pull": "몰입 −: 저항과 파멸로 이어지는 전개가 끌고 감",
+      "gain": "마음 −: 인물의 저항·파멸 이야기가 남기는 것",
+      "world": "딴 세상 −: 가상 국가 오세아니아, 텔레스크린 감시"
+     },
+     "missing": [],
+     "suggest": "SF·판타지",
+     "one_liner_style": "question",
+     "one_liner": "감시와 통제 속에서 한 사람이 무너지는 과정을 따라가 볼래요?",
+     "evidence": "가상 전체주의 국가와 감시 기술이 중심인 디스토피아",
+     "confidence": 0.8,
+     "fits": false,
+     "second": {
+      "fits": false,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": -1
+      },
+      "signals": {
+       "temp": "끝맺음 −: 저항하던 개인이 파멸해 가는 과정",
+       "pull": "몰입 −: 저항과 감시 속 개인의 전개가 끌고 감",
+       "gain": "마음 −: 인물과 이야기가 남기는 것이 중심",
+       "world": "딴 세상 −: 가상국 오세아니아, 텔레스크린 감시 체제"
+      },
+      "missing": [],
+      "suggest": "SF·판타지",
+      "why": "가상 전체주의 국가를 상상한 디스토피아라 SF"
+     },
+     "flags": [
+      "fits"
+     ],
+     "issues": [],
+     "status": "dropped",
+     "link": "https://www.yes24.com/product/goods/372300",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -1317,25 +2073,64 @@
     "genre": "외국 소설",
     "axes": {
      "temp": 1,
-     "pull": -1,
+     "pull": 0,
      "gain": -1,
      "world": 1
     },
     "signals": {
-     "temp": "어조 +: 선의·다정함·공동체 유대를 복원하는 시선",
-     "pull": "몰입 −: 정체 모를 이방인과 프로젝트의 전개가 끌고 감",
-     "gain": "",
-     "world": "현실 +: 소도시 골든이 무대, 초자연 존재 없음"
+     "temp": "끝맺음 +: 잃어버린 얼굴이 제자리를 찾고 세계에 금빛이 번짐",
+     "pull": "문장 +: 문장 사이사이 복원. 몰입 −: 미스터리한 이방인의 행보",
+     "gain": "마음 −: 소설 형식이 약한 마음 신호. 다정함에 마음을 내줌",
+     "world": "현실 +: 소도시 골든이 배경, 비현실 존재 없음"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "낯선 노신사의 소박한 선행이 작은 도시를 어떻게 바꾸는지 따라가 볼까요?",
-    "evidence": "문학 소설, 현실 소도시, 다정한 어조",
+    "one_liner": "조용한 선행이 작은 도시를 어떻게 바꿔 놓을까?",
+    "evidence": "외국 작가의 문학 소설, 내용 장르 없음",
     "confidence": 0.72,
     "fits": true,
     "second": {
      "fits": true,
+     "axes": {
+      "temp": 1,
+      "pull": 1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "어조 +: 선의·친절·유대를 다정하게 복원, 금빛 물결로 번짐",
+      "pull": "",
+      "gain": "",
+      "world": "현실 +: 소도시 골든, 초상화·카페 등 실제 같은 배경"
+     },
+     "missing": [],
+     "suggest": "",
+     "why": "미국 작가의 문학 소설, 내용 장르 없음"
+    },
+    "flags": [
+     "pull"
+    ],
+    "issues": [
+     "근거가 책소개를 베낌 (AI-2 pull)",
+     "근거가 책소개를 베낌 (AI-2 gain)"
+    ],
+    "status": "review",
+    "link": "https://www.yes24.com/product/goods/192469071",
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9791175772892",
+     "title": "테오",
+     "author": "앨런 레비 저/노지양 역",
+     "pages": 556,
+     "entry": "leaf",
+     "genre": "외국 소설",
      "axes": {
       "temp": 1,
       "pull": -1,
@@ -1343,23 +2138,45 @@
       "world": 1
      },
      "signals": {
-      "temp": "어조 +: 대가 없는 선의·다정함, 도시에 번지는 금빛 변화",
-      "pull": "몰입 −: 이방인의 비밀 프로젝트를 따라가는 전개",
-      "gain": "마음 쪽: 다정함·유대를 느끼게 하는 이야기",
-      "world": "현실 +: 소도시 골든 배경, 마법은 비유적 표현"
+      "temp": "어조 +: 선의·다정함·공동체 유대를 복원하는 시선",
+      "pull": "몰입 −: 정체 모를 이방인과 프로젝트의 전개가 끌고 감",
+      "gain": "",
+      "world": "현실 +: 소도시 골든이 무대, 초자연 존재 없음"
      },
      "missing": [],
      "suggest": "",
-     "why": "미국 작가의 문학 소설, 내용 장르 없음"
-    },
-    "flags": [],
-    "issues": [
-     "근거가 책소개를 베낌 (AI-1 gain)"
-    ],
-    "status": "picked",
-    "link": "https://www.yes24.com/product/goods/192469071",
-    "auto": "ai-agree",
-    "rules_version": "v3"
+     "one_liner_style": "question",
+     "one_liner": "낯선 노신사의 소박한 선행이 작은 도시를 어떻게 바꾸는지 따라가 볼까요?",
+     "evidence": "문학 소설, 현실 소도시, 다정한 어조",
+     "confidence": 0.72,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": 1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "어조 +: 대가 없는 선의·다정함, 도시에 번지는 금빛 변화",
+       "pull": "몰입 −: 이방인의 비밀 프로젝트를 따라가는 전개",
+       "gain": "마음 쪽: 다정함·유대를 느끼게 하는 이야기",
+       "world": "현실 +: 소도시 골든 배경, 마법은 비유적 표현"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "미국 작가의 문학 소설, 내용 장르 없음"
+     },
+     "flags": [],
+     "issues": [
+      "근거가 책소개를 베낌 (AI-1 gain)"
+     ],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/192469071",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -1393,17 +2210,17 @@
      "world": 1
     },
     "signals": {
-     "temp": "끝맺음 −: 주인공이 파멸·전락하고 어조도 서늘함",
-     "pull": "몰입 −: 주인공의 전락 과정과 내면 기록이 끌고 감",
-     "gain": "마음 쪽: 인물 내면과 이야기가 남기는 것",
-     "world": "현실: 전후 일본 사회가 배경, 비현실 존재 없음"
+     "temp": "끝맺음 −: 주인공이 파멸·전락해 가는 과정, 장면이 아픔",
+     "pull": "몰입 −: 소설 형식, 인물의 전락 이야기가 끌고 감",
+     "gain": "마음 −: 소설, 인물 내면의 기록이 남는 것",
+     "world": "현실 +: 전후 일본 사회가 배경, 비현실 존재 없음"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "사회에 속하지 못한 사람의 무너지는 내면을 따라가 볼래요?",
-    "evidence": "파멸하는 인물, 일본 작가의 문학 소설",
-    "confidence": 0.8,
+    "one_liner": "사회의 위선을 견디지 못한 한 사람의 내면은 어떻게 무너져 갈까요?",
+    "evidence": "번역 소설, 내용 장르 없는 문학. 파멸 서사",
+    "confidence": 0.85,
     "fits": true,
     "second": {
      "fits": true,
@@ -1414,21 +2231,78 @@
       "world": 1
      },
      "signals": {
-      "temp": "끝맺음 −: 주인공이 파멸·전락해 가는 과정, 장면 아픔",
-      "pull": "몰입 −: 주인공의 전락 과정과 수기로 끌고 감",
-      "gain": "마음 −: 인물 내면과 이야기가 남기는 것",
+      "temp": "끝맺음 −: 주인공이 파멸·전락해 가는 과정",
+      "pull": "몰입 −: 소설 형식, 문체 칭찬 없고 인물의 파멸 과정이 끌고 감",
+      "gain": "마음 −: 인물 내면과 이야기가 남기는 것, 형식 신호",
       "world": "현실 +: 전후 일본 사회가 배경, 비현실 존재 없음"
      },
      "missing": [],
      "suggest": "",
-     "why": "일본 작가의 문학 소설, 내용 장르 없음"
+     "why": "일본 작가의 문학 소설이라 외국 소설에 맞음"
     },
     "flags": [],
     "issues": [],
     "status": "picked",
     "link": "https://www.yes24.com/product/goods/1387488",
     "auto": "ai-agree",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9788937461033",
+     "title": "인간 실격",
+     "author": "다자이 오사무 저/김춘미 역",
+     "pages": 191,
+     "entry": "leaf",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "끝맺음 −: 주인공이 파멸·전락하고 어조도 서늘함",
+      "pull": "몰입 −: 주인공의 전락 과정과 내면 기록이 끌고 감",
+      "gain": "마음 쪽: 인물 내면과 이야기가 남기는 것",
+      "world": "현실: 전후 일본 사회가 배경, 비현실 존재 없음"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "사회에 속하지 못한 사람의 무너지는 내면을 따라가 볼래요?",
+     "evidence": "파멸하는 인물, 일본 작가의 문학 소설",
+     "confidence": 0.8,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "끝맺음 −: 주인공이 파멸·전락해 가는 과정, 장면 아픔",
+       "pull": "몰입 −: 주인공의 전락 과정과 수기로 끌고 감",
+       "gain": "마음 −: 인물 내면과 이야기가 남기는 것",
+       "world": "현실 +: 전후 일본 사회가 배경, 비현실 존재 없음"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "일본 작가의 문학 소설, 내용 장르 없음"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/1387488",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -1462,17 +2336,17 @@
      "world": 1
     },
     "signals": {
-     "temp": "끝맺음 −: 소외된 인물이 죽음을 앞두고 실존을 마주함",
-     "pull": "몰입 −: 인물의 삶과 죽음 앞 체험이 끌고 감",
-     "gain": "마음 −: 실존 체험을 느끼게 하는 인물 이야기",
-     "world": "현실 +: 현대 인물이 사는 실제 세상, 비현실 존재 없음"
+     "temp": "어조·끝맺음 −: 소외된 인물이 죽음 앞에서 실존을 마주하는 서늘한 시선",
+     "pull": "몰입 −: 소설 형식 신호, 문체 칭찬 없음(독창적 형식은 근거 아님)",
+     "gain": "마음 −: 소설, 인물이 겪는 실존 체험이 남는 것",
+     "world": "현실 +: 현대 인물의 현실 배경, 비현실 존재 없음"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "죽음 앞에서야 실존을 마주하는 소외된 한 사람을 따라가 볼래요?",
-    "evidence": "죽음 앞 소외된 인물, 현실 배경의 문학 소설",
-    "confidence": 0.7,
+    "one_liner": "소외된 채 살던 한 사람이 죽음 앞에서 맞닥뜨리는 실존을 만나요?",
+    "evidence": "소외된 인물의 죽음 앞 실존 체험, 현실 배경",
+    "confidence": 0.72,
     "fits": true,
     "second": {
      "fits": true,
@@ -1483,23 +2357,80 @@
       "world": 1
      },
      "signals": {
-      "temp": "끝맺음 −: 죽음을 앞두고 마주하는 실존의 체험, 소외된 인물",
-      "pull": "몰입 −: 문장 칭찬 없음, 인물의 삶과 사건이 끌고 감",
-      "gain": "",
-      "world": "현실: 현대인이 사는 실제 세상, 비현실 존재 없음"
+      "temp": "끝맺음 −: 죽음을 앞두고 마주하는 실존, 소외된 현대인의 초상",
+      "pull": "몰입 −: 문체 칭찬 없음, 소설 형식 신호인 이야기",
+      "gain": "마음 −: 소설, 실존 체험을 강렬하게 그리는 이야기",
+      "world": "현실 +: 현대 프랑스 배경, 실제 인간 사회 속 인물"
      },
      "missing": [],
      "suggest": "",
-     "why": "프랑스 작가의 내용 장르 없는 문학 소설"
+     "why": "내용 장르 없는 외국 작가의 문학 소설"
     },
     "flags": [],
-    "issues": [
-     "근거가 책소개를 베낌 (AI-2 gain)"
-    ],
+    "issues": [],
     "status": "picked",
     "link": "https://www.yes24.com/product/goods/4827613",
     "auto": "ai-agree",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9788937443848",
+     "title": "이방인",
+     "author": "알베르 카뮈 저/김화영 역",
+     "pages": 270,
+     "entry": "leaf",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "끝맺음 −: 소외된 인물이 죽음을 앞두고 실존을 마주함",
+      "pull": "몰입 −: 인물의 삶과 죽음 앞 체험이 끌고 감",
+      "gain": "마음 −: 실존 체험을 느끼게 하는 인물 이야기",
+      "world": "현실 +: 현대 인물이 사는 실제 세상, 비현실 존재 없음"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "죽음 앞에서야 실존을 마주하는 소외된 한 사람을 따라가 볼래요?",
+     "evidence": "죽음 앞 소외된 인물, 현실 배경의 문학 소설",
+     "confidence": 0.7,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "끝맺음 −: 죽음을 앞두고 마주하는 실존의 체험, 소외된 인물",
+       "pull": "몰입 −: 문장 칭찬 없음, 인물의 삶과 사건이 끌고 감",
+       "gain": "",
+       "world": "현실: 현대인이 사는 실제 세상, 비현실 존재 없음"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "프랑스 작가의 내용 장르 없는 문학 소설"
+     },
+     "flags": [],
+     "issues": [
+      "근거가 책소개를 베낌 (AI-2 gain)"
+     ],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/4827613",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -1732,20 +2663,20 @@
     "genre": "외국 소설",
     "axes": {
      "temp": 1,
-     "pull": -1,
+     "pull": 1,
      "gain": -1,
      "world": 1
     },
     "signals": {
      "temp": "",
-     "pull": "형식 신호 몰입 −: 문체 직접 칭찬 없이 인물 군상의 일상 이야기",
-     "gain": "형식상 마음 −: 소설, 삶의 아이러니를 포착해 보여 줌",
-     "world": "현실 +: 19세기 러시아 일상 속 인물들의 이야기"
+     "pull": "",
+     "gain": "마음 −: 소설 형식, 인물 군상의 일상이 남김",
+     "world": "현실 +: 19세기 러시아 일상 속 인물들"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "사소한 일상 속 인물들로 삶의 아이러니를 따뜻하게 비춰 줄까요?",
+    "one_liner": "사소한 일상 속 삶의 아이러니를 어떤 인물들로 보여 줄까요?",
     "evidence": "러시아 작가의 문학 단편선, 내용 장르 없음",
     "confidence": 0.8,
     "fits": true,
@@ -1760,29 +2691,30 @@
      "signals": {
       "temp": "",
       "pull": "",
-      "gain": "마음 −: 소설 형식, 삶의 아이러니를 인물로 포착",
-      "world": "현실 +: 19세기 러시아 일상사와 인물 군상"
+      "gain": "마음: 소설 형식, 일상과 아이러니를 포착하는 이야기",
+      "world": "현실: 19세기 러시아 일상사 속 인물들"
      },
      "missing": [],
      "suggest": "",
      "why": "러시아 작가의 문학 단편선, 내용 장르 없음"
     },
-    "flags": [
-     "pull"
-    ],
+    "flags": [],
     "issues": [
      "근거가 책소개를 베낌 (AI-1 temp)",
+     "근거가 책소개를 베낌 (AI-1 pull)",
      "근거가 책소개를 베낌 (AI-2 temp)",
      "근거가 책소개를 베낌 (AI-2 pull)"
     ],
-    "status": "review",
+    "status": "picked",
     "link": "https://www.yes24.com/product/goods/318392",
+    "auto": "ai-agree",
     "rules_version": "v3.1"
    },
    "rules_version": "v3.1",
    "retag_reasons": [
     "person",
-    "anthology"
+    "anthology",
+    "author"
    ],
    "v3": {
     "record": {
@@ -1866,6 +2798,89 @@
       "pull": null
      }
     }
+   },
+   "before_author": {
+    "record": {
+     "isbn": "9788937460708",
+     "title": "체호프 단편선",
+     "author": "안톤 체호프 저/박현섭 역",
+     "pages": 205,
+     "entry": "leaf",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "",
+      "pull": "형식 신호 몰입 −: 문체 직접 칭찬 없이 인물 군상의 일상 이야기",
+      "gain": "형식상 마음 −: 소설, 삶의 아이러니를 포착해 보여 줌",
+      "world": "현실 +: 19세기 러시아 일상 속 인물들의 이야기"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "사소한 일상 속 인물들로 삶의 아이러니를 따뜻하게 비춰 줄까요?",
+     "evidence": "러시아 작가의 문학 단편선, 내용 장르 없음",
+     "confidence": 0.8,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": 1,
+       "pull": 1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "",
+       "pull": "",
+       "gain": "마음 −: 소설 형식, 삶의 아이러니를 인물로 포착",
+       "world": "현실 +: 19세기 러시아 일상사와 인물 군상"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "러시아 작가의 문학 단편선, 내용 장르 없음"
+     },
+     "flags": [
+      "pull"
+     ],
+     "issues": [
+      "근거가 책소개를 베낌 (AI-1 temp)",
+      "근거가 책소개를 베낌 (AI-2 temp)",
+      "근거가 책소개를 베낌 (AI-2 pull)"
+     ],
+     "status": "review",
+     "link": "https://www.yes24.com/product/goods/318392",
+     "rules_version": "v3.1"
+    },
+    "tiebreak": {
+     "splits": [
+      "pull"
+     ],
+     "third": {
+      "fits": true,
+      "suggest": "",
+      "axes": {
+       "temp": 1,
+       "pull": 1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "어조 +: 삶의 비극성을 감싸 안는 따뜻한 리얼리즘",
+       "pull": "문장 +: 우수 어린 서정적 미학을 앞세워 소개",
+       "gain": "마음 −: 소설 형식, 일상과 삶의 아이러니를 포착",
+       "world": "현실 +: 19세기 러시아 일상사를 재현하는 단편들"
+      },
+      "missing": []
+     },
+     "settled": {
+      "pull": 1
+     }
+    }
    }
   },
   {
@@ -1899,50 +2914,52 @@
      "world": 1
     },
     "signals": {
-     "temp": "끝맺음·어조·장면 모두 소개에 없어 판단 불가",
-     "pull": "몰입 −: 조르바라는 인물의 호쾌한 삶이 끌고 감",
-     "gain": "마음 −: 소설 형식, 영혼의 투쟁과 삶의 길잡이",
-     "world": "현실 +: 실존 인물이 살았던 실제 세상이 배경"
+     "temp": "끝맺음·어조·장면 모두 소개에 없음, 신호 없음",
+     "pull": "몰입 −: 호쾌한 자유인 조르바의 삶이 끌고 감",
+     "gain": "마음 −: 소설 형식, 영혼의 투쟁이 남기는 것",
+     "world": "현실 +: 실존 인물이 모델인 현실 배경"
     },
     "missing": [
      "temp"
     ],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "자유로운 한 사람의 삶을 따라가며 나의 길잡이를 떠올리게 될까요?",
-    "evidence": "실존 인물의 삶이 중심인 문학 소설",
-    "confidence": 0.7,
+    "one_liner": "호쾌한 자유인과 함께 삶의 길잡이를 만나는 이야기일까요?",
+    "evidence": "외국 작가 문학 소설, 내용 장르 없음",
+    "confidence": 0.8,
     "fits": true,
     "second": {
      "fits": true,
      "axes": {
-      "temp": null,
+      "temp": 0,
       "pull": -1,
       "gain": -1,
       "world": 1
      },
      "signals": {
-      "temp": "끝맺음·어조·장면 신호 없음: 결말 언급 없고 인물 소개뿐",
+      "temp": "0 반반: 끝맺음·어조·장면이 소개에 없음, 방향 신호 없음",
       "pull": "몰입 −: 호쾌한 자유인 조르바의 삶이 끌고 감",
-      "gain": "마음 −: 소설 형식, 영혼의 투쟁과 삶의 길잡이",
-      "world": "현실 +: 실존 인물이 배경, 비현실 존재 없음"
+      "gain": "마음 −: 소설, 영혼의 투쟁과 삶의 길잡이 인물이 남김",
+      "world": "현실 +: 실존 인물이 사는 실제 세상이 배경"
      },
      "missing": [
       "temp"
      ],
      "suggest": "",
-     "why": "그리스 작가의 문학 소설이라 외국 소설에 맞음"
+     "why": "그리스 작가의 문학 소설, 내용 장르 없음"
     },
-    "flags": [],
+    "flags": [
+     "temp"
+    ],
     "issues": [],
-    "status": "picked",
+    "status": "review",
     "link": "https://www.yes24.com/product/goods/3647046",
-    "auto": "ai-agree",
     "rules_version": "v3.1"
    },
    "rules_version": "v3.1",
    "retag_reasons": [
-    "person"
+    "person",
+    "author"
    ],
    "v3": {
     "record": {
@@ -1999,6 +3016,63 @@
      "link": "https://www.yes24.com/product/goods/3647046",
      "rules_version": "v3"
     }
+   },
+   "before_author": {
+    "record": {
+     "isbn": "9788932909349",
+     "title": "그리스인 조르바",
+     "author": "니코스 카잔차키스 저/이윤기 역",
+     "pages": 483,
+     "entry": "leaf",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": null,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "끝맺음·어조·장면 모두 소개에 없어 판단 불가",
+      "pull": "몰입 −: 조르바라는 인물의 호쾌한 삶이 끌고 감",
+      "gain": "마음 −: 소설 형식, 영혼의 투쟁과 삶의 길잡이",
+      "world": "현실 +: 실존 인물이 살았던 실제 세상이 배경"
+     },
+     "missing": [
+      "temp"
+     ],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "자유로운 한 사람의 삶을 따라가며 나의 길잡이를 떠올리게 될까요?",
+     "evidence": "실존 인물의 삶이 중심인 문학 소설",
+     "confidence": 0.7,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": null,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "끝맺음·어조·장면 신호 없음: 결말 언급 없고 인물 소개뿐",
+       "pull": "몰입 −: 호쾌한 자유인 조르바의 삶이 끌고 감",
+       "gain": "마음 −: 소설 형식, 영혼의 투쟁과 삶의 길잡이",
+       "world": "현실 +: 실존 인물이 배경, 비현실 존재 없음"
+      },
+      "missing": [
+       "temp"
+      ],
+      "suggest": "",
+      "why": "그리스 작가의 문학 소설이라 외국 소설에 맞음"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/3647046",
+     "auto": "ai-agree",
+     "rules_version": "v3.1"
+    }
    }
   },
   {
@@ -2032,17 +3106,17 @@
      "world": 1
     },
     "signals": {
-     "temp": "어조 −: 무에서 무로, 삶 속의 죽음을 고요히 담는 시선",
-     "pull": "문장 +: 반복 단어와 침묵이 만드는 리듬을 강점으로 소개",
-     "gain": "마음 −: 사건 없이 내면 독백으로 삶과 죽음을 느끼게 함",
-     "world": "현실 +: 아버지·아이 등 사람의 삶, 비현실 존재 없음"
+     "temp": "어조 −: 삶 속의 죽음, 나직하고 삭막한 침묵의 시선",
+     "pull": "문장 +: 반복 단어의 리듬과 음악 같은 문체를 앞세움",
+     "gain": "마음 −: 내면의 독백과 삶·죽음에 대한 성찰, 형식도 마음",
+     "world": "현실 +: 아버지의 탄생 앞둔 삶, 거리의 악사 등 실제 삶"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "사건 없이 나직한 독백과 침묵의 리듬으로 삶과 죽음을 들려주는 소설일까요?",
-    "evidence": "문학 소설, 내면 독백과 리듬 중심, 삶과 죽음",
-    "confidence": 0.6,
+    "one_liner": "고요한 독백과 반복되는 말의 리듬으로 삶과 죽음을 들려줄까요?",
+    "evidence": "내면 독백과 반복 리듬, 죽음을 품은 삶의 어조",
+    "confidence": 0.72,
     "fits": true,
     "second": {
      "fits": true,
@@ -2053,10 +3127,10 @@
       "world": 1
      },
      "signals": {
-      "temp": "어조 −: 삶 속의 죽음, 고요하고 삭막한 침묵의 시선",
-      "pull": "문장 +: 반복 단어의 리듬과 음악 같은 문체를 강점으로 소개",
-      "gain": "마음 −: 사건 없이 내면 독백으로 삶과 죽음을 성찰",
-      "world": "현실 +: 일상 인물의 삶과 탄생·죽음, 비현실 존재 없음"
+      "temp": "어조 −: 삶 속의 죽음·무에서 무로, 나직하고 삭막한 시선",
+      "pull": "문장 +: 반복 단어의 리듬과 음악 같은 문체를 앞세움",
+      "gain": "마음 −: 내면 독백과 삶·죽음을 느끼게 하는 소설",
+      "world": "현실 +: 아버지·아이 등 사람의 삶이 배경, 초자연 없음"
      },
      "missing": [],
      "suggest": "",
@@ -2067,7 +3141,64 @@
     "status": "picked",
     "link": "https://www.yes24.com/product/goods/77133280",
     "auto": "ai-agree",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9788954657129",
+     "title": "아침 그리고 저녁",
+     "author": "욘 포세 저/박경희 역",
+     "pages": 152,
+     "entry": "leaf",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "어조 −: 무에서 무로, 삶 속의 죽음을 고요히 담는 시선",
+      "pull": "문장 +: 반복 단어와 침묵이 만드는 리듬을 강점으로 소개",
+      "gain": "마음 −: 사건 없이 내면 독백으로 삶과 죽음을 느끼게 함",
+      "world": "현실 +: 아버지·아이 등 사람의 삶, 비현실 존재 없음"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "사건 없이 나직한 독백과 침묵의 리듬으로 삶과 죽음을 들려주는 소설일까요?",
+     "evidence": "문학 소설, 내면 독백과 리듬 중심, 삶과 죽음",
+     "confidence": 0.6,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": 1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "어조 −: 삶 속의 죽음, 고요하고 삭막한 침묵의 시선",
+       "pull": "문장 +: 반복 단어의 리듬과 음악 같은 문체를 강점으로 소개",
+       "gain": "마음 −: 사건 없이 내면 독백으로 삶과 죽음을 성찰",
+       "world": "현실 +: 일상 인물의 삶과 탄생·죽음, 비현실 존재 없음"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "외국 작가의 내용 장르 없는 문학 소설"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/77133280",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -2173,16 +3304,16 @@
      "world": 1
     },
     "signals": {
-     "temp": "어조 −: 목차에 파멸·묵시록의 서늘한 기운, 환각 장면",
-     "pull": "몰입 −: 소설 형식 신호, 문체 직접 칭찬은 없음",
-     "gain": "마음 −: 소설 형식 신호, 지식이 목적이라는 말 없음",
-     "world": "현실 +: 마을·사람이 배경, 초자연 존재 등장 안 보임"
+     "temp": "끝맺음 −: 소개가 파멸의 공포를 말하고 목차에 환각·원이 닫힘",
+     "pull": "몰입 −: 소개가 문체를 칭찬하지 않아 소설 형식 신호로 몰입",
+     "gain": "마음 −: 지식 목적 없이 소설 형식, 성찰·감정을 건넴",
+     "world": "현실 +: 실제 존재하는 세상 배경, 초자연 존재 등장 안 보임"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "파멸의 기운 속에서 예술의 힘을 되묻는, 묵시록 같은 소설일까요?",
-    "evidence": "헝가리 작가의 문학 소설, 내용 장르 없음",
+    "one_liner": "파멸의 공포 속에서 예술의 힘을 다시 묻는, 묵시록 같은 소설일까요?",
+    "evidence": "묵시록적 파멸 분위기, 외국 작가 문학 소설",
     "confidence": 0.6,
     "fits": true,
     "second": {
@@ -2194,14 +3325,14 @@
       "world": 1
      },
      "signals": {
-      "temp": "어조 −: 묵시록·파멸의 공포를 앞세우는 서늘한 시선",
-      "pull": "몰입 −: 문체 칭찬 없음, 소설 형식 신호인 이야기",
-      "gain": "마음 −: 소설 형식 신호, 지식을 앞세우지 않음",
-      "world": "현실 +: 초자연 존재 없이 실제 있는 세상이 배경"
+      "temp": "어조 −: 묵시록·파멸의 공포를 말하는 평가, 장 제목 '환각'",
+      "pull": "소설 형식 신호 몰입 −: 문체 칭찬 없고 수상·평가만",
+      "gain": "소설 형식 신호 마음 −: 지식 전달이 목적이라는 말 없음",
+      "world": "현실 +: 실제 세상이 배경, 비현실 존재 등장 안 함"
      },
      "missing": [],
      "suggest": "",
-     "why": "외국 작가의 문학 소설로 내용 장르 중심이 아님"
+     "why": "외국 작가의 문학 소설이며 내용 장르 중심이 아님"
     },
     "flags": [],
     "issues": [],
@@ -2212,7 +3343,8 @@
    },
    "rules_version": "v3.1",
    "retag_reasons": [
-    "person"
+    "person",
+    "author"
    ],
    "v3": {
     "record": {
@@ -2294,6 +3426,59 @@
       "pull": null
      }
     }
+   },
+   "before_author": {
+    "record": {
+     "isbn": "9791159921445",
+     "title": "사탄탱고 (블랙 에디션)",
+     "author": "크러스너호르커이 라슬로 저/조원규 역",
+     "pages": 412,
+     "entry": "leaf",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "어조 −: 목차에 파멸·묵시록의 서늘한 기운, 환각 장면",
+      "pull": "몰입 −: 소설 형식 신호, 문체 직접 칭찬은 없음",
+      "gain": "마음 −: 소설 형식 신호, 지식이 목적이라는 말 없음",
+      "world": "현실 +: 마을·사람이 배경, 초자연 존재 등장 안 보임"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "파멸의 기운 속에서 예술의 힘을 되묻는, 묵시록 같은 소설일까요?",
+     "evidence": "헝가리 작가의 문학 소설, 내용 장르 없음",
+     "confidence": 0.6,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "어조 −: 묵시록·파멸의 공포를 앞세우는 서늘한 시선",
+       "pull": "몰입 −: 문체 칭찬 없음, 소설 형식 신호인 이야기",
+       "gain": "마음 −: 소설 형식 신호, 지식을 앞세우지 않음",
+       "world": "현실 +: 초자연 존재 없이 실제 있는 세상이 배경"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "외국 작가의 문학 소설로 내용 장르 중심이 아님"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/60543924",
+     "auto": "ai-agree",
+     "rules_version": "v3.1"
+    }
    }
   },
   {
@@ -2327,16 +3512,16 @@
      "world": 1
     },
     "signals": {
-     "temp": "어조 −: 전쟁·혁명 속 인간성이 파괴되는 것을 도발적으로 다룸",
-     "pull": "몰입 −: 소설 형식이 약한 이야기 신호, 문체 칭찬 없음",
-     "gain": "마음 −: 소설 형식 신호, 지식 전달이 목적이 아님",
-     "world": "현실 +: 전쟁과 혁명이 있었던 세상이 배경"
+     "temp": "어조·끝맺음 −: 전쟁·혁명 속 인간성 파괴를 도발적으로 다룸",
+     "pull": "몰입 −: 문체 칭찬 없음, 소설 형식 신호로 이야기",
+     "gain": "마음 −: 소설이라 형식 신호, 지식이 목적 아님",
+     "world": "현실 +: 전쟁과 혁명이 있던 실제 세상이 배경"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "전쟁과 혁명 속에서 무너지는 인간성을 세 겹의 이야기로 마주하게 해 줄까요?",
-    "evidence": "전쟁 배경 문학 소설, 내용 장르 없음, 외국 작가",
+    "one_liner": "전쟁과 혁명 속에서 인간성이 부서지는 모습을 어떻게 마주하게 될까요?",
+    "evidence": "역 표기로 외국 작가, 내용 장르 없는 문학 소설",
     "confidence": 0.7,
     "fits": true,
     "second": {
@@ -2348,19 +3533,17 @@
       "world": 1
      },
      "signals": {
-      "temp": "",
-      "pull": "몰입 −: 소설 형식, 문체 직접 칭찬 없음 → 이야기",
-      "gain": "마음 −: 소설 형식, 지식이 주목적이라는 말 없음",
-      "world": "현실 +: 전쟁과 혁명을 겪는 실제 세상이 배경"
+      "temp": "어조 −: 전쟁·혁명 속 인간성 파괴를 도발적으로 다룸",
+      "pull": "몰입 −: 소설 형식, 문체 칭찬 없고 3부작 이야기가 끌고 감",
+      "gain": "마음 −: 소설 형식, 지식 전달이 목적이 아님",
+      "world": "현실 +: 전쟁과 혁명의 실제 세상이 배경"
      },
      "missing": [],
      "suggest": "",
-     "why": "외국 작가의 문학 소설, 내용 장르 없음"
+     "why": "내용 장르 없는 외국 작가의 문학 소설"
     },
     "flags": [],
-    "issues": [
-     "근거가 책소개를 베낌 (AI-2 temp)"
-    ],
+    "issues": [],
     "status": "picked",
     "link": "https://www.yes24.com/product/goods/113450433",
     "auto": "ai-agree",
@@ -2368,7 +3551,8 @@
    },
    "rules_version": "v3.1",
    "retag_reasons": [
-    "person"
+    "person",
+    "author"
    ],
    "v3": {
     "record": {
@@ -2424,6 +3608,61 @@
      "status": "review",
      "link": "https://www.yes24.com/product/goods/113450433",
      "rules_version": "v3"
+    }
+   },
+   "before_author": {
+    "record": {
+     "isbn": "9788972917793",
+     "title": "존재의 세 가지 거짓말",
+     "author": "아고타 크리스토프 저/용경식 역",
+     "pages": 672,
+     "entry": "leaf",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "어조 −: 전쟁·혁명 속 인간성이 파괴되는 것을 도발적으로 다룸",
+      "pull": "몰입 −: 소설 형식이 약한 이야기 신호, 문체 칭찬 없음",
+      "gain": "마음 −: 소설 형식 신호, 지식 전달이 목적이 아님",
+      "world": "현실 +: 전쟁과 혁명이 있었던 세상이 배경"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "전쟁과 혁명 속에서 무너지는 인간성을 세 겹의 이야기로 마주하게 해 줄까요?",
+     "evidence": "전쟁 배경 문학 소설, 내용 장르 없음, 외국 작가",
+     "confidence": 0.7,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "",
+       "pull": "몰입 −: 소설 형식, 문체 직접 칭찬 없음 → 이야기",
+       "gain": "마음 −: 소설 형식, 지식이 주목적이라는 말 없음",
+       "world": "현실 +: 전쟁과 혁명을 겪는 실제 세상이 배경"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "외국 작가의 문학 소설, 내용 장르 없음"
+     },
+     "flags": [],
+     "issues": [
+      "근거가 책소개를 베낌 (AI-2 temp)"
+     ],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/113450433",
+     "auto": "ai-agree",
+     "rules_version": "v3.1"
     }
    }
   },
@@ -3347,16 +4586,16 @@
     },
     "signals": {
      "temp": "끝맺음 +: 우주에서 찾아오는 평화와 위로",
-     "pull": "",
-     "gain": "마음 −: 지구를 보는 의미를 성찰하게 하는 이야기",
+     "pull": "문장 +: 소개가 서정적 언어를 직접 내세움",
+     "gain": "마음 −: 소설 형식, 지식보다 감각과 성찰",
      "world": "딴 세상 −: 우주정거장이 무대인 소설"
     },
     "missing": [],
     "suggest": "외국 소설",
     "one_liner_style": "question",
-    "one_liner": "우주정거장에서 하루를 보내며 지구를 새로 보게 되는 이야기일까요?",
-    "evidence": "실존 우주정거장 무대의 문학 소설이라 SF 아님",
-    "confidence": 0.82,
+    "one_liner": "우주정거장에서 하루를 보내는 여섯 사람의 시선을 따라가 볼까요?",
+    "evidence": "실제 우주정거장 무대의 문학 소설, 번역서",
+    "confidence": 0.85,
     "fits": false,
     "second": {
      "fits": false,
@@ -3367,9 +4606,9 @@
       "world": -1
      },
      "signals": {
-      "temp": "",
-      "pull": "",
-      "gain": "마음 −: 지구를 보는 의미와 평화·위로를 건넴",
+      "temp": "어조 +: 우주에서 찾아오는 평화와 위로를 들려줌",
+      "pull": "문장 +: 서정적이고 아름다운 언어를 직접 칭찬",
+      "gain": "마음 −: 소설 형식, 우주에서의 감각과 위로가 남음",
       "world": "딴 세상 −: 우주정거장이 무대인 소설"
      },
      "missing": [],
@@ -3379,14 +4618,72 @@
     "flags": [
      "fits"
     ],
-    "issues": [
-     "근거가 책소개를 베낌 (AI-1 pull)",
-     "근거가 책소개를 베낌 (AI-2 temp)",
-     "근거가 책소개를 베낌 (AI-2 pull)"
-    ],
+    "issues": [],
     "status": "dropped",
     "link": "https://www.yes24.com/product/goods/147563743",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9791194413394",
+     "title": "궤도",
+     "author": "서맨사 하비 저/송예슬 역",
+     "pages": 240,
+     "entry": "leaf",
+     "genre": "SF·판타지",
+     "axes": {
+      "temp": 1,
+      "pull": 1,
+      "gain": -1,
+      "world": -1
+     },
+     "signals": {
+      "temp": "끝맺음 +: 우주에서 찾아오는 평화와 위로",
+      "pull": "",
+      "gain": "마음 −: 지구를 보는 의미를 성찰하게 하는 이야기",
+      "world": "딴 세상 −: 우주정거장이 무대인 소설"
+     },
+     "missing": [],
+     "suggest": "외국 소설",
+     "one_liner_style": "question",
+     "one_liner": "우주정거장에서 하루를 보내며 지구를 새로 보게 되는 이야기일까요?",
+     "evidence": "실존 우주정거장 무대의 문학 소설이라 SF 아님",
+     "confidence": 0.82,
+     "fits": false,
+     "second": {
+      "fits": false,
+      "axes": {
+       "temp": 1,
+       "pull": 1,
+       "gain": -1,
+       "world": -1
+      },
+      "signals": {
+       "temp": "",
+       "pull": "",
+       "gain": "마음 −: 지구를 보는 의미와 평화·위로를 건넴",
+       "world": "딴 세상 −: 우주정거장이 무대인 소설"
+      },
+      "missing": [],
+      "suggest": "외국 소설",
+      "why": "실제 우주정거장이 무대인 문학 소설이라 외국 소설"
+     },
+     "flags": [
+      "fits"
+     ],
+     "issues": [
+      "근거가 책소개를 베낌 (AI-1 pull)",
+      "근거가 책소개를 베낌 (AI-2 temp)",
+      "근거가 책소개를 베낌 (AI-2 pull)"
+     ],
+     "status": "dropped",
+     "link": "https://www.yes24.com/product/goods/147563743",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -28666,18 +29963,18 @@
      "world": -1
     },
     "signals": {
-     "temp": "어조 +: 존중받는 공동체를 향한 제안, 우정으로 닫힘",
-     "pull": "몰입 −: 마중이의 좌충우돌 이야기와 삽화가 끌고 감",
-     "gain": "마음 −: 우화로 공감과 성찰을 건네는 쪽",
+     "temp": "끝맺음 +: 공동체·우정으로 닫힘, 어조는 독자 곁에 다정함",
+     "pull": "몰입 −: 마중이의 좌충우돌 이야기가 끌고 감",
+     "gain": "마음 −: 우화 형식이라 형식 신호로 마음 쪽",
      "world": "딴 세상 −: 민달팽이·곤충이 말하는 우화"
     },
     "missing": [],
-    "suggest": "",
+    "suggest": "한국 소설",
     "one_liner_style": "question",
-    "one_liner": "민달팽이 우화로 인권과 존중받는 공동체를 쉽게 생각해 볼까요?",
-    "evidence": "인권 문제를 다룬 우화와 해설, 사회 문제가 목적",
+    "one_liner": "민달팽이 마중이의 좌충우돌을 따라가면 모두가 존중받는 공동체가 궁금해지나요?",
+    "evidence": "곤충 우화가 뼈대, 한국 작가 → 한국 소설",
     "confidence": 0.6,
-    "fits": true,
+    "fits": false,
     "second": {
      "fits": false,
      "axes": {
@@ -28687,26 +29984,27 @@
       "world": -1
      },
      "signals": {
-      "temp": "어조 +: 존중받는 공동체를 향해 독자 곁에서 이끄는 시선",
-      "pull": "몰입 −: 마중이의 좌충우돌 우화 전개가 끌고 감",
-      "gain": "마음 −: 우화로 생각해 보게 하는 형식, 해설은 보조",
-      "world": "딴 세상 −: 민달팽이·곤충이 말하고 사는 우화"
+      "temp": "끝맺음 +: 4부 '우정', 공동체를 만드는 연대와 독자 곁의 어조",
+      "pull": "몰입 −: 마중이의 좌충우돌 우화 전개가 끌고 감, 문체 칭찬 없음",
+      "gain": "마음 −: 우화로 존중·공동체를 느끼게 하는 쪽, 해설은 보조",
+      "world": "딴 세상 −: 민달팽이와 곤충이 말하고 행동하는 우화"
      },
      "missing": [],
-     "suggest": "한국 소설",
-     "why": "인권 우화(이야기+해설)라 소설 쪽이 더 맞음"
+     "suggest": "인문",
+     "why": "사회 문제보다 존중·연대의 삶의 태도를 우화로 전함"
     },
     "flags": [
      "fits"
     ],
     "issues": [],
-    "status": "review",
+    "status": "dropped",
     "link": "https://www.yes24.com/product/goods/122674421",
     "rules_version": "v3.1"
    },
    "rules_version": "v3.1",
    "retag_reasons": [
-    "fiction"
+    "fiction",
+    "author"
    ],
    "v3": {
     "record": {
@@ -28787,6 +30085,85 @@
      "settled": {
       "slot": null,
       "gain": -1
+     }
+    }
+   },
+   "before_author": {
+    "record": {
+     "isbn": "9791198138729",
+     "title": "이상이 일상이 되도록 상상하라",
+     "author": "유범상 저/유기훈 그림",
+     "pages": 304,
+     "entry": "leaf",
+     "genre": "사회·시사",
+     "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": -1,
+      "world": -1
+     },
+     "signals": {
+      "temp": "어조 +: 존중받는 공동체를 향한 제안, 우정으로 닫힘",
+      "pull": "몰입 −: 마중이의 좌충우돌 이야기와 삽화가 끌고 감",
+      "gain": "마음 −: 우화로 공감과 성찰을 건네는 쪽",
+      "world": "딴 세상 −: 민달팽이·곤충이 말하는 우화"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "민달팽이 우화로 인권과 존중받는 공동체를 쉽게 생각해 볼까요?",
+     "evidence": "인권 문제를 다룬 우화와 해설, 사회 문제가 목적",
+     "confidence": 0.6,
+     "fits": true,
+     "second": {
+      "fits": false,
+      "axes": {
+       "temp": 1,
+       "pull": -1,
+       "gain": -1,
+       "world": -1
+      },
+      "signals": {
+       "temp": "어조 +: 존중받는 공동체를 향해 독자 곁에서 이끄는 시선",
+       "pull": "몰입 −: 마중이의 좌충우돌 우화 전개가 끌고 감",
+       "gain": "마음 −: 우화로 생각해 보게 하는 형식, 해설은 보조",
+       "world": "딴 세상 −: 민달팽이·곤충이 말하고 사는 우화"
+      },
+      "missing": [],
+      "suggest": "한국 소설",
+      "why": "인권 우화(이야기+해설)라 소설 쪽이 더 맞음"
+     },
+     "flags": [
+      "fits"
+     ],
+     "issues": [],
+     "status": "review",
+     "link": "https://www.yes24.com/product/goods/122674421",
+     "rules_version": "v3.1"
+    },
+    "tiebreak": {
+     "splits": [
+      "slot"
+     ],
+     "third": {
+      "fits": false,
+      "suggest": "외국 소설",
+      "axes": {
+       "temp": 1,
+       "pull": -1,
+       "gain": -1,
+       "world": -1
+      },
+      "signals": {
+       "temp": "어조 +: 존중받는 공동체를 향한 독자 곁의 제안",
+       "pull": "몰입 −: 마중이의 좌충우돌 우화 줄거리가 끌고 감",
+       "gain": "마음 −: 우화로 인권을 생각하고 느끼게 하는 책",
+       "world": "딴 세상 −: 민달팽이·곤충이 말하는 우화"
+      },
+      "missing": []
+     },
+     "settled": {
+      "slot": null
      }
     }
    }
@@ -34900,22 +36277,25 @@
     "entry": "leaf",
     "genre": "한국 소설",
     "axes": {
-     "temp": 1,
+     "temp": null,
      "pull": 1,
      "gain": -1,
-     "world": 1
+     "world": null
     },
     "signals": {
-     "temp": "어조 +: 믿어보는 무모함·미리 꿈꾸는 용기 등 희망 쪽 메시지",
+     "temp": "끝맺음·어조·장면 신호 없음: 소개가 포부 문구뿐",
      "pull": "",
-     "gain": "마음 −: 소설집이라 통찰·성찰을 건넴, 설명 중심 아님",
-     "world": "현실 +: 목차·소개에 비현실 존재 확인 안 되는 문학 소설집"
+     "gain": "마음 −: 소설집이라 형식이 마음 쪽 신호",
+     "world": "배경·존재 신호 없음: 목차 제목만 모호"
     },
-    "missing": [],
+    "missing": [
+     "temp",
+     "world"
+    ],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "아름다운 문체로 삶을 바라보며 내일을 꿈꾸는 용기를 건네는 소설집일까요?",
-    "evidence": "한국 작가의 문학 소설집, 문체 칭찬과 희망적 어조",
+    "one_liner": "믿지 않던 것을 믿어 보는 용기를 아홉 편의 문장으로 건네는 소설집일까요?",
+    "evidence": "한국 작가 문학 소설집, 문체 칭찬이 있음",
     "confidence": 0.6,
     "fits": true,
     "second": {
@@ -34927,24 +36307,86 @@
       "world": 1
      },
      "signals": {
-      "temp": "어조 +: 믿어보는 용기·내일을 꿈꾸는 쪽으로 건네는 시선",
+      "temp": "어조 +: 믿어보는 무모함·꿈꾸는 용기로 독자에게 건네는 시선",
       "pull": "",
-      "gain": "마음 −: 소설집이라 인물과 이야기가 남기는 것, 통찰",
-      "world": "현실 +: 소개·목차에 괴이 존재가 보이지 않는 문학 소설집"
+      "gain": "마음 −: 소설이라 형식 신호, 지식 목적 없음",
+      "world": "현실 +: 지금 없는 존재 등장 신호 없음, 일상 배경 제목"
      },
      "missing": [],
      "suggest": "",
-     "why": "한국 작가의 문학 소설집이라 한국 소설에 맞음"
+     "why": "한국 작가의 문학 소설집, 내용 장르 없음"
     },
-    "flags": [],
+    "flags": [
+     "temp",
+     "world"
+    ],
     "issues": [
      "근거가 책소개를 베낌 (AI-1 pull)",
      "근거가 책소개를 베낌 (AI-2 pull)"
     ],
-    "status": "picked",
+    "status": "review",
     "link": "https://www.yes24.com/product/goods/196183375",
-    "auto": "ai-agree",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9791141619992",
+     "title": "눈 내리는 삼일포",
+     "author": "김연수 저",
+     "pages": 296,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": 1,
+      "pull": 1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "어조 +: 믿어보는 무모함·미리 꿈꾸는 용기 등 희망 쪽 메시지",
+      "pull": "",
+      "gain": "마음 −: 소설집이라 통찰·성찰을 건넴, 설명 중심 아님",
+      "world": "현실 +: 목차·소개에 비현실 존재 확인 안 되는 문학 소설집"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "아름다운 문체로 삶을 바라보며 내일을 꿈꾸는 용기를 건네는 소설집일까요?",
+     "evidence": "한국 작가의 문학 소설집, 문체 칭찬과 희망적 어조",
+     "confidence": 0.6,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": 1,
+       "pull": 1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "어조 +: 믿어보는 용기·내일을 꿈꾸는 쪽으로 건네는 시선",
+       "pull": "",
+       "gain": "마음 −: 소설집이라 인물과 이야기가 남기는 것, 통찰",
+       "world": "현실 +: 소개·목차에 괴이 존재가 보이지 않는 문학 소설집"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "한국 작가의 문학 소설집이라 한국 소설에 맞음"
+     },
+     "flags": [],
+     "issues": [
+      "근거가 책소개를 베낌 (AI-1 pull)",
+      "근거가 책소개를 베낌 (AI-2 pull)"
+     ],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/196183375",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -34978,19 +36420,17 @@
      "world": 1
     },
     "signals": {
-     "temp": "장면 −: 첫사랑이 평탄치 않고 사건으로 국면이 바뀜. 끝맺음은 불명",
-     "pull": "몰입 −: 우연한 사건으로 관계가 소용돌이치는 전개",
-     "gain": "마음 −: 인물의 사랑 이야기가 남기는 것, 설명 아님",
-     "world": "현실 +: 지방도시 진평, 저수지·계곡이 배경"
+     "temp": "장면 −: 첫사랑이 평탄치 않고 우연한 사건으로 소용돌이에 빠짐",
+     "pull": "몰입 −: 우연한 사건으로 관계가 달라지는 전개가 끌고 감",
+     "gain": "마음 −: 소설이라 형식상 인물 이야기가 남기는 마음",
+     "world": "현실 +: 지방도시 진평이 배경, 비현실 존재 없음"
     },
-    "missing": [
-     "temp"
-    ],
+    "missing": [],
     "suggest": "로맨스",
     "one_liner_style": "question",
-    "one_liner": "열일곱 두 아이의 첫사랑이 어떤 물살에 휩쓸리게 될까요?",
-    "evidence": "열일곱 도담과 해솔의 사랑이 중심 줄기라 로맨스",
-    "confidence": 0.7,
+    "one_liner": "저수지 도시에서 만난 두 아이의 첫사랑이 어디로 흘러갈지 궁금해지나요?",
+    "evidence": "열일곱 두 사람의 만남과 사랑이 이야기의 중심 줄기",
+    "confidence": 0.72,
     "fits": false,
     "second": {
      "fits": false,
@@ -35001,23 +36441,83 @@
       "world": 1
      },
      "signals": {
-      "temp": "장면 −: 평탄치 않은 첫사랑, 와류처럼 빨려드는 사건",
-      "pull": "몰입 −: 우연한 사건으로 국면이 바뀌는 전개",
-      "gain": "마음 −: 두 사람의 사랑 이야기가 남기는 것",
-      "world": "현실 +: 지방도시 진평이 배경, 비현실 존재 없음"
+      "temp": "어조·장면 −: 첫사랑이 평탄치 않고 소용돌이처럼 빨려듦",
+      "pull": "몰입 −: 우연한 사건으로 관계가 다른 국면에 접어드는 전개",
+      "gain": "마음 −: 소설 형식, 두 인물의 사랑 이야기가 남김",
+      "world": "현실 +: 지방도시 진평, 열일곱 두 인물의 현실 배경"
      },
      "missing": [],
      "suggest": "로맨스",
-     "why": "첫사랑과 관계가 이야기의 중심 줄기"
+     "why": "도담과 해솔의 만남·사랑이 중심 줄기라 로맨스"
     },
     "flags": [
-     "fits",
-     "temp"
+     "fits"
     ],
     "issues": [],
     "status": "dropped",
     "link": "https://www.yes24.com/product/goods/116586303",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9788937473401",
+     "title": "급류",
+     "author": "정대건 저",
+     "pages": 300,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "장면 −: 첫사랑이 평탄치 않고 사건으로 국면이 바뀜. 끝맺음은 불명",
+      "pull": "몰입 −: 우연한 사건으로 관계가 소용돌이치는 전개",
+      "gain": "마음 −: 인물의 사랑 이야기가 남기는 것, 설명 아님",
+      "world": "현실 +: 지방도시 진평, 저수지·계곡이 배경"
+     },
+     "missing": [
+      "temp"
+     ],
+     "suggest": "로맨스",
+     "one_liner_style": "question",
+     "one_liner": "열일곱 두 아이의 첫사랑이 어떤 물살에 휩쓸리게 될까요?",
+     "evidence": "열일곱 도담과 해솔의 사랑이 중심 줄기라 로맨스",
+     "confidence": 0.7,
+     "fits": false,
+     "second": {
+      "fits": false,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "장면 −: 평탄치 않은 첫사랑, 와류처럼 빨려드는 사건",
+       "pull": "몰입 −: 우연한 사건으로 국면이 바뀌는 전개",
+       "gain": "마음 −: 두 사람의 사랑 이야기가 남기는 것",
+       "world": "현실 +: 지방도시 진평이 배경, 비현실 존재 없음"
+      },
+      "missing": [],
+      "suggest": "로맨스",
+      "why": "첫사랑과 관계가 이야기의 중심 줄기"
+     },
+     "flags": [
+      "fits",
+      "temp"
+     ],
+     "issues": [],
+     "status": "dropped",
+     "link": "https://www.yes24.com/product/goods/116586303",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -35051,17 +36551,17 @@
      "world": 1
     },
     "signals": {
-     "temp": "끝맺음 +: 자매가 새로운 미래를 함께 펼침, 4부 '멋진 날'",
-     "pull": "문장 +: 치밀하게 벼린 문장을 직접 칭찬",
-     "gain": "마음: 자매의 기억과 첫 순간, 인물 이야기가 남김",
-     "world": "현실: 자매의 삶이 배경, 비현실 존재 없음"
+     "temp": "",
+     "pull": "문장 +: 치밀하게 벼린 문장이라고 직접 소개",
+     "gain": "마음 −: 소설 형식, 인물 이야기가 남기는 것",
+     "world": "현실 +: 자매의 삶과 몸의 기억, 비현실 존재 없음"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "자매의 몸에 새겨진 기억과 삶의 저녁에 맞는 첫 순간이 궁금하지 않나요?",
+    "one_liner": "삶의 저녁에 맞는 첫 순간들을 자매가 함께 펼쳐 보일까요?",
     "evidence": "한국 작가의 문학 소설, 자매의 삶 이야기",
-    "confidence": 0.8,
+    "confidence": 0.7,
     "fits": true,
     "second": {
      "fits": true,
@@ -35072,21 +36572,81 @@
       "world": 1
      },
      "signals": {
-      "temp": "끝맺음 +: 소개가 새로운 미래를 함께 펼친다는 도착점을 말함",
-      "pull": "문장 +: 소개가 치밀하게 벼린 문장을 직접 언급",
-      "gain": "마음 −: 자매의 기억과 삶의 첫 순간이 남기는 이야기",
+      "temp": "",
+      "pull": "문장 +: 치밀하게 벼린 문장을 직접 칭찬",
+      "gain": "0 아님 −: 소설 형식, 인물과 관계가 남기는 마음",
       "world": "현실 +: 자매의 삶이 배경, 비현실 존재 없음"
      },
      "missing": [],
      "suggest": "",
-     "why": "한국 작가의 가족·삶을 다룬 문학 소설"
+     "why": "한국 작가의 문학 소설, 가족·삶 중심"
     },
     "flags": [],
-    "issues": [],
+    "issues": [
+     "근거가 책소개를 베낌 (AI-1 temp)",
+     "근거가 책소개를 베낌 (AI-2 temp)"
+    ],
     "status": "picked",
     "link": "https://www.yes24.com/product/goods/191550933",
     "auto": "ai-agree",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9791141617226",
+     "title": "시간의 감촉",
+     "author": "은희경 저",
+     "pages": 384,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": 1,
+      "pull": 1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "끝맺음 +: 자매가 새로운 미래를 함께 펼침, 4부 '멋진 날'",
+      "pull": "문장 +: 치밀하게 벼린 문장을 직접 칭찬",
+      "gain": "마음: 자매의 기억과 첫 순간, 인물 이야기가 남김",
+      "world": "현실: 자매의 삶이 배경, 비현실 존재 없음"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "자매의 몸에 새겨진 기억과 삶의 저녁에 맞는 첫 순간이 궁금하지 않나요?",
+     "evidence": "한국 작가의 문학 소설, 자매의 삶 이야기",
+     "confidence": 0.8,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": 1,
+       "pull": 1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "끝맺음 +: 소개가 새로운 미래를 함께 펼친다는 도착점을 말함",
+       "pull": "문장 +: 소개가 치밀하게 벼린 문장을 직접 언급",
+       "gain": "마음 −: 자매의 기억과 삶의 첫 순간이 남기는 이야기",
+       "world": "현실 +: 자매의 삶이 배경, 비현실 존재 없음"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "한국 작가의 가족·삶을 다룬 문학 소설"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/191550933",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -35121,16 +36681,16 @@
     },
     "signals": {
      "temp": "장면 −: 납치·감금·조종, 목차 '절망'·'황홀한 비극'",
-     "pull": "몰입 −: 납치·감금 설정이 끌고 가는 전개",
-     "gain": "마음 −: 인물 이야기가 남기는 질문과 감정",
-     "world": "현실 +: 실제 사회가 배경인 현실 소설"
+     "pull": "몰입 −: 납치·감금·조종 전개가 끌고 감",
+     "gain": "형식상 마음 −: 소설, 지식이 목적이라는 말 없음",
+     "world": "현실 +: 1992년 한국 사회, 배우가 나오는 현실 배경"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "여성이 남자배우를 납치해 조종하는 파격적 설정이 어떤 파장을 남길까요?",
-    "evidence": "한국 작가의 문학 소설, 내용 장르 중심 아님",
-    "confidence": 0.7,
+    "one_liner": "납치와 감금 속에서 두 사람이 맞서는 이야기가 궁금하다면 어떨까요?",
+    "evidence": "작가 나라 한국, 내용 장르 없는 문학 소설",
+    "confidence": 0.72,
     "fits": true,
     "second": {
      "fits": true,
@@ -35141,21 +36701,78 @@
       "world": 1
      },
      "signals": {
-      "temp": "장면 −: 납치·감금·조종, '황홀한 비극' 장",
-      "pull": "몰입 −: 납치·감금·조종이라는 사건 전개",
-      "gain": "마음 −: 소설이라 인물과 이야기가 남기는 것",
-      "world": "현실 +: 현실 배경의 배우 납치 이야기"
+      "temp": "장면 −: 납치·감금·조종, 목차 '절망'·'황홀한 비극'으로 서늘함",
+      "pull": "몰입 −: 납치·감금 사건이 끌고 가는 전개",
+      "gain": "마음 −: 소설 형식, 인물과 관계가 남기는 것",
+      "world": "현실 +: 현실의 한국 사회, 비현실 존재 없음"
      },
      "missing": [],
      "suggest": "",
-     "why": "한국 작가의 문학 소설이며 내용 장르가 중심이 아님"
+     "why": "한국 작가의 문학 소설, 내용 장르 중심 아님"
     },
     "flags": [],
     "issues": [],
     "status": "picked",
     "link": "https://www.yes24.com/product/goods/72127217",
     "auto": "ai-agree",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9788998441074",
+     "title": "나는 소망한다 내게 금지된 것을",
+     "author": "양귀자 저",
+     "pages": 368,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "장면 −: 납치·감금·조종, 목차 '절망'·'황홀한 비극'",
+      "pull": "몰입 −: 납치·감금 설정이 끌고 가는 전개",
+      "gain": "마음 −: 인물 이야기가 남기는 질문과 감정",
+      "world": "현실 +: 실제 사회가 배경인 현실 소설"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "여성이 남자배우를 납치해 조종하는 파격적 설정이 어떤 파장을 남길까요?",
+     "evidence": "한국 작가의 문학 소설, 내용 장르 중심 아님",
+     "confidence": 0.7,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "장면 −: 납치·감금·조종, '황홀한 비극' 장",
+       "pull": "몰입 −: 납치·감금·조종이라는 사건 전개",
+       "gain": "마음 −: 소설이라 인물과 이야기가 남기는 것",
+       "world": "현실 +: 현실 배경의 배우 납치 이야기"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "한국 작가의 문학 소설이며 내용 장르가 중심이 아님"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/72127217",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -35189,17 +36806,17 @@
      "world": -1
     },
     "signals": {
-     "temp": "어조 −: 삶이 형벌이냐는 물음, 증오·죽음의 서늘한 분위기",
-     "pull": "몰입 −: 미스터리 전개와 강렬한 이야기가 끌고 감",
-     "gain": "마음 −: 삶의 본질을 되묻는 질문·성찰을 건넴",
-     "world": "딴 세상 −: 죽음과 환생이 실제 소재인 오컬트 이야기"
+     "temp": "어조 −: 삶이 형벌이냐는 물음, 죽음·증오의 서늘한 시선",
+     "pull": "몰입 −: 오컬트 미스터리 장편의 전개가 끌고 감",
+     "gain": "마음 −: 소설 형식, 삶의 본질을 되묻는 성찰을 건넴",
+     "world": "딴 세상 −: 죽음과 환생이 이야기에 등장"
     },
     "missing": [],
     "suggest": "호러·괴담",
     "one_liner_style": "question",
-    "one_liner": "죽음과 환생 속에서 삶이 형벌인지 되묻게 되는 이야기일까요?",
-    "evidence": "환생·오컬트 미스터리가 중심이라 초자연 장르",
-    "confidence": 0.55,
+    "one_liner": "죽음과 환생 속에서 삶의 본질을 되묻게 하는 건 무엇일까요?",
+    "evidence": "오컬트 미스터리, 환생·죽음이 중심이라 한국 소설 아님",
+    "confidence": 0.6,
     "fits": false,
     "second": {
      "fits": false,
@@ -35210,14 +36827,14 @@
       "world": -1
      },
      "signals": {
-      "temp": "어조 −: 삶을 형벌로 묻는 증오·죽음의 시선",
-      "pull": "몰입 −: 오컬트 미스터리 전개와 사건이 끌고 감",
-      "gain": "마음 −: 삶의 본질을 되묻는 성찰을 건넴",
+      "temp": "어조 −: 살아감을 형벌로 묻는 서늘한 질문, 죽음·증오",
+      "pull": "몰입 −: 오컬트 미스터리 장편 소설, 형식상 이야기",
+      "gain": "마음 −: 삶의 본질을 되묻는 질문, 소설 형식",
       "world": "딴 세상 −: 죽음과 환생이 등장하는 오컬트"
      },
      "missing": [],
      "suggest": "호러·괴담",
-     "why": "오컬트미스터리라 내용 장르가 먼저"
+     "why": "죽음·환생 오컬트미스터리라 내용 장르가 중심"
     },
     "flags": [
      "fits"
@@ -35225,7 +36842,65 @@
     "issues": [],
     "status": "dropped",
     "link": "https://www.yes24.com/product/goods/192879211",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9791168343887",
+     "title": "주와 연 (한정판 레드 에디션)",
+     "author": "청예 저",
+     "pages": 300,
+     "entry": "leaf",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": -1
+     },
+     "signals": {
+      "temp": "어조 −: 삶이 형벌이냐는 물음, 증오·죽음의 서늘한 분위기",
+      "pull": "몰입 −: 미스터리 전개와 강렬한 이야기가 끌고 감",
+      "gain": "마음 −: 삶의 본질을 되묻는 질문·성찰을 건넴",
+      "world": "딴 세상 −: 죽음과 환생이 실제 소재인 오컬트 이야기"
+     },
+     "missing": [],
+     "suggest": "호러·괴담",
+     "one_liner_style": "question",
+     "one_liner": "죽음과 환생 속에서 삶이 형벌인지 되묻게 되는 이야기일까요?",
+     "evidence": "환생·오컬트 미스터리가 중심이라 초자연 장르",
+     "confidence": 0.55,
+     "fits": false,
+     "second": {
+      "fits": false,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": -1
+      },
+      "signals": {
+       "temp": "어조 −: 삶을 형벌로 묻는 증오·죽음의 시선",
+       "pull": "몰입 −: 오컬트 미스터리 전개와 사건이 끌고 감",
+       "gain": "마음 −: 삶의 본질을 되묻는 성찰을 건넴",
+       "world": "딴 세상 −: 죽음과 환생이 등장하는 오컬트"
+      },
+      "missing": [],
+      "suggest": "호러·괴담",
+      "why": "오컬트미스터리라 내용 장르가 먼저"
+     },
+     "flags": [
+      "fits"
+     ],
+     "issues": [],
+     "status": "dropped",
+     "link": "https://www.yes24.com/product/goods/192879211",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -35253,22 +36928,24 @@
     "entry": "leaf",
     "genre": "외국 소설",
     "axes": {
-     "temp": -1,
+     "temp": null,
      "pull": -1,
      "gain": -1,
      "world": 1
     },
     "signals": {
-     "temp": "장면 −: 추락한 비행기, 얼굴 잃은 환자 X의 정체 추적",
-     "pull": "몰입 −: 정체를 쫓는 세 인물의 추적 전개",
-     "gain": "마음 −: 타인의 삶을 상상하며 남는 성찰, 인물 이야기",
-     "world": "현실 +: 병원·비행기 추락 등 실제 세상이 배경"
+     "temp": "끝맺음·어조·장면 신호 없음: 설정만 소개",
+     "pull": "몰입 −: 정체 모를 남자를 추적하는 전개가 끌고 감",
+     "gain": "마음 −: 소설 형식, 인물의 이야기가 남김",
+     "world": "현실 +: 비행기 추락·병원 등 실제 세계가 배경"
     },
-    "missing": [],
+    "missing": [
+     "temp"
+    ],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "정체 모를 환자 X의 삶을 세 사람은 어떤 상상으로 따라가 볼까요?",
-    "evidence": "체코 작가의 문학 소설, 내용 장르 없음",
+    "one_liner": "정체 모를 환자 X를 세 사람이 각자 방식으로 쫓는 이야기일까요?",
+    "evidence": "체코 작가 번역 문학 소설, 비행기 추락 배경",
     "confidence": 0.7,
     "fits": true,
     "second": {
@@ -35280,21 +36957,81 @@
       "world": 1
      },
      "signals": {
-      "temp": "장면 −: 추락한 비행기 잔해, 얼굴 잃은 환자 X",
-      "pull": "몰입 −: 정체 추적이라는 궁금증이 끌고 감",
-      "gain": "마음 −: 타인의 인생을 상상하는 이야기가 남김",
-      "world": "현실 +: 병원·비행기 사고 등 현실 배경"
+      "temp": "어조·장면 −: 정체를 잃은 남자, 추락 장면. 끝맺음은 소개에 없음",
+      "pull": "몰입 −: 정체를 추적하는 전개가 끌고 감. 문체 칭찬 없음",
+      "gain": "마음 −: 소설은 형식상 마음. 인물 이야기가 남는 것",
+      "world": "현실 +: 비행기 추락·병원이 무대. 비현실 존재 없음"
+     },
+     "missing": [
+      "temp"
+     ],
+     "suggest": "",
+     "why": "체코 작가의 번역 문학 소설이라 외국 소설에 맞음"
+    },
+    "flags": [
+     "temp"
+    ],
+    "issues": [],
+    "status": "review",
+    "link": "https://www.yes24.com/product/goods/196262364",
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9791170875666",
+     "title": "별똥별",
+     "author": "카렐 차페크 저/정보라 역",
+     "pages": 276,
+     "entry": "leaf",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "장면 −: 추락한 비행기, 얼굴 잃은 환자 X의 정체 추적",
+      "pull": "몰입 −: 정체를 쫓는 세 인물의 추적 전개",
+      "gain": "마음 −: 타인의 삶을 상상하며 남는 성찰, 인물 이야기",
+      "world": "현실 +: 병원·비행기 추락 등 실제 세상이 배경"
      },
      "missing": [],
      "suggest": "",
-     "why": "체코 작가의 문학 소설이라 외국 소설에 맞음"
-    },
-    "flags": [],
-    "issues": [],
-    "status": "picked",
-    "link": "https://www.yes24.com/product/goods/196262364",
-    "auto": "ai-agree",
-    "rules_version": "v3"
+     "one_liner_style": "question",
+     "one_liner": "정체 모를 환자 X의 삶을 세 사람은 어떤 상상으로 따라가 볼까요?",
+     "evidence": "체코 작가의 문학 소설, 내용 장르 없음",
+     "confidence": 0.7,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "장면 −: 추락한 비행기 잔해, 얼굴 잃은 환자 X",
+       "pull": "몰입 −: 정체 추적이라는 궁금증이 끌고 감",
+       "gain": "마음 −: 타인의 인생을 상상하는 이야기가 남김",
+       "world": "현실 +: 병원·비행기 사고 등 현실 배경"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "체코 작가의 문학 소설이라 외국 소설에 맞음"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/196262364",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -35328,18 +37065,18 @@
      "world": 1
     },
     "signals": {
-     "temp": "어조 −: 잊지 말라는 당부, 상실을 안고 가는 청춘의 정서",
-     "pull": "몰입 −: 인물과 삶의 이야기가 끌고 감, 문장 칭찬은 없음",
-     "gain": "마음 −: 청춘의 감성과 울림을 건네는 소설",
-     "world": "현실 +: 초자연 존재 없는 청춘 이야기"
+     "temp": "어조 −: 잊지 말라는 부탁, 상실을 안고 가는 청춘의 시선",
+     "pull": "몰입 −: 소설 형식 신호, 문체 칭찬은 없음",
+     "gain": "마음 −: 청춘의 감성을 전하는 소설, 지식 목적 없음",
+     "world": "현실 +: 사람이 사는 실제 세상, 비현실 존재 없음"
     },
     "missing": [],
-    "suggest": "",
+    "suggest": "로맨스",
     "one_liner_style": "question",
-    "one_liner": "잊지 말아 달라는 말이 오래 남는 청춘의 예민한 감성을 만나 볼래요?",
-    "evidence": "상실과 청춘의 감성 중심의 일본 문학 소설",
-    "confidence": 0.6,
-    "fits": true,
+    "one_liner": "잊지 말아 달라는 한마디가 오래 남는 청춘의 기억을 따라가 볼까요?",
+    "evidence": "청춘의 기억과 상실이 중심, 사랑이 중심 줄기",
+    "confidence": 0.5,
+    "fits": false,
     "second": {
      "fits": true,
      "axes": {
@@ -35349,21 +37086,79 @@
       "world": 1
      },
      "signals": {
-      "temp": "어조 −: 잊지 말아 달라는 말과 '상실의 시대' 제목, 상실에 머무는 ",
-      "pull": "몰입 −: 청춘의 이야기와 인물이 끌고 감, 문장 칭찬은 없음",
-      "gain": "마음 −: 청춘의 감성과 울림을 건네는 소설",
-      "world": "현실 +: 실제 현실의 청춘 이야기, 비현실 존재 없음"
+      "temp": "어조 −: 잊지 말아 달라는 말, 상실의 시대라는 옛 제목",
+      "pull": "소설 형식 신호: 문체 칭찬 없어 몰입·이야기",
+      "gain": "소설 형식 신호: 청춘의 감성을 전해 주는 마음 쪽",
+      "world": "현실 +: 실제 있던 시대 청춘 이야기, 비현실 존재 없음"
      },
      "missing": [],
      "suggest": "",
-     "why": "일본 작가의 문학 소설, 내용 장르 없음"
+     "why": "일본 작가의 번역 문학 소설이라 외국 소설이 맞음"
     },
-    "flags": [],
+    "flags": [
+     "fits"
+    ],
     "issues": [],
-    "status": "picked",
+    "status": "review",
     "link": "https://www.yes24.com/product/goods/44499829",
-    "auto": "ai-agree",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9788937434488",
+     "title": "노르웨이의 숲",
+     "author": "무라카미 하루키 저/양억관 역",
+     "pages": 572,
+     "entry": "leaf",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "어조 −: 잊지 말라는 당부, 상실을 안고 가는 청춘의 정서",
+      "pull": "몰입 −: 인물과 삶의 이야기가 끌고 감, 문장 칭찬은 없음",
+      "gain": "마음 −: 청춘의 감성과 울림을 건네는 소설",
+      "world": "현실 +: 초자연 존재 없는 청춘 이야기"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "잊지 말아 달라는 말이 오래 남는 청춘의 예민한 감성을 만나 볼래요?",
+     "evidence": "상실과 청춘의 감성 중심의 일본 문학 소설",
+     "confidence": 0.6,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "어조 −: 잊지 말아 달라는 말과 '상실의 시대' 제목, 상실에 머무는 ",
+       "pull": "몰입 −: 청춘의 이야기와 인물이 끌고 감, 문장 칭찬은 없음",
+       "gain": "마음 −: 청춘의 감성과 울림을 건네는 소설",
+       "world": "현실 +: 실제 현실의 청춘 이야기, 비현실 존재 없음"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "일본 작가의 문학 소설, 내용 장르 없음"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/44499829",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -35398,16 +37193,16 @@
     },
     "signals": {
      "temp": "",
-     "pull": "문장 +: 아름답고 유려한 문체를 직접 칭찬",
-     "gain": "마음 −: 소년의 성장과 내면 고민이 남는 것",
-     "world": "현실 +: 소년이 어른으로 자라는 실제 인간 세상"
+     "pull": "문장 +: 소개가 아름답고 유려한 문체를 직접 칭찬함",
+     "gain": "마음 −: 소년이 자라는 성장 이야기가 남기는 것이 중심",
+     "world": "현실 +: 소년기부터 청년기까지 이어지는 현실의 삶이 배경"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "한 소년이 자기 안의 두 세계를 지나 어른이 되는 길을 따라가 볼래요?",
-    "evidence": "성장 도착점과 문체 칭찬, 내면 중심의 현실 배경",
-    "confidence": 0.85,
+    "one_liner": "한 소년이 어른으로 자라는 길을 유려한 문장으로 따라가 볼래요?",
+    "evidence": "성장 도착점과 문체 칭찬이 소개에 있음, 현실 배경",
+    "confidence": 0.9,
     "fits": true,
     "second": {
      "fits": true,
@@ -35419,13 +37214,13 @@
      },
      "signals": {
       "temp": "",
-      "pull": "문장 +: 아름답고 유려한 문체를 직접 칭찬",
-      "gain": "마음 −: 성장과 내면 고민이 남기는 이야기",
-      "world": "현실 +: 실제 소년기~청년기 삶이 배경"
+      "pull": "문장 +: 아름답고 유려한 문체, 세밀하고 지적인 문장",
+      "gain": "마음 −: 소설, 성장하는 인물의 이야기가 남김",
+      "world": "현실 +: 소년기에서 어른으로 자라는 현실 배경"
      },
      "missing": [],
      "suggest": "",
-     "why": "외국 작가의 내용 장르 없는 문학 소설"
+     "why": "독일 작가의 성장을 다룬 문학 소설이라 외국 소설에 맞"
     },
     "flags": [],
     "issues": [
@@ -35435,7 +37230,67 @@
     "status": "picked",
     "link": "https://www.yes24.com/product/goods/176787",
     "auto": "ai-agree",
-    "rules_version": "v3"
+    "rules_version": "v3.1"
+   },
+   "rules_version": "v3.1",
+   "retag_reasons": [
+    "author"
+   ],
+   "v3": {
+    "record": {
+     "isbn": "9788937460449",
+     "title": "데미안",
+     "author": "헤르만 헤세 저/전영애 역",
+     "pages": 239,
+     "entry": "leaf",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": 1,
+      "pull": 1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "",
+      "pull": "문장 +: 아름답고 유려한 문체를 직접 칭찬",
+      "gain": "마음 −: 소년의 성장과 내면 고민이 남는 것",
+      "world": "현실 +: 소년이 어른으로 자라는 실제 인간 세상"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "한 소년이 자기 안의 두 세계를 지나 어른이 되는 길을 따라가 볼래요?",
+     "evidence": "성장 도착점과 문체 칭찬, 내면 중심의 현실 배경",
+     "confidence": 0.85,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": 1,
+       "pull": 1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "",
+       "pull": "문장 +: 아름답고 유려한 문체를 직접 칭찬",
+       "gain": "마음 −: 성장과 내면 고민이 남기는 이야기",
+       "world": "현실 +: 실제 소년기~청년기 삶이 배경"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "외국 작가의 내용 장르 없는 문학 소설"
+     },
+     "flags": [],
+     "issues": [
+      "근거가 책소개를 베낌 (AI-1 temp)",
+      "근거가 책소개를 베낌 (AI-2 temp)"
+     ],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/176787",
+     "auto": "ai-agree",
+     "rules_version": "v3"
+    }
    }
   },
   {
@@ -35469,17 +37324,17 @@
      "world": -1
     },
     "signals": {
-     "temp": "어조 +: 쉬운 언어로 마음에 들려주는 시선, 사랑으로 닫힘",
+     "temp": "어조 +: 쉬운 언어로 마음에 들려주는 다정한 시선",
      "pull": "몰입 −: 문체 칭찬 없음, 소설 형식 신호로 이야기",
-     "gain": "마음 −: 소설 형식, 깨달음과 지혜를 건네는 이야기",
-     "world": "딴 세상 −: 목차에 악령과 작은 악마가 등장하는 우화"
+     "gain": "마음 −: 사랑이라는 통찰을 건네는 소설, 형식 신호",
+     "world": "딴 세상 −: 늙은 악령과 작은 악마가 실제로 등장"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "쉬운 말로 사랑과 삶의 뜻을 들려주는 단편들이라면 어떨까요?",
-    "evidence": "러시아 작가의 문학 단편선, 내용 장르 없음",
-    "confidence": 0.8,
+    "one_liner": "쉬운 말로 들려주는 단편들에서 삶을 지탱하는 게 무엇인지 생각해 보게 될까요?",
+    "evidence": "러시아 작가 번역 단편선, 내용 장르 없는 문학 소설",
+    "confidence": 0.72,
     "fits": true,
     "second": {
      "fits": true,
@@ -35490,14 +37345,14 @@
       "world": -1
      },
      "signals": {
-      "temp": "어조 +: 쉬운 언어로 마음에 들려주는 다정한 시선",
-      "pull": "소설 형식 약한 몰입 신호: 문체 직접 칭찬 없음",
-      "gain": "소설 형식 신호 마음: 사랑의 통찰을 이야기로 남김",
-      "world": "딴 세상 −: 바보 이반에 악령·악마가 실제 등장"
+      "temp": "끝맺음 +: 소개가 사랑으로 사는 통찰을 말하고 쉬운 언어로 들려줌",
+      "pull": "몰입 −: 문체 직접 칭찬 없음, 소설 형식과 이야기 단편들",
+      "gain": "마음 −: 깨달음·사랑의 통찰을 건네는 이야기, 소설 형식",
+      "world": "딴 세상 −: 악령·작은 악마가 등장하는 우화(바보 이반)"
      },
      "missing": [],
      "suggest": "",
-     "why": "톨스토이 문학 단편선이라 외국 소설에 맞음"
+     "why": "러시아 작가의 문학 단편선, 내용 장르 없음"
     },
     "flags": [],
     "issues": [],
@@ -35508,7 +37363,8 @@
    },
    "rules_version": "v3.1",
    "retag_reasons": [
-    "fiction"
+    "fiction",
+    "author"
    ],
    "v3": {
     "record": {
@@ -35588,6 +37444,59 @@
       "pull": -1
      }
     }
+   },
+   "before_author": {
+    "record": {
+     "isbn": "9788937464720",
+     "title": "사람은 무엇으로 사는가",
+     "author": "레프 톨스토이 저/연진희 역",
+     "pages": 384,
+     "entry": "leaf",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": 1,
+      "pull": -1,
+      "gain": -1,
+      "world": -1
+     },
+     "signals": {
+      "temp": "어조 +: 쉬운 언어로 마음에 들려주는 시선, 사랑으로 닫힘",
+      "pull": "몰입 −: 문체 칭찬 없음, 소설 형식 신호로 이야기",
+      "gain": "마음 −: 소설 형식, 깨달음과 지혜를 건네는 이야기",
+      "world": "딴 세상 −: 목차에 악령과 작은 악마가 등장하는 우화"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "쉬운 말로 사랑과 삶의 뜻을 들려주는 단편들이라면 어떨까요?",
+     "evidence": "러시아 작가의 문학 단편선, 내용 장르 없음",
+     "confidence": 0.8,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": 1,
+       "pull": -1,
+       "gain": -1,
+       "world": -1
+      },
+      "signals": {
+       "temp": "어조 +: 쉬운 언어로 마음에 들려주는 다정한 시선",
+       "pull": "소설 형식 약한 몰입 신호: 문체 직접 칭찬 없음",
+       "gain": "소설 형식 신호 마음: 사랑의 통찰을 이야기로 남김",
+       "world": "딴 세상 −: 바보 이반에 악령·악마가 실제 등장"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "톨스토이 문학 단편선이라 외국 소설에 맞음"
+     },
+     "flags": [],
+     "issues": [],
+     "status": "picked",
+     "link": "https://www.yes24.com/product/goods/164707039",
+     "auto": "ai-agree",
+     "rules_version": "v3.1"
+    }
    }
   },
   {
@@ -35621,17 +37530,17 @@
      "world": 1
     },
     "signals": {
-     "temp": "끝맺음 −: 생의 마지막 순간에 쓰는 자서전, 어조도 서늘하게 거리를 둠",
-     "pull": "몰입 −: 소설 형식이 약한 몰입 신호, 문체 칭찬은 없음",
-     "gain": "마음 −: 소설이라 형식상 마음, 인식 여정은 소재",
-     "world": "현실 +: 전직 철도 공무원의 실제 삶이 배경"
+     "temp": "장면·어조 −: 생의 마지막 순간, 자기 검열이 만든 환영",
+     "pull": "몰입 −: 소설 형식, 문체 칭찬 없음, 인물 삶이 끌고 감",
+     "gain": "마음 −: 소설 형식, 성찰하는 인물의 자서전",
+     "world": "현실 +: 전직 철도 공무원의 삶, 현실 배경"
     },
     "missing": [],
     "suggest": "",
     "one_liner_style": "question",
-    "one_liner": "평범하다 믿은 삶 속에서 여러 개의 나를 만나게 될까요?",
-    "evidence": "체코 작가의 문학 소설, 내용 장르 없음",
-    "confidence": 0.72,
+    "one_liner": "평범하다고 믿은 삶을 돌아보면 어떤 '나'들이 나타날까요?",
+    "evidence": "체코 작가 번역 철학소설, 현실 배경의 문학 소설",
+    "confidence": 0.6,
     "fits": true,
     "second": {
      "fits": true,
@@ -35642,27 +37551,26 @@
       "world": 1
      },
      "signals": {
-      "temp": "",
-      "pull": "몰입 −: 소설 형식, 문체 칭찬 없음, 인물 삶의 이야기",
-      "gain": "마음 −: 소설, 자기 인식 성찰이 남는 것, 지식 목적 아님",
-      "world": "현실 +: 철도 공무원 삶이 배경, 비현실 존재 없음"
+      "temp": "어조 −: 죽음을 앞두고 자기 검열·환영을 파고드는 거리감 있는 시선",
+      "pull": "몰입 −: 소개가 문체 칭찬 없이 반전·인식 여정 전개를 앞세움",
+      "gain": "마음 −: 소설은 형식상 마음. 철학적 소재는 알게 됨 근거 아님",
+      "world": "현실 +: 철도 공무원의 실제 삶이 배경, 철학적 형식이어도 현실"
      },
      "missing": [],
      "suggest": "",
-     "why": "체코 작가의 문학 소설, 내용 장르 없음"
+     "why": "체코 작가 번역 문학 소설, 내용 장르 없음"
     },
     "flags": [],
-    "issues": [
-     "근거 약함(겹치는 단어 1개)",
-     "근거가 책소개를 베낌 (AI-2 temp)"
-    ],
-    "status": "reserve",
+    "issues": [],
+    "status": "picked",
     "link": "https://www.yes24.com/product/goods/196262367",
+    "auto": "ai-agree",
     "rules_version": "v3.1"
    },
    "rules_version": "v3.1",
    "retag_reasons": [
-    "person"
+    "person",
+    "author"
    ],
    "v3": {
     "record": {
@@ -35720,6 +37628,61 @@
      "status": "review",
      "link": "https://www.yes24.com/product/goods/196262367",
      "rules_version": "v3"
+    }
+   },
+   "before_author": {
+    "record": {
+     "isbn": "9791170875673",
+     "title": "평범한 인생",
+     "author": "카렐 차페크 저/정보라 역",
+     "pages": 256,
+     "entry": "leaf",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "signals": {
+      "temp": "끝맺음 −: 생의 마지막 순간에 쓰는 자서전, 어조도 서늘하게 거리를 둠",
+      "pull": "몰입 −: 소설 형식이 약한 몰입 신호, 문체 칭찬은 없음",
+      "gain": "마음 −: 소설이라 형식상 마음, 인식 여정은 소재",
+      "world": "현실 +: 전직 철도 공무원의 실제 삶이 배경"
+     },
+     "missing": [],
+     "suggest": "",
+     "one_liner_style": "question",
+     "one_liner": "평범하다 믿은 삶 속에서 여러 개의 나를 만나게 될까요?",
+     "evidence": "체코 작가의 문학 소설, 내용 장르 없음",
+     "confidence": 0.72,
+     "fits": true,
+     "second": {
+      "fits": true,
+      "axes": {
+       "temp": -1,
+       "pull": -1,
+       "gain": -1,
+       "world": 1
+      },
+      "signals": {
+       "temp": "",
+       "pull": "몰입 −: 소설 형식, 문체 칭찬 없음, 인물 삶의 이야기",
+       "gain": "마음 −: 소설, 자기 인식 성찰이 남는 것, 지식 목적 아님",
+       "world": "현실 +: 철도 공무원 삶이 배경, 비현실 존재 없음"
+      },
+      "missing": [],
+      "suggest": "",
+      "why": "체코 작가의 문학 소설, 내용 장르 없음"
+     },
+     "flags": [],
+     "issues": [
+      "근거 약함(겹치는 단어 1개)",
+      "근거가 책소개를 베낌 (AI-2 temp)"
+     ],
+     "status": "reserve",
+     "link": "https://www.yes24.com/product/goods/196262367",
+     "rules_version": "v3.1"
     }
    }
   },
