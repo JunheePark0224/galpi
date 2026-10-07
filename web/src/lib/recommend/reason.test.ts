@@ -20,6 +20,11 @@ describe("reasonLine", () => {
     expect(reasonLine(leafBook, { temp: -2, pull: -2, gain: 2, world: -2, len: -1 }))
       .toEqual({ label: "이 책은", items: ["따뜻함", "문장", "마음"] });
   });
+  it("never names an empty axis (null, 비움) — not as a match, not to describe the book", () => {
+    const empty: LeafBook = { ...leafBook, axes: { temp: null, pull: 1, gain: null, world: 1 } };
+    expect(reasonLine(empty, { temp: 1, pull: 2, gain: -2, world: 0, len: 0 })).toEqual({ label: "나온 이유", items: ["문장"] });
+    expect(reasonLine(empty, { temp: -2, pull: -2, gain: 2, world: -2, len: -1 })).toEqual({ label: "이 책은", items: ["문장", "현실"] });
+  });
   it("lists topic, matched keywords, way and length for target books", () => {
     expect(reasonLine(targetBook, { topic: "통계", way: "개념", len: 1, keywords: ["확률"] }))
       .toEqual({ label: "나온 이유", items: ["통계", "확률", "개념부터 쉽게", "얇게"] });

@@ -2,7 +2,7 @@ import type { ArtTicket } from "@/lib/collection/types";
 import type { PathSummary } from "../paths/summary";
 import type { Challenge } from "../paths/types";
 import type { Reason } from "../recommend/reason";
-import type { AxisKey, DrawPick, Entry, Tag, Way } from "../recommend/types";
+import type { AxisKey, AxisValue, DrawPick, Entry, Way } from "../recommend/types";
 
 export type OneLinerStyle = "summary" | "question";
 
@@ -19,7 +19,7 @@ interface CatalogBase {
 
 /** Roadmap 3-3 books columns (minus slot) + title and author. Our own tags only — no YES24 text. */
 export type CatalogBook =
-  | (CatalogBase & { entry: "leaf"; field: null; topic: null; way: null; axes: Record<AxisKey, Tag> })
+  | (CatalogBase & { entry: "leaf"; field: null; topic: null; way: null; axes: Record<AxisKey, AxisValue> })
   | (CatalogBase & { entry: "target"; field: string; topic: string; way: Way; axes: null });
 
 /** What the browser gets for one bookmark: no scores, no tags beyond the name tag. */

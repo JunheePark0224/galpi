@@ -34,8 +34,9 @@ SCHEMA = {"type": "object",
                                      "required": list(AXES), "additionalProperties": False},
                          "missing": {"type": "array", "items": {"type": "string", "enum": list(AXES)}}},
           "required": [*AXES, "signals", "missing"], "additionalProperties": False}
-ASK = ("방금 답에서 temp·pull·gain·world와 signals·missing만 다시 답해 주세요. 기준표 0절 6·7대로 — 값을 낸 축은 근거 한 줄이 "
-       "있고 그 줄의 방향이 값과 같아야 해요. 신호가 하나도 없으면 missing에 넣고 값은 null. 고칠 점:")
+ASK = ("방금 답에서 temp·pull·gain·world와 signals·missing만 다시 답해 주세요. 기준표 0절 5·6·7대로 — 값을 낸 축은 근거 한 줄이 "
+       "있고 그 줄의 방향이 값과 같아야 해요. 소설·시에서 신호가 없거나 똑같이 흐릿하면 missing에 넣고 값은 null, "
+       "비소설은 0(해당 없음). 고칠 점:")
 
 
 ALL_EMPTY = "네 축을 모두 비웠어요 — 약하게라도 한쪽을 가리키는 신호가 있는 축은 값을 내 주세요(기준표 0절 6)"

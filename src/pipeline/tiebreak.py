@@ -1,11 +1,12 @@
 """A third pass for the fields the two passes split on (user 10-06 evening, library re-tag).
 
 splits: the fields where pass A and pass B gave different values — the slot (each pass's slot is the given one when it says
-the book fits, else its suggestion, "" = none), a 🍃 axis both passes gave a value for (an axis either marked as having no
-info is not a split: 정보 없음 always goes to a person), 🎯 keywords (as a set) and way.
+the book fits, else its suggestion, "" = none), a 🍃 axis both passes gave a value for (an axis one pass left empty — null,
+비움 — is not a split: it goes to a person; both empty is decided as empty, v3.1 rule 9, 10-07; a no-info mark on a value
+is that value), 🎯 keywords (as a set) and way.
 third: one more blind pass B — the same v3 check prompt and model (config second_model), the 🍃 axis re-ask included —
 as pass "C" (its own Breaker streak). settle: per split field, the value two of the three passes gave; None when all three
-differ, when the third marked that axis as having no info, or for the slot unless one of A / B kept the book where it is
+differ, when the third left that axis empty, or for the slot unless one of A / B kept the book where it is
 (user 10-06: then 2 of 3 decide — stay, or move to the slot both "not fit" votes name; "nowhere" is a person's decision). Only the value is kept from the third pass's free text: the `why` line is
 cut like pass B's and copy-checked by the caller (record keeps no YES24 text).
 """
@@ -31,8 +32,8 @@ def pass_slot(src: dict, slot: str) -> str:
 def value(field: str, src: dict, slot: str):
     if field == "slot":
         return pass_slot(src, slot)
-    if field in AXES:
-        return None if field in (src.get("missing") or []) else (src.get("axes") or {}).get(field)
+    if field in AXES:  # null = 비움; a no-info mark on a value is still that value (v3.1 rule 9, 10-07)
+        return (src.get("axes") or {}).get(field)
     if field == "keywords":
         return sorted(src.get("keywords") or [])
     return src.get(field)

@@ -41,12 +41,28 @@ def test_agreed_values_are_auto_and_their_differences_from_the_library_are_chang
 
 
 def test_a_person_gets_unsettled_splits_no_info_slot_disputes_and_a_current_line_that_breaks_a_rule():
-    d = library_review.decide(leaf_book("1", a={**AX, "temp": 0}, a_missing=["world"], b_fits=False, b_suggest="한국 소설",
-                                        line="짧아요?"), None)
+    d = library_review.decide(leaf_book("1", a={**AX, "temp": 0, "world": None}, a_missing=["world"], b_fits=False,
+                                        b_suggest="한국 소설", line="짧아요?"), None)
     assert d["asks"] == ["slot", "temp", "world", "line"] and d["line_issues"]
     t = library_review.decide(target_book("2", a_kw=["주식"], b_kw=["ETF·펀드"], way=("개념", "실습")),
                               {"third": {"fits": True, "keywords": ["ETF·펀드"], "way": "실습"}})
     assert t["asks"] == ["keywords"] and t["auto"] == {"way": "실습"} and t["settled"] == ["way"]
+
+
+def test_rule_9_both_passes_empty_is_final_one_empty_is_asked_and_a_no_info_mark_alone_is_not():
+    """v3.1 rule 9 (10-07): both passes left an axis empty (null) → it stays empty, decided, nobody asked; one pass empty →
+    a person; a value both gave with a no-info mark is that value (the mark alone asks nothing)."""
+    empty = {**AX, "temp": None}
+    both = library_review.decide(leaf_book("1", a=empty, b=empty, a_missing=["temp"]), None)
+    assert both["asks"] == [] and both["auto"]["temp"] is None and both["emptied"] == ["temp"]
+    assert {"field": "temp", "old": 1, "new": None} in both["changes"]
+    one = library_review.decide(leaf_book("2", a=empty, a_missing=["temp"]), None)
+    assert one["asks"] == ["temp"] and "temp" not in one["auto"] and one["emptied"] == []
+    marked = library_review.decide(leaf_book("3", a_missing=["gain"]), None)
+    assert marked["asks"] == [] and marked["auto"]["gain"] == 0
+    g = library_review.groups([leaf_book("1", a=empty, b=empty, cur=empty), leaf_book("2", a=empty)], {})
+    n = library_review.counts(g)
+    assert n["empty_confirmed_books"] == 1 and n["empty_confirmed_axes"] == 1 and n["to_person"] == 1
 
 
 def test_the_majority_keeps_a_disputed_slot_and_settles_an_axis():
@@ -193,3 +209,20 @@ def test_apply_moves_a_book_both_passes_sent_elsewhere_and_keeps_the_old_slot_as
     assert moved["history"][0]["topic"] == "돈 관리·투자"
     rows = library_review.change_table(books, decided)
     assert {"field": "slot", "change": "에세이 → 한국 소설", "count": 1, "isbns": ["1"]} in rows
+
+
+def test_apply_writes_an_empty_axis_both_passes_left_and_takes_a_persons_empty_answer():
+    """v3.1 rule 9: both passes empty → the library row's axis becomes null (history kept); a person may answer 비움 (null)
+    too. A book re-tagged under v3.1 is stamped with that version."""
+    empty = {**AX, "temp": None}
+    both = leaf_book("1", a=empty, b=empty)
+    both["rules_version"] = "v3.1"
+    asked = leaf_book("3", a=empty)
+    decided = library_review.groups([both, asked], {}, rate=0.0001)
+    decided = {i: d | {"group": "auto" if i == "1" else "person"} for i, d in decided.items()}
+    ans = {"3": {"genre": "에세이", "axes": empty, "one_liner": LINE, "status": "picked", "ok": True}}
+    v1, _, _, _ = library_apply.apply([both, asked], decided, ans, KEPT, v1_rows(), {})
+    assert v1[0]["axes"] == empty and v1[0]["history"][0]["axes"] == AX and v1[0]["rules_version"] == "v3.1"
+    assert v1[1]["axes"] == empty and v1[1]["rules_version"] == "v3"
+    with pytest.raises(ReviewError, match="axes must be"):
+        library_apply.apply([both, asked], decided, {"3": {**ans["3"], "axes": {**AX, "temp": "x"}}}, KEPT, v1_rows(), {})

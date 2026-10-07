@@ -34,8 +34,9 @@ def checked_leaf(isbn: str, ans: dict) -> dict:
     if ans.get("genre") not in GENRES:
         raise ReviewError(f"{isbn}: unknown genre {ans.get('genre')}")
     axes = ans.get("axes") if isinstance(ans.get("axes"), dict) else {}
-    if any(axes.get(a) not in (-1, 0, 1) or isinstance(axes.get(a), bool) for a in AXES):
-        raise ReviewError(f"{isbn}: axes must be -1, 0 or 1 for {', '.join(AXES)}")
+    # None = 비움 (v3.1 rule 9, 10-07): a person may leave an axis empty; the app scores it 0 and never filters by it
+    if any(a not in axes or axes[a] not in (-1, 0, 1, None) or isinstance(axes[a], bool) for a in AXES):
+        raise ReviewError(f"{isbn}: axes must be -1, 0, 1 or null for {', '.join(AXES)}")
     line = str(ans.get("one_liner") or "").strip()
     if not line:
         raise ReviewError(f"{isbn}: one_liner is empty")

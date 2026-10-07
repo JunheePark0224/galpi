@@ -388,17 +388,27 @@ def test_a_pass_with_values_its_signals_do_not_back_is_asked_once_more_and_count
     assert ledger[CFG.model].calls == 3                       # the re-ask is in the run's ledger too (haiku on both passes)
 
 
-def test_an_empty_axis_keeps_the_book_out_of_the_app_until_a_person_answers():
-    def no_info(kwargs):
-        entry, kind = kind_of(kwargs)
-        if kind in ("tag", "check"):
-            make = tag_answer if kind == "tag" else check_answer
-            return message(make(entry, pull=None, missing=["pull"], signals={**FIXED["signals"], "pull": ""}))
-        return agreeing(kwargs)
+def test_an_axis_one_pass_left_empty_waits_for_a_person_and_both_empty_is_decided_as_empty():
+    """v3.1 rule 9 (10-07): one pass empty → the book waits for a person; both passes empty → empty is final, the book
+    goes in (the app scores an empty axis 0)."""
+    def no_info(passes):
+        def answer(kwargs):
+            entry, kind = kind_of(kwargs)
+            if kind in passes:
+                make = tag_answer if kind == "tag" else check_answer
+                return message(make(entry, pull=None, missing=["pull"], signals={**FIXED["signals"], "pull": ""}))
+            if kind in ("tag", "check"):
+                return message((tag_answer if kind == "tag" else check_answer)(entry, **FIXED))
+            return agreeing(kwargs)
+        return answer
     for cfg in (CFG, parse_config({**CFG.__dict__, "auto_merge": True})):
-        rec, why = run_daily.tag_one(FakeClient(no_info), cfg, {"tag": "T", "check": "C"}, {}, LEAF, Breaker(), {}, rules="v")
-        assert why == "ok" and rec["axes"]["pull"] is None and "pull" in rec["flags"]
+        rec, why = run_daily.tag_one(FakeClient(no_info(("check",))), cfg, {"tag": "T", "check": "C"}, {}, LEAF, Breaker(),
+                                     {}, rules="v")
+        assert why == "ok" and rec["second"]["axes"]["pull"] is None and "pull" in rec["flags"]
         assert rec["status"] in ("review", "reserve") and rec["status"] != "picked"
+    rec, why = run_daily.tag_one(FakeClient(no_info(("tag", "check"))), CFG, {"tag": "T", "check": "C"}, {}, LEAF, Breaker(),
+                                 {}, rules="v")
+    assert why == "ok" and rec["axes"]["pull"] is None and "pull" not in rec["flags"]
 
 
 def test_a_suggested_slot_is_kept_on_the_record_for_the_review_page():

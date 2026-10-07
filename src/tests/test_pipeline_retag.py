@@ -64,14 +64,19 @@ def test_the_new_file_is_written_once_and_never_over_an_existing_one(batch, caps
         retag.write("2026-10-05-2", {"books": []})
 
 
-def test_a_missing_info_axis_is_asked_even_when_both_passes_agree(batch):
-    def answer(kw):
-        entry, kind = kind_of(kw)
-        if entry == "leaf" and kind == "check":
-            return message(check_answer("leaf", missing=["temp"]))
-        return agreeing(kw)
-    new, _ = retag.run("2026-10-05-2", CFG, FakeClient(answer), VOCAB, texts)
+def test_an_axis_one_pass_left_empty_is_asked_but_a_no_info_mark_on_an_agreed_value_is_not(batch):
+    """v3.1 rule 9 (10-07): only an empty value (null) asks; a value both passes agree on stands even with a no-info mark."""
+    def answer(empty):
+        def reply(kw):
+            entry, kind = kind_of(kw)
+            if entry == "leaf" and kind == "check":
+                return message(check_answer("leaf", missing=["temp"], **({"temp": None} if empty else {})))
+            return agreeing(kw)
+        return reply
+    new, _ = retag.run("2026-10-05-2", CFG, FakeClient(answer(True)), VOCAB, texts)
     assert new["books"][0]["flags"] == ["temp"] and new["books"][0]["status"] == "review"
+    new, _ = retag.run("2026-10-05-2", CFG, FakeClient(answer(False)), VOCAB, texts)
+    assert new["books"][0]["flags"] == [] and new["books"][0]["status"] == "picked"
 
 
 def test_the_run_stops_at_the_cost_cap_and_writes_nothing(batch):

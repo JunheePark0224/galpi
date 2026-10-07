@@ -1,9 +1,10 @@
 import { lengthTag } from "./length";
 import { AXES, type LeafAnswers, type LeafBook, type TargetAnswers, type TargetBook } from "./types";
 
+/** An empty axis (null, 비움) adds 0: the book is never filtered out by it (label-dictionary v3.1 rule 9). */
 export function leafScore(b: LeafBook, a: LeafAnswers): number {
   let s = a.len * lengthTag(b.pages);
-  for (const axis of AXES) s += a[axis] * b.axes[axis];
+  for (const axis of AXES) s += a[axis] * (b.axes[axis] ?? 0);
   return s;
 }
 
