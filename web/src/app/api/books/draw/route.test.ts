@@ -4,22 +4,43 @@ import { verifyTicket } from "@/lib/collection/ticket";
 import { POST } from "./route";
 
 vi.mock("server-only", () => ({}));
+const PATH = { answers: SQL_PATH };
+const ORIGIN = "http://x";
+const from = (ip: string) => ({ origin: ORIGIN, "x-forwarded-for": ip });
 let userId: string | null = null;
 let lookups = 0;
 let failLookup = false;
+/** The logged-in person's 내 책갈피 as the saves table answers (null data + error = the query failed). */
+let saved: string[] = [];
+let savesError: { code: string } | null = null;
+const savesQueries: { column: string; value: string }[] = [];
 vi.mock("@/lib/auth/server", () => ({
   authClient: async () => {
     lookups += 1;
     if (failLookup) throw new Error("auth down");
-    return {};
+    return {
+      from: (table: string) => ({
+        select: () => ({
+          eq: async (column: string, value: string) => {
+            savesQueries.push({ column, value: `${table}:${value}` });
+            return savesError ? { data: null, error: savesError } : { data: saved.map((isbn) => ({ isbn })), error: null };
+          },
+        }),
+      }),
+    };
   },
   sessionUserId: async () => userId,
 }));
+import sample from "@/data/books.sample.json";
+import { toBook } from "@/lib/books/catalog";
+import type { CatalogBook } from "@/lib/books/types";
+import { inScope, QUESTION_MAP, walkPath } from "@/lib/paths";
 import { CHALLENGE_PATH, SQL_PATH } from "@/lib/paths/__fixtures__/paths";
 
-const PATH = { answers: SQL_PATH };
-const ORIGIN = "http://x";
-const from = (ip: string) => ({ origin: ORIGIN, "x-forwarded-for": ip });
+const BOOKS = sample as unknown as CatalogBook[];
+const USER = "11111111-1111-4111-8111-111111111111";
+const LOGGED_IN = { ...from("9.9.9.9"), cookie: "sb-abc-auth-token=x" };
+
 const req = (body: unknown, headers: Record<string, string> = from("9.9.9.9")) =>
   new Request("http://x/api/books/draw", { method: "POST", body: typeof body === "string" ? body : JSON.stringify(body), headers });
 
@@ -28,6 +49,11 @@ describe("POST /api/books/draw", () => {
   afterEach(() => {
     vi.useRealTimers();
     vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+    userId = null;
+    saved = [];
+    savesError = null;
+    savesQueries.length = 0;
   });
 
   it("is reproducible for a seed", async () => {
@@ -136,5 +162,67 @@ describe("POST /api/books/draw", () => {
     vi.stubEnv("COLLECTION_SIGNING_SECRET", "");
     const { art } = await (await POST(req({ ...PATH, seed: 5 }))).json();
     expect(art).toMatchObject({ count: 5, sig: null });
+  });
+
+  describe("saved books are never drawn again (10-07)", () => {
+    const ids = (body: { picks: { card: { id: string } }[] }) => body.picks.map((p) => p.card.id);
+    const scope = walkPath(QUESTION_MAP, SQL_PATH).scope;
+    const inSqlScope = BOOKS.filter((b) => inScope(toBook(b), scope)).map((b) => b.isbn);
+
+    it("leaves out the logged-in person's saved books, looked up from the session — one query, by their id", async () => {
+      const first = ids(await (await POST(req({ ...PATH, seed: 7 }))).json());
+      userId = USER;
+      saved = first;
+      const body = await (await POST(req({ ...PATH, seed: 7 }, LOGGED_IN))).json();
+      expect(body.picks).toHaveLength(5);
+      expect(ids(body).some((id) => first.includes(id))).toBe(false);
+      expect(savesQueries).toEqual([{ column: "user_id", value: `saves:${USER}` }]);
+      expect(body.art.sub).toBe(USER);
+    });
+
+    it("never asks for saves without a session, and keeps the response shape", async () => {
+      saved = BOOKS.map((b) => b.isbn);   // would empty the catalogue if it were (wrongly) applied
+      const body = await (await POST(req({ ...PATH, seed: 7 }))).json();
+      expect(savesQueries).toEqual([]);
+      expect(body.picks).toHaveLength(5);
+      expect(Object.keys(body).sort()).toEqual(["art", "challenge", "exhausted", "path", "picks", "widened"]);
+    });
+
+    it("a failed saves lookup still draws (nothing left out) and logs the code only", async () => {
+      const error = vi.spyOn(console, "error").mockImplementation(() => {});
+      userId = USER;
+      savesError = { code: "57014" };
+      const res = await POST(req({ ...PATH, seed: 7 }, LOGGED_IN));
+      expect(res.status).toBe(200);
+      expect((await res.json()).picks).toHaveLength(5);
+      expect(error).toHaveBeenCalledWith("draw: saved lookup failed", expect.stringContaining("57014"));
+    });
+
+    it("every book of the scope saved: the draw widens up the path, none of them comes back", async () => {
+      userId = USER;
+      saved = inSqlScope;
+      const body = await (await POST(req({ ...PATH, seed: 7 }, LOGGED_IN))).json();
+      expect(body.picks).toHaveLength(5);
+      expect(ids(body).some((id) => inSqlScope.includes(id))).toBe(false);
+      expect(body.widened).toBe(true);
+    });
+
+    it("nearly every book saved: the few left are drawn and the draw says it ran out", async () => {
+      const left = BOOKS.filter((b) => b.entry === "target").slice(0, 2).map((b) => b.isbn);
+      userId = USER;
+      saved = BOOKS.map((b) => b.isbn).filter((isbn) => !left.includes(isbn));
+      const body = await (await POST(req({ ...PATH, seed: 7 }, LOGGED_IN))).json();
+      expect(ids(body).every((id) => left.includes(id))).toBe(true);
+      expect(body.exhausted).toBe(true);
+      expect(body.art.count).toBe(body.picks.length);
+    });
+
+    it("saved books and this tab's seen are left out together", async () => {
+      const first = ids(await (await POST(req({ ...PATH, seed: 7 }))).json());
+      userId = USER;
+      saved = first.slice(0, 2);
+      const body = await (await POST(req({ ...PATH, seen: first.slice(2), seed: 7 }, LOGGED_IN))).json();
+      expect(ids(body).some((id) => first.includes(id))).toBe(false);
+    });
   });
 });

@@ -11,6 +11,7 @@ import { drawBody, requestDraw, toDrawView } from "@/lib/flow/api";
 import { challengeProps, completedProps, nextQuestion, pathCommon } from "@/lib/flow/path";
 import { curiousPicks, flowReducer, meetingOf, type FlowAction, type FlowState, type Reaction } from "@/lib/flow/state";
 import { loadFlow, saveFlow } from "@/lib/flow/storage";
+import { guestSaves } from "@/lib/library/guest";
 import type { Answer, AnswerChoice } from "@/lib/paths";
 import { setEntry, setMode } from "@/lib/track/common";
 import { track } from "@/lib/track/client";
@@ -42,7 +43,8 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
 
   const runDraw = async (s: FlowState) => {
     try {
-      const res = await requestDraw(drawBody(s));
+      // 10-07: books kept in this browser (logged out) are never drawn again — the account's are left out by the server
+      const res = await requestDraw(drawBody(s, guestSaves().map((g) => g.isbn)));
       dispatch({ type: "drawn", id: s.drawId, draw: toDrawView(res, newArtSeed()) });
     } catch {
       dispatch({ type: "drawFailed", id: s.drawId });
