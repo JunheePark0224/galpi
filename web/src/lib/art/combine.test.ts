@@ -9,15 +9,15 @@ import {
 import { PART_NAMES } from "./names";
 
 describe("bookmark art", () => {
-  it("has the three-part lists (10-07 A) — 16 animals, 12 backgrounds, 7 ground props; no sky props", () => {
+  it("has the three-part lists (10-07 A) — 16 animals, 12 backgrounds, 11 ground props; no sky props", () => {
     expect(ART_KINDS).toEqual(["animal", "bg", "ground"]);
     expect(ANIMALS).toHaveLength(16);
     expect(Object.keys(BACKGROUNDS)).toHaveLength(12);
-    expect(GROUND_PROPS).toHaveLength(7);
+    expect(GROUND_PROPS).toHaveLength(11);
     expect(GROUND_PROPS).not.toContain("firefly");
     expect(KIND_TIERS.bg.limited).toEqual(["cherry", "sunset", "aurora", "summer"]);
-    expect(KIND_TIERS.ground.limited).toEqual(["clover"]);
-    expect(KIND_TIERS.ground.first_edition).toEqual(["goldbook"]);
+    expect(KIND_TIERS.ground.limited).toEqual(["clover", "teacup", "jar", "quill"]);   // 10-07 시안: 찻잔·반딧불 병·깃털 펜
+    expect(KIND_TIERS.ground.first_edition).toEqual(["goldbook", "musicbox"]);             // 10-07 시안: 천상 오르골
     expect(KIND_TIERS.animal.limited).toEqual(["redpanda", "fennec", "otter", "panda", "koala"]);
     expect(KIND_TIERS.animal.first_edition).toEqual(["bluedragon", "whitetiger", "redbird", "blacktortoise"]);
     expect(KIND_TIERS.bg.first_edition).toEqual(["galaxy", "study"]);
@@ -38,7 +38,7 @@ describe("bookmark art", () => {
     }
   });
 
-  it("collects every part but the empty ground — 16 + 12 + 6 cells", () => {
+  it("collects every part but the empty ground — 16 + 12 + 10 cells", () => {
     expect(isCollectible("ground", "none")).toBe(false);
     expect(isCollectible("ground", "grass")).toBe(true);
     expect(isCollectible("sky" as never, "moon")).toBe(false);                // sky props are gone (10-07 A)
@@ -47,7 +47,7 @@ describe("bookmark art", () => {
     expect(DEX_TIERS.ground.common).toEqual(["grass", "flowers", "books", "mushroom"]);
     expect(KIND_TIERS.ground.common).toContain("none");                       // still drawn
     const cells = (kind: (typeof ART_KINDS)[number]) => TIERS.flatMap((t) => DEX_TIERS[kind][t]).length;
-    expect([cells("animal"), cells("bg"), cells("ground")]).toEqual([16, 12, 6]);
+    expect([cells("animal"), cells("bg"), cells("ground")]).toEqual([16, 12, 10]);
     const art = { animal: "cat", bg: "peach", ground: "none" } as const;
     expect(collectibleParts(art)).toEqual(partsOf(art).slice(0, 2));
     expect(collectibleParts({ ...art, ground: "clover" })).toEqual(partsOf({ ...art, ground: "clover" }));
@@ -94,7 +94,7 @@ describe("bookmark art", () => {
   it("reaches every value of every kind", () => {
     const seen = new Set<string>();
     for (let seed = 0; seed < 4000; seed++) for (const a of artsForDraw(5, seed)) for (const p of partsOf(a)) seen.add(`${p.kind}:${p.value}`);
-    expect(seen.size).toBe(16 + 12 + 7);
+    expect(seen.size).toBe(16 + 12 + 11);
   });
 
   it("draws a fixed picture for a fixed seed (the browser and the server must agree — a change here bumps the ticket version)", () => {

@@ -24,6 +24,10 @@ function starPath(cx: number, cy: number, outer: number, inner: number, points: 
   return `${parts.join(" ")} Z`;
 }
 
+const STEAM = ["M13 46 q-1.6 -2.4 0 -4.6 q1.6 -2.2 0 -4.4", "M16.4 46 q-1.6 -2.4 0 -4.8 q1.6 -2.4 0 -4.6"] as const;
+const JAR_FLIES = [[83, 52], [86.6, 47.6], [86, 53.6]] as const;
+const delay = (i: number, step: number) => ({ animationDelay: `${(i * step).toFixed(2)}s` });
+
 function Ground({ kind }: { kind: GroundProp }) {
   switch (kind) {
     case "grass":
@@ -39,6 +43,69 @@ function Ground({ kind }: { kind: GroundProp }) {
         <g>
           <path d="M16 57 Q15 52 16.3 48" stroke="#4E7A4A" strokeWidth="1.2" fill="none" />
           <g fill="#5E9A58"><circle cx="14" cy="45" r="2.6" /><circle cx="18.6" cy="45" r="2.6" /><circle cx="14" cy="49.6" r="2.6" /><circle cx="18.6" cy="49.6" r="2.6" /></g>
+          <g data-part="ribbon">
+            <path d="M15.8 53.4 l-2.8 -1.7 v3.4 Z M15.8 53.4 l2.8 -1.7 v3.4 Z" fill={GOLD} />
+            <path d="M15.4 53.8 l-1.2 2.6 M16.2 53.8 l1.4 2.4" stroke={GOLD} strokeWidth="0.7" strokeLinecap="round" />
+            <circle cx="15.8" cy="53.4" r="0.8" fill="#B8862A" />
+          </g>
+          <g data-part="dew">
+            <circle cx="19.2" cy="44.4" r="1.25" fill="#D6F1FF" stroke={WHITE} strokeWidth="0.3" opacity="0.95" />
+            <circle cx="18.8" cy="44" r="0.4" fill={WHITE} />
+          </g>
+        </g>
+      );
+    case "teacup":
+      return (
+        <g>
+          <g data-part="steam" stroke={WHITE} strokeWidth="0.9" fill="none" strokeLinecap="round" opacity="0.85">
+            {STEAM.map((d, i) => <path key={i} className={styles.steam} style={delay(i, 0.9)} d={d} />)}
+          </g>
+          <ellipse cx="15" cy="55.6" rx="7.2" ry="1.7" fill="#F4EBDD" stroke="#B8912F" strokeWidth="0.5" />
+          <path d="M20.2 49.4 a2.3 2.3 0 0 1 0 4.2" stroke="#3A6684" strokeWidth="0.9" fill="none" />
+          <path d="M9.6 48 H20.4 V50.6 A5.4 4.6 0 0 1 9.6 50.6 Z" fill="#F7F1E6" stroke="#3A6684" strokeWidth="0.6" />
+          <rect x="9.6" y="48" width="10.8" height="0.9" fill={GOLD} />
+          <g fill="#3A6684"><circle cx="12.4" cy="51" r="0.6" /><circle cx="15" cy="51.8" r="0.6" /><circle cx="17.6" cy="51" r="0.6" /></g>
+        </g>
+      );
+    case "jar":
+      return (
+        <g>
+          <rect x="81.3" y="40" width="7.4" height="3" rx="0.8" fill="#A0784E" />
+          <rect x="80" y="42.6" width="10" height="13.6" rx="3" fill="#EAF4F6" fillOpacity="0.4" stroke="#9FB7C2" strokeWidth="0.7" />
+          <g data-part="jar-light">
+            {JAR_FLIES.map(([x, y], i) => (
+              <g key={i} className={styles.jarfly} style={delay(i, 0.8)}>
+                <circle cx={x} cy={y} r="2.2" fill="#FFF3A6" opacity="0.45" /><circle cx={x} cy={y} r="0.8" fill="#FFE866" />
+              </g>
+            ))}
+          </g>
+          <path d="M81.6 45.5 V53" stroke={WHITE} strokeWidth="0.7" strokeLinecap="round" opacity="0.7" />
+        </g>
+      );
+    case "quill":
+      return (
+        <g data-part="quill">
+          <path d="M85.4 47 L93 31" stroke="#5A4A3A" strokeWidth="0.6" />
+          <path d="M86.6 44 C 85 38, 89 32, 94.5 29 C 94 35, 91 41, 86.6 44 Z" fill="#8FAE8A" stroke="#8E7BB8" strokeWidth="0.6" />
+          <path d="M88.5 40 l2.4 -1.2 M89.8 37.2 l2.2 -1.2" stroke="#6E8F6A" strokeWidth="0.4" />
+          <rect x="83" y="46.4" width="5" height="3" rx="0.6" fill="#2E3456" />
+          <rect x="83" y="48.4" width="5" height="0.8" fill={GOLD} />
+          <path d="M79.6 50 H91.4 L90.4 56 H80.6 Z" fill="#2E3456" />
+          <rect x="80.4" y="52" width="10.2" height="0.7" fill="#5B6491" />
+        </g>
+      );
+    case "musicbox":
+      return (
+        <g>
+          <path d="M77.4 50 A7.6 7.6 0 0 1 92.6 50 Z" fill="#DDEFFF" fillOpacity="0.35" stroke="#CFE3F5" strokeWidth="0.6" />
+          <circle cx="85" cy="45" r="1.9" fill={GOLD} />
+          <g data-part="orbit" className={styles.orbit}>
+            <circle cx="89.2" cy="45.6" r="1" fill="#F4F1E6" />
+            <path d={starPath(80.6, 44.2, 1.1, 0.4, 4)} fill={SPARK} />
+          </g>
+          <rect x="77" y="50" width="16" height="6" rx="1" fill="#6B3A22" stroke={GOLD} strokeWidth="0.8" />
+          <rect x="77" y="52.4" width="16" height="0.8" fill={GOLD} />
+          <path d="M93 53 h1.8 M94.8 51.8 v2.4" stroke={GOLD} strokeWidth="0.7" strokeLinecap="round" />
         </g>
       );
     case "goldbook":
@@ -60,7 +127,6 @@ const FIREFLIES = [[14, 46], [30, 36], [52, 44], [70, 30], [86, 42], [40, 22]] a
 const GALAXY_STARS = [[12, 14], [30, 8], [48, 20], [70, 12], [86, 28], [22, 32], [58, 6], [92, 10]] as const;
 const STUDY_COLOURS = ["#3A6684", "#A94C60", "#4A7456", "#B8912F", "#5E55A0"] as const;
 const DUST = [[14, 70], [30, 74], [46, 68], [62, 72], [78, 70], [90, 74], [22, 66]] as const;
-const delay = (i: number, step: number) => ({ animationDelay: `${(i * step).toFixed(2)}s` });
 
 /**
  * The 한정판·초판본 backgrounds are living (10-07 A, 시안 `deco/sky.html` A): each has its own gentle motion — petals fall
@@ -155,9 +221,63 @@ function Sparkles({ points }: { points: readonly Spark[] }) {
 const ANIMAL_SPARKS: readonly Spark[] = [[24, 26], [78, 34, 2.2], [30, 50, 1.8], [72, 14, 2]];
 const PROP_FX = {
   goldbook: { aura: [84.5, 50, 12], sparks: [[74, 42, 2], [95, 46, 1.6]] },
+  musicbox: { aura: [85, 47, 12], sparks: [[76, 40, 1.8], [94, 38, 1.5], [88, 34, 1.3]] },
 } as const satisfies Record<string, { aura: readonly [number, number, number]; sparks: readonly Spark[] }>;
 /** A 한정판 ground prop's small effect (10-07 A): the clover catches the light — one glint, still when light. */
 const CLOVER_GLINT = starPath(21.5, 43, 1.8, 0.6, 4);
+
+const FLAMES = [[28, 40, 9], [72, 40, 9], [37, 24, 7], [63, 24, 7], [50, 17, 8]] as const;
+const flame = (x: number, y: number, h: number) =>
+  `M${x} ${y} C ${x - h * 0.45} ${y - h * 0.35}, ${x - h * 0.2} ${y - h * 0.8}, ${x} ${y - h} C ${x + h * 0.2} ${y - h * 0.8}, ${x + h * 0.45} ${y - h * 0.35}, ${x} ${y} Z`;
+const CLOUDS = [[23, 30, 1], [77, 30, -1], [30, 52, 0.8], [70, 52, -0.8]] as const;
+
+/**
+ * A 초판본 animal's own aura (10-07 사용자): behind the animal and soft, so the face stays as it is and the background
+ * still reads — 청룡 blue clouds, 백호 silver wind, 주작 fire, 현무 water rings.
+ */
+function AnimalAura({ animal }: { animal: string }) {
+  switch (animal) {
+    case "bluedragon":
+      return (
+        <g data-part="animal-aura" data-aura="clouds" className={styles.aura} fill="#9ED3EA" opacity="0.7">
+          {CLOUDS.map(([x, y, s], i) => (
+            <g key={i} transform={`translate(${x} ${y}) scale(${s} ${Math.abs(s)})`}>
+              <circle cx="0" cy="0" r="4" /><circle cx="4.5" cy="1" r="3.2" /><circle cx="-4" cy="1.4" r="2.8" />
+              <path d="M-6 4 q6 -3 12 0" stroke="#6CB7D8" strokeWidth="0.8" fill="none" />
+            </g>
+          ))}
+        </g>
+      );
+    case "whitetiger":
+      return (
+        <g data-part="animal-aura" data-aura="wind" className={styles.aura} fill="none" strokeLinecap="round">
+          <circle cx="50" cy="40" r="24" fill="#EEF2F8" opacity="0.5" />
+          <g stroke="#C9D3E3" strokeWidth="1.4">
+            <path d="M18 34 q10 -13 24 -11" /><path d="M82 34 q-10 -13 -24 -11" />
+            <path d="M17 48 q8 -6 17 -4" /><path d="M83 48 q-8 -6 -17 -4" />
+          </g>
+        </g>
+      );
+    case "redbird":
+      return (
+        <g data-part="animal-aura" data-aura="fire" className={styles.flicker}>
+          {FLAMES.map(([x, y, h], i) => (
+            <g key={i}><path d={flame(x, y, h)} fill="#F28A3C" opacity="0.7" /><path d={flame(x, y - 1, h * 0.55)} fill="#F7D35E" opacity="0.85" /></g>
+          ))}
+        </g>
+      );
+    case "blacktortoise":
+      return (
+        <g data-part="animal-aura" data-aura="water" className={styles.aura} fill="none" stroke="#6FC0B5">
+          <circle cx="50" cy="40" r="23" fill="#CDEBE5" stroke="none" opacity="0.45" />
+          <ellipse cx="50" cy="60" rx="27" ry="5" strokeWidth="1" opacity="0.7" />
+          <ellipse cx="50" cy="60" rx="18" ry="3.2" strokeWidth="0.9" opacity="0.8" />
+        </g>
+      );
+    default:
+      return null;
+  }
+}
 
 function PropAura({ kind, aura }: { kind: string; aura: string }) {
   const fx = PROP_FX[kind as keyof typeof PROP_FX];
@@ -174,7 +294,7 @@ function PropSparkles({ kind }: { kind: string }) {
  */
 const PROP_FOCUS: Readonly<Record<string, readonly [number, number, number]>> = {
   grass: [50, 52, 1], flowers: [50, 51, 1], books: [85.5, 49.5, 1.6], mushroom: [14.5, 51, 1.6], clover: [16.3, 49, 1.6],
-  goldbook: [84.5, 50.5, 1.5],
+  teacup: [15, 47, 1.5], jar: [85, 48, 1.5], quill: [86.5, 43, 1.25], goldbook: [84.5, 50.5, 1.5], musicbox: [85, 48.5, 1.5],
 };
 export function propFocus(value: string): string | undefined {
   const f = PROP_FOCUS[value];
@@ -204,7 +324,8 @@ export function BookmarkArt({ art, clipId: base, fx = "full", parts = ART_KINDS,
   const first = (kind: ArtKind) => shows(kind) && tierOf(kind, art[kind]) === "first_edition";
   const tier = highestTier(parts.map((kind) => tierOf(kind, art[kind]) ?? "common"));
   const lone = parts.length === 1 && parts[0] === "ground" ? propFocus(art.ground) : undefined;
-  const golden = tier === "first_edition";
+  // The gold rim and the light sweep belong to the background (10-07 사용자): only a drawn 초판본 background has them.
+  const gilded = stage && tierOf("bg", art.bg) === "first_edition";
   const full = fx === "full";
   const sun = `${clipId}-sun`;
   const aura = `${clipId}-aura`;
@@ -220,7 +341,7 @@ export function BookmarkArt({ art, clipId: base, fx = "full", parts = ART_KINDS,
             <stop offset="0" stopColor="#9C7BB8" /><stop offset="0.55" stopColor="#F09A7A" /><stop offset="1" stopColor="#F8C98A" />
           </linearGradient>
         )}
-        {golden && (
+        {first("ground") && (
           <radialGradient id={aura}>
             <stop offset="0" stopColor="#FFE29A" stopOpacity="0.95" /><stop offset="0.6" stopColor="#F3C861" stopOpacity="0.35" />
             <stop offset="1" stopColor="#F3C861" stopOpacity="0" />
@@ -233,7 +354,7 @@ export function BookmarkArt({ art, clipId: base, fx = "full", parts = ART_KINDS,
         {stage && <path d={HILL} fill={bg.hill} />}
         {shows("animal") && (
           <>
-            {first("animal") && <circle className={styles.aura} cx="50" cy="40" r="27" fill={`url(#${aura})`} />}
+            {first("animal") && <AnimalAura animal={art.animal} />}
             <image href={`/animals/${art.animal}.svg`} x="22.5" y="12" width="55" height="55" />
             {full && first("animal") && <Sparkles points={ANIMAL_SPARKS} />}
           </>
@@ -246,10 +367,10 @@ export function BookmarkArt({ art, clipId: base, fx = "full", parts = ART_KINDS,
             {art.ground === "clover" && <path className={styles.glint} data-part="glint" d={CLOVER_GLINT} fill={SPARK} />}
           </g>
         )}
-        {full && golden && (
+        {full && gilded && (
           <g transform="skewX(-20)"><rect className={styles.sweep} x="-30" y="-10" width="16" height="100" fill="#FFF6D6" opacity="0.35" /></g>
         )}
-        {golden && (
+        {gilded && (
           <g fill="none" data-part="rim">
             <path d={ARCH} stroke={RIM} strokeWidth="7" opacity="0.25" />
             <path d={ARCH} stroke={RIM} strokeWidth="3.4" />

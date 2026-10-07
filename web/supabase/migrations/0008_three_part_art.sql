@@ -37,7 +37,7 @@ begin
     rare := rare or v = any (case k
       when 'animal' then array['redpanda', 'fennec', 'otter', 'panda', 'koala', 'bluedragon', 'whitetiger', 'redbird', 'blacktortoise']
       when 'bg' then array['cherry', 'sunset', 'aurora', 'summer', 'galaxy', 'study']
-      when 'ground' then array['clover', 'goldbook']
+      when 'ground' then array['clover', 'teacup', 'jar', 'quill', 'goldbook', 'musicbox']
     end);
   end loop;
   new.art := jsonb_build_object('animal', new.art ->> 'animal', 'bg', new.art ->> 'bg', 'ground', new.art ->> 'ground', 'rare', rare);
@@ -65,7 +65,7 @@ create or replace function pg_temp.three_part(a jsonb) returns jsonb language sq
     'ground', g,
     'rare', (a ->> 'animal') = any (array['redpanda', 'fennec', 'otter', 'panda', 'koala', 'bluedragon', 'whitetiger', 'redbird', 'blacktortoise'])
          or (a ->> 'bg') = any (array['cherry', 'sunset', 'aurora', 'summer', 'galaxy', 'study'])
-         or g = any (array['clover', 'goldbook']))
+         or g = any (array['clover', 'teacup', 'jar', 'quill', 'goldbook', 'musicbox']))
   from (select case when a ->> 'ground' = 'firefly' then 'none' else a ->> 'ground' end as g) parts
 $$;
 
