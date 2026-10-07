@@ -42,5 +42,6 @@ export function toDrawView(res: PathDrawResponse, fallbackSeed: number): DrawVie
     path: res.path,
     ticket: ticket?.sig ? ticket : null,
     challenge: res.challenge ?? null,
+    label: res.label ?? { chips: [], challenge: false },
   };
 }

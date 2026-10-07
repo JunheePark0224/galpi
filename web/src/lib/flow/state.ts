@@ -4,17 +4,22 @@ import type { FoundRequest } from "@/lib/collection/meeting";
 import type { ArtTicket } from "@/lib/collection/types";
 import type { Answer, AnswerChoice, Challenge, PathSummary } from "@/lib/paths";
 import type { Reason } from "@/lib/recommend";
+import type { ShareLabel } from "@/lib/share/label";
 import { nextQuestion, sameAnswers } from "./path";
 
-export type Step = "home" | "questions" | "book" | "first" | "bookmarks" | "result" | "end";
-export const STEPS: readonly Step[] = ["home", "questions", "book", "first", "bookmarks", "result", "end"];
+export type Step = "home" | "questions" | "book" | "first" | "bookmarks" | "back" | "result" | "end";
+export const STEPS: readonly Step[] = ["home", "questions", "book", "first", "bookmarks", "back", "result", "end"];
 export type Reaction = "pass" | "curious";
 export interface PickView { card: BookCard; kind: "recommended" | "random"; art: ArtCombo; reason: Reason }
 /**
  * ticket (도감 v1): the server's signed seed the pictures came from — null when unsigned (nothing is recorded).
  * challenge (10-05 v2): the draw's challenge provenance, kept for the result screen later — not shown yet.
  */
-export interface DrawView { picks: PickView[]; exhausted: boolean; path: PathSummary; ticket?: ArtTicket | null; challenge?: Challenge | null }
+export interface DrawView {
+  picks: PickView[]; exhausted: boolean; path: PathSummary; ticket?: ArtTicket | null; challenge?: Challenge | null;
+  /** F-27 (10-07): S-11 뒤표지 "내가 고른 길" — the server's chips (lib/share/label). */
+  label?: ShareLabel;
+}
 export type DrawStatus = "idle" | "loading" | "ready" | "error";
 
 export interface FlowState {
@@ -47,6 +52,7 @@ export type FlowAction =
   | { type: "open" }
   | { type: "next" }
   | { type: "react"; reaction: Reaction }
+  | { type: "leaveBack" }
   | { type: "nextResult" }
   | { type: "prevResult" }
   | { type: "redraw" }
@@ -114,12 +120,14 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
       if (s.step !== "bookmarks" || !s.draw) return s;
       const reactions = [...s.reactions, a.reaction];
       const index = s.index + 1;
-      if (index >= s.draw.picks.length) {
-        // PRD 2절: S-06 when something was 궁금해요, straight to S-08 when nothing was
-        return { ...s, reactions, result: 0, step: reactions.includes("curious") ? "result" : "end" };
-      }
+      // F-27 (10-07): the book is closed and turned over — S-11 뒤표지 with the five bookmarks laid on it
+      if (index >= s.draw.picks.length) return { ...s, reactions, result: 0, step: "back" };
       return { ...s, reactions, index, seen: addSeen(s.seen, s.draw.picks[index].card.id) };
     }
+    case "leaveBack":
+      // PRD 2절: S-06 when something was 궁금해요, straight to S-08 when nothing was
+      if (s.step !== "back") return s;
+      return { ...s, step: s.reactions.includes("curious") ? "result" : "end" };
     case "nextResult": {
       if (s.step !== "result") return s;
       const result = s.result + 1;

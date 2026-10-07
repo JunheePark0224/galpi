@@ -104,11 +104,22 @@ describe("flowReducer (v2 questions)", () => {
     expect(flowReducer(loading, { type: "next" })).toBe(loading);
   });
 
-  it("S-06 after a 궁금해요, S-08 after none; ‹ › within the 궁금해요 books", () => {
+  it("the 뒤표지 after the fifth bookmark (S-11, F-27), then S-06 after a 궁금해요 or S-08 after none", () => {
     const all = (r: "pass" | "curious"): FlowAction[] => Array.from({ length: 5 }, () => ({ type: "react" as const, reaction: r }));
     const marks = flowReducer(opened(), { type: "next" });
-    expect(run(all("pass"), marks)).toMatchObject({ step: "end" });
-    const mixed = run([{ type: "react", reaction: "curious" }, ...all("pass").slice(0, 2), { type: "react", reaction: "curious" }, { type: "react", reaction: "pass" }], marks);
+    const passed = run(all("pass"), marks);
+    expect(passed).toMatchObject({ step: "back", reactions: ["pass", "pass", "pass", "pass", "pass"] });
+    expect(flowReducer(passed, { type: "react", reaction: "curious" })).toBe(passed);           // no more bookmarks
+    expect(flowReducer(passed, { type: "leaveBack" })).toMatchObject({ step: "end" });
+    const curious = run([...all("pass").slice(0, 4), { type: "react", reaction: "curious" }], marks);
+    expect(flowReducer(curious, { type: "leaveBack" })).toMatchObject({ step: "result", result: 0 });
+    expect(flowReducer(marks, { type: "leaveBack" })).toBe(marks);                               // only from the 뒤표지
+  });
+
+  it("S-06: ‹ › within the 궁금해요 books", () => {
+    const all = (r: "pass" | "curious"): FlowAction[] => Array.from({ length: 5 }, () => ({ type: "react" as const, reaction: r }));
+    const marks = flowReducer(opened(), { type: "next" });
+    const mixed = run([{ type: "react", reaction: "curious" }, ...all("pass").slice(0, 2), { type: "react", reaction: "curious" }, { type: "react", reaction: "pass" }, { type: "leaveBack" }], marks);
     expect(mixed).toMatchObject({ step: "result", result: 0 });
     expect(curiousPicks(mixed).map((p) => p.card.id)).toEqual(["b0", "b3"]);
     expect(flowReducer(mixed, { type: "prevResult" })).toBe(mixed);
@@ -119,7 +130,7 @@ describe("flowReducer (v2 questions)", () => {
   });
 
   it("[다시 뽑기]: the same answers, a new closed book, nothing carried over", () => {
-    const end = run(Array.from({ length: 5 }, () => ({ type: "react" as const, reaction: "pass" as const })), flowReducer(opened(), { type: "next" }));
+    const end = run([...Array.from({ length: 5 }, () => ({ type: "react" as const, reaction: "pass" as const })), { type: "leaveBack" }], flowReducer(opened(), { type: "next" }));
     const again = flowReducer(end, { type: "redraw" });
     expect(again).toMatchObject({ step: "book", opened: false, status: "loading", drawId: 2, index: 0, reactions: [], result: 0 });
     expect(again.answers).toEqual(SQL_PATH);

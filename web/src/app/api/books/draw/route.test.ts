@@ -118,7 +118,7 @@ describe("POST /api/books/draw", () => {
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.picks).toHaveLength(5);
-    expect(Object.keys(body).sort()).toEqual(["art", "challenge", "exhausted", "path", "picks", "widened"]);
+    expect(Object.keys(body).sort()).toEqual(["art", "challenge", "exhausted", "label", "path", "picks", "widened"]);   // label (F-27): choice words only, never a book's tags
     expect(body.path.crumbs.at(-1)).toBe("DB에서 꺼내기");
     expect(body.challenge).toBeNull();
     expect(Object.keys(body.picks[0].card).sort()).toEqual(["author", "entry", "field", "genre", "id", "oneLiner", "oneLinerStyle", "title"]);
@@ -185,7 +185,7 @@ describe("POST /api/books/draw", () => {
       const body = await (await POST(req({ ...PATH, seed: 7 }))).json();
       expect(savesQueries).toEqual([]);
       expect(body.picks).toHaveLength(5);
-      expect(Object.keys(body).sort()).toEqual(["art", "challenge", "exhausted", "path", "picks", "widened"]);
+      expect(Object.keys(body).sort()).toEqual(["art", "challenge", "exhausted", "label", "path", "picks", "widened"]);   // label (F-27): choice words only, never a book's tags
     });
 
     it("a failed saves lookup still draws (nothing left out) and logs the code only", async () => {

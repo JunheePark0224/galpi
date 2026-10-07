@@ -1,4 +1,5 @@
 import type { ArtTicket } from "@/lib/collection/types";
+import type { ShareLabel } from "@/lib/share/label";
 import type { PathSummary } from "../paths/summary";
 import type { Challenge } from "../paths/types";
 import type { Reason } from "../recommend/reason";
@@ -50,6 +51,8 @@ export interface PathDrawResponse {
   challenge: Challenge | null;
   /** 도감 v1: the server's seed for this draw's pictures, signed (lib/collection/ticket). Absent from older answers. */
   art?: ArtTicket;
+  /** F-27 (10-07): S-11 "내가 고른 길" — the choices all five books match (lib/share/label). */
+  label: ShareLabel;
 }
 
 export interface VocabTopic { keywords: Record<string, string>; terms: string[] }

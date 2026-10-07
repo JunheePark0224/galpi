@@ -318,10 +318,17 @@ export function propFocus(value: string): string | undefined {
  * centred and enlarged (PROP_FOCUS). `stage={false}` (도감 동물·소품 칸, 10-07 — the part alone, to stand out): no sky, no
  * background details, no hill; the window's own background shows through.
  */
-export function BookmarkArt({ art, clipId: base, fx = "full", parts = ART_KINDS, stage = true }: {
-  art: ArtCombo; clipId: string; fx?: "full" | "light"; parts?: readonly ArtKind[]; stage?: boolean;
-}) {
-  const clipId = `${base}-${useId().replace(/[^A-Za-z0-9_-]/g, "")}`;
+type ArtProps = { art: ArtCombo; clipId: string; fx?: "full" | "light"; parts?: readonly ArtKind[]; stage?: boolean };
+
+export function BookmarkArt({ clipId: base, ...rest }: ArtProps) {
+  return <BookmarkArtSvg {...rest} clipId={`${base}-${useId().replace(/[^A-Za-z0-9_-]/g, "")}`} />;
+}
+
+/**
+ * The picture itself, with no hooks — `clipId` is used as given. The share images (lib/share/image, F-27) draw it through
+ * next/og, which runs no React hooks and cannot fetch a relative path: `animalHref` hands it the animal as a data URI.
+ */
+export function BookmarkArtSvg({ art, clipId, fx = "full", parts = ART_KINDS, stage = true, animalHref }: ArtProps & { animalHref?: string }) {
   const bg = BACKGROUNDS[art.bg] ?? BACKGROUNDS.peach;
   const shows = (kind: ArtKind) => parts.includes(kind);
   const first = (kind: ArtKind) => shows(kind) && tierOf(kind, art[kind]) === "first_edition";
@@ -358,7 +365,7 @@ export function BookmarkArt({ art, clipId: base, fx = "full", parts = ART_KINDS,
         {shows("animal") && (
           <>
             {first("animal") && <AnimalAura animal={art.animal} />}
-            <image href={`/animals/${art.animal}.svg`} x="22.5" y="12" width="55" height="55" />
+            <image href={animalHref ?? `/animals/${art.animal}.svg`} x="22.5" y="12" width="55" height="55" />
             {full && first("animal") && <Sparkles points={ANIMAL_SPARKS} />}
           </>
         )}

@@ -14,6 +14,7 @@ const RES: PathDrawResponse = {
   })),
   exhausted: false, widened: false, path: { crumbs: ["이야기에 빠지기"], moods: [], mode: "challenge" },
   challenge: { from: ["이야기 · 장르 없음"], to: ["시"], rule: { n: 19, title: "이야기 · 장르 없음 → 도전 목록" }, reason: null },
+  label: { chips: ["이야기에 빠지기"], challenge: true },
 };
 
 describe("flow api", () => {
@@ -50,6 +51,12 @@ describe("flow api", () => {
     expect(toDrawView({ ...RES, challenge: null }, 9).challenge).toBeNull();
     const older = { ...RES, challenge: undefined } as unknown as PathDrawResponse;           // an answer from before v2
     expect(toDrawView(older, 9).challenge).toBeNull();
+  });
+
+  it("keeps the 뒤표지 label (F-27), an empty one for an answer from before it", () => {
+    expect(toDrawView(RES, 9).label).toEqual({ chips: ["이야기에 빠지기"], challenge: true });
+    const older = { ...RES, label: undefined } as unknown as PathDrawResponse;
+    expect(toDrawView(older, 9).label).toEqual({ chips: [], challenge: false });
   });
 
   it("draws the pictures from the server's signed seed and keeps the ticket for the 도감 (v1)", () => {
