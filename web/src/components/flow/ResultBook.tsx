@@ -21,7 +21,11 @@ export const LAST_BOOK = "다 봤어요";
 export const NO_INTRO = "책 소개를 불러오지 못했어요";
 /** Stitch README "따르지 않을 부분": the intro is YES24's, so it is labelled as such — never as our own commentary. */
 export const INTRO_HEADING = "책 소개 · 예스24";
-const CREDIT = { yes24: "정보 제공: 예스24", kakao: "정보 제공: 카카오" } as const;
+/**
+ * F-15 (10-07 사용자 — 예스24가 너무 여러 번 보였다): a YES24 book is credited by the intro heading and the footer, so it
+ * gets no line of its own here; a book only Kakao answered still says so (the footer names YES24 only).
+ */
+const CREDIT = { yes24: null, kakao: "정보 제공: 카카오" } as const;
 /** C-21 waits for the page to settle (the 300ms `arrive`) before measuring what it lights. */
 const GUIDE_DELAY_MS = 400;
 
@@ -152,7 +156,7 @@ export function ResultBook({ pick, position, total, onNext, onPrev, meeting }: P
           예스24에서 보기 ↗
         </LinkButton>
       </div>
-      {detail?.source && <p className={styles.credit}>{CREDIT[detail.source]}</p>}
+      {detail?.source && CREDIT[detail.source] && <p className={styles.credit}>{CREDIT[detail.source]}</p>}
       {guide && settled && account.status !== "unknown" && (
         <ResultGuide scope={page} turns={turns} keep={canKeep} onDone={closeGuide} />
       )}

@@ -50,7 +50,7 @@ describe("ResultBook (S-06, C-11)", () => {
     expect(screen.queryByText(/나온 이유|이 책은/)).toBeNull();               // kept for the bookmark back (P5), not shown here
     expect(screen.getByRole("heading", { level: 2, name: INTRO_HEADING })).toBeInTheDocument();
     expect(screen.getByText(`${"가".repeat(80)}. ${"나".repeat(60)}.`)).toBeInTheDocument();
-    expect(screen.getByText("정보 제공: 예스24")).toBeInTheDocument();
+    expect(screen.queryByText("정보 제공: 예스24")).toBeNull();               // 10-07: the heading and the footer credit YES24 — no third line
     expect(loadDetail).toHaveBeenCalledWith(ISBN);
   });
 
