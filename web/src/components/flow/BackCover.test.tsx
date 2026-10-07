@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ArtCombo } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
 import { NO_CHIP_LINE } from "@/lib/share/label";
-import { BACK_TITLE, BackCover, CHALLENGE_CHIP, COPIED, LABEL_TITLE, NEXT_WHEN_NONE, SHARE } from "./BackCover";
+import { BACK_TITLE, BackCover, CHALLENGE_CHIP, COPIED, COPY_FAILED, LABEL_TITLE, NEXT_WHEN_NONE, SHARE } from "./BackCover";
 
 const card = (id: string): BookCard => ({
   id, entry: "leaf", title: `책 ${id}`, author: "작가", genre: "에세이", field: null, oneLiner: "한 줄?", oneLinerStyle: "question",
@@ -47,7 +47,7 @@ describe("BackCover (S-11, F-27 — the back of the book with today's five bookm
     const p = props();
     render(<BackCover {...p} />);
     await act(async () => { fireEvent.click(screen.getByRole("button", { name: SHARE })); });
-    expect(share).toHaveBeenCalledWith(expect.objectContaining({ url: URL_, title: "갈피" }));
+    expect(share).toHaveBeenCalledWith(expect.objectContaining({ url: URL_, title: "갈피", text: expect.stringContaining("책갈피 5장") }));
     expect(p.onShared).toHaveBeenCalledWith("native");
   });
 
@@ -56,6 +56,16 @@ describe("BackCover (S-11, F-27 — the back of the book with today's five bookm
     const p = props();
     render(<BackCover {...p} />);
     await act(async () => { fireEvent.click(screen.getByRole("button", { name: SHARE })); });
+    expect(p.onShared).not.toHaveBeenCalled();
+  });
+
+  it("says so and shows the link to copy by hand when the clipboard refuses", async () => {
+    vi.stubGlobal("navigator", { ...navigator, share: undefined, clipboard: { writeText: vi.fn().mockRejectedValue(new Error("denied")) } });
+    const p = props();
+    render(<BackCover {...p} />);
+    await act(async () => { fireEvent.click(screen.getByRole("button", { name: SHARE })); });
+    expect(screen.getByRole("status")).toHaveTextContent(COPY_FAILED);
+    expect(screen.getByRole("textbox", { name: "공유 링크" })).toHaveValue(URL_);
     expect(p.onShared).not.toHaveBeenCalled();
   });
 

@@ -49,7 +49,7 @@ describe("share images (F-27) — the 뒤표지 alone, drawn on the server", () 
     for (const kind of ["og", "story"] as const) {
       const res = await shareImage(view, kind, { batang: FONT, dodum: FONT });
       expect(res.headers.get("content-type")).toBe("image/png");
-      expect(res.headers.get("cache-control")).toContain("immutable");
+      expect(res.headers.get("cache-control")).toContain("stale-while-revalidate");
       const png = Buffer.from(await res.arrayBuffer());
       expect(png.readUInt32BE(16)).toBe(SIZES[kind].width);
       expect(png.readUInt32BE(20)).toBe(SIZES[kind].height);

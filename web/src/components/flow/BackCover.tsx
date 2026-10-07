@@ -13,7 +13,8 @@ export const CHALLENGE_CHIP = "오늘은 낯선 쪽으로 도전";
 export const NEXT_WHEN_NONE = "다음 책갈피 만나기";
 export const SHARE = "공유하기";
 export const COPIED = "링크를 복사했어요";
-const SHARE_TEXT = "오늘 갈피에서 책갈피 5장을 만났어요. 너도 갈피 잡아 봐";
+export const COPY_FAILED = "링크를 복사하지 못했어요. 아래 링크를 길게 눌러 복사해 주세요";
+const shareText = (n: number) => `오늘 갈피에서 책갈피 ${n}장을 만났어요. 너도 갈피 잡아 봐`;
 
 export type ShareMethod = "native" | "copy" | "save_image";
 
@@ -41,13 +42,13 @@ function isAbort(err: unknown): boolean {
  * (/s/<code>/story) can be saved too. Shows only — Flow sends the events (E-41, E-42 through onShared).
  */
 export function BackCover({ books, label, curious, shareUrl, onContinue, onShared }: Props) {
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<"" | "ok" | "failed">("");
   const story = `${new URL(shareUrl).pathname}/story`;
 
   const share = async () => {
     if (typeof navigator.share === "function") {
       try {
-        await navigator.share({ title: "갈피", text: SHARE_TEXT, url: shareUrl });
+        await navigator.share({ title: "갈피", text: shareText(books.length), url: shareUrl });
         onShared("native");
       } catch (err) {
         if (!isAbort(err)) await copy();
@@ -59,10 +60,10 @@ export function BackCover({ books, label, curious, shareUrl, onContinue, onShare
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
-      setCopied(true);
+      setCopied("ok");
       onShared("copy");
     } catch {
-      setCopied(false);
+      setCopied("failed");
     }
   };
 
@@ -75,7 +76,10 @@ export function BackCover({ books, label, curious, shareUrl, onContinue, onShare
         <Button variant="secondary" onClick={() => { void share(); }}>
           <span aria-hidden="true">↗ </span>{SHARE}
         </Button>
-        <p className={styles.status} role="status">{copied ? COPIED : ""}</p>
+        <p className={styles.status} role="status">{copied === "ok" ? COPIED : copied === "failed" ? COPY_FAILED : ""}</p>
+        {copied === "failed" && (
+          <input className={styles.link} aria-label="공유 링크" readOnly value={shareUrl} onFocus={(e) => e.currentTarget.select()} />
+        )}
         <a className={styles.save} href={story} download="galpi-bookmarks.png" onClick={() => onShared("save_image")}>이미지 저장</a>
       </div>
     </section>

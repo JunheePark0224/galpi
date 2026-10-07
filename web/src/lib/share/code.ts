@@ -12,6 +12,8 @@ export interface SharedDraw { answers: Answer[]; books: string[]; arts: ArtCombo
 
 const VERSION = "1";
 export const MAX_CODE = 400;
+/** A draw shows five bookmarks at most (F-05) — a code naming more is not ours. */
+export const MAX_BOOKS = 5;
 const BG_KEYS = Object.keys(BACKGROUNDS) as Background[];
 const CHOICE: Record<AnswerChoice, string> = { A: "A", B: "B", unsure: "U" };
 const FROM_CHOICE: Record<string, AnswerChoice> = { A: "A", B: "B", U: "unsure" };
@@ -42,7 +44,9 @@ export function decodeShare(map: QuestionMap, code: string, known: (isbn: string
   if (parts.length !== 4 || parts[0] !== VERSION || !parts[1] || !parts[2]) return null;
   const ids = Object.keys(map.nodes);
   const answers: Answer[] = [];
-  for (const raw of parts[1].split(".")) {
+  const raws = parts[1].split(".");
+  if (raws.length > ids.length) return null;
+  for (const raw of raws) {
     const node = ids[parseInt(raw.slice(0, -1), 36)];
     const choice = FROM_CHOICE[raw.slice(-1)];
     if (!node || !choice) return null;
@@ -50,7 +54,7 @@ export function decodeShare(map: QuestionMap, code: string, known: (isbn: string
   }
   if (!finished(map, answers)) return null;
   const books = parts[2].split(".");
-  if (new Set(books).size !== books.length || !books.every(known)) return null;
+  if (books.length > MAX_BOOKS || new Set(books).size !== books.length || !books.every(known)) return null;
   if (parts[3].length !== books.length * 3) return null;
   const arts: ArtCombo[] = [];
   for (let i = 0; i < books.length; i++) {
@@ -59,5 +63,7 @@ export function decodeShare(map: QuestionMap, code: string, known: (isbn: string
     const parts3 = { animal, bg, ground } as Pick<ArtCombo, "animal" | "bg" | "ground">;
     arts.push({ ...parts3, rare: isRare(parts3) });
   }
-  return { answers, books, arts };
+  const shared = { answers, books, arts };
+  // one spelling per draw: "00A" or upper-case digits would read the same but be another link (and another image to draw)
+  return encodeShare(map, shared) === code ? shared : null;
 }
