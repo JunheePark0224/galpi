@@ -74,7 +74,7 @@ function init(b){const cur=b.current, au=b.auto;
  return {...v,one_liner:cur.one_liner,status:"picked",answered:[],ok:false}}
 const cur=b=>st[b.isbn]||init(b);
 const put=(b,patch,key)=>{const c=cur(b), was=c.answered||[];st[b.isbn]={...c,...patch,answered:key&&!was.includes(key)?[...was,key]:was,ok:false};save();render()};
-function issues(s,b){const out=baseIssues(s,b.title);if(leafOf(b)&&!s.trim().endsWith("?"))out.push("질문형은 ?로 끝나요");if(!leafOf(b)&&s.trim().endsWith("?"))out.push("요약형에 물음표");return out}
+function issues(s,b){const out=baseIssues(s,b.title);if(leafOf(b)&&!s.trim().endsWith("?"))out.push("질문형은 ?로 끝나요");if(leafOf(b)&&FAKE_Q.test(s.trim()))out.push("평서문에 ?만 붙었어요");if(!leafOf(b)&&s.trim().endsWith("?"))out.push("요약형에 물음표");return out}
 const left=(b,c)=>c.status==="requeue"?(toEntry(b)==="leaf"&&!c.to_slot?["slot"]:[]):b.asks.filter(k=>k==="line"?(issues(c.one_liner,b).length>0||c.one_liner.trim()===b.current.one_liner.trim()):!(c.answered||[]).includes(k));
 const srcs=b=>[["AI-1",b.a,"ai1"],["AI-2",b.b,"ai2"],["AI-3",b.c,"ai3"]].filter(([,o])=>o);
 const passSlot=(o,slot)=>o.fits?slot:(o.suggest||"");

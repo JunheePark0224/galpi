@@ -32,6 +32,23 @@ TITLE_MIN = 4
 STOP_TOKENS = {"있어요", "말해요", "때", "까요", "어떻게", "무엇이", "뭐가", "정말", "다를까요", "되면", "하는", "하고", "싶을", "해보는", "담았어요"}
 
 
+# 🍃 질문형 asks the reader — …까요? …나요? …ㄹ래요? …세요? (10-08, user: "…쉽게 알게 돼요?" reads oddly). A statement with
+# "?" stuck on its ending is not a question: 31 of 395 lines did that, because the rule only asked for a final "?".
+STATEMENT_Q = re.compile(r"(봐|줘|돼|해|혀|려|져|워)요\?$|에요\?$")
+
+
+def form_issue(entry: str, line: str) -> str | None:
+    """The style of a one-liner's entry: 🍃 leaf a real question, 🎯 target a summary with no "?". None when it fits."""
+    line = line.strip()
+    if entry == "leaf" and not line.endswith("?"):
+        return "질문형인데 ?로 끝나지 않음"
+    if entry == "leaf" and STATEMENT_Q.search(line):
+        return "질문형인데 평서문에 ?만 붙음"
+    if entry == "target" and line.endswith("?"):
+        return "요약형인데 물음표로 끝남"
+    return None
+
+
 def tokens(text: str) -> set[str]:
     words = re.findall(r"[가-힣A-Za-z0-9]{2,}", text)
     return {w for w in words if w not in STOP_TOKENS}

@@ -18,7 +18,7 @@ from collections import Counter
 
 from apply_review import FIELD_OF_TOPIC, ReviewError, draft_of
 from apply_review import checked_answer as checked_target
-from check_one_liners import check_line
+from check_one_liners import check_line, form_issue
 
 from .agreement_log import LEAF_FIELDS, TARGET_FIELDS
 from .checks import AUTO
@@ -134,10 +134,8 @@ def line_problems(book: dict, line: str) -> list[str]:
     if not line:
         return ["한 줄이 비어 있어요"]
     out = [i for i in check_line(line, book.get("title", ""), line)["issues"] if not i.startswith("근거")]
-    if book["entry"] == "leaf" and not line.endswith("?"):
-        out.append("질문형인데 ?로 끝나지 않음")
-    if book["entry"] == "target" and line.endswith("?"):
-        out.append("요약형인데 물음표로 끝남")
+    if issue := form_issue(book["entry"], line):
+        out.append(issue)
     return out
 
 

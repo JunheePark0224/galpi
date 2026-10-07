@@ -15,7 +15,7 @@ human-reviewed books (agreement.py). Only "picked" books reach books.json (web/s
 """
 from difflib import SequenceMatcher
 
-from check_one_liners import check_line
+from check_one_liners import check_line, form_issue
 
 from .prompt import AXES, EVIDENCE_MAX
 
@@ -41,10 +41,8 @@ def rule_issues(entry: str, tag: dict, title: str, material: str, second: dict) 
     """`second` (pass B's answer) is required: its `why` gets the same copy check as the evidence, so no caller can skip it."""
     line, evidence = tag["one_liner"], tag["evidence"]
     issues = list(check_line(line, title, material)["issues"])
-    if entry == "leaf" and not line.endswith("?"):
-        issues.append("질문형인데 ?로 끝나지 않음")
-    if entry == "target" and line.endswith("?"):
-        issues.append("요약형인데 물음표로 끝남")
+    if issue := form_issue(entry, line):
+        issues.append(issue)
     if not evidence:
         issues.append("근거 없음")
     elif len(evidence) > EVIDENCE_MAX:

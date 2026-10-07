@@ -338,7 +338,7 @@
     "world": 1
    },
    "one_liner_style": "question",
-   "one_liner": "고조선부터 현대까지 흐름을 시대별로 훑으며 한국사의 뼈대를 잡아 봐요?",
+   "one_liner": "고조선부터 현대까지, 한국사의 뼈대를 시대별로 잡아 볼까요?",
    "evidence": "시대순 한국사 개설서라 지식 습득 중심, 현실 역사",
    "confidence": 0.9,
    "fits": true,
@@ -370,7 +370,13 @@
     "status": "review"
    },
    "reviewed": true,
-   "rules_version": "v3"
+   "rules_version": "v3",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "고조선부터 현대까지 흐름을 시대별로 훑으며 한국사의 뼈대를 잡아 봐요?"
+    }
+   ]
   },
   {
    "isbn": "9791194330424",
@@ -738,7 +744,7 @@
     "world": 1
    },
    "one_liner_style": "question",
-   "one_liner": "내 소비가 기후와 노동, 생물에 닿는 길을 일상 사례로 짚어 봐요?",
+   "one_liner": "내 소비는 기후와 노동, 생물에 어떤 길로 닿고 있을까요?",
    "evidence": "소비와 환경 문제를 지금 사회 이슈로 다룸",
    "confidence": 0.8,
    "fits": true,
@@ -783,6 +789,10 @@
       "world": 1
      },
      "one_liner": "내 소비가 기후와 노동, 생물에 닿는 길을 일상 사례로 짚어 봐요?"
+    },
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "내 소비가 기후와 노동, 생물에 닿는 길을 일상 사례로 짚어 봐요?"
     }
    ],
    "rules_version": "v3"
@@ -801,7 +811,7 @@
     "world": 1
    },
    "one_liner_style": "question",
-   "one_liner": "남자를 표준으로 설계된 일상과 일터, 의료 속 성별 격차를 자료로 짚어 봐요?",
+   "one_liner": "남자를 표준으로 설계된 일상과 의료엔 어떤 성별 격차가 있을까요?",
    "evidence": "지금 사회의 성차별 문제를 자료로 다룸",
    "confidence": 0.9,
    "fits": true,
@@ -844,6 +854,10 @@
       "gain": 1,
       "world": 1
      },
+     "one_liner": "남자를 표준으로 설계된 일상과 일터, 의료 속 성별 격차를 자료로 짚어 봐요?"
+    },
+    {
+     "change": "question-fix-2026-10-08",
      "one_liner": "남자를 표준으로 설계된 일상과 일터, 의료 속 성별 격차를 자료로 짚어 봐요?"
     }
    ],

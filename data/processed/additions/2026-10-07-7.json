@@ -1819,7 +1819,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "일하는 척하는 시간이 왜 늘었는지 통계와 인터뷰로 짚어 줘요?",
+   "one_liner": "일하는 척하는 시간은 왜 자꾸 늘어날까요?",
    "evidence": "노동 현실 비판과 인터뷰 분석, 사회 문제 중심",
    "confidence": 0.82,
    "fits": true,
@@ -1846,7 +1846,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/111368582",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "일하는 척하는 시간이 왜 늘었는지 통계와 인터뷰로 짚어 줘요?"
+    }
+   ]
   },
   {
    "isbn": "9791173475535",
@@ -2028,7 +2034,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "좋아요가 지나는 길을 따라가며 디지털 세계의 숨은 환경 비용을 살펴봐요?",
+   "one_liner": "좋아요 하나가 지나는 길엔 어떤 환경 비용이 숨어 있을까요?",
    "evidence": "디지털 인프라의 환경·지정학 문제를 다룬 시사서",
    "confidence": 0.88,
    "fits": true,
@@ -2055,7 +2061,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/117865074",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "좋아요가 지나는 길을 따라가며 디지털 세계의 숨은 환경 비용을 살펴봐요?"
+    }
+   ]
   },
   {
    "isbn": "9791187875550",
@@ -2079,7 +2091,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "쾌적함을 좇는 사회가 어떻게 배제와 통제를 낳는지 짚어 봐요?",
+   "one_liner": "쾌적함을 좇는 사회는 왜 배제와 통제를 낳을까요?",
    "evidence": "오늘의 사회 문제를 분석하는 비판서",
    "confidence": 0.85,
    "fits": true,
@@ -2106,7 +2118,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/175882885",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "쾌적함을 좇는 사회가 어떻게 배제와 통제를 낳는지 짚어 봐요?"
+    }
+   ]
   },
   {
    "isbn": "9791159313646",

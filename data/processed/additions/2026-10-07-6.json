@@ -340,7 +340,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "60년 작품 세계를 장마다 키워드로 훑어보는 회고전이에요?",
+   "one_liner": "60년의 작품 세계를 키워드로 따라가는 회고전, 들어가 볼까요?",
    "evidence": "화집형 회고전, 예술 작품을 보는 글이라 예술·여행",
    "confidence": 0.72,
    "fits": true,
@@ -367,7 +367,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/139758232",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "60년 작품 세계를 장마다 키워드로 훑어보는 회고전이에요?"
+    }
+   ]
   },
   {
    "isbn": "9791169298896",
@@ -650,7 +656,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "선사 시대부터 오늘까지 세계사를 지도 위에서 훑어봐요?",
+   "one_liner": "선사 시대부터 오늘까지, 세계사를 지도 위에서 훑어볼까요?",
    "evidence": "시대순 목차의 지도 기반 세계사 통사",
    "confidence": 0.9,
    "fits": true,
@@ -677,7 +683,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/128212748",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "선사 시대부터 오늘까지 세계사를 지도 위에서 훑어봐요?"
+    }
+   ]
   },
   {
    "isbn": "9791130683331",
@@ -804,7 +816,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "공자와 소크라테스, 싯다르타가 나란히 살던 고대 문명의 흐름을 따라가 봐요?",
+   "one_liner": "공자와 소크라테스, 싯다르타가 함께 살던 시대엔 무슨 일이 있었을까요?",
    "evidence": "시대 순서 목차의 역사서, 끝장은 연대 제안",
    "confidence": 0.8,
    "fits": true,
@@ -831,7 +843,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/4458809",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "공자와 소크라테스, 싯다르타가 나란히 살던 고대 문명의 흐름을 따라가 봐요?"
+    }
+   ]
   },
   {
    "isbn": "9791157063734",
@@ -2111,7 +2129,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "석학 여덟 명이 기술과 민주주의, 인류의 앞날을 짚어 줘요?",
+   "one_liner": "석학 여덟 명은 기술과 민주주의, 인류의 앞날을 어떻게 볼까요?",
    "evidence": "오늘의 사회 위기와 미래 전망이 중심",
    "confidence": 0.8,
    "fits": true,
@@ -2138,7 +2156,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/69406607",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "석학 여덟 명이 기술과 민주주의, 인류의 앞날을 짚어 줘요?"
+    }
+   ]
   },
   {
    "isbn": "9791193955185",
@@ -2682,7 +2706,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "어머니를 구하려 다시 압록강을 건넌 청년의 22일을 따라가며 존엄을 묻게 돼요?",
+   "one_liner": "어머니를 구하러 다시 압록강을 건넌 청년의 22일, 따라가 볼래요?",
    "evidence": "저자 자신의 경험이 뼈대인 수기라 에세이에 맞음",
    "confidence": 0.8,
    "fits": true,
@@ -2709,7 +2733,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/191920266",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "어머니를 구하려 다시 압록강을 건넌 청년의 22일을 따라가며 존엄을 묻게 돼요?"
+    }
+   ]
   },
   {
    "isbn": "9791162144510",

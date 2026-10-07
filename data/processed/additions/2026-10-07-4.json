@@ -3021,7 +3021,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "전기에서 양자컴퓨터까지 문명을 바꾼 물리학의 흐름을 따라가 봐요?",
+   "one_liner": "전기에서 양자컴퓨터까지, 물리학은 문명을 어떻게 바꿔 왔을까요?",
    "evidence": "양자역학 원리와 기술을 설명하는 물리 교양서",
    "confidence": 0.88,
    "fits": true,
@@ -3048,7 +3048,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/195409178",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "전기에서 양자컴퓨터까지 문명을 바꾼 물리학의 흐름을 따라가 봐요?"
+    }
+   ]
   },
   {
    "isbn": "9788965703112",
@@ -3072,7 +3078,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "20세기 물리학 혁명의 핵심 이론을 일곱 강의로 간결하게 훑어봐요?",
+   "one_liner": "20세기 물리학 혁명의 핵심을 일곱 강의로 훑어볼까요?",
    "evidence": "물리 이론을 설명하는 강의형 과학 교양",
    "confidence": 0.88,
    "fits": true,
@@ -3099,7 +3105,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/24607555",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "20세기 물리학 혁명의 핵심 이론을 일곱 강의로 간결하게 훑어봐요?"
+    }
+   ]
   },
   {
    "isbn": "9791141609603",
@@ -3280,7 +3292,7 @@
    "missing": [],
    "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "노벨 물리학상 120년의 논쟁과 합의를 따라가며 과학을 믿는 이유를 알게 돼요?",
+   "one_liner": "노벨 물리학상 120년의 논쟁을 보면 왜 과학을 믿게 될까요?",
    "evidence": "물리학 역사와 원리를 설명하는 교양서",
    "confidence": 0.85,
    "fits": true,
@@ -3307,7 +3319,13 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/193040664",
    "auto": "ai-agree",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "question-fix-2026-10-08",
+     "one_liner": "노벨 물리학상 120년의 논쟁과 합의를 따라가며 과학을 믿는 이유를 알게 돼요?"
+    }
+   ]
   },
   {
    "isbn": "9791197993480",
