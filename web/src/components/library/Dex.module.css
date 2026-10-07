@@ -26,6 +26,10 @@
   box-shadow: 0 0 0 1px rgba(43, 39, 36, 0.12);
 }
 .win[data-tier="first_edition"] { box-shadow: 0 0 0 2px #D9B65A, 0 0 8px rgba(217, 182, 90, 0.55); }
+/* 10-07: a met animal or prop alone on plain paper (no background art); 윤곽 A's ink edge keeps white clouds and stars seen. */
+.win[data-bare] { background: #fffdf8; box-shadow: 0 0 0 1px var(--paper-line); }
+.win[data-bare][data-tier="first_edition"] { box-shadow: 0 0 0 2px #D9B65A, 0 0 8px rgba(217, 182, 90, 0.55); }
+.win[data-bare] svg { filter: drop-shadow(0 0 0.5px rgba(43, 39, 36, 0.7)) drop-shadow(0 0 0.5px rgba(43, 39, 36, 0.5)); }
 .win[data-empty] { display: flex; align-items: center; justify-content: center; background: #EFE4CC; }
 .shape { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: brightness(0); opacity: 0.12; pointer-events: none; }
 img.shape { inset: auto; left: 22.5%; top: 15.8%; width: 55%; height: auto; }   /* the animal sits where the bookmark puts it */

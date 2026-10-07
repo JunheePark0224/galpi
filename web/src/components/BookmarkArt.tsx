@@ -26,10 +26,15 @@ function starPath(cx: number, cy: number, outer: number, inner: number, points: 
   return `${parts.join(" ")} Z`;
 }
 
-function Sky({ kind, sky }: { kind: SkyProp; sky: string }) {
+/** The disc a crescent is cut by: on a stage it is drawn over in the sky's colour; without a stage it is masked out. */
+const CRESCENT_CUT: Partial<Record<SkyProp, readonly [number, number, number]>> = { moon: [78.5, 19.5, 6], goldmoon: [79, 19, 7] };
+
+/** `cut`: the id of a mask that cuts the crescent (no stage behind it, 10-07) — instead of a disc in the sky's colour. */
+function Sky({ kind, sky, cut }: { kind: SkyProp; sky: string; cut?: string }) {
+  const mask = cut ? `url(#${cut})` : undefined;
   switch (kind) {
     case "moon":
-      return (<g><circle cx="75" cy="22" r="7" fill={MOON} /><circle cx="78.5" cy="19.5" r="6" fill={sky} /></g>);
+      return (<g><circle cx="75" cy="22" r="7" fill={MOON} mask={mask} />{!cut && <circle cx="78.5" cy="19.5" r="6" fill={sky} />}</g>);
     case "cloud":
       return (<g fill={WHITE} opacity="0.92"><ellipse cx="72" cy="25" rx="10" ry="4.5" /><circle cx="68" cy="22" r="4.5" /><circle cx="75" cy="20.5" r="5.5" /></g>);
     case "stars":
@@ -50,7 +55,7 @@ function Sky({ kind, sky }: { kind: SkyProp; sky: string }) {
     case "goldmoon":
       return (
         <g>
-          <circle cx="75" cy="22" r="8" fill={GOLD} /><circle cx="79" cy="19" r="7" fill={sky} />
+          <circle cx="75" cy="22" r="8" fill={GOLD} mask={mask} />{!cut && <circle cx="79" cy="19" r="7" fill={sky} />}
           <path d={starPath(62, 15, 2.2, 0.7, 4)} fill={GOLD} /><path d={starPath(88, 32, 1.8, 0.6, 4)} fill={GOLD} />
         </g>
       );
@@ -192,10 +197,11 @@ export function propFocus(value: string): string | undefined {
  * sheet, the drag copy) never shares a clip or gradient.
  * `parts` (도감 칸, 10-05): which parts are shown — the sky and hill of `art.bg` are always the stage; the animal and the
  * props only when listed. The tier (rim, `data-tier`) and the 초판본 effects follow the listed parts only. One prop alone is
- * centred and enlarged (PROP_FOCUS).
+ * centred and enlarged (PROP_FOCUS). `stage={false}` (도감 동물·소품 칸, 10-07 — the part alone, to stand out): no sky, no
+ * background details, no hill; the window's own background shows through, and a crescent is cut out instead of overlaid.
  */
-export function BookmarkArt({ art, clipId: base, fx = "full", parts = ART_KINDS }: {
-  art: ArtCombo; clipId: string; fx?: "full" | "light"; parts?: readonly ArtKind[];
+export function BookmarkArt({ art, clipId: base, fx = "full", parts = ART_KINDS, stage = true }: {
+  art: ArtCombo; clipId: string; fx?: "full" | "light"; parts?: readonly ArtKind[]; stage?: boolean;
 }) {
   const clipId = `${base}-${useId().replace(/[^A-Za-z0-9_-]/g, "")}`;
   const bg = BACKGROUNDS[art.bg] ?? BACKGROUNDS.peach;
@@ -207,6 +213,8 @@ export function BookmarkArt({ art, clipId: base, fx = "full", parts = ART_KINDS 
   const full = fx === "full";
   const sun = `${clipId}-sun`;
   const aura = `${clipId}-aura`;
+  const crescent = stage ? undefined : CRESCENT_CUT[art.sky];
+  const cut = crescent && shows("sky") ? `${clipId}-cut` : undefined;
   return (
     <svg
       viewBox="0 0 100 76" width="100%" aria-hidden="true" focusable="false" style={{ display: "block" }}
@@ -219,6 +227,11 @@ export function BookmarkArt({ art, clipId: base, fx = "full", parts = ART_KINDS 
             <stop offset="0" stopColor="#9C7BB8" /><stop offset="0.55" stopColor="#F09A7A" /><stop offset="1" stopColor="#F8C98A" />
           </linearGradient>
         )}
+        {cut && crescent && (
+          <mask id={cut} maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="76">
+            <rect width="100" height="76" fill="white" /><circle cx={crescent[0]} cy={crescent[1]} r={crescent[2]} fill="black" />
+          </mask>
+        )}
         {golden && (
           <radialGradient id={aura}>
             <stop offset="0" stopColor="#FFE29A" stopOpacity="0.95" /><stop offset="0.6" stopColor="#F3C861" stopOpacity="0.35" />
@@ -227,9 +240,9 @@ export function BookmarkArt({ art, clipId: base, fx = "full", parts = ART_KINDS 
         )}
       </defs>
       <g clipPath={`url(#${clipId})`}>
-        <rect width="100" height="76" fill={art.bg === "sunset" ? `url(#${sun})` : bg.sky} />
-        <BackDetail kind={art.bg} />
-        {full && first("bg") && (
+        {stage && <rect width="100" height="76" fill={art.bg === "sunset" ? `url(#${sun})` : bg.sky} />}
+        {stage && <BackDetail kind={art.bg} />}
+        {stage && full && first("bg") && (
           <g fill="#F3D98A">
             {DUST.map(([x, y], i) => <circle key={i} className={styles.dust} style={{ animationDelay: `${i * 0.45}s` }} cx={x} cy={y} r={i % 2 ? 0.9 : 1.2} />)}
           </g>
@@ -237,11 +250,11 @@ export function BookmarkArt({ art, clipId: base, fx = "full", parts = ART_KINDS 
         {shows("sky") && (
           <g transform={lone}>
             {first("sky") && <PropAura kind={art.sky} aura={aura} />}
-            <Sky kind={art.sky} sky={bg.sky} />
+            <Sky kind={art.sky} sky={bg.sky} cut={cut} />
             {full && first("sky") && <PropSparkles kind={art.sky} />}
           </g>
         )}
-        <path d={HILL} fill={bg.hill} />
+        {stage && <path d={HILL} fill={bg.hill} />}
         {shows("animal") && (
           <>
             {first("animal") && <circle className={styles.aura} cx="50" cy="40" r="27" fill={`url(#${aura})`} />}

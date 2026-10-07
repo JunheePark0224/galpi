@@ -117,13 +117,26 @@ export async function renameShelf(store: LibraryStore, id: string, rawName: unkn
   return (await store.renameShelf(id, name)) ? { ok: true } : { ok: false, error: "missing" };
 }
 
-/** [막대 치우기]: only an empty rod, never the first. */
+/** [막대 지우기] on an empty rod (no confirm sheet): only an empty rod, never the first. */
 export async function removeShelf(store: LibraryStore, id: string): Promise<Result> {
   const shelf = (await store.shelves()).find((s) => s.id === id);
   if (!shelf) return { ok: false, error: "missing" };
   if (shelf.position === 0) return { ok: false, error: "first" };
   if ((await store.saves()).some((s) => s.shelfId === id)) return { ok: false, error: "not_empty" };
   return (await store.deleteShelf(id)) ? { ok: true } : { ok: false, error: "not_empty" };
+}
+
+/**
+ * [막대 지우기] → [지우기] (10-07): the rod and every bookmark on it (also books no longer drawn), never the first rod (new
+ * bookmarks hang there). Two statements — the bookmarks, then the rod: if the rod's delete fails (a bookmark moved onto it
+ * meanwhile, `not_empty`), the bookmarks that were there are already gone and the rod stays; asking again finishes it.
+ */
+export async function removeShelfWithBookmarks(store: LibraryStore, id: string): Promise<Result<{ removed: number }>> {
+  const shelf = (await store.shelves()).find((s) => s.id === id);
+  if (!shelf) return { ok: false, error: "missing" };
+  if (shelf.position === 0) return { ok: false, error: "first" };
+  const removed = await store.deleteShelfSaves(id);
+  return (await store.deleteShelf(id)) ? { ok: true, removed } : { ok: false, error: "not_empty" };
 }
 
 /** S-09: rods in order with their bookmarks; a book that left the catalogue is not drawn (and not counted). */

@@ -105,7 +105,7 @@ export function BookmarkSheet({ bookmark, shelfId, shelves, onMove, onRemove, on
 
   if (mode === "decorate" && originalArt) {
     return (
-      <Sheet title={DECORATE_TITLE} onClose={leaveEditor} stepKey="decorate">
+      <Sheet title={DECORATE_TITLE} onClose={leaveEditor} stepKey="decorate" pinned>
         <DecorateEditor
           bookmark={{ ...bookmark, originalArt }} met={metLabel(bookmark.metOn)} onBack={leaveEditor}
           onSave={async (art) => {

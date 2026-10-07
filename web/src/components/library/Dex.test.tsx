@@ -56,7 +56,7 @@ describe("도감 (S-09 [도감])", () => {
     expect(request).not.toHaveBeenCalledWith("POST", "/api/collection/seen");             // nothing NEW: nothing to clear
   });
 
-  it("draws each met cell's own part: the animal on its first background, a background alone, a prop alone (10-05 fix)", async () => {
+  it("draws each met cell's own part: the animal alone, a background alone, a prop alone — no background behind animals and props (10-05 fix, 10-07)", async () => {
     const first = art("cat", "galaxy", "rainbow", "goldbook");
     await show(ok({ items: [
       row("animal", "cat", first), row("bg", "galaxy", first), row("sky", "rainbow", first), row("ground", "goldbook", first),
@@ -65,12 +65,15 @@ describe("도감 (S-09 [도감])", () => {
     expect(screen.getByText("동물 1 / 16 · 배경 1 / 11 · 소품 2 / 15")).toBeInTheDocument();
     const animal = screen.getByRole("region", { name: "동물 일반판" }).querySelector("svg")!;
     expect(animal.querySelector("image")).toHaveAttribute("href", "/animals/cat.svg");
+    expect(animal.querySelector("rect")).toBeNull();                       // no sky (10-07: the animal alone)
+    expect(animal.closest("[data-bare]")).not.toBeNull();
     expect(animal).toHaveAttribute("data-tier", "common");                 // the 초판본 background does not make the cat gold
     expect(animal.querySelector("[data-part=rim]")).toBeNull();
 
     fireEvent.click(screen.getByRole("button", { name: "배경" }));
     const bg = screen.getByRole("region", { name: "배경 초판본" }).querySelector("svg")!;
     expect(bg.querySelector("image")).toBeNull();                          // no animal on a background cell
+    expect(bg.closest("[data-bare]")).toBeNull();                          // a background cell is its sky and hill
     expect(bg).toHaveAttribute("data-tier", "first_edition");
     expect(bg.querySelectorAll("[style*='animation-delay']")).toHaveLength(0);   // light in the 도감
     expect(screen.getByRole("region", { name: "배경 일반판" }).querySelectorAll("svg")).toHaveLength(0);   // unmet: plain arch + ?
@@ -78,7 +81,8 @@ describe("도감 (S-09 [도감])", () => {
     fireEvent.click(screen.getByRole("button", { name: "소품" }));
     const sky = screen.getByRole("region", { name: "소품 한정판" }).querySelector("svg")!;
     expect(sky.querySelector("image")).toBeNull();
-    expect(sky.querySelector("rect")).toHaveAttribute("fill", "#3E4569");     // the common night stage, not the galaxy
+    expect(sky.querySelector("rect")).toBeNull();                            // no stage behind the prop (10-07)
+    expect(sky.querySelector("path[d^='M-5 76']")).toBeNull();
     expect(sky.querySelector("g[transform]")).not.toBeNull();               // centred and enlarged
     const ground = screen.getByRole("region", { name: "소품 초판본" }).querySelectorAll("li")[1].querySelector("svg")!;
     expect(ground.querySelector("image")).toBeNull();
