@@ -92,13 +92,30 @@ export function animalUri(name: string): string {
   return animals.get(name)!;
 }
 
-/** Google Fonts cut to `text`, as TTF (Satori reads no woff2). */
-async function googleFont(family: string, weight: number, text: string): Promise<ArrayBuffer> {
-  const url = `https://fonts.googleapis.com/css2?family=${family.replace(/ /g, "+")}:wght@${weight}&text=${encodeURIComponent(text)}`;
-  const css = await (await fetch(url)).text();
-  const src = /src: url\((.+?)\) format\('(?:opentype|truetype)'\)/.exec(css)?.[1];
-  if (!src) throw new Error(`font: no ttf for ${family}`);
-  return (await fetch(src)).arrayBuffer();
+const FONT_TIMEOUT_MS = 4000;
+const FONT_CACHE_MAX = 64;
+const fontCache = new Map<string, Promise<ArrayBuffer>>();
+
+/**
+ * Google Fonts cut to `text`, as TTF (Satori reads no woff2) — remembered per text (the same code draws the same letters)
+ * and given up after 4 s, so a slow font server cannot hold a request open. A failed fetch is not remembered.
+ */
+function googleFont(family: string, weight: number, text: string): Promise<ArrayBuffer> {
+  const key = `${family}:${weight}:${text}`;
+  const hit = fontCache.get(key);
+  if (hit) return hit;
+  const load = (async () => {
+    const signal = AbortSignal.timeout(FONT_TIMEOUT_MS);
+    const url = `https://fonts.googleapis.com/css2?family=${family.replace(/ /g, "+")}:wght@${weight}&text=${encodeURIComponent(text)}`;
+    const css = await (await fetch(url, { signal })).text();
+    const src = /src: url\((.+?)\) format\('(?:opentype|truetype)'\)/.exec(css)?.[1];
+    if (!src) throw new Error(`font: no ttf for ${family}`);
+    return (await fetch(src, { signal })).arrayBuffer();
+  })();
+  if (fontCache.size >= FONT_CACHE_MAX) fontCache.delete(fontCache.keys().next().value!);
+  fontCache.set(key, load);
+  load.catch(() => fontCache.delete(key));
+  return load;
 }
 
 /** A title short enough for two lines on a small bookmark: cut with "…" inside the 『 』. */
@@ -176,7 +193,7 @@ function Og({ view }: { view: SharedView }) {
       <div style={{ display: "flex", flexDirection: "column", width: 420 }}>
         <div style={{ display: "flex", fontSize: 64, fontFamily: "Batang", color: INK }}>갈피</div>
         <div style={{ display: "flex", fontSize: 24, fontFamily: "Dodum", color: MUTED, margin: "8px 0 36px" }}>읽을 책, 갈피가 안 잡힐 때</div>
-        <div style={{ display: "flex", fontSize: 32, fontFamily: "Batang", color: INK, lineHeight: 1.5 }}>오늘 책갈피 5장을 만났어요.</div>
+        <div style={{ display: "flex", fontSize: 32, fontFamily: "Batang", color: INK, lineHeight: 1.5 }}>{`오늘 책갈피 ${view.cards.length}장을 만났어요.`}</div>
         <div style={{ display: "flex", fontSize: 32, fontFamily: "Batang", color: INK, lineHeight: 1.5 }}>너도 갈피 잡아 봐</div>
         <div style={{ display: "flex", fontSize: 22, fontFamily: "Dodum", color: MUTED, marginTop: 28 }}>galpibook.com</div>
       </div>
@@ -214,6 +231,7 @@ export async function shareImage(view: SharedView, kind: ShareImageKind, fonts?:
       { name: "Batang", data: batang, weight: 700, style: "normal" },
       { name: "Dodum", data: dodum, weight: 400, style: "normal" },
     ],
-    headers: { "Cache-Control": "public, max-age=86400, s-maxage=31536000, immutable" },
+    // a day at the edge, then refreshed in the background — titles and pictures may change with the catalog
+    headers: { "Cache-Control": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800" },
   });
 }

@@ -43,8 +43,18 @@ describe("share code — the answers, the five books and their pictures in a lin
       `${v}~${ans}~${books}~${arts.slice(0, -3)}`,                    // a picture missing
       `${v}~${ans}~${books}~${arts.slice(0, -3)}zzz`,                 // a picture value we do not draw
       `${v}~${ans}~~`, "1~~~", "a".repeat(MAX_CODE + 1),
+      `${v}~0${ans}~${books}~${arts}`,                                // a second spelling of the same code ("00A" for "0A")
+      `${v}~${ans}~${books}~${arts.toUpperCase()}`,                   // base-36 digits in the other case
+      `${v}~${ans}~${books}.9788937460449x~${arts}000`,               // a sixth book
     ];
     for (const c of bad) expect(decodeShare(MINI, c, known), c).toBeNull();
+  });
+
+  it("reads at most five books and never more answers than the map has questions", () => {
+    const six = { ...SHARED, books: [...SHARED.books, "9780000000006"], arts: [...SHARED.arts, SHARED.arts[0]] };
+    expect(decodeShare(MINI, encodeShare(MINI, six), () => true)).toBeNull();
+    const one = { ...SHARED, books: SHARED.books.slice(0, 1), arts: SHARED.arts.slice(0, 1) };
+    expect(decodeShare(MINI, encodeShare(MINI, one), known)?.books).toEqual(SHARED.books.slice(0, 1));
   });
 
   it("does not write a code for nothing to share", () => {
