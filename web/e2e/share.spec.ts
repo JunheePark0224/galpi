@@ -18,7 +18,8 @@ test("뒤표지 → share a link → the shared page → 나도 갈피 잡기", 
   await toBookmarks(page);
   await reactToBookmarks(page, ["궁금해요", "패스", "패스", "패스", "패스"], 5, true);
 
-  const back = page.locator("section", { has: page.getByRole("heading", { level: 1, name: "오늘 만난 책갈피" }) });
+  // the bookmarks lie on the shut book itself (10-07: no screen change)
+  const back = page.locator("[data-back-half]");
   await expect(back.locator("article")).toHaveCount(5);
   await expect(back.getByRole("group", { name: "내가 고른 길" })).toBeVisible();
   await expect.poll(() => named(events, "back_cover_shown").length).toBe(1);

@@ -13,7 +13,11 @@ interface Props {
   tucked?: ReactNode;     // C-19: bookmark tips tucked into the closed book (CoverPeeks)
   /** S-11 (10-07): the round is over — the right-hand page shuts over the left, showing the back cover. */
   shut?: boolean;
+  /** already shut (a resumed round): no animation */
+  shutNow?: boolean;
   onShut?: () => void;
+  /** what lies on the back cover once shut (S-11: today's bookmarks and the label) */
+  backFace?: ReactNode;
 }
 
 /**
@@ -23,11 +27,12 @@ interface Props {
  * hidden until it opens. Opening swings the cover left around the spine (T-06) while the book settles to full size.
  * Transform and opacity only — no filter, no animated shadow. initial={false}: a resumed flow does not replay it.
  * `shut` (S-11, 10-07): the right half (back board + its page) turns over onto the left around the spine — the opening
- * reversed on the other side, so the back cover faces up — while the book slides to the middle; then onShut.
+ * reversed on the other side, so the back cover faces up — while the book slides to the middle and, like the closed front
+ * on S-03, settles to a book's proportions (zoomed on a phone); then onShut. The back cover holds `backFace`.
  */
-export function Book({ open, onPress, left, right, tucked, shut = false, onShut }: Props) {
+export function Book({ open, onPress, left, right, tucked, shut = false, shutNow = false, onShut, backFace }: Props) {
   return (
-    <div className={styles.zoom} data-closed={open ? undefined : ""}>
+    <div className={styles.zoom} data-closed={open && !shut ? undefined : ""} data-shut={shut ? "" : undefined}>
       <motion.div
         className={styles.book}
         initial={false}
@@ -65,15 +70,17 @@ export function Book({ open, onPress, left, right, tucked, shut = false, onShut 
         {shut && (
           <motion.div
             className={styles.backHalf}
-            data-shut=""
-            aria-hidden="true"
-            initial={{ rotateY: 0 }}
+            data-back-half=""
+            initial={shutNow ? false : { rotateY: 0 }}
             animate={{ rotateY: -180 }}
             transition={SHUT_BOOK}
             onAnimationComplete={onShut}
           >
-            <div className={styles.backInside}><div className={styles.backPage}><RuledPage /></div></div>
-            <div className={styles.backOutside}><span className={styles.backStamp} /></div>
+            <div className={styles.backInside} aria-hidden="true"><div className={styles.backPage}><RuledPage /></div></div>
+            <div className={styles.backOutside}>
+              <span className={styles.backStamp} aria-hidden="true" />
+              {backFace}
+            </div>
           </motion.div>
         )}
       </motion.div>

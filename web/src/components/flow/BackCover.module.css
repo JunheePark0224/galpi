@@ -1,10 +1,7 @@
-/* S-11 뒤표지 (F-27, 시안 A 10-07, DESIGN C-29): the back board of the same leather as the front (C-01), its spine on the
-   right — this is the back. Bookmarks lie on it, a little askew, with the paper label "내가 고른 길" below. */
+/* 뒤표지 (F-27, 시안 A 10-07, DESIGN C-29): the back board of the same leather as the front (C-01), its spine on the
+   right — this is the back. Bookmarks lie on it, a little askew, with the paper label "내가 고른 길" below. S-11 lays
+   them on the shut book itself (BackLaid, 10-07); S-12 draws the board (BackBoard). */
 .back { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); padding-top: var(--space-2); }
-/* after the book shuts (10-07) the back cover comes in softly: today's bookmarks and the label are simply there */
-.back { animation: back-in 400ms ease both; }
-@keyframes back-in { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .back { animation: none; } }
 .title { margin: 0; font-size: 18px; text-align: center; }
 .cover {
   position: relative; width: min(100%, 320px); aspect-ratio: 1 / 1.45;
@@ -17,6 +14,9 @@
   background: var(--spine-shade), var(--cloth-edge);
 }
 .stamp { position: absolute; inset: 14px 34px 14px 14px; border: 1px solid var(--foil-line); border-radius: 6px; pointer-events: none; }
+/* BackLaid draws at 320 × 464 and scales to its box (the shut book's back, or the board) — centred, never cropped */
+.fit { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.design { position: relative; flex: none; width: 320px; height: 464px; transform-origin: 50% 50%; }
 .laid { position: absolute; inset: 6% 26px 34% 4%; margin: 0; padding: 0; list-style: none; }
 /* each slot holds a real C-02 bookmark (160 × 370) at 40%: 64 × 148 */
 .slot { position: absolute; width: 64px; height: 148px; transform: rotate(var(--turn)); filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.28)); }
@@ -32,7 +32,7 @@
 .chip { padding: 1px 8px; border-radius: var(--radius-pill); background: var(--paper-deep); font-size: 11px; line-height: 18px; color: var(--ink); word-break: keep-all; }
 .none { margin: 0; font-size: 12px; color: var(--ink-soft); }
 .count { margin: 6px 0 0; font-size: 10.5px; color: var(--ink-muted); }
-.actions { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-2); width: min(100%, 320px); }
+.actions { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-2); width: min(100%, 320px); margin: 0 auto; }
 .status { margin: 0; min-height: 1.2em; font-size: 13px; text-align: center; color: var(--ink-soft); }
 .shareRow { display: flex; gap: var(--space-2); }
 .shareRow > * { flex: 1; }
