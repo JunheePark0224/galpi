@@ -1042,7 +1042,7 @@
    "issues": [
     "근거 약함(겹치는 단어 1개)"
    ],
-   "status": "picked",
+   "status": "dropped",
    "link": "https://www.yes24.com/product/goods/4594530",
    "draft": {
     "topic": "습관·집중",
@@ -1053,7 +1053,11 @@
     "one_liner": "나이 들며 뇌가 어떻게 달라지고 어떤 점이 오히려 강해지는지 알려 줘요",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "과학 교양"
+   }
   },
   {
    "isbn": "9788925576688",

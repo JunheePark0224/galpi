@@ -19,5 +19,33 @@
   "to_slot": "과학 교양",
   "from_batch": "library-v3",
   "date": "2026-10-07"
+ },
+ {
+  "isbn": "9791197647666",
+  "to_entry": "target",
+  "to_slot": "마음 돌보기",
+  "from_batch": "library-v3",
+  "date": "2026-10-07"
+ },
+ {
+  "isbn": "9791192372754",
+  "to_entry": "target",
+  "to_slot": "마음 돌보기",
+  "from_batch": "library-v3",
+  "date": "2026-10-07"
+ },
+ {
+  "isbn": "9791124248515",
+  "to_entry": "target",
+  "to_slot": "글쓰기",
+  "from_batch": "library-v3",
+  "date": "2026-10-07"
+ },
+ {
+  "isbn": "9788956055008",
+  "to_entry": "leaf",
+  "to_slot": "과학 교양",
+  "from_batch": "library-v3",
+  "date": "2026-10-07"
  }
 ]

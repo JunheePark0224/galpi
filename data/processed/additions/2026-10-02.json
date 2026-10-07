@@ -1368,10 +1368,7 @@
    "entry": "target",
    "topic": "통계",
    "field": "데이터·통계",
-   "keywords": [
-    "회귀분석",
-    "가설검정"
-   ],
+   "keywords": [],
    "keywords_regex": [
     "회귀분석",
     "가설검정"
@@ -1393,9 +1390,32 @@
    },
    "flags": [],
    "issues": [],
-   "status": "picked",
+   "status": "dropped",
    "link": "https://www.yes24.com/product/goods/119993361",
-   "auto": "ai-agree"
+   "draft": {
+    "topic": "통계",
+    "keywords": [
+     "회귀분석",
+     "가설검정"
+    ],
+    "way": "개념",
+    "one_liner": "베이즈부터 부트스트랩까지 추론 방법이 어떻게 발전했는지 시대 순으로 이해해요.",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "통계",
+     "keywords": [
+      "회귀분석",
+      "가설검정"
+     ],
+     "way": "개념",
+     "one_liner": "베이즈부터 부트스트랩까지 추론 방법이 어떻게 발전했는지 시대 순으로 이해해요."
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791160077179",

@@ -159,9 +159,7 @@
    "entry": "target",
    "topic": "통계",
    "field": "데이터·통계",
-   "keywords": [
-    "회귀분석"
-   ],
+   "keywords": [],
    "keywords_regex": [
     "회귀분석",
     "가설검정"
@@ -183,9 +181,30 @@
    },
    "flags": [],
    "issues": [],
-   "status": "picked",
+   "status": "dropped",
    "link": "https://www.yes24.com/product/goods/140042388",
-   "auto": "ai-agree"
+   "draft": {
+    "topic": "통계",
+    "keywords": [
+     "회귀분석"
+    ],
+    "way": "개념",
+    "one_liner": "선형회귀부터 분류, 딥러닝까지 통계적 학습 기법을 파이썬 실습과 함께 익혀요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "통계",
+     "keywords": [
+      "회귀분석"
+     ],
+     "way": "개념",
+     "one_liner": "선형회귀부터 분류, 딥러닝까지 통계적 학습 기법을 파이썬 실습과 함께 익혀요"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791158742553",

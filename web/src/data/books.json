@@ -1180,26 +1180,6 @@
   "keywords": []
  },
  {
-  "isbn": "9791197647666",
-  "title": "기분이 태도가 되지 말자 (30만 부 기념 최신 개정판)",
-  "author": "김수현",
-  "pages": 216,
-  "one_liner": "순간의 기분에 휘둘린 말과 행동을 어떻게 다독일 수 있을까요?",
-  "one_liner_style": "question",
-  "entry": "leaf",
-  "genre": "에세이",
-  "field": null,
-  "topic": null,
-  "way": null,
-  "axes": {
-   "temp": 1,
-   "pull": 0,
-   "gain": -1,
-   "world": 1
-  },
-  "keywords": []
- },
- {
   "isbn": "9791173323027",
   "title": "호의에 대하여",
   "author": "문형배",
@@ -1354,26 +1334,6 @@
   "axes": {
    "temp": 1,
    "pull": -1,
-   "gain": -1,
-   "world": 1
-  },
-  "keywords": []
- },
- {
-  "isbn": "9791192372754",
-  "title": "각성",
-  "author": "김요한",
-  "pages": 224,
-  "one_liner": "달콤한 위로 대신 냉정한 한 줄이 나를 일으켜 세울까요?",
-  "one_liner_style": "question",
-  "entry": "leaf",
-  "genre": "에세이",
-  "field": null,
-  "topic": null,
-  "way": null,
-  "axes": {
-   "temp": -1,
-   "pull": 1,
    "gain": -1,
    "world": 1
   },
@@ -1676,26 +1636,6 @@
    "pull": 1,
    "gain": -1,
    "world": 1
-  },
-  "keywords": []
- },
- {
-  "isbn": "9791124248515",
-  "title": "문해내공",
-  "author": "신종호, 김윤정",
-  "pages": 528,
-  "one_liner": "읽고 쓰는 힘이 멈춰 있다면, 어떻게 다시 키울 수 있을까요?",
-  "one_liner_style": "question",
-  "entry": "leaf",
-  "genre": "인문",
-  "field": null,
-  "topic": null,
-  "way": null,
-  "axes": {
-   "temp": 0,
-   "pull": 0,
-   "gain": 1,
-   "world": 0
   },
   "keywords": []
  },
@@ -2077,23 +2017,6 @@
   "keywords": [
    "엑셀",
    "데이터 리터러시"
-  ]
- },
- {
-  "isbn": "9791192932170",
-  "title": "DB 입문자를 위한 데이터베이스 기초와 SQL",
-  "author": "오세종",
-  "pages": 556,
-  "one_liner": "관계형 모델과 SQL로 데이터베이스를 설계하고 다루는 기초를 알려줘요",
-  "one_liner_style": "summary",
-  "entry": "target",
-  "genre": "데이터 분석",
-  "field": "데이터·통계",
-  "topic": "데이터 분석",
-  "way": "개념",
-  "axes": null,
-  "keywords": [
-   "SQL"
   ]
  },
  {
@@ -2482,25 +2405,6 @@
   ]
  },
  {
-  "isbn": "9791161754727",
-  "title": "통계학으로 배우는 머신러닝 2/e",
-  "author": "트레버 헤이스트 외",
-  "pages": 844,
-  "one_liner": "회귀에서 신경망까지 머신러닝 알고리즘의 통계 이론을 깊이 이해해요",
-  "one_liner_style": "summary",
-  "entry": "target",
-  "genre": "통계",
-  "field": "데이터·통계",
-  "topic": "통계",
-  "way": "개념",
-  "axes": null,
-  "keywords": [
-   "기초 통계",
-   "베이즈",
-   "회귀분석"
-  ]
- },
- {
   "isbn": "9791169213196",
   "title": "파이썬으로 배우는 통계학 교과서",
   "author": "바바 신야",
@@ -2570,23 +2474,6 @@
   "keywords": [
    "기초 통계",
    "가설검정",
-   "확률"
-  ]
- },
- {
-  "isbn": "9791192229508",
-  "title": "개념 있는 수학자 : 대수·미적분·확률과 통계 편",
-  "author": "이광연",
-  "pages": 288,
-  "one_liner": "지수·로그·삼각함수 등 수학 개념을 정확히 이해하도록 도와줘요",
-  "one_liner_style": "summary",
-  "entry": "target",
-  "genre": "통계",
-  "field": "데이터·통계",
-  "topic": "통계",
-  "way": "개념",
-  "axes": null,
-  "keywords": [
    "확률"
   ]
  },
@@ -6328,24 +6215,6 @@
   ]
  },
  {
-  "isbn": "9791161757742",
-  "title": "컴퓨터 시대의 통계적 추론",
-  "author": "브래들리 에프론 외",
-  "pages": 626,
-  "one_liner": "베이즈부터 부트스트랩까지 추론 방법이 어떻게 발전했는지 시대 순으로 이해해요.",
-  "one_liner_style": "summary",
-  "entry": "target",
-  "genre": "통계",
-  "field": "데이터·통계",
-  "topic": "통계",
-  "way": "개념",
-  "axes": null,
-  "keywords": [
-   "회귀분석",
-   "가설검정"
-  ]
- },
- {
   "isbn": "9791160077179",
   "title": "수학은 어렵지만 확률·통계는 알고 싶어",
   "author": "요비노리 다쿠미",
@@ -6619,23 +6488,6 @@
   "keywords": [
    "운동 습관",
    "달리기·근력"
-  ]
- },
- {
-  "isbn": "9788956055008",
-  "title": "가장 뛰어난 중년의 뇌",
-  "author": "바버라 스트로치",
-  "pages": 332,
-  "one_liner": "나이 들며 뇌가 어떻게 달라지고 어떤 점이 오히려 강해지는지 알려 줘요",
-  "one_liner_style": "summary",
-  "entry": "target",
-  "genre": "습관·집중",
-  "field": "습관·자기계발",
-  "topic": "습관·집중",
-  "way": "개념",
-  "axes": null,
-  "keywords": [
-   "뇌과학"
   ]
  },
  {
@@ -8351,23 +8203,6 @@
   "axes": null,
   "keywords": [
    "엑셀"
-  ]
- },
- {
-  "isbn": "9788966264629",
-  "title": "기초부터 다지는 통계학 교과서 with 파이썬",
-  "author": "트레버 헤이스티 외",
-  "pages": 760,
-  "one_liner": "선형회귀부터 분류, 딥러닝까지 통계적 학습 기법을 파이썬 실습과 함께 익혀요",
-  "one_liner_style": "summary",
-  "entry": "target",
-  "genre": "통계",
-  "field": "데이터·통계",
-  "topic": "통계",
-  "way": "개념",
-  "axes": null,
-  "keywords": [
-   "회귀분석"
   ]
  },
  {
