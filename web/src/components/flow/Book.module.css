@@ -105,10 +105,11 @@
   border-radius: 0 var(--radius-book) var(--radius-book) 0; background: var(--spine-shade), var(--cloth-edge);
 }
 .backStamp { position: absolute; inset: 14px 34px 14px 14px; border: 1px solid var(--foil-line); border-radius: 6px; }
-/* shutting: the zoom waits for the last bookmark to leave (SHUT_BOOK delay); the open cover (the left page) goes the moment
-   the back lands on it — on a phone the back is a 1 : 1.45 book, shorter than the tall page it covers */
-.zoom[data-shut] { transition-delay: 0.4s; }
-.zoom[data-shut] .cover { visibility: hidden; transition: visibility 0s linear 1.4s; }   /* not opacity: < 1 flattens its 3D */
+/* shutting: the book keeps its size while it turns, then settles (zooms) once shut */
+.zoom[data-shut] { transition-duration: 0.45s; }   /* settles once shut (SHUT_SETTLE_MS), never while open */
+/* the open cover (the tall left page) goes once the turning half shows its back (≈ half way: 0.4 s wait + ≈ 0.55 s of the
+   1 s turn) — on a phone the back is a 1 : 1.45 book and must not lie on a page taller than itself (10-08) */
+.zoom[data-shut] .cover { visibility: hidden; transition: visibility 0s linear 0.95s; }   /* not opacity: < 1 flattens its 3D */
 .ruled {
   position: absolute; inset: 0; perspective: 1600px;
   background: repeating-linear-gradient(to bottom, transparent 0 27px, var(--paper-rule) 27px 28px);

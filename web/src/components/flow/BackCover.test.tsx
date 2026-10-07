@@ -54,18 +54,12 @@ describe("BackLaid + BackActions (S-11, F-27 — the back of the book with today
     expect(screen.getByText(NO_CHIP_LINE)).toBeInTheDocument();
   });
 
-  it("asks for the story picture as the book shuts — on a phone that can share pictures only (10-08)", async () => {
+  it("asks for the story picture so the sheet's preview is ready — on every browser (10-08)", async () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response(new Blob(["png"], { type: "image/png" })));
     vi.stubGlobal("fetch", fetchMock);
-    vi.stubGlobal("navigator", { ...navigator, userAgent: "Mozilla/5.0 (Linux; Android 14; Pixel 7) Chrome/129.0 Mobile", canShare: () => true });
-    const { unmount } = render(<BackCover {...props()} />);
-    expect(fetchMock).toHaveBeenCalledWith("/s/1~0A~a.b~000000/story");
-    unmount();
-    forgetStories();
-    fetchMock.mockClear();
     vi.stubGlobal("navigator", { ...navigator, userAgent: "Mozilla/5.0 (Windows NT 10.0) Chrome/129.0", canShare: undefined });
     render(<BackCover {...props()} />);
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(fetchMock).toHaveBeenCalledWith("/s/1~0A~a.b~000000/story");
     await act(async () => {});
   });
 
