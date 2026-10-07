@@ -229,11 +229,13 @@ const CLOVER_GLINT = starPath(21.5, 43, 1.8, 0.6, 4);
 const FLAMES = [[28, 40, 9], [72, 40, 9], [37, 24, 7], [63, 24, 7], [50, 17, 8]] as const;
 const flame = (x: number, y: number, h: number) =>
   `M${x} ${y} C ${x - h * 0.45} ${y - h * 0.35}, ${x - h * 0.2} ${y - h * 0.8}, ${x} ${y - h} C ${x + h * 0.2} ${y - h * 0.8}, ${x + h * 0.45} ${y - h * 0.35}, ${x} ${y} Z`;
+const BLUE_FLAMES = [[24, 62, 24], [76, 62, 24], [31, 54, 30], [69, 54, 30], [41, 36, 20], [59, 36, 20]] as const;
+const EMBERS = [[18, 30], [84, 26], [24, 18], [78, 44]] as const;
 const CLOUDS = [[23, 30, 1], [77, 30, -1], [30, 52, 0.8], [70, 52, -0.8]] as const;
 
 /**
  * A 초판본 animal's own aura (10-07 사용자): behind the animal and soft, so the face stays as it is and the background
- * still reads — 청룡 blue clouds, 백호 silver wind, 주작 fire, 현무 water rings.
+ * still reads — 청룡 blue clouds, 백호 blue fire (사용자 10-07), 주작 fire, 현무 water rings.
  */
 function AnimalAura({ animal }: { animal: string }) {
   switch (animal) {
@@ -250,12 +252,12 @@ function AnimalAura({ animal }: { animal: string }) {
       );
     case "whitetiger":
       return (
-        <g data-part="animal-aura" data-aura="wind" className={styles.aura} fill="none" strokeLinecap="round">
-          <circle cx="50" cy="40" r="24" fill="#EEF2F8" opacity="0.5" />
-          <g stroke="#C9D3E3" strokeWidth="1.4">
-            <path d="M18 34 q10 -13 24 -11" /><path d="M82 34 q-10 -13 -24 -11" />
-            <path d="M17 48 q8 -6 17 -4" /><path d="M83 48 q-8 -6 -17 -4" />
-          </g>
+        <g data-part="animal-aura" data-aura="blue-fire" className={styles.flicker}>
+          <circle cx="50" cy="42" r="24" fill="#4FA3F7" opacity="0.18" />
+          {BLUE_FLAMES.map(([x, y, h], i) => (
+            <g key={i}><path d={flame(x, y, h)} fill="#3D8EEB" opacity="0.5" /><path d={flame(x, y - 2, h * 0.6)} fill="#8CCBFF" opacity="0.7" /></g>
+          ))}
+          {EMBERS.map(([x, y], i) => <circle key={i} cx={x} cy={y} r="0.7" fill="#9FD4FF" />)}
         </g>
       );
     case "redbird":

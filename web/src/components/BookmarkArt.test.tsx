@@ -51,8 +51,8 @@ describe("BookmarkArt (C-03, 도감 v1, three parts — 10-07 A)", () => {
     expect(container.querySelector("[data-part=rim]")).toBeNull();                             // 도감 동물 칸: no background, no rim
   });
 
-  it("gives each 초판본 animal its own aura behind it — 청룡 clouds, 백호 wind, 주작 fire, 현무 water", () => {
-    const want = { bluedragon: "clouds", whitetiger: "wind", redbird: "fire", blacktortoise: "water" } as const;
+  it("gives each 초판본 animal its own aura behind it — 청룡 clouds, 백호 blue fire, 주작 fire, 현무 water", () => {
+    const want = { bluedragon: "clouds", whitetiger: "blue-fire", redbird: "fire", blacktortoise: "water" } as const;
     for (const [animal, aura] of Object.entries(want)) {
       const { container, unmount } = render(<BookmarkArt art={{ ...COMMON, animal: animal as ArtCombo["animal"] }} clipId={animal} />);
       const svg = container.querySelector("svg")!;
