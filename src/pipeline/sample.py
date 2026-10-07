@@ -38,7 +38,10 @@ def sample_size(n_agreed: int, rate: float) -> int:
 def trial_sample(doc: dict, rate: float) -> list[str]:
     """A fixed share of the batch's agreed books, reviewed by default during the trial. Seeded by the batch id
     (`batch_id`; files from before 10-05 have none and use `date`, which is the same id for a day's first batch). The same
-    books come back after a review is applied and the page is built again."""
+    books come back after a review is applied and the page is built again. A batch re-sorted under a newer rule keeps the
+    draw it had (`trial_sample` in the file — review.resorted), so a sample a person has started does not move."""
+    if "trial_sample" in doc:
+        return list(doc["trial_sample"])
     agreed = agreed_isbns(doc)
     seed = doc.get("batch_id") or doc["date"]
     return sorted(random.Random(seed).sample(agreed, sample_size(len(agreed), rate)))

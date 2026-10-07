@@ -11,7 +11,7 @@
 | 갈래 | 코드 | 안에 있는 것 | 책 하나가 가진 이름 |
 |---|---|---|---|
 | 이야기 | `entry=leaf` (🍃) | **장르** 13개 | `genre` (예: 한국 소설) |
-| 배우기 | `entry=target` (🎯) | **분야** 6개 > **주제** 16개 > **키워드** 68개 | `field` · `genre`(= 주제) · `keywords` 2~5개 |
+| 배우기 | `entry=target` (🎯) | **분야** 6개 > **주제** 16개 > **키워드** 68개 | `field` · `genre`(= 주제) · `keywords` 0~3개 |
 
 - 배우기 책의 `genre`는 주제 이름과 같다. 장르 색은 이야기, 분야 색은 배우기가 쓴다.
 - 도전(낯선 쪽) 모드는 **갈래를 유지한 채** 그 안에서 한 발짝 옮긴다. 배우기 도전만 이야기 쪽 교양 장르(과학 교양·인문·역사·예술·여행·사회·시사)로 간다.
@@ -22,8 +22,8 @@
 
 | # | 영역 | 고칠 곳 | 이야기 장르 | 배우기 주제 | 배우기 키워드 |
 |---|---|---|---|---|---|
-| 1 | 정의·경계 | `docs/book-pool.md` 1-3 경계 표 | 필요 | 필요 시 | — |
-| | | `docs/target-chips.md` 2-1 (주제·키워드 목록, 새 키워드 정의 표, 경계 표) | — | 필요 | 필요 |
+| 1 | 정의·경계 | `docs/label-dictionary.md` (정의서 v3, 10-06) — 2절 장르 · 3절 주제와 경계 · 5절 방식 | 필요 | 필요 | — |
+| | | `docs/target-chips.md` 2-1 (주제·키워드 목록, 새 키워드 정의 표) | — | 필요 | 필요 |
 | | | `data/processed/keyword_vocab.json` → `npm run books:import` → `web/src/data/vocab.json` (단어 규칙) | — | — | 필요 |
 | 2 | 질문 지도 | `docs/question-map.md` `node` 블록 (선택지에 `genres=` / `topics=` / `keywords=`) | 필요 | 필요 | 필요 |
 | | | `npm run map:build` → `web/src/data/question-map.json`, `mood-skips.json` 재생성 · `npm run map:coverage` 확인 | 필요 | 필요 | 필요 |
@@ -37,7 +37,7 @@
 | 6 | 목표 권수 | `docs/book-pool.md` 1-2c (두 단계, 10-05) + `src/pipeline/gaps.py` `PHASES`(장르·주제·키워드 공통 목표) · 장르 목록 `GENRES` / 주제 목록 `src/apply_review.py` `FIELD_OF_TOPIC` | 이름만 | 이름만 | 공개 5 · 넓히기 15 |
 | 7 | 코드 목록 | `web/src/lib/books/taxonomy.ts`: `LEAF_GENRES`(장르) · `FIELD_OF_TOPIC`(주제 → 분야) · `GENRE_TONE` · `FIELD_TONE`. `web/src/lib/paths/vocabulary.ts`의 `MAP_GENRES`는 이 둘에서 자동으로 만들어진다 | 필요 | 필요 | — |
 | 8 | 테스트·기록 | `taxonomy.test.ts` · `vocabulary.test.ts` · `data.test.ts` · `challenge.test.ts` · `normalize.test.ts` · `additions.test.ts` · `src/tests/test_pipeline_tagger.py`가 장르 이름을 직접 쓰므로 함께 확인 | 확인 | 확인 | 확인 |
-| 9 | 태그·검수 (파이썬) | 태그 지시문은 `src/pipeline/prompt.py`가 위 1번 문서(`book-pool.md` 1-3 · `target-chips.md` 2-1 정의·경계)와 `keyword_vocab.json`에서 그대로 읽는다 — 문서만 고치면 된다. 검수·병합의 `src/apply_review.py` `FIELD_OF_TOPIC`(주제 → 분야)은 4번 예스24 규칙과 **같이** 더한다(`test_pipeline_plan.py`가 그 표의 주제마다 예스24 규칙을 요구) | 확인 | 필요 | — |
+| 9 | 태그·검수 (파이썬) | 태그 지시문은 `src/pipeline/prompt.py`가 위 1번 문서(`label-dictionary.md` 0~5절 · `target-chips.md` 새 키워드 정의)와 `keyword_vocab.json`에서 그대로 읽는다 — 문서만 고치면 된다. 검수·병합의 `src/apply_review.py` `FIELD_OF_TOPIC`(주제 → 분야)은 4번 예스24 규칙과 **같이** 더한다(`test_pipeline_plan.py`가 그 표의 주제마다 예스24 규칙을 요구) | 확인 | 필요 | — |
 | | | `docs/PRD.md`(해당 F-xx) · `docs/context.md`(날짜와 이유) · `docs/launch-plan.md` | 필요 | 필요 | 필요 |
 
 - 장르 이름표 글자색: 예술·여행만 잉크(`--ink`), 나머지는 흰색 (`toneOf`).
@@ -71,7 +71,7 @@
 - 이야기 도전은 늘 이야기 장르 안에서 뒤집는다(🍃 → 🎯 규칙 없음).
 - 질문 지도의 묶음 자리: `story-shelf`(소설 / 진짜 세상) → `story-fiction` · `story-nonfiction` → `story-real`(10-05: 설레는 사랑 이야기 / 삶을 그린 소설) → `story-novel` · `story-genre` · `story-thrill` · `story-heart` · `story-prose` · `story-know` · `story-people` · `story-time`. 장르를 고르지 않은 길(기분 따라)은 `story-gain` → `story-world` → `story-temp` → `story-pull` → `story-len`.
 - 예스24 분류 id는 `src/collect_candidates.py` / `src/research_expansion.py`에 있다(이 표에는 개수만). SF·판타지·추리·스릴러·호러·괴담은 분류 `001001046011`(장르 소설)을 함께 쓰고 검색어와 제외어로 가른다.
-- 경계 두 줄(`book-pool.md` 1-3): 호러·괴담 ↔ 추리·스릴러 = 초자연·괴이 vs 범인·사건 풀이 / 역사 ↔ 사회·시사 ↔ 인문 = 지난 사실이 뼈대 vs 지금 사회 문제 vs 생각·삶의 태도.
+- 경계 두 줄(`label-dictionary.md` 2절): 호러·괴담 ↔ 추리·스릴러 = 초자연·괴이 vs 범인·사건 풀이 / 역사 ↔ 사회·시사 ↔ 인문 = 지난 사실이 뼈대 vs 지금 사회 문제 vs 생각·삶의 태도.
 - 갈래 안의 분위기 축(온도·끌림·얻는 것·세계)은 `docs/balance-game.md` 참고 — 장르 표에는 넣지 않았다.
 
 ---
@@ -109,10 +109,10 @@
 
 - 분야 6개: 데이터·통계 · AI·IT 활용 · 습관·자기계발 · 돈·경제 · 마음·관계 · 일·커리어. 질문 지도에서 큰 갈래 아래에 묶이는 길: 일을 더 잘하기 = `learn-work`(숫자·도구 `learn-tools` / 일하는 방식과 사람 `learn-craft-people` → 나를 다듬기 `learn-craft` · 함께 움직이기 `learn-reach`), 나를 더 잘 돌보기 = `learn-life`(마음과 관계 / 하루와 살림 `learn-daily-body` → 몸과 생활 `learn-body` · 습관과 돈 `learn-daily`). 새 주제는 새 분야를 만들지 않고 일·커리어(마케팅·브랜딩·리더십)·습관·자기계발(건강·운동·요리·살림) 색을 쓴다(10-05).
 - 예스24 "분류 0"은 분류 없이 검색어와 제목 규칙만으로 찾는다는 뜻(데이터 분석·통계·AI 활용·업무 자동화). 제목·소개 규칙과 제외어(수험서 `EXAM` 포함)는 `src/research_expansion.py`에 있다.
-- 주제 사이 경계는 `target-chips.md` 2-1 경계 표가 원본이다(돈 관리 ↔ 경제 상식, 마음 돌보기 ↔ 습관·집중 / 에세이 / 대화·관계, 글쓰기 ↔ 업무 자동화, 데이터 분석 ↔ 업무 자동화 등).
+- 주제 사이 경계는 `label-dictionary.md` 3절 경계 표가 원본이다(돈 관리 ↔ 경제 상식, 마음 돌보기 ↔ 습관·집중 / 에세이 / 대화·관계, 글쓰기 ↔ 업무 자동화, 데이터 분석 ↔ 업무 자동화 등).
 - 도전 묶음 규칙의 `→`에 쓰인 장르만 갈 수 있다. 역사가 들어간 규칙은 모두 다른 장르와 함께라 역사가 0권이어도 책이 나온다.
 
-### 2-3. 키워드 (주제 아래, 책마다 2~5개)
+### 2-3. 키워드 (주제 아래, 책마다 0~3개 — 10-06 LD-7)
 
 점수: 겹치는 키워드 1개당 +3. "정의"는 `target-chips.md` 2-1 표 요약(10-04에 19개가 정의를 얻었고, 나머지는 10-01~02 정의). 권수는 현재 `books.json` 기준, 5권 미만은 **굵게** 표시.
 
@@ -238,7 +238,7 @@
 |---|---|---|---|
 | 브랜딩 | 상품·서비스·조직이 기억되는 이름과 이미지 만들기. 나를 알리면 퍼스널 브랜딩 | `learn-market-make` › 기억되는 브랜드 | **0** |
 | 콘텐츠 마케팅 | SNS·유튜브·블로그 등 콘텐츠로 알리기. 문구 쓰기 자체면 카피라이팅 | `learn-market-make` › 사람을 모으는 콘텐츠 | **0** |
-| 고객 이해 | 고객·소비자의 마음과 행동 읽기(고객 조사·페르소나) | `learn-market` › 고객 마음 읽기 | **0** |
+| 고객 이해 | 고객·소비자의 마음과 행동을 읽고 그 마음을 움직여 파는 법(고객 조사·페르소나·영업 심리·설득) | `learn-market` › 고객 마음 읽기 | **0** |
 
 **리더십** (0권, 10-05 — 정의 확정, 키워드 초안 (사용자 확인 대기))
 
@@ -308,7 +308,7 @@
 | 요리·살림 | 나를 더 잘 돌보기 · 분야 미정 | — (이름만 나옴) | 미정 | 미정 | 미정 | 미정 | 미정 | 위와 같음. 돈 관리·투자(가계부 등)와 경계 |
 
 - 각 주제가 생기면 도전 규칙도 같이 필요하다 — 배우기 도전 묶음 20~35번의 `from: topics=…`에 넣어야 하고, 빠지면 데이터 테스트("도전 길 끝마다 규칙이 있는지")가 실패한다. 어느 도전 영역으로 보낼지는 미정.
-- 키워드(2~5개, 책 5권 이상)와 새 키워드 정의 표는 주제가 확정된 뒤 만든다.
+- 키워드(0~3개, 책 5권 이상)와 새 키워드 정의 표는 주제가 확정된 뒤 만든다.
 - **설계가 남은 필드(6개 모두 미정)**: 질문 지도 자리 · 도전 규칙 · 예스24 찾는 곳(분류 id · 검색어 · 제외어) · 색(분야를 새로 만들면 새 색, 기존 분야에 넣으면 필요 없음) · 목표 권수 · 경계 문장.
 
 ---

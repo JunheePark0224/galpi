@@ -1,4 +1,4 @@
-import { AXES, type AxisKey, type Tag, type Way } from "../recommend/types";
+import { AXES, type AxisKey, type AxisValue, type Way } from "../recommend/types";
 import { FIELD_OF_TOPIC, LEAF_GENRES, TOPICS, WAYS, type Topic } from "./taxonomy";
 import type { CatalogBook, OneLinerStyle, Vocab } from "./types";
 
@@ -34,10 +34,10 @@ export function normalizeBook(raw: Row, bib: ReadonlyMap<string, Bib>): CatalogB
     if (!(LEAF_GENRES as readonly string[]).includes(slot)) throw bad(b.isbn, `unknown leaf genre ${slot}`);
     const axes = raw.axes;
     if (typeof axes !== "object" || axes === null) throw bad(b.isbn, "leaf book needs axes");
-    const tags = {} as Record<AxisKey, Tag>;
+    const tags = {} as Record<AxisKey, AxisValue>;
     for (const axis of AXES) {
-      const v = (axes as Row)[axis];
-      if (v !== -1 && v !== 0 && v !== 1) throw bad(b.isbn, `axis ${axis} must be -1, 0 or 1`);
+      const v = (axes as Row)[axis];   // null = 비움 (both passes found no signal, v3.1 rule 9); a missing key is an error
+      if (v !== -1 && v !== 0 && v !== 1 && v !== null) throw bad(b.isbn, `axis ${axis} must be -1, 0, 1 or null`);
       tags[axis] = v;
     }
     return { ...b, entry: "leaf", genre: slot, field: null, topic: null, way: null, axes: tags, keywords: [] };
@@ -99,10 +99,11 @@ const TWO_NAMES_MAX = 10;
 
 /**
  * "양귀자 저" → "양귀자", "조지 오웰 저/정회성 역" → "조지 오웰" (translators, illustrators, editors after "/" are dropped),
- * "지현이(디지털거북이) 저" → "지현이", two short names → "천선란, 임솔아", two long names, three or more (or 등저) → "피터 브루스 외".
+ * "지현이(디지털거북이) 저" → "지현이", a show's title inside the name dropped ("tvN〈벌거벗은 세계사〉제작팀" → "tvN 제작팀" — one
+ * long name cannot wrap on the author line), two short names → "천선란, 임솔아", two long names, three or more (or 등저) → "피터 브루스 외".
  */
 export function cleanAuthor(raw: string): string {
-  const main = raw.split("/")[0].replace(/\([^)]*\)/g, "").trim();
+  const main = raw.split("/")[0].replace(/\([^)]*\)/g, "").replace(/\s*〈[^〉]*〉\s*/g, " ").trim();
   const names = main.replace(ROLE, "").split(",").map((n) => n.trim()).filter(Boolean);
   if (!names.length) return "";
   const both = names.join(", ");

@@ -8,6 +8,10 @@ INTRO = ("주식 투자를 처음 시작하는 사회초년생을 위해 계좌 
 TOC = "1장 왜 주식인가<br>2장 계좌와 주문<br>3장 배당과 분산<br>4장 흔한 실수"
 
 
+SIGNALS = {"temp": "끝맺음 +: 다시 일어서는 마무리", "pull": "몰입: 실패담이 이어짐", "gain": "0 반반: 방법과 다짐",
+           "world": "현실: 개인 투자자의 삶"}  # 🍃 per-axis signal lines (10-06), our own words
+
+
 def message(payload: dict, stop: str = "end_turn", tokens: tuple[int, int] = (1000, 100)) -> SimpleNamespace:
     usage = SimpleNamespace(input_tokens=tokens[0], output_tokens=tokens[1], cache_read_input_tokens=0,
                             cache_creation_input_tokens=0)
@@ -20,14 +24,14 @@ def tag_answer(entry: str, **over) -> dict:
         base = {"fits": True, "keywords": ["주식"], "way": "개념", "one_liner": "배당과 분산 투자로 주식의 첫걸음을 알려줘요",
                 "evidence": "입문자용 주식 기초서", "confidence": 0.9, "new_keyword": ""}
     else:
-        base = {"fits": True, "temp": 1, "pull": -1, "gain": 0, "world": 1,
+        base = {"fits": True, "temp": 1, "pull": -1, "gain": 0, "world": 1, "signals": SIGNALS, "missing": [],
                 "one_liner": "투자 실수 앞에서 사람은 무엇을 배울까요?", "evidence": "경험담 중심의 이야기", "confidence": 0.9}
     return base | over
 
 
 def check_answer(entry: str, **over) -> dict:
     base = ({"fits": True, "keywords": ["주식"], "way": "개념"} if entry == "target"
-            else {"fits": True, "temp": 1, "pull": -1, "gain": 0, "world": 1})
+            else {"fits": True, "temp": 1, "pull": -1, "gain": 0, "world": 1, "signals": SIGNALS, "missing": []})
     return base | {"why": "주식 입문서"} | over
 
 
@@ -48,9 +52,11 @@ class FakeClient:
 
 
 def kind_of(kwargs: dict) -> tuple[str, str]:
-    """(entry, kind): kind "tag" (pass A), "check" (pass B) or "fix" (a one-liner retry — its schema has one field, so the
-    entry is read from the first answer sent back)."""
+    """(entry, kind): kind "tag" (pass A), "check" (pass B), "fix" (a one-liner retry — its schema has one field, so the
+    entry is read from the first answer sent back) or "axisfix" (a 🍃 axis re-ask)."""
     props = kwargs["output_config"]["format"]["schema"]["properties"]
+    if "fits" not in props and "signals" in props:  # an axis re-ask (axis_check.py): 🍃 only
+        return "leaf", "axisfix"
     if set(props) == {"one_liner"}:
         first = json.loads(kwargs["messages"][1]["content"])
         return ("target" if "way" in first else "leaf"), "fix"

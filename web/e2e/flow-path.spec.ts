@@ -23,7 +23,7 @@ test("SQL path: ten questions (써먹는 쪽 is not split: no 사례 SQL book), 
   await expect(heading(page, "start")).toBeVisible();
   await shot(page, "s02-first-question");
   await answerPath(page, SQL_PATH.slice(0, 8));
-  await expect(heading(page, "learn-way")).toBeVisible();
+  await expect(heading(page, "learn-len")).toBeVisible();                 // learn-way passed over (4 SQL books, all drawn)
   await expect(page.getByText(/\d+\s*\/\s*\d+/)).toHaveCount(0);           // no "n / 9"
   await expect(page.getByText("일을 더 잘하기")).toHaveCount(0);           // no crumbs while answering
   await shot(page, "s02-question");
@@ -32,7 +32,7 @@ test("SQL path: ten questions (써먹는 쪽 is not split: no 사례 SQL book), 
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await expect(page.getByRole("heading", { name: "당신이 고른 길" })).toBeVisible();
   await expect(page.getByRole("region", { name: "지나온 길" })).toContainText("DB에서 꺼내기");
-  await expect(page.getByRole("region", { name: "기분" })).toContainText("실제로 써먹는 쪽");
+  await expect(page.getByRole("region", { name: "기분" })).toContainText("가볍게 읽히는 얇은 책");
   await expect(page.getByText(/\d+권/)).toHaveCount(0);                    // no book-count note (design 10절)
   await expect(page.getByText("평소의 당신과 반대편에서 골랐어요")).toHaveCount(0);   // a normal path: no challenge line
   await shot(page, "s04-path");
@@ -42,14 +42,14 @@ test("SQL path: ten questions (써먹는 쪽 is not split: no 사례 SQL book), 
   await expect.poll(() => named(events, "path_completed").length).toBe(1);
   const answered = named(events, "question_answered");
   expect(answered.map((e) => e.props.node_id)).toEqual(SQL_PATH.map((a) => a.node));   // a question passed over sends nothing
-  expect(answered.map((e) => e.props.node_id)).not.toContain("learn-way-use");
+  expect(answered.map((e) => e.props.node_id)).not.toContain("learn-way");
   expect(answered.map((e) => e.props.depth)).toEqual(SQL_PATH.map((_, i) => i + 1));
   expect(answered.map((e) => e.props.position)).toEqual(SQL_PATH.map((_, i) => i + 1));
   expect(answered[0].props).toMatchObject({ kind: "narrow", choice: "A" });
   expect(answered[0].common).toMatchObject({ entry: null, mode: null, screen_version: "v2" });
   expect(named(events, "unsure_hold_cancelled")[0].props).toMatchObject({ node_id: "start", depth: 1 });
   expect(named(events, "path_completed")[0]).toMatchObject({
-    props: { scope_id: "entry=target;topics=데이터 분석;keywords=SQL", depth: 10, unsure_count: 0 },
+    props: { scope_id: "entry=target;topics=데이터 분석;keywords=SQL", depth: 9, unsure_count: 0 },
     common: { entry: "target", mode: "normal" },
   });
   expect(named(events, "bookmark_shown")[0].common).toMatchObject({ entry: "target", mode: "normal" });
@@ -164,7 +164,7 @@ test("S-04 [← 질문으로 돌아가기]: the same answer keeps the five books
   expect(drawn[1]).not.toEqual(drawn[0]);
 
   expect(named(events, "question_back_clicked").map((e) => e.props)).toEqual([
-    { node_id: "learn-len", depth: 10, source: "first_page" }, { node_id: "learn-len", depth: 10, source: "first_page" },
+    { node_id: "learn-len", depth: 9, source: "first_page" }, { node_id: "learn-len", depth: 9, source: "first_page" },
   ]);
   expect(named(events, "path_completed")).toHaveLength(3);
   expect(named(events, "book_opened")).toHaveLength(1);                     // the book stayed open
@@ -175,13 +175,13 @@ test("[← 이전 질문] after a question the map passed over: back to the ques
   const { events } = await recordEvents(page);
   await page.goto("/");
   await page.getByRole("button", { name: START }).click();
-  await answerPath(page, SQL_PATH.slice(0, 9));                              // … 실제로 써먹는 쪽
-  await expect(heading(page, "learn-len")).toBeVisible();                    // learn-way-use passed over
+  await answerPath(page, SQL_PATH.slice(0, 8));                              // … DB에서 꺼내기
+  await expect(heading(page, "learn-len")).toBeVisible();                    // learn-way passed over
   await page.getByRole("button", { name: "이전 질문" }).click();
-  await expect(heading(page, "learn-way")).toBeVisible();
+  await expect(heading(page, "learn-data-tool")).toBeVisible();
   await expect.poll(() => named(events, "question_back_clicked").length).toBe(1);
-  expect(named(events, "question_back_clicked")[0].props).toEqual({ node_id: "learn-way", depth: 9, source: "question" });
-  expect(named(events, "question_answered").map((e) => e.props.node_id)).not.toContain("learn-way-use");
+  expect(named(events, "question_back_clicked")[0].props).toEqual({ node_id: "learn-data-tool", depth: 8, source: "question" });
+  expect(named(events, "question_answered").map((e) => e.props.node_id)).not.toContain("learn-way");
   expect(specMismatches(events)).toEqual([]);
 });
 

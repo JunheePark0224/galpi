@@ -92,7 +92,8 @@ def build_target(rng: random.Random, per_topic: tuple[int, ...]) -> list[Book]:
 
 
 def leaf_score(book: Book, user: User) -> float:
-    return sum(user[a] * book[a] for a in AXES) + user["len"] * book["len"]
+    """An axis left empty (None, 비움 — label-dictionary v3.1 rule 9) adds 0, as in web/src/lib/recommend/score.ts."""
+    return sum(user[a] * (book[a] or 0) for a in AXES) + user["len"] * book["len"]
 
 
 def target_score(book: Book, user: User) -> float:

@@ -13,6 +13,11 @@ describe("leafScore", () => {
     const b = leaf({ temp: 1, pull: -1, gain: 0, world: 1 }, 200);
     expect(leafScore(b, { temp: 2, pull: 2, gain: -2, world: 0, len: 1 })).toBe(2 - 2 + 0 + 0 + 1);
   });
+  it("counts an empty axis (null, 비움) as 0 — the book is never filtered out by it", () => {
+    const b = leaf({ temp: null, pull: -1, gain: null, world: 1 }, 200);
+    expect(leafScore(b, { temp: 2, pull: -2, gain: -2, world: 1, len: 1 })).toBe(0 + 2 + 0 + 1 + 1);
+    expect(leafScore(leaf({ temp: null, pull: null, gain: null, world: null }), { temp: -2, pull: 2, gain: 2, world: -2, len: 0 })).toBe(0);
+  });
   it("is 0 when the user is neutral everywhere", () => {
     expect(leafScore(leaf({ temp: 1, pull: 1, gain: 1, world: 1 }), { temp: 0, pull: 0, gain: 0, world: 0, len: 0 })).toBe(0);
   });

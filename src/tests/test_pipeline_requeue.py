@@ -9,7 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import collect_candidates  # noqa: E402
 from apply_review import ReviewError  # noqa: E402
-from pipeline import REQUEUE, requeue, review, run_daily  # noqa: E402
+from pipeline import ADDITIONS, REQUEUE, requeue, review, run_daily  # noqa: E402
 from pipeline.agreement import apply_answers  # noqa: E402
 from pipeline.config import parse_config  # noqa: E402
 from pipeline_fakes import INTRO, TOC, FakeClient, write_cache, yes24_item  # noqa: E402
@@ -18,8 +18,14 @@ BRAIN = "9788931558210"
 ROW = {"isbn": BRAIN, "to_entry": "leaf", "to_slot": "과학 교양", "from_batch": "2026-10-05", "date": "2026-10-05"}
 
 
-def test_the_seeded_file_holds_the_brain_book_for_science():
-    assert requeue.load(REQUEUE) == [ROW]  # 『뇌』 (모기 겐이치로): 🎯 습관·집중 / 뇌과학 → 🍃 과학 교양
+def test_the_brain_book_went_to_science_once():
+    """『뇌』 (모기 겐이치로): 🎯 습관·집중 / 뇌과학 → 🍃 과학 교양. Seeded on 10-05, used up by the next batch (2026-10-05-2):
+    the row either still waits in the file or the book is in an additions file as 🍃 과학 교양 (a data test must not assume
+    the queue never moves)."""
+    rows = requeue.load(REQUEUE)
+    tagged = [b for p in sorted(ADDITIONS.glob("*.json")) for b in json.loads(p.read_text(encoding="utf-8"))["books"]
+              if b["isbn"] == BRAIN and b["entry"] == "leaf" and b.get("genre") == "과학 교양"]
+    assert rows == [ROW] or (BRAIN not in {r["isbn"] for r in rows} and tagged)
 
 
 @pytest.mark.parametrize("row, msg", [

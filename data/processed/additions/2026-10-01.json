@@ -59,7 +59,8 @@
     "one_liner": "경제지표 읽기부터 공모주, ISA, 연금 준비까지 차근차근 짚어 줘요.",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9788919205013",
@@ -93,7 +94,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/5141170",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "돈 관리·투자",
+    "keywords": [
+     "돈의 심리"
+    ],
+    "way": "개념",
+    "one_liner": "돈에 대한 신념과 책임을 점검하며 부자의 사고방식을 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791194634737",
@@ -127,7 +138,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/169902356",
-   "auto": "ai-agree"
+   "draft": {
+    "topic": "돈 관리·투자",
+    "keywords": [
+     "주식"
+    ],
+    "way": "실습",
+    "one_liner": "사고파는 타이밍을 차트로 스스로 읽는 투자 기준을 세워요.",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791165795788",
@@ -161,7 +182,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/101875887",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "돈 관리·투자",
+    "keywords": [
+     "주식"
+    ],
+    "way": "실습",
+    "one_liner": "원금을 쪼개 사고 파는 분할매수 투자법을 단계별로 따라 해 볼 수 있어요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791199302198",
@@ -196,7 +227,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/177258553",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "돈 관리·투자",
+    "keywords": [
+     "ETF·펀드"
+    ],
+    "way": "실습",
+    "one_liner": "인덱스 펀드 세 개로 포트폴리오를 짜고 사두고 기다리는 투자법을 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791197862670",
@@ -248,7 +289,8 @@
     "one_liner": "해외 주식·펀드·ETF를 계좌 개설부터 환전, 고르는 기준까지 익혀요.",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791157848034",
@@ -283,7 +325,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/145316591",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "돈 관리·투자",
+    "keywords": [
+     "부동산·청약"
+    ],
+    "way": "실습",
+    "one_liner": "청약통장 준비부터 특별공급·일반공급 신청, 당첨 뒤 계약까지 순서대로 짚어요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193712269",
@@ -300,7 +352,7 @@
     "재테크 기초",
     "부동산·청약"
    ],
-   "way": "개념",
+   "way": "실습",
    "one_liner_style": "summary",
    "one_liner": "전월세 계약부터 매매, 청약까지 부동산 거래에서 손해 보지 않는 기본기를 잡아요.",
    "evidence": "전월세·매매·청약 기초 지식이 중심이라 부동산·청약",
@@ -318,7 +370,28 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/126046211",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "돈 관리·투자",
+    "keywords": [
+     "부동산·청약"
+    ],
+    "way": "개념",
+    "one_liner": "전월세 계약부터 매매, 청약까지 부동산 거래에서 손해 보지 않는 기본기를 잡아요.",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "돈 관리·투자",
+     "keywords": [
+      "부동산·청약"
+     ],
+     "way": "개념",
+     "one_liner": "전월세 계약부터 매매, 청약까지 부동산 거래에서 손해 보지 않는 기본기를 잡아요."
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791140700493",
@@ -353,7 +426,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/110791353",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "돈 관리·투자",
+    "keywords": [
+     "부동산·청약"
+    ],
+    "way": "실습",
+    "one_liner": "주거용 오피스텔을 고르고 사는 기준과 임장 요령을 배워요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788947502122",
@@ -364,7 +447,8 @@
    "topic": "돈 관리·투자",
    "field": "돈·경제",
    "keywords": [
-    "연금·노후"
+    "연금·노후",
+    "ETF·펀드"
    ],
    "keywords_regex": [
     "재테크 기초",
@@ -402,7 +486,19 @@
     "one_liner": "퇴직 뒤에도 월급처럼 돈이 들어오게 연금 계좌를 굴리는 길을 알려 줘요.",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "돈 관리·투자",
+     "keywords": [
+      "연금·노후"
+     ],
+     "way": "실습",
+     "one_liner": "퇴직 뒤에도 월급처럼 돈이 들어오게 연금 계좌를 굴리는 길을 알려 줘요."
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791130682822",
@@ -454,7 +550,8 @@
     "one_liner": "퇴직연금 계좌에 자산배분과 리밸런싱 규칙을 세워 현금흐름을 만들어 가요.",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791194508816",
@@ -465,7 +562,8 @@
    "topic": "돈 관리·투자",
    "field": "돈·경제",
    "keywords": [
-    "연금·노후"
+    "연금·노후",
+    "ETF·펀드"
    ],
    "keywords_regex": [
     "재테크 기초",
@@ -504,7 +602,19 @@
     "one_liner": "은퇴 전 10년 동안 노후생활비와 투자, 반퇴 준비를 어떻게 챙길지 짚어 줘요.",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "돈 관리·투자",
+     "keywords": [
+      "연금·노후"
+     ],
+     "way": "실습",
+     "one_liner": "은퇴 전 10년 동안 노후생활비와 투자, 반퇴 준비를 어떻게 챙길지 짚어 줘요."
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791192533100",
@@ -539,7 +649,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/125213035",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "돈 관리·투자",
+    "keywords": [
+     "돈의 심리"
+    ],
+    "way": "실습",
+    "one_liner": "돈에 대한 내 생각 습관을 진단하고 부자 방향으로 고쳐 가요",
+    "status": "picked"
+   },
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788950907549",
@@ -585,7 +705,8 @@
     "status": "picked"
    },
    "reviewed": true,
-   "sampled": true
+   "sampled": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9788955336443",
@@ -620,7 +741,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/120760988",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "경제 상식",
+    "keywords": [
+     "금리·환율"
+    ],
+    "way": "개념",
+    "one_liner": "기준금리와 물가지수, 환율이 정해지는 원리를 시장 흐름과 함께 이해해요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791192218618",
@@ -669,7 +800,8 @@
     "status": "picked"
    },
    "reviewed": true,
-   "sampled": true
+   "sampled": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9788901260679",
@@ -703,7 +835,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/110157236",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "경제 상식",
+    "keywords": [
+     "행동경제학"
+    ],
+    "way": "개념",
+    "one_liner": "편향과 기본 설정이 선택을 어떻게 좌우하는지 알게 돼요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791192999739",
@@ -748,7 +890,8 @@
     "one_liner": "결핍이 판단을 좁히고 빚과 가난의 악순환을 만드는 원리를 알게 돼요.",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791191842791",
@@ -756,10 +899,11 @@
    "author": "곽준식 저",
    "pages": 284,
    "entry": "target",
-   "topic": "경제 상식",
-   "field": "돈·경제",
+   "topic": "마케팅·브랜딩",
+   "field": "일·커리어",
    "keywords": [
-    "행동경제학"
+    "브랜딩",
+    "고객 이해"
    ],
    "keywords_regex": [
     "행동경제학"
@@ -793,7 +937,19 @@
     "one_liner": "작은 브랜드가 소비자 심리를 활용해 성장한 전략을 사례로 배워요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "경제 상식",
+     "keywords": [
+      "행동경제학"
+     ],
+     "way": "사례",
+     "one_liner": "작은 브랜드가 소비자 심리를 활용해 성장한 전략을 사례로 배워요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788993985856",
@@ -827,7 +983,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/7836135",
-   "auto": "ai-agree"
+   "draft": {
+    "topic": "경제 상식",
+    "keywords": [
+     "경제사·자본주의"
+    ],
+    "way": "개념",
+    "one_liner": "자본주의를 옹호하고 비판해 온 경제 사상의 흐름을 차근차근 이해해요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791191975116",
@@ -861,7 +1027,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/119650539",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "경제 상식",
+    "keywords": [
+     "경제사·자본주의"
+    ],
+    "way": "개념",
+    "one_liner": "구석기부터 근대까지 돈과 은행이 자본주의로 이어진 과정을 이해해요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9788959405701",
@@ -895,7 +1071,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/23092462",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "경제 상식",
+    "keywords": [
+     "경제사·자본주의"
+    ],
+    "way": "개념",
+    "one_liner": "스미스부터 마르크스까지 경제 이론이 어떻게 이어졌는지 한 흐름으로 이해해요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791165047511",
@@ -980,7 +1166,7 @@
    "keywords_regex": [
     "트렌드"
    ],
-   "way": "사례",
+   "way": "개념",
    "one_liner_style": "summary",
    "one_liner": "세계 각 도시에서 포착한 유망 트렌드로 2027년 시장 흐름을 미리 가늠해요.",
    "evidence": "국가별 현장 취재 트렌드 전망이 뼈대",
@@ -998,7 +1184,28 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/196486254",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "경제 상식",
+    "keywords": [
+     "트렌드"
+    ],
+    "way": "사례",
+    "one_liner": "세계 각 도시에서 포착한 유망 트렌드로 2027년 시장 흐름을 미리 가늠해요.",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "경제 상식",
+     "keywords": [
+      "트렌드"
+     ],
+     "way": "사례",
+     "one_liner": "세계 각 도시에서 포착한 유망 트렌드로 2027년 시장 흐름을 미리 가늠해요."
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791193937686",
@@ -1049,7 +1256,8 @@
     "one_liner": "2026년 돈의 흐름을 주식·부동산·코인까지 폭넓게 짚어 볼 수 있어요.",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791168622159",
@@ -1084,7 +1292,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/125076275",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "마음 돌보기",
+    "keywords": [
+     "불안·걱정"
+    ],
+    "way": "실습",
+    "one_liner": "아이의 두려움을 낮추도록 부모가 따라 할 단계별 기법을 익혀요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791139715989",
@@ -1102,7 +1320,7 @@
     "감정 다루기",
     "번아웃·스트레스"
    ],
-   "way": "개념",
+   "way": "실습",
    "one_liner_style": "summary",
    "one_liner": "불안이 뇌에서 왜 생기는지 알고 곧바로 쓸 완화 훈련법까지 얻어요",
    "evidence": "불안의 뇌 원리가 중심, 훈련법은 보조",
@@ -1120,7 +1338,28 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/121913499",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "마음 돌보기",
+    "keywords": [
+     "불안·걱정"
+    ],
+    "way": "개념",
+    "one_liner": "불안이 뇌에서 왜 생기는지 알고 곧바로 쓸 완화 훈련법까지 얻어요",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마음 돌보기",
+     "keywords": [
+      "불안·걱정"
+     ],
+     "way": "개념",
+     "one_liner": "불안이 뇌에서 왜 생기는지 알고 곧바로 쓸 완화 훈련법까지 얻어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788901284927",
@@ -1170,7 +1409,8 @@
     "one_liner": "사소한 일에도 쉽게 지치는 마음을 다독이고, 걱정을 끊는 훈련을 해 볼 수 있어요.",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9788901294087",
@@ -1187,7 +1427,7 @@
     "불안·걱정",
     "감정 다루기"
    ],
-   "way": "개념",
+   "way": "실습",
    "one_liner_style": "summary",
    "one_liner": "막연한 걱정이 왜 생기는지 알고 생각에 휘둘리지 않는 법을 배워요",
    "evidence": "불안의 원리와 생각 다루기가 중심이라 개념으로 봤어요",
@@ -1216,7 +1456,19 @@
     "one_liner": "막연한 걱정이 왜 생기는지 알고 생각에 휘둘리지 않는 법을 배워요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마음 돌보기",
+     "keywords": [
+      "불안·걱정"
+     ],
+     "way": "개념",
+     "one_liner": "막연한 걱정이 왜 생기는지 알고 생각에 휘둘리지 않는 법을 배워요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788965134855",
@@ -1224,10 +1476,10 @@
    "author": "권영애 저/한국버츄프로젝트 감수",
    "pages": 484,
    "entry": "target",
-   "topic": "마음 돌보기",
+   "topic": "대화·관계",
    "field": "마음·관계",
    "keywords": [
-    "자존감"
+    "말투·대화법"
    ],
    "keywords_regex": [
     "자존감"
@@ -1250,7 +1502,28 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/57799026",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "마음 돌보기",
+    "keywords": [
+     "자존감"
+    ],
+    "way": "실습",
+    "one_liner": "미덕의 언어와 5대 전략으로 아이의 자존감을 키우는 교실·가정 수업법을 익혀요.",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마음 돌보기",
+     "keywords": [
+      "자존감"
+     ],
+     "way": "실습",
+     "one_liner": "미덕의 언어와 5대 전략으로 아이의 자존감을 키우는 교실·가정 수업법을 익혀요."
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791171258291",
@@ -1322,7 +1595,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/143772659",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "마음 돌보기",
+    "keywords": [
+     "자존감"
+    ],
+    "way": "개념",
+    "one_liner": "열등감이 어디서 생기는지 짚어 보고 당당해지는 길을 찾아가요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791166815782",
@@ -1373,7 +1656,8 @@
     "one_liner": "무너진 뒤에도 다시 일어서도록 마음 근육을 키우는 훈련을 단계별로 익혀요",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9788970417752",
@@ -1381,10 +1665,10 @@
    "author": "세라 커책 저/김잔디 역",
    "pages": 344,
    "entry": "target",
-   "topic": "마음 돌보기",
-   "field": "마음·관계",
+   "topic": "건강·운동",
+   "field": "습관·자기계발",
    "keywords": [
-    "번아웃·스트레스"
+    "운동 습관"
    ],
    "keywords_regex": [
     "불안·걱정",
@@ -1424,7 +1708,19 @@
     "one_liner": "무기력하고 지칠 때 이불을 걷고 몸을 움직이게 하는 작은 방법을 얻어요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마음 돌보기",
+     "keywords": [
+      "번아웃·스트레스"
+     ],
+     "way": "실습",
+     "one_liner": "무기력하고 지칠 때 이불을 걷고 몸을 움직이게 하는 작은 방법을 얻어요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788955969542",
@@ -1468,7 +1764,8 @@
    "topic": "마음 돌보기",
    "field": "마음·관계",
    "keywords": [
-    "우울"
+    "우울",
+    "감정 다루기"
    ],
    "keywords_regex": [
     "불안·걱정",
@@ -1507,7 +1804,19 @@
     "one_liner": "우울과 불안을 겪은 경험담을 따라가며 마음과 잘 지내는 법을 배워요",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마음 돌보기",
+     "keywords": [
+      "우울"
+     ],
+     "way": "사례",
+     "one_liner": "우울과 불안을 겪은 경험담을 따라가며 마음과 잘 지내는 법을 배워요"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788954699334",
@@ -1570,9 +1879,22 @@
    },
    "flags": [],
    "issues": [],
-   "status": "picked",
+   "status": "dropped",
    "link": "https://www.yes24.com/product/goods/101700450",
-   "auto": "ai-agree"
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "인문"
+   },
+   "draft": {
+    "topic": "마음 돌보기",
+    "keywords": [
+     "우울"
+    ],
+    "way": "개념",
+    "one_liner": "우울이 무엇이고 왜 생기는지 심리·역사·치료까지 넓게 이해하게 돼요.",
+    "status": "picked"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791172611446",
@@ -1608,7 +1930,18 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/143608571",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "마음 돌보기",
+    "keywords": [
+     "명상·마음챙김",
+     "자존감"
+    ],
+    "way": "실습",
+    "one_liner": "자책을 내려놓고 지금 모습 그대로 나를 품는 명상 연습을 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791191587418",
@@ -1652,7 +1985,8 @@
     "status": "picked"
    },
    "reviewed": true,
-   "sampled": true
+   "sampled": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9788974792176",
@@ -1663,8 +1997,7 @@
    "topic": "마음 돌보기",
    "field": "마음·관계",
    "keywords": [
-    "명상·마음챙김",
-    "번아웃·스트레스"
+    "명상·마음챙김"
    ],
    "keywords_regex": [
     "불안·걱정",
@@ -1673,7 +2006,7 @@
     "우울",
     "명상·마음챙김"
    ],
-   "way": "개념",
+   "way": "실습",
    "one_liner_style": "summary",
    "one_liner": "생각을 바꾸려 하지 않고 있는 그대로 바라보는 마음챙김의 원리와 연습을 익혀요.",
    "evidence": "명상 원리와 수련 안내가 중심, 스트레스 완화 곁들임",
@@ -1706,7 +2039,20 @@
     "one_liner": "생각을 바꾸려 하지 않고 있는 그대로 바라보는 마음챙김의 원리와 연습을 익혀요.",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마음 돌보기",
+     "keywords": [
+      "명상·마음챙김",
+      "번아웃·스트레스"
+     ],
+     "way": "개념",
+     "one_liner": "생각을 바꾸려 하지 않고 있는 그대로 바라보는 마음챙김의 원리와 연습을 익혀요."
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791162244388",
@@ -1714,10 +2060,10 @@
    "author": "채종서 저",
    "pages": 232,
    "entry": "target",
-   "topic": "대화·관계",
-   "field": "마음·관계",
+   "topic": "글쓰기",
+   "field": "일·커리어",
    "keywords": [
-    "발표"
+    "업무 글"
    ],
    "keywords_regex": [
     "말투·대화법",
@@ -1754,7 +2100,19 @@
     "one_liner": "업무 보고를 5단계로 짜서 1분 안에 핵심을 전하는 법을 익혀요",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "대화·관계",
+     "keywords": [
+      "발표"
+     ],
+     "way": "실습",
+     "one_liner": "업무 보고를 5단계로 짜서 1분 안에 핵심을 전하는 법을 익혀요"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791168369320",
@@ -1801,7 +2159,8 @@
     "one_liner": "떨리는 목소리 때문에 고민인 사람이 열 명의 극복 경험과 노하우를 얻어요.",
     "status": "picked"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791194793359",
@@ -1835,7 +2194,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/159079879",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "대화·관계",
+    "keywords": [
+     "설득·협상"
+    ],
+    "way": "실습",
+    "one_liner": "협상에 실패한 뒤 다시 테이블에 앉는 5단계 방법을 익혀요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791190826860",
@@ -1883,7 +2252,8 @@
     "one_liner": "",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791195333851",
@@ -1918,7 +2288,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/23311610",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "대화·관계",
+    "keywords": [
+     "설득·협상"
+    ],
+    "way": "사례",
+    "one_liner": "역사와 고전 속 거래 장면으로 사람을 움직이는 지혜를 배워요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791130636429",

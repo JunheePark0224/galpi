@@ -1,0 +1,995 @@
+{
+ "note": "pass C (tiebreak.py) per book: values and signal lines only",
+ "cost_usd": 0.8381,
+ "books": {
+  "9791124668016": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": null,
+     "pull": null,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "끝맺음·어조·장면 정보 없음: 형식 소개뿐",
+     "pull": "끄는 힘 신호 없음: 기획·구성 소개뿐",
+     "gain": "마음 −: 소설·시 형식이라 성찰·감정을 건넴",
+     "world": "딴 세상 −: SF 소설·SF 시가 중심"
+    },
+    "missing": [
+     "temp",
+     "pull"
+    ]
+   },
+   "settled": {
+    "slot": "SF·판타지"
+   }
+  },
+  "9791170522454": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "장면 −: 죽은 자들이 돌아오는 집, 공포와 욕망의 파국",
+     "pull": "몰입 −: 로맨스릴러 단편들, 사건·전개가 끌고 감",
+     "gain": "마음 −: 소설이라 이야기와 인물이 남기는 감정",
+     "world": "딴 세상 −: 죽은 자·호랑이·인어 등 비현실 존재 등장"
+    },
+    "missing": []
+   },
+   "settled": {
+    "slot": "추리·스릴러"
+   }
+  },
+  "9788970128337": {
+   "splits": [
+    "pull"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "끝맺음 +: 후기 '세상의 길 위에서', 완주 장면. 어조 +: 저자 자",
+     "pull": "몰입 −: 날짜별 달리기 경험과 삶의 이야기가 끌고 감",
+     "gain": "마음 −: 달리기를 통한 저자의 성찰과 삶의 철학",
+     "world": "현실 +: 하와이·도쿄·케임브리지 등 실제 장소가 무대인 비소설"
+    },
+    "missing": []
+   },
+   "settled": {
+    "pull": -1
+   }
+  },
+  "9791173323027": {
+   "splits": [
+    "pull"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": 1,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 따뜻한 진심, 호의, 일상의 소중함",
+     "pull": "문장 +: 글맛 칭찬 없음. 몰입 −: 일상·독서 기록이 끌고 감",
+     "gain": "마음 −: 성찰과 기록, 호의·삶의 태도를 건넴",
+     "world": "현실 +: 비소설, 법원·일상·여행 등 실제 세상"
+    },
+    "missing": []
+   },
+   "settled": {
+    "pull": 0
+   }
+  },
+  "9791199889378": {
+   "splits": [
+    "slot",
+    "gain"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "인문",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 결정권을 되찾는 조언·제안, 위로 쪽",
+     "pull": "몰입 −: 심리학자가 든 사례와 구체적 조언이 끌고 감",
+     "gain": "마음 −: 내 마음을 알고 선택하게 하는 성찰 쪽",
+     "world": "현실 +: 비소설, 일상·관계·직장 이야기"
+    },
+    "missing": []
+   },
+   "settled": {
+    "slot": "인문",
+    "gain": -1
+   }
+  },
+  "9791189327156": {
+   "splits": [
+    "slot",
+    "gain"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "에세이",
+    "axes": {
+     "temp": null,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "끝맺음·어조·장면을 알 수 있는 내용이 소개에 없음",
+     "pull": "몰입 −: 예상 밖 전개·반전이 끌고 감",
+     "gain": "마음 −: 무의미를 받아들이는 성찰을 건넴",
+     "world": "현실 +: 비소설, 실제 세상의 이야기"
+    },
+    "missing": [
+     "temp"
+    ]
+   },
+   "settled": {
+    "slot": null,
+    "gain": -1
+   }
+  },
+  "9791130682952": {
+   "splits": [
+    "temp"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 생명체 시선에서 유쾌하게 풀어내는 서술",
+     "pull": "몰입: 반전 있는 생존 이야기와 사례가 끌고 감",
+     "gain": "알게 됨: 극한 환경 생물과 진화 법칙을 설명",
+     "world": "현실 +: 실제 생물을 다룬 비소설"
+    },
+    "missing": []
+   },
+   "settled": {
+    "temp": 1
+   }
+  },
+  "9788962605952": {
+   "splits": [
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "확률",
+     "기초 통계"
+    ],
+    "way": "개념"
+   },
+   "settled": {
+    "way": "개념"
+   }
+  },
+  "9791194587330": {
+   "splits": [
+    "slot",
+    "keywords"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "시간·생산성",
+    "keywords": [],
+    "way": "실습"
+   },
+   "settled": {
+    "slot": null,
+    "keywords": null
+   }
+  },
+  "9791167740984": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "집중력"
+    ],
+    "way": "개념"
+   },
+   "settled": {
+    "slot": "습관·집중"
+   }
+  },
+  "9791171714308": {
+   "splits": [
+    "way"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "마음 돌보기",
+    "keywords": [],
+    "way": "실습"
+   },
+   "settled": {
+    "way": "실습"
+   }
+  },
+  "9791162998328": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "습관·집중",
+    "keywords": [],
+    "way": "사례"
+   },
+   "settled": {
+    "slot": null
+   }
+  },
+  "9788934903611": {
+   "splits": [
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "일하는 법"
+    ],
+    "way": "실습"
+   },
+   "settled": {
+    "way": "실습"
+   }
+  },
+  "9791158513269": {
+   "splits": [
+    "keywords",
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "재테크 기초",
+     "주식",
+     "부동산·청약"
+    ],
+    "way": "실습"
+   },
+   "settled": {
+    "keywords": null,
+    "way": "실습"
+   }
+  },
+  "9788974796594": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "명상·마음챙김"
+    ],
+    "way": "실습"
+   },
+   "settled": {
+    "slot": "마음 돌보기"
+   }
+  },
+  "9788901297477": {
+   "splits": [
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "감정 다루기",
+     "불안·걱정"
+    ],
+    "way": "실습"
+   },
+   "settled": {
+    "way": "실습"
+   }
+  },
+  "9791188632077": {
+   "splits": [
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "감정 다루기",
+     "불안·걱정",
+     "자존감"
+    ],
+    "way": "실습"
+   },
+   "settled": {
+    "way": "실습"
+   }
+  },
+  "9788925573021": {
+   "splits": [
+    "keywords",
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "퍼스널 브랜딩",
+     "이직·퇴사"
+    ],
+    "way": "사례"
+   },
+   "settled": {
+    "keywords": null,
+    "way": "사례"
+   }
+  },
+  "9791190710589": {
+   "splits": [
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "문해력·어휘"
+    ],
+    "way": "개념"
+   },
+   "settled": {
+    "way": "개념"
+   }
+  },
+  "9791192099118": {
+   "splits": [
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [],
+    "way": "개념"
+   },
+   "settled": {
+    "way": "개념"
+   }
+  },
+  "9788901260679": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "경제 상식",
+    "keywords": [
+     "행동경제학"
+    ],
+    "way": "개념"
+   },
+   "settled": {
+    "slot": "경제 상식"
+   }
+  },
+  "9791169852296": {
+   "splits": [
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "트렌드"
+    ],
+    "way": "개념"
+   },
+   "settled": {
+    "way": "개념"
+   }
+  },
+  "9791124575420": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "AI 활용",
+    "keywords": [
+     "트렌드"
+    ],
+    "way": "개념"
+   },
+   "settled": {
+    "slot": null
+   }
+  },
+  "9791176210072": {
+   "splits": [
+    "keywords",
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "커리어 설계",
+     "퍼스널 브랜딩",
+     "직장 생활"
+    ],
+    "way": "실습"
+   },
+   "settled": {
+    "keywords": null,
+    "way": "실습"
+   }
+  },
+  "9791198347619": {
+   "splits": [
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "에세이·책 쓰기"
+    ],
+    "way": "실습"
+   },
+   "settled": {
+    "way": "실습"
+   }
+  },
+  "9791193128428": {
+   "splits": [
+    "temp"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 설명 중심 통사, 맺음말 없음, 어조 판단 약함",
+     "pull": "몰입 −: 영화처럼 속도감 있는 스토리텔링, 시대 흐름",
+     "gain": "알게 됨 +: 세계사 주요 사건을 정리해 알려 줌",
+     "world": "현실 +: 비소설 역사서"
+    },
+    "missing": []
+   },
+   "settled": {
+    "temp": 0
+   }
+  },
+  "9788935212828": {
+   "splits": [
+    "keywords",
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ],
+    "way": "실습"
+   },
+   "settled": {
+    "keywords": null,
+    "way": "실습"
+   }
+  },
+  "9791155362501": {
+   "splits": [
+    "keywords",
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "정리·미니멀"
+    ],
+    "way": "실습"
+   },
+   "settled": {
+    "keywords": null,
+    "way": "실습"
+   }
+  },
+  "9791175780439": {
+   "splits": [
+    "gain"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "사회·시사",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "끝맺음 +: 불안을 잠재우고 낙관·다정한 안내로 닫힘",
+     "pull": "몰입 −: 현장 인터뷰·사례와 시대 흐름으로 끌고 감",
+     "gain": "알게 됨 +: 역할 변화·진로 정보를 짚어 줌",
+     "world": "현실 +: 비소설, 실제 창작 현장이 무대"
+    },
+    "missing": []
+   },
+   "settled": {
+    "gain": 1
+   }
+  },
+  "9791198721846": {
+   "splits": [
+    "way"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "습관·집중",
+    "keywords": [],
+    "way": "개념"
+   },
+   "settled": {
+    "way": "개념"
+   }
+  },
+  "9791187809418": {
+   "splits": [
+    "slot",
+    "keywords"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "keywords": [
+     "뇌과학",
+     "습관"
+    ],
+    "way": "실습"
+   },
+   "settled": {
+    "slot": "습관·집중",
+    "keywords": null
+   }
+  },
+  "9791197647666": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 감정을 다독이며 곁에서 건네는 시선, 끝맺음 '결국 행복해질 ",
+     "pull": "약한 몰입: 짧은 글 묶음, 문장 칭찬 없고 사례·조언으로 끌고 감",
+     "gain": "마음 −: 감정·태도를 돌보고 성찰하게 하는 책",
+     "world": "현실 +: 비소설, 일상과 인간관계가 무대"
+    },
+    "missing": []
+   },
+   "settled": {
+    "slot": null
+   }
+  },
+  "9788901300702": {
+   "splits": [
+    "gain"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "인문",
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 따뜻한 삽화, 곁에 두고 펼쳐 볼 책으로 건네는 시선",
+     "pull": "문장 +: 아름다운 우리말·낱말의 맛을 앞세움",
+     "gain": "마음 −: 낱말로 일상을 새롭게 바라보게 함",
+     "world": "현실 +: 비소설, 실제 우리말과 일상"
+    },
+    "missing": []
+   },
+   "settled": {
+    "gain": -1
+   }
+  },
+  "9791192372754": {
+   "splits": [
+    "pull"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "",
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 위로·희망을 거부하고 무너진다고 단호히 경고",
+     "pull": "문장 +: 단 한 권의 문장, 한 줄의 진심을 앞세움",
+     "gain": "마음 −: 감정·기준을 다잡는 성찰과 훈련을 건넴",
+     "world": "현실 +: 비소설, 관계·감정 등 실제 삶이 무대"
+    },
+    "missing": []
+   },
+   "settled": {
+    "pull": 1
+   }
+  },
+  "9791197831744": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 우리 안의 예술가를 깨우는 지혜를 건넴",
+     "pull": "문장 +: 아름다운 책이라는 추천, 짧은 단상 형식",
+     "gain": "마음 −: 창의성·자기 의심·열정 등 성찰을 건넴",
+     "world": "현실 +: 비소설, 실제 예술·창작 이야기"
+    },
+    "missing": []
+   },
+   "settled": {
+    "slot": "예술·여행"
+   }
+  },
+  "9791158395483": {
+   "splits": [
+    "keywords",
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "suggest_keywords": [],
+    "keywords": [],
+    "way": "개념"
+   },
+   "settled": {
+    "keywords": null,
+    "way": "개념"
+   }
+  },
+  "9788947549394": {
+   "splits": [
+    "slot",
+    "keywords"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "시간·생산성",
+    "suggest_keywords": [
+     "일하는 법"
+    ],
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념"
+   },
+   "settled": {
+    "slot": null,
+    "keywords": null
+   }
+  },
+  "9791140711970": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "글쓰기",
+    "suggest_keywords": [
+     "일기·편지"
+    ],
+    "keywords": [],
+    "way": "실습"
+   },
+   "settled": {
+    "slot": null
+   }
+  },
+  "9791173324901": {
+   "splits": [
+    "keywords",
+    "way"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "suggest_keywords": [],
+    "keywords": [
+     "에세이·책 쓰기"
+    ],
+    "way": "실습"
+   },
+   "settled": {
+    "keywords": null,
+    "way": "실습"
+   }
+  },
+  "9791192999739": {
+   "splits": [
+    "slot",
+    "keywords"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "",
+    "suggest_keywords": [],
+    "keywords": [],
+    "way": "개념"
+   },
+   "settled": {
+    "slot": null,
+    "keywords": null
+   }
+  },
+  "9791167600936": {
+   "splits": [
+    "slot",
+    "keywords"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "",
+    "suggest_keywords": [],
+    "keywords": [],
+    "way": "실습"
+   },
+   "settled": {
+    "slot": null,
+    "keywords": null
+   }
+  },
+  "9788925556253": {
+   "splits": [
+    "temp"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "끝맺음 +: 3장 해법·제안, 에필로그 '상자의 밖으로'로 열림",
+     "pull": "몰입 −: 손실액·멸종 등 사례·데이터와 저자 경험으로 끌고 감",
+     "gain": "알게 됨 +: 기후위기 사실과 대응 방법을 알려 주는 책",
+     "world": "현실 +: 비소설, 실제 기후위기와 지구가 무대"
+    },
+    "missing": []
+   },
+   "settled": {
+    "temp": 1
+   }
+  },
+  "9788932919584": {
+   "splits": [
+    "slot",
+    "keywords"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "",
+    "suggest_keywords": [],
+    "keywords": [],
+    "way": "개념"
+   },
+   "settled": {
+    "slot": null,
+    "keywords": null
+   }
+  },
+  "9788966264629": {
+   "splits": [
+    "keywords",
+    "way"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "",
+    "suggest_keywords": [],
+    "keywords": [],
+    "way": "실습"
+   },
+   "settled": {
+    "keywords": null,
+    "way": "실습"
+   }
+  },
+  "9791191462470": {
+   "splits": [
+    "slot",
+    "keywords"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "",
+    "suggest_keywords": [],
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념"
+   },
+   "settled": {
+    "slot": null,
+    "keywords": null
+   }
+  },
+  "9791169087520": {
+   "splits": [
+    "world"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "추리·스릴러",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "장면 −: 집단 자살·복수, 악몽 등 아픈 장면",
+     "pull": "몰입 −: 복수와 반전, 사건의 진실을 좇는 전개",
+     "gain": "마음 −: 소설 형식, 인물과 이야기가 남기는 것",
+     "world": "딴 세상 −: 얼굴이 낯설게 보이는 기이한 후유증, 사이비 종교의 괴이"
+    },
+    "missing": []
+   },
+   "settled": {
+    "world": -1
+   }
+  },
+  "9791175772892": {
+   "splits": [
+    "pull"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 선의·친절·유대를 다정하게 복원, 금빛 물결로 번짐",
+     "pull": "문장 +: 가치들을 문장 사이사이에 섬세하게 복원한다는 소개",
+     "gain": "마음 −: 소설 형식, 다정함·그리움을 건네는 이야기",
+     "world": "현실 +: 소도시 골든, 마법 같은 변화는 비유일 뿐 실제 초자연 없음"
+    },
+    "missing": []
+   },
+   "settled": {
+    "pull": 1
+   }
+  },
+  "9791198138729": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": false,
+    "suggest": "한국 소설",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "끝맺음 +: 4부 '우정', 공동체를 만드는 연대로 닫힘",
+     "pull": "몰입 −: 마중이의 좌충우돌 우화 전개가 끌고 감",
+     "gain": "마음 −: 우화로 권리를 느끼고 생각해 보게 함",
+     "world": "딴 세상 −: 민달팽이·곤충이 말하는 우화"
+    },
+    "missing": []
+   },
+   "settled": {
+    "slot": null
+   }
+  },
+  "9788937434488": {
+   "splits": [
+    "slot"
+   ],
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 기억해 달라는 인용, 상실의 시대라는 제명의 약한 신호",
+     "pull": "소설 형식 신호: 몰입·이야기, 문체 직접 칭찬 없음",
+     "gain": "소설 형식 신호: 청춘의 감성을 전하는 마음 쪽",
+     "world": "현실 +: 1980년대 청춘의 실제 세상, 비현실 존재 없음"
+    },
+    "missing": [
+     "temp"
+    ]
+   },
+   "settled": {
+    "slot": "외국 소설"
+   }
+  }
+ }
+}

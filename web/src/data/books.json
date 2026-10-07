@@ -12,8 +12,8 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
-   "pull": 0,
+   "temp": -1,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -27,14 +27,14 @@
   "one_liner": "빵과 똑같은 애벌레로 인생 역전을 꿈꾸면 어떻게 될까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "한국 소설",
+  "genre": "SF·판타지",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": -1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": -1
   },
   "keywords": []
@@ -53,7 +53,7 @@
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 1,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -93,9 +93,9 @@
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 1,
+   "pull": -1,
    "gain": -1,
-   "world": 1
+   "world": null
   },
   "keywords": []
  },
@@ -113,7 +113,7 @@
   "way": null,
   "axes": {
    "temp": 1,
-   "pull": 0,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -134,7 +134,7 @@
   "axes": {
    "temp": -1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -147,15 +147,15 @@
   "one_liner": "사이비 종교의 집단 자살 뒤에 감춰진 진실을 따라가 볼까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "한국 소설",
+  "genre": "추리·스릴러",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
    "temp": -1,
    "pull": -1,
-   "gain": 0,
-   "world": 0
+   "gain": -1,
+   "world": -1
   },
   "keywords": []
  },
@@ -187,7 +187,7 @@
   "one_liner": "잠 못 드는 청년이 꿈 가게에서 찾는 건 무엇일까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "한국 소설",
+  "genre": "SF·판타지",
   "field": null,
   "topic": null,
   "way": null,
@@ -213,7 +213,7 @@
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 0,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -247,14 +247,14 @@
   "one_liner": "감시하는 체제 앞에서 한 개인은 어디까지 저항할 수 있을까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "외국 소설",
+  "genre": "SF·판타지",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
    "temp": -1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": -1
   },
   "keywords": []
@@ -273,7 +273,7 @@
   "way": null,
   "axes": {
    "temp": 1,
-   "pull": -1,
+   "pull": 1,
    "gain": -1,
    "world": 1
   },
@@ -293,7 +293,7 @@
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 0,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -313,8 +313,8 @@
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 0,
-   "gain": 0,
+   "pull": -1,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -327,13 +327,13 @@
   "one_liner": "서로 다른 두 사랑 앞에서 폴의 마음은 어디로 향할까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "외국 소설",
+  "genre": "로맨스",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 0,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -347,7 +347,7 @@
   "one_liner": "해가 지지 않는 밤, 몽상가가 나흘 동안 만난 사랑은 어땠을까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "외국 소설",
+  "genre": "로맨스",
   "field": null,
   "topic": null,
   "way": null,
@@ -372,8 +372,8 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
-   "pull": 0,
+   "temp": 1,
+   "pull": 1,
    "gain": -1,
    "world": 1
   },
@@ -392,8 +392,8 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 1,
-   "pull": 0,
+   "temp": null,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -427,15 +427,15 @@
   "one_liner": "요리 한 접시에 담긴 사랑과 욕망은 어떤 맛일까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "외국 소설",
+  "genre": "로맨스",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
-   "pull": 0,
-   "gain": 0,
-   "world": 0
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
   },
   "keywords": []
  },
@@ -453,9 +453,9 @@
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 0,
-   "gain": 0,
-   "world": 0
+   "pull": -1,
+   "gain": -1,
+   "world": 1
   },
   "keywords": []
  },
@@ -473,7 +473,7 @@
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 0,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -494,7 +494,7 @@
   "axes": {
    "temp": 0,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": -1
   },
   "keywords": []
@@ -514,7 +514,7 @@
   "axes": {
    "temp": 0,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": -1
   },
   "keywords": []
@@ -532,7 +532,7 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": 1,
    "pull": -1,
    "gain": -1,
    "world": -1
@@ -573,7 +573,7 @@
   "way": null,
   "axes": {
    "temp": 0,
-   "pull": 0,
+   "pull": -1,
    "gain": -1,
    "world": -1
   },
@@ -612,9 +612,9 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": -1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": -1
   },
   "keywords": []
@@ -634,7 +634,7 @@
   "axes": {
    "temp": 1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": -1
   },
   "keywords": []
@@ -672,7 +672,7 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 1,
+   "temp": -1,
    "pull": -1,
    "gain": -1,
    "world": -1
@@ -707,12 +707,12 @@
   "one_liner": "하루에 열여섯 번 해가 뜨고 지는 곳에서 지구는 어떻게 보일까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "SF·판타지",
+  "genre": "외국 소설",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
-   "temp": -1,
+   "temp": 1,
    "pull": 1,
    "gain": -1,
    "world": -1
@@ -734,7 +734,7 @@
   "axes": {
    "temp": 1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": -1
   },
   "keywords": []
@@ -767,7 +767,7 @@
   "one_liner": "죽음에 사로잡힌 이야기꾼은 공포를 어떻게 아름답게 바꿨을까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "추리·스릴러",
+  "genre": "호러·괴담",
   "field": null,
   "topic": null,
   "way": null,
@@ -775,7 +775,7 @@
    "temp": -1,
    "pull": -1,
    "gain": -1,
-   "world": 0
+   "world": -1
   },
   "keywords": []
  },
@@ -792,9 +792,9 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": null,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -814,7 +814,7 @@
   "axes": {
    "temp": -1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -832,9 +832,9 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": null,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -852,9 +852,9 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": -1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -874,7 +874,7 @@
   "axes": {
    "temp": -1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -887,7 +887,7 @@
   "one_liner": "사랑과 좀비와 귀신이 뒤섞인 이야기가 궁금하지 않나요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "추리·스릴러",
+  "genre": "호러·괴담",
   "field": null,
   "topic": null,
   "way": null,
@@ -914,7 +914,7 @@
   "axes": {
    "temp": -1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -934,7 +934,7 @@
   "axes": {
    "temp": -1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -954,7 +954,7 @@
   "axes": {
    "temp": 1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -967,15 +967,15 @@
   "one_liner": "자정까지 두 사람에게 들려줘야 하는 저주의 이야기, 버틸 수 있을까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "추리·스릴러",
+  "genre": "호러·괴담",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
    "temp": -1,
    "pull": -1,
-   "gain": 0,
-   "world": 1
+   "gain": -1,
+   "world": -1
   },
   "keywords": []
  },
@@ -994,7 +994,7 @@
   "axes": {
    "temp": -1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -1014,8 +1014,8 @@
   "axes": {
    "temp": -1,
    "pull": -1,
-   "gain": 0,
-   "world": 0
+   "gain": -1,
+   "world": 1
   },
   "keywords": []
  },
@@ -1032,9 +1032,9 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": -1,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": -1
   },
   "keywords": []
@@ -1067,14 +1067,14 @@
   "one_liner": "짜증 나 한마디에 눌러 담은 마음에 알맞은 이름을 붙여 볼까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "에세이",
+  "genre": "인문",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
    "temp": 1,
-   "pull": 0,
-   "gain": 0,
+   "pull": 1,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -1093,7 +1093,7 @@
   "way": null,
   "axes": {
    "temp": 1,
-   "pull": 0,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -1112,7 +1112,7 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": -1,
+   "temp": 1,
    "pull": 1,
    "gain": -1,
    "world": 1
@@ -1147,13 +1147,13 @@
   "one_liner": "부족하다는 말에 지친 날, 나는 무엇에만 마음을 쓸까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "에세이",
+  "genre": "인문",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
    "temp": 0,
-   "pull": 0,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -1172,8 +1172,8 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
-   "pull": 1,
+   "temp": 1,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -1227,15 +1227,15 @@
   "one_liner": "잊혀 가는 고운 우리말 하나가 하루를 선명하게 바꿀까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "에세이",
+  "genre": "인문",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
    "temp": 1,
    "pull": 1,
-   "gain": 0,
-   "world": 0
+   "gain": -1,
+   "world": 1
   },
   "keywords": []
  },
@@ -1287,13 +1287,13 @@
   "one_liner": "가장 용감한 일이 도움을 청하는 것이라면 어떨까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "에세이",
+  "genre": "인문",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
    "temp": 1,
-   "pull": 1,
+   "pull": 0,
    "gain": -1,
    "world": -1
   },
@@ -1327,13 +1327,13 @@
   "one_liner": "돈과 지위에 따라 흔들리는 마음의 뿌리는 어디에 있을까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "에세이",
+  "genre": "인문",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
    "temp": 0,
-   "pull": 0,
+   "pull": -1,
    "gain": 1,
    "world": 1
   },
@@ -1352,7 +1352,7 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": 1,
    "pull": -1,
    "gain": -1,
    "world": 1
@@ -1387,13 +1387,13 @@
   "one_liner": "사랑이 감정이 아니라 배우고 익히는 기술이라면 무엇부터 해야 할까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "에세이",
+  "genre": "인문",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
    "temp": 0,
-   "pull": 0,
+   "pull": -1,
    "gain": 1,
    "world": 1
   },
@@ -1415,7 +1415,7 @@
    "temp": -1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1455,7 +1455,7 @@
    "temp": 1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1495,7 +1495,7 @@
    "temp": 1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1512,8 +1512,8 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": -1,
-   "pull": 1,
+   "temp": 0,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -1552,9 +1552,9 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": 1,
    "pull": 1,
-   "gain": 0,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -1612,9 +1612,9 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": 1,
    "pull": 0,
-   "gain": 1,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -1632,9 +1632,9 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
-   "pull": 0,
-   "gain": 1,
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -1652,8 +1652,8 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": -1,
-   "pull": 0,
+   "temp": 1,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -1713,9 +1713,9 @@
   "way": null,
   "axes": {
    "temp": 0,
-   "pull": 0,
+   "pull": -1,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1733,9 +1733,9 @@
   "way": null,
   "axes": {
    "temp": 0,
-   "pull": 0,
+   "pull": -1,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1753,9 +1753,9 @@
   "way": null,
   "axes": {
    "temp": 0,
-   "pull": 0,
+   "pull": -1,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1772,10 +1772,10 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": 1,
    "pull": -1,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1795,7 +1795,7 @@
    "temp": 0,
    "pull": -1,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1813,9 +1813,9 @@
   "way": null,
   "axes": {
    "temp": 0,
-   "pull": 0,
+   "pull": -1,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1834,7 +1834,7 @@
   "axes": {
    "temp": 0,
    "pull": -1,
-   "gain": 0,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -1853,7 +1853,7 @@
   "way": null,
   "axes": {
    "temp": 0,
-   "pull": 0,
+   "pull": -1,
    "gain": 1,
    "world": 1
   },
@@ -1872,10 +1872,10 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
-   "pull": 0,
+   "temp": 1,
+   "pull": -1,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1892,10 +1892,10 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": 1,
    "pull": -1,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1912,10 +1912,10 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": 1,
    "pull": 1,
    "gain": -1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1935,7 +1935,7 @@
    "temp": 0,
    "pull": -1,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1955,7 +1955,7 @@
    "temp": 1,
    "pull": -1,
    "gain": 1,
-   "world": 0
+   "world": 1
   },
   "keywords": []
  },
@@ -1972,9 +1972,9 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": -1,
    "pull": -1,
-   "gain": 1,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -1994,7 +1994,7 @@
   "axes": {
    "temp": 0,
    "pull": 1,
-   "gain": 0,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -2012,10 +2012,7 @@
   "topic": "데이터 분석",
   "way": "실습",
   "axes": null,
-  "keywords": [
-   "R",
-   "시각화"
-  ]
+  "keywords": []
  },
  {
   "isbn": "9788931480634",
@@ -2030,10 +2027,7 @@
   "topic": "데이터 분석",
   "way": "실습",
   "axes": null,
-  "keywords": [
-   "SQL",
-   "시각화"
-  ]
+  "keywords": []
  },
  {
   "isbn": "9791173400780",
@@ -2049,7 +2043,6 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "시각화",
    "데이터 리터러시"
   ]
  },
@@ -2066,9 +2059,7 @@
   "topic": "데이터 분석",
   "way": "개념",
   "axes": null,
-  "keywords": [
-   "시각화"
-  ]
+  "keywords": []
  },
  {
   "isbn": "9791192469317",
@@ -2084,7 +2075,6 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "SQL",
    "엑셀",
    "데이터 리터러시"
   ]
@@ -2117,10 +2107,9 @@
   "genre": "데이터 분석",
   "field": "데이터·통계",
   "topic": "데이터 분석",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": [
-   "시각화",
    "데이터 리터러시"
   ]
  },
@@ -2155,7 +2144,6 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "파이썬",
    "SQL"
   ]
  },
@@ -2170,10 +2158,10 @@
   "genre": "데이터 분석",
   "field": "데이터·통계",
   "topic": "데이터 분석",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "시각화"
+   "데이터 리터러시"
   ]
  },
  {
@@ -2190,8 +2178,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "엑셀",
-   "시각화"
+   "엑셀"
   ]
  },
  {
@@ -2208,8 +2195,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "파이썬",
-   "시각화"
+   "파이썬"
   ]
  },
  {
@@ -2226,9 +2212,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "SQL",
-   "엑셀",
-   "시각화"
+   "엑셀"
   ]
  },
  {
@@ -2242,7 +2226,7 @@
   "genre": "데이터 분석",
   "field": "데이터·통계",
   "topic": "데이터 분석",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": [
    "데이터 리터러시"
@@ -2262,7 +2246,7 @@
   "way": "개념",
   "axes": null,
   "keywords": [
-   "시각화"
+   "데이터 리터러시"
   ]
  },
  {
@@ -2279,8 +2263,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "파이썬",
-   "SQL"
+   "파이썬"
   ]
  },
  {
@@ -2297,7 +2280,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "시각화"
+   "데이터 리터러시"
   ]
  },
  {
@@ -2314,8 +2297,7 @@
   "way": "개념",
   "axes": null,
   "keywords": [
-   "기초 통계",
-   "가설검정"
+   "기초 통계"
   ]
  },
  {
@@ -2329,12 +2311,11 @@
   "genre": "통계",
   "field": "데이터·통계",
   "topic": "통계",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": [
-   "기초 통계",
    "확률",
-   "통계적 사고"
+   "기초 통계"
   ]
  },
  {
@@ -2345,14 +2326,13 @@
   "one_liner": "파이썬 코드로 회귀와 분류, 그룹화, 차원 축소까지 차근차근 익혀요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "통계",
+  "genre": "데이터 분석",
   "field": "데이터·통계",
-  "topic": "통계",
+  "topic": "데이터 분석",
   "way": "실습",
   "axes": null,
   "keywords": [
-   "회귀분석",
-   "파이썬·R 통계"
+   "파이썬"
   ]
  },
  {
@@ -2370,10 +2350,8 @@
   "axes": null,
   "keywords": [
    "기초 통계",
-   "확률",
-   "베이즈",
-   "회귀분석",
-   "가설검정"
+   "가설검정",
+   "확률"
   ]
  },
  {
@@ -2390,9 +2368,9 @@
   "way": "개념",
   "axes": null,
   "keywords": [
-   "회귀분석",
+   "기초 통계",
    "가설검정",
-   "파이썬·R 통계"
+   "회귀분석"
   ]
  },
  {
@@ -2409,7 +2387,9 @@
   "way": "개념",
   "axes": null,
   "keywords": [
-   "확률"
+   "기초 통계",
+   "확률",
+   "가설검정"
   ]
  },
  {
@@ -2423,10 +2403,11 @@
   "genre": "통계",
   "field": "데이터·통계",
   "topic": "통계",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": [
-   "통계적 사고"
+   "확률",
+   "기초 통계"
   ]
  },
  {
@@ -2443,9 +2424,8 @@
   "way": "개념",
   "axes": null,
   "keywords": [
-   "기초 통계",
    "확률",
-   "베이즈"
+   "기초 통계"
   ]
  },
  {
@@ -2459,10 +2439,11 @@
   "genre": "통계",
   "field": "데이터·통계",
   "topic": "통계",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": [
-   "통계적 사고"
+   "확률",
+   "기초 통계"
   ]
  },
  {
@@ -2494,10 +2475,10 @@
   "genre": "통계",
   "field": "데이터·통계",
   "topic": "통계",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": [
-   "통계적 사고"
+   "기초 통계"
   ]
  },
  {
@@ -2534,10 +2515,8 @@
   "axes": null,
   "keywords": [
    "기초 통계",
-   "확률",
-   "회귀분석",
    "가설검정",
-   "파이썬·R 통계"
+   "회귀분석"
   ]
  },
  {
@@ -2554,8 +2533,7 @@
   "way": "개념",
   "axes": null,
   "keywords": [
-   "확률",
-   "베이즈"
+   "확률"
   ]
  },
  {
@@ -2573,7 +2551,6 @@
   "axes": null,
   "keywords": [
    "기초 통계",
-   "확률",
    "가설검정"
   ]
  },
@@ -2592,9 +2569,8 @@
   "axes": null,
   "keywords": [
    "기초 통계",
-   "확률",
-   "회귀분석",
-   "가설검정"
+   "가설검정",
+   "확률"
   ]
  },
  {
@@ -2630,8 +2606,7 @@
   "keywords": [
    "챗GPT",
    "클로드",
-   "제미나이",
-   "AI 에이전트"
+   "제미나이"
   ]
  },
  {
@@ -2649,9 +2624,7 @@
   "axes": null,
   "keywords": [
    "챗GPT",
-   "클로드",
-   "제미나이",
-   "이미지·영상 생성"
+   "제미나이"
   ]
  },
  {
@@ -2703,10 +2676,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "클로드",
-   "프롬프트 엔지니어링",
-   "바이브 코딩",
-   "AI 에이전트"
+   "바이브 코딩"
   ]
  },
  {
@@ -2724,8 +2694,7 @@
   "axes": null,
   "keywords": [
    "클로드",
-   "프롬프트 엔지니어링",
-   "AI 에이전트"
+   "프롬프트 엔지니어링"
   ]
  },
  {
@@ -2742,9 +2711,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "클로드",
    "바이브 코딩",
-   "AI 에이전트"
+   "클로드"
   ]
  },
  {
@@ -2761,12 +2729,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "챗GPT",
-   "클로드",
-   "제미나이",
-   "바이브 코딩",
-   "AI 에이전트",
-   "이미지·영상 생성"
+   "클로드"
   ]
  },
  {
@@ -2783,9 +2746,9 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "프롬프트 엔지니어링",
    "바이브 코딩",
-   "AI 에이전트"
+   "AI 에이전트",
+   "프롬프트 엔지니어링"
   ]
  },
  {
@@ -2802,7 +2765,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "제미나이"
+   "프롬프트 엔지니어링"
   ]
  },
  {
@@ -2820,7 +2783,6 @@
   "axes": null,
   "keywords": [
    "프롬프트 엔지니어링",
-   "AI 에이전트",
    "LLM 원리"
   ]
  },
@@ -2838,9 +2800,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "챗GPT",
    "클로드",
-   "제미나이",
    "바이브 코딩"
   ]
  },
@@ -2858,9 +2818,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "제미나이",
-   "바이브 코딩",
-   "AI 에이전트"
+   "제미나이"
   ]
  },
  {
@@ -2895,12 +2853,9 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "챗GPT",
-   "제미나이",
    "프롬프트 엔지니어링",
-   "AI 에이전트",
-   "이미지·영상 생성",
-   "LLM 원리"
+   "LLM 원리",
+   "AI 에이전트"
   ]
  },
  {
@@ -2935,8 +2890,6 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "챗GPT",
-   "클로드",
    "프롬프트 엔지니어링"
   ]
  },
@@ -2954,9 +2907,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "엑셀",
-   "파이썬 자동화",
-   "AI 업무 활용"
+   "파이썬 자동화"
   ]
  },
  {
@@ -2967,15 +2918,13 @@
   "one_liner": "엑셀 함수를 외우지 않고 원리로 이해해 AI와 함께 업무에 써요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "업무 자동화",
-  "field": "AI·IT 활용",
-  "topic": "업무 자동화",
-  "way": "개념",
+  "genre": "데이터 분석",
+  "field": "데이터·통계",
+  "topic": "데이터 분석",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "엑셀",
-   "코파일럿·M365",
-   "AI 업무 활용"
+   "엑셀"
   ]
  },
  {
@@ -2986,14 +2935,13 @@
   "one_liner": "엑셀 함수와 동적 배열로 자료 취합·분석·시각화를 빠르게 하는 법을 알려줘요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "업무 자동화",
-  "field": "AI·IT 활용",
-  "topic": "업무 자동화",
+  "genre": "데이터 분석",
+  "field": "데이터·통계",
+  "topic": "데이터 분석",
   "way": "실습",
   "axes": null,
   "keywords": [
-   "엑셀",
-   "코파일럿·M365"
+   "엑셀"
   ]
  },
  {
@@ -3010,7 +2958,6 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "노션",
    "AI 업무 활용"
   ]
  },
@@ -3028,10 +2975,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "엑셀",
-   "파이썬 자동화",
-   "코파일럿·M365",
-   "AI 업무 활용"
+   "파이썬 자동화"
   ]
  },
  {
@@ -3042,15 +2986,15 @@
   "one_liner": "다섯 가지 생성형 AI의 특징을 알고 내 업무에 맞게 골라 쓰는 법을 알려줘요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "업무 자동화",
+  "genre": "AI 활용",
   "field": "AI·IT 활용",
-  "topic": "업무 자동화",
+  "topic": "AI 활용",
   "way": "실습",
   "axes": null,
   "keywords": [
-   "엑셀",
-   "코파일럿·M365",
-   "AI 업무 활용"
+   "챗GPT",
+   "클로드",
+   "제미나이"
   ]
  },
  {
@@ -3067,7 +3011,6 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "구글 워크스페이스",
    "AI 업무 활용"
   ]
  },
@@ -3102,7 +3045,6 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "엑셀",
    "파이썬 자동화"
   ]
  },
@@ -3120,7 +3062,6 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "엑셀",
    "코파일럿·M365"
   ]
  },
@@ -3137,9 +3078,7 @@
   "topic": "업무 자동화",
   "way": "실습",
   "axes": null,
-  "keywords": [
-   "구글 워크스페이스"
-  ]
+  "keywords": []
  },
  {
   "isbn": "9791140713899",
@@ -3155,7 +3094,6 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "엑셀",
    "파이썬 자동화"
   ]
  },
@@ -3167,13 +3105,13 @@
   "one_liner": "분산된 도구를 한곳에 모아 정리하는 사용법을 따라 익혀요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "업무 자동화",
-  "field": "AI·IT 활용",
-  "topic": "업무 자동화",
+  "genre": "시간·생산성",
+  "field": "습관·자기계발",
+  "topic": "시간·생산성",
   "way": "실습",
   "axes": null,
   "keywords": [
-   "노션"
+   "일하는 법"
   ]
  },
  {
@@ -3190,7 +3128,6 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "엑셀",
    "AI 업무 활용"
   ]
  },
@@ -3208,7 +3145,6 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "엑셀",
    "파이썬 자동화"
   ]
  },
@@ -3225,11 +3161,7 @@
   "topic": "업무 자동화",
   "way": "실습",
   "axes": null,
-  "keywords": [
-   "엑셀",
-   "구글 워크스페이스",
-   "AI 업무 활용"
-  ]
+  "keywords": []
  },
  {
   "isbn": "9791140717057",
@@ -3245,8 +3177,6 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "엑셀",
-   "코파일럿·M365",
    "AI 업무 활용"
   ]
  },
@@ -3258,13 +3188,13 @@
   "one_liner": "스트레스와 번아웃을 다스리는 다섯 가지 리셋 방법을 뇌과학으로 알려줘요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "습관·집중",
-  "field": "습관·자기계발",
-  "topic": "습관·집중",
-  "way": "개념",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "뇌과학"
+   "번아웃·스트레스"
   ]
  },
  {
@@ -3280,7 +3210,9 @@
   "topic": "습관·집중",
   "way": "사례",
   "axes": null,
-  "keywords": []
+  "keywords": [
+   "습관"
+  ]
  },
  {
   "isbn": "9791162540640",
@@ -3293,7 +3225,7 @@
   "genre": "습관·집중",
   "field": "습관·자기계발",
   "topic": "습관·집중",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "습관"
@@ -3313,7 +3245,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "습관"
+   "습관",
+   "뇌과학"
   ]
  },
  {
@@ -3343,13 +3276,14 @@
   "one_liner": "식생활, 운동, 수면을 바꾼 저자의 경험으로 무리 없는 건강 루틴을 만들어 봐요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "습관·집중",
+  "genre": "건강·운동",
   "field": "습관·자기계발",
-  "topic": "습관·집중",
-  "way": "사례",
+  "topic": "건강·운동",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "습관"
+   "운동 습관",
+   "잠·회복"
   ]
  },
  {
@@ -3360,13 +3294,15 @@
   "one_liner": "불안과 무기력이 뇌의 자연스러운 반응임을 알고 마음을 다스려요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "습관·집중",
-  "field": "습관·자기계발",
-  "topic": "습관·집중",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
   "way": "개념",
   "axes": null,
   "keywords": [
-   "뇌과학"
+   "불안·걱정",
+   "우울",
+   "번아웃·스트레스"
   ]
  },
  {
@@ -3380,7 +3316,7 @@
   "genre": "습관·집중",
   "field": "습관·자기계발",
   "topic": "습관·집중",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "집중력"
@@ -3397,7 +3333,7 @@
   "genre": "습관·집중",
   "field": "습관·자기계발",
   "topic": "습관·집중",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": [
    "집중력"
@@ -3414,10 +3350,9 @@
   "genre": "습관·집중",
   "field": "습관·자기계발",
   "topic": "습관·집중",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "습관",
    "집중력",
    "뇌과학"
   ]
@@ -3433,7 +3368,7 @@
   "genre": "습관·집중",
   "field": "습관·자기계발",
   "topic": "습관·집중",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "습관"
@@ -3453,7 +3388,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "집중력"
+   "뇌과학"
   ]
  },
  {
@@ -3467,12 +3402,11 @@
   "genre": "습관·집중",
   "field": "습관·자기계발",
   "topic": "습관·집중",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "습관",
-   "집중력",
-   "도파민"
+   "뇌과학",
+   "습관"
   ]
  },
  {
@@ -3489,7 +3423,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "습관"
+   "습관",
+   "뇌과학"
   ]
  },
  {
@@ -3500,13 +3435,13 @@
   "one_liner": "팀과 재택근무, 사무실 환경에서 뇌가 일하는 원리를 쉽게 짚어 줘요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "습관·집중",
+  "genre": "시간·생산성",
   "field": "습관·자기계발",
-  "topic": "습관·집중",
+  "topic": "시간·생산성",
   "way": "개념",
   "axes": null,
   "keywords": [
-   "뇌과학"
+   "일하는 법"
   ]
  },
  {
@@ -3520,11 +3455,11 @@
   "genre": "습관·집중",
   "field": "습관·자기계발",
   "topic": "습관·집중",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": [
-   "도파민",
-   "뇌과학"
+   "뇌과학",
+   "습관"
   ]
  },
  {
@@ -3538,9 +3473,11 @@
   "genre": "시간·생산성",
   "field": "습관·자기계발",
   "topic": "시간·생산성",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
-  "keywords": []
+  "keywords": [
+   "일하는 법"
+  ]
  },
  {
   "isbn": "9791171830909",
@@ -3553,11 +3490,10 @@
   "genre": "시간·생산성",
   "field": "습관·자기계발",
   "topic": "시간·생산성",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "시간 관리",
-   "계획·목표"
+   "일하는 법"
   ]
  },
  {
@@ -3574,7 +3510,6 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "지식 관리",
    "일하는 법"
   ]
  },
@@ -3586,12 +3521,14 @@
   "one_liner": "혼자 보낸 10년의 경험으로 고독이 지적 성장이 되는 이유를 들려줘요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "시간·생산성",
-  "field": "습관·자기계발",
-  "topic": "시간·생산성",
-  "way": "사례",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "실습",
   "axes": null,
-  "keywords": []
+  "keywords": [
+   "자존감"
+  ]
  },
  {
   "isbn": "9791130650678",
@@ -3604,10 +3541,9 @@
   "genre": "시간·생산성",
   "field": "습관·자기계발",
   "topic": "시간·생산성",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "계획·목표",
    "일하는 법"
   ]
  },
@@ -3622,10 +3558,10 @@
   "genre": "시간·생산성",
   "field": "습관·자기계발",
   "topic": "시간·생산성",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "메모·기록"
+   "일하는 법"
   ]
  },
  {
@@ -3639,7 +3575,7 @@
   "genre": "시간·생산성",
   "field": "습관·자기계발",
   "topic": "시간·생산성",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "일하는 법"
@@ -3653,13 +3589,13 @@
   "one_liner": "새벽 4시에 일어나 자격증과 박사학위까지 이룬 경험을 들려줘요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "시간·생산성",
+  "genre": "습관·집중",
   "field": "습관·자기계발",
-  "topic": "시간·생산성",
+  "topic": "습관·집중",
   "way": "사례",
   "axes": null,
   "keywords": [
-   "아침·새벽"
+   "습관"
   ]
  },
  {
@@ -3673,7 +3609,7 @@
   "genre": "시간·생산성",
   "field": "습관·자기계발",
   "topic": "시간·생산성",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "일하는 법"
@@ -3690,11 +3626,10 @@
   "genre": "시간·생산성",
   "field": "습관·자기계발",
   "topic": "시간·생산성",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "시간 관리",
-   "계획·목표"
+   "일하는 법"
   ]
  },
  {
@@ -3711,7 +3646,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "메모·기록"
+   "일하는 법"
   ]
  },
  {
@@ -3722,13 +3657,13 @@
   "one_liner": "짧은 메모부터 일기, 포토로그까지 25가지 기록법을 골라 시작하게 도와줘요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "시간·생산성",
-  "field": "습관·자기계발",
-  "topic": "시간·생산성",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
   "way": "실습",
   "axes": null,
   "keywords": [
-   "메모·기록"
+   "일기·편지"
   ]
  },
  {
@@ -3739,12 +3674,14 @@
   "one_liner": "메일과 보고서, 회의록을 챗GPT 프롬프트로 빠르게 쓰는 법을 보여줘요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "시간·생산성",
-  "field": "습관·자기계발",
-  "topic": "시간·생산성",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
   "way": "실습",
   "axes": null,
-  "keywords": []
+  "keywords": [
+   "업무 글"
+  ]
  },
  {
   "isbn": "9788960543324",
@@ -3757,11 +3694,10 @@
   "genre": "시간·생산성",
   "field": "습관·자기계발",
   "topic": "시간·생산성",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "시간 관리",
-   "계획·목표"
+   "일하는 법"
   ]
  },
  {
@@ -3772,12 +3708,15 @@
   "one_liner": "타고난 재능보다 방법이 중요한 이유를 연구 사례로 보여줘요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "시간·생산성",
+  "genre": "습관·집중",
   "field": "습관·자기계발",
-  "topic": "시간·생산성",
-  "way": "사례",
+  "topic": "습관·집중",
+  "way": "개념",
   "axes": null,
-  "keywords": []
+  "keywords": [
+   "뇌과학",
+   "습관"
+  ]
  },
  {
   "isbn": "9788934903611",
@@ -3790,10 +3729,9 @@
   "genre": "시간·생산성",
   "field": "습관·자기계발",
   "topic": "시간·생산성",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "시간 관리",
    "일하는 법"
   ]
  },
@@ -3811,7 +3749,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "연금·노후"
+   "연금·노후",
+   "ETF·펀드"
   ]
  },
  {
@@ -3825,7 +3764,7 @@
   "genre": "돈 관리·투자",
   "field": "돈·경제",
   "topic": "돈 관리·투자",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "부동산·청약"
@@ -3845,7 +3784,8 @@
   "way": "개념",
   "axes": null,
   "keywords": [
-   "돈의 심리"
+   "돈의 심리",
+   "재테크 기초"
   ]
  },
  {
@@ -3859,7 +3799,7 @@
   "genre": "돈 관리·투자",
   "field": "돈·경제",
   "topic": "돈 관리·투자",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": [
    "돈의 심리"
@@ -3895,7 +3835,9 @@
   "topic": "돈 관리·투자",
   "way": "개념",
   "axes": null,
-  "keywords": []
+  "keywords": [
+   "주식"
+  ]
  },
  {
   "isbn": "9788901294179",
@@ -3908,7 +3850,7 @@
   "genre": "돈 관리·투자",
   "field": "돈·경제",
   "topic": "돈 관리·투자",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "ETF·펀드",
@@ -3926,7 +3868,7 @@
   "genre": "돈 관리·투자",
   "field": "돈·경제",
   "topic": "돈 관리·투자",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": [
    "돈의 심리"
@@ -3997,7 +3939,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "재테크 기초"
+   "재테크 기초",
+   "부동산·청약"
   ]
  },
  {
@@ -4011,10 +3954,12 @@
   "genre": "돈 관리·투자",
   "field": "돈·경제",
   "topic": "돈 관리·투자",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "재테크 기초"
+   "재테크 기초",
+   "주식",
+   "ETF·펀드"
   ]
  },
  {
@@ -4028,10 +3973,12 @@
   "genre": "돈 관리·투자",
   "field": "돈·경제",
   "topic": "돈 관리·투자",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "재테크 기초"
+   "재테크 기초",
+   "주식",
+   "부동산·청약"
   ]
  },
  {
@@ -4065,8 +4012,8 @@
   "way": "개념",
   "axes": null,
   "keywords": [
-   "시사·경제 이슈",
-   "금리·환율"
+   "금리·환율",
+   "시사·경제 이슈"
   ]
  },
  {
@@ -4114,7 +4061,7 @@
   "genre": "경제 상식",
   "field": "돈·경제",
   "topic": "경제 상식",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": [
    "행동경제학"
@@ -4151,7 +4098,8 @@
   "way": "개념",
   "axes": null,
   "keywords": [
-   "금리·환율"
+   "금리·환율",
+   "시사·경제 이슈"
   ]
  },
  {
@@ -4165,7 +4113,7 @@
   "genre": "경제 상식",
   "field": "돈·경제",
   "topic": "경제 상식",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": [
    "행동경제학"
@@ -4216,7 +4164,7 @@
   "genre": "경제 상식",
   "field": "돈·경제",
   "topic": "경제 상식",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": []
  },
@@ -4267,9 +4215,7 @@
   "topic": "경제 상식",
   "way": "개념",
   "axes": null,
-  "keywords": [
-   "시사·경제 이슈"
-  ]
+  "keywords": []
  },
  {
   "isbn": "9791198987631",
@@ -4302,7 +4248,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "자존감"
+   "자존감",
+   "감정 다루기"
   ]
  },
  {
@@ -4353,8 +4300,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "우울",
-   "감정 다루기"
+   "감정 다루기",
+   "우울"
   ]
  },
  {
@@ -4422,7 +4369,8 @@
   "way": "개념",
   "axes": null,
   "keywords": [
-   "감정 다루기"
+   "감정 다루기",
+   "명상·마음챙김"
   ]
  },
  {
@@ -4439,7 +4387,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "감정 다루기"
+   "감정 다루기",
+   "불안·걱정"
   ]
  },
  {
@@ -4453,7 +4402,7 @@
   "genre": "마음 돌보기",
   "field": "마음·관계",
   "topic": "마음 돌보기",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "감정 다루기"
@@ -4470,9 +4419,12 @@
   "genre": "마음 돌보기",
   "field": "마음·관계",
   "topic": "마음 돌보기",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
-  "keywords": []
+  "keywords": [
+   "번아웃·스트레스",
+   "감정 다루기"
+  ]
  },
  {
   "isbn": "9788999731419",
@@ -4487,7 +4439,9 @@
   "topic": "마음 돌보기",
   "way": "실습",
   "axes": null,
-  "keywords": []
+  "keywords": [
+   "감정 다루기"
+  ]
  },
  {
   "isbn": "9791191369564",
@@ -4552,10 +4506,11 @@
   "genre": "대화·관계",
   "field": "마음·관계",
   "topic": "대화·관계",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "호감·사회생활"
+   "호감·사회생활",
+   "설득·협상"
   ]
  },
  {
@@ -4569,7 +4524,7 @@
   "genre": "대화·관계",
   "field": "마음·관계",
   "topic": "대화·관계",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "설득·협상"
@@ -4603,10 +4558,11 @@
   "genre": "대화·관계",
   "field": "마음·관계",
   "topic": "대화·관계",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "말투·대화법"
+   "말투·대화법",
+   "호감·사회생활"
   ]
  },
  {
@@ -4623,6 +4579,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
+   "말투·대화법",
    "호감·사회생활"
   ]
  },
@@ -4637,11 +4594,11 @@
   "genre": "대화·관계",
   "field": "마음·관계",
   "topic": "대화·관계",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "거리 두기",
-   "말투·대화법"
+   "말투·대화법",
+   "거리 두기"
   ]
  },
  {
@@ -4655,10 +4612,11 @@
   "genre": "대화·관계",
   "field": "마음·관계",
   "topic": "대화·관계",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "갈등·무례 대처"
+   "갈등·무례 대처",
+   "거리 두기"
   ]
  },
  {
@@ -4675,7 +4633,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "말투·대화법"
+   "말투·대화법",
+   "발표"
   ]
  },
  {
@@ -4692,8 +4651,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "갈등·무례 대처",
-   "거리 두기"
+   "거리 두기",
+   "갈등·무례 대처"
   ]
  },
  {
@@ -4710,7 +4669,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "말투·대화법"
+   "말투·대화법",
+   "갈등·무례 대처"
   ]
  },
  {
@@ -4727,7 +4687,9 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "말투·대화법"
+   "말투·대화법",
+   "발표",
+   "호감·사회생활"
   ]
  },
  {
@@ -4829,7 +4791,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "자소서·면접"
+   "퍼스널 브랜딩"
   ]
  },
  {
@@ -4846,7 +4808,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "이직·퇴사"
+   "이직·퇴사",
+   "자소서·면접"
   ]
  },
  {
@@ -4894,26 +4857,11 @@
   "genre": "취업·커리어",
   "field": "일·커리어",
   "topic": "취업·커리어",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "직장 생활"
   ]
- },
- {
-  "isbn": "9791167471901",
-  "title": "직업으로서의 PD",
-  "author": "정영택",
-  "pages": 208,
-  "one_liner": "낯가리는 PD가 20년 방송 일을 하며 겪은 현실을 들려줘요",
-  "one_liner_style": "summary",
-  "entry": "target",
-  "genre": "취업·커리어",
-  "field": "일·커리어",
-  "topic": "취업·커리어",
-  "way": "사례",
-  "axes": null,
-  "keywords": []
  },
  {
   "isbn": "9791197867101",
@@ -4961,7 +4909,7 @@
   "genre": "취업·커리어",
   "field": "일·커리어",
   "topic": "취업·커리어",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "직장 생활"
@@ -4981,8 +4929,7 @@
   "way": "사례",
   "axes": null,
   "keywords": [
-   "퍼스널 브랜딩",
-   "이직·퇴사"
+   "퍼스널 브랜딩"
   ]
  },
  {
@@ -5017,7 +4964,9 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "이직·퇴사"
+   "이직·퇴사",
+   "자소서·면접",
+   "커리어 설계"
   ]
  },
  {
@@ -5034,7 +4983,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "이직·퇴사"
+   "이직·퇴사",
+   "자소서·면접"
   ]
  },
  {
@@ -5065,9 +5015,11 @@
   "genre": "글쓰기",
   "field": "일·커리어",
   "topic": "글쓰기",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
-  "keywords": []
+  "keywords": [
+   "문해력·어휘"
+  ]
  },
  {
   "isbn": "9791185152431",
@@ -5080,7 +5032,7 @@
   "genre": "글쓰기",
   "field": "일·커리어",
   "topic": "글쓰기",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "문해력·어휘"
@@ -5099,7 +5051,9 @@
   "topic": "글쓰기",
   "way": "실습",
   "axes": null,
-  "keywords": []
+  "keywords": [
+   "에세이·책 쓰기"
+  ]
  },
  {
   "isbn": "9791139724363",
@@ -5178,9 +5132,11 @@
   "genre": "글쓰기",
   "field": "일·커리어",
   "topic": "글쓰기",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
-  "keywords": []
+  "keywords": [
+   "에세이·책 쓰기"
+  ]
  },
  {
   "isbn": "9791199491731",
@@ -5210,7 +5166,7 @@
   "genre": "글쓰기",
   "field": "일·커리어",
   "topic": "글쓰기",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "업무 글"
@@ -5276,9 +5232,12 @@
   "genre": "글쓰기",
   "field": "일·커리어",
   "topic": "글쓰기",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
-  "keywords": []
+  "keywords": [
+   "에세이·책 쓰기",
+   "업무 글"
+  ]
  },
  {
   "isbn": "9791194353706",
@@ -5413,7 +5372,7 @@
   "genre": "돈 관리·투자",
   "field": "돈·경제",
   "topic": "돈 관리·투자",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "부동산·청약"
@@ -5450,7 +5409,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "연금·노후"
+   "연금·노후",
+   "ETF·펀드"
   ]
  },
  {
@@ -5485,7 +5445,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "연금·노후"
+   "연금·노후",
+   "ETF·펀드"
   ]
  },
  {
@@ -5599,13 +5560,14 @@
   "one_liner": "작은 브랜드가 소비자 심리를 활용해 성장한 전략을 사례로 배워요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "경제 상식",
-  "field": "돈·경제",
-  "topic": "경제 상식",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
   "way": "사례",
   "axes": null,
   "keywords": [
-   "행동경제학"
+   "브랜딩",
+   "고객 이해"
   ]
  },
  {
@@ -5670,7 +5632,7 @@
   "genre": "경제 상식",
   "field": "돈·경제",
   "topic": "경제 상식",
-  "way": "사례",
+  "way": "개념",
   "axes": null,
   "keywords": [
    "트렌드"
@@ -5722,7 +5684,7 @@
   "genre": "마음 돌보기",
   "field": "마음·관계",
   "topic": "마음 돌보기",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "불안·걱정"
@@ -5756,7 +5718,7 @@
   "genre": "마음 돌보기",
   "field": "마음·관계",
   "topic": "마음 돌보기",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "불안·걱정"
@@ -5770,13 +5732,13 @@
   "one_liner": "미덕의 언어와 5대 전략으로 아이의 자존감을 키우는 교실·가정 수업법을 익혀요.",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "마음 돌보기",
+  "genre": "대화·관계",
   "field": "마음·관계",
-  "topic": "마음 돌보기",
+  "topic": "대화·관계",
   "way": "실습",
   "axes": null,
   "keywords": [
-   "자존감"
+   "말투·대화법"
   ]
  },
  {
@@ -5822,13 +5784,13 @@
   "one_liner": "무기력하고 지칠 때 이불을 걷고 몸을 움직이게 하는 작은 방법을 얻어요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "마음 돌보기",
-  "field": "마음·관계",
-  "topic": "마음 돌보기",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
   "way": "실습",
   "axes": null,
   "keywords": [
-   "번아웃·스트레스"
+   "운동 습관"
   ]
  },
  {
@@ -5845,24 +5807,8 @@
   "way": "사례",
   "axes": null,
   "keywords": [
-   "우울"
-  ]
- },
- {
-  "isbn": "9788937417573",
-  "title": "한낮의 우울",
-  "author": "앤드류 솔로몬",
-  "pages": 1028,
-  "one_liner": "우울이 무엇이고 왜 생기는지 심리·역사·치료까지 넓게 이해하게 돼요.",
-  "one_liner_style": "summary",
-  "entry": "target",
-  "genre": "마음 돌보기",
-  "field": "마음·관계",
-  "topic": "마음 돌보기",
-  "way": "개념",
-  "axes": null,
-  "keywords": [
-   "우울"
+   "우울",
+   "감정 다루기"
   ]
  },
  {
@@ -5911,11 +5857,10 @@
   "genre": "마음 돌보기",
   "field": "마음·관계",
   "topic": "마음 돌보기",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
-   "명상·마음챙김",
-   "번아웃·스트레스"
+   "명상·마음챙김"
   ]
  },
  {
@@ -5926,13 +5871,13 @@
   "one_liner": "업무 보고를 5단계로 짜서 1분 안에 핵심을 전하는 법을 익혀요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "대화·관계",
-  "field": "마음·관계",
-  "topic": "대화·관계",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
   "way": "실습",
   "axes": null,
   "keywords": [
-   "발표"
+   "업무 글"
   ]
  },
  {
@@ -6084,7 +6029,7 @@
   "genre": "취업·커리어",
   "field": "일·커리어",
   "topic": "취업·커리어",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "커리어 설계",
@@ -6120,7 +6065,7 @@
   "genre": "취업·커리어",
   "field": "일·커리어",
   "topic": "취업·커리어",
-  "way": "개념",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "커리어 설계"
@@ -6151,13 +6096,13 @@
   "one_liner": "전자책을 써서 출간하고 홍보하는 단계를 차근차근 따라 해 볼 수 있어요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "취업·커리어",
+  "genre": "글쓰기",
   "field": "일·커리어",
-  "topic": "취업·커리어",
+  "topic": "글쓰기",
   "way": "실습",
   "axes": null,
   "keywords": [
-   "퍼스널 브랜딩"
+   "에세이·책 쓰기"
   ]
  },
  {
@@ -6205,7 +6150,7 @@
   "genre": "글쓰기",
   "field": "일·커리어",
   "topic": "글쓰기",
-  "way": "사례",
+  "way": "실습",
   "axes": null,
   "keywords": [
    "에세이·책 쓰기"
@@ -6327,7 +6272,8 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "엑셀"
+   "엑셀",
+   "데이터 리터러시"
   ]
  },
  {
@@ -6413,8 +6359,8 @@
   "way": "개념",
   "axes": null,
   "keywords": [
-   "확률",
-   "기초 통계"
+   "기초 통계",
+   "확률"
   ]
  },
  {
@@ -6448,8 +6394,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "바이브 코딩",
-   "클로드"
+   "바이브 코딩"
   ]
  },
  {
@@ -6477,17 +6422,13 @@
   "one_liner": "수업 준비와 행정 업무에 AI를 단계별로 적용해 시간을 아껴요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "AI 활용",
+  "genre": "업무 자동화",
   "field": "AI·IT 활용",
-  "topic": "AI 활용",
+  "topic": "업무 자동화",
   "way": "실습",
   "axes": null,
   "keywords": [
-   "프롬프트 엔지니어링",
-   "챗GPT",
-   "클로드",
-   "제미나이",
-   "바이브 코딩"
+   "AI 업무 활용"
   ]
  },
  {
@@ -6591,8 +6532,7 @@
   "way": "개념",
   "axes": null,
   "keywords": [
-   "기초 통계",
-   "가설검정"
+   "기초 통계"
   ]
  },
  {
@@ -6626,8 +6566,7 @@
   "way": "실습",
   "axes": null,
   "keywords": [
-   "챗GPT",
-   "이미지·영상 생성"
+   "챗GPT"
   ]
  },
  {
@@ -6672,32 +6611,14 @@
   "one_liner": "뇌가 운동을 피하는 원리를 알고 달리기를 꾸준히 이어 가는 방법을 익혀요.",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "습관·집중",
+  "genre": "건강·운동",
   "field": "습관·자기계발",
-  "topic": "습관·집중",
+  "topic": "건강·운동",
   "way": "실습",
   "axes": null,
   "keywords": [
-   "습관",
-   "뇌과학"
-  ]
- },
- {
-  "isbn": "9791141189778",
-  "title": "도파민 과잉 시대, 당신의 뇌가 무너진다",
-  "author": "리처드 사이토윅",
-  "pages": 500,
-  "one_liner": "스마트폰에 흩어지는 주의력이 왜 무너지는지 뇌의 작동 방식으로 이해해요",
-  "one_liner_style": "summary",
-  "entry": "target",
-  "genre": "습관·집중",
-  "field": "습관·자기계발",
-  "topic": "습관·집중",
-  "way": "개념",
-  "axes": null,
-  "keywords": [
-   "집중력",
-   "뇌과학"
+   "운동 습관",
+   "달리기·근력"
   ]
  },
  {
@@ -6801,6 +6722,1621 @@
   ]
  },
  {
+  "isbn": "9788931558210",
+  "title": "뇌",
+  "author": "모기 겐이치로",
+  "pages": 128,
+  "one_liner": "뇌는 어떻게 창의성을 만들고 AI와 다를까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193401200",
+  "title": "역사의 쓸모",
+  "author": "최태성",
+  "pages": 304,
+  "one_liner": "신라 삼국통일과 독립운동가의 선택에서 내 삶의 힘을 찾아볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193401675",
+  "title": "최소한의 세계사",
+  "author": "이다지",
+  "pages": 472,
+  "one_liner": "서양과 동양의 흐름을 한 번에 꿰어 세계사의 큰 줄기를 잡아볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788934942467",
+  "title": "총 균 쇠",
+  "author": "재레드 다이아몬드",
+  "pages": 784,
+  "one_liner": "대륙마다 문명의 출발선이 달라진 까닭을 지리와 생물로 풀어 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791191438406",
+  "title": "거꾸로 읽는 세계사",
+  "author": "유시민",
+  "pages": 404,
+  "one_liner": "드레퓌스 사건에서 소련 해체까지, 20세기를 뒤흔든 장면이 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198243430",
+  "title": "최소한의 한국사",
+  "author": "최태성",
+  "pages": 352,
+  "one_liner": "고조선부터 현대까지 흐름을 시대별로 훑으며 한국사의 뼈대를 잡아 봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194330424",
+  "title": "넥서스",
+  "author": "유발 하라리",
+  "pages": 684,
+  "one_liner": "정보 네트워크의 역사를 따라가면 AI 시대의 민주주의가 보일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193128428",
+  "title": "요즘 어른을 위한 최소한의 세계사",
+  "author": "임소미",
+  "pages": 348,
+  "one_liner": "러시아는 왜 전쟁을 벌이고 미국은 어떻게 강대국이 됐는지 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791159098161",
+  "title": "벌거벗은 세계사 : 전쟁편",
+  "author": "tvN 제작팀",
+  "pages": 400,
+  "one_liner": "백년전쟁부터 우크라이나 전쟁까지 굵직한 전쟁의 배경과 흐름을 이야기로 따라가요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194627296",
+  "title": "이 일에는 이름이 없다",
+  "author": "김희경",
+  "pages": 256,
+  "one_liner": "돌봄 곁에서 늘 해 온 계획과 결정의 부담을 사회 문제로 보게 될까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194085751",
+  "title": "재활용의 거짓말",
+  "author": "문관식",
+  "pages": 208,
+  "one_liner": "분리배출한 쓰레기가 왜 대부분 소각되는지, 통계 뒤 구조를 짚어 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788968335327",
+  "title": "착한 소비는 없다",
+  "author": "최원형",
+  "pages": 288,
+  "one_liner": "내 소비가 기후와 노동, 생물에 닿는 길을 일상 사례로 짚어 봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788901242644",
+  "title": "보이지 않는 여자들",
+  "author": "캐럴라인 크리아도 페레스",
+  "pages": 464,
+  "one_liner": "남자를 표준으로 설계된 일상과 일터, 의료 속 성별 격차를 자료로 짚어 봐요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791187064664",
+  "title": "흰머리 휘날리며, 예순 이후 페미니즘",
+  "author": "김영옥",
+  "pages": 316,
+  "one_liner": "노년의 몸과 욕망, 돌봄과 죽음을 페미니즘으로 보면 무엇이 달라질까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788925556253",
+  "title": "두 번째 지구는 없다",
+  "author": "타일러 라쉬",
+  "pages": 208,
+  "one_liner": "수도를 틀 때 그 물이 어디서 왔는지 생각해 본 적 있나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198138729",
+  "title": "이상이 일상이 되도록 상상하라",
+  "author": "유범상",
+  "pages": 304,
+  "one_liner": "민달팽이 이야기로 자유권과 사회권 같은 인권을 쉽게 짚어 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791189143466",
+  "title": "퍼센트 %",
+  "author": "안지현",
+  "pages": 286,
+  "one_liner": "숫자로 재난, 주거, 교육, 노동 같은 한국 사회의 오늘을 볼 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791199244351",
+  "title": "이성애의 비극",
+  "author": "제인 워드",
+  "pages": 370,
+  "one_liner": "연애가 힘든 이유를 개인 탓 말고 사회에서 찾아볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198239020",
+  "title": "호러만찬회",
+  "author": "신진오, 전건우",
+  "pages": 388,
+  "one_liner": "한국 사회의 세대별 공포를 여덟 가지 맛으로 맛볼 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791171259939",
+  "title": "인수세공",
+  "author": "고바야시 야스미",
+  "pages": 244,
+  "one_liner": "섬뜩한 묘사와 반전이 이어지는 핏빛 이야기에 빠져들고 싶나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788967998387",
+  "title": "박해로 오컬트 포크 호러",
+  "author": "박해로",
+  "pages": 248,
+  "one_liner": "민속신앙에서 비롯된 기이한 공포가 가상 도시 섭주에서 이어지는 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788932925868",
+  "title": "프랑켄슈타인",
+  "author": "메리 W. 셸리",
+  "pages": 320,
+  "one_liner": "생명을 만든 과학자와 버려진 피조물의 분노가 어디로 번지는지 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "SF·판타지",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791169108423",
+  "title": "러닝머신 위의 변호사",
+  "author": "류동훈",
+  "pages": 376,
+  "one_liner": "좀비 바이러스가 퍼진 법정에서 무슨 일이 벌어질까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791175773370",
+  "title": "신 퇴마록 신세편 1",
+  "author": "이우혁",
+  "pages": 292,
+  "one_liner": "퇴마사들이 다시 모여 어둠의 존재와 맞서는 오컬트 전개가 궁금해지나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791158791971",
+  "title": "우중괴담",
+  "author": "미쓰다 신조",
+  "pages": 416,
+  "one_liner": "비 오는 밤 낯선 이들이 들려주는 기이한 체험담, 어떤 괴이가 숨어 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791173573910",
+  "title": "돌비공포라디오 더 레드",
+  "author": "돌비",
+  "pages": 340,
+  "one_liner": "무속과 사이비, 이웃의 얼굴을 한 공포를 사연으로 만나 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791192738826",
+  "title": "괴담 소설이라는 이름의 소설 괴담",
+  "author": "사와무라 이치",
+  "pages": 324,
+  "one_liner": "유령 저택부터 슬래셔까지, 다양한 공포를 한 권에서 만나 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "호러·괴담",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193358245",
+  "title": "말하고 싶은 비밀",
+  "author": "사쿠라 이이요",
+  "pages": 328,
+  "one_liner": "잘못 날아온 고백 때문에 시작된 거짓말, 마음은 어디로 향할까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791191043297",
+  "title": "오늘 밤, 세계에서 이 사랑이 사라진다 해도",
+  "author": "이치조 미사키",
+  "pages": 376,
+  "one_liner": "기억이 매일 리셋되는 소녀와 고등학생의 애틋한 사랑은 어떻게 흘러갈까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193358177",
+  "title": "위시",
+  "author": "니컬러스 스파크스",
+  "pages": 488,
+  "one_liner": "겨울 해변 마을의 첫사랑을 따라가며 마음이 촉촉해지는 이야기일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193358825",
+  "title": "노트북",
+  "author": "니컬러스 스파크스",
+  "pages": 240,
+  "one_liner": "오랜 세월 이어진 두 사람의 사랑이 어떻게 다시 닿는지 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788956608846",
+  "title": "낭만적 연애와 그 후의 일상",
+  "author": "알랭 드 보통",
+  "pages": 300,
+  "one_liner": "사랑이 이루어진 뒤 결혼 생활 속 갈등을 어떻게 이어 갈 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791155815656",
+  "title": "마케팅 설계자",
+  "author": "러셀 브런슨",
+  "pages": 472,
+  "one_liner": "광고 문구부터 구매 버튼까지 판매 과정을 하나의 시스템으로 짜는 법을 알려 줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "고객 이해"
+  ]
+ },
+ {
+  "isbn": "9791176881364",
+  "title": "판매의 법칙",
+  "author": "김주환",
+  "pages": 324,
+  "one_liner": "거절을 넘어 성과를 만드는 실전 세일즈 심리 전략",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "고객 이해"
+  ]
+ },
+ {
+  "isbn": "9788965707820",
+  "title": "마케팅이다",
+  "author": "세스 고딘",
+  "pages": 368,
+  "one_liner": "스팸 같은 광고 대신 최소한의 열광할 고객을 찾아 신뢰를 쌓는 마케팅 관점을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "고객 이해",
+   "브랜딩"
+  ]
+ },
+ {
+  "isbn": "9788925575438",
+  "title": "컨셉 수업",
+  "author": "호소다 다카히로",
+  "pages": 384,
+  "one_liner": "고객 인사이트와 비전에서 컨셉을 끌어내 한 문장으로 쓰는 단계를 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "브랜딩",
+   "고객 이해"
+  ]
+ },
+ {
+  "isbn": "9791144200265",
+  "title": "AI가 선택하는 브랜드는 어떻게 만들어지는가",
+  "author": "최인찬",
+  "pages": 304,
+  "one_liner": "AI가 브랜드를 읽고 추천하는 방식을 알고 선택받는 브랜드 전략을 세워요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "브랜딩"
+  ]
+ },
+ {
+  "isbn": "9791194793090",
+  "title": "CX 매니저를 위한 고객 경험 관리 바이블",
+  "author": "팀 나이트 외",
+  "pages": 392,
+  "one_liner": "고객 여정을 살피고 직원 경험까지 이어 90일 안에 고객 경험을 다듬는 틀을 얻어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "고객 이해"
+  ]
+ },
+ {
+  "isbn": "9791157688715",
+  "title": "무조건 팔리는 심리 마케팅 기술 100",
+  "author": "사카이 도시오",
+  "pages": 280,
+  "one_liner": "손해 강조, 선택지 3개 같은 설득 심리 기술로 고객의 지갑을 여는 법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "고객 이해"
+  ]
+ },
+ {
+  "isbn": "9791122040203",
+  "title": "고객은 검색창을 떠났다",
+  "author": "김유진",
+  "pages": 316,
+  "one_liner": "AI가 고객에게 우리 가게를 추천하도록 데이터를 심는 마케팅 방법을 알려줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "고객 이해",
+   "콘텐츠 마케팅"
+  ]
+ },
+ {
+  "isbn": "9788986022919",
+  "title": "마케팅 불변의 법칙",
+  "author": "알 리스 외",
+  "pages": 224,
+  "one_liner": "소비자 머릿속 인식을 중심으로 시장에서 기억되는 전략의 원리를 이해해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "브랜딩"
+  ]
+ },
+ {
+  "isbn": "9791130625867",
+  "title": "두려움 없는 조직",
+  "author": "에이미 에드먼슨",
+  "pages": 288,
+  "one_liner": "구성원이 거리낌 없이 의견을 내는 팀을 만드는 이유와 단계를 알려줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "조직 문화"
+  ]
+ },
+ {
+  "isbn": "9791191662177",
+  "title": "홍대리, 원온원 미팅을 시작하다",
+  "author": "손창훈, 유하림",
+  "pages": 250,
+  "one_liner": "일대일 면담으로 팀원과 소통하고 성장을 돕는 방법을 배워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "취업·커리어",
+  "field": "일·커리어",
+  "topic": "취업·커리어",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "직장 생활"
+  ]
+ },
+ {
+  "isbn": "9788965966463",
+  "title": "좋은 리더를 넘어 위대한 리더로",
+  "author": "짐 콜린스 외",
+  "pages": 520,
+  "one_liner": "위대한 리더의 조건과 비전, 용인술, 혁신 조직 만드는 법을 이해해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기"
+  ]
+ },
+ {
+  "isbn": "9791172541385",
+  "title": "리더의 질문법",
+  "author": "에드거 샤인 외",
+  "pages": 268,
+  "one_liner": "답을 주는 대신 묻는 태도로 신뢰 관계를 쌓는 리더의 대화 기술을 배워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "피드백·코칭",
+   "조직 문화"
+  ]
+ },
+ {
+  "isbn": "9788935212828",
+  "title": "실리콘밸리의 팀장들",
+  "author": "킴 스콧",
+  "pages": 408,
+  "one_liner": "솔직한 피드백과 신뢰로 팀원과 관계를 쌓고 성장시키는 방법을 알게 돼요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "피드백·코칭",
+   "팀 이끌기"
+  ]
+ },
+ {
+  "isbn": "9791162544914",
+  "title": "리더의 일은 맡기는 것이 전부다",
+  "author": "이바 마사야스",
+  "pages": 212,
+  "one_liner": "일을 누구에게 어디까지 맡길지 단계별 원칙과 상황별 방법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "피드백·코칭"
+  ]
+ },
+ {
+  "isbn": "9788927810872",
+  "title": "처음 리더가 된 당신에게",
+  "author": "박태현",
+  "pages": 300,
+  "one_liner": "첫 팀장이 팀 운영부터 성과 관리, 원온원까지 바로 써먹을 해결책을 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "피드백·코칭"
+  ]
+ },
+ {
+  "isbn": "9791168120112",
+  "title": "팀워크의 부활",
+  "author": "패트릭 렌시오니",
+  "pages": 292,
+  "one_liner": "뛰어난 사람들이 모여도 삐걱대는 팀이 어디서 막히는지 짚고 풀어 가는 법을 알려 줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "사례",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "조직 문화"
+  ]
+ },
+ {
+  "isbn": "9791124629086",
+  "title": "탁월한 리더, 성장하는 조직",
+  "author": "백종화",
+  "pages": 324,
+  "one_liner": "팀원의 잠재력을 끌어내는 상황별 대화법과 성장시키는 리더의 태도를 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "피드백·코칭"
+  ]
+ },
+ {
+  "isbn": "9791196834005",
+  "title": "백년운동",
+  "author": "정선근",
+  "pages": 484,
+  "one_liner": "척추와 관절을 지키며 유산소와 근력운동을 안전하게 하는 방법을 알려 줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "달리기·근력",
+   "운동 습관"
+  ]
+ },
+ {
+  "isbn": "9788932919584",
+  "title": "우리는 왜 잠을 자야 할까",
+  "author": "매슈 워커",
+  "pages": 512,
+  "one_liner": "수면이 몸과 마음에 하는 일을 과학으로 풀어 잠을 지키고 싶어져요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "잠·회복"
+  ]
+ },
+ {
+  "isbn": "9788927813330",
+  "title": "세상에서 가장 알기 쉬운 근육연결도감 : 셀프케어편",
+  "author": "키마타 료",
+  "pages": 160,
+  "one_liner": "몸의 근막 연결을 따라 굳은 곳을 스스로 풀어 주는 케어 방법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": []
+ },
+ {
+  "isbn": "9791160322699",
+  "title": "김명섭의 아나토미 헬스 교실",
+  "author": "김명섭",
+  "pages": 196,
+  "one_liner": "근육 구조 그림을 보며 부위별 웨이트 동작과 주차별 프로그램을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "달리기·근력"
+  ]
+ },
+ {
+  "isbn": "9791158464639",
+  "title": "내 몸 오래 쓰는 백년 스트레칭",
+  "author": "김범수",
+  "pages": 252,
+  "one_liner": "목부터 발까지 하루 10분 스트레칭으로 통증을 미리 막는 법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "운동 습관"
+  ]
+ },
+ {
+  "isbn": "9788978496926",
+  "title": "New 뉴 근육운동가이드",
+  "author": "프레데릭 데라비에",
+  "pages": 318,
+  "one_liner": "부위별 근육 운동법을 해부도로 보며 내 목적에 맞는 운동을 짜요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "달리기·근력"
+  ]
+ },
+ {
+  "isbn": "9791198675606",
+  "title": "인요가의 언어",
+  "author": "가브리엘 해리스",
+  "pages": 232,
+  "one_liner": "인요가로 몸과 마음을 돌아보는 수련 안내서",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": []
+ },
+ {
+  "isbn": "9788956994550",
+  "title": "헬스의 정석 : 근력운동편",
+  "author": "수피",
+  "pages": 492,
+  "one_liner": "근육이 커지는 원리부터 부위별 동작, 내 몸에 맞는 운동 프로그램 짜기까지 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "달리기·근력"
+  ]
+ },
+ {
+  "isbn": "9791197987694",
+  "title": "요가 아나토미",
+  "author": "레슬리 카미노프 외",
+  "pages": 449,
+  "one_liner": "요가 자세마다 어떤 근육과 관절이 움직이는지 해부 그림으로 이해해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "개념",
+  "axes": null,
+  "keywords": []
+ },
+ {
+  "isbn": "9788954449014",
+  "title": "요가 하는데 왜 아프죠?",
+  "author": "이재은",
+  "pages": 220,
+  "one_liner": "어깨·엉덩관절·척추의 구조와 근육을 알면 다치지 않고 요가 하는 길이 보여요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "개념",
+  "axes": null,
+  "keywords": []
+ },
+ {
+  "isbn": "9791194087700",
+  "title": "류수영의 평생 레시피",
+  "author": "류수영",
+  "pages": 272,
+  "one_liner": "쉬운 집밥 79가지를 계량과 단계로 따라 하며 밥상을 차려요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791175911345",
+  "title": "박준면의 낯가리는 레시피",
+  "author": "박준면",
+  "pages": 448,
+  "one_liner": "계량 걱정 없이 따라 하는 집밥 반찬 60가지를 상황별로 골라 바로 만들어 봐요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791185473437",
+  "title": "진짜 기본 요리책",
+  "author": "요리잡지 수퍼레시피",
+  "pages": 356,
+  "one_liner": "나물·국물요리부터 손질·보관 요령까지 처음 요리하는 사람도 따라 해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791192366395",
+  "title": "진짜 기본 청소책",
+  "author": "두룸 정두미",
+  "pages": 232,
+  "one_liner": "청소 루틴과 구역별 청소 레시피로 집안 곳곳을 쉽게 관리해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "살림 기술"
+  ]
+ },
+ {
+  "isbn": "9791198553386",
+  "title": "내 몸을 바꾸는 집밥테라피",
+  "author": "박용우, 김영아",
+  "pages": 272,
+  "one_liner": "가공식품을 줄이고 집에서 건강하게 차리는 식사 원칙과 간단한 레시피를 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791155362501",
+  "title": "미니멀라이프 수납법",
+  "author": "주부의 벗",
+  "pages": 144,
+  "one_liner": "주방부터 현관까지 공간별로 따라 할 수납 요령을 엿보고 내 집에 적용해 봐요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "정리·미니멀"
+  ]
+ },
+ {
+  "isbn": "9791194140108",
+  "title": "살림의 책 The Book of Living",
+  "author": "이지영 외",
+  "pages": 600,
+  "one_liner": "요일별 루틴과 도구 고르는 기준으로 나에게 편한 살림법을 찾아요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "살림 기술",
+   "정리·미니멀"
+  ]
+ },
+ {
+  "isbn": "9788969525390",
+  "title": "김대석 셰프의 집밥 레시피 1",
+  "author": "김대석",
+  "pages": 203,
+  "one_liner": "밑반찬부터 국, 김치, 명절 음식까지 한식 상차림을 영상 보며 따라 해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791193282793",
+  "title": "걍레오 그냥 레오의 오늘 요리",
+  "author": "강레오",
+  "pages": 320,
+  "one_liner": "83가지 일상 레시피를 반복하며 요리 기본기와 식재료 보는 눈을 키워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9788953150812",
+  "title": "C.S. 루이스의 글쓰기에 관하여",
+  "author": "C.S. 루이스",
+  "pages": 236,
+  "one_liner": "소설·시·설득하는 글까지 루이스가 남긴 글쓰기 조언과 철학을 모아 만나요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "개념",
+  "axes": null,
+  "keywords": []
+ },
+ {
+  "isbn": "9791167700452",
+  "title": "편지 쓰는 법",
+  "author": "문주희",
+  "pages": 162,
+  "one_liner": "첫 줄부터 마무리, 봉투와 우표까지 손편지를 직접 써 보는 길잡이예요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "일기·편지"
+  ]
+ },
+ {
+  "isbn": "9788965180449",
+  "title": "일기, 독서록, 체험학습보고서 쓰기",
+  "author": "김수정",
+  "pages": 307,
+  "one_liner": "아이와 함께 일기와 독서록, 체험 보고서를 단계별로 써 보는 방법을 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "일기·편지"
+  ]
+ },
+ {
+  "isbn": "9791167700209",
+  "title": "일기 쓰는 법",
+  "author": "조경국",
+  "pages": 184,
+  "one_liner": "일기를 매일 이어 쓰는 마음가짐과 구성, 도구까지 차근차근 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "일기·편지"
+  ]
+ },
+ {
+  "isbn": "9791140713059",
+  "title": "내 일을 위한 기록",
+  "author": "제갈명",
+  "pages": 280,
+  "one_liner": "하루 10분 기록을 쌓아 내 일과 콘텐츠로 키우는 방법을 알려줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "습관"
+  ]
+ },
+ {
+  "isbn": "9788932043272",
+  "title": "사랑과 멸종을 바꿔 읽어보십시오",
+  "author": "유선혜",
+  "pages": 170,
+  "one_liner": "사랑의 끝을 멸종의 말로 더듬어 보면 어떤 풍경이 보일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194591375",
+  "title": "초판본 사슴",
+  "author": "백석",
+  "pages": 192,
+  "one_liner": "토속 시어로 그려 낸 옛 고향 풍경을 천천히 음미해 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791157956357",
+  "title": "윤동주 전 시집 하늘과 바람과 별과 시",
+  "author": "윤동주",
+  "pages": 256,
+  "one_liner": "별과 바람 사이에서 부끄러움을 되새기던 시인의 목소리를 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791199983861",
+  "title": "그곳에 음악이 서성였다, 시처럼",
+  "author": "김명옥 외",
+  "pages": 254,
+  "one_liner": "계절마다 다른 시인의 시를 음악처럼 들으며 마음을 쉬게 해 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788970638331",
+  "title": "지금 알고 있는 걸 그때도 알았더라면",
+  "author": "류시화",
+  "pages": 136,
+  "one_liner": "살아온 날을 돌아보며 지금의 나를 다독이고 싶은 날, 어떤 시가 마음에 남을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788954693370",
+  "title": "이걸 내 마음이라고 하자",
+  "author": "황인찬",
+  "pages": 144,
+  "one_liner": "근거 없이 이어지는 사랑과 삶을 낯선 감각의 시로 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194591368",
+  "title": "초판본 이상 선집",
+  "author": "이상",
+  "pages": 184,
+  "one_liner": "실험적인 시어와 낯선 문법으로 쓴 이상의 시와 소설을 한자리에서 만나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788925568355",
+  "title": "가슴속엔 조그만 사랑이 반짝이누나",
+  "author": "나태주",
+  "pages": 348,
+  "one_liner": "사랑의 순간마다 어울리는 시를 한 편씩 옮겨 쓰며 마음을 데워 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788936421564",
+  "title": "모든 경계에는 꽃이 핀다",
+  "author": "함민복",
+  "pages": 128,
+  "one_liner": "어머니와 아버지, 가난한 일상을 따사롭고 쓸쓸한 말로 읽는 시집인가요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791189074883",
+  "title": "모두를 위한 한국미술사",
+  "author": "유홍준",
+  "pages": 664,
+  "one_liner": "구석기부터 근대까지 우리 미술의 흐름을 도판으로 따라가 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791155818541",
+  "title": "미술관 여행자를 위한 도슨트 북",
+  "author": "카미유 주노",
+  "pages": 344,
+  "one_liner": "거장의 대표작을 따라가며 미술사의 흐름을 한눈에 잡아 보면 어떨까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791197325809",
+  "title": "나의 이브 생 로랑에게",
+  "author": "피에르 베르제",
+  "pages": 160,
+  "one_liner": "50년을 함께한 연인에게 보내지 못한 편지를 읽어 볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791175780439",
+  "title": "AI 시대에 예술을 해도 될까요?",
+  "author": "정유진",
+  "pages": 288,
+  "one_liner": "AI가 다 해 주는 시대에도 창작자의 자리가 남을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
   "isbn": "9791129708328",
   "title": "회사는 엑셀을 가르쳐주지 않아요",
   "author": "쏘피",
@@ -6864,7 +8400,9 @@
   "topic": "업무 자동화",
   "way": "실습",
   "axes": null,
-  "keywords": []
+  "keywords": [
+   "AI 업무 활용"
+  ]
  },
  {
   "isbn": "9791124516218",
@@ -6908,13 +8446,14 @@
   "one_liner": "감정을 담당하는 뇌의 작동 방식을 알면 집중과 행동을 다루기 쉬워져요",
   "one_liner_style": "summary",
   "entry": "target",
-  "genre": "마음 돌보기",
-  "field": "마음·관계",
-  "topic": "마음 돌보기",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
   "way": "개념",
   "axes": null,
   "keywords": [
-   "감정 다루기"
+   "습관",
+   "뇌과학"
   ]
  },
  {
@@ -6983,7 +8522,7 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": -1,
+   "temp": 1,
    "pull": 1,
    "gain": -1,
    "world": 1
@@ -6998,7 +8537,7 @@
   "one_liner": "첫사랑이 물살처럼 어디로 흘러가는지 따라가 볼래요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "한국 소설",
+  "genre": "로맨스",
   "field": null,
   "topic": null,
   "way": null,
@@ -7023,8 +8562,8 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
-   "pull": 0,
+   "temp": 1,
+   "pull": 1,
    "gain": -1,
    "world": 1
   },
@@ -7058,13 +8597,13 @@
   "one_liner": "죽음과 환생을 따라가며 삶이 형벌인지 되묻게 되는 이야기일까요?",
   "one_liner_style": "question",
   "entry": "leaf",
-  "genre": "한국 소설",
+  "genre": "호러·괴담",
   "field": null,
   "topic": null,
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 0,
+   "pull": -1,
    "gain": -1,
    "world": -1
   },
@@ -7083,10 +8622,10 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": -1,
+   "temp": null,
    "pull": -1,
-   "gain": 0,
-   "world": 0
+   "gain": -1,
+   "world": 1
   },
   "keywords": []
  },
@@ -7104,7 +8643,7 @@
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 0,
+   "pull": -1,
    "gain": -1,
    "world": 1
   },
@@ -7123,7 +8662,7 @@
   "topic": null,
   "way": null,
   "axes": {
-   "temp": 0,
+   "temp": 1,
    "pull": 1,
    "gain": -1,
    "world": 1
@@ -7144,9 +8683,9 @@
   "way": null,
   "axes": {
    "temp": 1,
-   "pull": 0,
+   "pull": -1,
    "gain": -1,
-   "world": 1
+   "world": -1
   },
   "keywords": []
  },
@@ -7164,8 +8703,8 @@
   "way": null,
   "axes": {
    "temp": -1,
-   "pull": 0,
-   "gain": 0,
+   "pull": -1,
+   "gain": -1,
    "world": 1
   },
   "keywords": []

@@ -40,7 +40,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/112941801",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "데이터 분석",
+    "keywords": [
+     "엑셀"
+    ],
+    "way": "실습",
+    "one_liner": "실무에서 자주 쓰는 함수와 피벗, 차트만 골라 바로 따라 해요.",
+    "status": "picked"
+   },
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791162245651",
@@ -210,7 +220,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/149238591",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "통계",
+    "keywords": [
+     "확률"
+    ],
+    "way": "개념",
+    "one_liner": "확률의 역설과 베이즈, 엔트로피를 거쳐 인공지능이 생각하는 원리까지 이해해요",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791194383499",
@@ -220,7 +240,9 @@
    "entry": "target",
    "topic": "업무 자동화",
    "field": "AI·IT 활용",
-   "keywords": [],
+   "keywords": [
+    "AI 업무 활용"
+   ],
    "keywords_regex": [
     "AI 업무 활용"
    ],
@@ -252,7 +274,17 @@
     "one_liner": "노드를 이어 붙여 메일·일정 알림 같은 반복 업무를 코딩 없이 자동으로 돌려요",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "업무 자동화",
+     "keywords": [],
+     "way": "실습",
+     "one_liner": "노드를 이어 붙여 메일·일정 알림 같은 반복 업무를 코딩 없이 자동으로 돌려요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9791163036661",
@@ -330,7 +362,8 @@
     "one_liner": "제미나이와 앱스 스크립트로 유튜브 데이터 분석 시트를 만들어요",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9788931480030",
@@ -365,7 +398,17 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/146965812",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "topic": "업무 자동화",
+    "keywords": [
+     "AI 업무 활용"
+    ],
+    "way": "실습",
+    "one_liner": "코딩을 몰라도 AI에게 질문해 반복되는 사무 업무를 줄이는 방법을 익혀요.",
+    "status": "picked"
+   },
+   "rules_version": "v3"
   },
   {
    "isbn": "9791158395209",
@@ -408,10 +451,11 @@
    "author": "베르너 티키 퀴스텐마허 저/한윤진 역/김대수 감수",
    "pages": 384,
    "entry": "target",
-   "topic": "마음 돌보기",
-   "field": "마음·관계",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
    "keywords": [
-    "감정 다루기"
+    "습관",
+    "뇌과학"
    ],
    "keywords_regex": [
     "습관",
@@ -450,7 +494,19 @@
     "one_liner": "감정을 담당하는 뇌의 작동 방식을 알면 집중과 행동을 다루기 쉬워져요",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "topic": "마음 돌보기",
+     "keywords": [
+      "감정 다루기"
+     ],
+     "way": "개념",
+     "one_liner": "감정을 담당하는 뇌의 작동 방식을 알면 집중과 행동을 다루기 쉬워져요"
+    }
+   ],
+   "rules_version": "v3"
   },
   {
    "isbn": "9788963221908",
@@ -531,7 +587,8 @@
     "status": "picked"
    },
    "reviewed": true,
-   "sampled": true
+   "sampled": true,
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788931558210",
@@ -624,7 +681,8 @@
     "one_liner": "뇌신경이 연결되는 원리로 짧은 시간에 책을 읽고 정리하는 단계별 독서법을 익혀요",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791197459566",
@@ -829,7 +887,8 @@
     "one_liner": "개발자 이력서와 포트폴리오 쓰는 법부터 면접 답변 준비까지 이직 과정을 따라가 볼 수 있어요",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "rules_version": "v3"
   },
   {
    "isbn": "9791141619992",
@@ -839,7 +898,7 @@
    "entry": "leaf",
    "genre": "한국 소설",
    "axes": {
-    "temp": -1,
+    "temp": 1,
     "pull": 1,
     "gain": -1,
     "world": 1
@@ -879,7 +938,21 @@
     "one_liner": "정교한 문체로 삶과 내일을 다시 바라보게 하는 소설집일까요?",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": 1,
+      "gain": -1,
+      "world": 1
+     },
+     "one_liner": "정교한 문체로 삶과 내일을 다시 바라보게 하는 소설집일까요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788937473401",
@@ -887,7 +960,7 @@
    "author": "정대건 저",
    "pages": 300,
    "entry": "leaf",
-   "genre": "한국 소설",
+   "genre": "로맨스",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -928,7 +1001,21 @@
     "one_liner": "첫사랑이 물살처럼 어디로 흘러가는지 따라가 볼래요?",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": -1,
+      "world": 1
+     },
+     "one_liner": "첫사랑이 물살처럼 어디로 흘러가는지 따라가 볼래요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791141617226",
@@ -938,8 +1025,8 @@
    "entry": "leaf",
    "genre": "한국 소설",
    "axes": {
-    "temp": 0,
-    "pull": 0,
+    "temp": 1,
+    "pull": 1,
     "gain": -1,
     "world": 1
    },
@@ -975,7 +1062,21 @@
     "one_liner": "서로 다른 두 자매가 삶의 저녁에 맞는 첫 순간들을 따라가 볼까요?",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": 0,
+      "pull": 0,
+      "gain": -1,
+      "world": 1
+     },
+     "one_liner": "서로 다른 두 자매가 삶의 저녁에 맞는 첫 순간들을 따라가 볼까요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788998441074",
@@ -1009,7 +1110,19 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/72127217",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "한국 소설",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "납치와 감금이라는 위험한 관계 속에서 두 사람은 무엇을 마주하게 될까요?",
+    "status": "picked"
+   },
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791168343887",
@@ -1017,10 +1130,10 @@
    "author": "청예 저",
    "pages": 300,
    "entry": "leaf",
-   "genre": "한국 소설",
+   "genre": "호러·괴담",
    "axes": {
     "temp": -1,
-    "pull": 0,
+    "pull": -1,
     "gain": -1,
     "world": -1
    },
@@ -1043,7 +1156,32 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/192879211",
-   "auto": "ai-agree"
+   "auto": "ai-agree",
+   "draft": {
+    "genre": "한국 소설",
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": -1,
+     "world": -1
+    },
+    "one_liner": "죽음과 환생을 따라가며 삶이 형벌인지 되묻게 되는 이야기일까요?",
+    "status": "picked"
+   },
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "한국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": 0,
+      "gain": -1,
+      "world": -1
+     },
+     "one_liner": "죽음과 환생을 따라가며 삶이 형벌인지 되묻게 되는 이야기일까요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791170875666",
@@ -1053,10 +1191,10 @@
    "entry": "leaf",
    "genre": "외국 소설",
    "axes": {
-    "temp": -1,
+    "temp": null,
     "pull": -1,
-    "gain": 0,
-    "world": 0
+    "gain": -1,
+    "world": 1
    },
    "one_liner_style": "question",
    "one_liner": "정체 모를 환자 X의 삶을 세 사람이 각자 상상으로 쫓아가면 어떨까요?",
@@ -1091,7 +1229,21 @@
     "one_liner": "정체 모를 환자 X의 삶을 세 사람이 각자 상상으로 쫓아가면 어떨까요?",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": -1,
+      "gain": 0,
+      "world": 0
+     },
+     "one_liner": "정체 모를 환자 X의 삶을 세 사람이 각자 상상으로 쫓아가면 어떨까요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788937434488",
@@ -1102,7 +1254,7 @@
    "genre": "외국 소설",
    "axes": {
     "temp": -1,
-    "pull": 0,
+    "pull": -1,
     "gain": -1,
     "world": 1
    },
@@ -1125,7 +1277,32 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/44499829",
-   "auto": "ai-agree"
+   "draft": {
+    "genre": "외국 소설",
+    "axes": {
+     "temp": -1,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "청춘의 상실과 기억을 예민하고 섬세하게 따라가 볼래요?",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": 0,
+      "gain": -1,
+      "world": 1
+     },
+     "one_liner": "청춘의 상실과 기억을 예민하고 섬세하게 따라가 볼래요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788937460449",
@@ -1135,7 +1312,7 @@
    "entry": "leaf",
    "genre": "외국 소설",
    "axes": {
-    "temp": 0,
+    "temp": 1,
     "pull": 1,
     "gain": -1,
     "world": 1
@@ -1173,7 +1350,21 @@
     "one_liner": "알에서 나오려 애쓰던 소년은 어떤 어른이 될까요?",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": 0,
+      "pull": 1,
+      "gain": -1,
+      "world": 1
+     },
+     "one_liner": "알에서 나오려 애쓰던 소년은 어떤 어른이 될까요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9788937464720",
@@ -1184,9 +1375,9 @@
    "genre": "외국 소설",
    "axes": {
     "temp": 1,
-    "pull": 0,
+    "pull": -1,
     "gain": -1,
-    "world": 1
+    "world": -1
    },
    "one_liner_style": "question",
    "one_liner": "사람을 끝내 살게 하는 건 결국 사랑일까요?",
@@ -1223,7 +1414,21 @@
     "one_liner": "사랑으로 사는 삶의 이치를 쉬운 말로 들려주는 이야기 모음이에요.",
     "status": "reserve"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": 1,
+      "pull": 0,
+      "gain": -1,
+      "world": 1
+     },
+     "one_liner": "사람을 끝내 살게 하는 건 결국 사랑일까요?"
+    }
+   ],
+   "rules_version": "v3.1"
   },
   {
    "isbn": "9791170875673",
@@ -1234,8 +1439,8 @@
    "genre": "외국 소설",
    "axes": {
     "temp": -1,
-    "pull": 0,
-    "gain": 0,
+    "pull": -1,
+    "gain": -1,
     "world": 1
    },
    "one_liner_style": "question",
@@ -1272,7 +1477,21 @@
     "one_liner": "평범하다 믿은 한 사람의 삶이 자서전 속에서 어떻게 달라질까요?",
     "status": "review"
    },
-   "reviewed": true
+   "reviewed": true,
+   "history": [
+    {
+     "rules_version": "before-v3",
+     "genre": "외국 소설",
+     "axes": {
+      "temp": -1,
+      "pull": 0,
+      "gain": 0,
+      "world": 1
+     },
+     "one_liner": "평범하다 믿은 한 사람의 삶이 자서전 속에서 어떻게 달라질까요?"
+    }
+   ],
+   "rules_version": "v3.1"
   }
  ]
 }

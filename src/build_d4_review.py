@@ -26,18 +26,23 @@ from build_d3_bundles import BUNDLE_DIR, load_selected
 ROOT = Path(__file__).resolve().parents[1]
 OUT = OUT_DIR / "d4_review.html"
 
-# key, question, +1 side, 0 side, -1 side, hint (side names from TAGGING.md). The world hint is a short form of the
-# balance-game.md 태그 기준 row 세계 (10-05) — test_pipeline_review.py checks its words against that row
+# key, question, +1 side, 0 side, -1 side, hint (side names from TAGGING.md). The world hint is a short form of
+# docs/label-dictionary.md 1-4 세계 (10-06) — test_pipeline_review.py checks its words against that section
 AXIS_LABELS = [
     ["temp", "책을 덮은 뒤 남는 느낌", "따뜻함", "중간", "여운·서늘함",
-     "마음이 데워지는 책인가, 오래 먹먹하고 서늘하게 남는 책인가"],
+     "끝맺음(결말·맺음말)과 어조로 — 세상의 설정·감동의 크기(눈물·울림)는 신호 아님 · 소설·시: 끝맺음이 가장 무겁고, "
+     "흐릿해도 조금이라도 기울면 그쪽, 똑같이 흐릿하거나 신호가 없으면 비움(정보 없음 — 중간 아님) · "
+     "비소설: 끝맺음·어조만, 둘이 반대면 중간(반반), 둘 다 약하거나 없으면 중간(해당 없음)"],
     ["pull", "끌리는 힘", "문장", "중간", "몰입·이야기",
-     "계속 읽게 만드는 게 문장 자체인가, 다음이 궁금한 전개인가 (둘 다 강하면 중간)"],
+     "끄는 힘의 종류 — 문장·문체를 직접 칭찬하면 문장, 전개·사례·흐름으로 끌면 몰입. 소설은 그 밖엔 몰입, "
+     "시집은 이야기로 끈다는 말이 없으면 문장(비우지 않음). 어렵다고 중간 아님, 둘 다 뚜렷하게 강할 때만 중간"],
     ["gain", "읽고 나서 얻는 것", "알게 됨", "중간", "마음",
-     "새로 아는 게 생기는 책인가, 마음이 달라지는 책인가 — 둘 다 강하거나 어느 쪽도 뚜렷하지 않으면 중간"],
+     "사실·원리를 설명·증명하면 알게 됨, 질문·성찰·감정을 건네면 마음 — 소설·시는 지식을 주된 목적으로 앞세울 때만 "
+     "알게 됨, 그 밖엔 마음(비우지 않음). 정말 반반일 때만 중간, 둘 다 약하면 더 강한 쪽"],
     ["world", "책 속 세상", "현실", "중간", "딴 세상",
-     "실제로 있을 수 있는 세계인가, 여기 없는 세계를 만든 책인가 — 현실 배경 소설은 철학적이거나 실험적이어도 현실, "
-     "사람·삶·사회를 다룬 비소설도 현실, 중간은 현실과 비현실이 정말 섞였거나 사람도 세계도 없는 책만"],
+     "비소설은 무대가 우주여도 현실. 소설·우화는 실제로 있거나 있었던 세상이 배경이면 현실(철학적이어도), 우주 배경이거나 "
+     "지금 없는 기술이나 존재(귀신·괴이·좀비 등)가 실제로 등장하면 현실 배경이어도 딴 세상. 섞였다고 중간이 아니다 — "
+     "중간은 목차·소개 어디에도 사람·장소가 전혀 보이지 않는 책만(시집도 사람·장소·생활이 보이면 현실). 해당 없음 중간은 없다"],
 ]
 WAY_LABELS = [["개념", "개념부터 쉽게"], ["실습", "따라 하며 실습"], ["사례", "사례로 술술"]]
 assert [a[0] for a in AXIS_LABELS] == list(AXES) and [w[0] for w in WAY_LABELS] == list(WAYS)
