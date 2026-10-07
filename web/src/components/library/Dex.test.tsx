@@ -25,7 +25,7 @@ describe("도감 (S-09 [도감])", () => {
   it("counts, tier sections, met cells with their first picture, NEW once, silhouettes with ??? — and E-37", async () => {
     const tiger = art("whitetiger", "night");
     await show(ok({ items: [row("animal", "cat", art("cat")), row("animal", "whitetiger", tiger, true), row("bg", "peach", art("cat"))] }));
-    expect(screen.getByText("동물 2 / 16 · 배경 1 / 12 · 소품 0 / 6")).toBeInTheDocument();
+    expect(screen.getByText("동물 2 / 16 · 배경 1 / 12 · 소품 0 / 10")).toBeInTheDocument();
     const common = screen.getByRole("region", { name: "동물 일반판" });
     expect(within(common).getByText("1 / 7")).toBeInTheDocument();
     expect(within(common).getByText("고양이")).toBeInTheDocument();
@@ -49,8 +49,8 @@ describe("도감 (S-09 [도감])", () => {
     expect(props).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByRole("button", { name: "동물" })).toHaveAttribute("aria-pressed", "false");
     expect(within(screen.getByRole("region", { name: "소품 한정판" })).getByText("네잎클로버")).toBeInTheDocument();
-    expect(within(screen.getByRole("region", { name: "소품 한정판" })).getByText("1 / 1")).toBeInTheDocument();
-    expect(screen.getAllByText("아직 만나지 않은 소품")).toHaveLength(5);
+    expect(within(screen.getByRole("region", { name: "소품 한정판" })).getByText("1 / 4")).toBeInTheDocument();
+    expect(screen.getAllByText("아직 만나지 않은 소품")).toHaveLength(9);
     expect(screen.queryByText("무지개")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "배경" }));
     expect(screen.getAllByText("아직 만나지 않은 배경")).toHaveLength(12);
@@ -65,7 +65,7 @@ describe("도감 (S-09 [도감])", () => {
       row("ground", "none", first, true),                                  // recorded before the fix: ignored
       row("sky", "rainbow", first, true),                                  // a sky prop from before 10-07 A: ignored
     ] }));
-    expect(screen.getByText("동물 1 / 16 · 배경 1 / 12 · 소품 2 / 6")).toBeInTheDocument();
+    expect(screen.getByText("동물 1 / 16 · 배경 1 / 12 · 소품 2 / 10")).toBeInTheDocument();
     const animal = screen.getByRole("region", { name: "동물 일반판" }).querySelector("svg")!;
     expect(animal.querySelector("image")).toHaveAttribute("href", "/animals/cat.svg");
     expect(animal.querySelector("rect")).toBeNull();                       // no sky (10-07: the animal alone)
@@ -101,7 +101,7 @@ describe("도감 (S-09 [도감])", () => {
     expect(track).not.toHaveBeenCalled();
     request.mockImplementation(async () => ok({ items: [] }));
     await act(async () => { fireEvent.click(screen.getByRole("button", { name: "다시 불러오기" })); });
-    expect(screen.getByText("동물 0 / 16 · 배경 0 / 12 · 소품 0 / 6")).toBeInTheDocument();
+    expect(screen.getByText("동물 0 / 16 · 배경 0 / 12 · 소품 0 / 10")).toBeInTheDocument();
     expect(track).toHaveBeenCalledWith("collection_viewed", { collected_count: 0, is_logged_in: true });
   });
 
