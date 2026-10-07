@@ -69,7 +69,7 @@ describe("BackCover (S-11, F-27 — the back of the book with today's five bookm
     expect(p.onShared).not.toHaveBeenCalled();
   });
 
-  it("copies the link where there is no share sheet, says so, and offers the story image to save (E-42 copy · save_image)", async () => {
+  it("copies the link where there is no share sheet and says so (E-42 copy); there is no 이미지 저장 any more", async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     vi.stubGlobal("navigator", { ...navigator, share: undefined, clipboard: { writeText } });
     const p = props();
@@ -78,10 +78,6 @@ describe("BackCover (S-11, F-27 — the back of the book with today's five bookm
     expect(writeText).toHaveBeenCalledWith(URL_);
     expect(screen.getByRole("status")).toHaveTextContent(COPIED);
     expect(p.onShared).toHaveBeenCalledWith("copy");
-    const save = screen.getByRole("link", { name: "이미지 저장" });
-    expect(save).toHaveAttribute("href", "/s/1~0A~a.b~000000/story");
-    expect(save).toHaveAttribute("download");
-    fireEvent.click(save);
-    expect(p.onShared).toHaveBeenCalledWith("save_image");
+    expect(screen.queryByRole("link", { name: "이미지 저장" })).toBeNull();
   });
 });

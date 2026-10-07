@@ -26,9 +26,10 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   };
 }
 
-export default async function SharePage({ params }: Params) {
+export default async function SharePage({ params, searchParams }: Params & { searchParams: Promise<{ mine?: string }> }) {
   const { code } = await params;
+  const { mine } = await searchParams;
   const view = loadShare(code);
   if (!view) redirect("/");
-  return <SharedBack cards={view.cards} arts={view.arts} label={view.label} />;
+  return <SharedBack code={view.code} cards={view.cards} arts={view.arts} label={view.label} mine={mine === "1"} />;
 }

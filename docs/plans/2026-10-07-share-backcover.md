@@ -25,6 +25,8 @@
 6. **공유 페이지 `/s/[code]`** (S-11): 같은 뒤표지 + "○○님이 만난 책갈피" 대신 "누군가 갈피에서 만난 책갈피" + 주 버튼 [나도 갈피 잡기].
    메타데이터 og:image = `/s/[code]/opengraph-image` (1200×630, next/og). 스토리 = `/s/[code]/story` (1080×1920 PNG).
    코드가 틀리면 404 대신 첫 화면으로.
+> 10-07 뒤 변경: [이미지 저장]은 없애고 [이미지로 공유], E-42 method "save_image" → "image", 카카오톡 안 브라우저는 브라우저로 넘김 (`context.md` 10-07, taxonomy v2.1)
+
 7. **이벤트 (taxonomy v2.0)**: E-41 `back_cover_shown`(curious_count, label_count), E-42 `share_clicked`(method: native|copy|save_image),
    E-43 `share_page_viewed`(유입 — label_count), E-44 `share_page_started`(나도 갈피 잡기). 공통 속성 그대로. 모으는 정보:
    새 개인정보 없음(공유 코드 = 답 + 책 + 그림). 처리방침에 "공유 링크에는 고른 답·책·그림만 담긴다" 한 줄.
