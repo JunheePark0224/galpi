@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { canShareImages, storyFile } from "@/lib/share/storyFile";
 import { detectDevice } from "@/lib/track/common";
 import styles from "./ShareSheet.module.css";
 
@@ -31,9 +32,7 @@ function isAbort(err: unknown): boolean {
 
 /** Not the app's name but what the browser does (10-07): can it hand a picture to the share sheet? */
 function modeOf(): Mode {
-  const probe = new File([new Uint8Array(1)], "x.png", { type: "image/png" });   // not empty: some browsers refuse an empty file
-  const files = typeof navigator.canShare === "function" && navigator.canShare({ files: [probe] });
-  if (files) return "files";
+  if (canShareImages()) return "files";
   return detectDevice(navigator.userAgent).is_in_app_browser ? "hold" : "save";
 }
 
@@ -41,13 +40,14 @@ function modeOf(): Mode {
  * C-31 공유 시트 (F-27, 사용자 시안 10-07): the story image (C-30) as a preview, then [인스타 스토리로] (the picture to the
  * share sheet — Instagram offers its story), [이미지 저장] and [링크 공유] (the share sheet, or the link copied). An in-app
  * browser that can neither share nor download the picture gets a big preview to hold and save, and [링크 복사].
- * The picture is fetched when the sheet opens, so the share can start right on the next tap. Shows only — the caller
- * sends E-42 through onShared.
+ * The picture is usually in hand already (the S-11 buttons asked for it as the book shut — lib/share/storyFile); till
+ * then [인스타 스토리로] keeps its place, greyed, "준비 중…" (10-08). Shows only — the caller sends E-42 through onShared.
  */
 export function ShareSheet({ shareUrl, count, onClose, onShared }: Props) {
   const [mode] = useState(modeOf);
   const [status, setStatus] = useState<Status>("");
-  const [image, setImage] = useState<File | null>(null);
+  // undefined: still coming; null: it did not come (the tile goes, saving and the link still work)
+  const [image, setImage] = useState<File | null | undefined>(undefined);
   const title = useRef<HTMLHeadingElement>(null);
   const sheet = useRef<HTMLDivElement>(null);
   const story = `${new URL(shareUrl).pathname}/story`;
@@ -80,10 +80,7 @@ export function ShareSheet({ shareUrl, count, onClose, onShared }: Props) {
   useEffect(() => {
     if (mode !== "files") return;
     let live = true;
-    fetch(story)
-      .then((res) => (res.ok ? res.blob() : Promise.reject(new Error(`story ${res.status}`))))
-      .then((blob) => { if (live) setImage(new File([blob], "galpi-bookmarks.png", { type: "image/png" })); })
-      .catch(() => { /* no picture, no [인스타 스토리로] — saving and the link still work */ });
+    void storyFile(story).then((file) => { if (live) setImage(file); });
     return () => { live = false; };
   }, [mode, story]);
 
@@ -125,9 +122,16 @@ export function ShareSheet({ shareUrl, count, onClose, onShared }: Props) {
         <img className={mode === "hold" ? styles.storyBig : styles.story} src={story} alt="스토리 이미지 미리보기" />
         {mode === "hold" && <p className={styles.hint}>{INAPP_HINT}</p>}
         <div className={styles.tiles}>
-          {mode === "files" && image && (
-            <button type="button" className={styles.tile} onClick={() => { void shareImage(image); }}>
-              <span className={`${styles.icon} ${styles.insta}`} aria-hidden="true">◎</span>인스타 스토리로
+          {mode === "files" && image !== null && (
+            <button
+              type="button"
+              className={styles.tile}
+              disabled={!image}
+              aria-busy={!image || undefined}
+              onClick={() => { if (image) void shareImage(image); }}
+            >
+              <span className={`${styles.icon} ${styles.insta}`} aria-hidden="true">◎</span>
+              {image ? "인스타 스토리로" : "준비 중…"}
             </button>
           )}
           {mode !== "hold" && (
