@@ -8,7 +8,8 @@
 --   4. saves: every bookmark goes back to its first picture, made three-part — the sky key dropped, fireflies → the empty
 --      ground ("none"), `rare` worked out again. original_art the same. Bookmarks, rods and their order are kept.
 -- Run this in the Supabase SQL Editor once, AFTER the new site is deployed (an older site would draw four-part pictures
--- and its tickets would no longer be accepted). Safe to run again. Then run supabase/checks/three_part_art.sql (every line
+-- and its tickets would no longer be accepted). Run it EXACTLY ONCE, at launch: the schema part is idempotent, but running it
+-- again would wipe the collection and claims again and undo every decorated picture. Then run supabase/checks/three_part_art.sql (every line
 -- "ok") and, each as its own query, supabase/checks/art_guard.sql and collection_rls.sql.
 --
 -- The rare lists below must stay equal to KIND_TIERS limited + first_edition — src/lib/library/artGuardSql.test.ts checks.
