@@ -13,7 +13,8 @@ export const PART_NAMES: { readonly [K in ArtKind]: Readonly<Record<string, stri
   },
   ground: {
     grass: "풀", flowers: "꽃", books: "책 더미", mushroom: "버섯",
-    clover: "네잎클로버", goldbook: "금장 고서",
+    clover: "네잎클로버", teacup: "김 나는 찻잔", jar: "반딧불 유리병", quill: "깃털 펜과 잉크병",
+    goldbook: "금장 고서", musicbox: "천상 오르골",
   },
 };
 

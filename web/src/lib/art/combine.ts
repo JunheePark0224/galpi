@@ -41,10 +41,13 @@ const BG_TIERS: Record<Tier, readonly Background[]> = {
 /** The backgrounds with their own motion (every 한정판·초판본 one, 10-07 A). */
 export const LIVING_BACKGROUNDS: ReadonlySet<Background> = new Set([...BG_TIERS.limited, ...BG_TIERS.first_edition]);
 
-/** DESIGN A-03 — ground props only (10-07 A: the sky props are gone; the fireflies became the 여름밤 background). */
+/**
+ * DESIGN A-03 — ground props only (10-07 A: the sky props are gone; the fireflies became the 여름밤 background).
+ * 10-07 시안 (사용자): 한정판 + 김 나는 찻잔 · 반딧불 유리병 · 깃털 펜과 잉크병, 초판본 + 천상 오르골.
+ */
 const GROUND_COMMON = ["grass", "flowers", "books", "mushroom", "none"] as const;
-const GROUND_LIMITED = ["clover"] as const;
-const GROUND_FIRST = ["goldbook"] as const;
+const GROUND_LIMITED = ["clover", "teacup", "jar", "quill"] as const;
+const GROUND_FIRST = ["goldbook", "musicbox"] as const;
 export const GROUND_PROPS = [...GROUND_COMMON, ...GROUND_LIMITED, ...GROUND_FIRST] as const;
 
 export type Animal = (typeof ANIMALS)[number];
@@ -80,7 +83,7 @@ export function isCollectible(kind: ArtKind, value: string): boolean {
   return !(kind === "ground" && value === EMPTY_GROUND) && TIER_OF.has(`${kind}:${value}`);
 }
 
-/** The 도감's cells: KIND_TIERS without the empty ground. 동물 16 · 배경 12 · 소품 6 (땅 소품). */
+/** The 도감's cells: KIND_TIERS without the empty ground. 동물 16 · 배경 12 · 소품 10 (땅 소품). */
 export const DEX_TIERS: { readonly [K in ArtKind]: Record<Tier, readonly string[]> } = {
   ...KIND_TIERS,
   ground: { ...KIND_TIERS.ground, common: KIND_TIERS.ground.common.filter((v) => v !== EMPTY_GROUND) },
