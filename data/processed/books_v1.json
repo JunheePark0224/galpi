@@ -1791,25 +1791,6 @@
   "rules_version": "v3"
  },
  {
-  "isbn": "9791197647666",
-  "entry": "leaf",
-  "slot": "에세이",
-  "field": null,
-  "topic": null,
-  "genre": "에세이",
-  "pages": 216,
-  "way": null,
-  "axes": {
-   "temp": 1,
-   "pull": 0,
-   "gain": -1,
-   "world": 1
-  },
-  "keywords": [],
-  "one_liner": "순간의 기분에 휘둘린 말과 행동을 어떻게 다독일 수 있을까요?",
-  "one_liner_style": "question"
- },
- {
   "isbn": "9791173323027",
   "entry": "leaf",
   "slot": "에세이",
@@ -2020,25 +2001,6 @@
    }
   ],
   "rules_version": "v3"
- },
- {
-  "isbn": "9791192372754",
-  "entry": "leaf",
-  "slot": "에세이",
-  "field": null,
-  "topic": null,
-  "genre": "에세이",
-  "pages": 224,
-  "way": null,
-  "axes": {
-   "temp": -1,
-   "pull": 1,
-   "gain": -1,
-   "world": 1
-  },
-  "keywords": [],
-  "one_liner": "달콤한 위로 대신 냉정한 한 줄이 나를 일으켜 세울까요?",
-  "one_liner_style": "question"
  },
  {
   "isbn": "9788931027068",
@@ -2455,25 +2417,6 @@
   "one_liner": "2500년을 건너온 짧은 말은 약해진 마음에 어떤 힘을 줄까요?",
   "one_liner_style": "question",
   "rules_version": "v3"
- },
- {
-  "isbn": "9791124248515",
-  "entry": "leaf",
-  "slot": "인문",
-  "field": null,
-  "topic": null,
-  "genre": "인문",
-  "pages": 528,
-  "way": null,
-  "axes": {
-   "temp": 0,
-   "pull": 0,
-   "gain": 1,
-   "world": 0
-  },
-  "keywords": [],
-  "one_liner": "읽고 쓰는 힘이 멈춰 있다면, 어떻게 다시 키울 수 있을까요?",
-  "one_liner_style": "question"
  },
  {
   "isbn": "9788925574394",
@@ -3111,22 +3054,6 @@
   "rules_version": "v3"
  },
  {
-  "isbn": "9791192932170",
-  "entry": "target",
-  "slot": "데이터 분석",
-  "field": "데이터·통계",
-  "topic": "데이터 분석",
-  "genre": "데이터 분석",
-  "pages": 556,
-  "way": "개념",
-  "axes": null,
-  "keywords": [
-   "SQL"
-  ],
-  "one_liner": "관계형 모델과 SQL로 데이터베이스를 설계하고 다루는 기초를 알려줘요",
-  "one_liner_style": "summary"
- },
- {
   "isbn": "9791140708277",
   "entry": "target",
   "slot": "데이터 분석",
@@ -3751,24 +3678,6 @@
   "rules_version": "v3"
  },
  {
-  "isbn": "9791161754727",
-  "entry": "target",
-  "slot": "통계",
-  "field": "데이터·통계",
-  "topic": "통계",
-  "genre": "통계",
-  "pages": 844,
-  "way": "개념",
-  "axes": null,
-  "keywords": [
-   "기초 통계",
-   "베이즈",
-   "회귀분석"
-  ],
-  "one_liner": "회귀에서 신경망까지 머신러닝 알고리즘의 통계 이론을 깊이 이해해요",
-  "one_liner_style": "summary"
- },
- {
   "isbn": "9791169213196",
   "entry": "target",
   "slot": "통계",
@@ -3894,22 +3803,6 @@
    }
   ],
   "rules_version": "v3.1"
- },
- {
-  "isbn": "9791192229508",
-  "entry": "target",
-  "slot": "통계",
-  "field": "데이터·통계",
-  "topic": "통계",
-  "genre": "통계",
-  "pages": 288,
-  "way": "개념",
-  "axes": null,
-  "keywords": [
-   "확률"
-  ],
-  "one_liner": "지수·로그·삼각함수 등 수학 개념을 정확히 이해하도록 도와줘요",
-  "one_liner_style": "summary"
  },
  {
   "isbn": "9791189028589",
