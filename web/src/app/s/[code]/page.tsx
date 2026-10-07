@@ -6,7 +6,7 @@ import { loadShare } from "@/lib/share/load";
 type Params = { params: Promise<{ code: string }> };
 
 const title = (n: number) => `갈피 — 오늘 만난 책갈피 ${n}장`;
-const DESCRIPTION = "누군가 질문 몇 개로 책갈피를 만났어요. 너도 갈피 잡아 봐";
+const DESCRIPTION = "누군가 질문 몇 개로 책갈피를 만났어요. 나도 갈피 잡으러 가기";
 
 /**
  * S-12 (F-27): a shared 뒤표지. The link preview image is ./opengraph-image (the board itself, no YES24 cover). Share pages
