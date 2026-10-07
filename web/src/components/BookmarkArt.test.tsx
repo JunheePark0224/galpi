@@ -37,6 +37,50 @@ describe("BookmarkArt (C-03, 도감 v1, three parts — 10-07 A)", () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
+  it("puts the gold rim and the sweep on a 초판본 background only — never for a 초판본 animal or prop (10-07)", () => {
+    const { container, rerender } = render(<BookmarkArt art={{ ...FIRST, bg: "night" }} clipId="r" />);
+    let svg = container.querySelector("svg")!;
+    expect(svg).toHaveAttribute("data-tier", "first_edition");
+    expect(svg.querySelector("[data-part=rim]")).toBeNull();
+    expect(svg.querySelector("[transform='skewX(-20)']")).toBeNull();
+    rerender(<BookmarkArt art={{ ...COMMON, bg: "study" }} clipId="r" />);
+    svg = container.querySelector("svg")!;
+    expect(svg.querySelector("[data-part=rim]")).not.toBeNull();
+    expect(svg.querySelector("[transform='skewX(-20)']")).not.toBeNull();
+    rerender(<BookmarkArt art={{ ...COMMON, bg: "study" }} clipId="r" parts={["animal"]} stage={false} />);
+    expect(container.querySelector("[data-part=rim]")).toBeNull();                             // 도감 동물 칸: no background, no rim
+  });
+
+  it("gives each 초판본 animal its own aura behind it — 청룡 clouds, 백호 wind, 주작 fire, 현무 water", () => {
+    const want = { bluedragon: "clouds", whitetiger: "wind", redbird: "fire", blacktortoise: "water" } as const;
+    for (const [animal, aura] of Object.entries(want)) {
+      const { container, unmount } = render(<BookmarkArt art={{ ...COMMON, animal: animal as ArtCombo["animal"] }} clipId={animal} />);
+      const svg = container.querySelector("svg")!;
+      const el = svg.querySelector("[data-part=animal-aura]")!;
+      expect(el, animal).toHaveAttribute("data-aura", aura);
+      expect(el.compareDocumentPosition(svg.querySelector("image")!) & Node.DOCUMENT_POSITION_FOLLOWING, animal).toBeTruthy();   // behind
+      unmount();
+    }
+    const { container } = render(<BookmarkArt art={{ ...COMMON, animal: "otter" }} clipId="o" />);
+    expect(container.querySelector("[data-part=animal-aura]")).toBeNull();
+  });
+
+  it("dresses the clover with a gold ribbon and a dew drop, and draws the 10-07 rare props (찻잔 김, 반딧불 병, 오르골 회전)", () => {
+    const art = (ground: ArtCombo["ground"]) => ({ ...COMMON, ground });
+    const { container, rerender } = render(<BookmarkArt art={art("clover")} clipId="g" />);
+    expect(container.querySelector("[data-part=ribbon]")).not.toBeNull();
+    expect(container.querySelector("[data-part=dew]")).not.toBeNull();
+    rerender(<BookmarkArt art={art("teacup")} clipId="g" />);
+    expect(container.querySelectorAll("[data-part=steam] path").length).toBeGreaterThan(1);
+    rerender(<BookmarkArt art={art("jar")} clipId="g" />);
+    expect(container.querySelectorAll("[data-part=jar-light] g").length).toBe(3);
+    rerender(<BookmarkArt art={art("quill")} clipId="g" />);
+    expect(container.querySelector("[data-part=quill]")).not.toBeNull();
+    rerender(<BookmarkArt art={art("musicbox")} clipId="g" />);
+    expect(container.querySelector("[data-part=orbit]")).not.toBeNull();
+    expect(container.querySelectorAll("path[style*='animation-delay']").length).toBe(3);      // its star dust
+  });
+
   it("keeps only the rim, a still aura and still living things when light (moving or small)", () => {
     const { container } = render(<BookmarkArt art={FIRST} clipId="l" fx="light" />);
     const svg = container.querySelector("svg")!;
@@ -46,7 +90,8 @@ describe("BookmarkArt (C-03, 도감 v1, three parts — 10-07 A)", () => {
     expect(svg.querySelector("[transform='skewX(-20)']")).toBeNull();
     expect(svg.querySelectorAll("[data-part=living] circle").length).toBeGreaterThan(0);      // the galaxy still drawn
     const aura = svg.querySelector("radialGradient")!.id;
-    expect(svg.querySelectorAll(`circle[fill='url(#${aura})']`).length).toBe(2);              // animal + the prop
+    expect(svg.querySelectorAll(`circle[fill='url(#${aura})']`).length).toBe(1);              // the prop's glow
+    expect(svg.querySelector("[data-part=animal-aura]")).not.toBeNull();                     // the dragon's clouds, still
   });
 
   it("keeps ids apart when the same book is drawn twice on one page (rod + sheet, drag copy)", () => {
@@ -118,8 +163,8 @@ describe("BookmarkArt (C-03, 도감 v1, three parts — 10-07 A)", () => {
     expect(svg.querySelector("rect")).toBeNull();                                            // no sky, no galaxy band
     expect(svg.querySelector("[data-part=living]")).toBeNull();
     expect(svg.querySelector("path[d^='M-5 76']")).toBeNull();                                // no hill
-    expect(svg).toHaveAttribute("data-tier", "first_edition");                               // the rim still says 초판본
-    expect(svg.querySelector("[data-part=rim]")).not.toBeNull();
+    expect(svg).toHaveAttribute("data-tier", "first_edition");
+    expect(svg.querySelector("[data-part=rim]")).toBeNull();                                  // the rim belongs to the background
 
     rerender(<BookmarkArt art={{ ...COMMON, ground: "books" }} clipId="p" parts={["ground"]} stage={false} fx="light" />);
     svg = container.querySelector("svg")!;

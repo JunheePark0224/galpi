@@ -41,7 +41,7 @@ describe("도감 service", () => {
     // old "none" rows in production are ignored on read: not shown, not counted
     const rows = [item("ground", "none"), item("ground", "grass")];
     expect(knownItems(rows)).toEqual([item("ground", "grass")]);
-    expect(dexCounts(knownItems(rows)).prop).toEqual({ found: 1, total: 6 });
+    expect(dexCounts(knownItems(rows)).prop).toEqual({ found: 1, total: 10 });
     expect(dexSections("prop", rows).flatMap((s) => s.cells).some((c) => c.value === "none")).toBe(false);
   });
 
@@ -57,10 +57,10 @@ describe("도감 service", () => {
     expect(animals.map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 7, 1], ["limited", 5, 0], ["first_edition", 4, 1]]);
     expect(animals[2].cells.find((c) => c.value === "bluedragon")?.met?.isNew).toBe(true);
     const props = dexSections("prop", items);
-    expect(props.map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 4, 0], ["limited", 1, 0], ["first_edition", 1, 1]]);
+    expect(props.map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 4, 0], ["limited", 4, 0], ["first_edition", 2, 1]]);
     expect(props.flatMap((s) => s.cells).every((c) => c.kind === "ground")).toBe(true);
     expect(dexSections("bg", items).map((s) => [s.tier, s.cells.length, s.found])).toEqual([["common", 6, 0], ["limited", 4, 1], ["first_edition", 2, 0]]);
-    expect(dexCounts(items)).toEqual({ animal: { found: 2, total: 16 }, bg: { found: 1, total: 12 }, prop: { found: 1, total: 6 } });
+    expect(dexCounts(items)).toEqual({ animal: { found: 2, total: 16 }, bg: { found: 1, total: 12 }, prop: { found: 1, total: 10 } });
   });
 
   it("leaves out a sky row recorded before 10-07 A (not a part any more)", () => {
