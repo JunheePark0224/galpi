@@ -386,7 +386,7 @@ def test_the_first_calibration_rules_reach_both_prompts():
     sentences are praised, poetry world, the new SF·판타지 definition and the new boundaries."""
     for kind in ("tag", "check"):
         p = system_prompt(VOC, kind)
-        assert "**\"어느 쪽도 뚜렷하지 않음\"은 0의 이유가 아니다.**" in p and "정보 없음 + **값 비움**" in p
+        assert "**\"어느 쪽도 뚜렷하지 않음\"은 0의 이유가 아니다**" in p and "정보 없음 + **값 비움**" in p
         assert "**값을 낸 축은 근거 신호 한 줄이 반드시 있다.**" in p and "**소개·목차 밖의 지식은 쓰지 않는다**" in p
         assert "인물의 도착점(어디로 변해 가는지)" in p and "**정보 없음과 상관없이** 더 강한 쪽" in p
         assert "이 책의 문장·문체를 직접 칭찬할 때만" in p and "**인물의 매력·삶의 이야기가 끌고 감**" in p
@@ -443,3 +443,26 @@ def test_schemas_ask_for_the_suggested_slot_from_our_closed_lists():
     assert "suggest" in p and "suggest_keywords" in p and "null" in p
     # calibration 2 (10-06): passes gave up on books (fits false with no tags, all four axes null) — told not to
     assert "정보가 적다는 이유로 false로 하지 않는다" in p and "null은 드문 예외다" in p
+
+
+def test_the_v3_1_rules_reach_both_prompts():
+    """10-07 (plans/2026-10-07-dictionary-v3.1.md, 9 rules the user confirmed during the library review): written into the
+    dictionary as rule lines, so both passes read them — and the 10-06 LD-2 poetry rule is gone."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert p.index("모든 수록작이 하나의 내용 장르") < p.index("2. 시집이면 **시**") < p.index("목차의 **편 수**를 센다")  # 1
+        assert "**소설·시는 형식 자체가 약한 '마음' 신호다**" in p and "**주된 목적**" in p                        # 2
+        assert "**소설**은 형식 자체가 약한 '몰입·이야기' 신호다" in p                                             # 3
+        assert "**시집**은 형식 자체가 약한 '문장' 신호다" in p and "글맛이 강점으로 드러날 때만 문장 +1" not in p  # 4
+        assert "**세상의 설정을 말하는 문장(어떤 세상에서 무슨 일이 시작되는지)은 장면이 아니다." in p             # 5
+        assert p.index('"○○ 에세이"는 형식이다') < p.index("| 과학 교양 ↔ 에세이 |")                               # 6
+        assert "**세기 단어**(눈물·뭉클·울림·전율" in p and "**마지막 장 제목은 인물이 어떻게 됐는지를 말할 때만" in p  # 7
+        assert "| **뚜렷함** |" in p and "| **흐릿함** |" in p and "**비움은 소설·시에서만 쓴다.**" in p          # 8
+        assert "**두 AI가 모두 비움이면 비움으로 확정하고 사람에게 묻지 않는다**" in p                              # 9
+        assert "두 AI 중 하나라도 '정보 없음'으로 표시한 축" not in p
+        assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
+
+
+def test_the_dictionary_is_v3_1():
+    from pipeline.rules_version import rules_version
+    assert rules_version() == "v3.1"
