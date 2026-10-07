@@ -3,7 +3,7 @@ import type { CommonProps, EventName } from "./schema";
 import { saveEvent } from "./store";
 
 /** Supabase Auth keeps the session in cookies named sb-<project>-auth-token(.0, .1 …). */
-const hasAuthCookie = (req: Request): boolean => /(?:^|;\s*)sb-[^=;]*-auth-token/.test(req.headers.get("cookie") ?? "");
+export const hasAuthCookie = (req: Request): boolean => /(?:^|;\s*)sb-[^=;]*-auth-token/.test(req.headers.get("cookie") ?? "");
 
 /**
  * taxonomy 3-2 (v0.8): common.user_id is the logged-in person's Supabase id as this server verifies it from the session
