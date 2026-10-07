@@ -27,6 +27,7 @@
 | taxonomy v1.4 | 2026-10-05 | 공개 홍보(10-07) 유입 채널 구분 (`launch-plan.md` 4절, `launch-attribution.md`) | E-01 `utm_source`·`utm_medium`·`utm_campaign`(세션 첫 주소, Supabase only), 공통 `referrer`는 호스트만, `is_in_app_browser`에 스레드·링크드인, 처리방침 6-3h (3-1b, 8절) |
 | taxonomy v1.8 | 2026-10-07 | 내 책갈피 [막대 지우기] (PRD F-13, DESIGN C-17·C-27) | E-40 `shelf_removed`(`removed_count`) live, 동사 `removed`, 막대와 함께 지운 책갈피는 E-16을 책마다 보내지 않음 (8절) |
 | taxonomy v1.9 | 2026-10-07 | 책갈피 그림 세 부분 (사용자 결정 10-07 A, 시안 `deco/sky.html` A, `context.md` 10-07) | 하늘 소품 없앰 — E-36 `part_kind`·E-38 `parts_changed`에서 "sky" 뺌, E-07·E-38 `art`는 {animal, bg, ground, rare}, E-37 `collected_count` 최대 39 — 10-07 시안으로 땅 소품 한정판 +3·초판본 +1, 일반판 강아지 +1(고래는 한정판으로) (배포 전 같은 v1.9) (8절) |
+| taxonomy v2.0 | 2026-10-07 | 뒤표지 + 공유 (PRD F-27·S-11·S-12, `plans/2026-10-07-share-backcover.md`) | E-41 `back_cover_shown`·E-42 `share_clicked`·E-43 `share_page_viewed`·E-44 `share_page_started` live, 분류 `공유`, 동사 그대로(shown·clicked·viewed·started), 처리방침 공유 링크 문구 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -160,6 +161,7 @@
 | 도감 | S-05(처음 만남)·S-09(도감 보기) | E-36, E-37 (v1.3) |
 | 마무리 | S-08 (E-20은 S-04의 막다른 길에서도) | E-19, E-20 |
 | 홈 | S-01 (퍼널 밖 — 갈피 우체통, v0.10) | E-31 |
+| 공유 | S-11 뒤표지 · S-12 공유 페이지 | E-41, E-42, E-43, E-44 (v2.0) |
 | 공통 | — | 공통 속성 (csv의 `*` 줄) |
 
 ### 2-6. 트리거 (Trigger)
@@ -338,8 +340,12 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-19 | `redraw_clicked` | 같음 | 마무리 | click | live |
 | E-20 | `home_clicked` | 같음 | 마무리 | click | live |
 | E-31 | `feedback_sent` | (없음, v0.10) | 홈 | click | live |
+| E-41 | `back_cover_shown` | (없음, v2.0) | 공유 | view | live |
+| E-42 | `share_clicked` | (없음, v2.0) | 공유 | click | live |
+| E-43 | `share_page_viewed` | (없음, v2.0) | 공유 | view | live |
+| E-44 | `share_page_started` | (없음, v2.0) | 공유 | click | live |
 
-E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(33개 — `EVENT_NAMES`는 그 키, v1.2 E-35 추가, v1.3 E-36·E-37 추가, v1.6 E-38 추가, v1.7 E-39 추가, v1.8 E-40 추가. `removed` 6개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
+E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(37개 — `EVENT_NAMES`는 그 키, v2.0 E-41~E-44 추가, v1.2 E-35 추가, v1.3 E-36·E-37 추가, v1.6 E-38 추가, v1.7 E-39 추가, v1.8 E-40 추가. `removed` 6개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
 
 ### 4-2. 이벤트별 상세
 
@@ -836,6 +842,57 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|---|
 | `removed_count` | 추가 (v1.8) | Number | 0, 3, 12 | 서버가 막대와 함께 지운 책갈피 수 (빈 막대면 0, 목록에서 빠져 화면에 안 보이던 책도 포함) |
 
+#### E-41 `back_cover_shown`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 공유 | view | live | 신규 (v2.0) |
+
+**언제**: 다섯 번째 책갈피에 반응한 뒤 S-11 뒤표지(오늘 만난 책갈피 5장 + "내가 고른 길" 라벨)가 보일 때 한 판에 한 번. 새로고침으로 다시 보여도 같은 판이면 다시 보내지 않는다  
+**분석 질문**: 뒤표지까지 온 사람 중 공유를 누르는 비율(E-42 ÷ E-41), 뒤표지에서 [책 정보 보기]로 넘어가는 비율(E-09 ÷ E-41)
+
+| 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
+|---|---|---|---|---|
+| `curious_count` | 같음 | Number | 0, 2, 5 | 이번 회차 궁금해요 수 |
+| `label_count` | 추가 (v2.0) | Number | 0, 3, 5 | "내가 고른 길" 라벨에 올라간 칩 수 — 5장 모두에 맞는 선택 수(도전 표시는 세지 않음, 0이면 "기분 따라 골랐어요") |
+
+#### E-42 `share_clicked`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 공유 | click | live | 신규 (v2.0) |
+
+**언제**: S-11 [공유하기]로 무언가를 했을 때 동작마다 한 번 — 휴대폰 공유창을 열었을 때(native, 고른 앱·실제 전송은 알 수 없음), 공유창이 없어 링크를 복사했을 때(copy), [이미지 저장]으로 스토리 이미지를 받았을 때(save_image). 공유창을 닫은 것·실패는 남지 않음. 공유 링크 자체(답·책)는 넣지 않는다  
+**분석 질문**: 공유 방법별 비율, 공유 1번당 들어온 사람(E-43) — 바이럴 계수
+
+| 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
+|---|---|---|---|---|
+| `method` | 추가 (v2.0) | String | "native", "copy", "save_image" | 공유한 방법 — 휴대폰 공유창 / 링크 복사 / 이미지 저장 |
+| `label_count` | 추가 (v2.0) | Number | 0, 3, 5 | "내가 고른 길" 라벨에 올라간 칩 수 — 5장 모두에 맞는 선택 수(도전 표시는 세지 않음, 0이면 "기분 따라 골랐어요") |
+
+#### E-43 `share_page_viewed`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 공유 | view | live | 신규 (v2.0) |
+
+**언제**: 공유 링크 `/s/<코드>`로 S-12 공유 페이지가 열릴 때 한 번(코드가 틀려 첫 화면으로 가면 남지 않음). 공유한 사람·공유 코드는 넣지 않는다 — 들어온 경로는 공통 속성 `referrer_host`와 utm으로  
+**분석 질문**: 공유로 들어온 사람 수, 그중 [나도 갈피 잡기]를 누른 비율(E-44 ÷ E-43)
+
+| 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
+|---|---|---|---|---|
+| `label_count` | 추가 (v2.0) | Number | 0, 3, 5 | "내가 고른 길" 라벨에 올라간 칩 수 — 5장 모두에 맞는 선택 수(도전 표시는 세지 않음, 0이면 "기분 따라 골랐어요") |
+
+#### E-44 `share_page_started`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 공유 | click | live | 신규 (v2.0) |
+
+**언제**: S-12 공유 페이지의 [나도 갈피 잡기]를 누를 때 → S-01  
+**분석 질문**: 공유 페이지에서 갈피를 시작한 비율
+
+속성 없음 (공통 속성만).
 #### E-38 `bookmark_decorated`
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
@@ -1293,6 +1350,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v1.4 | 2026-10-05 | Claude (공개 준비) | 공개 홍보(10-07)의 유입 채널을 Supabase 원본에서도 가른다(3-1b). E-01 `site_visited`에 `utm_source`·`utm_medium`·`utm_campaign`(String 또는 null, ≤40, **Supabase only**) — 세션 첫 주소에서 한 번 읽어 sessionStorage에 두고(첫 접촉), `[a-z0-9_-]` 밖은 null, Amplitude가 주소를 읽은 뒤 주소창에서 `utm_*`를 지움. 공통 속성이 아니라 E-01 속성인 이유는 1-2 속성 상속 원칙과 행 크기. 공통 `referrer`는 이름 그대로 **호스트만**(6-2 검토 메모 — 브라우저·서버 `referrerHost`, 그 전 기록은 주소 전체). `is_in_app_browser`가 스레드(`Barcelona`)·링크드인(`LinkedInApp`) 앱 안 브라우저도 TRUE로(그 전 기록은 FALSE). 처리방침 6-3h 먼저(갱신일 그대로). 분석 SQL은 `launch-attribution.md`. 새 이벤트 없음 |
 | v1.9 | 2026-10-07 | Claude (사용자 결정 10-07 A) | 책갈피 그림이 세 부분(동물 + 배경 + 땅 소품)이 된다 — 하늘 소품(달·구름·별·새·큰 별·무지개·별똥별·금빛 초승달)을 없애고 하늘은 배경이 맡는다(일반판 배경은 깔끔한 하늘, 한정판·초판본 배경은 움직이는 "살아 있는 배경"). 반딧불은 땅 소품에서 빠져 새 한정판 배경 "summer"(여름밤)가 된다. E-36 `part_kind`·E-38 `parts_changed` 값에서 "sky"를 뺌(`schema.ts` 허용 값도), E-07·E-38 `art`는 {animal, bg, ground, rare}, E-37 `collected_count` 최대 42 → 34. 이벤트 이름·속성·타입 그대로. 출시 전이라 도감·시험 기록을 비운다(0008 — 모두 같은 출발선). 그 전 기록에는 "sky"·"firefly"가 있을 수 있어 분석에서 뺀다. 모으는 정보 변화 없음 — `/privacy`는 "하늘"을 말하지 않아 그대로 |
 | v1.8 | 2026-10-07 | Claude (사용자 요청) | 내 책갈피(S-09) [막대 지우기](PRD F-13, DESIGN C-17·C-27): 첫 막대가 아닌 막대를 책갈피와 함께 지운다(책갈피가 있으면 확인 시트). 새 E-40 `shelf_removed`(`removed_count` Number — 서버가 함께 지운 책갈피 수, 빈 막대면 0)를 화면과 함께 `live`로, 동사 `removed` 추가. v0.8의 "막대 지우기는 이벤트 없음"은 빈 막대만 치울 수 있을 때의 결정 — 이제 책갈피가 함께 사라지므로 남긴다. 함께 지운 책마다 E-16을 보내지 않음(E-35와 같음). 막대 이름·번호는 넣지 않음(6-1). 모으는 정보 변화 없음(지운 수뿐) — `/privacy`는 기록을 "누른 버튼"으로만 적어 그대로 |
+| v2.0 | 2026-10-07 | Claude (사용자 결정) | 뒤표지 + 공유(PRD F-27·S-11·S-12, `plans/2026-10-07-share-backcover.md`): E-41 `back_cover_shown`, E-42 `share_clicked`(`method`), E-43 `share_page_viewed`, E-44 `share_page_started` 추가, 분류 `공유`, 새 속성 `method`·`label_count`. 공유 링크에는 고른 답·책 5권·그림만 — 개인정보 없음, 처리방침에 한 줄 |
 
 ---
 

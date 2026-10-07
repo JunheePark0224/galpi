@@ -125,9 +125,18 @@ export function specMismatches(events: Sent[]): string[] {
 }
 
 /** Reacts to bookmarks in order; each click waits until the bookmark has finished rising (buttons re-enable). */
-export async function reactToBookmarks(page: Page, reactions: readonly ("궁금해요" | "패스")[], total = reactions.length) {
+/**
+ * React to the bookmarks in turn. After the last one the S-11 뒤표지 shows (F-27, 10-07); unless `stayOnBack`, its main
+ * button is pressed so the round goes on to S-06 / S-08 as before.
+ */
+export async function reactToBookmarks(page: Page, reactions: readonly ("궁금해요" | "패스")[], total = reactions.length, stayOnBack = false) {
   for (let i = 0; i < reactions.length; i++) {
     await expect(page.getByText(`${i + 1} / ${total}`)).toBeVisible();
     await page.getByRole("button", { name: reactions[i], exact: true }).click();
   }
+  if (reactions.length < total) return;
+  await expect(page.getByRole("heading", { level: 1, name: "오늘 만난 책갈피" })).toBeVisible();
+  if (stayOnBack) return;
+  const curious = reactions.filter((r) => r === "궁금해요").length;
+  await page.getByRole("button", { name: curious > 0 ? `궁금해요 ${curious}권 책 정보 보기` : "다음 책갈피 만나기" }).click();
 }

@@ -64,7 +64,10 @@ test("the mailbox sits below the entry, smaller and fainter, with a 44px tap tar
   const mailbox = page.getByRole("button", { name: MAILBOX });
   await expect(entry).toBeVisible();
   await expect(mailbox).toBeVisible();
-  const [e, m] = [await entry.boundingBox(), await mailbox.boundingBox()];
+  // the server's S-01 is swapped for the browser's (FlowRoot) right after load — measure once both boxes are there
+  const boxes = async () => [await entry.boundingBox(), await mailbox.boundingBox()] as const;
+  await expect.poll(async () => (await boxes()).every(Boolean)).toBe(true);
+  const [e, m] = await boxes();
   if (!e || !m) throw new Error("not laid out");
   expect(m.y).toBeGreaterThan(e.y + e.height);
   expect(m.width).toBeLessThan(e.width / 2);
