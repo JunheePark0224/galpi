@@ -48,14 +48,19 @@ export function cellPicture(cell: DexCell, first: ArtCombo): { art: ArtCombo; pa
   }
 }
 
+/**
+ * 10-07 (user: the collected part should stand out): a met animal or prop cell draws that part alone, with no background
+ * art behind it (`stage={false}` — a plain paper window); a background cell is its sky and hill as before.
+ */
 function Cell({ cell }: { cell: DexCell }) {
   const { met } = cell;
   if (met) {
     const picture = cellPicture(cell, met.firstArt);
+    const bare = cell.kind !== "bg";
     return (
       <li className={styles.cell}>
-        <span className={styles.win} data-tier={cell.tier}>
-          <BookmarkArt art={picture.art} parts={picture.parts} clipId={`dex-${cell.kind}-${cell.value}`} fx="light" />
+        <span className={styles.win} data-tier={cell.tier} data-bare={bare ? "" : undefined}>
+          <BookmarkArt art={picture.art} parts={picture.parts} clipId={`dex-${cell.kind}-${cell.value}`} fx="light" stage={!bare} />
           {met.isNew && <span className={styles.new}>NEW</span>}
         </span>
         <span className={styles.name}>{partName(cell.kind, cell.value)}</span>

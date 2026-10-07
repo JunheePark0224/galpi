@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Bookmark } from "@/components/Bookmark";
 import { BookmarkArt, PartShape } from "@/components/BookmarkArt";
 import { Button } from "@/components/Button";
@@ -67,7 +67,8 @@ interface Props {
 
 /**
  * C-26 책갈피 꾸미기 (PRD F-13·F-21, 시안 flow.png ②): the bookmark's front, live, at the top; [동물 | 배경 | 하늘 소품 |
- * 땅 소품]; the parts by tier (일반판 · 한정판 · 초판본). Only parts in the person's 도감, the bookmark's own first parts and
+ * 땅 소품]; the parts by tier (일반판 · 한정판 · 초판본). The preview and the tabs stay pinned (10-07 user: every pick shows
+ * in view) — only the list of parts scrolls (`data-parts`), back to its top on a new tab; the sheet (`pinned`) keeps one height. Only parts in the person's 도감, the bookmark's own first parts and
  * the empty ground can be picked (the server checks the same rule) — the rest are 🔒 silhouettes. A footer that stays at
  * the bottom: [처음 그림으로] (the picture it was kept with, in the preview) and [이대로 꽂기]. The 도감 not loading: a
  * plain message, nothing can be saved.
@@ -79,6 +80,7 @@ export function DecorateEditor({ bookmark, met, onSave, onBack }: Props) {
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
   const original = bookmark.originalArt;
+  const list = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let live = true;
@@ -104,31 +106,38 @@ export function DecorateEditor({ bookmark, met, onSave, onBack }: Props) {
   return (
     <div className={styles.editor}>
       <div className={styles.preview}>
-        <span className={sheet.big}>
+        <span className={styles.previewBox}>
           <Bookmark card={bookmark.card} art={draft} met={met} moving />
         </span>
       </div>
       <div className={styles.tabs} role="group" aria-label="꾸밀 부분">
         {ART_KINDS.map((k) => (
-          <button key={k} type="button" className={styles.tab} aria-pressed={tab === k} onClick={() => setTab(k)}>{TAB_NAMES[k]}</button>
+          <button
+            key={k} type="button" className={styles.tab} aria-pressed={tab === k}
+            onClick={() => { setTab(k); if (list.current) list.current.scrollTop = 0; }}
+          >
+            {TAB_NAMES[k]}
+          </button>
         ))}
       </div>
-      {!load && <p className={styles.quiet} aria-busy="true">도감을 불러오는 중…</p>}
-      {load && !ready && <p className={styles.quiet} role="alert">{DEX_FAILED}</p>}
-      {load && TIERS.map((tier) => (
-        <section key={tier} className={styles.section} aria-label={`${TAB_NAMES[tab]} ${TIER_NAMES[tier]}`}>
-          <h3 className={styles.tier} data-tier={tier}>{TIER_NAMES[tier]}</h3>
-          <ul className={styles.grid}>
-            {KIND_TIERS[tab][tier].map((value) => (
-              <Cell
-                key={value} kind={tab} value={value} tier={tier} draft={draft}
-                allowed={ready && partAllowed(tab, value, original, owned)} onPick={() => pick(tab, value)}
-              />
-            ))}
-          </ul>
-        </section>
-      ))}
-      <button type="button" className={sheet.textButton} onClick={onBack}>뒤로</button>
+      <div ref={list} className={styles.parts} data-parts="">
+        {!load && <p className={styles.quiet} aria-busy="true">도감을 불러오는 중…</p>}
+        {load && !ready && <p className={styles.quiet} role="alert">{DEX_FAILED}</p>}
+        {load && TIERS.map((tier) => (
+          <section key={tier} className={styles.section} aria-label={`${TAB_NAMES[tab]} ${TIER_NAMES[tier]}`}>
+            <h3 className={styles.tier} data-tier={tier}>{TIER_NAMES[tier]}</h3>
+            <ul className={styles.grid}>
+              {KIND_TIERS[tab][tier].map((value) => (
+                <Cell
+                  key={value} kind={tab} value={value} tier={tier} draft={draft}
+                  allowed={ready && partAllowed(tab, value, original, owned)} onPick={() => pick(tab, value)}
+                />
+              ))}
+            </ul>
+          </section>
+        ))}
+        <button type="button" className={sheet.textButton} onClick={onBack}>뒤로</button>
+      </div>
       <div className={styles.footer}>
         {failed && <p role="alert" className={sheet.error}>{SAVE_FAILED}</p>}
         <div className={styles.footerRow}>

@@ -34,6 +34,8 @@ export interface LibraryStore {
   deleteSave(isbn: string): Promise<boolean>;
   /** Every bookmark of this person (S-09 [모두 제거]); the rods stay. How many rows went. */
   deleteAllSaves(): Promise<number>;
+  /** The bookmarks of one rod (S-09 [막대 지우기], 10-07); how many rows went. */
+  deleteShelfSaves(shelfId: string): Promise<number>;
   updateSave(isbn: string, change: { shelfId: string; position: number }): Promise<boolean>;
   /** 꾸미기: the picture shown now (original_art never changes — 0005's trigger). false when this book is not saved. */
   updateArt(isbn: string, art: ArtCombo): Promise<boolean>;

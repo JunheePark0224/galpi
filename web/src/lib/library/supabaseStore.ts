@@ -76,6 +76,11 @@ export function supabaseStore(db: SupabaseClient, userId: string, writer: Supaba
       if (error) fail("unsave all", error.code);
       return (data ?? []).length;
     },
+    async deleteShelfSaves(shelfId) {
+      const { data, error } = await saves().delete().eq("user_id", userId).eq("shelf_id", shelfId).select("isbn");
+      if (error) fail("unsave rod", error.code);
+      return (data ?? []).length;
+    },
     async updateSave(isbn, change) {
       const { data, error } = await saves().update({ shelf_id: change.shelfId, position: change.position })
         .eq("user_id", userId).eq("isbn", isbn).select("isbn");

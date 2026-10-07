@@ -7,6 +7,11 @@
   border-radius: 18px 18px 0 0; background: var(--paper-grain), var(--paper); box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.15);
   animation: rise 220ms var(--ease-flip);
 }
+/* C-26 (10-07): one fixed height, no scroll of its own — the child pins its top and scrolls its middle. */
+.sheet[data-pinned] { display: flex; flex-direction: column; height: 92vh; height: 92dvh; max-height: 92dvh; overflow: hidden; padding-bottom: 0; }
+.sheet[data-pinned] > .grab, .sheet[data-pinned] > .title { flex-shrink: 0; }
 .grab { display: block; width: 40px; height: 4px; margin: 0 auto var(--space-3); border-radius: 2px; background: var(--paper-line); }
-.title { margin: 0; font-size: 20px; line-height: 1.4; }
+.title { margin: 0; font-size: 20px; line-height: 1.4; word-break: keep-all; }   /* Korean lines break between words */
 @keyframes rise { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+/* Reduced motion: the sheet is simply there (also keeps measurements in E2E stable — they run with reducedMotion "reduce"). */
+@media (prefers-reduced-motion: reduce) { .sheet { animation: none; } }

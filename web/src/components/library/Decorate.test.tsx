@@ -78,6 +78,24 @@ describe("C-26 책갈피 꾸미기 editor", () => {
     return utils;
   }
 
+  it("keeps the preview and the tabs pinned above the one scrolling list of parts; the footer below it (10-07)", async () => {
+    await openEditor();
+    const dialog = screen.getByRole("dialog", { name: "책갈피 꾸미기" });
+    expect(dialog).toHaveAttribute("data-pinned");
+    const list = dialog.querySelector<HTMLElement>("[data-parts]")!;
+    expect(list).not.toBeNull();
+    expect(within(list).getByRole("region", { name: "동물 한정판" })).toBeInTheDocument();
+    expect(within(list).getByRole("button", { name: "뒤로" })).toBeInTheDocument();
+    for (const outside of [within(dialog).getByRole("group", { name: "꾸밀 부분" }), within(dialog).getByRole("button", { name: "이대로 꽂기" })]) {
+      expect(list.contains(outside)).toBe(false);
+    }
+    expect(list.contains(dialog.querySelector("svg"))).toBe(false);                 // the preview is not in the list
+    // a new tab starts its list at the top
+    list.scrollTop = 120;
+    fireEvent.click(within(dialog).getByRole("button", { name: "배경" }));
+    expect(list.scrollTop).toBe(0);
+  });
+
   it("focus moves into the editor; tabs are buttons with aria-pressed; cells are named by part and tier, or 잠김", async () => {
     await openEditor();
     expect(screen.getByRole("dialog", { name: "책갈피 꾸미기" })).toBeInTheDocument();

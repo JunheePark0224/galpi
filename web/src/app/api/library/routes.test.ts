@@ -295,6 +295,29 @@ describe("내 책갈피 routes", () => {
     expect((await removeShelf(send("DELETE", "/api/library/shelves", { id: "x" }))).status).toBe(400);
   });
 
+  it("[막대 지우기] takes a rod with its bookmarks only for { id, withBookmarks: true } — never the first rod", async () => {
+    const row = (isbn: string, shelfId: string, position: number) =>
+      ({ isbn, art: ART as never, reason: { label: "이 책은" as const, items: [] }, metOn: "2026-10-01", shelfId, position });
+    store = memoryStore({
+      shelves: [{ id: A, name: "첫", position: 0 }, { id: B, name: "둘", position: 1 }],
+      saves: [row("9788998441012", A, 0), row("9790000000009", B, 0), row("9790000000016", B, 1)],
+    });
+    for (const body of [{ id: B, withBookmarks: "true" }, { id: B, withBookmarks: 1 }, { id: B, withBookmarks: true, all: true }]) {
+      expect((await removeShelf(send("DELETE", "/api/library/shelves", body))).status, JSON.stringify(body)).toBe(400);
+    }
+    expect((await removeShelf(send("DELETE", "/api/library/shelves", { id: B }))).status).toBe(409);       // not empty: asked plainly
+    expect((await removeShelf(send("DELETE", "/api/library/shelves", { id: A, withBookmarks: true }))).status).toBe(409);
+    expect(store.data.saves).toHaveLength(3);
+    const res = await removeShelf(send("DELETE", "/api/library/shelves", { id: B, withBookmarks: true }));
+    expect(res.status).toBe(200);
+    expect(res.headers.get("cache-control")).toBe("no-store");
+    expect(await res.json()).toEqual({ ok: true, removed: 2 });
+    expect(store.data.shelves.map((s) => s.id)).toEqual([A]);
+    expect(store.data.saves.map((s) => s.isbn)).toEqual(["9788998441012"]);
+    userId = null;
+    expect((await removeShelf(send("DELETE", "/api/library/shelves", { id: A, withBookmarks: true }))).status).toBe(401);
+  });
+
   it("answers a database failure with a plain 500 and logs no values", async () => {
     store.saves = async () => { throw new Error("library saves failed: 08006"); };
     const res = await library(get("/api/library"));

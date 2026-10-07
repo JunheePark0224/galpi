@@ -120,7 +120,7 @@ describe("useLibrary (S-09)", () => {
     expect(addSavedCount).toHaveBeenCalledWith(-1);
   });
 
-  it("adds a rod (E-29 with the new number of rods — never its name), renames and removes rods without events", async () => {
+  it("adds a rod (E-29 with the new number of rods — never its name), renames without an event, removes with E-40 (v1.8)", async () => {
     request.mockResolvedValue(ok(VIEW));
     const { result } = renderHook(() => useLibrary());
     await waitFor(() => expect(result.current.status).toBe("ready"));
@@ -133,10 +133,16 @@ describe("useLibrary (S-09)", () => {
     request.mockResolvedValueOnce(ok()).mockResolvedValueOnce(ok(VIEW));
     await act(async () => { await result.current.renameShelf("b", "새 이름"); });
     request.mockResolvedValueOnce(ok()).mockResolvedValueOnce(ok(VIEW));
-    await act(async () => { await result.current.removeShelf("b"); });
     expect(request).toHaveBeenCalledWith("PATCH", "/api/library/shelves", { id: "b", name: "새 이름" });
-    expect(request).toHaveBeenCalledWith("DELETE", "/api/library/shelves", { id: "b" });
     expect(track).not.toHaveBeenCalled();
+    await act(async () => { await result.current.removeShelf("b"); });
+    expect(request).toHaveBeenCalledWith("DELETE", "/api/library/shelves", { id: "b" });
+    expect(track).toHaveBeenLastCalledWith("shelf_removed", { removed_count: 0 });
+    request.mockResolvedValueOnce(ok({ ok: true, removed: 4 })).mockResolvedValueOnce(ok(VIEW));
+    await act(async () => { await result.current.removeShelf("b", true); });
+    expect(request).toHaveBeenCalledWith("DELETE", "/api/library/shelves", { id: "b", withBookmarks: true });
+    expect(track).toHaveBeenLastCalledWith("shelf_removed", { removed_count: 4 });
+    expect(JSON.stringify(track.mock.calls)).not.toContain("새 이름");
   });
 
   it("reports a refused change without an event", async () => {
