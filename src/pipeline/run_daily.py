@@ -2,6 +2,8 @@
 
 Usage (from the checkout):  PYTHONIOENCODING=utf-8 python -m src.pipeline.run_daily [--date YYYY-MM-DD | --batch ID] [--count N]
   --batch: a later run of the same day, `YYYY-MM-DD-2`, `-3` … (pipeline/batch.py); the first batch is the plain date
+  --batches: send the calls through the Message Batches API (pipeline/batched.py) — half the price, the same requests and
+             records; the run waits for each batch (usually minutes, at most 24 hours), so it is for local runs
 Then:                        cd web && npm run books:import && npm test      (the workflow does both, then report.py)
 Keys: YES24_API_KEY / ANTHROPIC_API_KEY from the environment (Actions secrets) or the local .env — never printed.
 Models and counts come from data/pipeline/config.json (model = pass A, second_model = blind pass B).
@@ -16,6 +18,9 @@ missing key, YES24 failed, the run stopped before any book was finished, or cand
   STOP_LIMIT times in a row (tagger.Breaker, one streak per pass) → the run stops there; the books finished before it are
   written as `partial`, and if there are none it is `anthropic_failed` with no file
   nothing to fill → `full`, zero API calls
+A split a majority may settle (slot, 🍃 axes, way — tiebreak.SETTLES) gets a third pass (pass C, the same blind check); its
+2-of-3 value replaces the person's decision (route plan 10-08). Both passes — or the majority — placing a book in a slot of
+the other 갈래 drop it here with `requeued_to` and a requeue.json row; a book back from the queue is not sent on again.
 A pass-A one-liner that breaks the form / length / hype / title rules is asked for once more from the same model
 (pipeline/one_liner.py); the summary's `one_liner_retries` counts them and their cost (also in `usage` / `cost_usd`).
 YES24 text (intro, TOC) lives on the Candidate in memory and goes to the tagger only; the additions file, the summary and
@@ -31,7 +36,9 @@ import argparse
 import json
 import os
 import sys
+import time
 from collections import Counter
+from dataclasses import dataclass
 from datetime import datetime
 
 import collect_candidates
@@ -39,11 +46,11 @@ from apply_review import FIELD_OF_TOPIC
 from compare_apis import load_env
 
 from . import ADDITIONS, BOOKS, KST, REQUEUE, RUNS, VOCAB
-from . import requeue
+from . import batched, requeue
 from .axis_check import retry as retry_axes
 from .batch import BatchError, parse as parse_batch
 from .candidates import Candidate, find, known_from, yes24_env
-from .checks import decide, disagreements, rule_issues
+from .checks import crossed_to, decide, disagreements, rule_issues
 from .config import Config, load_config
 from .gaps import plan_day
 from .keyword_candidates import excluded_names
@@ -52,7 +59,7 @@ from .one_liner import RetryLog, retry as retry_one_liner
 from .prompt import all_keywords, schema, system_prompt, user_message
 from .rules_version import rules_version
 from .slots import keyword_rule, slot_rule
-from .tagger import Breaker, TaggerStop, Usage, call, parse
+from .tagger import Breaker, TaggerStop, Usage, call, parse, request
 
 
 MIN_ATTEMPTS, MAX_FAILED_SHARE = 10, 0.30  # a run whose books keep failing (max_tokens, refusal, invalid answer…) stops here
@@ -92,17 +99,19 @@ def _spend(ledger: dict, model: str, used: Usage) -> None:
 
 def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, breaker: Breaker,
             ledger: dict, retries: RetryLog | None = None, rules: str | None = None,
-            axis_retries: RetryLog | None = None) -> tuple[dict | None, str]:
+            axis_retries: RetryLog | None = None, routed: bool = False, requeued: bool = False
+            ) -> tuple[dict | None, str]:
     """(record or None, reason). Pass A tags (a one-liner that breaks a rule is asked for once more — one_liner.py), pass B
     checks blind (it writes no one-liner); on a 🍃 book either pass whose axis values its own signal lines do not back is
     asked once more (axis_check.py). Token use goes to `ledger`, one-liner retries also to `retries`, axis re-asks to
     `axis_retries`. Raises TaggerStop. A pass that says the book does not fit names the slot it belongs to (`suggest`).
-    The record carries `rules_version`: `rules`, or the label dictionary's version (rules_version.py) when not given."""
+    The record carries `rules_version`: `rules`, or the label dictionary's version (rules_version.py) when not given.
+    `routed` (the daily run — route plan 10-08; the library re-tag and the gold runs keep the two passes' record as it is):
+    a split a majority may settle goes to a third pass (`_third_pass`), and both passes naming the same slot of the other 갈래 (checks.crossed_to, 10-08) drop the book here with `requeued_to` — run()
+    queues it to be tagged there; a book that came back from the queue (`requeued`) is not sent on again but waits for a person."""
     if not cand.author.strip() or cand.pages <= 0:  # find() never offers one; a book that import would reject costs nothing
         return None, "incomplete_candidate"
-    kept = vocab.get(cand.slot, {}).get("kept", {}) if cand.entry == "target" else {}  # a new topic may have no list yet
-    names, hints = list(kept), keyword_hints(cand, kept) if kept else []
-    user = user_message(cand.entry, cand.slot, cand.title, cand.author, cand.intro, cand.toc, hints)
+    names, hints, user = _book_text(cand, vocab)
     raw_a, used, why = call(client, cfg.model, prompts["tag"], user, schema(cand.entry, "tag", all_keywords(vocab)), breaker, "A")
     _spend(ledger, cfg.model, used)
     left_out = excluded_names(vocab.get(cand.slot, {})) if cand.entry == "target" else []
@@ -123,9 +132,37 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     b = _axes_backed(client, cfg.second_model, prompts["check"], user, cand.entry, raw_b, b, "B", breaker, ledger, axis_retries)
     flags = disagreements(cand.entry, a, b)
     issues = rule_issues(cand.entry, a, cand.title, f"{cand.intro} {cand.toc}", b)
-    status, auto = decide(a, b, flags, issues, cfg.auto_merge)
+    crossed = routed and not requeued and crossed_to(cand.entry, a, b)
+    status, auto = ("dropped", None) if crossed else decide(a, b, flags, issues, cfg.auto_merge, cand.entry)
     rec = record(cand, a, b, flags, issues, status, auto, hints)  # record() blanks any field that copied YES24 text
+    rec = _third_pass(client, cfg, prompts, vocab, cand, breaker, ledger, rec, requeued) if routed else rec
     return {**rec, "rules_version": rules or rules_version()}, "ok"
+
+
+def _book_text(cand: Candidate, vocab: dict) -> tuple[list[str], list[str], str]:
+    """(the topic's keyword names, the keyword hints found in the book, the user message both passes get)."""
+    kept = vocab.get(cand.slot, {}).get("kept", {}) if cand.entry == "target" else {}  # a new topic may have no list yet
+    hints = keyword_hints(cand, kept) if kept else []
+    return list(kept), hints, user_message(cand.entry, cand.slot, cand.title, cand.author, cand.intro, cand.toc, hints)
+
+
+def prefetch(recorder: batched.Recorder, cfg: Config, prompts: dict, vocab: dict, cands: list[Candidate]) -> None:
+    """Pass B of every book in the first batch next to pass A (it is blind: its request does not wait on pass A's answer)."""
+    for cand in cands:
+        if cand.author.strip() and cand.pages > 0:
+            user = _book_text(cand, vocab)[2]
+            recorder.expect(cand.isbn, request(cfg.second_model, prompts["check"], user, schema(cand.entry, "check", all_keywords(vocab))))
+
+
+def _third_pass(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, breaker: Breaker, ledger: dict,
+                rec: dict, requeued: bool) -> dict:
+    """The record after pass C when A and B split on a field a majority may settle (tiebreak.py, route plan 3 — 10-08);
+    as it is otherwise. Raises TaggerStop."""
+    from . import tiebreak  # tiebreak imports this module
+    if rec["status"] == "dropped" or not tiebreak.needs_third(rec):
+        return rec
+    return tiebreak.applied(rec, tiebreak.third(client, cfg, vocab, prompts, cand, breaker, ledger), cfg.auto_merge,
+                            requeued)
 
 
 def _axes_backed(client, model: str, system: str, user: str, entry: str, raw: dict, ans: dict, pass_: str,
@@ -140,8 +177,77 @@ def _axes_backed(client, model: str, system: str, user: str, entry: str, raw: di
     return ans
 
 
-def run(batch: str, cfg: Config, env: dict, client) -> dict:
-    """One batch (`batch` = the day, or `<day>-N` for a later run that day)."""
+@dataclass
+class Tagged:
+    recs: list[dict]
+    reasons: Counter
+    ledger: dict
+    stopped: str | None
+    retries: RetryLog
+    axis_retries: RetryLog
+    sent: list[str]
+
+
+def tag_all(client, cfg: Config, prompts: dict, vocab: dict, cands: list[Candidate], rules: str,
+            requeued: set[str] = frozenset(), batches: bool = False, sleep=time.sleep) -> Tagged:
+    """Every candidate through tag_one (routed: third pass, cross-entry requeue), in the run's order. `batches`: in rounds
+    through the Message Batches API (batched.py); `requeued`: ISBNs back from requeue.json (not sent on again). Stops on a
+    TaggerStop or when too many books fail (MIN_ATTEMPTS / MAX_FAILED_SHARE) — the finished books are kept."""
+    recs, reasons, ledger, stopped, breaker, tried, retries = [], Counter(), {}, None, Breaker(), 0, RetryLog()
+    axis_retries, sent = RetryLog(), []
+    tagger = batched.Recorder() if batches else client
+    if batches:
+        prefetch(tagger, cfg, prompts, vocab, cands)
+    todo = cands
+    while todo and not stopped:
+        waiting = []
+        for cand in todo:
+            # one book's use is kept apart and added once it is done: a batched book is run again each round (replays)
+            own, own_retries, own_axes, rec, why = {}, RetryLog(), RetryLog(), None, None
+            if batches:
+                tagger.begin(cand.isbn)
+            try:
+                rec, why = tag_one(tagger, cfg, prompts, vocab, cand, breaker, own, own_retries, rules, own_axes,
+                                   routed=True, requeued=cand.isbn in requeued)
+            except batched.Waiting:
+                waiting.append(cand)
+                continue
+            except TaggerStop as err:
+                stopped = str(err)
+            except Exception as err:  # one odd book must not lose the finished ones; the class name is all that is kept
+                rec, why = None, f"error:{type(err).__name__}"
+            for m, u in own.items():
+                ledger[m] = ledger.get(m, Usage()).plus(u)
+            retries.absorb(own_retries)
+            axis_retries.absorb(own_axes)
+            if stopped:
+                break
+            reasons[why] += 1
+            if rec:
+                recs.append(rec)
+            if why != "incomplete_candidate":  # that one cost nothing
+                tried += 1
+            if tried >= MIN_ATTEMPTS and 1 - len(recs) / tried > MAX_FAILED_SHARE:
+                top = max((r for r in reasons if r != "ok"), key=reasons.get, default="unknown")
+                stopped = f"{tried - len(recs)} of {tried} books failed ({top}) — over {MAX_FAILED_SHARE:.0%}, stopped to save cost"
+                break
+        if stopped or not waiting:
+            break
+        try:
+            sent.append(batched.send(client, tagger, sleep))
+        except TaggerStop as err:
+            stopped = str(err)
+        todo = waiting
+    if batches:  # what the batches answered: a prefetched pass B whose book failed, and books cut off by a stop, too
+        ledger = dict(tagger.spent)
+    order = {c.isbn: i for i, c in enumerate(cands)}
+    recs.sort(key=lambda r: order[r["isbn"]])  # a batched book finishes in its own round; the file keeps the run's order
+    return Tagged(recs, reasons, ledger, stopped, retries, axis_retries, sent)
+
+
+def run(batch: str, cfg: Config, env: dict, client, batches: bool = False, sleep=time.sleep) -> dict:
+    """One batch (`batch` = the day, or `<day>-N` for a later run that day). `batches`: send the calls through the Message
+    Batches API (batched.py — half the price, results within 24 hours; `sleep` waits between status checks)."""
     date = parse_batch(batch)[0]
     books, vocab, additions = load_state()
     fails_before = len(collect_candidates.FAILURES)
@@ -163,42 +269,32 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
     if not cands:
         return summary | {"status": "yes24_failed" if yes24_fail else "no_candidates"}
     prompts, rules = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}, rules_version()
-    recs, reasons, ledger, stopped, breaker, tried, retries = [], Counter(), {}, None, Breaker(), 0, RetryLog()
-    axis_retries = RetryLog()
-    for cand in cands:
-        try:
-            rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger, retries, rules, axis_retries)
-        except TaggerStop as err:
-            stopped = str(err)
-            break
-        except Exception as err:  # one odd book must not lose the finished ones; the class name is all that is kept
-            rec, why = None, f"error:{type(err).__name__}"
-        reasons[why] += 1
-        if rec:
-            recs.append(rec)
-        if why != "incomplete_candidate":  # that one cost nothing
-            tried += 1
-        if tried >= MIN_ATTEMPTS and 1 - len(recs) / tried > MAX_FAILED_SHARE:
-            top = max((r for r in reasons if r != "ok"), key=reasons.get, default="unknown")
-            stopped = f"{tried - len(recs)} of {tried} books failed ({top}) — over {MAX_FAILED_SHARE:.0%}, stopped to save cost"
-            break
+    t = tag_all(client, cfg, prompts, vocab, cands, rules, {c.isbn for c in back}, batches, sleep)
+    recs, reasons, ledger, stopped, retries, axis_retries, sent = (t.recs, t.reasons, t.ledger, t.stopped, t.retries,
+                                                                  t.axis_retries, t.sent)
+    back_isbns = {c.isbn for c in back}
     status = Counter(r["status"] for r in recs)
     summary |= {"tagged": len(recs), "reasons": dict(reasons), "stopped": stopped, "rules_version": rules,
                 "picked": status["picked"], "review": status["review"], "reserve": status["reserve"],
-                "dropped": status["dropped"],
+                "dropped": status["dropped"], "crossed": sum(bool(r.get("requeued_to")) for r in recs),
                 "auto_agreed": sum(r.get("auto") == "ai-agree" for r in recs),
                 "flagged": sum(bool(r["flags"]) and r["status"] != "dropped" for r in recs),
+                "third_pass": {"books": sum("third" in r for r in recs), "settled": sum(bool(r.get("settled")) for r in recs)},
                 "one_liner_retries": retries.summary(),
                 "axis_retries": axis_retries.summary(),
                 "usage": {m: u.__dict__ for m, u in ledger.items()},
-                "cost_usd": round(sum(u.cost(m) for m, u in ledger.items()), 4)}
+                "cost_usd": round(sum(u.cost(m) for m, u in ledger.items()) * (batched.DISCOUNT if batches else 1), 4),
+                **({"batches": {"ids": sent, "discount": batched.DISCOUNT}} if batches else {})}
     if not recs:
         return summary | {"status": "anthropic_failed" if stopped else "no_books"}
     write_doc(ADDITIONS / f"{batch}.json", additions_doc(date, cfg.model, cfg.second_model, recs, batch))
-    done = {r["isbn"] for r in recs} & {c.isbn for c in back}
-    if done:  # tagged as the other entry: the row has done its job (a book whose tagging failed waits for the next batch)
-        requeue.save(REQUEUE, requeue.without(requeue.load(REQUEUE), done))
-        summary |= {"requeued": sorted(done)}
+    done = {r["isbn"] for r in recs} & back_isbns
+    crossing = [{"isbn": r["isbn"], "to_entry": r["requeued_to"]["entry"], "to_slot": r["requeued_to"]["slot"],
+                 "from_batch": batch, "date": date} for r in recs if r.get("requeued_to")]
+    if done or crossing:  # a row tagged as the other entry has done its job (a failed one waits for the next batch);
+        # a book both passes sent to the other 갈래 goes in for the next batch
+        requeue.save(REQUEUE, requeue.added(requeue.without(requeue.load(REQUEUE), done), crossing))
+        summary |= {"requeued": sorted(done)} if done else {}
     return summary | {"status": "partial" if stopped else "ok", "file": f"data/processed/additions/{batch}.json"}
 
 
@@ -222,6 +318,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--date", help="the day (default: today in KST) — the day's first batch")
     ap.add_argument("--batch", help="batch id: YYYY-MM-DD, or YYYY-MM-DD-N for a later run that day")
     ap.add_argument("--count", type=int)
+    ap.add_argument("--batches", action="store_true", help="Message Batches API: half the price, waits up to 24 hours")
     args = ap.parse_args(argv)
     batch = args.batch or args.date or datetime.now(KST).date().isoformat()
     try:
@@ -239,7 +336,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ERROR: {', '.join(missing)} not set", file=sys.stderr)
         return 1
     import anthropic  # the SDK is only needed for a real run
-    summary = run(batch, cfg, env, anthropic.Anthropic(api_key=key, max_retries=2, timeout=60))
+    summary = run(batch, cfg, env, anthropic.Anthropic(api_key=key, max_retries=2, timeout=60), batches=args.batches)
     RUNS.mkdir(parents=True, exist_ok=True)
     (RUNS / f"{batch}.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(json.dumps(summary, ensure_ascii=False, indent=1))

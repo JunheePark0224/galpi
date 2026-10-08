@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { SQL_PATH } from "../src/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "../src/lib/paths/__fixtures__/paths";
 import { answerPath, named, reactToBookmarks, recordEvents, specMismatches, START, test, toBookmarks as openBookmarks, type Sent } from "./helpers";
 
 // S-06 with a mocked /api/books/<isbn> (E2E has no YES24 key): synthetic text, never real YES24 text.
@@ -100,7 +100,7 @@ test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, 
   await mockBooks(page);
   await page.goto("/");
   await page.getByRole("button", { name: START }).click();
-  await answerPath(page, SQL_PATH);
+  await answerPath(page, DATA_PATH);
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await page.getByRole("button", { name: "다음 장" }).click();
   await reactToBookmarks(page, ["패스", "패스", "패스", "패스", "패스"]);
@@ -123,7 +123,7 @@ test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, 
   expect(second.some((id) => first.includes(id))).toBe(false);                  // seen books stay out
   expect(named(events, "redraw_clicked").map((e) => [e.props, e.common.round, e.common.entry])).toEqual([[{ curious_count: 0 }, 1, "target"]]);
   expect(named(events, "book_opened").map((e) => e.common.round)).toEqual([1, 2]);
-  expect(named(events, "question_answered")).toHaveLength(SQL_PATH.length);   // the answers were not asked again
+  expect(named(events, "question_answered")).toHaveLength(DATA_PATH.length);   // the answers were not asked again
   expect(named(events, "result_viewed")[0]).toMatchObject({ props: { curious_count: 1 }, common: { round: 2 } });
   expect(specMismatches(events)).toEqual([]);
 });

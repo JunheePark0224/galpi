@@ -491,7 +491,7 @@
    "author": "하정 저",
    "pages": 352,
    "entry": "leaf",
-   "genre": "예술·여행",
+   "genre": "에세이",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -499,16 +499,16 @@
     "world": 1
    },
    "signals": {
-    "temp": "어조 +: 독자 곁에서 초대·친구가 되는 다정한 이야기",
-    "pull": "몰입 −: 덴마크 버스 만남 등 사람 이야기가 끌고 감",
-    "gain": "마음 −: 사람과의 인연을 건네 마음이 달라지게 함",
-    "world": "현실 +: 덴마크·독일 여행 등 실제 세상의 비소설"
+    "temp": "어조 +: 사람들과의 만남·초대·선물 등 다정한 장면이 이어짐",
+    "pull": "몰입 −: 덴마크 가족과의 만남 같은 경험담이 끌고 감",
+    "gain": "마음 −: 관계와 여행이 남기는 감정, 사랑과 연대",
+    "world": "현실 +: 비소설이라 덴마크·독일 등 실제 세상"
    },
    "missing": [],
    "suggest": "에세이",
    "one_liner_style": "question",
-   "one_liner": "여행길에서 만난 사람들과 우리가 된 이야기를 다정하게 들려줄까요?",
-   "evidence": "작가 경험과 인연이 뼈대라 에세이",
+   "one_liner": "낯선 사람의 초대에 응한 여행이 어떤 인연으로 이어졌을까요?",
+   "evidence": "저자의 여행 경험과 인연이 뼈대라 에세이",
    "confidence": 0.72,
    "fits": false,
    "second": {
@@ -520,22 +520,29 @@
      "world": 1
     },
     "signals": {
-     "temp": "어조 +: 독자에게 다정하게 건네는 이야기, 목차에 '좋은 것은 네가 가",
-     "pull": "몰입 −: 덴마크인 초대 같은 만남·사건의 이야기가 끌고 감",
-     "gain": "마음 −: 사람들과의 인연 이야기가 남기는 느낌 중심",
-     "world": "현실 +: 덴마크·독일 여행 등 실제 장소가 배경"
+     "temp": "어조 +: 친구가 되고 초대에 응하는 다정한 이야기, 독자 곁에 있음",
+     "pull": "몰입 −: 여행 중 만남과 제작기 등 경험 이야기가 끌고 감",
+     "gain": "마음 −: 사람들과의 만남·경험을 나누며 느끼게 함",
+     "world": "현실 +: 덴마크·독일 여행, 실제 사람들 이야기"
     },
     "missing": [],
-    "suggest": "",
-    "why": "저자 자신의 경험·관계가 뼈대라 에세이가 맞음"
+    "suggest": "에세이",
+    "why": "저자 자신의 여행·만남 경험이 뼈대인 에세이"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/159372634",
-   "rules_version": "v3.2"
+   "moved_from": "예술·여행",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "예술·여행"
+    }
+   ]
   },
   {
    "isbn": "9788936481100",
@@ -1033,7 +1040,7 @@
    "author": "카이랑 저",
    "pages": 240,
    "entry": "leaf",
-   "genre": "역사",
+   "genre": "인문",
    "axes": {
     "temp": 0,
     "pull": -1,
@@ -1041,44 +1048,70 @@
     "world": 1
    },
    "signals": {
-    "temp": "해당 없음 0: 문화·일상 소개가 중심, 끝맺음 정보 없음",
+    "temp": "0 해당 없음: 맺음말이 안 보이고 어조는 설명·소개 중심",
     "pull": "몰입 −: 방송·생활 사례와 일상 이야기로 끌고 감",
-    "gain": "알게 됨 +: 타이완 사회·문화를 알려 주는 일이 중심",
-    "world": "현실 +: 실제 타이완을 다룬 비소설"
+    "gain": "알게 됨 +: 타이완의 문화·사회를 알려 주는 설명 중심",
+    "world": "현실 +: 실제 타이완을 다루는 비소설"
    },
    "missing": [],
    "suggest": "사회·시사",
    "one_liner_style": "question",
-   "one_liner": "가깝지만 낯선 이웃의 문화와 일상을 방송인의 시선으로 만나 볼까요?",
-   "evidence": "시대순 아닌 현재 문화·사회 소개가 중심",
-   "confidence": 0.55,
+   "one_liner": "방송과 생활 속에서 만난 타이완의 문화와 사람들, 한국과 닮은 점을 살펴볼래요?",
+   "evidence": "시대순 아닌 주제별 구성, 오늘의 타이완 사회 중심",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "axes": {
-     "temp": 1,
+     "temp": 0,
      "pull": -1,
      "gain": 1,
      "world": 1
     },
     "signals": {
-     "temp": "어조 +: 이웃의 진짜 모습을 곁에서 다정하게 들려줌",
-     "pull": "몰입 −: 방송·생활 경험담과 사례로 끌고 감",
-     "gain": "알게 됨: 타이완의 문화·사회를 알려 주는 책",
-     "world": "현실 +: 실제 타이완을 다루는 비소설"
+     "temp": "해당 없음 0: 소개·목차가 설명 중심, 끝맺음·어조 신호 약함",
+     "pull": "몰입 −: 방송·취재 경험담과 일상 사례로 끌고 감",
+     "gain": "알게 됨 +: 타이완 문화·사회를 알려 주는 설명 중심",
+     "world": "현실 +: 실제 타이완 사회를 다루는 비소설"
     },
     "missing": [],
-    "suggest": "예술·여행",
-    "why": "시대순 역사가 아니라 현지 문화·일상을 들려주는 글"
+    "suggest": "인문",
+    "why": "과거 사건보다 오늘 타이완의 문화·생활 해석이 중심"
    },
-   "flags": [
-    "fits",
-    "temp"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/193699369",
-   "rules_version": "v3.2"
+   "third": {
+    "fits": false,
+    "suggest": "인문",
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 목차 일부만 보이고 맺음말 없음, 어조는 설명·소개 중심",
+     "pull": "몰입 −: 방송·생활 사례와 일상 이야기로 끌고 감",
+     "gain": "알게 됨 +: 타이완 사회·문화를 알려 주는 설명",
+     "world": "현실 +: 실제 타이완을 다루는 비소설"
+    },
+    "missing": []
+   },
+   "moved_from": "역사",
+   "settled": {
+    "slot": "인문"
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "역사"
+    }
+   ]
   },
   {
    "isbn": "9791167903358",
@@ -4704,54 +4737,61 @@
    "author": "배명은 저",
    "pages": 152,
    "entry": "leaf",
-   "genre": "한국 소설",
+   "genre": "SF·판타지",
    "axes": {
-    "temp": null,
+    "temp": -1,
     "pull": -1,
     "gain": -1,
     "world": -1
    },
    "signals": {
-    "temp": "끝맺음 약함, 어조·장면 신호 모두 흐릿해 정보 없음",
-    "pull": "몰입 −: 금기를 깬 이무기와 소녀 이야기가 끌고 감",
-    "gain": "마음 −: 소설 형식, 첫사랑 이야기가 남는 것",
+    "temp": "끝맺음 약함. 장면 −: 승천 직전 벼락에 찢겨 추락, 애절한 기다림",
+    "pull": "몰입 −: 금기를 깬 사건과 복수·기다림의 전개가 끌고 감",
+    "gain": "마음 −: 소설 형식, 지식 목적 없이 첫사랑 이야기가 남김",
     "world": "딴 세상 −: 천 년 이무기가 실제로 등장"
    },
-   "missing": [
-    "temp"
-   ],
-   "suggest": "로맨스",
+   "missing": [],
+   "suggest": "SF·판타지",
    "one_liner_style": "question",
-   "one_liner": "용이 되지 못한 이무기와 소녀의 애틋한 여름 첫사랑을 만나 볼까요?",
-   "evidence": "이무기와 소녀의 첫사랑이 중심 줄기",
+   "one_liner": "용이 되지 못한 이무기와 소녀의 여름, 함께 따라가 볼래요?",
+   "evidence": "이무기가 실제 등장하는 판타지 첫사랑 이야기",
    "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "axes": {
-     "temp": -1,
+     "temp": null,
      "pull": -1,
      "gain": -1,
      "world": -1
     },
     "signals": {
-     "temp": "어조·장면 −: 애절한 첫사랑, 기다림, 벼락에 찢겨 추락",
-     "pull": "몰입 −: 문체 칭찬 없음, 사건 전개와 인물 이야기가 끌고 감",
-     "gain": "마음 −: 소설 형식, 이무기와 소녀의 사랑 이야기가 남김",
-     "world": "딴 세상 −: 천 년 이무기가 실제로 등장하는 이야기"
+     "temp": "끝맺음 없음, 어조·장면 신호가 모두 흐릿해 판단 불가",
+     "pull": "몰입 −: 금기·복수·기다림으로 이어지는 사건이 끌고 감",
+     "gain": "마음 −: 이야기가 남기는 것은 첫사랑의 정서",
+     "world": "딴 세상 −: 이무기·승천이 실제로 등장"
     },
-    "missing": [],
+    "missing": [
+     "temp"
+    ],
     "suggest": "SF·판타지",
-    "why": "이무기가 등장하는 판타지 첫사랑 이야기"
+    "why": "이무기가 등장하는 판타지가 중심 줄기라 SF·판타지가 "
    },
    "flags": [
-    "fits",
     "temp"
    ],
    "issues": [],
-   "status": "dropped",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/141193498",
-   "rules_version": "v3.2"
+   "moved_from": "한국 소설",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "한국 소설"
+    }
+   ]
   },
   {
    "isbn": "9788936439880",

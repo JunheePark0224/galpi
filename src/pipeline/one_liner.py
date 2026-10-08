@@ -78,6 +78,12 @@ class RetryLog:
         self.outcomes[outcome] += 1
         self.ledger[model] = self.ledger.get(model, Usage()).plus(used)
 
+    def absorb(self, other: "RetryLog") -> None:
+        """Add another log's retries (one book's, kept apart until the book is done — batched.py)."""
+        self.outcomes.update(other.outcomes)
+        for model, used in other.ledger.items():
+            self.ledger[model] = self.ledger.get(model, Usage()).plus(used)
+
     def summary(self) -> dict:
         return {"tried": sum(self.outcomes.values()), "fixed": self.outcomes["fixed"],
                 "still_failing": self.outcomes["still_failing"],

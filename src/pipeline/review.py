@@ -35,6 +35,7 @@ from collect_candidates import detail
 
 from . import ADDITIONS, AGREEMENT, KST, REQUEUE, VOCAB
 from . import requeue
+from .signals_report import FICTION
 from .agreement import apply_answers, screened, stats_row
 from .agreement_log import MAX_SAMPLE_CHANGED, MIN_SAMPLE, STREAK, below, graduation, read_rows, upsert, write_rows
 from .candidates import yes24_env
@@ -105,7 +106,7 @@ def render(entries: list[dict], vocab: dict, key: str) -> str:
     slots = {"__BOOKS__": js_json(entries), "__KW__": js_json({t: list(v.get("kept", {})) for t, v in vocab.items()}),
              "__GENRES__": js_json(list(GENRES)), "__DEFS__": js_json(keyword_definitions()),
              "__AXES__": js_json(AXIS_LABELS), "__WAYS__": js_json(WAY_LABELS),
-             "__KEY__": js_json(f"galpi-pipeline-{key}"), "__NAME__": js_json(key)}
+             "__KEY__": js_json(f"galpi-pipeline-{key}"), "__NAME__": js_json(key), "__FICTION__": js_json(list(FICTION))}
     return re.sub("|".join(slots), lambda m: slots[m.group(0)], TEMPLATE)
 
 

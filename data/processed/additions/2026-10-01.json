@@ -1095,27 +1095,37 @@
    "keywords_regex": [
     "트렌드"
    ],
-   "way": "사례",
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "교회와 성도의 변화를 조사 자료로 읽고 앞날을 가늠해 봐요",
-   "evidence": "종교계 트렌드 조사서라 경제 상식 소비·사회 트렌드와 거리 있음",
+   "one_liner": "조사 자료로 교회와 성도의 달라지는 흐름을 짚어 보는 전망서예요",
+   "evidence": "교회·신앙 트렌드라 경제 상식 아님, 종교서",
    "confidence": 0.8,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "개념",
-    "why": "교회·신앙 트렌드 책이라 경제 상식과 무관함"
+    "why": "교회·신앙 트렌드 분석서, 종교는 갈피가 안 다룸",
+    "suggest": "",
+    "suggest_keywords": []
    },
    "flags": [
-    "fits",
-    "way"
+    "fits"
    ],
-   "issues": [
-    "근거 김(35자)"
-   ],
+   "issues": [],
    "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/196485790"
+   "link": "https://www.yes24.com/product/goods/196485790",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "경제 상식"
+    }
+   ]
   },
   {
    "isbn": "9791158513665",
@@ -1123,34 +1133,50 @@
    "author": "테크피드 저",
    "pages": 288,
    "entry": "target",
-   "topic": "경제 상식",
+   "topic": "돈 관리·투자",
    "field": "돈·경제",
-   "keywords": [],
+   "keywords": [
+    "주식"
+   ],
    "keywords_regex": [
     "경제사·자본주의",
     "트렌드"
    ],
    "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "돈 관리·투자",
+   "suggest_keywords": [
+    "주식"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "미국 테크 기업과 AI·우주·바이오 흐름을 읽고 장기 투자 기준을 세워요",
-   "evidence": "경제 원리보다 미국 테크 종목 투자 안내서",
+   "one_liner": "미국 테크 기업과 AI·우주·바이오 흐름에 투자하는 기준을 알려 줘요",
+   "evidence": "목차 대부분이 종목·투자 원칙이라 투자 칸",
    "confidence": 0.85,
    "fits": false,
    "second": {
     "fits": false,
-    "keywords": [
-     "트렌드"
-    ],
+    "keywords": [],
     "way": "개념",
-    "why": "미국 테크주 투자 안내서라 경제 상식보다 돈 관리·투자"
+    "why": "투자 대상·원칙이 중심이라 돈 관리·투자가 맞음",
+    "suggest": "돈 관리·투자",
+    "suggest_keywords": [
+     "주식"
+    ]
    },
-   "flags": [
-    "fits",
-    "keywords"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/195790309"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/195790309",
+   "moved_from": "경제 상식",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "경제 상식"
+    }
+   ]
   },
   {
    "isbn": "9791169852296",
@@ -1728,32 +1754,51 @@
    "author": "정도성 저",
    "pages": 224,
    "entry": "target",
-   "topic": "마음 돌보기",
-   "field": "마음·관계",
-   "keywords": [],
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "조직 문화"
+   ],
    "keywords_regex": [
     "감정 다루기",
     "번아웃·스트레스",
     "명상·마음챙김"
    ],
    "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "리더십",
+   "suggest_keywords": [
+    "조직 문화"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "병원 구성원이 일의 의미를 찾는 워크숍과 활동을 기획하는 방법을 얻어요",
-   "evidence": "병원 조직문화 기획서라 개인 마음 돌봄과 거리 있음",
-   "confidence": 0.8,
+   "one_liner": "병원 구성원이 일의 의미를 찾도록 돕는 조직 활동 틀과 워크숍 콘텐츠를 얻어요.",
+   "evidence": "개인 마음보다 병원 조직 문화 활동 기획이 중심",
+   "confidence": 0.7,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "병원 조직 문화 프레임워크 기획서라 개인 마음 돌봄이 "
+    "why": "병원 조직 문화·일터 활동 기획이 중심이라 리더십 쪽이",
+    "suggest": "리더십",
+    "suggest_keywords": [
+     "조직 문화"
+    ]
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/142346227"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/142346227",
+   "moved_from": "마음 돌보기",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "마음 돌보기"
+    }
+   ]
   },
   {
    "isbn": "9791124002155",
@@ -1831,23 +1876,40 @@
     "우울"
    ],
    "way": "사례",
+   "keyword_candidate": null,
+   "suggest": "시",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "사랑과 살의가 얽힌 관계의 이면을 시로 더듬어 보게 돼요",
-   "evidence": "우울을 다루는 방법서가 아니라 시집이라 맞지 않음",
-   "confidence": 0.9,
+   "one_liner": "사랑과 살의가 뒤섞인 관계의 이면을 시로 들여다보게 해 줘요.",
+   "evidence": "시집이라 마음 돌보기 방법서가 아님",
+   "confidence": 0.95,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "사례",
-    "why": "우울을 다루는 방법서가 아니라 관계를 그린 시집이라 맞"
+    "why": "방법서가 아닌 시집이라 장르 시가 맞음",
+    "suggest": "시",
+    "suggest_keywords": []
    },
    "flags": [
     "fits"
    ],
    "issues": [],
    "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/117080662"
+   "link": "https://www.yes24.com/product/goods/117080662",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "시"
+   },
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "마음 돌보기"
+    }
+   ]
   },
   {
    "isbn": "9788937417573",
@@ -2313,23 +2375,36 @@
     "거리 두기"
    ],
    "way": "실습",
+   "keyword_candidate": "육아",
+   "suggest": "",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "아이에게 개입할 때와 물러설 때를 가르는 기준과 연습법을 얻어요",
-   "evidence": "사람 간 거리두기가 아닌 육아 개입 조절서",
-   "confidence": 0.8,
+   "one_liner": "아이 일에 어디까지 개입할지 기준을 세우고 엄마와 아이가 함께 크는 법을 알려줘요.",
+   "evidence": "사람 사이 말·관계가 아닌 초등 육아·교육서라 칸 밖",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "부모-자녀 양육서라 대화·관계 칸의 사회적 관계와 맞지"
+    "why": "자녀 양육서라 대화·관계 주제에 안 맞고 맞는 칸 없음",
+    "suggest": "",
+    "suggest_keywords": []
    },
    "flags": [
     "fits"
    ],
    "issues": [],
    "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/98981422"
+   "link": "https://www.yes24.com/product/goods/98981422",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "대화·관계"
+    }
+   ]
   }
  ]
 }

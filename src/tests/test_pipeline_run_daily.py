@@ -79,14 +79,18 @@ def test_a_day_writes_our_tags_and_a_summary(day):
     client = FakeClient(mixed)
     s = run_daily.run("2026-10-05", CFG, ENV, client)
     assert s["status"] == "ok" and s["wanted"] == 4 and s["slots"] == ["돈 관리·투자/주식 4"] and s["candidates"] == 4
-    assert (s["picked"], s["review"], s["reserve"], s["dropped"], s["auto_agreed"], s["flagged"]) == (2, 1, 1, 0, 2, 1)
-    assert s["usage"]["claude-haiku-4-5"]["calls"] == 9 and s["cost_usd"] > 0  # 4 books × 2 passes + 1 retry
+    # book 2's way split goes to pass C, which reads it like pass B: two of three settle it (route plan 3, 10-08)
+    assert (s["picked"], s["review"], s["reserve"], s["dropped"], s["auto_agreed"], s["flagged"]) == (3, 0, 1, 0, 3, 0)
+    assert s["third_pass"] == {"books": 1, "settled": 1}
+    assert s["usage"]["claude-haiku-4-5"]["calls"] == 10 and s["cost_usd"] > 0  # 4 books × 2 passes + 1 retry + 1 pass C
     assert {k: s["one_liner_retries"][k] for k in ("tried", "fixed", "still_failing", "call_failed")} ==         {"tried": 1, "fixed": 0, "still_failing": 1, "call_failed": 0}
     assert s["one_liner_retries"]["usage"]["claude-haiku-4-5"]["calls"] == 1 and 0 < s["one_liner_retries"]["cost_usd"] < s["cost_usd"]
     doc = json.loads((day / "2026-10-05.json").read_text(encoding="utf-8"))
     by = {b["title"]: b for b in doc["books"]}
-    assert by["처음 주식 공부"]["auto"] == "ai-agree" and by["주식 배당 입문"]["flags"] == ["way"]
-    assert by["처음 주식 공부"]["status"] == "picked" and by["주식 배당 입문"]["status"] == "review"  # flagged: not live until a review
+    assert by["처음 주식 공부"]["auto"] == "ai-agree" and by["처음 주식 공부"]["status"] == "picked"
+    settled = by["주식 배당 입문"]
+    assert (settled["way"], settled["a_was"], settled["settled"], settled["flags"]) == ("실습", {"way": "개념"}, {"way": "실습"}, [])
+    assert settled["second"]["way"] == "실습" and settled["third"]["way"] == "실습" and "why" not in settled["third"]
     assert by["주식 투자 수업"]["status"] == "reserve" and by["주식 투자 수업"]["issues"]
     text = (day / "2026-10-05.json").read_text(encoding="utf-8")
     assert INTRO[:20] not in text and "계좌와 주문" not in text
@@ -427,3 +431,32 @@ def test_a_suggested_slot_is_kept_on_the_record_for_the_review_page():
     assert rec["second"]["suggest"] == "경제 상식" and rec["second"]["suggest_keywords"] == ["금리·환율"]
     rec, _ = run_daily.tag_one(FakeClient(), CFG, {"tag": "T", "check": "C"}, {}, LEAF, Breaker(), {}, rules="v")
     assert rec["suggest"] == "" and rec["second"]["suggest"] == ""
+
+
+def crossing(slot):
+    def answer(kwargs):
+        entry, kind = kind_of(kwargs)
+        if kind == "tag":
+            return message(tag_answer(entry, fits=False, suggest=slot))
+        if kind == "check":
+            return message(check_answer(entry, fits=False, suggest=slot))
+        return agreeing(kwargs)
+    return answer
+
+
+def test_a_book_both_passes_send_to_the_other_entry_is_dropped_here_and_requeued_there(day):
+    """10-08: no person needed — both passes name the same 🍃 genre for a 🎯 book; the next batch tags it as 🍃."""
+    summary = run_daily.run("2026-10-02", CFG, ENV, FakeClient(crossing("에세이")))
+    doc = json.loads((day / "2026-10-02.json").read_text(encoding="utf-8"))
+    assert all(b["status"] == "dropped" and b["requeued_to"] == {"entry": "leaf", "slot": "에세이"} for b in doc["books"])
+    rows = json.loads(run_daily.REQUEUE.read_text(encoding="utf-8"))
+    assert sorted(r["isbn"] for r in rows) == sorted(b["isbn"] for b in doc["books"])
+    assert {(r["to_entry"], r["to_slot"], r["from_batch"]) for r in rows} == {("leaf", "에세이", "2026-10-02")}
+    assert summary["dropped"] == len(doc["books"]) and summary["crossed"] == len(doc["books"])
+
+
+def test_a_requeued_book_sent_back_again_waits_for_a_person_instead_of_bouncing(day):
+    cand = Candidate("leaf", "에세이", "9790000000011", "처음 주식 공부", "저자11 저", 211, "https://y/11", INTRO, TOC)
+    rec, _ = run_daily.tag_one(FakeClient(crossing("돈 관리·투자")), CFG, {"tag": "T", "check": "C"}, {}, cand, Breaker(),
+                               {}, rules="v", routed=True, requeued=True)
+    assert rec["status"] == "review" and "requeued_to" not in rec and "fits" in rec["flags"]

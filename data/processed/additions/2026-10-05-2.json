@@ -242,37 +242,58 @@
    "author": "손자 저/소준섭 역",
    "pages": 384,
    "entry": "leaf",
-   "genre": "역사",
+   "genre": "인문",
    "axes": {
     "temp": 0,
-    "pull": 0,
+    "pull": -1,
     "gain": 1,
     "world": 1
    },
+   "signals": {
+    "temp": "0 해당 없음: 병법 해설 중심, 끝맺음·어조 신호 약함",
+    "pull": "몰입 −: 97가지 역사 사례 이야기로 끌고 감",
+    "gain": "알게 됨 +: 전략 원리를 사례로 설명해 알려 줌",
+    "world": "현실 +: 비소설, 실제 역사 속 전쟁과 인물"
+   },
+   "missing": [],
+   "suggest": "인문",
    "one_liner_style": "question",
-   "one_liner": "싸우기 전에 이겨놓는 법, 2,500년 된 병법에서 배워볼까요?",
-   "evidence": "고전 병법을 삶에 적용하는 전략서, 역사서 아님",
+   "one_liner": "이겨놓고 싸우라는 병법의 지혜를 역사 속 승패 사례로 읽어 볼래요?",
+   "evidence": "병법 원리를 삶에 적용, 사례는 예시일 뿐",
    "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "axes": {
      "temp": 0,
-     "pull": 0,
-     "gain": 0,
-     "world": 0
+     "pull": -1,
+     "gain": 1,
+     "world": 1
     },
-    "why": "병법 고전의 삶 적용서, 역사 사례는 도구일 뿐 중심은"
+    "signals": {
+     "temp": "해당 없음 0: 병법 해설 중심, 맺음말·어조 신호 약함",
+     "pull": "몰입 −: 97가지 역사 사례와 인물 이야기로 끌고 감",
+     "gain": "알게 됨 +: 승리의 원리와 전략을 사례로 설명",
+     "world": "현실 +: 비소설, 실제 있었던 역사 속 전쟁"
+    },
+    "missing": [],
+    "suggest": "인문",
+    "why": "병법 고전을 삶의 지혜로 풀이, 사건 순서 아님"
    },
-   "flags": [
-    "fits",
-    "gain",
-    "world",
-    "confidence"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/154827889"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/154827889",
+   "moved_from": "역사",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "역사"
+    }
+   ]
   },
   {
    "isbn": "9791191438406",
@@ -539,38 +560,81 @@
    "author": "유홍준 저 ",
    "pages": 428,
    "entry": "leaf",
-   "genre": "역사",
+   "genre": "예술·여행",
    "axes": {
     "temp": 1,
-    "pull": 1,
+    "pull": -1,
     "gain": 1,
     "world": 1
    },
+   "signals": {
+    "temp": "어조 +: 문화유산을 사랑하자며 독자에게 다정하게 안내함",
+    "pull": "해당 없음 0: 답사 글이라 끄는 힘을 특정하기 어려움",
+    "gain": "알게 됨 +: 제목과 소개가 문화유산을 알고 보는 법을 말함",
+    "world": "현실 +: 안동·경주·종묘 등 실제 장소가 무대인 비소설"
+   },
+   "missing": [],
+   "suggest": "예술·여행",
    "one_liner_style": "question",
-   "one_liner": "문화유산을 보는 눈과 사랑하는 마음을 길러 주는 답사 안내서인가요?",
-   "evidence": "문화유산 답사 기행이라 역사 뼈대보다 감상 중심",
-   "confidence": 0.7,
+   "one_liner": "우리 옛 건축과 자연을 직접 찾아가 보고 싶어지나요?",
+   "evidence": "사실 기록 아닌 답사지 감상 글이라 예술·여행",
+   "confidence": 0.8,
    "fits": false,
    "second": {
     "fits": false,
     "axes": {
-     "temp": 0,
-     "pull": 0,
-     "gain": 0,
-     "world": 0
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
     },
-    "why": "역사 서술이 아닌 문화유산 답사 감상 기행문"
+    "signals": {
+     "temp": "어조 +: 문화유산을 사랑하며 다정하게 안내하는 시선",
+     "pull": "몰입 −: 답사지별 사례와 이야기로 끌고 감",
+     "gain": "알게 됨 +: 문화유산을 알고 보는 법을 설명",
+     "world": "현실 +: 비소설, 실제 답사지 안동·경주·서울"
+    },
+    "missing": [],
+    "suggest": "예술·여행",
+    "why": "시대순 아닌 답사지를 보고 느끼는 글"
    },
-   "flags": [
-    "fits",
-    "temp",
-    "pull",
-    "gain",
-    "world"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/119410082"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/119410082",
+   "moved_from": "역사",
+   "third": {
+    "fits": false,
+    "suggest": "예술·여행",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 문화유산을 사랑으로 안내하는 다정한 시선",
+     "pull": "몰입 −: 답사 장소별 이야기와 사례로 끌고 감",
+     "gain": "알게 됨 +: 문화유산을 보는 법과 지식을 알려 줌",
+     "world": "현실 +: 실제 유적·장소를 다룬 비소설"
+    },
+    "missing": []
+   },
+   "settled": {
+    "pull": -1
+   },
+   "a_was": {
+    "pull": 0
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "역사"
+    }
+   ]
   },
   {
    "isbn": "9788937834790",
@@ -578,36 +642,81 @@
    "author": "마이클 샌델 저/김선욱 감수/김명철 역",
    "pages": 444,
    "entry": "leaf",
-   "genre": "사회·시사",
+   "genre": "인문",
    "axes": {
     "temp": 0,
-    "pull": 0,
-    "gain": 1,
+    "pull": -1,
+    "gain": -1,
     "world": 1
    },
+   "signals": {
+    "temp": "0 해당 없음: 철학적 논의 설명 중심, 끝맺음·어조 신호 약함",
+    "pull": "몰입 −: 현대 사회 사례와 논쟁이 이어지며 끌고 감",
+    "gain": "알게 됨 +: 철학자들의 정의론을 알기 쉽게 소개",
+    "world": "현실 +: 비소설이라 현실 세계를 다룸"
+   },
+   "missing": [],
+   "suggest": "인문",
    "one_liner_style": "question",
-   "one_liner": "공리주의와 롤스의 시각으로 정의를 따져 보면 어떨까요?",
-   "evidence": "정치 철학자의 사상 비교가 뼈대라 인문에 가까움",
+   "one_liner": "공리주의부터 롤스까지 정의에 대한 나만의 생각을 세워 볼래요?",
+   "evidence": "사회 문제가 출발점이나 정치철학 개념이 중심이라 인문",
    "confidence": 0.8,
    "fits": false,
    "second": {
     "fits": false,
     "axes": {
      "temp": 0,
-     "pull": 0,
-     "gain": 0,
-     "world": 0
+     "pull": -1,
+     "gain": -1,
+     "world": 1
     },
-    "why": "정치 철학 중심이라 인문, 사회·시사 아님"
+    "signals": {
+     "temp": "0 해당 없음: 철학 설명 중심, 끝맺음·어조 신호 약함",
+     "pull": "몰입 −: 현실 사례와 논쟁 흐름으로 끌고 감",
+     "gain": "마음 −: 정의에 대한 자기 견해를 세우게 하는 성찰",
+     "world": "현실 +: 비소설, 현실 사회 문제를 다룸"
+    },
+    "missing": [],
+    "suggest": "인문",
+    "why": "사회 문제는 출발점, 목적은 정의에 대한 철학적 사유"
    },
-   "flags": [
-    "fits",
-    "gain",
-    "world"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/15156691"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/15156691",
+   "moved_from": "사회·시사",
+   "third": {
+    "fits": false,
+    "suggest": "인문",
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "0 해당 없음: 철학 설명 중심, 끝맺음·어조 판단어 약함",
+     "pull": "몰입 −: 구제 금융·대리 출산 등 사례와 논쟁으로 끌고 감",
+     "gain": "마음 −: 정의에 대한 자기 견해를 세우게 하는 성찰",
+     "world": "현실 +: 비소설, 현대 사회의 실제 문제"
+    },
+    "missing": []
+   },
+   "settled": {
+    "gain": -1
+   },
+   "a_was": {
+    "gain": 1
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "사회·시사"
+    }
+   ]
   },
   {
    "isbn": "9791194627296",
@@ -1676,36 +1785,60 @@
    "author": "이장욱 저",
    "pages": 212,
    "entry": "leaf",
-   "genre": "호러·괴담",
+   "genre": "한국 소설",
    "axes": {
     "temp": -1,
-    "pull": 0,
+    "pull": -1,
     "gain": -1,
-    "world": 0
+    "world": -1
    },
+   "signals": {
+    "temp": "장면 −: 고기의 시선, 연쇄 살인, 잘린 머리통 같은 섬뜩한 장면",
+    "pull": "몰입 −: 소설 형식, 문체 칭찬 없이 기묘한 사건이 서사를 끌고 감",
+    "gain": "마음 −: 소설이라 형식 신호가 마음, 지식이 목적 아님",
+    "world": "딴 세상 −: 목차에 외계인, 괴물이 나오는 이야기가 실제 등장"
+   },
+   "missing": [],
+   "suggest": "한국 소설",
    "one_liner_style": "question",
-   "one_liner": "익숙한 일상에 낯선 조건 하나가 끼어들면 어떤 서늘함이 번질까요?",
-   "evidence": "섬뜩한 설정은 장치일 뿐, 중심은 인식 흔들기라 호러 아님",
-   "confidence": 0.7,
+   "one_liner": "익숙한 일상에 낯선 조건이 끼어드는 으스스한 짧은 이야기들, 읽어 볼래요?",
+   "evidence": "공포 자체가 중심이 아닌 한국 작가의 짧은 소설집",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "axes": {
      "temp": -1,
-     "pull": 0,
+     "pull": -1,
      "gain": -1,
-     "world": 0
+     "world": -1
     },
-    "why": "괴이는 장치일 뿐, 호러 아닌 문학 단편집"
+    "signals": {
+     "temp": "어조 −: 으스스·섬뜩한 장면, 서늘한 분위기",
+     "pull": "몰입 −: 소설 형식, 문체 칭찬 없고 기묘한 장면이 끌고 감",
+     "gain": "마음 −: 소설 형식, 낯선 조건이 사고방식을 흔듦",
+     "world": ""
+    },
+    "missing": [],
+    "suggest": "한국 소설",
+    "why": "공포가 중심 아닌 한국 작가의 문학 단편집"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
-    "근거 김(32자)"
+    "근거가 책소개를 베낌 (AI-2 world)"
    ],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/195484950"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/195484950",
+   "moved_from": "호러·괴담",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "호러·괴담"
+    }
+   ]
   },
   {
    "isbn": "9791193358245",
@@ -1820,37 +1953,58 @@
    "author": "루이스 세풀베다 저/정창 역",
    "pages": 181,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
     "temp": -1,
     "pull": -1,
-    "gain": 0,
+    "gain": -1,
     "world": 1
    },
+   "signals": {
+    "temp": "어조 −: 자연 파괴와 삶의 터전을 잃는 원주민, 총 든 노인",
+    "pull": "몰입 −: 맹수를 쫓아 숲으로 향하는 사건 전개",
+    "gain": "마음 −: 소설 형식, 지식이 주목적이라는 말 없음",
+    "world": "현실 +: 아마존 부근 마을 등 실제 배경, 초자연 없음"
+   },
+   "missing": [],
+   "suggest": "외국 소설",
    "one_liner_style": "question",
-   "one_liner": "정글로 향한 노인은 무너진 자연의 균형 앞에서 무엇을 택할까요?",
-   "evidence": "연애는 소재일 뿐, 중심은 아마존 정글과 맹수 추적",
-   "confidence": 0.88,
+   "one_liner": "숲으로 향한 노인의 선택을 따라가 볼래요?",
+   "evidence": "연애는 소재, 문학 소설이며 외국 작가",
+   "confidence": 0.85,
    "fits": false,
    "second": {
     "fits": false,
     "axes": {
-     "temp": 0,
-     "pull": 0,
-     "gain": 0,
-     "world": 0
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
     },
-    "why": "제목만 연애일 뿐 정글과 자연이 중심, 연애 줄기 아님"
+    "signals": {
+     "temp": "장면 −: 터전을 떠나는 원주민, 깨진 자연의 균형",
+     "pull": "몰입 −: 맹수를 쫓아 숲으로 향하는 사건 전개",
+     "gain": "마음 −: 소설 형식, 지식이 주된 목적 아님",
+     "world": "현실 +: 아마존 부근 마을, 딴 세상 신호 없음"
+    },
+    "missing": [],
+    "suggest": "외국 소설",
+    "why": "사랑이 중심 아닌 문학 소설, 칠레 작가"
    },
-   "flags": [
-    "fits",
-    "temp",
-    "pull",
-    "world"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/3623595"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/3623595",
+   "moved_from": "로맨스",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ]
   },
   {
    "isbn": "9791124038604",
@@ -1858,36 +2012,63 @@
    "author": "백희성 저",
    "pages": 304,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "추리·스릴러",
    "axes": {
-    "temp": 0,
+    "temp": null,
     "pull": -1,
-    "gain": 0,
+    "gain": -1,
     "world": 1
    },
+   "signals": {
+    "temp": "끝맺음·어조·장면 모두 흐릿: 소개에 '사랑의 기적' 한 구절뿐, 결말 ",
+    "pull": "몰입 −: 섬세한 추리와 반전, 추적·진짜 주인 등 사건 전개",
+    "gain": "마음 −: 소설 형식, 기억을 찾아가는 인물의 이야기",
+    "world": "현실 +: 파리·건축·가구 등 실제 공간, 딴 세상 신호 없음"
+   },
+   "missing": [
+    "temp"
+   ],
+   "suggest": "추리·스릴러",
    "one_liner_style": "question",
-   "one_liner": "사물의 흔적을 따라 사라진 기억을 쫓는 이야기인가요?",
-   "evidence": "사랑은 곁가지, 추리와 사건 추적이 중심 줄기",
-   "confidence": 0.6,
+   "one_liner": "손끝의 기억으로 사건을 풀어 가는 추리, 함께 따라가 볼래요?",
+   "evidence": "사랑보다 추적·반전 중심의 추리 전개",
+   "confidence": 0.7,
    "fits": false,
    "second": {
     "fits": false,
     "axes": {
-     "temp": 0,
+     "temp": 1,
      "pull": -1,
      "gain": -1,
      "world": 1
     },
-    "why": "추리와 반전이 중심이고 사랑은 곁가지라 로맨스 아님"
+    "signals": {
+     "temp": "",
+     "pull": "몰입 −: 섬세한 추리와 반전, 추적 전개",
+     "gain": "마음 −: 소설 형식, 인물의 기억과 사랑 이야기",
+     "world": "현실 +: 파리·건축 배경, 딴 세상 신호 없음"
+    },
+    "missing": [],
+    "suggest": "추리·스릴러",
+    "why": "사랑은 결말, 추리와 반전이 중심 줄기"
    },
    "flags": [
-    "fits",
-    "gain",
-    "confidence"
+    "temp"
    ],
-   "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/194332794"
+   "issues": [
+    "근거가 책소개를 베낌 (AI-2 temp)"
+   ],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/194332794",
+   "moved_from": "로맨스",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ]
   },
   {
    "isbn": "9791193358177",
@@ -1956,36 +2137,60 @@
    "author": "안톤 체호프 저/이항재 역",
    "pages": 272,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
     "temp": -1,
-    "pull": 0,
+    "pull": -1,
     "gain": -1,
     "world": 1
    },
+   "signals": {
+    "temp": "어조 −: 소개가 우수와 회한의 이야기라 하고 '애수'·'추도 미사' 제",
+    "pull": "몰입 −: 소설 형식의 약한 신호, 문체 칭찬은 단편 구성 평가뿐",
+    "gain": "마음 −: 소설이라 형식상 마음, 지식이 목적이 아님",
+    "world": "현실 +: 러시아 배경 인물 이야기, 딴 세상 신호 없음"
+   },
+   "missing": [],
+   "suggest": "외국 소설",
    "one_liner_style": "question",
-   "one_liner": "평범한 일상 속 사랑과 회한을 섬세하게 비추는 이야기들은 어떤 여운을 남길까요?",
-   "evidence": "사랑은 일부 작품뿐, 삶 전반 단편집이라 로맨스 중심 아님",
-   "confidence": 0.8,
+   "one_liner": "사랑과 우수, 회한이 스민 짧은 이야기들을 한 권으로 만나 볼래요?",
+   "evidence": "단편선이라 사랑이 중심 줄기 아님, 러시아 작가 문학 소설",
+   "confidence": 0.75,
    "fits": false,
    "second": {
     "fits": false,
     "axes": {
      "temp": -1,
-     "pull": 0,
+     "pull": -1,
      "gain": -1,
      "world": 1
     },
-    "why": "사랑 외에 다양한 주제를 담은 단편집이라 로맨스 중심 "
+    "signals": {
+     "temp": "어조 −: 사랑과 우수·회한을 다룬 소개, 목차 '애수'·'추도 미사'",
+     "pull": "몰입 −: 소설 형식의 약한 신호, 문체 칭찬은 작가 평가뿐",
+     "gain": "마음 −: 소설 형식, 지식을 앞세우지 않고 인물 이야기",
+     "world": "현실 +: 딴 세상 신호 없음, 일상 인물 이야기"
+    },
+    "missing": [],
+    "suggest": "외국 소설",
+    "why": "사랑은 일부, 다양한 주제의 단편집이라 외국 소설"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
     "근거 김(32자)"
    ],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/141735776"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/141735776",
+   "moved_from": "로맨스",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ]
   },
   {
    "isbn": "9791193358825",
@@ -2114,35 +2319,62 @@
    "author": "스즈키 유이 저/이지수 역",
    "pages": 248,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
-    "temp": 0,
-    "pull": 0,
-    "gain": 1,
+    "temp": null,
+    "pull": -1,
+    "gain": -1,
     "world": 1
    },
+   "signals": {
+    "temp": "끝맺음·어조·장면 신호 없음: 출처 불명 명언이 삶을 흔든다는 설정뿐",
+    "pull": "몰입 −: 한 문장이 삶을 뒤흔들며 이어지는 전개, 문체 칭찬 없음",
+    "gain": "마음 −: 소설 형식, 소개가 지식 전달을 앞세우지 않음",
+    "world": "현실 +: 괴테 연구가와 홍차 티백 등 현실 배경, 딴 세상 신호 없음"
+   },
+   "missing": [
+    "temp"
+   ],
+   "suggest": "외국 소설",
    "one_liner_style": "question",
-   "one_liner": "출처 모를 명언 하나가 연구가의 삶을 흔드는 이야기인가요?",
-   "evidence": "사랑은 문장 소재일 뿐 중심은 명언의 출처와 진실",
-   "confidence": 0.8,
+   "one_liner": "출처 모를 괴테의 말 한 줄이 한 사람의 삶을 어떻게 흔들어 놓을까요?",
+   "evidence": "사랑 중심 아님, 일본 작가 문학 소설",
+   "confidence": 0.7,
    "fits": false,
    "second": {
     "fits": false,
     "axes": {
-     "temp": 0,
-     "pull": 0,
-     "gain": 0,
+     "temp": null,
+     "pull": -1,
+     "gain": -1,
      "world": 1
     },
-    "why": "명언의 출처를 좇는 이야기라 사랑이 중심 줄기가 아님"
+    "signals": {
+     "temp": "결말·어조·장면 정보 없음: 출발점 설정뿐",
+     "pull": "몰입 −: 출처 불명 명언의 수수께끼가 끌고 감, 소설 형식",
+     "gain": "마음 −: 소설 형식, 지식은 소재일 뿐",
+     "world": "현실 +: 괴테 연구가 등 실제 세계, 딴 세상 신호 없음"
+    },
+    "missing": [
+     "temp"
+    ],
+    "suggest": "외국 소설",
+    "why": "사랑은 소재, 중심은 괴테 명언 수수께끼"
    },
-   "flags": [
-    "fits",
-    "gain"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/164510819"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/164510819",
+   "moved_from": "로맨스",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ]
   },
   {
    "isbn": "9788931023299",
@@ -2150,35 +2382,62 @@
    "author": "도리스 레싱 저/김승욱 역",
    "pages": 416,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
-    "temp": -1,
-    "pull": 0,
+    "temp": null,
+    "pull": -1,
     "gain": -1,
     "world": 1
    },
+   "signals": {
+    "temp": "끝맺음·어조·장면 모두 소개·목차에서 드러나지 않음",
+    "pull": "소설 형식 신호: 몰입·이야기 (문체 칭찬은 없음)",
+    "gain": "소설 형식 신호: 마음 (지식이 주목적이 아님)",
+    "world": "딴 세상 신호 없음: 현실 +1 (목차 제목에 와인·스탈린이 죽은 날)"
+   },
+   "missing": [
+    "temp"
+   ],
+   "suggest": "외국 소설",
    "one_liner_style": "question",
-   "one_liner": "여성의 삶과 관계 속 속마음을 단편마다 들여다보게 돼요?",
-   "evidence": "사랑 중심 아닌 여성 삶 단편집, 외국 소설 칸",
-   "confidence": 0.72,
+   "one_liner": "여성의 삶이 고인 단편들로 혼자라는 것의 무게를 느껴 볼래요?",
+   "evidence": "단편선, 사랑이 중심 줄기 아님, 외국 작가 문학",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "axes": {
-     "temp": -1,
-     "pull": 0,
-     "gain": 1,
+     "temp": null,
+     "pull": -1,
+     "gain": -1,
      "world": 1
     },
-    "why": "사랑 중심 아닌 여성의 삶을 다룬 문학 단편선"
+    "signals": {
+     "temp": "끝맺음·어조·장면 모두 소개·목차에 안 보임",
+     "pull": "소설 형식의 약한 몰입·이야기 신호, 문체 칭찬은 없음",
+     "gain": "소설 형식 기본값 마음, 지식이 목적이라는 말 없음",
+     "world": "딴 세상 신호 없음, 1950년대 단편 현실 기본값"
+    },
+    "missing": [
+     "temp"
+    ],
+    "suggest": "외국 소설",
+    "why": "사랑 중심 줄기가 안 보이는 외국 작가 단편선"
    },
-   "flags": [
-    "fits",
-    "gain"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/122320314"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/122320314",
+   "moved_from": "로맨스",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ]
   },
   {
    "isbn": "9791155815656",
@@ -2353,32 +2612,53 @@
    "author": "전우성 저",
    "pages": 236,
    "entry": "target",
-   "topic": "마케팅·브랜딩",
+   "topic": "취업·커리어",
    "field": "일·커리어",
-   "keywords": [],
+   "keywords": [
+    "퍼스널 브랜딩",
+    "커리어 설계"
+   ],
    "keywords_regex": [
     "브랜딩",
     "고객 이해"
    ],
-   "way": "사례",
+   "way": "개념",
    "keyword_candidate": null,
+   "suggest": "취업·커리어",
+   "suggest_keywords": [
+    "퍼스널 브랜딩",
+    "커리어 설계"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "조직 밖에서도 통하는 나만의 무기를 어떻게 만들지 사고·태도·관계로 풀어 줘요",
-   "evidence": "상품이 아닌 나 한 사람의 브랜드라 퍼스널 브랜딩",
-   "confidence": 0.88,
+   "one_liner": "조직 간판 없이도 나를 대체 불가한 브랜드로 세우는 사고와 태도를 얻어요",
+   "evidence": "상품이 아닌 나 한 사람을 알리는 퍼스널 브랜딩이 중심",
+   "confidence": 0.85,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
-    "way": "사례",
-    "why": "상품·조직 브랜딩이 아닌 개인 브랜드, 커리어 중심"
+    "way": "개념",
+    "why": "나 한 사람을 알리는 퍼스널 브랜딩 책",
+    "suggest": "취업·커리어",
+    "suggest_keywords": [
+     "퍼스널 브랜딩",
+     "커리어 설계"
+    ]
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/195440692"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/195440692",
+   "moved_from": "마케팅·브랜딩",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "마케팅·브랜딩"
+    }
+   ]
   },
   {
    "isbn": "9788925575438",
@@ -2969,25 +3249,39 @@
    ],
    "way": "개념",
    "keyword_candidate": null,
+   "suggest": "역사",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "정치·사업·스포츠·종교 리더가 역사에 미친 영향력과 그 한계를 통계로 따져 봐요",
-   "evidence": "팀 이끄는 법이 아닌 역사 속 리더 영향력 분석서",
-   "confidence": 0.85,
+   "one_liner": "정치·사업·스포츠·종교 리더가 역사를 얼마나 바꿨는지 자연실험으로 따져 봐요",
+   "evidence": "팀 이끄는 법이 아니라 리더 영향력을 역사로 분석",
+   "confidence": 0.8,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "개념",
-    "why": "역사 속 리더의 영향력 분석, 팀 이끄는 법 아님"
+    "why": "팀 이끄는 법이 아닌 역사 속 리더의 영향력 탐구서",
+    "suggest": "역사",
+    "suggest_keywords": []
    },
    "flags": [
     "fits"
    ],
-   "issues": [
-    "과장 표현: 미친"
-   ],
+   "issues": [],
    "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/195806999"
+   "link": "https://www.yes24.com/product/goods/195806999",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "역사"
+   },
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "리더십"
+    }
+   ]
   },
   {
    "isbn": "9788935212828",
@@ -4073,23 +4367,35 @@
    ],
    "way": "실습",
    "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "요리 활동을 하며 수 개념을 아이와 함께 익히는 방법을 알려 줘요",
-   "evidence": "요리는 수학 학습의 도구, 중심은 아이 수학 교육",
-   "confidence": 0.88,
+   "one_liner": "요리 활동을 하며 아이와 수학 기초 개념을 함께 익혀 볼 수 있어요",
+   "evidence": "요리로 수학을 배우는 아이 교육서, 집밥 책 아님",
+   "confidence": 0.8,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "요리로 수학을 배우는 아동 수학 학습서라 요리·살림 아"
+    "why": "요리로 수학을 배우는 아이 학습서, 집밥 책 아님",
+    "suggest": "",
+    "suggest_keywords": []
    },
    "flags": [
     "fits"
    ],
    "issues": [],
    "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/44328605"
+   "link": "https://www.yes24.com/product/goods/44328605",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "요리·살림"
+    }
+   ]
   },
   {
    "isbn": "9788969525390",

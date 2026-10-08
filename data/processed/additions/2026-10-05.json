@@ -60,29 +60,45 @@
    "entry": "target",
    "topic": "데이터 분석",
    "field": "데이터·통계",
-   "keywords": [],
+   "keywords": [
+    "파이썬"
+   ],
    "keywords_regex": [
     "파이썬"
    ],
    "way": "실습",
    "keyword_candidate": "파이썬 입문",
+   "suggest": "",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "변수, 조건문, 자료형을 차근차근 따라 하며 코딩 기초 문법을 익혀요",
-   "evidence": "문법 입문서라 데이터 분석이 아님",
-   "confidence": 0.9,
+   "one_liner": "설치부터 문법까지 단계별로 따라 하며 코딩 기초를 익혀요",
+   "evidence": "파이썬 문법 입문서, 데이터 분석 내용 없음",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
-    "keywords": [],
+    "keywords": [
+     "파이썬"
+    ],
     "way": "실습",
-    "why": "파이썬 문법 입문서이며 데이터 분석이 중심이 아님"
+    "why": "파이썬 문법 입문서라 데이터 분석이 아님",
+    "suggest": "",
+    "suggest_keywords": []
    },
    "flags": [
     "fits"
    ],
    "issues": [],
    "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/109625396"
+   "link": "https://www.yes24.com/product/goods/109625396",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "데이터 분석"
+    }
+   ]
   },
   {
    "isbn": "9791198324207",
@@ -98,23 +114,39 @@
    ],
    "way": "사례",
    "keyword_candidate": null,
+   "suggest": "한국 소설",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "코로나 격리 뒤 어색한 점심으로 이어지는 짧은 소설들을 만나요",
-   "evidence": "사진소설집, 대인관계 방법서가 아닌 소설",
-   "confidence": 0.96,
+   "one_liner": "격리 해제 뒤 어색한 점심으로 시작하는 단편들을 징검다리처럼 이어 읽어요.",
+   "evidence": "사진소설집, 단편 소설 8편이라 이야기 중심",
+   "confidence": 0.9,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "사례",
-    "why": "사진소설집(문학)이라 대화·관계 방법서가 아님"
+    "why": "관계 방법서가 아닌 단편소설집, 한국 소설이 맞음.",
+    "suggest": "한국 소설",
+    "suggest_keywords": []
    },
    "flags": [
     "fits"
    ],
    "issues": [],
    "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/120533606"
+   "link": "https://www.yes24.com/product/goods/120533606",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "한국 소설"
+   },
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "대화·관계"
+    }
+   ]
   },
   {
    "isbn": "9791165920395",
@@ -122,8 +154,8 @@
    "author": "장철원 저",
    "pages": 624,
    "entry": "target",
-   "topic": "통계",
-   "field": "데이터·통계",
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
    "keywords": [],
    "keywords_regex": [
     "기초 통계",
@@ -131,25 +163,56 @@
    ],
    "way": "개념",
    "keyword_candidate": "머신러닝",
+   "suggest": "AI 활용",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "머신러닝 밑바탕인 선형대수와 확률 분포를 수식으로 이해하고 파이썬으로 실습해요",
-   "evidence": "통계는 일부, 머신러닝이 중심이라 통계 주제 전체에는 안 맞음",
-   "confidence": 0.8,
+   "one_liner": "선형대수·통계 이론과 사이킷런·텐서플로 실습으로 머신러닝 기본기를 다져요.",
+   "evidence": "통계는 일부일 뿐, 머신러닝 이론과 코드 실습이 중심",
+   "confidence": 0.5,
    "fits": false,
    "second": {
     "fits": false,
-    "keywords": [],
+    "keywords": [
+     "기초 통계",
+     "확률"
+    ],
     "way": "개념",
-    "why": "머신러닝·선형대수가 중심, 통계는 일부 배경 이론"
+    "why": "머신러닝 이론·실습서로 통계 개념서가 아님",
+    "suggest": "AI 활용",
+    "suggest_keywords": [
+     "LLM 원리"
+    ]
    },
    "flags": [
-    "fits"
+    "keywords"
    ],
-   "issues": [
-    "근거 김(34자)"
-   ],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/97032765"
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/97032765",
+   "moved_from": "통계",
+   "third": {
+    "fits": false,
+    "suggest": "AI 활용",
+    "suggest_keywords": [
+     "LLM 원리"
+    ],
+    "keywords": [],
+    "way": "개념"
+   },
+   "settled": {
+    "way": "개념"
+   },
+   "a_was": {
+    "way": "실습"
+   },
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "통계"
+    }
+   ]
   },
   {
    "isbn": "9788966264629",
@@ -311,31 +374,47 @@
    "author": "이지현 저",
    "pages": 336,
    "entry": "target",
-   "topic": "업무 자동화",
-   "field": "AI·IT 활용",
-   "keywords": [],
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [
+    "엑셀"
+   ],
    "keywords_regex": [],
    "way": "실습",
-   "keyword_candidate": "스프레드시트",
+   "keyword_candidate": "구글 스프레드시트",
+   "suggest": "데이터 분석",
+   "suggest_keywords": [
+    "엑셀"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "구글 드라이브 공유부터 함수, 협업 기능까지 스프레드시트 쓰는 법을 차근차근 익혀요",
-   "evidence": "스프레드시트 기초 사용법과 함수 중심이라 자동화와 거리 있음",
-   "confidence": 0.72,
+   "one_liner": "스프레드시트의 입력·서식·필터·함수를 따라 하며 데이터를 정리하고 분석해요.",
+   "evidence": "스프레드시트 함수·필터로 분석, 자동화 아님",
+   "confidence": 0.7,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "스프레드시트 기능·분석 입문서, 반복업무 자동화 아님"
+    "why": "스프레드시트로 데이터 정리·분석하는 법이 중심",
+    "suggest": "데이터 분석",
+    "suggest_keywords": [
+     "엑셀"
+    ]
    },
-   "flags": [
-    "fits"
-   ],
-   "issues": [
-    "근거 김(33자)"
-   ],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/140407763"
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/140407763",
+   "moved_from": "업무 자동화",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "업무 자동화"
+    }
+   ]
   },
   {
    "isbn": "9791124516218",
@@ -435,34 +514,52 @@
    "author": "레오 포터,다니엘 진가로 공저/김연지 역",
    "pages": 360,
    "entry": "target",
-   "topic": "업무 자동화",
+   "topic": "AI 활용",
    "field": "AI·IT 활용",
-   "keywords": [],
+   "keywords": [
+    "바이브 코딩"
+   ],
    "keywords_regex": [
     "파이썬 자동화",
     "코파일럿·M365"
    ],
    "way": "실습",
-   "keyword_candidate": "바이브 코딩",
+   "keyword_candidate": null,
+   "suggest": "AI 활용",
+   "suggest_keywords": [
+    "바이브 코딩"
+   ],
    "one_liner_style": "summary",
    "one_liner": "",
-   "evidence": "AI 코딩 도구로 프로그램 만들기라 바이브 코딩 성격",
+   "evidence": "반복 업무 절감이 아니라 AI에게 말로 코드를 만들게 하는 책",
    "confidence": 0.8,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "깃허브 코파일럿으로 코딩 배우기, 반복 업무 자동화가 "
+    "why": "반복 업무 자동화가 아니라 AI로 코드를 만드는 법",
+    "suggest": "AI 활용",
+    "suggest_keywords": [
+     "바이브 코딩"
+    ]
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
+    "근거 김(34자)",
     "한 줄이 책소개를 베낌"
    ],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/126516854"
+   "status": "reserve",
+   "link": "https://www.yes24.com/product/goods/126516854",
+   "moved_from": "업무 자동화",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "업무 자동화"
+    }
+   ]
   },
   {
    "isbn": "9791198721846",
@@ -533,31 +630,48 @@
    "author": "도미니크 오브라이언 저/김지원 역 ",
    "pages": 224,
    "entry": "target",
-   "topic": "습관·집중",
+   "topic": "시간·생산성",
    "field": "습관·자기계발",
    "keywords": [],
    "keywords_regex": [
     "집중력"
    ],
    "way": "실습",
-   "keyword_candidate": "기억력",
+   "keyword_candidate": "기억법",
+   "suggest": "시간·생산성",
+   "suggest_keywords": [
+    "일하는 법"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "기억력 챔피언의 훈련법을 따라 하며 외우는 기술을 익혀요",
-   "evidence": "기억술 훈련서라 습관·집중과는 주제가 다름",
-   "confidence": 0.8,
+   "one_liner": "연상·장소·상상으로 이름과 숫자를 외우는 기억 훈련을 직접 따라 해 봐요.",
+   "evidence": "기억술 훈련서라 집중·습관 주제와 결이 다름",
+   "confidence": 0.5,
    "fits": false,
    "second": {
     "fits": false,
-    "keywords": [],
+    "keywords": [
+     "집중력"
+    ],
     "way": "실습",
-    "why": "습관·집중이 아닌 기억력 암기 기술서"
+    "why": "집중 고치는 법이 아닌 기억법 훈련서",
+    "suggest": "시간·생산성",
+    "suggest_keywords": []
    },
    "flags": [
-    "fits"
+    "keywords"
    ],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/113850919"
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/113850919",
+   "moved_from": "습관·집중",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "습관·집중"
+    }
+   ]
   },
   {
    "isbn": "9791191462470",
@@ -709,29 +823,47 @@
    "author": "엄남미 저",
    "pages": 272,
    "entry": "target",
-   "topic": "시간·생산성",
+   "topic": "습관·집중",
    "field": "습관·자기계발",
-   "keywords": [],
+   "keywords": [
+    "습관"
+   ],
    "keywords_regex": [],
    "way": "실습",
    "keyword_candidate": null,
+   "suggest": "습관·집중",
+   "suggest_keywords": [
+    "습관"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "하루 한 줄 감사를 적으며 마음을 긍정으로 바꾸는 방법을 알려 줘요",
-   "evidence": "감사 습관과 긍정이 중심, 업무 효율과 무관",
-   "confidence": 0.9,
+   "one_liner": "하루 한 줄 감사메모를 꾸준히 쓰는 습관으로 긍정적인 삶을 시작해 보세요.",
+   "evidence": "일 효율이 아닌 감사 쓰기 습관이 중심",
+   "confidence": 0.7,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "감사 습관·긍정 마음이 중심, 업무 생산성과 무관"
+    "why": "일하는 법 아닌 감사 습관 만들기가 중심",
+    "suggest": "습관·집중",
+    "suggest_keywords": [
+     "습관"
+    ]
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/104661176"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/104661176",
+   "moved_from": "시간·생산성",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "시간·생산성"
+    }
+   ]
   },
   {
    "isbn": "9791160406498",
@@ -739,31 +871,49 @@
    "author": "박창식 저",
    "pages": 240,
    "entry": "target",
-   "topic": "시간·생산성",
-   "field": "습관·자기계발",
-   "keywords": [],
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "업무 글"
+   ],
    "keywords_regex": [
     "일하는 법"
    ],
    "way": "실습",
    "keyword_candidate": null,
+   "suggest": "글쓰기",
+   "suggest_keywords": [
+    "업무 글"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "공직자가 보고서와 보도자료, 안내문을 쉽고 명료하게 쓰고 말하는 방법을 익혀요",
-   "evidence": "업무 효율보다 공공 글쓰기·말하기가 중심",
-   "confidence": 0.88,
+   "one_liner": "보고서·보도자료·안내문 쓰는 법과 말하기 요령을 공직 현장에 맞게 익혀요.",
+   "evidence": "공직자 업무 글쓰기·말하기 방법서라 글쓰기 칸",
+   "confidence": 0.85,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "업무 효율이 아닌 공직자 글쓰기·말하기 매뉴얼"
+    "why": "일 처리법이 아니라 공직자 글쓰기·말하기 방법서라 글쓰",
+    "suggest": "글쓰기",
+    "suggest_keywords": [
+     "업무 글"
+    ]
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/103751687"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/103751687",
+   "moved_from": "시간·생산성",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "시간·생산성"
+    }
+   ]
   },
   {
    "isbn": "9791162335390",
@@ -771,29 +921,47 @@
    "author": "조성도 저",
    "pages": 512,
    "entry": "target",
-   "topic": "시간·생산성",
-   "field": "습관·자기계발",
-   "keywords": [],
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "업무 글"
+   ],
    "keywords_regex": [],
    "way": "실습",
    "keyword_candidate": null,
+   "suggest": "글쓰기",
+   "suggest_keywords": [
+    "업무 글"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "이메일 주소부터 제목·본문·첨부파일까지 바로 따라 할 수 있게 짚어줘요",
-   "evidence": "이메일 쓰는 법이 중심이라 글쓰기 업무 글에 가깝다",
-   "confidence": 0.8,
+   "one_liner": "이메일 주소부터 제목·본문·첨부까지 일하는 이메일을 제대로 쓰는 요령을 익혀요",
+   "evidence": "이메일 작성법이 중심이라 글쓰기 업무 글",
+   "confidence": 0.7,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "이메일 작성법 중심이라 업무 글 주제, 시간·생산성 아"
+    "why": "이메일 쓰는 법이 중심이라 글쓰기가 맞음",
+    "suggest": "글쓰기",
+    "suggest_keywords": [
+     "업무 글"
+    ]
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/61193999"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/61193999",
+   "moved_from": "시간·생산성",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "시간·생산성"
+    }
+   ]
   },
   {
    "isbn": "9791194587644",
@@ -801,29 +969,49 @@
    "author": "안광섭 저",
    "pages": 236,
    "entry": "target",
-   "topic": "시간·생산성",
-   "field": "습관·자기계발",
-   "keywords": [],
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "프롬프트 엔지니어링"
+   ],
    "keywords_regex": [],
    "way": "개념",
-   "keyword_candidate": "비판적 사고",
+   "keyword_candidate": "AI 사고법",
+   "suggest": "AI 활용",
+   "suggest_keywords": [
+    "프롬프트 엔지니어링",
+    "챗GPT"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "AI에게 생각을 맡기지 않고 질문하고 판단하며 함께 일하는 힘을 길러요",
-   "evidence": "AI 시대 사고력 책, 업무 효율서 아님",
-   "confidence": 0.8,
+   "one_liner": "AI에 생각을 맡기지 않고 질문력과 구조화로 협업하는 법을 알려줘요",
+   "evidence": "AI와 협업하는 생각법이 중심이라 AI 활용 칸",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "개념",
-    "why": "AI 시대 사고력·협업 관점이 중심이라 업무 효율 주제"
+    "why": "일 효율이 아닌 AI 시대 생각법·협업 중심",
+    "suggest": "AI 활용",
+    "suggest_keywords": [
+     "프롬프트 엔지니어링"
+    ]
    },
    "flags": [
-    "fits"
+    "keywords"
    ],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/153156828"
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/153156828",
+   "moved_from": "시간·생산성",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "시간·생산성"
+    }
+   ]
   },
   {
    "isbn": "9788901273037",
@@ -831,31 +1019,56 @@
    "author": "서현직 저 ",
    "pages": 336,
    "entry": "target",
-   "topic": "시간·생산성",
-   "field": "습관·자기계발",
-   "keywords": [],
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
    "keywords_regex": [
     "일하는 법"
    ],
    "way": "사례",
    "keyword_candidate": null,
+   "suggest": "리더십",
+   "suggest_keywords": [
+    "팀 이끌기",
+    "피드백·코칭",
+    "조직 문화"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "초보 팀장이 겪은 시행착오와 팀 운영 노하우를 솔직하게 풀어내요",
-   "evidence": "팀장 시행착오 경험담, 직장 생활 주제에 가까움",
-   "confidence": 0.8,
+   "one_liner": "초보 팀장이 팀 목표와 미팅, 일대일 면담으로 팀을 꾸리는 시행착오를 알려 줘요.",
+   "evidence": "팀장 독자 대상, 팀 운영·면담·팀빌딩이 중심이라 리더십",
+   "confidence": 0.86,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "사례",
-    "why": "팀장 리더십·팀 운영 중심이라 직장 생활 주제에 가깝다"
+    "why": "일 자체보다 팀장이 팀을 이끄는 법이 중심",
+    "suggest": "리더십",
+    "suggest_keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ]
    },
    "flags": [
-    "fits"
+    "keywords"
    ],
-   "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/119773488"
+   "issues": [
+    "근거 김(31자)"
+   ],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/119773488",
+   "moved_from": "시간·생산성",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "시간·생산성"
+    }
+   ]
   },
   {
    "isbn": "9791169213677",

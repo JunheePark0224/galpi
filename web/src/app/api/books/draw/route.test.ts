@@ -4,7 +4,7 @@ import { verifyTicket } from "@/lib/collection/ticket";
 import { POST } from "./route";
 
 vi.mock("server-only", () => ({}));
-const PATH = { answers: SQL_PATH };
+const PATH = { answers: DATA_PATH };
 const ORIGIN = "http://x";
 const from = (ip: string) => ({ origin: ORIGIN, "x-forwarded-for": ip });
 let userId: string | null = null;
@@ -35,7 +35,7 @@ import sample from "@/data/books.sample.json";
 import { toBook } from "@/lib/books/catalog";
 import type { CatalogBook } from "@/lib/books/types";
 import { inScope, QUESTION_MAP, walkPath } from "@/lib/paths";
-import { CHALLENGE_PATH, SQL_PATH } from "@/lib/paths/__fixtures__/paths";
+import { CHALLENGE_PATH, DATA_PATH } from "@/lib/paths/__fixtures__/paths";
 
 const BOOKS = sample as unknown as CatalogBook[];
 const USER = "11111111-1111-4111-8111-111111111111";
@@ -91,7 +91,7 @@ describe("POST /api/books/draw", () => {
   it.each([
     ["not JSON", "{"],
     ["a v1 body", { entry: "leaf", choices: ["A", "B", "A", "B", "A", "B", "A", "B", "A"] }],
-    ["an unfinished path", { answers: SQL_PATH.slice(0, 2) }],
+    ["an unfinished path", { answers: DATA_PATH.slice(0, 2) }],
     ["an unknown answer", { answers: [{ node: "start", choice: "C" }] }],
     ["seen that is not a list of ids", { ...PATH, seen: "9790000000001" }],
     ["a negative seed", { ...PATH, seed: -1 }],
@@ -114,12 +114,12 @@ describe("POST /api/books/draw", () => {
   });
 
   it("draws five bookmarks for a v2 path and returns the path S-04 shows", async () => {
-    const res = await POST(req({ answers: SQL_PATH, seen: [], seed: 7 }));
+    const res = await POST(req({ answers: DATA_PATH, seen: [], seed: 7 }));
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.picks).toHaveLength(5);
     expect(Object.keys(body).sort()).toEqual(["art", "challenge", "exhausted", "label", "path", "picks", "widened"]);   // label (F-27): choice words only, never a book's tags
-    expect(body.path.crumbs.at(-1)).toBe("DB에서 꺼내기");
+    expect(body.path.crumbs.at(-1)).toBe("표로 (엑셀)");
     expect(body.challenge).toBeNull();
     expect(Object.keys(body.picks[0].card).sort()).toEqual(["author", "entry", "field", "genre", "id", "oneLiner", "oneLinerStyle", "title"]);
   });
@@ -166,7 +166,7 @@ describe("POST /api/books/draw", () => {
 
   describe("saved books are never drawn again (10-07)", () => {
     const ids = (body: { picks: { card: { id: string } }[] }) => body.picks.map((p) => p.card.id);
-    const scope = walkPath(QUESTION_MAP, SQL_PATH).scope;
+    const scope = walkPath(QUESTION_MAP, DATA_PATH).scope;
     const inSqlScope = BOOKS.filter((b) => inScope(toBook(b), scope)).map((b) => b.isbn);
 
     it("leaves out the logged-in person's saved books, looked up from the session — one query, by their id", async () => {

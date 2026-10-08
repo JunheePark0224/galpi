@@ -16,10 +16,11 @@ from apply_review import FIELD_OF_TOPIC
 
 from .candidates import Candidate
 from .prompt import MAX_KEYWORDS
-from .checks import moved_to, scrub
+from .checks import crossed_to, moved_to, scrub
 
 NOTE = ("Daily pipeline: pass A (model) tags, pass B (second_model) checks blind. Our tags only — no YES24 intro/TOC. "
-        "auto=ai-agree: both passes agreed, accepted without human review (not in the agreement figures).")
+        "auto=ai-agree: both passes agreed — or a third pass settled their split (`settled`) — accepted without human "
+        "review (not in the agreement figures).")
 
 
 def keyword_hints(cand: Candidate, kept: dict[str, dict]) -> list[str]:
@@ -34,7 +35,7 @@ def record(cand: Candidate, a: dict, b: dict, flags: list[str], issues: list[str
     if not cand.author.strip() or cand.pages <= 0:  # books:import rejects such a book for the whole run — never write one
         raise ValueError(f"{cand.isbn}: a book needs an author and a page count")
     a, b = scrub(a, b, issues)  # a field that copied the YES24 text is stored blank, only its issue flag stays
-    moved = moved_to(a, b)  # 10-08: both passes place it in another slot — written there, the slot it was found in kept
+    moved = moved_to(a, b, cand.entry)  # 10-08: both passes place it in another slot — written there, the old one kept
     slot = moved or cand.slot
     out = {"isbn": cand.isbn, "title": cand.title, "author": cand.author, "pages": cand.pages, "entry": cand.entry}
     if cand.entry == "target":
@@ -53,6 +54,8 @@ def record(cand: Candidate, a: dict, b: dict, flags: list[str], issues: list[str
     out |= {"one_liner": a["one_liner"], "evidence": a["evidence"], "confidence": a["confidence"], "fits": a["fits"],
             "second": second, "flags": flags, "issues": issues, "status": status, "link": cand.link}
     out |= {"moved_from": cand.slot} if moved else {}
+    crossed = crossed_to(cand.entry, a, b) if status == "dropped" else None  # run_daily requeues it (tagged there next)
+    out |= {"requeued_to": crossed} if crossed else {}
     return out | ({"auto": auto} if auto else {})
 
 

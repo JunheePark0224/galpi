@@ -1,16 +1,37 @@
 [
  {
-  "isbn": "9788925568362",
-  "to_entry": "target",
-  "to_slot": "마음 돌보기",
-  "from_batch": "2026-10-07-4",
+  "isbn": "9791195650149",
+  "to_entry": "leaf",
+  "to_slot": "과학 교양",
+  "from_batch": "2026-10-08-2",
   "date": "2026-10-08"
  },
  {
-  "isbn": "9791190807296",
-  "to_entry": "target",
-  "to_slot": "대화·관계",
-  "from_batch": "2026-10-07-4",
+  "isbn": "9788973378869",
+  "to_entry": "leaf",
+  "to_slot": "인문",
+  "from_batch": "2026-10-08-2",
+  "date": "2026-10-08"
+ },
+ {
+  "isbn": "9788925551012",
+  "to_entry": "leaf",
+  "to_slot": "과학 교양",
+  "from_batch": "2026-10-08-2",
+  "date": "2026-10-08"
+ },
+ {
+  "isbn": "9791166572364",
+  "to_entry": "leaf",
+  "to_slot": "과학 교양",
+  "from_batch": "2026-10-08-2",
+  "date": "2026-10-08"
+ },
+ {
+  "isbn": "9788936812065",
+  "to_entry": "leaf",
+  "to_slot": "과학 교양",
+  "from_batch": "2026-10-08",
   "date": "2026-10-08"
  }
 ]

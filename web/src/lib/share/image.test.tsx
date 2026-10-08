@@ -5,7 +5,7 @@ import { artsForDraw } from "@/lib/art/combine";
 import { catalog } from "@/lib/books/catalog";
 import { drawPath } from "@/lib/books/draw";
 import { QUESTION_MAP } from "@/lib/paths";
-import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "@/lib/paths/__fixtures__/paths";
 import { mulberry32 } from "@/lib/recommend";
 import { encodeShare } from "./code";
 import { artUri, cssColour, intrinsic, shareImage, SIZES, svgText } from "./image";
@@ -43,8 +43,8 @@ describe("share images (F-27) — the 뒤표지 alone, drawn on the server", () 
   });
 
   it("renders the link preview and the story as PNGs of their sizes", async () => {
-    const drawn = drawPath(SQL_PATH, new Set(), mulberry32(3), catalog());
-    const code = encodeShare(QUESTION_MAP, { answers: SQL_PATH, books: drawn.picks.map((p) => p.card.id), arts: artsForDraw(5, 9) });
+    const drawn = drawPath(DATA_PATH, new Set(), mulberry32(3), catalog());
+    const code = encodeShare(QUESTION_MAP, { answers: DATA_PATH, books: drawn.picks.map((p) => p.card.id), arts: artsForDraw(5, 9) });
     const view = loadShare(code)!;
     for (const kind of ["og", "story"] as const) {
       const res = await shareImage(view, kind, { batang: FONT, dodum: FONT });
