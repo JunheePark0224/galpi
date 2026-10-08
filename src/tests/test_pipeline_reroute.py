@@ -12,7 +12,7 @@ AXES = {"temp": 1, "pull": 0, "gain": -1, "world": 0}
 
 def leaf(**over) -> dict:
     base = {"isbn": "1", "entry": "leaf", "genre": "로맨스", "axes": AXES, "fits": False, "suggest": "외국 소설",
-            "flags": ["fits"], "issues": [], "status": "dropped", "one_liner": "사랑은 어디서 올까요?",
+            "flags": ["fits"], "issues": [], "status": "dropped", "one_liner": "사랑은 대체 어디서 시작되는 걸까요?",
             "second": {"fits": False, "suggest": "외국 소설", "axes": AXES, "why": "번역 소설"}}
     return base | over
 
@@ -47,3 +47,14 @@ def test_a_target_book_takes_the_shared_keywords_of_its_new_topic():
                        "why": "주식"}}
     b = reroute({"books": [book]}, auto_merge=False)[0]["books"][0]
     assert (b["topic"], b["field"], b["keywords"], b["status"], b["flags"]) == ("돈 관리·투자", "돈·경제", ["주식"], "review", ["keywords"])
+
+
+def test_a_moved_book_is_held_when_its_one_liner_breaks_todays_rules():
+    # 10-08: books dropped before the question rule (check_one_liners.form_issue) were never checked against it
+    fake = leaf(isbn="6", one_liner="지금 이 순간에 깨어 있는 법을 안내해요?")
+    empty = leaf(isbn="7", one_liner="", issues=["한 줄이 책소개를 베낌"])
+    out, tally = reroute({"books": [fake, empty]}, auto_merge=False)
+    assert [b["status"] for b in out["books"]] == ["reserve", "reserve"]
+    assert "질문형인데 평서문에 ?만 붙음" in out["books"][0]["issues"]
+    assert out["books"][1]["issues"] == ["한 줄이 책소개를 베낌"]      # an empty line keeps its copy issue, not a second one
+    assert tally == {"moved": 2, "reserve": 2}
