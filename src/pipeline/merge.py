@@ -15,7 +15,8 @@ from pathlib import Path
 from apply_review import FIELD_OF_TOPIC
 
 from .candidates import Candidate
-from .checks import scrub
+from .prompt import MAX_KEYWORDS
+from .checks import moved_to, scrub
 
 NOTE = ("Daily pipeline: pass A (model) tags, pass B (second_model) checks blind. Our tags only — no YES24 intro/TOC. "
         "auto=ai-agree: both passes agreed, accepted without human review (not in the agreement figures).")
@@ -33,22 +34,33 @@ def record(cand: Candidate, a: dict, b: dict, flags: list[str], issues: list[str
     if not cand.author.strip() or cand.pages <= 0:  # books:import rejects such a book for the whole run — never write one
         raise ValueError(f"{cand.isbn}: a book needs an author and a page count")
     a, b = scrub(a, b, issues)  # a field that copied the YES24 text is stored blank, only its issue flag stays
+    moved = moved_to(a, b)  # 10-08: both passes place it in another slot — written there, the slot it was found in kept
+    slot = moved or cand.slot
     out = {"isbn": cand.isbn, "title": cand.title, "author": cand.author, "pages": cand.pages, "entry": cand.entry}
     if cand.entry == "target":
-        out |= {"topic": cand.slot, "field": FIELD_OF_TOPIC[cand.slot], "keywords": a["keywords"],
+        keywords = moved_keywords(a, b) if moved else a["keywords"]
+        out |= {"topic": slot, "field": FIELD_OF_TOPIC[slot], "keywords": keywords,
                 "keywords_regex": hints, "way": a["way"], "keyword_candidate": a.get("keyword_candidate"),
                 "suggest": a.get("suggest", ""), "suggest_keywords": a.get("suggest_keywords", []),
                 "one_liner_style": "summary"}
         second = {k: b[k] for k in ("fits", "keywords", "way", "why")} | {
             "suggest": b.get("suggest", ""), "suggest_keywords": b.get("suggest_keywords", [])}
     else:
-        out |= {"genre": cand.slot, "axes": a["axes"], "signals": a.get("signals", {}), "missing": a.get("missing", []),
+        out |= {"genre": slot, "axes": a["axes"], "signals": a.get("signals", {}), "missing": a.get("missing", []),
                 "suggest": a.get("suggest", ""), "one_liner_style": "question"}
         second = {"fits": b["fits"], "axes": b["axes"], "signals": b.get("signals", {}), "missing": b.get("missing", []),
                   "suggest": b.get("suggest", ""), "why": b["why"]}
     out |= {"one_liner": a["one_liner"], "evidence": a["evidence"], "confidence": a["confidence"], "fits": a["fits"],
             "second": second, "flags": flags, "issues": issues, "status": status, "link": cand.link}
+    out |= {"moved_from": cand.slot} if moved else {}
     return out | ({"auto": auto} if auto else {})
+
+
+def moved_keywords(a: dict, b: dict) -> list[str]:
+    """A 🎯 book moved to another topic: the keywords both passes gave there (pass A's order, at most MAX_KEYWORDS) —
+    empty when they share none (run_daily then flags "keywords" for a person)."""
+    common = [k for k in a.get("suggest_keywords") or [] if k in (b.get("suggest_keywords") or [])]
+    return common[:MAX_KEYWORDS]
 
 
 def additions_doc(date: str, model: str, second_model: str, books: list[dict], batch_id: str | None = None) -> dict:

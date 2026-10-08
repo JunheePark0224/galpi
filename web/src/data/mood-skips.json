@@ -169,7 +169,6 @@
  "learn-way|normal|all>entry=target>entry=target;topics=건강·운동,경제 상식,대화·관계,돈 관리·투자,마음 돌보기,습관·집중,요리·살림>entry=target;topics=건강·운동,경제 상식,돈 관리·투자,습관·집중,요리·살림>entry=target;topics=경제 상식,돈 관리·투자,습관·집중>entry=target;topics=경제 상식,돈 관리·투자>entry=target;topics=돈 관리·투자>entry=target;topics=돈 관리·투자;keywords=돈의 심리,연금·노후,재테크 기초>entry=target;topics=돈 관리·투자;keywords=연금·노후,재테크 기초>entry=target;topics=돈 관리·투자;keywords=연금·노후",
  "learn-way|normal|all>entry=target>entry=target;topics=건강·운동,경제 상식,대화·관계,돈 관리·투자,마음 돌보기,습관·집중,요리·살림>entry=target;topics=대화·관계,마음 돌보기>entry=target;topics=대화·관계>entry=target;topics=대화·관계;keywords=갈등·무례 대처,거리 두기,호감·사회생활>entry=target;topics=대화·관계;keywords=호감·사회생활",
  "learn-way|normal|all>entry=target>entry=target;topics=건강·운동,경제 상식,대화·관계,돈 관리·투자,마음 돌보기,습관·집중,요리·살림>entry=target;topics=대화·관계,마음 돌보기>entry=target;topics=대화·관계>entry=target;topics=대화·관계;keywords=말투·대화법,발표,설득·협상>entry=target;topics=대화·관계;keywords=발표",
- "story-len|normal|all>entry=leaf>entry=leaf;genres=과학 교양,사회·시사,시,에세이,역사,예술·여행,인문>entry=leaf;genres=과학 교양,사회·시사,역사,인문>entry=leaf;genres=사회·시사,역사,인문>entry=leaf;genres=인문",
  "story-len|normal|all>entry=leaf>entry=leaf;genres=과학 교양,사회·시사,시,에세이,역사,예술·여행,인문>entry=leaf;genres=시,에세이,예술·여행>entry=leaf;genres=시",
  "story-pull|challenge|all>entry=leaf>entry=leaf;genres=SF·판타지,로맨스,외국 소설,추리·스릴러,한국 소설,호러·괴담>entry=leaf;genres=로맨스,외국 소설,한국 소설>entry=leaf;genres=로맨스",
  "story-pull|challenge|all>entry=leaf>entry=leaf;genres=과학 교양,사회·시사,시,에세이,역사,예술·여행,인문>entry=leaf;genres=과학 교양,사회·시사,역사,인문>entry=leaf;genres=사회·시사,역사,인문",

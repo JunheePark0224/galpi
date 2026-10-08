@@ -172,7 +172,7 @@
    "author": "전원경 저",
    "pages": 632,
    "entry": "leaf",
-   "genre": "예술·여행",
+   "genre": "역사",
    "axes": {
     "temp": 0,
     "pull": -1,
@@ -210,13 +210,20 @@
     "suggest": "역사",
     "why": "시대순 목차로 예술사를 풀어 역사가 뼈대"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/28765073",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "예술·여행",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "예술·여행"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791191602609",
@@ -742,7 +749,7 @@
    "author": "한국문화인류학회 편저",
    "pages": 398,
    "entry": "leaf",
-   "genre": "역사",
+   "genre": "인문",
    "axes": {
     "temp": 0,
     "pull": -1,
@@ -758,7 +765,7 @@
    "missing": [],
    "suggest": "인문",
    "one_liner_style": "question",
-   "one_liner": "여러 민족의 생활 사례로 문화를 낯설게 보는 눈을 길러 줘요?",
+   "one_liner": "여러 민족의 생활을 보면 익숙한 내 문화도 낯설게 보일까요?",
    "evidence": "시대순 아닌 문화 주제별 인류학 사례라 인문",
    "confidence": 0.72,
    "fits": false,
@@ -780,13 +787,24 @@
     "suggest": "인문",
     "why": "사건 순서가 아닌 문화인류학 입문, 인문에 가까움"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/2142431",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "역사",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "역사"
+    },
+    {
+     "change": "reroute-lines-2026-10-08",
+     "one_liner": "여러 민족의 생활 사례로 문화를 낯설게 보는 눈을 길러 줘요?"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791155818930",
@@ -846,7 +864,7 @@
    "author": "수바드라 다스 저/장한라 역",
    "pages": 408,
    "entry": "leaf",
-   "genre": "역사",
+   "genre": "인문",
    "axes": {
     "temp": 0,
     "pull": -1,
@@ -884,16 +902,22 @@
     "suggest": "인문",
     "why": "시대 순서 아닌 열 가지 관념 주제별 탐구라 인문"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
     "근거 약함(겹치는 단어 1개)",
     "근거 김(31자)"
    ],
-   "status": "dropped",
+   "status": "reserve",
    "link": "https://www.yes24.com/product/goods/126805203",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "역사",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "역사"
+    }
+   ]
   },
   {
    "isbn": "9788965642855",
@@ -901,7 +925,7 @@
    "author": "애나 로웬하웁트 칭 저/노고운 역",
    "pages": 544,
    "entry": "leaf",
-   "genre": "역사",
+   "genre": "인문",
    "axes": {
     "temp": 0,
     "pull": -1,
@@ -939,13 +963,20 @@
     "suggest": "인문",
     "why": "역사 아닌 인류학으로 자본주의·생존을 탐구"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/121826549",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "역사",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "역사"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791193130094",
@@ -1004,7 +1035,7 @@
    "author": "에이모 토올스 저/서창렬 역",
    "pages": 724,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -1042,13 +1073,20 @@
     "suggest": "외국 소설",
     "why": "사랑이 중심이 아닌 문학 소설, 미국 작가"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/61842744",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791165700171",
@@ -1111,7 +1149,7 @@
    "author": "진 웹스터 저/허윤정 역",
    "pages": 228,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -1149,13 +1187,20 @@
     "suggest": "외국 소설",
     "why": "사랑보다 고아 소녀의 성장이 중심, 외국 작가 문학 소"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/144415074",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791130653495",
@@ -1163,7 +1208,7 @@
    "author": "황모과 저",
    "pages": 268,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "SF·판타지",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -1204,13 +1249,20 @@
     "why": "디아스포라 SF로 사랑은 중심 줄기가 아님"
    },
    "flags": [
-    "fits",
     "temp"
    ],
    "issues": [],
-   "status": "dropped",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/128262500",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ]
   },
   {
    "isbn": "9791194979036",
@@ -1321,7 +1373,7 @@
    "author": "조지 오웰 저/이종인 역",
    "pages": 192,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -1359,13 +1411,20 @@
     "suggest": "외국 소설",
     "why": "사랑이 중심이 아닌 풍자 우화, 외국 문학 소설"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/91909899",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791130683348",
@@ -1373,7 +1432,7 @@
    "author": "샐리 페이지 저/이은선 역",
    "pages": 468,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -1389,7 +1448,7 @@
    "missing": [],
    "suggest": "외국 소설",
    "one_liner_style": "question",
-   "one_liner": "",
+   "one_liner": "모든 걸 잃고 찾아간 런던 골목 문구점에서 다시 시작할 수 있을까요?",
    "evidence": "사랑보다 우정·회복이 중심, 영국 작가 문학 소설",
    "confidence": 0.82,
    "fits": false,
@@ -1411,17 +1470,27 @@
     "suggest": "외국 소설",
     "why": "연애는 곁가지, 우정·자기 삶 찾기가 중심"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
-    "한 줄이 책소개를 베낌",
     "근거가 책소개를 베낌 (AI-1 pull)",
     "근거가 책소개를 베낌 (AI-2 pull)"
    ],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/196345178",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    },
+    {
+     "change": "reroute-lines-2026-10-08",
+     "one_liner": ""
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791193358023",
@@ -1699,7 +1768,7 @@
    "author": "김주완 저",
    "pages": 359,
    "entry": "leaf",
-   "genre": "사회·시사",
+   "genre": "인문",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -1737,13 +1806,20 @@
     "suggest": "인문",
     "why": "사회 문제가 아니라 한 인물의 삶과 태도가 중심"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/116433040",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "사회·시사",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "사회·시사"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791172541439",
@@ -2132,7 +2208,7 @@
    "author": "도나 해러웨이 저/황희선 역 ",
    "pages": 372,
    "entry": "leaf",
-   "genre": "사회·시사",
+   "genre": "인문",
    "axes": {
     "temp": 0,
     "pull": -1,
@@ -2148,7 +2224,7 @@
    "missing": [],
    "suggest": "인문",
    "one_liner_style": "question",
-   "one_liner": "사이보그와 반려종 개념으로 인간과 기계, 동물의 경계를 다시 보게 해요?",
+   "one_liner": "사이보그와 반려종, 인간과 기계·동물의 경계는 어디일까요?",
    "evidence": "사회 문제보다 인간·종 경계를 따지는 사유 중심",
    "confidence": 0.7,
    "fits": false,
@@ -2170,13 +2246,24 @@
     "suggest": "인문",
     "why": "사회 문제 해결이 아닌 이론·철학적 사유 중심"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/76071579",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "사회·시사",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "사회·시사"
+    },
+    {
+     "change": "reroute-lines-2026-10-08",
+     "one_liner": "사이보그와 반려종 개념으로 인간과 기계, 동물의 경계를 다시 보게 해요?"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791175488762",
