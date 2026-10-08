@@ -19,7 +19,7 @@ import { track } from "@/lib/track/client";
 import { QUESTION_MAP } from "@/lib/paths";
 import { encodeShare } from "@/lib/share/code";
 import { storyFile } from "@/lib/share/storyFile";
-import { guardFlow, setFlowBack } from "@/lib/nav/deviceBack";
+import { advance, setFlowBack, unwind } from "@/lib/nav/deviceBack";
 import type { ShareMethod } from "./BackCover";
 import { BookScene } from "./BookScene";
 import { EndScreen } from "./EndScreen";
@@ -47,9 +47,9 @@ function shareUrl(s: FlowState): string {
   return `${window.location.origin}/s/${code}`;
 }
 
-/** The phone's back key on the bookmarks and the 뒤표지 (10-08): a reaction is never undone — a second press goes home. */
-export const HOLD_NOTICE = "책갈피는 되돌릴 수 없어요 · 처음으로 가려면 한 번 더 눌러 주세요";
-const HOLD_MS = 3000;
+/** The phone's back key on the bookmarks and the 뒤표지 (10-08): a reaction is never undone — [처음으로] is offered instead. */
+export const HOLD_NOTICE = "책갈피는 되돌릴 수 없어요";
+const NOTICE_MS = 5000;
 
 export function Flow({ library = null }: { library?: LibraryCount | null }) {
   const [state, dispatch] = useReducer(flowReducer, undefined, loadFlow);
@@ -127,6 +127,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
   const start = () => {
     syncCommon([]);
     track("entry_selected", { source: "home" });
+    advance();
     act({ type: "start" });
   };
 
@@ -145,6 +146,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     track("question_answered", {
       node_id: node.id, kind: node.kind, choice, depth: state.answers.length + 1, position: state.asked + 1, elapsed_ms: elapsedMs,
     });
+    advance();
     const next = act({ type: "answer", choice });
     syncCommon(next.answers);
     if (nextQuestion(next.answers) === null) track("path_completed", completedProps(next.answers));
@@ -171,10 +173,12 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
 
   const open = () => {
     track("book_opened", {});
+    advance();
     act({ type: "open" });
   };
 
   const nextPage = () => {
+    advance();
     const next = act({ type: "next" });
     if (next.step === "bookmarks") trackShown(next);
   };
@@ -202,6 +206,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
 
   /** S-11 main button: S-06 with something 궁금해요, S-08 without (PRD 2절). */
   const leaveBack = () => {
+    advance();
     const next = act({ type: "leaveBack" });
     if (next.step === "result") enterResult(next);
   };
@@ -210,20 +215,19 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
   };
 
   const nextResult = () => {
+    advance();
     const next = act({ type: "nextResult" });
     if (next.step === "result") trackResultBook(next);
   };
   /** S-06 ‹: no event (taxonomy v0.11). */
   const prevResult = () => { act({ type: "prevResult" }); };
 
-  // The phone's back key (10-08, plans/2026-10-08-device-back.md): while not on S-01 the flow keeps one marked history
-  // entry (lib/nav/deviceBack); the back key leaves it, the flow moves one step back (or holds on the bookmarks and the
-  // 뒤표지 — a second press within HOLD_MS goes home), and the entry is marked again.
-  const [backed, setBacked] = useState(0);
-  // the note and the second press belong to one screen (this bookmark, the 뒤표지): a reaction in between starts again
+  // The phone's back key (10-08, plans/2026-10-08-device-back.md): every tap that takes a step forward adds one history
+  // entry (lib/nav/deviceBack `advance`), so the back key moves one step back — several presses, several steps. On the
+  // bookmarks and the 뒤표지 it stays (a reaction is never undone) and offers [처음으로]. Back at S-01, the flow's
+  // entries left are gone over, so the next press leaves the site.
   const screen = `${state.step}:${state.index}`;
   const [noticeFor, setNoticeFor] = useState<string | null>(null);
-  const heldAt = useRef({ screen: "", at: 0 });
   const deviceBack = useEffectEvent(() => {
     switch (deviceBackMove(state)) {
       case "question":
@@ -233,13 +237,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
         home("device_back");
         break;
       case "hold":
-        if (heldAt.current.screen === screen && Date.now() - heldAt.current.at < HOLD_MS) {
-          setNoticeFor(null);
-          home("device_back");
-        } else {
-          heldAt.current = { screen, at: Date.now() };
-          setNoticeFor(screen);
-        }
+        setNoticeFor(screen);
         break;
       case "prevResult":
         prevResult();
@@ -248,27 +246,23 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
         act({ type: "returnToBack" });
         break;
       case "leave":
-        break;   // S-01: the next press is the browser's own
+        break;
     }
   });
-  useEffect(() => setFlowBack(() => {
-    deviceBack();
-    setBacked((n) => n + 1);
-  }), []);
+  useEffect(() => setFlowBack(() => deviceBack()), []);
   useEffect(() => {
-    // after this commit's effects — Next's router patches history in its own effect, which runs after ours on the first load
-    const t = setTimeout(() => guardFlow(state.step !== "home"), 0);
-    return () => clearTimeout(t);
-  }, [state.step, backed]);
+    if (state.step === "home") unwind();
+  }, [state.step]);
   useEffect(() => {
     if (!noticeFor) return;
-    const t = setTimeout(() => setNoticeFor(null), HOLD_MS);
+    const t = setTimeout(() => setNoticeFor(null), NOTICE_MS);
     return () => clearTimeout(t);
   }, [noticeFor]);
 
   /** S-08 [다시 뽑기] (E-19): track() moves the round on right after sending it (taxonomy 3-1a); the path stays. */
   const redraw = () => {
     track("redraw_clicked", { curious_count: state.reactions.filter((r) => r === "curious").length });
+    advance();
     act({ type: "redraw" });
   };
 
@@ -315,7 +309,10 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
       {resultPick && shownResult !== resultPick.card.id && <ResultLoading />}
       {state.step === "end" && <EndScreen onRedraw={redraw} onHome={() => home("end")} />}
       {noticeFor === screen && (
-        <p className={styles.notice} role="status">{HOLD_NOTICE}</p>
+        <div className={styles.notice} role="status">
+          <span>{HOLD_NOTICE}</span>
+          <button type="button" className={styles.noticeHome} onClick={() => home("device_back")}>처음으로</button>
+        </div>
       )}
     </MotionConfig>
   );

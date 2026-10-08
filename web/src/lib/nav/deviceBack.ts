@@ -2,12 +2,13 @@
  * The phone's back key inside the one-page flow (10-08, plans/2026-10-08-device-back.md). The address never changes
  * between steps, so the browser has nothing to go back to and leaves the site.
  *
- * The flow keeps one marked history entry (`galpiBack`) while it is past S-01 — `guardFlow(true)` adds it only when the
- * current entry has no mark, so a reload, a restored tab or a page visited in between never stack a second one, and
- * `guardFlow(false)` takes it back when the flow returns to S-01 some other way ([처음으로]). The back key leaves the marked
- * entry; the flow's handler (`setFlowBack`) then moves one step and guards again.
- * An open window (a sheet) holds an entry of its own above it (`holdBack`); the back key closes the newest one first.
- * Each new entry copies the current history state, so Next's router state (__NA) rides along and a back press restores
+ * One history entry per step forward, added in the tap that takes the step (`advance`) — never after a back press.
+ * Chrome skips back over entries a page adds without a user tap (its "history manipulation" intervention: the entry
+ * before one added without activation is marked skippable), which is why re-adding an entry after each back press
+ * worked once and then left the site (10-08, user on a phone). Each entry carries its depth (`galpiDepth`); a popstate
+ * to a lower depth is the back key: an open window closes first, else the flow's handler moves one step.
+ * When the flow is at S-01 again, `unwind` goes back over the flow's remaining entries so the next press leaves the site.
+ * Each entry copies the current history state, so Next's router state (__NA) rides along and a back press restores
  * the same page instead of reloading it (app-router.js onPopState).
  */
 export interface BackHold {
@@ -15,31 +16,47 @@ export interface BackHold {
   release(): void;
 }
 
-let holds: { onBack: () => void }[] = [];
+type Entry = { galpiDepth?: number; galpiSheet?: boolean };
+
+let depth = 0;
+let holds: { depth: number; onBack: () => void }[] = [];
 let flowBack: (() => void) | null = null;
 let ignore = 0;
 let listening = false;
 
-const marked = () => Boolean((window.history.state as { galpiBack?: boolean } | null)?.galpiBack);
+const depthHere = () => (window.history.state as Entry | null)?.galpiDepth ?? 0;
 
 function popped(): void {
+  const here = depthHere();
   if (ignore > 0) {
-    ignore -= 1;           // an entry this module took back itself
+    ignore -= 1;           // a move this module made itself
+    depth = here;
     return;
   }
-  const sheet = holds.pop();
-  if (sheet) {
+  if (here >= depth) {     // forward (or no move): follow it, nothing to undo
+    depth = here;
+    return;
+  }
+  depth = here;
+  const sheet = holds.at(-1);
+  if (sheet && sheet.depth > here) {
+    holds = holds.slice(0, -1);
     sheet.onBack();
     return;
   }
-  if (marked()) return;    // still on a marked entry (a window's stray one): nothing of the flow's was left
   flowBack?.();
 }
 
 function listen(): void {
   if (listening) return;
+  depth = depthHere();     // a reload or a restored tab keeps the depth of the entry it is on
   window.addEventListener("popstate", popped);
   listening = true;
+}
+
+function push(extra: Entry): void {
+  depth += 1;
+  window.history.pushState({ ...(window.history.state ?? {}), galpiDepth: depth, ...extra }, "");
 }
 
 /** The flow's back-key handler; returns the unregister (call it when the flow goes away). */
@@ -49,27 +66,29 @@ export function setFlowBack(onBack: () => void): () => void {
   return () => { if (flowBack === onBack) flowBack = null; };
 }
 
-/** on: hold the flow's marked entry (once); off: take it back when the flow is at S-01 again and no window is open. */
-export function guardFlow(on: boolean): void {
+/** A step forward, from a tap: one entry the back key can take back. Call it inside the tap's handler. */
+export function advance(): void {
   listen();
-  if (on && !marked()) {
-    window.history.pushState({ ...(window.history.state ?? {}), galpiBack: true }, "");
-  } else if (!on && marked() && holds.length === 0) {
-    ignore += 1;
-    window.history.back();
-  }
+  push({ galpiSheet: false });
+}
+
+/** At S-01 again: go back over the flow's entries left (one move), so the next press leaves the site. */
+export function unwind(): void {
+  listen();
+  if (depth <= 0 || holds.length > 0) return;
+  ignore += 1;
+  window.history.go(-depth);
 }
 
 export function holdBack(onBack: () => void): BackHold {
   listen();
-  const hold = { onBack };
-  holds.push(hold);
-  window.history.pushState({ ...(window.history.state ?? {}), galpiBack: true, galpiSheet: holds.length }, "");
+  push({ galpiSheet: true });
+  const hold = { depth, onBack };
+  holds = [...holds, hold];
   return {
     release() {
-      const at = holds.indexOf(hold);
-      if (at < 0) return;                          // the back key already took it
-      const top = at === holds.length - 1;
+      if (!holds.includes(hold)) return;           // the back key already took it
+      const top = holds.at(-1) === hold && depth === hold.depth;
       holds = holds.filter((h) => h !== hold);
       if (!top) return;                            // not the newest entry: leave it — a later press passes over it
       ignore += 1;
@@ -80,6 +99,7 @@ export function holdBack(onBack: () => void): BackHold {
 
 /** Tests only: start from nothing. */
 export function forgetBackHolds(): void {
+  depth = 0;
   holds = [];
   flowBack = null;
   ignore = 0;
