@@ -7,39 +7,39 @@ import { applyChallenge, LEARN_CHALLENGE_GENRES, pathReason, QUESTION_MAP, walkP
 import { toBook } from "./catalog";
 import { drawPath } from "./draw";
 import { shareLabel } from "@/lib/share/label";
-import { CHALLENGE_PATH, MIXED_PATH, SQL_PATH } from "@/lib/paths/__fixtures__/paths";
+import { CHALLENGE_PATH, MIXED_PATH, DATA_PATH } from "@/lib/paths/__fixtures__/paths";
 import type { CatalogBook } from "./types";
 
 const BOOKS = sample as unknown as CatalogBook[];
 const none = new Set<string>();
 
 describe("drawPath (v2: the answers of the question map)", () => {
-  const sql = BOOKS.filter((b) => b.keywords.includes("SQL")).map((b) => b.isbn);
+  const excel = BOOKS.filter((b) => b.keywords.includes("엑셀")).map((b) => b.isbn);
 
-  it("SQL path: five different books, one 운명, the SQL books first, and the path for S-04", () => {
-    const res = drawPath(SQL_PATH, none, mulberry32(7), BOOKS);
+  it("data path: five different books, one 운명, the 엑셀 book first, and the path for S-04", () => {
+    const res = drawPath(DATA_PATH, none, mulberry32(7), BOOKS);
     expect(res.picks).toHaveLength(5);
     expect(new Set(res.picks.map((p) => p.card.id)).size).toBe(5);
     expect(res.picks.filter((p) => p.kind === "random")).toHaveLength(1);
     expect(res.picks.every((p) => p.card.entry === "target")).toBe(true);
-    expect(res.picks.filter((p) => sql.includes(p.card.id))).toHaveLength(2);
+    expect(res.picks.filter((p) => excel.includes(p.card.id))).toHaveLength(1);   // the sample has one 엑셀 book
     expect(res.widened).toBe(true);
     expect(res.path).toEqual({
-      crumbs: ["지금 필요한 걸 채우기", "일을 더 잘하기", "숫자·도구 다루기", "데이터 읽고 분석", "데이터 꺼내는 도구", "DB에서 꺼내기"],
+      crumbs: ["지금 필요한 걸 채우기", "일을 더 잘하기", "숫자·도구 다루기", "데이터 읽고 분석", "데이터 꺼내는 도구", "표·코드로 분석", "표로 (엑셀)"],
       moods: ["가볍게 읽히는 얇은 책"], mode: "normal",
     });
-    const sqlPick = res.picks.find((p) => sql.includes(p.card.id) && p.kind === "recommended");
-    expect(sqlPick?.reason).toMatchObject({ label: "나온 이유", items: expect.arrayContaining(["데이터 분석", "SQL"]) });
+    const excelPick = res.picks.find((p) => excel.includes(p.card.id) && p.kind === "recommended");
+    expect(excelPick?.reason).toMatchObject({ label: "나온 이유", items: expect.arrayContaining(["데이터 분석", "엑셀"]) });
     expect(Object.keys(res.picks[0]).sort()).toEqual(["card", "kind", "reason"]);
   });
 
   it("carries the 뒤표지 label (F-27): only choices all five books match — the same as shareLabel on these books", () => {
-    const res = drawPath(SQL_PATH, none, mulberry32(7), BOOKS);
+    const res = drawPath(DATA_PATH, none, mulberry32(7), BOOKS);
     const byId = new Map(BOOKS.map((b) => [b.isbn, toBook(b)]));
-    expect(res.label).toEqual(shareLabel(QUESTION_MAP, SQL_PATH, res.picks.map((p) => byId.get(p.card.id)!)));
+    expect(res.label).toEqual(shareLabel(QUESTION_MAP, DATA_PATH, res.picks.map((p) => byId.get(p.card.id)!)));
     expect(res.label.challenge).toBe(false);
     expect(res.label.chips).toContain("지금 필요한 걸 채우기");
-    expect(res.label.chips).not.toContain("DB에서 꺼내기");                       // only 2 of the 5 are SQL books
+    expect(res.label.chips).not.toContain("표로 (엑셀)");                         // only 1 of the 5 is an 엑셀 book
   });
 
   it("challenge path: 🍃 books from the far side, the route kept for S-04", () => {
@@ -89,7 +89,7 @@ describe("drawPath — challenge provenance (rules v2, 10-05)", () => {
   });
 
   it("the usual route: challenge null", () => {
-    expect(drawPath(SQL_PATH, none, mulberry32(7), catalogue).challenge).toBeNull();
+    expect(drawPath(DATA_PATH, none, mulberry32(7), catalogue).challenge).toBeNull();
   });
 
   it("rule 30: 돈·경제 → 인문·역사, its title and draft reason, the books from there", () => {

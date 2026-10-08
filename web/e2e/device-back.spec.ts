@@ -1,6 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 import built from "../src/data/question-map.json";
-import { SQL_PATH } from "../src/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "../src/lib/paths/__fixtures__/paths";
 import type { QuestionMap } from "../src/lib/paths/types";
 import { answerPath, named, reactToBookmarks, recordEvents, specMismatches, START, test, toBookmarks, toClosedBook } from "./helpers";
 
@@ -10,13 +10,13 @@ import { answerPath, named, reactToBookmarks, recordEvents, specMismatches, STAR
  */
 const MAP = built as QuestionMap;
 const question = (page: Page, i: number) =>
-  page.getByRole("heading", { level: 1, name: MAP.nodes[SQL_PATH[i].node].question, exact: true });
+  page.getByRole("heading", { level: 1, name: MAP.nodes[DATA_PATH[i].node].question, exact: true });
 
 test("questions: back goes to the previous question, then from the first one to S-01 (E-33 · E-20 device_back)", async ({ page }) => {
   const { events } = await recordEvents(page);
   await page.goto("/");
   await page.getByRole("button", { name: START }).click();
-  await answerPath(page, SQL_PATH.slice(0, 2));
+  await answerPath(page, DATA_PATH.slice(0, 2));
   await expect(question(page, 2)).toBeVisible();
   await page.goBack();
   await expect(question(page, 1)).toBeVisible();
@@ -33,7 +33,7 @@ test("questions: back goes to the previous question, then from the first one to 
 test("the closed book: back goes to the last question", async ({ page }) => {
   await toClosedBook(page);
   await page.goBack();
-  await expect(question(page, SQL_PATH.length - 1)).toBeVisible();
+  await expect(question(page, DATA_PATH.length - 1)).toBeVisible();
 });
 
 test("the bookmarks hold — a note with [처음으로], which goes to S-01 (E-20 device_back)", async ({ page }) => {
@@ -71,10 +71,10 @@ test("every history entry is added during a tap; back, a tap, back again stays i
   await page.goto("/privacy");
   await page.goto("/");
   await page.getByRole("button", { name: START }).click();
-  await answerPath(page, SQL_PATH.slice(0, 2));
+  await answerPath(page, DATA_PATH.slice(0, 2));
   await page.goBack();
   await expect(question(page, 1)).toBeVisible();
-  await answerPath(page, SQL_PATH.slice(1, 2));
+  await answerPath(page, DATA_PATH.slice(1, 2));
   await expect(question(page, 2)).toBeVisible();
   await page.goBack();
   await expect(question(page, 1)).toBeVisible();
@@ -113,7 +113,7 @@ test("after [처음으로] on the last screen, back leaves the site — no dead 
 test("reloaded mid-path, back still goes to the previous question (one mark, not two)", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: START }).click();
-  await answerPath(page, SQL_PATH.slice(0, 2));
+  await answerPath(page, DATA_PATH.slice(0, 2));
   await expect(question(page, 2)).toBeVisible();
   await page.reload();
   await expect(question(page, 2)).toBeVisible();

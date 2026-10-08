@@ -4,15 +4,15 @@ import { artsForDraw } from "@/lib/art/combine";
 import { catalog } from "@/lib/books/catalog";
 import { drawPath } from "@/lib/books/draw";
 import { QUESTION_MAP } from "@/lib/paths";
-import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "@/lib/paths/__fixtures__/paths";
 import { mulberry32 } from "@/lib/recommend";
 import { encodeShare } from "./code";
 import { loadShare } from "./load";
 
 describe("loadShare — a shared link back to its 뒤표지 (F-27)", () => {
-  const drawn = drawPath(SQL_PATH, new Set(), mulberry32(11), catalog());
+  const drawn = drawPath(DATA_PATH, new Set(), mulberry32(11), catalog());
   const arts = artsForDraw(drawn.picks.length, 77);
-  const code = encodeShare(QUESTION_MAP, { answers: SQL_PATH, books: drawn.picks.map((p) => p.card.id), arts });
+  const code = encodeShare(QUESTION_MAP, { answers: DATA_PATH, books: drawn.picks.map((p) => p.card.id), arts });
 
   it("gives the same cards, pictures and label the person saw on their 뒤표지", () => {
     const view = loadShare(code)!;

@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MotionGlobalConfig } from "motion/react";
 import { describe, expect, it, vi } from "vitest";
 import { EXHAUSTED_NOTICE } from "@/lib/recommend";
-import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "@/lib/paths/__fixtures__/paths";
 import { INITIAL, type DrawView, type FlowState } from "@/lib/flow/state";
 import { BookScene, DRAW_FAILED } from "./BookScene";
 
@@ -17,7 +17,7 @@ const view = (n: number, mode: "normal" | "challenge" = "normal"): DrawView => (
   exhausted: false,
   path: { crumbs: ["뭔가 배우기", "DB에서 꺼내기"], moods: ["가볍게 한 권"], mode },
 });
-const first: FlowState = { ...INITIAL, step: "first", answers: SQL_PATH, drawnFor: SQL_PATH, opened: true, status: "ready", drawId: 1, draw: view(5) };
+const first: FlowState = { ...INITIAL, step: "first", answers: DATA_PATH, drawnFor: DATA_PATH, opened: true, status: "ready", drawId: 1, draw: view(5) };
 const handlers = () => ({ onOpen: vi.fn(), onBack: vi.fn(), onNext: vi.fn(), onRetry: vi.fn(), onReact: vi.fn(), onHome: vi.fn() });
 
 describe("BookScene", () => {

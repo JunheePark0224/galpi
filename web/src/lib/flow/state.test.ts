@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "@/lib/paths/__fixtures__/paths";
 import { INITIAL, curiousPicks, flowReducer, meetingOf, type DrawView, type FlowAction, type FlowState } from "./state";
 
 const art = { animal: "cat", bg: "peach", sky: "moon", ground: "none", rare: false } as const;
@@ -14,7 +14,7 @@ const view = (n: number): DrawView => ({
   path: { crumbs: ["뭔가 배우기"], moods: [], mode: "normal" },
 });
 const run = (actions: FlowAction[], from: FlowState = INITIAL) => actions.reduce(flowReducer, from);
-const answers = (path = SQL_PATH): FlowAction[] => path.map((a) => ({ type: "answer" as const, choice: a.choice }));
+const answers = (path = DATA_PATH): FlowAction[] => path.map((a) => ({ type: "answer" as const, choice: a.choice }));
 const asked = () => run([{ type: "start" }, ...answers()]);
 const opened = () => run([{ type: "drawn", id: 1, draw: view(5) }, { type: "open" }], asked());
 
@@ -26,12 +26,12 @@ describe("flowReducer (v2 questions)", () => {
   it("records each answer against the question on screen and counts every answer given", () => {
     const s = run([{ type: "start" }, ...answers().slice(0, 3)]);
     expect(s).toMatchObject({ step: "questions", asked: 3, status: "idle", drawId: 0 });
-    expect(s.answers).toEqual(SQL_PATH.slice(0, 3));
+    expect(s.answers).toEqual(DATA_PATH.slice(0, 3));
   });
 
   it("asks for a draw once the path ends, then takes no more answers", () => {
     const s = asked();
-    expect(s).toMatchObject({ step: "book", status: "loading", drawId: 1, draw: null, asked: 9, drawnFor: SQL_PATH });
+    expect(s).toMatchObject({ step: "book", status: "loading", drawId: 1, draw: null, asked: 10, drawnFor: DATA_PATH });
     expect(flowReducer(s, { type: "answer", choice: "A" })).toBe(s);
     expect(flowReducer(INITIAL, { type: "answer", choice: "A" })).toBe(INITIAL);
   });
@@ -39,7 +39,7 @@ describe("flowReducer (v2 questions)", () => {
   it("back on a question drops the last answer; on the first question or past the book it changes nothing", () => {
     const back = run([{ type: "start" }, ...answers().slice(0, 2), { type: "back" }]);
     expect(back).toMatchObject({ step: "questions", asked: 2 });
-    expect(back.answers).toEqual(SQL_PATH.slice(0, 1));
+    expect(back.answers).toEqual(DATA_PATH.slice(0, 1));
     const first = run([{ type: "start" }]);
     expect(flowReducer(first, { type: "back" })).toBe(first);
     const reading = run([{ type: "drawn", id: 1, draw: view(5) }, { type: "open" }, { type: "next" }], asked());
@@ -50,13 +50,13 @@ describe("flowReducer (v2 questions)", () => {
     it("goes back to the last question with the book kept open", () => {
       const s = flowReducer(opened(), { type: "back" });
       expect(s).toMatchObject({ step: "questions", opened: true, status: "ready" });
-      expect(s.answers).toEqual(SQL_PATH.slice(0, -1));
+      expect(s.answers).toEqual(DATA_PATH.slice(0, -1));
     });
 
     it("the same answer again: straight back to the first page with the same five books", () => {
       const before = opened();
       const s = run([{ type: "back" }, { type: "answer", choice: "A" }], before);
-      expect(s).toMatchObject({ step: "first", drawId: 1, status: "ready", asked: 10 });
+      expect(s).toMatchObject({ step: "first", drawId: 1, status: "ready", asked: 11 });
       expect(s.draw).toBe(before.draw);
     });
 
@@ -134,7 +134,7 @@ describe("flowReducer (v2 questions)", () => {
     const end = run([...Array.from({ length: 5 }, () => ({ type: "react" as const, reaction: "pass" as const })), { type: "leaveBack" }], flowReducer(opened(), { type: "next" }));
     const again = flowReducer(end, { type: "redraw" });
     expect(again).toMatchObject({ step: "book", opened: false, status: "loading", drawId: 2, index: 0, reactions: [], result: 0 });
-    expect(again.answers).toEqual(SQL_PATH);
+    expect(again.answers).toEqual(DATA_PATH);
     expect(flowReducer(opened(), { type: "redraw" })).toEqual(opened());
   });
 
@@ -171,7 +171,7 @@ describe("the phone's back key (10-08, plans/2026-10-08-device-back.md)", () => 
     const book = asked();
     expect(book.step).toBe("book");
     const s = flowReducer(book, { type: "back" });
-    expect(s).toMatchObject({ step: "questions", answers: SQL_PATH.slice(0, -1) });
+    expect(s).toMatchObject({ step: "questions", answers: DATA_PATH.slice(0, -1) });
   });
 
   it("returnToBack: from the first 궁금해요 book or the end, back to the 뒤표지 — nowhere else", () => {

@@ -1,6 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 import built from "../src/data/question-map.json";
-import { CHALLENGE_PATH, MIXED_PATH, SQL_PATH } from "../src/lib/paths/__fixtures__/paths";
+import { CHALLENGE_PATH, MIXED_PATH, DATA_PATH } from "../src/lib/paths/__fixtures__/paths";
 import type { QuestionMap } from "../src/lib/paths/types";
 import { answerPath, holdUnsure, named, reactToBookmarks, recordEvents, specMismatches, START, test } from "./helpers";
 
@@ -12,7 +12,7 @@ const SHOTS = process.env.PATH_SHOTS;
 const heading = (page: Page, node: string) => page.getByRole("heading", { level: 1, name: MAP.nodes[node].question, exact: true });
 const shot = async (page: Page, name: string) => { if (SHOTS) await page.screenshot({ path: `${SHOTS}/${name}.png` }); };
 
-test("SQL path: ten questions (써먹는 쪽 is not split: no 사례 SQL book), no path or count while answering, then 당신이 고른 길 and five bookmarks (E-32 · E-25 · E-34)", async ({ page }) => {
+test("data path: ten questions (the way question passed over: every 엑셀 book is 실습), no path or count while answering, then 당신이 고른 길 and five bookmarks (E-32 · E-25 · E-34)", async ({ page }) => {
   const { events } = await recordEvents(page);
   await page.goto("/");
   await expect(page.getByText("질문 몇 개면 한 권을 만나요")).toBeVisible();
@@ -22,16 +22,16 @@ test("SQL path: ten questions (써먹는 쪽 is not split: no 사례 SQL book), 
   await holdUnsure(page, 300);                                            // let go early: still the first question
   await expect(heading(page, "start")).toBeVisible();
   await shot(page, "s02-first-question");
-  await answerPath(page, SQL_PATH.slice(0, 8));
-  await expect(heading(page, "learn-len")).toBeVisible();                 // learn-way passed over (4 SQL books, all drawn)
+  await answerPath(page, DATA_PATH.slice(0, 9));
+  await expect(heading(page, "learn-len")).toBeVisible();                 // learn-way passed over (every 엑셀 book is 실습)
   await expect(page.getByText(/\d+\s*\/\s*\d+/)).toHaveCount(0);           // no "n / 9"
   await expect(page.getByText("일을 더 잘하기")).toHaveCount(0);           // no crumbs while answering
   await shot(page, "s02-question");
-  await answerPath(page, SQL_PATH.slice(8));
+  await answerPath(page, DATA_PATH.slice(9));
 
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await expect(page.getByRole("heading", { name: "당신이 고른 길" })).toBeVisible();
-  await expect(page.getByRole("region", { name: "지나온 길" })).toContainText("DB에서 꺼내기");
+  await expect(page.getByRole("region", { name: "지나온 길" })).toContainText("표로 (엑셀)");
   await expect(page.getByRole("region", { name: "기분" })).toContainText("가볍게 읽히는 얇은 책");
   await expect(page.getByText(/\d+권/)).toHaveCount(0);                    // no book-count note (design 10절)
   await expect(page.getByText("평소의 당신과 반대편에서 골랐어요")).toHaveCount(0);   // a normal path: no challenge line
@@ -41,15 +41,15 @@ test("SQL path: ten questions (써먹는 쪽 is not split: no 사례 SQL book), 
 
   await expect.poll(() => named(events, "path_completed").length).toBe(1);
   const answered = named(events, "question_answered");
-  expect(answered.map((e) => e.props.node_id)).toEqual(SQL_PATH.map((a) => a.node));   // a question passed over sends nothing
+  expect(answered.map((e) => e.props.node_id)).toEqual(DATA_PATH.map((a) => a.node));   // a question passed over sends nothing
   expect(answered.map((e) => e.props.node_id)).not.toContain("learn-way");
-  expect(answered.map((e) => e.props.depth)).toEqual(SQL_PATH.map((_, i) => i + 1));
-  expect(answered.map((e) => e.props.position)).toEqual(SQL_PATH.map((_, i) => i + 1));
+  expect(answered.map((e) => e.props.depth)).toEqual(DATA_PATH.map((_, i) => i + 1));
+  expect(answered.map((e) => e.props.position)).toEqual(DATA_PATH.map((_, i) => i + 1));
   expect(answered[0].props).toMatchObject({ kind: "narrow", choice: "A" });
   expect(answered[0].common).toMatchObject({ entry: null, mode: null, screen_version: "v2" });
   expect(named(events, "unsure_hold_cancelled")[0].props).toMatchObject({ node_id: "start", depth: 1 });
   expect(named(events, "path_completed")[0]).toMatchObject({
-    props: { scope_id: "entry=target;topics=데이터 분석;keywords=SQL", depth: 9, unsure_count: 0 },
+    props: { scope_id: "entry=target;topics=데이터 분석;keywords=엑셀", depth: 10, unsure_count: 0 },
     common: { entry: "target", mode: "normal" },
   });
   expect(named(events, "bookmark_shown")[0].common).toMatchObject({ entry: "target", mode: "normal" });
@@ -98,7 +98,7 @@ test("[← 이전 질문] drops the last answer; on the first question it goes h
   const { events } = await recordEvents(page);
   await page.goto("/");
   await page.getByRole("button", { name: START }).click();
-  await answerPath(page, SQL_PATH.slice(0, 2));                              // 평소 → 지금 필요한 걸 채우기
+  await answerPath(page, DATA_PATH.slice(0, 2));                              // 평소 → 지금 필요한 걸 채우기
   await expect(heading(page, "learn-intro")).toBeVisible();
   const back = page.getByRole("button", { name: "이전 질문" });
   expect((await back.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(44);
@@ -140,7 +140,7 @@ test("S-04 [← 질문으로 돌아가기]: the same answer keeps the five books
     (JSON.parse(sessionStorage.getItem("galpi.flow") ?? "{}").state?.draw?.picks ?? []).map((p: { card: { id: string } }) => p.card.id) as string[]);
   await page.goto("/");
   await page.getByRole("button", { name: START }).click();
-  await answerPath(page, SQL_PATH);
+  await answerPath(page, DATA_PATH);
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await expect(page.getByRole("button", { name: "다음 장" })).toBeEnabled();
   expect(drawn).toHaveLength(1);
@@ -164,7 +164,7 @@ test("S-04 [← 질문으로 돌아가기]: the same answer keeps the five books
   expect(drawn[1]).not.toEqual(drawn[0]);
 
   expect(named(events, "question_back_clicked").map((e) => e.props)).toEqual([
-    { node_id: "learn-len", depth: 9, source: "first_page" }, { node_id: "learn-len", depth: 9, source: "first_page" },
+    { node_id: "learn-len", depth: 10, source: "first_page" }, { node_id: "learn-len", depth: 10, source: "first_page" },
   ]);
   expect(named(events, "path_completed")).toHaveLength(3);
   expect(named(events, "book_opened")).toHaveLength(1);                     // the book stayed open
@@ -175,12 +175,12 @@ test("[← 이전 질문] after a question the map passed over: back to the ques
   const { events } = await recordEvents(page);
   await page.goto("/");
   await page.getByRole("button", { name: START }).click();
-  await answerPath(page, SQL_PATH.slice(0, 8));                              // … DB에서 꺼내기
+  await answerPath(page, DATA_PATH.slice(0, 9));                              // … 표로 (엑셀)
   await expect(heading(page, "learn-len")).toBeVisible();                    // learn-way passed over
   await page.getByRole("button", { name: "이전 질문" }).click();
-  await expect(heading(page, "learn-data-tool")).toBeVisible();
+  await expect(heading(page, "learn-data-sheet")).toBeVisible();
   await expect.poll(() => named(events, "question_back_clicked").length).toBe(1);
-  expect(named(events, "question_back_clicked")[0].props).toEqual({ node_id: "learn-data-tool", depth: 8, source: "question" });
+  expect(named(events, "question_back_clicked")[0].props).toEqual({ node_id: "learn-data-sheet", depth: 9, source: "question" });
   expect(named(events, "question_answered").map((e) => e.props.node_id)).not.toContain("learn-way");
   expect(specMismatches(events)).toEqual([]);
 });
@@ -189,14 +189,14 @@ test("a reload mid-path resumes the same question and keeps counting answers", a
   const { events } = await recordEvents(page);
   await page.goto("/");
   await page.getByRole("button", { name: START }).click();
-  await answerPath(page, SQL_PATH.slice(0, 3));
+  await answerPath(page, DATA_PATH.slice(0, 3));
   await expect(heading(page, "learn-area")).toBeVisible();
   await page.reload();
   await expect(heading(page, "learn-area")).toBeVisible();
-  await answerPath(page, SQL_PATH.slice(3));
+  await answerPath(page, DATA_PATH.slice(3));
   await expect(page.getByText("눌러서 펼치기")).toBeVisible();
   await expect.poll(() => named(events, "path_completed").length).toBe(1);
-  expect(named(events, "question_answered").map((e) => e.props.position)).toEqual(SQL_PATH.map((_, i) => i + 1));
+  expect(named(events, "question_answered").map((e) => e.props.position)).toEqual(DATA_PATH.map((_, i) => i + 1));
   await page.reload();
   await expect(page.getByText("눌러서 펼치기")).toBeVisible();              // S-03 resumes too
   expect(specMismatches(events)).toEqual([]);

@@ -24,6 +24,12 @@ describe("bookTitle", () => {
     expect(bookTitle("IT 비전공자를 위한 파이썬 업무 자동화 (RPA)")).toBe("『IT 비전공자를 위한 파이썬 업무 자동화 (RPA)』");
   });
 
+  it("drops a trailing list of what the book covers (items split by │ or |) — the shop's keywords, not the name", () => {
+    expect(bookTitle("1등급 연구대회 실전가이드 (수업혁신사례연구대회│디지털교육연구대회│인성교육실천사례연구발표대회)"))
+      .toBe("『1등급 연구대회 실전가이드』");
+    expect(bookTitle("글쓰기 수업 (기획|퇴고)")).toBe("『글쓰기 수업』");
+  });
+
   it("keeps a one-character word on the same line as the next word", () => {
     expect(bookTitle("존재의 세 가지 거짓말")).toBe("『존재의 세 가지 거짓말』");
     expect(bookTitle("모두를 위한 R 데이터 분석 입문")).toBe("『모두를 위한 R 데이터 분석 입문』");
