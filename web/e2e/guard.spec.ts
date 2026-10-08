@@ -1,6 +1,6 @@
 import { expect } from "@playwright/test";
 import { test } from "./helpers";
-import { SQL_PATH } from "../src/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "../src/lib/paths/__fixtures__/paths";
 
 const common = { anon_id: "e2e", user_id: null, session_id: "e2e", round: 1, entry: null, mode: null, screen_version: "v2",
   referrer: "", is_returning: false, device: "desktop", is_in_app_browser: false };
@@ -14,7 +14,7 @@ test("track refuses a request from another origin, or with no origin at all", as
 });
 
 test("draw refuses a request from another origin", async ({ request, baseURL }) => {
-  const body = { answers: SQL_PATH };
+  const body = { answers: DATA_PATH };
   expect((await request.post("/api/books/draw", { data: body, headers: { origin: "https://evil.example" } })).status()).toBe(403);
   expect((await request.post("/api/books/draw", { data: body, headers: { origin: baseURL! } })).status()).toBe(200);
 });

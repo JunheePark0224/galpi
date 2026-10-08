@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { SQL_PATH } from "../src/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "../src/lib/paths/__fixtures__/paths";
 import { named, recordEvents, specMismatches, test, toBookmarks } from "./helpers";
 
 // 도감 v1 (PRD F-21, plans/2026-10-05-collection-dex.md). No real Supabase: /api/me and the 도감 routes are answered here
@@ -181,7 +181,7 @@ test("a 초판본 bookmark on S-05 wears its effects, and the gold rim of its �
 
 test("the server records nothing for a tampered ticket (403) and asks a login for a real one (401)", async ({ request, baseURL }) => {
   const headers = { origin: baseURL!, "content-type": "application/json" };
-  const draw = await request.post("/api/books/draw", { headers, data: { answers: SQL_PATH } });
+  const draw = await request.post("/api/books/draw", { headers, data: { answers: DATA_PATH } });
   expect(draw.status()).toBe(200);
   const { art } = await draw.json();
   expect(art).toMatchObject({ count: 5, sub: null, iat: expect.any(Number), sig: expect.stringMatching(/^[A-Za-z0-9_-]{43}$/) });

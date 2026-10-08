@@ -5,7 +5,7 @@ import { test, toClosedBook } from "./helpers";
 // 320 × 568 = iPhone SE (1st) / small Android; 375 × 559 ≈ a 375 × 667 phone inside KakaoTalk's or Instagram's browser.
 test.use({ reducedMotion: "reduce", isMobile: true, hasTouch: true });
 
-/** S-04 with the ten-question SQL path (6 path rows + 2 mood rows — the longest summary the fixtures draw). */
+/** S-04 with the ten-question data path (7 path rows + 1 mood row — the longest summary the fixtures draw). */
 async function toFirstPage(page: Page) {
   await toClosedBook(page);
   await page.getByRole("button", { name: "책 펼치기" }).click();

@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { CHALLENGE_PATH, MIXED_PATH, SQL_PATH } from "./__fixtures__/paths";
+import { CHALLENGE_PATH, MIXED_PATH, DATA_PATH } from "./__fixtures__/paths";
 import { QUESTION_MAP } from "./map";
 import { parseQuestionMap } from "./parse";
 import { pathSummary } from "./summary";
@@ -44,8 +44,8 @@ describe("pathSummary (S-04 당신이 고른 길)", () => {
   it("on the real map: left broad (못 잡겠어요 next, or the next question passed over), the broad answer shows", () => {
     const real = [a("start", "A"), a("branch", "B"), a("learn-intro", "B"), a("learn-way", "B"), a("learn-way-use", "unsure"), a("learn-len", "B")];
     expect(pathSummary(QUESTION_MAP, real)).toEqual({ crumbs: ["지금 필요한 걸 채우기"], moods: ["실제로 써먹는 쪽", "두툼한 책 한 권"], mode: "normal" });
-    expect(walkPath(QUESTION_MAP, SQL_PATH).skipped).toEqual(["learn-way"]);
-    expect(pathSummary(QUESTION_MAP, SQL_PATH).moods).toEqual(["가볍게 읽히는 얇은 책"]);
+    expect(walkPath(QUESTION_MAP, DATA_PATH).skipped).toEqual(["learn-way"]);
+    expect(pathSummary(QUESTION_MAP, DATA_PATH).moods).toEqual(["가볍게 읽히는 얇은 책"]);
   });
 
   it("on the real map: two mood answers in a row on different axes both show", () => {
@@ -59,9 +59,9 @@ describe("pathSummary (S-04 당신이 고른 길)", () => {
   });
 
   it("on the real map: the three test paths end, with the summaries S-04 shows", () => {
-    for (const p of [SQL_PATH, MIXED_PATH, CHALLENGE_PATH]) expect(walkPath(QUESTION_MAP, p).next).toBeNull();
-    expect(pathSummary(QUESTION_MAP, SQL_PATH)).toEqual({
-      crumbs: ["지금 필요한 걸 채우기", "일을 더 잘하기", "숫자·도구 다루기", "데이터 읽고 분석", "데이터 꺼내는 도구", "DB에서 꺼내기"],
+    for (const p of [DATA_PATH, MIXED_PATH, CHALLENGE_PATH]) expect(walkPath(QUESTION_MAP, p).next).toBeNull();
+    expect(pathSummary(QUESTION_MAP, DATA_PATH)).toEqual({
+      crumbs: ["지금 필요한 걸 채우기", "일을 더 잘하기", "숫자·도구 다루기", "데이터 읽고 분석", "데이터 꺼내는 도구", "표·코드로 분석", "표로 (엑셀)"],
       moods: ["가볍게 읽히는 얇은 책"], mode: "normal",
     });
     expect(pathSummary(QUESTION_MAP, MIXED_PATH)).toEqual({ crumbs: [], moods: ["가볍게 얇은 책"], mode: "normal" });

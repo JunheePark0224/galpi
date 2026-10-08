@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PathDrawResponse } from "@/lib/books/types";
-import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "@/lib/paths/__fixtures__/paths";
 import { artsForDraw } from "@/lib/art/combine";
 import { drawBody, requestDraw, toDrawView } from "./api";
 import { MAX_SEEN, parseDrawRequest } from "@/lib/books/request";
@@ -21,16 +21,16 @@ describe("flow api", () => {
   afterEach(() => vi.unstubAllGlobals());
 
   it("sends the answers and the books this session has shown", () => {
-    expect(drawBody({ ...INITIAL, answers: SQL_PATH, seen: ["x"] })).toEqual({ answers: SQL_PATH, seen: ["x"] });
+    expect(drawBody({ ...INITIAL, answers: DATA_PATH, seen: ["x"] })).toEqual({ answers: DATA_PATH, seen: ["x"] });
   });
 
   it("10-07: a guest's saved books are left out too — once each, saved first", () => {
-    expect(drawBody({ ...INITIAL, answers: SQL_PATH, seen: ["x", "s1"] }, ["s1", "s2"])).toEqual({ answers: SQL_PATH, seen: ["s1", "s2", "x"] });
+    expect(drawBody({ ...INITIAL, answers: DATA_PATH, seen: ["x", "s1"] }, ["s1", "s2"])).toEqual({ answers: DATA_PATH, seen: ["s1", "s2", "x"] });
   });
 
   it("never sends more than the server takes: saved books kept, the oldest seen dropped first", () => {
     const seen = Array.from({ length: MAX_SEEN }, (_, i) => `seen-${i}`);
-    const body = drawBody({ ...INITIAL, answers: SQL_PATH, seen }, ["s1", "s2"]);
+    const body = drawBody({ ...INITIAL, answers: DATA_PATH, seen }, ["s1", "s2"]);
     expect(body.seen).toHaveLength(MAX_SEEN);
     expect((body.seen as string[]).slice(0, 3)).toEqual(["s1", "s2", "seen-2"]);
     expect((body.seen as string[]).at(-1)).toBe(`seen-${MAX_SEEN - 1}`);
