@@ -2,6 +2,8 @@
 
 Usage (from the checkout):  PYTHONIOENCODING=utf-8 python -m src.pipeline.run_daily [--date YYYY-MM-DD | --batch ID] [--count N]
   --batch: a later run of the same day, `YYYY-MM-DD-2`, `-3` … (pipeline/batch.py); the first batch is the plain date
+  --batches: send the calls through the Message Batches API (pipeline/batched.py) — half the price, the same requests and
+             records; the run waits for each batch (usually minutes, at most 24 hours), so it is for local runs
 Then:                        cd web && npm run books:import && npm test      (the workflow does both, then report.py)
 Keys: YES24_API_KEY / ANTHROPIC_API_KEY from the environment (Actions secrets) or the local .env — never printed.
 Models and counts come from data/pipeline/config.json (model = pass A, second_model = blind pass B).
@@ -34,6 +36,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from collections import Counter
 from datetime import datetime
 
@@ -42,7 +45,7 @@ from apply_review import FIELD_OF_TOPIC
 from compare_apis import load_env
 
 from . import ADDITIONS, BOOKS, KST, REQUEUE, RUNS, VOCAB
-from . import requeue
+from . import batched, requeue
 from .axis_check import retry as retry_axes
 from .batch import BatchError, parse as parse_batch
 from .candidates import Candidate, find, known_from, yes24_env
@@ -55,7 +58,7 @@ from .one_liner import RetryLog, retry as retry_one_liner
 from .prompt import all_keywords, schema, system_prompt, user_message
 from .rules_version import rules_version
 from .slots import keyword_rule, slot_rule
-from .tagger import Breaker, TaggerStop, Usage, call, parse
+from .tagger import Breaker, TaggerStop, Usage, call, parse, request
 
 
 MIN_ATTEMPTS, MAX_FAILED_SHARE = 10, 0.30  # a run whose books keep failing (max_tokens, refusal, invalid answer…) stops here
@@ -107,9 +110,7 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     queues it to be tagged there; a book that came back from the queue (`requeued`) is not sent on again but waits for a person."""
     if not cand.author.strip() or cand.pages <= 0:  # find() never offers one; a book that import would reject costs nothing
         return None, "incomplete_candidate"
-    kept = vocab.get(cand.slot, {}).get("kept", {}) if cand.entry == "target" else {}  # a new topic may have no list yet
-    names, hints = list(kept), keyword_hints(cand, kept) if kept else []
-    user = user_message(cand.entry, cand.slot, cand.title, cand.author, cand.intro, cand.toc, hints)
+    names, hints, user = _book_text(cand, vocab)
     raw_a, used, why = call(client, cfg.model, prompts["tag"], user, schema(cand.entry, "tag", all_keywords(vocab)), breaker, "A")
     _spend(ledger, cfg.model, used)
     left_out = excluded_names(vocab.get(cand.slot, {})) if cand.entry == "target" else []
@@ -137,6 +138,21 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     return {**rec, "rules_version": rules or rules_version()}, "ok"
 
 
+def _book_text(cand: Candidate, vocab: dict) -> tuple[list[str], list[str], str]:
+    """(the topic's keyword names, the keyword hints found in the book, the user message both passes get)."""
+    kept = vocab.get(cand.slot, {}).get("kept", {}) if cand.entry == "target" else {}  # a new topic may have no list yet
+    hints = keyword_hints(cand, kept) if kept else []
+    return list(kept), hints, user_message(cand.entry, cand.slot, cand.title, cand.author, cand.intro, cand.toc, hints)
+
+
+def prefetch(recorder: batched.Recorder, cfg: Config, prompts: dict, vocab: dict, cands: list[Candidate]) -> None:
+    """Pass B of every book in the first batch next to pass A (it is blind: its request does not wait on pass A's answer)."""
+    for cand in cands:
+        if cand.author.strip() and cand.pages > 0:
+            user = _book_text(cand, vocab)[2]
+            recorder.expect(request(cfg.second_model, prompts["check"], user, schema(cand.entry, "check", all_keywords(vocab))))
+
+
 def _third_pass(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, breaker: Breaker, ledger: dict,
                 rec: dict, requeued: bool) -> dict:
     """The record after pass C when A and B split on a field a majority may settle (tiebreak.py, route plan 3 — 10-08);
@@ -160,8 +176,9 @@ def _axes_backed(client, model: str, system: str, user: str, entry: str, raw: di
     return ans
 
 
-def run(batch: str, cfg: Config, env: dict, client) -> dict:
-    """One batch (`batch` = the day, or `<day>-N` for a later run that day)."""
+def run(batch: str, cfg: Config, env: dict, client, batches: bool = False, sleep=time.sleep) -> dict:
+    """One batch (`batch` = the day, or `<day>-N` for a later run that day). `batches`: send the calls through the Message
+    Batches API (batched.py — half the price, results within 24 hours; `sleep` waits between status checks)."""
     date = parse_batch(batch)[0]
     books, vocab, additions = load_state()
     fails_before = len(collect_candidates.FAILURES)
@@ -184,25 +201,52 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
         return summary | {"status": "yes24_failed" if yes24_fail else "no_candidates"}
     prompts, rules = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}, rules_version()
     recs, reasons, ledger, stopped, breaker, tried, retries = [], Counter(), {}, None, Breaker(), 0, RetryLog()
-    axis_retries, back_isbns = RetryLog(), {c.isbn for c in back}
-    for cand in cands:
+    axis_retries, back_isbns, sent = RetryLog(), {c.isbn for c in back}, []
+    tagger = batched.Recorder() if batches else client
+    if batches:
+        prefetch(tagger, cfg, prompts, vocab, cands)
+    todo = cands
+    while todo and not stopped:
+        waiting = []
+        for cand in todo:
+            # one book's use is kept apart and added once it is done: a batched book is run again each round (replays)
+            own, own_retries, own_axes, rec, why = {}, RetryLog(), RetryLog(), None, None
+            if batches:
+                tagger.begin()
+            try:
+                rec, why = tag_one(tagger, cfg, prompts, vocab, cand, breaker, own, own_retries, rules, own_axes,
+                                   routed=True, requeued=cand.isbn in back_isbns)
+            except batched.Waiting:
+                waiting.append(cand)
+                continue
+            except TaggerStop as err:
+                stopped = str(err)
+            except Exception as err:  # one odd book must not lose the finished ones; the class name is all that is kept
+                rec, why = None, f"error:{type(err).__name__}"
+            for m, u in own.items():
+                ledger[m] = ledger.get(m, Usage()).plus(u)
+            retries.absorb(own_retries)
+            axis_retries.absorb(own_axes)
+            if stopped:
+                break
+            reasons[why] += 1
+            if rec:
+                recs.append(rec)
+            if why != "incomplete_candidate":  # that one cost nothing
+                tried += 1
+            if tried >= MIN_ATTEMPTS and 1 - len(recs) / tried > MAX_FAILED_SHARE:
+                top = max((r for r in reasons if r != "ok"), key=reasons.get, default="unknown")
+                stopped = f"{tried - len(recs)} of {tried} books failed ({top}) — over {MAX_FAILED_SHARE:.0%}, stopped to save cost"
+                break
+        if stopped or not waiting:
+            break
         try:
-            rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger, retries, rules, axis_retries,
-                               routed=True, requeued=cand.isbn in back_isbns)
+            sent.append(batched.send(client, tagger, sleep))
         except TaggerStop as err:
             stopped = str(err)
-            break
-        except Exception as err:  # one odd book must not lose the finished ones; the class name is all that is kept
-            rec, why = None, f"error:{type(err).__name__}"
-        reasons[why] += 1
-        if rec:
-            recs.append(rec)
-        if why != "incomplete_candidate":  # that one cost nothing
-            tried += 1
-        if tried >= MIN_ATTEMPTS and 1 - len(recs) / tried > MAX_FAILED_SHARE:
-            top = max((r for r in reasons if r != "ok"), key=reasons.get, default="unknown")
-            stopped = f"{tried - len(recs)} of {tried} books failed ({top}) — over {MAX_FAILED_SHARE:.0%}, stopped to save cost"
-            break
+        todo = waiting
+    order = {c.isbn: i for i, c in enumerate(cands)}
+    recs.sort(key=lambda r: order[r["isbn"]])  # a batched book finishes in its own round; the file keeps the run's order
     status = Counter(r["status"] for r in recs)
     summary |= {"tagged": len(recs), "reasons": dict(reasons), "stopped": stopped, "rules_version": rules,
                 "picked": status["picked"], "review": status["review"], "reserve": status["reserve"],
@@ -213,7 +257,8 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
                 "one_liner_retries": retries.summary(),
                 "axis_retries": axis_retries.summary(),
                 "usage": {m: u.__dict__ for m, u in ledger.items()},
-                "cost_usd": round(sum(u.cost(m) for m, u in ledger.items()), 4)}
+                "cost_usd": round(sum(u.cost(m) for m, u in ledger.items()) * (batched.DISCOUNT if batches else 1), 4),
+                **({"batches": {"ids": sent, "discount": batched.DISCOUNT}} if batches else {})}
     if not recs:
         return summary | {"status": "anthropic_failed" if stopped else "no_books"}
     write_doc(ADDITIONS / f"{batch}.json", additions_doc(date, cfg.model, cfg.second_model, recs, batch))
@@ -247,6 +292,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--date", help="the day (default: today in KST) — the day's first batch")
     ap.add_argument("--batch", help="batch id: YYYY-MM-DD, or YYYY-MM-DD-N for a later run that day")
     ap.add_argument("--count", type=int)
+    ap.add_argument("--batches", action="store_true", help="Message Batches API: half the price, waits up to 24 hours")
     args = ap.parse_args(argv)
     batch = args.batch or args.date or datetime.now(KST).date().isoformat()
     try:
@@ -264,7 +310,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ERROR: {', '.join(missing)} not set", file=sys.stderr)
         return 1
     import anthropic  # the SDK is only needed for a real run
-    summary = run(batch, cfg, env, anthropic.Anthropic(api_key=key, max_retries=2, timeout=60))
+    summary = run(batch, cfg, env, anthropic.Anthropic(api_key=key, max_retries=2, timeout=60), batches=args.batches)
     RUNS.mkdir(parents=True, exist_ok=True)
     (RUNS / f"{batch}.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(json.dumps(summary, ensure_ascii=False, indent=1))
