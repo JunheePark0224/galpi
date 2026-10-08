@@ -155,6 +155,12 @@ def decide(a: dict, b: dict, flags: list[str], issues: list[str], auto_merge: bo
         return "dropped", None
     if moved_to(a, b, entry):
         flags = [f for f in flags if f != "fits"]
+    return status_of(flags, issues, auto_merge)
+
+
+def status_of(flags: list[str], issues: list[str], auto_merge: bool) -> tuple[str, str | None]:
+    """(status, auto mark) of a book that stays: a one-liner rule → reserve; a field left to a person → review (reserve
+    with auto_merge); else picked and auto-accepted."""
     flags, issues = needs_person(flags, issues)
     if issues:
         return "reserve", None

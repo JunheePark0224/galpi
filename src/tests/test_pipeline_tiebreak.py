@@ -89,3 +89,69 @@ def test_only_validated_fields_are_settled_and_keyword_splits_alone_need_no_thir
     third = {"fits": True, "keywords": ["ETF·펀드"], "way": "실습"}
     assert tiebreak.settle(rec, third, tiebreak.SETTLES) == {"keywords": None, "way": "실습"}
     assert tiebreak.needs_third(rec) and not tiebreak.needs_third(target(["주식"], ["ETF·펀드"]))
+
+
+def daily(rec, flags, issues=(), status="review"):
+    return rec | {"flags": list(flags), "issues": list(issues), "status": status}
+
+
+def test_the_daily_run_takes_the_majority_value_and_lets_an_agreed_book_in():
+    """route plan 3 (10-08): a split the third pass settles is no longer a person's — the record keeps the majority value,
+    what pass A said (`a_was`) and pass C's values (never its free text)."""
+    rec = daily(leaf(AX, {**AX, "temp": 0}), ["temp"])
+    out = tiebreak.applied(rec, {"fits": True, "axes": {**AX, "temp": 0}, "missing": [], "why": "자유 글"}, auto_merge=False)
+    assert out["axes"]["temp"] == 0 and out["a_was"] == {"temp": 1} and out["settled"] == {"temp": 0}
+    assert (out["flags"], out["status"], out["auto"]) == ([], "picked", "ai-agree")
+    assert out["third"]["axes"]["temp"] == 0 and "why" not in out["third"]
+    kept = tiebreak.applied(rec, {"fits": True, "axes": AX, "missing": []}, auto_merge=False)
+    assert kept["axes"]["temp"] == 1 and "a_was" not in kept and kept["status"] == "picked"
+    held = tiebreak.applied(daily(leaf(AX, {**AX, "temp": 0}), ["temp"], ["짧음(9자)"], "reserve"),
+                            {"fits": True, "axes": AX, "missing": []}, auto_merge=False)
+    assert held["status"] == "reserve" and "auto" not in held          # a one-liner rule still waits for a person
+
+
+def test_a_three_way_split_or_a_keyword_split_still_waits_for_a_person():
+    rec = daily(leaf(AX, {**AX, "temp": 0}), ["temp"])
+    out = tiebreak.applied(rec, {"fits": True, "axes": {**AX, "temp": -1}, "missing": []}, auto_merge=False)
+    assert out["flags"] == ["temp"] and out["status"] == "review" and out["settled"] == {}
+    rec = daily(target(["주식"], ["ETF·펀드"], b_way="실습"), ["keywords", "way"])
+    out = tiebreak.applied(rec, {"fits": True, "keywords": ["ETF·펀드"], "way": "개념"}, auto_merge=False)
+    assert out["flags"] == ["keywords"] and out["way"] == "개념" and out["status"] == "review"
+    assert tiebreak.applied(rec, None, auto_merge=False)["status"] == "review"  # pass C failed: as it was
+
+
+def test_a_slot_split_moves_the_book_to_the_slot_two_of_three_name():
+    """The plan's slot table: one pass keeps it and two name a slot → there; both out on different slots and pass C names
+    one of them → there (route plan 2); "nowhere" by majority is still a person's."""
+    rec = daily(leaf(AX, AX, b_fits=False, b_suggest="한국 소설"), ["fits"])
+    out = tiebreak.applied(rec, {"fits": False, "suggest": "한국 소설", "axes": AX}, auto_merge=False)
+    assert (out["genre"], out["moved_from"], out["flags"], out["status"]) == ("한국 소설", "에세이", [], "picked")
+    stay = tiebreak.applied(rec, {"fits": True, "suggest": "", "axes": AX}, auto_merge=False)
+    assert stay["genre"] == "에세이" and "moved_from" not in stay and stay["status"] == "picked"
+    two = daily(leaf(AX, AX, a_fits=False, b_fits=False, b_suggest="한국 소설") | {"suggest": "SF·판타지"}, ["fits"])
+    out = tiebreak.applied(two, {"fits": False, "suggest": "한국 소설", "axes": AX}, auto_merge=False)
+    assert out["genre"] == "한국 소설" and out["status"] == "picked"
+    nowhere = daily(leaf(AX, AX, b_fits=False), ["fits"])
+    assert tiebreak.applied(nowhere, {"fits": False, "suggest": "", "axes": AX}, auto_merge=False)["status"] == "review"
+
+
+def test_a_slot_the_majority_puts_in_the_other_entry_is_requeued_once():
+    rec = daily(leaf(AX, AX, b_fits=False, b_suggest="마음 돌보기"), ["fits"])
+    c = {"fits": False, "suggest": "마음 돌보기", "axes": AX}
+    out = tiebreak.applied(rec, c, auto_merge=False)
+    assert out["status"] == "dropped" and out["requeued_to"] == {"entry": "target", "slot": "마음 돌보기"}
+    assert out["genre"] == "에세이"
+    back = tiebreak.applied(rec, c, auto_merge=False, requeued=True)
+    assert back["status"] == "review" and "fits" in back["flags"] and "requeued_to" not in back
+
+
+def test_a_target_book_moved_by_the_majority_takes_the_keywords_its_two_voters_share():
+    rec = daily(target(["주식"], ["주식"]) | {"second": {"fits": False, "keywords": ["주식"], "way": "개념",
+                                                          "suggest": "경제 상식", "suggest_keywords": ["금리·환율"]}},
+                ["fits", "keywords"])
+    c = {"fits": False, "keywords": [], "way": "개념", "suggest": "경제 상식", "suggest_keywords": ["금리·환율", "물가"]}
+    out = tiebreak.applied(rec, c, auto_merge=False)
+    assert (out["topic"], out["field"], out["keywords"], out["moved_from"]) == ("경제 상식", "돈·경제", ["금리·환율"], "돈 관리·투자")
+    assert out["flags"] == [] and out["status"] == "picked"
+    stay = tiebreak.applied(rec, {**c, "fits": True, "suggest": "", "keywords": ["ETF·펀드"]}, auto_merge=False)
+    assert stay["topic"] == "돈 관리·투자" and stay["flags"] == ["keywords"]  # a keyword split in the old slot stays
