@@ -16,6 +16,9 @@ missing key, YES24 failed, the run stopped before any book was finished, or cand
   STOP_LIMIT times in a row (tagger.Breaker, one streak per pass) → the run stops there; the books finished before it are
   written as `partial`, and if there are none it is `anthropic_failed` with no file
   nothing to fill → `full`, zero API calls
+A split a majority may settle (slot, 🍃 axes, way — tiebreak.SETTLES) gets a third pass (pass C, the same blind check); its
+2-of-3 value replaces the person's decision (route plan 10-08). Both passes — or the majority — placing a book in a slot of
+the other 갈래 drop it here with `requeued_to` and a requeue.json row; a book back from the queue is not sent on again.
 A pass-A one-liner that breaks the form / length / hype / title rules is asked for once more from the same model
 (pipeline/one_liner.py); the summary's `one_liner_retries` counts them and their cost (also in `usage` / `cost_usd`).
 YES24 text (intro, TOC) lives on the Candidate in memory and goes to the tagger only; the additions file, the summary and
@@ -92,13 +95,15 @@ def _spend(ledger: dict, model: str, used: Usage) -> None:
 
 def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, breaker: Breaker,
             ledger: dict, retries: RetryLog | None = None, rules: str | None = None,
-            axis_retries: RetryLog | None = None, requeued: bool = False) -> tuple[dict | None, str]:
+            axis_retries: RetryLog | None = None, routed: bool = False, requeued: bool = False
+            ) -> tuple[dict | None, str]:
     """(record or None, reason). Pass A tags (a one-liner that breaks a rule is asked for once more — one_liner.py), pass B
     checks blind (it writes no one-liner); on a 🍃 book either pass whose axis values its own signal lines do not back is
     asked once more (axis_check.py). Token use goes to `ledger`, one-liner retries also to `retries`, axis re-asks to
     `axis_retries`. Raises TaggerStop. A pass that says the book does not fit names the slot it belongs to (`suggest`).
     The record carries `rules_version`: `rules`, or the label dictionary's version (rules_version.py) when not given.
-    Both passes naming the same slot of the other 갈래 (checks.crossed_to, 10-08) drop the book here with `requeued_to` — run()
+    `routed` (the daily run — route plan 10-08; the library re-tag and the gold runs keep the two passes' record as it is):
+    a split a majority may settle goes to a third pass (`_third_pass`), and both passes naming the same slot of the other 갈래 (checks.crossed_to, 10-08) drop the book here with `requeued_to` — run()
     queues it to be tagged there; a book that came back from the queue (`requeued`) is not sent on again but waits for a person."""
     if not cand.author.strip() or cand.pages <= 0:  # find() never offers one; a book that import would reject costs nothing
         return None, "incomplete_candidate"
@@ -125,10 +130,22 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     b = _axes_backed(client, cfg.second_model, prompts["check"], user, cand.entry, raw_b, b, "B", breaker, ledger, axis_retries)
     flags = disagreements(cand.entry, a, b)
     issues = rule_issues(cand.entry, a, cand.title, f"{cand.intro} {cand.toc}", b)
-    crossed = crossed_to(cand.entry, a, b) and not requeued
+    crossed = routed and not requeued and crossed_to(cand.entry, a, b)
     status, auto = ("dropped", None) if crossed else decide(a, b, flags, issues, cfg.auto_merge, cand.entry)
     rec = record(cand, a, b, flags, issues, status, auto, hints)  # record() blanks any field that copied YES24 text
+    rec = _third_pass(client, cfg, prompts, vocab, cand, breaker, ledger, rec, requeued) if routed else rec
     return {**rec, "rules_version": rules or rules_version()}, "ok"
+
+
+def _third_pass(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, breaker: Breaker, ledger: dict,
+                rec: dict, requeued: bool) -> dict:
+    """The record after pass C when A and B split on a field a majority may settle (tiebreak.py, route plan 3 — 10-08);
+    as it is otherwise. Raises TaggerStop."""
+    from . import tiebreak  # tiebreak imports this module
+    if rec["status"] == "dropped" or not tiebreak.needs_third(rec):
+        return rec
+    return tiebreak.applied(rec, tiebreak.third(client, cfg, vocab, prompts, cand, breaker, ledger), cfg.auto_merge,
+                            requeued)
 
 
 def _axes_backed(client, model: str, system: str, user: str, entry: str, raw: dict, ans: dict, pass_: str,
@@ -171,7 +188,7 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
     for cand in cands:
         try:
             rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger, retries, rules, axis_retries,
-                               requeued=cand.isbn in back_isbns)
+                               routed=True, requeued=cand.isbn in back_isbns)
         except TaggerStop as err:
             stopped = str(err)
             break
@@ -192,6 +209,7 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
                 "dropped": status["dropped"], "crossed": sum(bool(r.get("requeued_to")) for r in recs),
                 "auto_agreed": sum(r.get("auto") == "ai-agree" for r in recs),
                 "flagged": sum(bool(r["flags"]) and r["status"] != "dropped" for r in recs),
+                "third_pass": {"books": sum("third" in r for r in recs), "settled": sum(bool(r.get("settled")) for r in recs)},
                 "one_liner_retries": retries.summary(),
                 "axis_retries": axis_retries.summary(),
                 "usage": {m: u.__dict__ for m, u in ledger.items()},

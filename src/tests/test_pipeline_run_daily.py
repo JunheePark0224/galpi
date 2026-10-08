@@ -79,14 +79,18 @@ def test_a_day_writes_our_tags_and_a_summary(day):
     client = FakeClient(mixed)
     s = run_daily.run("2026-10-05", CFG, ENV, client)
     assert s["status"] == "ok" and s["wanted"] == 4 and s["slots"] == ["돈 관리·투자/주식 4"] and s["candidates"] == 4
-    assert (s["picked"], s["review"], s["reserve"], s["dropped"], s["auto_agreed"], s["flagged"]) == (2, 1, 1, 0, 2, 1)
-    assert s["usage"]["claude-haiku-4-5"]["calls"] == 9 and s["cost_usd"] > 0  # 4 books × 2 passes + 1 retry
+    # book 2's way split goes to pass C, which reads it like pass B: two of three settle it (route plan 3, 10-08)
+    assert (s["picked"], s["review"], s["reserve"], s["dropped"], s["auto_agreed"], s["flagged"]) == (3, 0, 1, 0, 3, 0)
+    assert s["third_pass"] == {"books": 1, "settled": 1}
+    assert s["usage"]["claude-haiku-4-5"]["calls"] == 10 and s["cost_usd"] > 0  # 4 books × 2 passes + 1 retry + 1 pass C
     assert {k: s["one_liner_retries"][k] for k in ("tried", "fixed", "still_failing", "call_failed")} ==         {"tried": 1, "fixed": 0, "still_failing": 1, "call_failed": 0}
     assert s["one_liner_retries"]["usage"]["claude-haiku-4-5"]["calls"] == 1 and 0 < s["one_liner_retries"]["cost_usd"] < s["cost_usd"]
     doc = json.loads((day / "2026-10-05.json").read_text(encoding="utf-8"))
     by = {b["title"]: b for b in doc["books"]}
-    assert by["처음 주식 공부"]["auto"] == "ai-agree" and by["주식 배당 입문"]["flags"] == ["way"]
-    assert by["처음 주식 공부"]["status"] == "picked" and by["주식 배당 입문"]["status"] == "review"  # flagged: not live until a review
+    assert by["처음 주식 공부"]["auto"] == "ai-agree" and by["처음 주식 공부"]["status"] == "picked"
+    settled = by["주식 배당 입문"]
+    assert (settled["way"], settled["a_was"], settled["settled"], settled["flags"]) == ("실습", {"way": "개념"}, {"way": "실습"}, [])
+    assert settled["second"]["way"] == "실습" and settled["third"]["way"] == "실습" and "why" not in settled["third"]
     assert by["주식 투자 수업"]["status"] == "reserve" and by["주식 투자 수업"]["issues"]
     text = (day / "2026-10-05.json").read_text(encoding="utf-8")
     assert INTRO[:20] not in text and "계좌와 주문" not in text
@@ -454,5 +458,5 @@ def test_a_book_both_passes_send_to_the_other_entry_is_dropped_here_and_requeued
 def test_a_requeued_book_sent_back_again_waits_for_a_person_instead_of_bouncing(day):
     cand = Candidate("leaf", "에세이", "9790000000011", "처음 주식 공부", "저자11 저", 211, "https://y/11", INTRO, TOC)
     rec, _ = run_daily.tag_one(FakeClient(crossing("돈 관리·투자")), CFG, {"tag": "T", "check": "C"}, {}, cand, Breaker(),
-                               {}, rules="v", requeued=True)
+                               {}, rules="v", routed=True, requeued=True)
     assert rec["status"] == "review" and "requeued_to" not in rec and "fits" in rec["flags"]
