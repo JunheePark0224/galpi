@@ -1039,7 +1039,7 @@
    "missing": [],
    "suggest": "인문",
    "one_liner_style": "question",
-   "one_liner": "인류 문명의 흥망을 주제별로 훑으며 역사에서 되풀이되는 것을 짚어요?",
+   "one_liner": "흥하고 망한 문명들의 역사에서 되풀이되는 것은 무엇일까요?",
    "evidence": "시대순 아닌 주제별 목차, 교훈 중심이라 인문",
    "confidence": 0.72,
    "fits": false,
@@ -1072,6 +1072,10 @@
      "change": "reroute-2026-10-08",
      "status": "dropped",
      "genre": "역사"
+    },
+    {
+     "change": "question-fix-2026-10-08b",
+     "one_liner": "인류 문명의 흥망을 주제별로 훑으며 역사에서 되풀이되는 것을 짚어요?"
     }
    ],
    "auto": "ai-agree"

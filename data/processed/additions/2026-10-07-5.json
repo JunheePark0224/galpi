@@ -830,7 +830,7 @@
    "missing": [],
    "suggest": "외국 소설",
    "one_liner_style": "question",
-   "one_liner": "긴 항해 끝에 집으로 돌아가는 영웅의 모험을 편하게 읽어요?",
+   "one_liner": "긴 항해 끝에 집으로 돌아가는 영웅의 모험, 한 권으로 따라가 볼까요?",
    "evidence": "지어낸 서사시라 역사 아님, 외국 문학",
    "confidence": 0.6,
    "fits": false,
@@ -863,6 +863,10 @@
      "change": "reroute-2026-10-08",
      "status": "dropped",
      "genre": "역사"
+    },
+    {
+     "change": "question-fix-2026-10-08b",
+     "one_liner": "긴 항해 끝에 집으로 돌아가는 영웅의 모험을 편하게 읽어요?"
     }
    ],
    "auto": "ai-agree"

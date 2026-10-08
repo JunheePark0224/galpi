@@ -2234,7 +2234,7 @@
    "missing": [],
    "suggest": "역사",
    "one_liner_style": "question",
-   "one_liner": "사라진 문명들의 몰락 원인을 비교하며 우리 미래에 주는 교훈을 짚어요?",
+   "one_liner": "사라진 문명들은 왜 무너졌고, 그 교훈은 우리 미래에 무엇을 말할까요?",
    "evidence": "과거 문명 사례가 뼈대, 지난 사건 중심",
    "confidence": 0.7,
    "fits": false,
@@ -2267,6 +2267,10 @@
      "change": "reroute-2026-10-08",
      "status": "dropped",
      "genre": "사회·시사"
+    },
+    {
+     "change": "question-fix-2026-10-08b",
+     "one_liner": "사라진 문명들의 몰락 원인을 비교하며 우리 미래에 주는 교훈을 짚어요?"
     }
    ],
    "auto": "ai-agree"
