@@ -46,7 +46,7 @@ export const EVENT_SPEC = {
     elapsed_ms: { type: "number" },
   },
   unsure_hold_cancelled: { node_id: NODE_ID, depth: DEPTH, held_ms: { type: "number" } },
-  question_back_clicked: { node_id: NODE_ID, depth: DEPTH, source: { type: ["question", "first_page"] } },
+  question_back_clicked: { node_id: NODE_ID, depth: DEPTH, source: { type: ["question", "first_page", "device_back"] } },
   path_completed: { scope_id: { type: "string" }, depth: DEPTH, unsure_count: { type: "number" } },
   book_opened: {},
   // v1.5: the draw's challenge provenance rides on the first event that follows the server's answer (null off the challenge route)
@@ -75,7 +75,7 @@ export const EVENT_SPEC = {
     pick_type: { type: [null, "recommended", "random"] },
   },
   redraw_clicked: { curious_count: CURIOUS_COUNT },
-  home_clicked: { curious_count: CURIOUS_COUNT, source: { type: ["first_page", "end", "question"] } },
+  home_clicked: { curious_count: CURIOUS_COUNT, source: { type: ["first_page", "end", "question", "device_back"] } },
   description_expanded: { book_id: BOOK_ID, pick_type: PICK_TYPE },
   bookmark_pulled: { book_id: BOOK_ID, position: POSITION, pick_type: PICK_TYPE },
   bookmark_flipped: { book_id: BOOK_ID, pick_type: PICK_TYPE },

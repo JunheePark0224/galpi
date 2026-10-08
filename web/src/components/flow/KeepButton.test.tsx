@@ -89,7 +89,7 @@ describe("KeepButton (S-06 [🔖 내 책갈피에 저장], C-16b v1.7)", () => {
     act(() => store.setKeepState(ISBN, "saved"));
     const saved = screen.getByRole("button", { name: "내 책갈피에 저장했어요" });
     expect(saved).toHaveTextContent("✓ 내 책갈피에 저장했어요");
-    expect(saved).toHaveAccessibleDescription("다시 누르면 빼요");
+    expect(saved).toHaveAccessibleDescription("다음 뽑기엔 안 나와요 · 다시 누르면 빼요");
     expect(saved).toHaveAttribute("data-saved", "");
     fireEvent.click(saved);
     expect(pressUnkeep).toHaveBeenCalledWith(ISBN, true);

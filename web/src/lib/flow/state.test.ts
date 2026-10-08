@@ -36,13 +36,14 @@ describe("flowReducer (v2 questions)", () => {
     expect(flowReducer(INITIAL, { type: "answer", choice: "A" })).toBe(INITIAL);
   });
 
-  it("back on a question drops the last answer; on the first question or elsewhere it changes nothing", () => {
+  it("back on a question drops the last answer; on the first question or past the book it changes nothing", () => {
     const back = run([{ type: "start" }, ...answers().slice(0, 2), { type: "back" }]);
     expect(back).toMatchObject({ step: "questions", asked: 2 });
     expect(back.answers).toEqual(SQL_PATH.slice(0, 1));
     const first = run([{ type: "start" }]);
     expect(flowReducer(first, { type: "back" })).toBe(first);
-    expect(flowReducer(asked(), { type: "back" })).toEqual(asked());     // S-03: no back
+    const reading = run([{ type: "drawn", id: 1, draw: view(5) }, { type: "open" }, { type: "next" }], asked());
+    expect(flowReducer(reading, { type: "back" })).toBe(reading);     // S-05: no back (S-03 has one since 10-08 — see below)
   });
 
   describe("S-04 [← 질문으로 돌아가기]", () => {
@@ -159,5 +160,28 @@ describe("meetingOf (v1.7: which signed bookmark an S-06 save is, for the 도감
     expect(meetingOf(draw, pick("z"))).toBeUndefined();
     expect(meetingOf(null, draw.picks[0])).toBeUndefined();
     expect(meetingOf(draw, undefined)).toBeUndefined();
+  });
+});
+
+describe("the phone's back key (10-08, plans/2026-10-08-device-back.md)", () => {
+  const atBack = () => run([{ type: "drawn", id: 1, draw: view(2) }, { type: "open" }, { type: "next" },
+    { type: "react", reaction: "curious" }, { type: "react", reaction: "curious" }], asked());
+
+  it("back from the closed book (S-03) drops the last answer like S-04's [← 질문으로 돌아가기]", () => {
+    const book = asked();
+    expect(book.step).toBe("book");
+    const s = flowReducer(book, { type: "back" });
+    expect(s).toMatchObject({ step: "questions", answers: SQL_PATH.slice(0, -1) });
+  });
+
+  it("returnToBack: from the first 궁금해요 book or the end, back to the 뒤표지 — nowhere else", () => {
+    const result = flowReducer(atBack(), { type: "leaveBack" });
+    expect(result.step).toBe("result");
+    expect(flowReducer(result, { type: "returnToBack" })).toMatchObject({ step: "back", result: 0 });
+    const end = run([{ type: "nextResult" }, { type: "nextResult" }], result);
+    expect(end.step).toBe("end");
+    expect(flowReducer(end, { type: "returnToBack" }).step).toBe("back");
+    const q = asked();
+    expect(flowReducer(q, { type: "returnToBack" })).toBe(q);
   });
 });

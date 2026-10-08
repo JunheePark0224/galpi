@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useReducer, useRef, useState } from "react";
 import { MotionConfig } from "motion/react";
 import { loadAccount } from "@/lib/account/store";
 import { newArtSeed } from "@/lib/art/combine";
@@ -9,6 +9,7 @@ import type { FoundItem } from "@/lib/collection/types";
 import type { LibraryCount } from "@/lib/books/library";
 import { drawBody, requestDraw, toDrawView } from "@/lib/flow/api";
 import { challengeProps, completedProps, nextQuestion, pathCommon } from "@/lib/flow/path";
+import { deviceBackMove } from "@/lib/flow/back";
 import { curiousPicks, flowReducer, meetingOf, type FlowAction, type FlowState, type Reaction } from "@/lib/flow/state";
 import { loadFlow, saveFlow } from "@/lib/flow/storage";
 import { guestSaves } from "@/lib/library/guest";
@@ -18,6 +19,7 @@ import { track } from "@/lib/track/client";
 import { QUESTION_MAP } from "@/lib/paths";
 import { encodeShare } from "@/lib/share/code";
 import { storyFile } from "@/lib/share/storyFile";
+import { guardFlow, setFlowBack } from "@/lib/nav/deviceBack";
 import type { ShareMethod } from "./BackCover";
 import { BookScene } from "./BookScene";
 import { EndScreen } from "./EndScreen";
@@ -25,6 +27,7 @@ import { Home } from "./Home";
 import { Question } from "./Question";
 import { ResultBook } from "./ResultBook";
 import { ResultLoading } from "./ResultLoading";
+import styles from "./Flow.module.css";
 
 /** taxonomy v1.0 3-1: the common branch (`entry`) and route (`mode`) follow the answers — set after each answer or step back. */
 function syncCommon(answers: readonly Answer[]) {
@@ -43,6 +46,10 @@ function shareUrl(s: FlowState): string {
   const code = encodeShare(QUESTION_MAP, { answers: s.answers, books: picks.map((p) => p.card.id), arts: picks.map((p) => p.art) });
   return `${window.location.origin}/s/${code}`;
 }
+
+/** The phone's back key on the bookmarks and the 뒤표지 (10-08): a reaction is never undone — a second press goes home. */
+export const HOLD_NOTICE = "책갈피는 되돌릴 수 없어요 · 처음으로 가려면 한 번 더 눌러 주세요";
+const HOLD_MS = 3000;
 
 export function Flow({ library = null }: { library?: LibraryCount | null }) {
   const [state, dispatch] = useReducer(flowReducer, undefined, loadFlow);
@@ -124,7 +131,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
   };
 
   /** [처음으로] (E-20) — first_page = S-04 dead end, end = S-08, question = the first question's [← 이전 질문]. */
-  const home = (source: "first_page" | "end" | "question") => {
+  const home = (source: "first_page" | "end" | "question" | "device_back") => {
     track("home_clicked", { curious_count: state.reactions.filter((r) => r === "curious").length, source });
     syncCommon([]);
     act({ type: "home" });
@@ -148,14 +155,16 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     track("unsure_hold_cancelled", { node_id: node.id, depth: state.answers.length + 1, held_ms: heldMs });
   };
 
-  /** S-02 [← 이전 질문] and S-04 [← 질문으로 돌아가기] (E-33): drop the last answer. On the first question: S-01. */
-  const back = () => {
+  /** S-02 [← 이전 질문] and S-04 [← 질문으로 돌아가기] (E-33): drop the last answer. On the first question: S-01.
+   *  The phone's back key does the same (source device_back, 10-08). */
+  const back = (device = false) => {
     const last = state.answers.at(-1);
     if (!last) {
-      home("question");
+      home(device ? "device_back" : "question");
       return;
     }
-    track("question_back_clicked", { node_id: last.node, depth: state.answers.length, source: state.step === "first" ? "first_page" : "question" });
+    const source = device ? "device_back" : state.step === "first" ? "first_page" : "question";
+    track("question_back_clicked", { node_id: last.node, depth: state.answers.length, source });
     const next = act({ type: "back" });
     syncCommon(next.answers);
   };
@@ -207,6 +216,56 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
   /** S-06 ‹: no event (taxonomy v0.11). */
   const prevResult = () => { act({ type: "prevResult" }); };
 
+  // The phone's back key (10-08, plans/2026-10-08-device-back.md): while not on S-01 the flow keeps one marked history
+  // entry (lib/nav/deviceBack); the back key leaves it, the flow moves one step back (or holds on the bookmarks and the
+  // 뒤표지 — a second press within HOLD_MS goes home), and the entry is marked again.
+  const [backed, setBacked] = useState(0);
+  // the note and the second press belong to one screen (this bookmark, the 뒤표지): a reaction in between starts again
+  const screen = `${state.step}:${state.index}`;
+  const [noticeFor, setNoticeFor] = useState<string | null>(null);
+  const heldAt = useRef({ screen: "", at: 0 });
+  const deviceBack = useEffectEvent(() => {
+    switch (deviceBackMove(state)) {
+      case "question":
+        back(true);
+        break;
+      case "home":
+        home("device_back");
+        break;
+      case "hold":
+        if (heldAt.current.screen === screen && Date.now() - heldAt.current.at < HOLD_MS) {
+          setNoticeFor(null);
+          home("device_back");
+        } else {
+          heldAt.current = { screen, at: Date.now() };
+          setNoticeFor(screen);
+        }
+        break;
+      case "prevResult":
+        prevResult();
+        break;
+      case "toBack":
+        act({ type: "returnToBack" });
+        break;
+      case "leave":
+        break;   // S-01: the next press is the browser's own
+    }
+  });
+  useEffect(() => setFlowBack(() => {
+    deviceBack();
+    setBacked((n) => n + 1);
+  }), []);
+  useEffect(() => {
+    // after this commit's effects — Next's router patches history in its own effect, which runs after ours on the first load
+    const t = setTimeout(() => guardFlow(state.step !== "home"), 0);
+    return () => clearTimeout(t);
+  }, [state.step, backed]);
+  useEffect(() => {
+    if (!noticeFor) return;
+    const t = setTimeout(() => setNoticeFor(null), HOLD_MS);
+    return () => clearTimeout(t);
+  }, [noticeFor]);
+
   /** S-08 [다시 뽑기] (E-19): track() moves the round on right after sending it (taxonomy 3-1a); the path stays. */
   const redraw = () => {
     track("redraw_clicked", { curious_count: state.reactions.filter((r) => r === "curious").length });
@@ -230,13 +289,13 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
       {state.step === "home" && <Home onStart={start} library={library} />}
       {node && (
         // a new key per question shown (an answer or a step back): the tap guard and the hold start again
-        <Question key={`${state.asked}-${state.answers.length}`} node={node} onAnswer={answer} onHoldCancel={holdCancelled} onBack={back} />
+        <Question key={`${state.asked}-${state.answers.length}`} node={node} onAnswer={answer} onHoldCancel={holdCancelled} onBack={() => back()} />
       )}
       {inBook && (
         <BookScene
           state={state}
           onOpen={open}
-          onBack={back}
+          onBack={() => back()}
           onNext={nextPage}
           onRetry={() => act({ type: "retry" })}
           onReact={react}
@@ -255,6 +314,9 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
       )}
       {resultPick && shownResult !== resultPick.card.id && <ResultLoading />}
       {state.step === "end" && <EndScreen onRedraw={redraw} onHome={() => home("end")} />}
+      {noticeFor === screen && (
+        <p className={styles.notice} role="status">{HOLD_NOTICE}</p>
+      )}
     </MotionConfig>
   );
 }

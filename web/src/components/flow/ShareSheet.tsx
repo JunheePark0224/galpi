@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { canShareImages, storyFile } from "@/lib/share/storyFile";
+import { useBackToClose } from "@/lib/nav/useBackToClose";
 import { detectDevice } from "@/lib/track/common";
 import styles from "./ShareSheet.module.css";
 
@@ -53,6 +54,7 @@ export function ShareSheet({ shareUrl, count, onClose, onShared }: Props) {
   const title = useRef<HTMLHeadingElement>(null);
   const sheet = useRef<HTMLDivElement>(null);
   const story = `${new URL(shareUrl).pathname}/story`;
+  useBackToClose(onClose);   // the phone's back key closes the sheet, not the page (10-08)
 
   // a modal: focus starts on the title and Tab stays in the sheet, Esc closes, the page behind does not scroll
   useEffect(() => {

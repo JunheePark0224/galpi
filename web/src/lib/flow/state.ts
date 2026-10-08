@@ -53,6 +53,7 @@ export type FlowAction =
   | { type: "next" }
   | { type: "react"; reaction: Reaction }
   | { type: "leaveBack" }
+  | { type: "returnToBack" }
   | { type: "nextResult" }
   | { type: "prevResult" }
   | { type: "redraw" }
@@ -100,8 +101,9 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
     case "answer":
       return answer(s, a.choice);
     case "back":
-      // S-02 [← 이전 질문] and S-04 [← 질문으로 돌아가기] drop the last answer. The first question's back is Flow's [처음으로].
-      if ((s.step === "questions" || s.step === "first") && s.answers.length > 0) {
+      // S-02 [← 이전 질문] and S-04 [← 질문으로 돌아가기] drop the last answer — and the phone's back key on the closed book
+      // (S-03, 10-08). The first question's back is Flow's [처음으로].
+      if ((s.step === "questions" || s.step === "book" || s.step === "first") && s.answers.length > 0) {
         return { ...s, step: "questions", answers: s.answers.slice(0, -1) };
       }
       return s;
@@ -128,6 +130,9 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
       // PRD 2절: S-06 when something was 궁금해요, straight to S-08 when nothing was
       if (s.step !== "back") return s;
       return { ...s, step: s.reactions.includes("curious") ? "result" : "end" };
+    case "returnToBack":
+      // the phone's back key (10-08): from the first 궁금해요 book or the end, back to the 뒤표지
+      return s.step === "result" || s.step === "end" ? { ...s, step: "back", result: 0 } : s;
     case "nextResult": {
       if (s.step !== "result") return s;
       const result = s.result + 1;
