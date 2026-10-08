@@ -17,7 +17,8 @@ from difflib import SequenceMatcher
 
 from check_one_liners import check_line, form_issue
 
-from .prompt import AXES, EVIDENCE_MAX
+from .gaps import GENRES
+from .prompt import AXES, EVIDENCE_MAX, TOPICS
 
 COPY_RUN = 10
 AUTO = "ai-agree"
@@ -90,7 +91,7 @@ def disagreements(entry: str, a: dict, b: dict) -> list[str]:
     """The fields the two passes answered differently. For a book both passes move to the same other slot (moved_to,
     10-08) the slot is agreed, and a 🎯 book's keywords are the ones they gave for that new topic."""
     out = []
-    moved = moved_to(a, b)
+    moved = moved_to(a, b, entry)
     if not (a["fits"] and b["fits"]) and not moved:
         out.append("fits")
     if entry == "target":
@@ -115,24 +116,44 @@ def needs_person(flags: list[str], issues: list[str]) -> tuple[list[str], list[s
     return [f for f in flags if f != UNSURE], split_issues(issues)[0]
 
 
-def moved_to(a: dict, b: dict) -> str | None:
-    """The slot both passes place the book in when neither keeps it where it was found and both name the same one
-    (10-08, plans/2026-10-08-route-pipeline.md — the library re-tag's "agreed" move, library_review.slot_decision); else
-    None. A pass that says "not here" already fills every other answer for the book (prompt COMMON), so a 🍃 book's tags
-    hold in the new genre; a 🎯 book takes the keywords both passes gave for the new topic (merge.record)."""
+def _named(a: dict, b: dict) -> str | None:
     if a["fits"] or b["fits"]:
         return None
     slot = a.get("suggest") or ""
     return slot if slot and slot == (b.get("suggest") or "") else None
 
 
-def decide(a: dict, b: dict, flags: list[str], issues: list[str], auto_merge: bool) -> tuple[str, str | None]:
+def _other(entry: str) -> tuple[str, tuple[str, ...]]:
+    return ("target", TOPICS) if entry == "leaf" else ("leaf", GENRES)
+
+
+def moved_to(a: dict, b: dict, entry: str | None = None) -> str | None:
+    """The slot both passes place the book in when neither keeps it where it was found and both name the same one
+    (10-08, plans/2026-10-08-route-pipeline.md — the library re-tag's "agreed" move, library_review.slot_decision); else
+    None. A pass that says "not here" already fills every other answer for the book (prompt COMMON), so a 🍃 book's tags
+    hold in the new genre; a 🎯 book takes the keywords both passes gave for the new topic (merge.record). Given the
+    book's `entry`, a slot of the other 갈래 is no move (crossed_to: the book is tagged again there)."""
+    slot = _named(a, b)
+    return None if slot and entry and slot in _other(entry)[1] else slot
+
+
+def crossed_to(entry: str, a: dict, b: dict) -> dict | None:
+    """{entry, slot} when both passes place the book in the same slot of the other 갈래 (10-08, 『과몰입 사회』: found as
+    🍃 사회·시사, really 🎯 마음 돌보기) — its tags are the other entry's (🎯 keywords·way·summary line), so it is not moved
+    but requeued (requeue.json) and tagged again there; else None."""
+    slot, (other, slots) = _named(a, b), _other(entry)
+    return {"entry": other, "slot": slot} if slot in slots else None
+
+
+def decide(a: dict, b: dict, flags: list[str], issues: list[str], auto_merge: bool,
+           entry: str | None = None) -> tuple[str, str | None]:
     """(status, auto mark). A book both passes place in the same other slot is moved there (its "fits" flag was about the
     slot it was found in); it is dropped only when both say it belongs nowhere among our slots (10-08). Passes that name
-    different slots, or one keeping it, leave it to a person."""
+    different slots, or one keeping it, leave it to a person. A slot of the other 갈래 (with `entry`) is no move here —
+    run_daily requeues such a book (crossed_to); one already requeued once waits for a person."""
     if not a["fits"] and not b["fits"] and not (a.get("suggest") or b.get("suggest")):
         return "dropped", None
-    if moved_to(a, b):
+    if moved_to(a, b, entry):
         flags = [f for f in flags if f != "fits"]
     flags, issues = needs_person(flags, issues)
     if issues:
@@ -148,4 +169,4 @@ def redecide(book: dict, auto_merge: bool) -> tuple[str, str | None]:
     second = book.get("second") or {}
     return decide({"fits": book["fits"], "suggest": book.get("suggest", "")},
                   {"fits": second.get("fits", book["fits"]), "suggest": second.get("suggest", "")},
-                  book.get("flags") or [], book.get("issues") or [], auto_merge)
+                  book.get("flags") or [], book.get("issues") or [], auto_merge, book.get("entry"))

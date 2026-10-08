@@ -43,7 +43,7 @@ from . import requeue
 from .axis_check import retry as retry_axes
 from .batch import BatchError, parse as parse_batch
 from .candidates import Candidate, find, known_from, yes24_env
-from .checks import decide, disagreements, rule_issues
+from .checks import crossed_to, decide, disagreements, rule_issues
 from .config import Config, load_config
 from .gaps import plan_day
 from .keyword_candidates import excluded_names
@@ -92,12 +92,14 @@ def _spend(ledger: dict, model: str, used: Usage) -> None:
 
 def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, breaker: Breaker,
             ledger: dict, retries: RetryLog | None = None, rules: str | None = None,
-            axis_retries: RetryLog | None = None) -> tuple[dict | None, str]:
+            axis_retries: RetryLog | None = None, requeued: bool = False) -> tuple[dict | None, str]:
     """(record or None, reason). Pass A tags (a one-liner that breaks a rule is asked for once more — one_liner.py), pass B
     checks blind (it writes no one-liner); on a 🍃 book either pass whose axis values its own signal lines do not back is
     asked once more (axis_check.py). Token use goes to `ledger`, one-liner retries also to `retries`, axis re-asks to
     `axis_retries`. Raises TaggerStop. A pass that says the book does not fit names the slot it belongs to (`suggest`).
-    The record carries `rules_version`: `rules`, or the label dictionary's version (rules_version.py) when not given."""
+    The record carries `rules_version`: `rules`, or the label dictionary's version (rules_version.py) when not given.
+    Both passes naming the same slot of the other 갈래 (checks.crossed_to, 10-08) drop the book here with `requeued_to` — run()
+    queues it to be tagged there; a book that came back from the queue (`requeued`) is not sent on again but waits for a person."""
     if not cand.author.strip() or cand.pages <= 0:  # find() never offers one; a book that import would reject costs nothing
         return None, "incomplete_candidate"
     kept = vocab.get(cand.slot, {}).get("kept", {}) if cand.entry == "target" else {}  # a new topic may have no list yet
@@ -123,7 +125,8 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     b = _axes_backed(client, cfg.second_model, prompts["check"], user, cand.entry, raw_b, b, "B", breaker, ledger, axis_retries)
     flags = disagreements(cand.entry, a, b)
     issues = rule_issues(cand.entry, a, cand.title, f"{cand.intro} {cand.toc}", b)
-    status, auto = decide(a, b, flags, issues, cfg.auto_merge)
+    crossed = crossed_to(cand.entry, a, b) and not requeued
+    status, auto = ("dropped", None) if crossed else decide(a, b, flags, issues, cfg.auto_merge, cand.entry)
     rec = record(cand, a, b, flags, issues, status, auto, hints)  # record() blanks any field that copied YES24 text
     return {**rec, "rules_version": rules or rules_version()}, "ok"
 
@@ -164,10 +167,11 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
         return summary | {"status": "yes24_failed" if yes24_fail else "no_candidates"}
     prompts, rules = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}, rules_version()
     recs, reasons, ledger, stopped, breaker, tried, retries = [], Counter(), {}, None, Breaker(), 0, RetryLog()
-    axis_retries = RetryLog()
+    axis_retries, back_isbns = RetryLog(), {c.isbn for c in back}
     for cand in cands:
         try:
-            rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger, retries, rules, axis_retries)
+            rec, why = tag_one(client, cfg, prompts, vocab, cand, breaker, ledger, retries, rules, axis_retries,
+                               requeued=cand.isbn in back_isbns)
         except TaggerStop as err:
             stopped = str(err)
             break
@@ -185,7 +189,7 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
     status = Counter(r["status"] for r in recs)
     summary |= {"tagged": len(recs), "reasons": dict(reasons), "stopped": stopped, "rules_version": rules,
                 "picked": status["picked"], "review": status["review"], "reserve": status["reserve"],
-                "dropped": status["dropped"],
+                "dropped": status["dropped"], "crossed": sum(bool(r.get("requeued_to")) for r in recs),
                 "auto_agreed": sum(r.get("auto") == "ai-agree" for r in recs),
                 "flagged": sum(bool(r["flags"]) and r["status"] != "dropped" for r in recs),
                 "one_liner_retries": retries.summary(),
@@ -195,10 +199,13 @@ def run(batch: str, cfg: Config, env: dict, client) -> dict:
     if not recs:
         return summary | {"status": "anthropic_failed" if stopped else "no_books"}
     write_doc(ADDITIONS / f"{batch}.json", additions_doc(date, cfg.model, cfg.second_model, recs, batch))
-    done = {r["isbn"] for r in recs} & {c.isbn for c in back}
-    if done:  # tagged as the other entry: the row has done its job (a book whose tagging failed waits for the next batch)
-        requeue.save(REQUEUE, requeue.without(requeue.load(REQUEUE), done))
-        summary |= {"requeued": sorted(done)}
+    done = {r["isbn"] for r in recs} & back_isbns
+    crossing = [{"isbn": r["isbn"], "to_entry": r["requeued_to"]["entry"], "to_slot": r["requeued_to"]["slot"],
+                 "from_batch": batch, "date": date} for r in recs if r.get("requeued_to")]
+    if done or crossing:  # a row tagged as the other entry has done its job (a failed one waits for the next batch);
+        # a book both passes sent to the other 갈래 goes in for the next batch
+        requeue.save(REQUEUE, requeue.added(requeue.without(requeue.load(REQUEUE), done), crossing))
+        summary |= {"requeued": sorted(done)} if done else {}
     return summary | {"status": "partial" if stopped else "ok", "file": f"data/processed/additions/{batch}.json"}
 
 

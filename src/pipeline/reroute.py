@@ -42,7 +42,7 @@ def reroute(doc: dict, auto_merge: bool) -> tuple[dict, dict]:
         if book.get("status") != "dropped" or book.get("requeued_to") or _seen(book, "reroute-check"):
             continue                                   # a person already decided it (sent to the other entry, or dropped)
         a, b = _answers(book)
-        new = moved_to(a, b)
+        new = moved_to(a, b, book["entry"])  # answers before 10-08 never name the other 갈래
         if not new:
             continue
         old_slot = book.get("genre") if book["entry"] == "leaf" else book.get("topic")
@@ -52,7 +52,7 @@ def reroute(doc: dict, auto_merge: bool) -> tuple[dict, dict]:
         line = book.get("one_liner") or ""
         issues = [*(book.get("issues") or []), *(p for p in (line_problems(book, line) if line else [])
                                                  if p not in (book.get("issues") or []))]
-        status, auto = decide(a, b, flags, issues, auto_merge)
+        status, auto = decide(a, b, flags, issues, auto_merge, book["entry"])
         history = {"change": CHANGE, "status": "dropped", ("genre" if book["entry"] == "leaf" else "topic"): old_slot}
         if book["entry"] == "leaf":
             book["genre"] = new
@@ -96,7 +96,7 @@ def apply_check(doc: dict, wrong: dict, lines: dict, today: str) -> tuple[dict, 
                      "history": [*(book.get("history") or []), {"change": "reroute-lines-2026-10-08", "one_liner": old}]}
             a, b = _answers(book)
             if book.get("status") != "dropped":
-                status, auto = decide(a, b, book.get("flags") or [], issues, auto_merge=False)
+                status, auto = decide(a, b, book.get("flags") or [], issues, auto_merge=False, entry=book["entry"])
                 book["status"] = status
                 book.pop("auto", None)
                 if auto:
