@@ -620,3 +620,9 @@ def test_a_novel_or_poem_axis_may_be_answered_empty_on_the_daily_page():
     html = render([], {}, "k")
     assert '"비움 (정보 없음)"' in html and json.dumps(list(FICTION), ensure_ascii=False) in html
     assert 'v==="null"?null:Number(v)' in html          # the radio's "null" reaches the download as null, not NaN
+
+
+def test_keyword_none_shows_it_is_chosen():
+    """10-08 user: "키워드 없음" was answered but looked unpressed — it lights like a chosen chip."""
+    from pipeline.review import render
+    assert 'data-act="kwnone" aria-pressed="${done&&!c.keywords.length}"' in render([], {}, "k")

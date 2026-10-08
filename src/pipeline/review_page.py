@@ -107,7 +107,7 @@ function ask(b,c,k){const two=b.second||{}, done=(c.answered||[]).includes(k);
  if(k==="keywords"){const k1=b.keywords||[], k2=two.keywords||[], list=chipsOf(b,c);
   return `<p class="q">키워드 <span class="hint">— 책의 중심일 때만 · 눌러서 켜고 끄기 (최대 5개) · ¹ AI-1이 붙임 · ² AI-2가 붙임</span></p>
    <div class="row">${list.map(x=>`<button class="chip ${done&&c.keywords.includes(x)?"on":""}" data-kw="${esc(x)}" title="${esc((DEFS[c.topic]||{})[x]||"")}">${esc(x)}${k1.includes(x)?" ¹":""}${k2.includes(x)?" ²":""}</button>`).join("")}
-   <button class="ghost" data-act="kwnone">키워드 없음</button></div>`}
+   <button class="chip ${done&&!c.keywords.length?"on":""}" data-act="kwnone" aria-pressed="${done&&!c.keywords.length}">키워드 없음</button></div>`}
  if(k==="way"){return `<p class="q">읽는 방식</p><div class="opts">${WAYS.map(([w,l])=>`<label><input type="radio" name="way-${b.isbn}" data-act="way" value="${w}" ${done&&c.way===w?"checked":""}><span>${w}<span class="ai0">${esc(l)}</span>${marks(b.way===w,two.way===w)}</span></label>`).join("")}</div>`}
  if(k==="line"){const li=issues(c.one_liner,b);
   return `<p class="q">한 줄 고치기 <span class="hint">— 걸린 이유: ${heldBy(b).map(esc).join(" · ")}${b.one_liner?"":" (책소개를 베껴서 지웠어요 — 새로 써 주세요)"}</span></p>
