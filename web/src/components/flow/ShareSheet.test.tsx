@@ -152,14 +152,16 @@ describe("ShareSheet (C-31, F-27 — 결과 공유하기)", () => {
     expect(close).toHaveFocus();
   });
 
-  it("closes with 닫기, a tap outside, Esc, or the phone's back key", () => {
+  it("closes with 닫기, a tap outside, Esc, or the phone's back key", async () => {
     vi.stubGlobal("navigator", { ...navigator, userAgent: DESKTOP, canShare: undefined });
     const p = props();
     render(<ShareSheet {...p} />);
     fireEvent.click(screen.getByRole("button", { name: "닫기" }));
     fireEvent.click(document.querySelector("[data-backdrop]")!);   // the sheet is on document.body (a portal)
     fireEvent.keyDown(document, { key: "Escape" });
-    window.dispatchEvent(new PopStateEvent("popstate", { state: null }));   // the phone's back key (10-08)
+    const popped = new Promise((r) => window.addEventListener("popstate", r, { once: true }));
+    window.history.back();                                                  // the phone's back key (10-08)
+    await popped;
     expect(p.onClose).toHaveBeenCalledTimes(4);
   });
 });

@@ -7,22 +7,25 @@ function Open({ onClose }: { onClose: () => void }) {
   useBackToClose(onClose);
   return <p>open</p>;
 }
-const pressBack = () => window.dispatchEvent(new PopStateEvent("popstate", { state: null }));
+/** The browser's back key: a real history move (jsdom fires popstate a moment later). */
+const pressBack = async () => {
+  const popped = new Promise((r) => window.addEventListener("popstate", r, { once: true }));
+  window.history.back();
+  await popped;
+};
 
 describe("useBackToClose (10-08)", () => {
   afterEach(() => { vi.restoreAllMocks(); forgetBackHolds(); });
 
-  it("the phone's back key closes the open window", () => {
-    vi.spyOn(window.history, "pushState");
+  it("the phone's back key closes the open window", async () => {
     const onClose = vi.fn();
     render(<Open onClose={onClose} />);
-    pressBack();
+    await pressBack();
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it("closed by its own button, it gives its history entry back", () => {
-    vi.spyOn(window.history, "pushState");
-    const back = vi.spyOn(window.history, "back").mockImplementation(() => pressBack());
+    const back = vi.spyOn(window.history, "back");
     const onClose = vi.fn();
     const { unmount } = render(<Open onClose={onClose} />);
     unmount();

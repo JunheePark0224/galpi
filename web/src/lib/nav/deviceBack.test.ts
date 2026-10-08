@@ -1,45 +1,55 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { forgetBackHolds, guardFlow, holdBack, setFlowBack } from "./deviceBack";
+import { advance, forgetBackHolds, holdBack, setFlowBack, unwind } from "./deviceBack";
 
-/** The browser's back key (jsdom moves through its real history and fires popstate a moment later). */
-const pressBack = async () => {
+/** Waits for the popstate a history move fires (jsdom moves through its real history a moment later). */
+const moved = async (move: () => void) => {
   const popped = new Promise((r) => window.addEventListener("popstate", r, { once: true }));
-  window.history.back();
+  move();
   await popped;
   await new Promise((r) => setTimeout(r, 0));
 };
-const marked = () => Boolean((window.history.state as { galpiBack?: boolean } | null)?.galpiBack);
+const pressBack = () => moved(() => window.history.back());
+const depthHere = () => (window.history.state as { galpiDepth?: number } | null)?.galpiDepth ?? 0;
 
 describe("the phone's back key inside the flow (10-08)", () => {
-  beforeEach(() => { window.history.pushState({ base: 1 }, ""); });
+  beforeEach(() => { window.history.pushState({ base: 1 }, ""); forgetBackHolds(); });
   afterEach(() => { forgetBackHolds(); vi.restoreAllMocks(); });
 
-  it("guards one marked entry, keeping the state that was there — never a second one (reload, restored tab)", () => {
-    const push = vi.spyOn(window.history, "pushState");
-    guardFlow(true);
-    guardFlow(true);
-    expect(push).toHaveBeenCalledTimes(1);
-    expect(window.history.state).toMatchObject({ base: 1, galpiBack: true });
+  it("one entry per step forward, keeping the state that was there (Next's router state rides along)", () => {
+    advance();
+    advance();
+    expect(window.history.state).toMatchObject({ base: 1, galpiDepth: 2 });
   });
 
-  it("the back key leaves the mark: the flow's handler moves a step", async () => {
+  it("each press is one step back — several presses in a row too (Chrome only trusts entries added in a tap)", async () => {
     const flow = vi.fn();
     setFlowBack(flow);
-    guardFlow(true);
+    advance();
+    advance();
+    advance();
     await pressBack();
-    expect(flow).toHaveBeenCalledTimes(1);
-    expect(marked()).toBe(false);
+    await pressBack();
+    expect(flow).toHaveBeenCalledTimes(2);
+    expect(depthHere()).toBe(1);
   });
 
-  it("back at S-01 by its own button: the mark is taken back quietly, so the next press leaves the site", async () => {
+  it("forward is followed, never taken for a back press", async () => {
     const flow = vi.fn();
     setFlowBack(flow);
-    guardFlow(true);
-    const popped = new Promise((r) => window.addEventListener("popstate", r, { once: true }));
-    guardFlow(false);
-    await popped;
-    await new Promise((r) => setTimeout(r, 0));
-    expect(marked()).toBe(false);
+    advance();
+    await pressBack();
+    await moved(() => window.history.forward());
+    expect(flow).toHaveBeenCalledTimes(1);
+    expect(depthHere()).toBe(1);
+  });
+
+  it("back at S-01 by its own button: the flow's entries are gone over quietly, so the next press leaves the site", async () => {
+    const flow = vi.fn();
+    setFlowBack(flow);
+    advance();
+    advance();
+    await moved(() => unwind());
+    expect(depthHere()).toBe(0);
     expect(flow).not.toHaveBeenCalled();
   });
 
@@ -47,29 +57,34 @@ describe("the phone's back key inside the flow (10-08)", () => {
     const flow = vi.fn();
     const sheet = vi.fn();
     setFlowBack(flow);
-    guardFlow(true);
+    advance();
     holdBack(sheet);
     await pressBack();
     expect(sheet).toHaveBeenCalledTimes(1);
     expect(flow).not.toHaveBeenCalled();
-    expect(marked()).toBe(true);                    // back on the flow's mark
-
     const other = vi.fn();
     const hold = holdBack(other);
-    const popped = new Promise((r) => window.addEventListener("popstate", r, { once: true }));
-    hold.release();
-    await popped;
-    await new Promise((r) => setTimeout(r, 0));
+    await moved(() => hold.release());
+    hold.release();                                  // twice: nothing more
     expect(other).not.toHaveBeenCalled();
-    expect(flow).not.toHaveBeenCalled();
-    expect(marked()).toBe(true);
-    hold.release();                                 // twice: nothing more
+    expect(depthHere()).toBe(1);
+    await pressBack();
+    expect(flow).toHaveBeenCalledTimes(1);
+  });
+
+  it("a reload keeps the depth of the entry it is on", async () => {
+    window.history.pushState({ galpiDepth: 1 }, "");
+    window.history.pushState({ galpiDepth: 2 }, "");
+    const flow = vi.fn();
+    setFlowBack(flow);                               // the flow mounts again after the reload
+    await pressBack();
+    expect(flow).toHaveBeenCalledTimes(1);
   });
 
   it("a flow that went away is not called", async () => {
     const flow = vi.fn();
     const off = setFlowBack(flow);
-    guardFlow(true);
+    advance();
     off();
     await pressBack();
     expect(flow).not.toHaveBeenCalled();
