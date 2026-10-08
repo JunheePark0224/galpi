@@ -164,15 +164,16 @@ def axes_of(raw: dict) -> dict | None:
 
 
 def suggestion(raw: dict, entry: str, fits: bool, lists: dict[str, list[str]] | None) -> dict:
-    """The slot a pass names for a book it says does not fit (10-06 calibration): a 🍃 genre or a 🎯 topic from our lists,
-    "" when none or when the pass says the book fits; a 🎯 suggestion also carries that topic's keywords, cut to its closed
-    list (`lists`: topic → keywords; at most MAX_KEYWORDS)."""
+    """The slot a pass names for a book it says does not fit (10-06 calibration): a 🍃 genre or a 🎯 topic from our lists —
+    either 갈래 since 10-08 (checks.crossed_to) — "" when none or when the pass says the book fits; on a 🎯 book a topic
+    suggestion also carries that topic's keywords, cut to its closed list (`lists`: topic → keywords; at most MAX_KEYWORDS).
+    A 🍃 book gets its 🎯 keywords when it is tagged again there (requeue)."""
     named = raw.get("suggest")
-    slot = named if not fits and isinstance(named, str) and named in (TOPICS if entry == "target" else GENRES) else ""
+    slot = named if not fits and isinstance(named, str) and (named in GENRES or named in TOPICS) else ""
     if entry != "target":
         return {"suggest": slot}
     own = (lists or {}).get(slot, [])
-    given = raw.get("suggest_keywords") if slot and isinstance(raw.get("suggest_keywords"), list) else []
+    given = raw.get("suggest_keywords") if slot in TOPICS and isinstance(raw.get("suggest_keywords"), list) else []
     return {"suggest": slot, "suggest_keywords": list(dict.fromkeys(k for k in given if k in own))[:MAX_KEYWORDS]}
 
 

@@ -427,3 +427,32 @@ def test_a_suggested_slot_is_kept_on_the_record_for_the_review_page():
     assert rec["second"]["suggest"] == "경제 상식" and rec["second"]["suggest_keywords"] == ["금리·환율"]
     rec, _ = run_daily.tag_one(FakeClient(), CFG, {"tag": "T", "check": "C"}, {}, LEAF, Breaker(), {}, rules="v")
     assert rec["suggest"] == "" and rec["second"]["suggest"] == ""
+
+
+def crossing(slot):
+    def answer(kwargs):
+        entry, kind = kind_of(kwargs)
+        if kind == "tag":
+            return message(tag_answer(entry, fits=False, suggest=slot))
+        if kind == "check":
+            return message(check_answer(entry, fits=False, suggest=slot))
+        return agreeing(kwargs)
+    return answer
+
+
+def test_a_book_both_passes_send_to_the_other_entry_is_dropped_here_and_requeued_there(day):
+    """10-08: no person needed — both passes name the same 🍃 genre for a 🎯 book; the next batch tags it as 🍃."""
+    summary = run_daily.run("2026-10-02", CFG, ENV, FakeClient(crossing("에세이")))
+    doc = json.loads((day / "2026-10-02.json").read_text(encoding="utf-8"))
+    assert all(b["status"] == "dropped" and b["requeued_to"] == {"entry": "leaf", "slot": "에세이"} for b in doc["books"])
+    rows = json.loads(run_daily.REQUEUE.read_text(encoding="utf-8"))
+    assert sorted(r["isbn"] for r in rows) == sorted(b["isbn"] for b in doc["books"])
+    assert {(r["to_entry"], r["to_slot"], r["from_batch"]) for r in rows} == {("leaf", "에세이", "2026-10-02")}
+    assert summary["dropped"] == len(doc["books"]) and summary["crossed"] == len(doc["books"])
+
+
+def test_a_requeued_book_sent_back_again_waits_for_a_person_instead_of_bouncing(day):
+    cand = Candidate("leaf", "에세이", "9790000000011", "처음 주식 공부", "저자11 저", 211, "https://y/11", INTRO, TOC)
+    rec, _ = run_daily.tag_one(FakeClient(crossing("돈 관리·투자")), CFG, {"tag": "T", "check": "C"}, {}, cand, Breaker(),
+                               {}, rules="v", requeued=True)
+    assert rec["status"] == "review" and "requeued_to" not in rec and "fits" in rec["flags"]

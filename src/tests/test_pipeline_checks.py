@@ -8,7 +8,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from pipeline.candidates import Candidate  # noqa: E402
-from pipeline.checks import AUTO, copied_run, decide, disagreements, moved_to, needs_person, redecide, rule_issues, scrub, split_issues  # noqa: E402
+from pipeline.checks import AUTO, copied_run, crossed_to, decide, disagreements, moved_to, needs_person, redecide, rule_issues, scrub, split_issues  # noqa: E402
 from pipeline.merge import additions_doc, keyword_hints, record, write_doc  # noqa: E402
 from pipeline.tagger import parse  # noqa: E402
 from pipeline_fakes import INTRO, TOC, check_answer, tag_answer  # noqa: E402
@@ -217,3 +217,24 @@ def test_a_moved_book_is_recorded_in_its_new_slot():
     cand = Candidate("target", "경제 상식", "9790000000035", "주식의 첫걸음", "김 저", 200, "https://y/3", INTRO, TOC)
     rec = record(cand, a, b, [], [], "picked", AUTO, [])
     assert (rec["topic"], rec["field"], rec["keywords"], rec["moved_from"]) == ("돈 관리·투자", "돈·경제", ["주식"], "경제 상식")
+
+
+def test_a_book_both_passes_send_to_the_other_entry_goes_there_to_be_tagged_again():
+    """10-08 (『과몰입 사회』: found as 🍃 사회·시사, really 🎯 마음 돌보기): both passes naming the same slot of the other 갈래
+    send the book there (requeue) — it is tagged again as that entry, whose tags differ (🎯 keywords·way·summary line)."""
+    out = {"fits": False, "suggest": "마음 돌보기"}
+    assert crossed_to("leaf", out, out) == {"entry": "target", "slot": "마음 돌보기"}
+    genre = {"fits": False, "suggest": "과학 교양"}
+    assert crossed_to("target", genre, genre) == {"entry": "leaf", "slot": "과학 교양"}
+    assert crossed_to("leaf", genre, genre) is None                                     # same 갈래: an ordinary move
+    assert crossed_to("leaf", out, {"fits": False, "suggest": "인문"}) is None          # different slots: a person
+    assert crossed_to("leaf", out, {"fits": True, "suggest": ""}) is None
+
+
+def test_a_crossing_book_is_recorded_where_it_was_found_with_where_it_goes():
+    leaf = Candidate("leaf", "사회·시사", "9790000000028", "과몰입 사회", "가 저", 300, "https://y/2", INTRO, TOC)
+    a = parse(tag_answer("leaf", fits=False, suggest="마음 돌보기"), "leaf", "tag", [])
+    b = parse(check_answer("leaf", fits=False, suggest="마음 돌보기"), "leaf", "check", [])
+    rec = record(leaf, a, b, [], [], "dropped", None, [])
+    assert rec["genre"] == "사회·시사" and "moved_from" not in rec
+    assert rec["requeued_to"] == {"entry": "target", "slot": "마음 돌보기"} and rec["status"] == "dropped"
