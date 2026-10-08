@@ -170,7 +170,7 @@
    "author": "윌 곰퍼츠 저/김세진 역",
    "pages": 560,
    "entry": "leaf",
-   "genre": "예술·여행",
+   "genre": "역사",
    "axes": {
     "temp": 0,
     "pull": -1,
@@ -208,13 +208,20 @@
     "suggest": "역사",
     "why": "목차가 시대·사조 순서의 미술사 흐름이라 역사"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/14752204",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "예술·여행",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "예술·여행"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791171712304",
@@ -484,7 +491,7 @@
    "author": "니키타 브라긴스키 저/박은지 역 ",
    "pages": 256,
    "entry": "leaf",
-   "genre": "예술·여행",
+   "genre": "역사",
    "axes": {
     "temp": 0,
     "pull": -1,
@@ -522,13 +529,20 @@
     "suggest": "역사",
     "why": "시대순 창작 기술사가 뼈대라 역사"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/195271941",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "예술·여행",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "예술·여행"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791166894312",
@@ -956,7 +970,7 @@
    "author": "후쿠스케 저/이정현 역",
    "pages": 280,
    "entry": "leaf",
-   "genre": "역사",
+   "genre": "과학 교양",
    "axes": {
     "temp": 0,
     "pull": -1,
@@ -994,13 +1008,20 @@
     "suggest": "과학 교양",
     "why": "수학 개념 설명이 중심이라 과학 교양에 가깝다"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/183904018",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "역사",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "역사"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791197378270",
@@ -1059,7 +1080,7 @@
    "author": "이승우 저",
    "pages": 296,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "한국 소설",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -1099,13 +1120,20 @@
     "suggest": "한국 소설",
     "why": "사랑 해부 관념소설, 연애 줄거리 아님→한국 소설"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/36884196",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791193358146",
@@ -1220,7 +1248,7 @@
    "author": "김청귤 저",
    "pages": 160,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "SF·판타지",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -1258,13 +1286,20 @@
     "suggest": "SF·판타지",
     "why": "몸이 조각나는 상상이 이야기를 움직이는 SF·판타지"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/170341311",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791175910928",
@@ -1329,7 +1364,7 @@
    "author": "레프 니콜라예비치 톨스토이 저/장영재 역",
    "pages": 172,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -1367,15 +1402,22 @@
     "suggest": "외국 소설",
     "why": "사랑은 신앙적 선행 의미, 연애 중심 아님"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
     "근거가 책소개를 베낌 (AI-2 temp)"
    ],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/161737218",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791130664927",
@@ -1383,7 +1425,7 @@
    "author": "아인 저",
    "pages": 308,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "SF·판타지",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -1421,16 +1463,23 @@
     "suggest": "SF·판타지",
     "why": "존재하지 않는 바이러스 상상이 이야기를 움직이는 SF "
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
     "근거가 책소개를 베낌 (AI-1 world)",
     "근거가 책소개를 베낌 (AI-2 world)"
    ],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/144966093",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791141618018",
@@ -1438,7 +1487,7 @@
    "author": "서고운 저",
    "pages": 324,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "한국 소설",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -1476,13 +1525,20 @@
     "suggest": "한국 소설",
     "why": "사랑 중심 장편이 아닌 한국 작가의 문학 소설집"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/195237651",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791191043723",
@@ -1542,7 +1598,7 @@
    "author": "루시 모드 몽고메리 저/박혜원 역",
    "pages": 508,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -1558,7 +1614,7 @@
    "missing": [],
    "suggest": "외국 소설",
    "one_liner_style": "question",
-   "one_liner": "",
+   "one_liner": "실수투성이여도 매일을 설레며 사는 앤, 그 비결은 뭘까요?",
    "evidence": "사랑이 중심이 아닌 성장 이야기, 번역서",
    "confidence": 0.85,
    "fits": false,
@@ -1581,15 +1637,24 @@
     "why": "사랑이 중심이 아닌 성장 문학 소설이라 외국 소설"
    },
    "flags": [
-    "fits",
     "pull"
    ],
-   "issues": [
-    "한 줄이 책소개를 베낌"
-   ],
-   "status": "dropped",
+   "issues": [],
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/154932318",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    },
+    {
+     "change": "reroute-lines-2026-10-08",
+     "one_liner": ""
+    }
+   ]
   },
   {
    "isbn": "9791194793540",
@@ -2088,7 +2153,7 @@
    "author": "한병철 저/김태환 역",
    "pages": 128,
    "entry": "leaf",
-   "genre": "사회·시사",
+   "genre": "인문",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -2104,7 +2169,7 @@
    "missing": [],
    "suggest": "인문",
    "one_liner_style": "question",
-   "one_liner": "우울증이 퍼진 시대를 철학으로 진단하며 오늘의 병리를 다시 보게 해요?",
+   "one_liner": "우울과 소진이 번지는 시대, 우리는 왜 이렇게 지쳐 있을까요?",
    "evidence": "사회 진단이지만 철학적 개념 중심이라 인문",
    "confidence": 0.6,
    "fits": false,
@@ -2127,14 +2192,25 @@
     "why": "사회 진단이지만 철학적 성찰이 중심이라 인문"
    },
    "flags": [
-    "fits",
     "pull",
     "gain"
    ],
    "issues": [],
-   "status": "dropped",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/6425989",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "사회·시사",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "사회·시사"
+    },
+    {
+     "change": "reroute-lines-2026-10-08",
+     "one_liner": "우울증이 퍼진 시대를 철학으로 진단하며 오늘의 병리를 다시 보게 해요?"
+    }
+   ]
   },
   {
    "isbn": "9788934919766",
@@ -2142,7 +2218,7 @@
    "author": "제레드 다이아몬드 저/강주헌 역",
    "pages": 788,
    "entry": "leaf",
-   "genre": "사회·시사",
+   "genre": "역사",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -2180,13 +2256,20 @@
     "suggest": "역사",
     "why": "과거 문명 붕괴 사례가 뼈대라 역사에 가깝다"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/1806300",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "사회·시사",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "사회·시사"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791168730830",
@@ -4557,7 +4640,7 @@
    "author": "성해나 저",
    "pages": 312,
    "entry": "leaf",
-   "genre": "한국 소설",
+   "genre": "호러·괴담",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -4595,13 +4678,20 @@
     "suggest": "호러·괴담",
     "why": "기담집으로 괴이가 중심이라 호러·괴담이 맞음"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/192028900",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "한국 소설",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "한국 소설"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791162203392",
@@ -4609,7 +4699,7 @@
    "author": "구병모 저",
    "pages": 220,
    "entry": "leaf",
-   "genre": "한국 소설",
+   "genre": "SF·판타지",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -4647,15 +4737,22 @@
     "suggest": "SF·판타지",
     "why": "아가미 소년이 나오는 환상 소설이라 SF·판타지"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
     "근거가 책소개를 베낌 (AI-2 temp)"
    ],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/125761510",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "한국 소설",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "한국 소설"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791124038192",
@@ -4663,7 +4760,7 @@
    "author": "조현선 저",
    "pages": 296,
    "entry": "leaf",
-   "genre": "한국 소설",
+   "genre": "호러·괴담",
    "axes": {
     "temp": 1,
     "pull": 0,
@@ -4702,16 +4799,23 @@
     "why": "그림자 없는 영혼 손님이 이야기를 이끄는 괴이물"
    },
    "flags": [
-    "fits",
     "pull"
    ],
    "issues": [
     "근거가 책소개를 베낌 (AI-1 gain)",
     "근거가 책소개를 베낌 (AI-2 pull)"
    ],
-   "status": "dropped",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/173082175",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "한국 소설",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "한국 소설"
+    }
+   ]
   },
   {
    "isbn": "9788954687041",
@@ -4770,7 +4874,7 @@
    "author": "김바다 저",
    "pages": 268,
    "entry": "leaf",
-   "genre": "한국 소설",
+   "genre": "로맨스",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -4808,13 +4912,20 @@
     "suggest": "로맨스",
     "why": "사랑하는 두 사람의 관계가 중심 줄기라 로맨스가 맞음"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/155186518",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "한국 소설",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "한국 소설"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791168322769",
@@ -5035,9 +5146,11 @@
    "author": "최영우 등저",
    "pages": 320,
    "entry": "target",
-   "topic": "리더십",
+   "topic": "취업·커리어",
    "field": "일·커리어",
-   "keywords": [],
+   "keywords": [
+    "직장 생활"
+   ],
    "keywords_regex": [
     "팀 이끌기",
     "피드백·코칭"
@@ -5063,13 +5176,20 @@
      "직장 생활"
     ]
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/195253980",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "리더십",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "topic": "리더십"
+    }
+   ],
+   "auto": "ai-agree"
   }
  ]
 }

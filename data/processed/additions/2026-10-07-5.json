@@ -119,7 +119,7 @@
    "author": "박상영 저",
    "pages": 300,
    "entry": "leaf",
-   "genre": "예술·여행",
+   "genre": "에세이",
    "axes": {
     "temp": 1,
     "pull": 1,
@@ -157,15 +157,22 @@
     "suggest": "에세이",
     "why": "저자 자신의 번아웃·휴식 일상이 뼈대라 에세이"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
     "근거가 책소개를 베낌 (AI-1 pull)"
    ],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/119741395",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "예술·여행",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "예술·여행"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9788971990933",
@@ -536,7 +543,7 @@
    "author": "유홍준 저",
    "pages": 404,
    "entry": "leaf",
-   "genre": "역사",
+   "genre": "예술·여행",
    "axes": {
     "temp": 0,
     "pull": -1,
@@ -574,13 +581,20 @@
     "suggest": "예술·여행",
     "why": "화가 전기이자 작품 해설이라 예술·여행"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/176291031",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "역사",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "역사"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791188949755",
@@ -588,7 +602,7 @@
    "author": "나리카와 아야 저",
    "pages": 480,
    "entry": "leaf",
-   "genre": "역사",
+   "genre": "사회·시사",
    "axes": {
     "temp": 0,
     "pull": -1,
@@ -626,13 +640,20 @@
     "suggest": "사회·시사",
     "why": "시대순 아닌 현재 일본 사회·문화 안내라 사회·시사"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/147032757",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "역사",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "역사"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791194273523",
@@ -793,7 +814,7 @@
    "author": "호메로스 저/육혜원 역",
    "pages": 352,
    "entry": "leaf",
-   "genre": "역사",
+   "genre": "외국 소설",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -831,13 +852,20 @@
     "suggest": "외국 소설",
     "why": "지어낸 신화 서사라 역사가 아닌 외국 소설"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/194333288",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "역사",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "역사"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791170611707",
@@ -1054,7 +1082,7 @@
    "author": "임솔아 등저",
    "pages": 252,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "한국 소설",
    "axes": {
     "temp": null,
     "pull": -1,
@@ -1096,13 +1124,20 @@
     "suggest": "한국 소설",
     "why": "문학상 수상작 모음, 사랑 중심 줄기 확인 안 됨"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/167735263",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9788932925738",
@@ -1110,7 +1145,7 @@
    "author": "나쓰메 소세키 저/김난주 역",
    "pages": 556,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
     "temp": null,
     "pull": -1,
@@ -1151,13 +1186,20 @@
     "why": "사랑이 중심이 아닌 풍자 문학 소설"
    },
    "flags": [
-    "fits",
     "temp"
    ],
    "issues": [],
-   "status": "dropped",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/189683811",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ]
   },
   {
    "isbn": "9788972757085",
@@ -1165,7 +1207,7 @@
    "author": "오가와 요코 저/김난주 역",
    "pages": 272,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
     "temp": 1,
     "pull": 0,
@@ -1204,7 +1246,6 @@
     "why": "사랑이 아닌 세 사람의 교감이 중심, 일본 작가 문학 "
    },
    "flags": [
-    "fits",
     "pull"
    ],
    "issues": [
@@ -1213,9 +1254,17 @@
     "근거가 책소개를 베낌 (AI-2 temp)",
     "근거가 책소개를 베낌 (AI-2 pull)"
    ],
-   "status": "dropped",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/14129345",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ]
   },
   {
    "isbn": "9791157412037",
@@ -1223,7 +1272,7 @@
    "author": "위기철 저",
    "pages": 268,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "한국 소설",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -1261,13 +1310,20 @@
     "suggest": "한국 소설",
     "why": "연애가 중심이 아닌 산동네 성장 소설"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/90225118",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791192738772",
@@ -1275,7 +1331,7 @@
    "author": "일리아나 잰더 저/안은주 역",
    "pages": 472,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "추리·스릴러",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -1313,13 +1369,20 @@
     "suggest": "추리·스릴러",
     "why": "사랑이 아닌 편지의 진실을 쫓는 스릴러"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/187510785",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9788936437978",
@@ -1378,7 +1441,7 @@
    "author": "하세가와 카오리 저/김진환 역",
    "pages": 396,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "SF·판타지",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -1419,13 +1482,20 @@
     "why": "사신·명부가 이야기를 움직이는 판타지가 중심"
    },
    "flags": [
-    "fits",
     "temp"
    ],
    "issues": [],
-   "status": "dropped",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/111700422",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ]
   },
   {
    "isbn": "9791194591610",
@@ -1487,7 +1557,7 @@
    "author": "아사이 료 저/송태욱 역",
    "pages": 544,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
     "temp": null,
     "pull": -1,
@@ -1528,13 +1598,20 @@
     "why": "팬덤·믿음을 다룬 문학 소설, 사랑은 주제 중 하나"
    },
    "flags": [
-    "fits",
     "temp"
    ],
    "issues": [],
-   "status": "dropped",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/194328401",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ]
   },
   {
    "isbn": "9791141602468",
@@ -1542,7 +1619,7 @@
    "author": "박서련 저",
    "pages": 400,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "SF·판타지",
    "axes": {
     "temp": null,
     "pull": -1,
@@ -1560,7 +1637,7 @@
    ],
    "suggest": "SF·판타지",
    "one_liner_style": "question",
-   "one_liner": "사랑하면 능력이 생기는 시대에서 사랑이 무엇인지 묻는 연작이에요?",
+   "one_liner": "사랑하면 능력이 생기는 시대, 사랑이란 대체 무엇일까요?",
    "evidence": "사랑의 미생물이 퍼진 상상 세계가 이야기를 움직임",
    "confidence": 0.7,
    "fits": false,
@@ -1584,13 +1661,24 @@
     "suggest": "SF·판타지",
     "why": "사랑 미생물·초능력이 이야기를 움직여 SF·판타지"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/183187905",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "로맨스",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    },
+    {
+     "change": "reroute-lines-2026-10-08",
+     "one_liner": "사랑하면 능력이 생기는 시대에서 사랑이 무엇인지 묻는 연작이에요?"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791155818084",
@@ -2340,7 +2428,7 @@
    "author": "호아킴 데 포사다,레이먼드 조 공저",
    "pages": 236,
    "entry": "leaf",
-   "genre": "에세이",
+   "genre": "인문",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -2378,13 +2466,20 @@
     "suggest": "인문",
     "why": "실화 인물 이야기로 삶의 태도·믿음을 전하는 우화형 책"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/4668550",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "에세이",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "에세이"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791162146170",
@@ -2494,7 +2589,7 @@
    "author": "에크하르트 톨레 저/노혜숙,유영일 역",
    "pages": 388,
    "entry": "leaf",
-   "genre": "에세이",
+   "genre": "인문",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -2510,7 +2605,7 @@
    "missing": [],
    "suggest": "인문",
    "one_liner_style": "question",
-   "one_liner": "마음과 생각에서 벗어나 지금 이 순간에 깨어 있는 법을 안내해요?",
+   "one_liner": "생각에서 한 걸음 물러나 지금 이 순간에 깨어 있을 수 있을까요?",
    "evidence": "저자 경험담 아닌 삶의 태도·깨달음 가르침",
    "confidence": 0.6,
    "fits": false,
@@ -2532,15 +2627,26 @@
     "suggest": "인문",
     "why": "저자 경험담이 아닌 삶의 태도·깨달음 가르침이라 인문"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
     "근거가 책소개를 베낌 (AI-1 temp)"
    ],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/145384857",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "에세이",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "에세이"
+    },
+    {
+     "change": "reroute-lines-2026-10-08",
+     "one_liner": "마음과 생각에서 벗어나 지금 이 순간에 깨어 있는 법을 안내해요?"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791199447806",
@@ -2601,7 +2707,7 @@
    "author": "법륜 저",
    "pages": 264,
    "entry": "leaf",
-   "genre": "에세이",
+   "genre": "인문",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -2639,15 +2745,22 @@
     "suggest": "인문",
     "why": "저자 경험이 아니라 삶의 태도를 제안하는 인문"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
     "근거가 책소개를 베낌 (AI-1 temp)"
    ],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/189413175",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "에세이",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "에세이"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9788962452495",
@@ -2708,7 +2821,7 @@
    "author": "에크하르트 톨레 저/류시화 역",
    "pages": 388,
    "entry": "leaf",
-   "genre": "에세이",
+   "genre": "인문",
    "axes": {
     "temp": 1,
     "pull": 0,
@@ -2747,13 +2860,20 @@
     "why": "저자 경험이 아닌 에고·의식 성찰 개념서라 인문"
    },
    "flags": [
-    "fits",
     "pull"
    ],
    "issues": [],
-   "status": "dropped",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/9437871",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "에세이",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "에세이"
+    }
+   ]
   },
   {
    "isbn": "9791167743312",
@@ -2761,7 +2881,7 @@
    "author": "김새섬,김진경 저",
    "pages": 288,
    "entry": "leaf",
-   "genre": "에세이",
+   "genre": "인문",
    "axes": {
     "temp": 0,
     "pull": -1,
@@ -2800,13 +2920,20 @@
     "why": "삶과 죽음을 두 사람 대화로 묻는 인문 성격"
    },
    "flags": [
-    "fits",
     "temp"
    ],
    "issues": [],
-   "status": "dropped",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/196554411",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "에세이",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "에세이"
+    }
+   ]
   },
   {
    "isbn": "9791141609597",
@@ -3706,13 +3833,24 @@
     "suggest": "SF·판타지",
     "why": "초자연 능력자의 대혈전이 중심인 오컬트 판타지"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/147048443",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "호러·괴담"
+    },
+    {
+     "change": "reroute-check-2026-10-08",
+     "status": "picked",
+     "genre": "SF·판타지"
+    }
+   ],
+   "reviewed": true
   },
   {
    "isbn": "9791191193534",
@@ -3875,7 +4013,7 @@
    "author": "맥스 브룩스 저/박산호 역",
    "pages": 531,
    "entry": "leaf",
-   "genre": "호러·괴담",
+   "genre": "SF·판타지",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -3913,16 +4051,23 @@
     "suggest": "SF·판타지",
     "why": "좀비 재난 생존 보고서라 호러보다 상상 소설"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
     "근거가 책소개를 베낌 (AI-1 pull)",
     "근거가 책소개를 베낌 (AI-2 pull)"
    ],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/2983083",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "호러·괴담",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "호러·괴담"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791191193312",
@@ -4148,7 +4293,7 @@
    "author": "최진영 저",
    "pages": 208,
    "entry": "leaf",
-   "genre": "한국 소설",
+   "genre": "SF·판타지",
    "axes": {
     "temp": 1,
     "pull": 1,
@@ -4187,16 +4332,23 @@
     "why": "바이러스 멸망 아포칼립스 서사가 중심이라 SF·판타지"
    },
    "flags": [
-    "fits",
     "temp",
     "pull"
    ],
    "issues": [
     "근거가 책소개를 베낌 (AI-1 pull)"
    ],
-   "status": "dropped",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/43504366",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "한국 소설",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "한국 소설"
+    }
+   ]
   },
   {
    "isbn": "9788932020938",
@@ -4258,7 +4410,7 @@
    "author": "이도우 저",
    "pages": 456,
    "entry": "leaf",
-   "genre": "한국 소설",
+   "genre": "로맨스",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -4296,17 +4448,24 @@
     "suggest": "로맨스",
     "why": "해원과 은섭의 설렘·사랑이 중심 줄기라 로맨스"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
     "근거가 책소개를 베낌 (AI-1 temp)",
     "근거가 책소개를 베낌 (AI-2 temp)",
     "근거가 책소개를 베낌 (AI-2 world)"
    ],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/123746663",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "한국 소설",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "한국 소설"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9791124038499",
@@ -4314,7 +4473,7 @@
    "author": "이경진 저",
    "pages": 292,
    "entry": "leaf",
-   "genre": "한국 소설",
+   "genre": "SF·판타지",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -4355,13 +4514,20 @@
     "why": "시간여행 버스가 이야기를 움직이는 판타지"
    },
    "flags": [
-    "fits",
     "temp"
    ],
    "issues": [],
-   "status": "dropped",
+   "status": "review",
    "link": "https://www.yes24.com/product/goods/190215128",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "한국 소설",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "한국 소설"
+    }
+   ]
   },
   {
    "isbn": "9791171717262",
@@ -4423,7 +4589,7 @@
    "author": "정유정 저",
    "pages": 524,
    "entry": "leaf",
-   "genre": "한국 소설",
+   "genre": "추리·스릴러",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -4461,13 +4627,20 @@
     "suggest": "추리·스릴러",
     "why": "서스펜스와 공포가 중심인 스릴러라 한국 소설이 아님"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/101908580",
-   "rules_version": "v3.2"
+   "rules_version": "v3.2",
+   "moved_from": "한국 소설",
+   "history": [
+    {
+     "change": "reroute-2026-10-08",
+     "status": "dropped",
+     "genre": "한국 소설"
+    }
+   ],
+   "auto": "ai-agree"
   },
   {
    "isbn": "9788901296906",
