@@ -2649,22 +2649,22 @@
    "genre": "에세이",
    "axes": {
     "temp": 1,
-    "pull": 0,
-    "gain": -1,
+    "pull": -1,
+    "gain": 1,
     "world": 1
    },
    "signals": {
-    "temp": "어조 +: 억지로 좋아하라 않고 마음을 되찾는 제안, 3장 '너그러움'",
-    "pull": "해당 없음 0: 끄는 힘을 알 수 있는 신호가 약함",
-    "gain": "마음 −: 감정을 인정하고 생각을 바꾸는 방식",
-    "world": "현실 +: 비소설, 직장·학교 등 일상 관계"
+    "temp": "어조 +: 억지로 좋아하라 하지 않고 곁에서 마음 리셋을 권함",
+    "pull": "0 해당 없음 아님, 몰입 −: 사례·단계로 끌고 감, 문장 칭찬 없음",
+    "gain": "알게 됨: 미움이 생기는 메커니즘을 설명하고 4단계를 알려 줌",
+    "world": "현실 +: 직장·학교·가족 등 생활권 비소설"
    },
    "missing": [],
-   "suggest": "",
+   "suggest": "대화·관계",
    "one_liner_style": "question",
-   "one_liner": "싫은 감정에 마음의 용량을 뺏기지 않는 법, 알고 싶지 않나요?",
-   "evidence": "방법·훈련을 알려 주는 🎯 마음 돌보기 책",
-   "confidence": 0.8,
+   "one_liner": "싫은 사람 때문에 지친 마음을 4단계 생각 리셋으로 되찾아 볼래요?",
+   "evidence": "4단계 리셋·훈련 편이라 방법서, 관계 중심",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
@@ -2675,23 +2675,53 @@
      "world": 1
     },
     "signals": {
-     "temp": "어조 +: 미움을 줄이고 너그러움으로 가자는 다정한 제안",
-     "pull": "몰입 −: 문장 칭찬 없고 사례·단계로 끌고 감",
-     "gain": "마음 −: 감정을 리셋하는 사고 요령으로 마음이 달라짐",
-     "world": "현실 +: 비소설, 직장·가족 등 현실 인간관계"
+     "temp": "어조 +: 미움을 줄이는 법을 독자 곁에서 제안하며 관대함으로 닫음",
+     "pull": "0 해당 없음 아님: 생각 리셋 단계와 사례로 끌고 감, 몰입 쪽",
+     "gain": "마음 −: 감정 이해와 리셋 훈련으로 마음이 달라짐",
+     "world": "현실 +: 직장·학교·가족 등 실제 인간관계"
     },
     "missing": [],
-    "suggest": "",
-    "why": "생각 리셋 4단계·훈련을 알려 주는 방법서라 🎯 쪽"
+    "suggest": "마음 돌보기",
+    "why": "생각 리셋 4단계·훈련 중심의 방법서라 마음 돌보기가 "
    },
    "flags": [
-    "fits",
-    "pull"
+    "gain"
    ],
    "issues": [],
    "status": "dropped",
    "link": "https://www.yes24.com/product/goods/191481989",
-   "rules_version": "v3.2"
+   "third": {
+    "fits": false,
+    "suggest": "대화·관계",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 미움을 내려놓고 성장하자며 독자 곁에서 제안",
+     "pull": "비소설, 이야기 아닌 사례·단계로 끌고 감 → 몰입 쪽",
+     "gain": "마음 −: 감정을 다루는 생각 리셋으로 마음이 달라짐",
+     "world": "비소설이라 현실 +1"
+    },
+    "missing": []
+   },
+   "requeued_to": {
+    "entry": "target",
+    "slot": "대화·관계"
+   },
+   "settled": {
+    "slot": "대화·관계"
+   },
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "에세이"
+    }
+   ]
   },
   {
    "isbn": "9788933872482",
@@ -3227,54 +3257,78 @@
    "author": "제러미 리프킨 저/이창희 역",
    "pages": 364,
    "entry": "leaf",
-   "genre": "과학 교양",
+   "genre": "사회·시사",
    "axes": {
-    "temp": 0,
+    "temp": 1,
     "pull": -1,
     "gain": 1,
     "world": 1
    },
    "signals": {
-    "temp": "해당 없음 0: 비판과 제안이 섞이고 끝맺음 '절망에서 희망으로'는 단어",
-    "pull": "몰입 −: 문명사·에너지 위기 흐름과 사례로 끌고 감",
-    "gain": "알게 됨 +: 법칙을 설명해 사회·경제를 새로 보게 함",
-    "world": "현실 +: 비소설, 현대 문명과 에너지 문제를 다룸"
+    "temp": "끝맺음 +: 마지막 장 '절망에서 희망으로', 새 세계관 제안",
+    "pull": "몰입 −: 역사 흐름과 사례로 끌고 가는 설명",
+    "gain": "알게 됨: 엔트로피 법칙을 적용해 설명·진단",
+    "world": "현실: 비소설이라 현실 세계를 다룸"
    },
    "missing": [],
-   "suggest": "인문",
+   "suggest": "",
    "one_liner_style": "question",
-   "one_liner": "엔트로피 법칙으로 에너지와 기술, 경제를 새로운 세계관에서 다시 보게 해요?",
-   "evidence": "과학 개념으로 문명·세계관을 따지는 책",
-   "confidence": 0.6,
-   "fits": false,
+   "one_liner": "기술 발전이 부른 에너지 위기를 자연의 원리로 함께 짚어 볼래요?",
+   "evidence": "열역학 법칙으로 문명·에너지를 설명하는 교양서",
+   "confidence": 0.72,
+   "fits": true,
    "second": {
     "fits": false,
     "axes": {
-     "temp": -1,
+     "temp": 1,
      "pull": -1,
      "gain": 1,
      "world": 1
     },
     "signals": {
-     "temp": "어조 −: 문명·기술을 날카롭게 비판하고 경고. 끝맺음은 희망 쪽",
-     "pull": "몰입 −: 시대 흐름과 사례로 끌고 감, 문체 칭찬 없음",
-     "gain": "알게 됨 +: 열역학 법칙을 적용해 문명을 설명·진단",
-     "world": "현실 +: 비소설, 실제 사회·에너지 문제를 다룸"
+     "temp": "끝맺음 +: 마지막 장이 '절망에서 희망으로'로 닫힘",
+     "pull": "몰입 −: 문명·역사 흐름과 사례로 끌고 감",
+     "gain": "알게 됨 +: 엔트로피 법칙으로 문명을 설명·진단",
+     "world": "현실 +: 비소설, 현대 문명과 에너지 문제를 다룸"
     },
     "missing": [],
     "suggest": "사회·시사",
-    "why": "열역학은 도구, 오늘의 에너지·문명 문제 비판이 중심"
+    "why": "과학 원리보다 에너지·문명 비판과 세계관 제안이 중심"
    },
-   "flags": [
-    "fits",
-    "temp"
-   ],
-   "issues": [
-    "제목 반복"
-   ],
-   "status": "dropped",
+   "flags": [],
+   "issues": [],
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/195218411",
-   "rules_version": "v3.2"
+   "third": {
+    "fits": false,
+    "suggest": "사회·시사",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "끝맺음 +: 마지막 부가 '절망에서 희망으로', 새 세계관 제안",
+     "pull": "몰입 −: 시대 흐름·사례로 끌고 감, 문장 칭찬 없음",
+     "gain": "알게 됨 +: 엔트로피 법칙으로 문명을 설명하고 진단",
+     "world": "현실 +: 비소설, 실제 사회·에너지 문제를 다룸"
+    },
+    "missing": []
+   },
+   "moved_from": "과학 교양",
+   "settled": {
+    "slot": "사회·시사"
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "과학 교양"
+    }
+   ]
   },
   {
    "isbn": "9791165215842",
@@ -4600,20 +4654,20 @@
     "world": -1
    },
    "signals": {
-    "temp": "끝맺음 +: 몸을 맞바꾼 뒤 자신의 진짜 마음과 마주함",
-    "pull": "몰입 −: 악마와의 거래라는 사건과 인물 이야기가 끌고 감",
-    "gain": "마음 −: 소설이라 마음 신호, 진짜 마음을 마주하는 이야기",
-    "world": "딴 세상 −: 소원을 들어주는 악마가 실제로 등장"
+    "temp": "끝맺음 +: 자신의 진짜 마음을 마주하게 됨",
+    "pull": "몰입 −: 악마와 은둔 청년의 거래 전개가 끌고 감",
+    "gain": "마음 −: 소설, 고립과 진짜 마음을 마주하는 이야기",
+    "world": "딴 세상 −: 악마가 실제로 등장함"
    },
    "missing": [],
-   "suggest": "호러·괴담",
+   "suggest": "SF·판타지",
    "one_liner_style": "question",
-   "one_liner": "악마와 몸을 맞바꾼 은둔 청년은 어떤 마음을 마주하게 될까요?",
-   "evidence": "악마가 실제로 등장하는 이야기가 중심",
-   "confidence": 0.5,
+   "one_liner": "악마와 몸을 맞바꾸면 내가 진짜 원했던 마음이 보일까요?",
+   "evidence": "악마가 실제로 등장해 거래하는 상상이 이야기를 움직임",
+   "confidence": 0.6,
    "fits": false,
    "second": {
-    "fits": false,
+    "fits": true,
     "axes": {
      "temp": 1,
      "pull": -1,
@@ -4621,22 +4675,48 @@
      "world": -1
     },
     "signals": {
-     "temp": "끝맺음 +: 자신의 진짜 마음을 마주하게 되는 도착점",
-     "pull": "몰입 −: 악마와의 거래라는 사건 전개가 끌고 감",
-     "gain": "마음 −: 인물이 자기 마음을 마주하는 이야기",
-     "world": "딴 세상 −: 악마 Z가 실제로 등장하는 소설"
+     "temp": "끝맺음 +: 잊었던 진짜 마음을 마주하게 됨",
+     "pull": "몰입 −: 악마와 은둔 청년의 거래라는 사건이 끌고 감",
+     "gain": "마음 −: 소설, 진짜 마음을 마주하는 이야기",
+     "world": "딴 세상 −: 악마가 실제로 등장해 몸을 맞바꿈"
     },
     "missing": [],
-    "suggest": "SF·판타지",
-    "why": "악마가 실제로 등장해 이야기를 움직이는 판타지"
+    "suggest": "",
+    "why": "한국 작가의 문학 소설, 악마는 설정 요소"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/192298884",
-   "rules_version": "v3.2"
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "끝맺음 +: 잊었던 진짜 마음을 마주하게 되는 도착점",
+     "pull": "몰입 −: 악마와 은둔 청년의 거래 이야기가 끌고 감",
+     "gain": "마음 −: 소설, 자기 마음을 마주하는 인물 이야기",
+     "world": "딴 세상 −: 작은 악마가 실제로 등장해 몸을 맞바꿈"
+    },
+    "missing": []
+   },
+   "settled": {
+    "slot": "한국 소설"
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "한국 소설"
+    }
+   ]
   },
   {
    "isbn": "9791172134297",
