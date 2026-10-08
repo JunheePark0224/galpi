@@ -16298,5 +16298,1430 @@
    "world": 1
   },
   "keywords": []
+ },
+ {
+  "isbn": "9791190807296",
+  "title": "당신은 반드시 잘될 사람",
+  "author": "라파엘",
+  "pages": 212,
+  "one_liner": "무례한 사람 앞에서 선 긋고 적을 만들지 않는 대화와 관계의 요령을 얻어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "대화·관계",
+  "field": "마음·관계",
+  "topic": "대화·관계",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "거리 두기",
+   "갈등·무례 대처",
+   "호감·사회생활"
+  ]
+ },
+ {
+  "isbn": "9788954699334",
+  "title": "천사를 거부하는 우울한 연인에게",
+  "author": "양안다",
+  "pages": 152,
+  "one_liner": "사랑과 살의처럼 나뉘지 않는 관계의 이면을 들여다볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788953119901",
+  "title": "팀 켈러의 일과 영성",
+  "author": "팀 켈러",
+  "pages": 344,
+  "one_liner": "일의 의미가 막막할 때, 신앙의 눈으로 일과 쉼을 다시 바라볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791190985215",
+  "title": "바람의 초상",
+  "author": "박도순",
+  "pages": 472,
+  "one_liner": "편지와 일기로 한 보건진료소장의 40년 삶을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791190955423",
+  "title": "[예스리커버] 커리어 그리고 가정",
+  "author": "클라우디아 골딘",
+  "pages": 488,
+  "one_liner": "성별 소득 격차가 왜 사라지지 않는지 역사와 데이터로 짚어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791173327964",
+  "title": "리더는 언제 차이를 만들어내는가",
+  "author": "재레드 다이아몬드",
+  "pages": 372,
+  "one_liner": "히틀러부터 스포츠 감독까지, 리더 한 사람이 역사를 얼마나 바꾸는지 궁금하세요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198324207",
+  "title": "확진 후 회복자들의 사회적 거리두기",
+  "author": "이민수",
+  "pages": 408,
+  "one_liner": "격리 해제 후 어색한 점심 자리에서 시작되는 사진소설 속 이야기들을 만나볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791172540883",
+  "title": "늙지 않는 뇌",
+  "author": "데일 브레드슨",
+  "pages": 548,
+  "one_liner": "뇌가 늙지 않도록 식사·운동·숙면으로 돌보는 방법을 알려 줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "달리기·근력",
+   "잠·회복"
+  ]
+ },
+ {
+  "isbn": "9791176611022",
+  "title": "원시인 수면법",
+  "author": "메레인 판더라르",
+  "pages": 400,
+  "one_liner": "잠을 억지로 통제하지 않고 3주 실천 계획으로 깊이 잠드는 법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "잠·회복"
+  ]
+ },
+ {
+  "isbn": "9791124205907",
+  "title": "지속 가능한 일러스트레이터",
+  "author": "정은지",
+  "pages": 240,
+  "one_liner": "그림을 일로 잇는 포트폴리오와 외주 대응, 단가 협상 방법을 알려 줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "취업·커리어",
+  "field": "일·커리어",
+  "topic": "취업·커리어",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "커리어 설계"
+  ]
+ },
+ {
+  "isbn": "9788954696012",
+  "title": "샤워젤과 소다수",
+  "author": "고선경",
+  "pages": 176,
+  "one_liner": "체념 속에서도 내일을 약속하는 이십대의 얼굴을 만나볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788995501474",
+  "title": "사랑하라 한번도 상처받지 않은 것처럼",
+  "author": "류시화",
+  "pages": 158,
+  "one_liner": "마음이 지칠 때 치유의 시 한 편으로 위로받아 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791199724808",
+  "title": "사물의 온도",
+  "author": "이창미",
+  "pages": 151,
+  "one_liner": "평범한 사물이 건네는 조용한 이야기로 지나쳐 온 마음을 들여다볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791190382267",
+  "title": "마음챙김의 시",
+  "author": "류시화",
+  "pages": 184,
+  "one_liner": "자기 자신으로 돌아와 감정을 천천히 들여다보고 싶은 날, 시 한 편 곁에 두실래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788932042725",
+  "title": "누군가를 이토록 사랑한 적",
+  "author": "이병률",
+  "pages": 172,
+  "one_liner": "고독과 사랑이 겹친 푸른 빛깔의 시를 읽어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788936425449",
+  "title": "청색에 흘린 청색",
+  "author": "조정인",
+  "pages": 152,
+  "one_liner": "삶과 죽음의 경계를 넘나드는 감각적인 시어를 천천히 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198023346",
+  "title": "사랑",
+  "author": "김순임 외",
+  "pages": 126,
+  "one_liner": "나이도 모양도 다른 사랑을 시로 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791171710867",
+  "title": "그대는 나의 여름이 되세요",
+  "author": "서덕준",
+  "pages": 264,
+  "one_liner": "사랑의 모든 계절을 시로 지나 보고 싶은 날, 함께 읽어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791124065648",
+  "title": "어깨에 머리를 기대던 시절",
+  "author": "고명재",
+  "pages": 124,
+  "one_liner": "밥은 먹고 다니는지 안부를 건네는 시를 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194324720",
+  "title": "다 좋다는 느낌",
+  "author": "김승일",
+  "pages": 172,
+  "one_liner": "블랙코미디 같은 목소리로 삶의 모순을 마주해 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "시",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791191994513",
+  "title": "추추의 집밥 클래스",
+  "author": "추재현",
+  "pages": 244,
+  "one_liner": "계량과 간 맞추기부터 배우며 한식 기본 집밥을 차근차근 따라 만들어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791193406168",
+  "title": "간결한 식탁 레시피",
+  "author": "간결한 식탁",
+  "pages": 340,
+  "one_liner": "냉장고 속 고기 하나, 채소 하나로 온 가족 집밥을 차려 볼 수 있어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791160322453",
+  "title": "따뜻한 여사의 월간 집밥",
+  "author": "따뜻한 여사",
+  "pages": 208,
+  "one_liner": "장보기부터 밀프렙까지 식비를 아끼며 집밥을 빠르게 차려 볼 수 있어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9788901234472",
+  "title": "곤도 마리에 정리의 힘",
+  "author": "곤도 마리에",
+  "pages": 248,
+  "one_liner": "설레는 물건만 남기고 자리를 정해 집과 마음을 가볍게 비우는 정리법을 알려 줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "정리·미니멀"
+  ]
+ },
+ {
+  "isbn": "9791124336557",
+  "title": "집밥력",
+  "author": "홀썸모먼트",
+  "pages": 424,
+  "one_liner": "건강한 집밥의 기준을 세우고 142가지 레시피로 직접 만들어 볼 수 있어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791191059397",
+  "title": "고독한 직장인의 자취 요리기",
+  "author": "한태희",
+  "pages": 324,
+  "one_liner": "퇴근 후 혼자 먹는 저녁을 간단한 레시피로 챙겨 먹게 돼요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791192366708",
+  "title": "유연한 채식, 페스카테리언의 식탁",
+  "author": "지은경",
+  "pages": 208,
+  "one_liner": "고기 없이도 풍성한 브런치부터 술안주까지 50가지 식탁을 차려 볼 수 있어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791171175048",
+  "title": "살림지옥 해방일지",
+  "author": "이나가키 에미코",
+  "pages": 268,
+  "one_liner": "집안일을 줄이고 물건을 비워 살림을 즐겁게 만드는 방법을 알려 줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "정리·미니멀",
+   "살림 기술",
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9788931589238",
+  "title": "만화로 쉽게 배우는 회귀분석",
+  "author": "다카하시 신",
+  "pages": 224,
+  "one_liner": "만화 속 일상 예시로 단순·중·로지스틱 회귀의 큰 흐름을 잡을 수 있어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "통계",
+  "field": "데이터·통계",
+  "topic": "통계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "회귀분석"
+  ]
+ },
+ {
+  "isbn": "9791161752501",
+  "title": "파이썬으로 풀어보는 회귀분석",
+  "author": "루카 마싸론 외",
+  "pages": 384,
+  "one_liner": "파이썬 코드를 따라 하며 선형·로지스틱 회귀 모델을 만들고 성능을 높여요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "데이터 분석",
+  "field": "데이터·통계",
+  "topic": "데이터 분석",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "파이썬"
+  ]
+ },
+ {
+  "isbn": "9791169212502",
+  "title": "개발자를 위한 필수 수학",
+  "author": "토머스 닐드",
+  "pages": 352,
+  "one_liner": "미적분·확률·통계·선형대수를 익혀 회귀와 신경망이 돌아가는 원리를 이해해요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "통계",
+  "field": "데이터·통계",
+  "topic": "통계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "기초 통계",
+   "확률",
+   "회귀분석"
+  ]
+ },
+ {
+  "isbn": "9791194630586",
+  "title": "캔바 AI",
+  "author": "신승희, 앤미디어",
+  "pages": 368,
+  "one_liner": "이미지·영상·문서 초안을 AI로 만들고 다듬는 과정을 따라 하며 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "AI 활용",
+  "field": "AI·IT 활용",
+  "topic": "AI 활용",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "이미지·영상 생성"
+  ]
+ },
+ {
+  "isbn": "9791169211420",
+  "title": "개발자의 하루를 바꾸는 코파일럿 & 챗GPT",
+  "author": "마이클 D. 캘러핸",
+  "pages": 284,
+  "one_liner": "코파일럿과 챗GPT로 코드·테스트·셸 명령을 빠르게 처리하는 법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "AI 활용",
+  "field": "AI·IT 활용",
+  "topic": "AI 활용",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "챗GPT",
+   "바이브 코딩"
+  ]
+ },
+ {
+  "isbn": "9791193584705",
+  "title": "코파일럿이 온다",
+  "author": "커넥팅랩 외",
+  "pages": 296,
+  "one_liner": "AI 확산이 업무와 커머스·마케팅 시장을 어떻게 바꿀지 전망을 읽어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "경제 상식",
+  "field": "돈·경제",
+  "topic": "경제 상식",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "트렌드"
+  ]
+ },
+ {
+  "isbn": "9791160050929",
+  "title": "음식이 나다",
+  "author": "오새은",
+  "pages": 252,
+  "one_liner": "영양소가 몸에 미치는 영향을 알고 내 몸에 맞는 음식 고르는 법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "개념",
+  "axes": null,
+  "keywords": []
+ },
+ {
+  "isbn": "9788931558227",
+  "title": "자율신경계",
+  "author": "고바야시 히로유키 외",
+  "pages": 128,
+  "one_liner": "아침 물 한 컵, 호흡법, 목욕, 식사 시간으로 몸의 리듬을 되찾는 방법을 알려 줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "잠·회복"
+  ]
+ },
+ {
+  "isbn": "9788901299532",
+  "title": "살찌지 않는 몸",
+  "author": "우창윤",
+  "pages": 340,
+  "one_liner": "수면·식단·움직임을 바로잡아 뱃살 늘리는 대사를 되돌리는 방법을 알려줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "운동 습관",
+   "잠·회복"
+  ]
+ },
+ {
+  "isbn": "9791160321999",
+  "title": "김명섭의 헬스 교실",
+  "author": "김명섭",
+  "pages": 224,
+  "one_liner": "부위별 근육 구조를 알고 부상 없이 웨이트 동작을 따라 해 볼 수 있어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "달리기·근력"
+  ]
+ },
+ {
+  "isbn": "9791191187342",
+  "title": "근력 운동의 과학",
+  "author": "오스틴 커런트",
+  "pages": 224,
+  "one_liner": "근육 원리를 알고 부위별 기본 동작으로 근력 운동을 시작해요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "달리기·근력"
+  ]
+ },
+ {
+  "isbn": "9788954781145",
+  "title": "연금처럼 근육 리셋",
+  "author": "홍정기",
+  "pages": 360,
+  "one_liner": "근육이 왜 빠지는지 알고 내 몸에 맞는 근력 운동법을 찾아가요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "달리기·근력"
+  ]
+ },
+ {
+  "isbn": "9791190818377",
+  "title": "탁상용 스트레칭북",
+  "author": "브레이니 피트니스 랩",
+  "pages": 116,
+  "one_liner": "책상 위에 세워 두고 하루 30초씩 부위별 스트레칭을 따라 하며 통증을 풀어 보세요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "운동 습관"
+  ]
+ },
+ {
+  "isbn": "9791160263404",
+  "title": "모비 딕",
+  "author": "허먼 멜빌",
+  "pages": 808,
+  "one_liner": "끝없는 항해와 거대한 고래를 쫓는 선장의 집념을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791197221989",
+  "title": "첫 여름, 완주",
+  "author": "김금희",
+  "pages": 224,
+  "one_liner": "여름 한 철 마을 사람들과 함께 머물러 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791157403387",
+  "title": "감정을 할인가에 판매합니다",
+  "author": "신조하 외",
+  "pages": 328,
+  "one_liner": "감정이 돈으로 거래되는 세상에서 인간다움이 뭔지 따져 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "SF·판타지",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791158887544",
+  "title": "듄 신장판 1",
+  "author": "프랭크 허버트",
+  "pages": 944,
+  "one_liner": "사막 행성을 무대로 한 대작 SF 세계로 먼저 들어가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "SF·판타지",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791171717095",
+  "title": "불멸의 인절미",
+  "author": "한유리",
+  "pages": 112,
+  "one_liner": "아픈 기니피그를 위해 돈을 벌며 소설을 쓰는 유리의 이야기를 만나볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791190090476",
+  "title": "SF 연대기",
+  "author": "셰릴 빈트 외",
+  "pages": 492,
+  "one_liner": "SF가 어떻게 태어나 시대마다 달라졌는지 대표 작품으로 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194591597",
+  "title": "초판본 프랑켄슈타인",
+  "author": "메리 셸리",
+  "pages": 368,
+  "one_liner": "생명을 만들어 낸 과학자와 그가 만든 존재의 대립을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "SF·판타지",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791141602789",
+  "title": "멋진 실리콘 세계",
+  "author": "단요 외",
+  "pages": 432,
+  "one_liner": "과학기술이 삶과 사회를 바꾸는 모습을 여덟 작가의 SF로 만나볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "SF·판타지",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788931024029",
+  "title": "멋진 신세계",
+  "author": "올더스 헉슬리",
+  "pages": 372,
+  "one_liner": "시험관에서 계급별로 사람이 만들어지는 세상, 그 안에서 인간다움이 남을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "SF·판타지",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788901300283",
+  "title": "독성 인간",
+  "author": "리앤 텐 브링크",
+  "pages": 364,
+  "one_liner": "위험한 사람을 알아보는 단서와 대응 전략을 알려 줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "대화·관계",
+  "field": "마음·관계",
+  "topic": "대화·관계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "거리 두기",
+   "갈등·무례 대처"
+  ]
+ },
+ {
+  "isbn": "9791140716548",
+  "title": "마케팅노트",
+  "author": "마케팅노트",
+  "pages": 264,
+  "one_liner": "브랜딩과 콘텐츠, 고객 경험까지 마케팅 실무를 직접 답하며 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마케팅·브랜딩",
+  "field": "일·커리어",
+  "topic": "마케팅·브랜딩",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "브랜딩",
+   "콘텐츠 마케팅",
+   "고객 이해"
+  ]
+ },
+ {
+  "isbn": "9791189938338",
+  "title": "단 한 권을 읽어도 제대로 남는 메모 독서법",
+  "author": "신정철",
+  "pages": 264,
+  "one_liner": "밑줄과 독서 노트, 마인드맵으로 읽은 내용을 오래 남기는 방법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "에세이·책 쓰기"
+  ]
+ },
+ {
+  "isbn": "9791173577673",
+  "title": "브라이언 트레이시 시간 관리론",
+  "author": "브라이언 트레이시",
+  "pages": 188,
+  "one_liner": "시간을 열 가지 유형으로 나눠 목표와 우선순위를 세우고 하루의 밀도를 높여요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "시간·생산성",
+  "field": "습관·자기계발",
+  "topic": "시간·생산성",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "일하는 법"
+  ]
+ },
+ {
+  "isbn": "9791168340473",
+  "title": "숫자로 일하는 법",
+  "author": "노현태",
+  "pages": 224,
+  "one_liner": "숫자로 문제를 잡고 자료를 읽어 보고까지 해내는 업무 요령을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "시간·생산성",
+  "field": "습관·자기계발",
+  "topic": "시간·생산성",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "일하는 법"
+  ]
+ },
+ {
+  "isbn": "9791157689347",
+  "title": "인생이 바뀌는 시간관리의 비밀",
+  "author": "리치 노튼",
+  "pages": 320,
+  "one_liner": "최종 목적을 찾고 우선순위를 정해 시간을 내 편으로 만드는 열 가지 도구를 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "시간·생산성",
+  "field": "습관·자기계발",
+  "topic": "시간·생산성",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "일하는 법"
+  ]
+ },
+ {
+  "isbn": "9791164452095",
+  "title": "초판본 하루 24시간 어떻게 살 것인가",
+  "author": "아놀드 베넷",
+  "pages": 128,
+  "one_liner": "출퇴근길과 하루 시간을 쪼개 쓰는 작은 계획으로 삶을 바꾸는 법을 알려줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "시간·생산성",
+  "field": "습관·자기계발",
+  "topic": "시간·생산성",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "일하는 법"
+  ]
+ },
+ {
+  "isbn": "9791156226130",
+  "title": "일 잘하는 사람의 생각법",
+  "author": "류호택",
+  "pages": 256,
+  "one_liner": "리더가 조직과 구성원을 이끌며 던져볼 근본적인 질문을 아포리즘으로 만나요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "팀 이끌기",
+   "조직 문화"
+  ]
+ },
+ {
+  "isbn": "9788954675574",
+  "title": "사랑이 한 일",
+  "author": "이승우",
+  "pages": 248,
+  "one_liner": "사랑과 구원 같은 삶의 궁극적 물음을 성서 이야기로 마주해 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788976047700",
+  "title": "닿지 못해 닳은 사랑",
+  "author": "히코로히",
+  "pages": 196,
+  "one_liner": "바보가 되고 마는 사랑의 순간들을 열여덟 편으로 만나볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193506752",
+  "title": "사랑받고 있는 거 눈치채!",
+  "author": "코노 유타카",
+  "pages": 380,
+  "one_liner": "천 년을 건너 이어지는 저주와 사랑을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193190388",
+  "title": "너의 답장이 되어 줄게",
+  "author": "백승연",
+  "pages": 456,
+  "one_liner": "편지 한 통으로 마음이 이어지는 편지 가게 이야기, 함께 읽어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193873076",
+  "title": "고양이 식당, 사랑을 요리합니다",
+  "author": "다카하시 유타",
+  "pages": 304,
+  "one_liner": "그리운 사람을 다시 만나는 추억 밥상, 함께 맛보러 갈래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "SF·판타지",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788954690799",
+  "title": "속죄",
+  "author": "이언 매큐언",
+  "pages": 556,
+  "one_liner": "어린 시절의 오해가 남긴 파국과 평생의 속죄를 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788972976196",
+  "title": "나의 라임 오렌지나무",
+  "author": "J. M. 바스콘셀로스",
+  "pages": 301,
+  "one_liner": "다섯 살 제제의 눈으로 가난과 사랑, 우정을 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937462672",
+  "title": "페스트",
+  "author": "알베르 카뮈",
+  "pages": 498,
+  "one_liner": "폐쇄된 도시에서 절망과 맞서는 사람들의 모습을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788954696852",
+  "title": "율리시스 1",
+  "author": "제임스 조이스",
+  "pages": 708,
+  "one_liner": "의식의 흐름과 언어 실험을 주석 부담 없이 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937463075",
+  "title": "더블린 사람들",
+  "author": "제임스 조이스",
+  "pages": 360,
+  "one_liner": "타락하고 마비된 도시 속 사람들의 엇나간 욕망을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788932023977",
+  "title": "초조한 마음",
+  "author": "슈테판 츠바이크",
+  "pages": 403,
+  "one_liner": "연민이 어떻게 사람을 얽어매는지, 한 소위의 마음속을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791164453115",
+  "title": "초판본 데미안",
+  "author": "헤르만 헤세",
+  "pages": 208,
+  "one_liner": "나를 찾아가는 길 위에서 싱클레어의 두 세계를 함께 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791130605210",
+  "title": "오베라는 남자",
+  "author": "프레드릭 배크만",
+  "pages": 452,
+  "one_liner": "까칠한 이웃 할아버지의 투덜거림에 웃다가 코끝이 찡해지고 싶나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937437564",
+  "title": "참을 수 없는 존재의 가벼움",
+  "author": "밀란 쿤데라",
+  "pages": 520,
+  "one_liner": "사랑하면서도 서로에게 지옥이 되는 관계를 들여다볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791130637617",
+  "title": "불안한 사람들",
+  "author": "프레드릭 배크만",
+  "pages": 488,
+  "one_liner": "불안한 날에 웃음과 위로를 건네는 이야기를 읽어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791140707331",
+  "title": "최적의 뇌를 만드는 뇌과학자의 1분 명상",
+  "author": "가토 토시노리",
+  "pages": 208,
+  "one_liner": "뇌 기능별로 짧은 명상을 따라 하며 집중력과 기억력을 되살려 봐요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "뇌과학",
+   "집중력"
+  ]
+ },
+ {
+  "isbn": "9791194620402",
+  "title": "도파민의 함정",
+  "author": "따웨이",
+  "pages": 272,
+  "one_liner": "도파민이 갈망을 부추기는 원리를 심리학으로 알고 일상의 선택을 돌아보게 돼요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "감정 다루기",
+   "불안·걱정"
+  ]
+ },
+ {
+  "isbn": "9788901296630",
+  "title": "멈추지 못하는 뇌",
+  "author": "조지프 제벨리",
+  "pages": 344,
+  "one_liner": "뇌가 제대로 쉬는 원리를 알고 잠·고독·운동 같은 휴식법을 배워요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "잠·회복"
+  ]
  }
 ]

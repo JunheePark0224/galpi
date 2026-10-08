@@ -1,93 +1,9 @@
 [
  {
-  "isbn": "9788925568362",
-  "to_entry": "target",
-  "to_slot": "마음 돌보기",
-  "from_batch": "2026-10-07-4",
-  "date": "2026-10-08"
- },
- {
-  "isbn": "9791190807296",
-  "to_entry": "target",
-  "to_slot": "대화·관계",
-  "from_batch": "2026-10-07-4",
-  "date": "2026-10-08"
- },
- {
-  "isbn": "9788954699334",
+  "isbn": "9788936812065",
   "to_entry": "leaf",
-  "to_slot": "시",
-  "from_batch": "",
-  "date": "2026-10-08"
- },
- {
-  "isbn": "9788953119901",
-  "to_entry": "leaf",
-  "to_slot": "인문",
-  "from_batch": "",
-  "date": "2026-10-08"
- },
- {
-  "isbn": "9791190985215",
-  "to_entry": "leaf",
-  "to_slot": "에세이",
-  "from_batch": "",
-  "date": "2026-10-08"
- },
- {
-  "isbn": "9791190955423",
-  "to_entry": "leaf",
-  "to_slot": "사회·시사",
-  "from_batch": "",
-  "date": "2026-10-08"
- },
- {
-  "isbn": "9791173327964",
-  "to_entry": "leaf",
-  "to_slot": "역사",
-  "from_batch": "2026-10-05-2",
-  "date": "2026-10-08"
- },
- {
-  "isbn": "9791198324207",
-  "to_entry": "leaf",
-  "to_slot": "한국 소설",
-  "from_batch": "2026-10-05",
-  "date": "2026-10-08"
- },
- {
-  "isbn": "9791191369786",
-  "to_entry": "target",
-  "to_slot": "대화·관계",
-  "from_batch": "2026-10-07-3",
-  "date": "2026-10-08"
- },
- {
-  "isbn": "9791172540883",
-  "to_entry": "target",
-  "to_slot": "건강·운동",
-  "from_batch": "2026-10-07-6",
-  "date": "2026-10-08"
- },
- {
-  "isbn": "9791176611022",
-  "to_entry": "target",
-  "to_slot": "건강·운동",
-  "from_batch": "2026-10-07-6",
-  "date": "2026-10-08"
- },
- {
-  "isbn": "9791124205907",
-  "to_entry": "target",
-  "to_slot": "취업·커리어",
-  "from_batch": "2026-10-07",
-  "date": "2026-10-08"
- },
- {
-  "isbn": "9788901297842",
-  "to_entry": "target",
-  "to_slot": "마음 돌보기",
-  "from_batch": "2026-10-07",
+  "to_slot": "과학 교양",
+  "from_batch": "2026-10-08",
   "date": "2026-10-08"
  }
 ]
