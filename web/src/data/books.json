@@ -5509,6 +5509,23 @@
   ]
  },
  {
+  "isbn": "9791158513665",
+  "title": "미래를 바꿀 7개의 메가트렌드에 올라타라",
+  "author": "테크피드",
+  "pages": 288,
+  "one_liner": "미국 테크 기업과 AI·우주·바이오 흐름에 투자하는 기준을 알려 줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "돈 관리·투자",
+  "field": "돈·경제",
+  "topic": "돈 관리·투자",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "주식"
+  ]
+ },
+ {
   "isbn": "9791169852296",
   "title": "코트라 월드 트렌드 2027",
   "author": "KOTRA",
@@ -5678,6 +5695,23 @@
   "axes": null,
   "keywords": [
    "운동 습관"
+  ]
+ },
+ {
+  "isbn": "9788955969542",
+  "title": "조이 인 워크",
+  "author": "정도성",
+  "pages": 224,
+  "one_liner": "병원 구성원이 일의 의미를 찾도록 돕는 조직 활동 틀과 워크숍 콘텐츠를 얻어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "리더십",
+  "field": "일·커리어",
+  "topic": "리더십",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "조직 문화"
   ]
  },
  {
@@ -5889,6 +5923,23 @@
   ]
  },
  {
+  "isbn": "9791193205860",
+  "title": "1등급 연구대회 실전가이드 (수업혁신사례연구대회│디지털교육연구대회│인성교육실천사례연구발표대회)",
+  "author": "김민주 외",
+  "pages": 200,
+  "one_liner": "교사 연구대회 주제를 잡고 보고서를 구조에 맞게 쓰는 방법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "취업·커리어",
+  "field": "일·커리어",
+  "topic": "취업·커리어",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "직장 생활"
+  ]
+ },
+ {
   "isbn": "9788965703969",
   "title": "거리 두기",
   "author": "임춘성",
@@ -5981,6 +6032,23 @@
   "author": "안세진",
   "pages": 258,
   "one_liner": "전자책을 써서 출간하고 홍보하는 단계를 차근차근 따라 해 볼 수 있어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "에세이·책 쓰기"
+  ]
+ },
+ {
+  "isbn": "9791169213165",
+  "title": "N잡러를 위한 전자책 만들기 with 퍼스널 브랜딩",
+  "author": "흑상어쌤",
+  "pages": 272,
+  "one_liner": "전자책을 기획하고 쓰고 펀딩과 마케팅까지 해 보는 방법을 얻어요",
   "one_liner_style": "summary",
   "entry": "target",
   "genre": "글쓰기",
@@ -6181,6 +6249,25 @@
   ]
  },
  {
+  "isbn": "9791175981430",
+  "title": "데이터분석가를 위한 알기 쉬운 확률과 통계",
+  "author": "권상호",
+  "pages": 264,
+  "one_liner": "수식보다 개념을 먼저 짚으며 확률과 통계의 기초를 손계산으로 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "통계",
+  "field": "데이터·통계",
+  "topic": "통계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "확률",
+   "가설검정",
+   "기초 통계"
+  ]
+ },
+ {
   "isbn": "9791191905038",
   "title": "Must Have 나성호의 R 데이터 분석 입문",
   "author": "나성호",
@@ -6213,6 +6300,21 @@
    "확률",
    "가설검정"
   ]
+ },
+ {
+  "isbn": "9788960779501",
+  "title": "통계 분석 너머 R의 무궁무진한 활용",
+  "author": "고석범",
+  "pages": 544,
+  "one_liner": "R 코드와 글을 섞어 워드·PDF·웹 문서와 대시보드를 만드는 방법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "업무 자동화",
+  "field": "AI·IT 활용",
+  "topic": "업무 자동화",
+  "way": "실습",
+  "axes": null,
+  "keywords": []
  },
  {
   "isbn": "9791160077179",
@@ -6371,6 +6473,23 @@
   ]
  },
  {
+  "isbn": "9791197031731",
+  "title": "불안과 생활 속 거리 두기",
+  "author": "엘리자베스 루카스 외",
+  "pages": 204,
+  "one_liner": "불안과 두려움, 걱정을 로고테라피로 어떻게 다룰지 문답으로 알려 줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "불안·걱정"
+  ]
+ },
+ {
   "isbn": "9788931585933",
   "title": "후니의 쉽게 쓴 직장생활 생존기",
   "author": "진강훈",
@@ -6436,6 +6555,57 @@
   "axes": null,
   "keywords": [
    "챗GPT"
+  ]
+ },
+ {
+  "isbn": "9791163038979",
+  "title": "된다! 7일 실무 엑셀",
+  "author": "한정희",
+  "pages": 492,
+  "one_liner": "셀 입력부터 서식, 시트 관리까지 단계별로 따라 하며 실무 엑셀 기본기를 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "데이터 분석",
+  "field": "데이터·통계",
+  "topic": "데이터 분석",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "엑셀"
+  ]
+ },
+ {
+  "isbn": "9791165219673",
+  "title": "직장인을 위한 실무 구글 스프레드시트",
+  "author": "진은영",
+  "pages": 476,
+  "one_liner": "구글 스프레드시트로 공유·협업하며 데이터를 입력하고 정리하는 법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "데이터 분석",
+  "field": "데이터·통계",
+  "topic": "데이터 분석",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "엑셀"
+  ]
+ },
+ {
+  "isbn": "9791194383635",
+  "title": "요즘 바이브 코딩 깃허브 코파일럿 31가지 프로그램 만들기",
+  "author": "박현규",
+  "pages": 296,
+  "one_liner": "코딩을 몰라도 AI와 대화하며 웹사이트와 앱 31개를 직접 만들어 봐요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "AI 활용",
+  "field": "AI·IT 활용",
+  "topic": "AI 활용",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "바이브 코딩"
   ]
  },
  {
@@ -6654,6 +6824,26 @@
   "keywords": []
  },
  {
+  "isbn": "9791139728002",
+  "title": "손자병법",
+  "author": "손자",
+  "pages": 384,
+  "one_liner": "이겨놓고 싸우라는 병법의 지혜를 역사 속 승패 사례로 읽어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
   "isbn": "9791191438406",
   "title": "거꾸로 읽는 세계사",
   "author": "유시민",
@@ -6749,6 +6939,46 @@
    "temp": -1,
    "pull": -1,
    "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788936479381",
+  "title": "[예스리커버] 아는 만큼 보인다",
+  "author": "유홍준",
+  "pages": 428,
+  "one_liner": "우리 옛 건축과 자연을 직접 찾아가 보고 싶어지나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937834790",
+  "title": "정의란 무엇인가",
+  "author": "마이클 샌델",
+  "pages": 444,
+  "one_liner": "공리주의부터 롤스까지 정의에 대한 나만의 생각을 세워 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": -1,
    "world": 1
   },
   "keywords": []
@@ -7114,6 +7344,26 @@
   "keywords": []
  },
  {
+  "isbn": "9788960901087",
+  "title": "호러는 아니지만 어쩐지",
+  "author": "이장욱",
+  "pages": 212,
+  "one_liner": "익숙한 일상에 낯선 조건이 끼어드는 으스스한 짧은 이야기들, 읽어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
   "isbn": "9791193358245",
   "title": "말하고 싶은 비밀",
   "author": "사쿠라 이이요",
@@ -7154,6 +7404,26 @@
   "keywords": []
  },
  {
+  "isbn": "9788932909363",
+  "title": "연애 소설 읽는 노인",
+  "author": "루이스 세풀베다",
+  "pages": 181,
+  "one_liner": "숲으로 향한 노인의 선택을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
   "isbn": "9791193358177",
   "title": "위시",
   "author": "니컬러스 스파크스",
@@ -7167,6 +7437,26 @@
   "way": null,
   "axes": {
    "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937464614",
+  "title": "사랑에 대하여",
+  "author": "안톤 체호프",
+  "pages": 272,
+  "one_liner": "사랑과 우수, 회한이 스민 짧은 이야기들을 한 권으로 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
    "pull": -1,
    "gain": -1,
    "world": 1
@@ -7207,6 +7497,46 @@
   "way": null,
   "axes": {
    "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194530701",
+  "title": "괴테는 모든 것을 말했다 (여름 에디션)",
+  "author": "스즈키 유이",
+  "pages": 248,
+  "one_liner": "출처 모를 괴테의 말 한 줄이 한 사람의 삶을 어떻게 흔들어 놓을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788931023299",
+  "title": "[예스리커버] 사랑하는 습관",
+  "author": "도리스 레싱",
+  "pages": 416,
+  "one_liner": "여성의 삶이 고인 단편들로 혼자라는 것의 무게를 느껴 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
    "pull": -1,
    "gain": -1,
    "world": 1
@@ -7263,6 +7593,24 @@
   "keywords": [
    "고객 이해",
    "브랜딩"
+  ]
+ },
+ {
+  "isbn": "9788970414843",
+  "title": "그렇게 브랜드가 된다",
+  "author": "전우성",
+  "pages": 236,
+  "one_liner": "조직 간판 없이도 나를 대체 불가한 브랜드로 세우는 사고와 태도를 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "취업·커리어",
+  "field": "일·커리어",
+  "topic": "취업·커리어",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "퍼스널 브랜딩",
+   "커리어 설계"
   ]
  },
  {
@@ -8240,6 +8588,23 @@
   ]
  },
  {
+  "isbn": "9791163036661",
+  "title": "된다! 7일 구글 스프레드시트",
+  "author": "이지현",
+  "pages": 336,
+  "one_liner": "스프레드시트의 입력·서식·필터·함수를 따라 하며 데이터를 정리하고 분석해요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "데이터 분석",
+  "field": "데이터·통계",
+  "topic": "데이터 분석",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "엑셀"
+  ]
+ },
+ {
   "isbn": "9791124516218",
   "title": "유튜브 AI 비서 고용하기 제미나이 X 노트북LM X 구글 스프레드시트",
   "author": "조현정",
@@ -8324,6 +8689,57 @@
   "axes": null,
   "keywords": [
    "뇌과학"
+  ]
+ },
+ {
+  "isbn": "9791197459566",
+  "title": "기적을 만드는 감사메모",
+  "author": "엄남미",
+  "pages": 272,
+  "one_liner": "하루 한 줄 감사메모를 꾸준히 쓰는 습관으로 긍정적인 삶을 시작해 보세요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "습관"
+  ]
+ },
+ {
+  "isbn": "9791160406498",
+  "title": "일 잘하는 공무원은 문장부터 다릅니다",
+  "author": "박창식",
+  "pages": 240,
+  "one_liner": "보고서·보도자료·안내문 쓰는 법과 말하기 요령을 공직 현장에 맞게 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "업무 글"
+  ]
+ },
+ {
+  "isbn": "9791162335390",
+  "title": "일잘러를 위한 이메일 가이드 101",
+  "author": "조성도",
+  "pages": 512,
+  "one_liner": "이메일 주소부터 제목·본문·첨부까지 일하는 이메일을 제대로 쓰는 요령을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "글쓰기",
+  "field": "일·커리어",
+  "topic": "글쓰기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "업무 글"
   ]
  },
  {
@@ -9499,6 +9915,26 @@
   "keywords": []
  },
  {
+  "isbn": "9791163730279",
+  "title": "엔트로피",
+  "author": "제러미 리프킨",
+  "pages": 364,
+  "one_liner": "기술 발전이 부른 에너지 위기를 자연의 원리로 함께 짚어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
   "isbn": "9791165215842",
   "title": "이토록 뜻밖의 뇌과학",
   "author": "리사 펠드먼 배럿",
@@ -9815,6 +10251,26 @@
    "pull": -1,
    "gain": -1,
    "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937477478",
+  "title": "악마는 열심히 산다",
+  "author": "김화진",
+  "pages": 196,
+  "one_liner": "악마와 몸을 맞바꾸면 내가 진짜 원했던 마음이 보일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
   },
   "keywords": []
  },
@@ -10246,6 +10702,26 @@
   "keywords": []
  },
  {
+  "isbn": "9788937462184",
+  "title": "세일즈맨의 죽음",
+  "author": "아서 밀러",
+  "pages": 198,
+  "one_liner": "무너진 꿈을 붙잡은 한 세일즈맨의 가족 이야기를 만나볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
   "isbn": "9791172070786",
   "title": "동영",
   "author": "임태리",
@@ -10414,6 +10890,26 @@
   "way": null,
   "axes": {
    "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788985155854",
+  "title": "기후 빅 히스토리",
+  "author": "마이클 E.만",
+  "pages": 512,
+  "one_liner": "지구 역사 속 기후 기록에서 오늘의 위기를 풀 실마리를 찾을 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
    "pull": -1,
    "gain": 1,
    "world": 1
@@ -11350,6 +11846,26 @@
   "keywords": []
  },
  {
+  "isbn": "9791196702960",
+  "title": "장래희망은, 귀여운 할머니",
+  "author": "하정",
+  "pages": 352,
+  "one_liner": "낯선 사람의 초대에 응한 여행이 어떤 인연으로 이어졌을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
   "isbn": "9788936481100",
   "title": "겸재 정선",
   "author": "유홍준",
@@ -11498,6 +12014,26 @@
   "one_liner_style": "question",
   "entry": "leaf",
   "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791188719327",
+  "title": "그러니까, 타이완",
+  "author": "카이랑",
+  "pages": 240,
+  "one_liner": "방송과 생활 속에서 만난 타이완의 문화와 사람들, 한국과 닮은 점을 살펴볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
   "field": null,
   "topic": null,
   "way": null,
@@ -13211,6 +13747,26 @@
   "keywords": []
  },
  {
+  "isbn": "9791173327667",
+  "title": "책이었습니다",
+  "author": "요시타케 신스케 외",
+  "pages": 236,
+  "one_liner": "한 줄 단서만으로 책 한 권이 되살아난다면, 어떤 이야기가 나올지 궁금하지 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
   "isbn": "9791192638980",
   "title": "치부노트",
   "author": "정성은",
@@ -13836,6 +14392,26 @@
    "temp": 1,
    "pull": 1,
    "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788974832803",
+  "title": "앨버트로스의 똥으로 만든 나라",
+  "author": "후쿠타 야스시",
+  "pages": 118,
+  "one_liner": "자원 부자 나라는 왜 낙원에서 저주로 기울었을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
    "world": 1
   },
   "keywords": []
@@ -15259,6 +15835,26 @@
    "temp": 1,
    "pull": -1,
    "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791165349738",
+  "title": "레인보우 맨션",
+  "author": "애슐리 반스",
+  "pages": 616,
+  "one_liner": "우주산업을 일군 사람들의 욕망과 기업 탄생기가 궁금하신가요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "사회·시사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
    "world": 1
   },
   "keywords": []

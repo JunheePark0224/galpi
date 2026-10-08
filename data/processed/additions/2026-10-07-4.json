@@ -1206,7 +1206,7 @@
    "author": "아서 밀러 저/강유나 역",
    "pages": 198,
    "entry": "leaf",
-   "genre": "로맨스",
+   "genre": "외국 소설",
    "axes": {
     "temp": -1,
     "pull": -1,
@@ -1214,16 +1214,16 @@
     "world": 1
    },
    "signals": {
-    "temp": "어조 −: 무너진 꿈과 소시민의 비극, 입지가 잠식됨",
-    "pull": "몰입 −: 윌리의 몰락 과정이 끌고 감, 문체 칭찬 없음",
-    "gain": "마음 −: 인물의 비극이 남기는 것, 희곡 형식은 마음 쪽",
-    "world": "현실 +: 대공황 시기 미국이 배경"
+    "temp": "어조 −: 무너진 꿈 속 소시민의 비극, 목차 '레퀴엠'(애도)",
+    "pull": "몰입 −: 불황 속 윌리의 몰락과 아들들과의 갈등 전개가 끌고 감",
+    "gain": "마음 −: 인물의 비극이 남기는 것, 지식 전달이 목적 아님",
+    "world": "현실 +: 대공황기 미국, 실제 있었던 세상이 배경"
    },
    "missing": [],
-   "suggest": "",
+   "suggest": "외국 소설",
    "one_liner_style": "question",
-   "one_liner": "꿈이 무너져 가는 한 가장의 몰락을 따라가 볼래요?",
-   "evidence": "사랑이 중심이 아닌 가족 비극 희곡",
+   "one_liner": "무너진 꿈을 붙잡은 한 세일즈맨의 가족 이야기를 만나볼래요?",
+   "evidence": "사랑이 중심이 아닌 가족 비극 희곡, 외국 작가",
    "confidence": 0.6,
    "fits": false,
    "second": {
@@ -1235,22 +1235,29 @@
      "world": 1
     },
     "signals": {
-     "temp": "어조 −: 무너진 꿈 속 소시민의 비극, 입지 잠식과 실망",
-     "pull": "몰입 −: 인물의 삶과 몰락 이야기가 끌고 감",
-     "gain": "마음 −: 희곡 형식, 인물 이야기가 남기는 것",
-     "world": "현실 +: 대공황기 미국 세일즈맨, 딴 세상 신호 없음"
+     "temp": "끝맺음 −: 레퀴엠·비극, 입지 잠식과 아들의 실망",
+     "pull": "몰입 −: 희곡 형식, 몰락해 가는 인물의 삶이 끌고 감",
+     "gain": "마음 −: 소설·희곡 형식, 소시민의 비극이 남기는 것",
+     "world": "현실 +: 대공황기 미국, 실제 있던 세상"
     },
     "missing": [],
     "suggest": "외국 소설",
-    "why": "사랑이 중심이 아닌 외국 작가의 문학 작품"
+    "why": "사랑 중심이 아닌 소시민 비극 희곡"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/3523842",
-   "rules_version": "v3.2"
+   "moved_from": "로맨스",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "로맨스"
+    }
+   ]
   },
   {
    "isbn": "9791172070786",
@@ -2207,7 +2214,7 @@
    "author": "마이클 E.만 저/박경미 역/조천호 감수",
    "pages": 512,
    "entry": "leaf",
-   "genre": "사회·시사",
+   "genre": "과학 교양",
    "axes": {
     "temp": 1,
     "pull": -1,
@@ -2215,17 +2222,17 @@
     "world": 1
    },
    "signals": {
-    "temp": "끝맺음 +: 해결 가능한 위기라며 희망의 메시지로 닫음",
-    "pull": "몰입 −: 지구 45억 년 시간 흐름과 대멸종 사건이 끌고 감",
+    "temp": "끝맺음 +: 기후변화는 해결 가능한 위기라고 거듭 강조",
+    "pull": "몰입 −: 지구 역사의 시대 흐름과 고기후 기록으로 끌고 감",
     "gain": "",
-    "world": "현실 +: 비소설, 실제 지구와 기후의 역사"
+    "world": "현실: 비소설, 실제 지구와 인간의 역사"
    },
    "missing": [],
    "suggest": "과학 교양",
    "one_liner_style": "question",
-   "one_liner": "지구의 오랜 기후 역사를 따라가며 지금의 위기에서 무엇을 할지 배워요?",
-   "evidence": "기후 원리·과거 기록 설명이 중심이라 과학 교양",
-   "confidence": 0.72,
+   "one_liner": "지구 역사 속 기후 기록에서 오늘의 위기를 풀 실마리를 찾을 수 있을까요?",
+   "evidence": "고기후 과학 설명이 중심이라 과학 교양",
+   "confidence": 0.8,
    "fits": false,
    "second": {
     "fits": false,
@@ -2236,25 +2243,31 @@
      "world": 1
     },
     "signals": {
-     "temp": "끝맺음 +: 해결 가능한 위기라는 희망의 메시지",
-     "pull": "몰입: 지구 기후 역사의 시간 흐름이 끌고 감",
-     "gain": "",
-     "world": "현실: 비소설, 실제 지구와 인류의 역사"
+     "temp": "끝맺음 +: 기후변화는 해결 가능한 위기라는 희망 강조",
+     "pull": "몰입 −: 지구 기후사를 시간 흐름으로 끌고 감",
+     "gain": "알게 됨 +: 고기후 기록으로 과학 사실 설명",
+     "world": "현실 +: 비소설, 실제 지구와 인류의 역사"
     },
     "missing": [],
-    "suggest": "",
-    "why": "과학 원리·기후 역사 설명이 중심이라 과학 교양에 가깝"
+    "suggest": "과학 교양",
+    "why": "지구 기후 역사와 과학 원리 설명이 중심"
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [
-    "근거가 책소개를 베낌 (AI-1 gain)",
-    "근거가 책소개를 베낌 (AI-2 gain)"
+    "근거가 책소개를 베낌 (AI-1 gain)"
    ],
-   "status": "dropped",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/194906101",
-   "rules_version": "v3.2"
+   "moved_from": "사회·시사",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "genre": "사회·시사"
+    }
+   ]
   },
   {
    "isbn": "9788954698344",
