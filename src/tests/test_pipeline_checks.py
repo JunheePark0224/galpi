@@ -8,7 +8,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from pipeline.candidates import Candidate  # noqa: E402
-from pipeline.checks import AUTO, copied_run, decide, disagreements, needs_person, redecide, rule_issues, scrub, split_issues  # noqa: E402
+from pipeline.checks import AUTO, copied_run, decide, disagreements, moved_to, needs_person, redecide, rule_issues, scrub, split_issues  # noqa: E402
 from pipeline.merge import additions_doc, keyword_hints, record, write_doc  # noqa: E402
 from pipeline.tagger import parse  # noqa: E402
 from pipeline_fakes import INTRO, TOC, check_answer, tag_answer  # noqa: E402
@@ -54,6 +54,17 @@ def test_disagreements_name_each_field():
     assert disagreements("leaf", leaf_a, leaf_b) == ["world"]                     # 10-06: pass A unsure is no reason
 
 
+def test_disagreements_of_a_moved_book_are_about_its_new_slot():
+    out = {"fits": False, "suggest": "돈 관리·투자"}
+    a = {**tag_answer("target"), **out, "keywords": ["경제 뉴스"], "suggest_keywords": ["주식"]}
+    b = {**check_answer("target"), **out, "keywords": ["금리"], "suggest_keywords": ["주식"]}
+    assert disagreements("target", a, b) == []                                       # same keywords in the new topic
+    assert disagreements("target", a, {**b, "suggest_keywords": ["ETF·펀드"]}) == ["keywords"]
+    leaf_out = {"fits": False, "suggest": "외국 소설"}
+    assert disagreements("leaf", parse(tag_answer("leaf", **leaf_out), "leaf", "tag", []),
+                         parse(check_answer("leaf", world=-1, **leaf_out), "leaf", "check", [])) == ["world"]
+
+
 def test_decide():
     a, b = tag_answer("target"), check_answer("target")
     assert decide(a, b, [], [], auto_merge=False) == ("picked", AUTO)
@@ -68,6 +79,31 @@ def test_decide():
     assert decide(a, b, [], ["근거 김(33자)", "한 줄이 책소개를 베낌"], auto_merge=False) == ("reserve", None)
 
 
+# 10-08 (plans/2026-10-08-route-pipeline.md): "which slot?", not "does it fit this slot?" — a book both passes place in the same
+# other slot moves there instead of being dropped (the library re-tag's rule, library_review.slot_decision "agreed")
+def test_moved_to_needs_both_passes_out_of_the_slot_naming_the_same_one():
+    a, b = tag_answer("leaf"), check_answer("leaf")
+    out = lambda s: {"fits": False, "suggest": s}  # noqa: E731
+    assert moved_to({**a, **out("외국 소설")}, {**b, **out("외국 소설")}) == "외국 소설"
+    assert moved_to({**a, **out("외국 소설")}, {**b, **out("SF·판타지")}) is None     # different slots: not a move
+    assert moved_to({**a, **out("외국 소설")}, b) is None                             # one keeps it here
+    assert moved_to({**a, **out("")}, {**b, **out("")}) is None                       # nowhere
+    assert moved_to(a, b) is None
+
+
+def test_decide_moves_instead_of_dropping():
+    a, b = tag_answer("leaf"), check_answer("leaf")
+    out = lambda s: {"fits": False, "suggest": s}  # noqa: E731
+    # both name the same other genre and agree on the rest: picked there (the "fits" flag was about the old slot)
+    assert decide({**a, **out("외국 소설")}, {**b, **out("외국 소설")}, ["fits"], [], False) == ("picked", AUTO)
+    assert decide({**a, **out("외국 소설")}, {**b, **out("외국 소설")}, ["fits", "temp"], [], False) == ("review", None)
+    # only when both say "nowhere among our slots" is a book dropped
+    assert decide({**a, **out("")}, {**b, **out("")}, ["fits"], [], False) == ("dropped", None)
+    # they name different slots, or one keeps it: a person (or pass C) decides
+    assert decide({**a, **out("외국 소설")}, {**b, **out("SF·판타지")}, ["fits"], [], False) == ("review", None)
+    assert decide({**a, **out("외국 소설")}, b, ["fits"], [], False) == ("review", None)
+
+
 def test_needs_person_names_only_what_a_person_must_decide():
     assert needs_person(["confidence"], ["근거 김(31자)", "근거 없음", "근거가 책소개를 베낌", "판단 이유가 책소개를 베낌"]) == ([], [])
     assert needs_person(["temp", "confidence"], ["근거 김(31자)", "과장 표현: 미친"]) == (["temp"], ["과장 표현: 미친"])
@@ -77,6 +113,10 @@ def test_redecide_a_stored_book_with_todays_rules():
     stored = {"fits": True, "second": {"fits": True}, "flags": ["confidence"], "issues": ["근거 김(31자)"], "status": "reserve"}
     assert redecide(stored, auto_merge=False) == ("picked", AUTO)
     assert redecide({**stored, "flags": ["fits"], "second": {"fits": False}}, auto_merge=False) == ("review", None)
+    # a book dropped before 10-08 whose two passes named the same other slot comes back, moved there
+    dropped = {**stored, "fits": False, "suggest": "인문", "flags": ["fits"], "issues": [], "status": "dropped",
+               "second": {"fits": False, "suggest": "인문"}}
+    assert redecide(dropped, auto_merge=False) == ("picked", AUTO)
 
 
 def test_record_holds_our_tags_only(tmp_path):
@@ -160,3 +200,20 @@ def test_record_keeps_both_passes_signals_and_missing_axes():
     rec = record(leaf_cand, a, b, ["temp"], [], "review", None, [])
     assert rec["signals"] == a["signals"] and rec["missing"] == ["temp"]
     assert rec["second"]["signals"] == b["signals"] and rec["second"]["missing"] == []
+
+
+def test_a_moved_book_is_recorded_in_its_new_slot():
+    leaf = Candidate("leaf", "로맨스", "9790000000028", "사랑의 기원", "앤 저/김 역", 300, "https://y/2", INTRO, TOC)
+    a = parse(tag_answer("leaf", fits=False, suggest="외국 소설"), "leaf", "tag", [])
+    b = parse(check_answer("leaf", fits=False, suggest="외국 소설"), "leaf", "check", [])
+    rec = record(leaf, a, b, [], [], "picked", AUTO, [])
+    assert rec["genre"] == "외국 소설" and rec["moved_from"] == "로맨스"
+    kept = record(leaf, parse(tag_answer("leaf"), "leaf", "tag", []), parse(check_answer("leaf"), "leaf", "check", []),
+                  [], [], "picked", AUTO, [])
+    assert kept["genre"] == "로맨스" and "moved_from" not in kept
+    # a 🎯 book takes the new topic, its field, and the keywords both passes gave there
+    a = {**tag_answer("target"), "fits": False, "suggest": "돈 관리·투자", "suggest_keywords": ["주식", "ETF·펀드"]}
+    b = {**check_answer("target"), "fits": False, "suggest": "돈 관리·투자", "suggest_keywords": ["주식"]}
+    cand = Candidate("target", "경제 상식", "9790000000035", "주식의 첫걸음", "김 저", 200, "https://y/3", INTRO, TOC)
+    rec = record(cand, a, b, [], [], "picked", AUTO, [])
+    assert (rec["topic"], rec["field"], rec["keywords"], rec["moved_from"]) == ("돈 관리·투자", "돈·경제", ["주식"], "경제 상식")
