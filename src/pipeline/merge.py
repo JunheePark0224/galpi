@@ -19,7 +19,8 @@ from .prompt import MAX_KEYWORDS
 from .checks import crossed_to, moved_to, scrub
 
 NOTE = ("Daily pipeline: pass A (model) tags, pass B (second_model) checks blind. Our tags only — no YES24 intro/TOC. "
-        "auto=ai-agree: both passes agreed, accepted without human review (not in the agreement figures).")
+        "auto=ai-agree: both passes agreed — or a third pass settled their split (`settled`) — accepted without human "
+        "review (not in the agreement figures).")
 
 
 def keyword_hints(cand: Candidate, kept: dict[str, dict]) -> list[str]:

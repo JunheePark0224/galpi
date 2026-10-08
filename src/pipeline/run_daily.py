@@ -150,7 +150,7 @@ def prefetch(recorder: batched.Recorder, cfg: Config, prompts: dict, vocab: dict
     for cand in cands:
         if cand.author.strip() and cand.pages > 0:
             user = _book_text(cand, vocab)[2]
-            recorder.expect(request(cfg.second_model, prompts["check"], user, schema(cand.entry, "check", all_keywords(vocab))))
+            recorder.expect(cand.isbn, request(cfg.second_model, prompts["check"], user, schema(cand.entry, "check", all_keywords(vocab))))
 
 
 def _third_pass(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, breaker: Breaker, ledger: dict,
@@ -212,7 +212,7 @@ def run(batch: str, cfg: Config, env: dict, client, batches: bool = False, sleep
             # one book's use is kept apart and added once it is done: a batched book is run again each round (replays)
             own, own_retries, own_axes, rec, why = {}, RetryLog(), RetryLog(), None, None
             if batches:
-                tagger.begin()
+                tagger.begin(cand.isbn)
             try:
                 rec, why = tag_one(tagger, cfg, prompts, vocab, cand, breaker, own, own_retries, rules, own_axes,
                                    routed=True, requeued=cand.isbn in back_isbns)
@@ -245,6 +245,8 @@ def run(batch: str, cfg: Config, env: dict, client, batches: bool = False, sleep
         except TaggerStop as err:
             stopped = str(err)
         todo = waiting
+    if batches:  # what the batches answered: a prefetched pass B whose book failed, and books cut off by a stop, too
+        ledger = dict(tagger.spent)
     order = {c.isbn: i for i, c in enumerate(cands)}
     recs.sort(key=lambda r: order[r["isbn"]])  # a batched book finishes in its own round; the file keeps the run's order
     status = Counter(r["status"] for r in recs)

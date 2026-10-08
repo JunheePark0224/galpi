@@ -121,8 +121,9 @@ def applied(rec: dict, third: dict | None, auto_merge: bool, requeued: bool = Fa
             gone = ("fits", "keywords") if "topic" in moved else ("fits",)  # old-topic keywords left with the old topic
             flags = [x for x in flags if x not in gone] + (["keywords"] if moved.get("keywords") == [] else [])
             if "requeued_to" in moved:
-                return {k: x for k, x in out.items() if k != "auto"} | {"flags": flags, "settled": {"slot": v},
-                                                                         "status": "dropped"}
+                return ({k: x for k, x in out.items() if k != "auto"}
+                        | {"flags": flags, "settled": settled | {"slot": v}, "status": "dropped"}
+                        | ({"a_was": a_was} if a_was else {}))
         elif f in AXES:
             a_was |= {f: rec["axes"][f]} if rec["axes"][f] != v else {}
             out["axes"] = {**out["axes"], f: v}
@@ -151,4 +152,5 @@ def _slot_move(rec: dict, third: dict, new: str, requeued: bool) -> dict | None:
     voters = [v for v in (rec, rec.get("second") or {}, third) if not v.get("fits") and v.get("suggest") == new]
     common = [k for k in voters[0].get("suggest_keywords") or []
               if all(k in (v.get("suggest_keywords") or []) for v in voters)]
-    return {"topic": new, "field": FIELD_OF_TOPIC[new], "keywords": common[:MAX_KEYWORDS], "moved_from": slot}
+    return {"topic": new, "field": FIELD_OF_TOPIC[new], "keywords": common[:MAX_KEYWORDS], "moved_from": slot,
+            "keywords_regex": []}  # the hints were the old topic's
