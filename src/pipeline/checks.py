@@ -123,7 +123,7 @@ def _named(a: dict, b: dict) -> str | None:
     return slot if slot and slot == (b.get("suggest") or "") else None
 
 
-def _other(entry: str) -> tuple[str, tuple[str, ...]]:
+def other_entry(entry: str) -> tuple[str, tuple[str, ...]]:
     return ("target", TOPICS) if entry == "leaf" else ("leaf", GENRES)
 
 
@@ -134,14 +134,14 @@ def moved_to(a: dict, b: dict, entry: str | None = None) -> str | None:
     hold in the new genre; a 🎯 book takes the keywords both passes gave for the new topic (merge.record). Given the
     book's `entry`, a slot of the other 갈래 is no move (crossed_to: the book is tagged again there)."""
     slot = _named(a, b)
-    return None if slot and entry and slot in _other(entry)[1] else slot
+    return None if slot and entry and slot in other_entry(entry)[1] else slot
 
 
 def crossed_to(entry: str, a: dict, b: dict) -> dict | None:
     """{entry, slot} when both passes place the book in the same slot of the other 갈래 (10-08, 『과몰입 사회』: found as
     🍃 사회·시사, really 🎯 마음 돌보기) — its tags are the other entry's (🎯 keywords·way·summary line), so it is not moved
     but requeued (requeue.json) and tagged again there; else None."""
-    slot, (other, slots) = _named(a, b), _other(entry)
+    slot, (other, slots) = _named(a, b), other_entry(entry)
     return {"entry": other, "slot": slot} if slot in slots else None
 
 

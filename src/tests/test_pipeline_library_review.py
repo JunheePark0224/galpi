@@ -226,3 +226,14 @@ def test_apply_writes_an_empty_axis_both_passes_left_and_takes_a_persons_empty_a
     assert v1[1]["axes"] == empty and v1[1]["rules_version"] == "v3"
     with pytest.raises(ReviewError, match="axes must be"):
         library_apply.apply([both, asked], decided, {"3": {**ans["3"], "axes": {**AX, "temp": "x"}}}, KEPT, v1_rows(), {})
+
+
+def test_the_library_never_applies_a_slot_of_the_other_entry():
+    """10-08: passes may name a 🎯 topic for a 🍃 book; the library re-tag asks a person ("다른 갈래로") instead of writing a
+    topic as a genre."""
+    from pipeline.library_review import slot_decision
+    book = {"slot": "사회·시사", "entry": "leaf"}
+    out = {"fits": False, "suggest": "마음 돌보기"}
+    assert slot_decision(book, out, out, {}) == (None, "ask")
+    assert slot_decision(book, {"fits": True}, out, {"slot": "마음 돌보기"}) == (None, "ask")
+    assert slot_decision(book, {"fits": True}, {"fits": False, "suggest": "인문"}, {"slot": "인문"}) == ("인문", "majority")

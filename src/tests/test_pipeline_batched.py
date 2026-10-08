@@ -15,15 +15,22 @@ from test_pipeline_run_daily import CFG, ENV, day, mixed  # noqa: E402,F401  (da
 def test_the_recorder_answers_from_results_and_holds_any_other_request_back():
     rec = batched.Recorder()
     kwargs = request("claude-haiku-4-5", "S", "U", {"type": "object"})
+    rec.begin("1")
     try:
         rec.messages.create(**kwargs)
         raise AssertionError("an unknown request must wait")
     except batched.Waiting:
         pass
     assert list(rec.pending.values()) == [kwargs]
-    rec.answers[batched.key(kwargs)] = "the message"
-    rec.begin()  # the next round runs the book again
+    rec.answers[next(iter(rec.pending))] = "the message"
+    rec.begin("1")  # the next round runs the book again
     assert rec.messages.create(**kwargs) == "the message"
+    rec.begin("2")  # another edition with the very same text is its own request, as in a direct run
+    try:
+        rec.messages.create(**kwargs)
+        raise AssertionError("another book must not share the answer")
+    except batched.Waiting:
+        pass
 
 
 def test_a_request_becomes_batch_params_with_its_sdk_only_options_in_the_body():
@@ -57,7 +64,7 @@ def test_a_batched_day_writes_what_a_direct_day_writes_at_half_the_price(day):
 def test_the_same_request_twice_in_one_book_is_two_requests():
     rec = batched.Recorder()
     kwargs = request("claude-haiku-4-5", "S", "U", {"type": "object"})
-    rec.begin()
+    rec.begin("1")
     for _ in range(2):
         try:
             rec.messages.create(**kwargs)
@@ -67,7 +74,7 @@ def test_the_same_request_twice_in_one_book_is_two_requests():
     first, second = rec.pending
     rec.answers |= {first: "B", second: "C"}
     rec.pending = {}
-    rec.begin()  # the book runs again in the next round: the same two answers, in order
+    rec.begin("1")  # the book runs again in the next round: the same two answers, in order
     assert [rec.messages.create(**kwargs), rec.messages.create(**kwargs)] == ["B", "C"]
 
 
@@ -101,3 +108,28 @@ def test_main_sends_batches_when_asked(day, monkeypatch, capsys):
     monkeypatch.setattr(run_daily, "yes24_env", lambda: ENV)
     assert run_daily.main(["--batch", "2026-10-09", "--batches"]) == 0
     assert seen.get("batches") is True
+
+
+def test_a_prefetched_pass_b_is_paid_for_even_when_its_book_fails(day):
+    def result(params):  # every pass A comes back unanswered; the pass B asked ahead was answered (and billed)
+        if "one_liner" in params["output_config"]["format"]["schema"]["properties"]:
+            return SimpleNamespace(type="expired")
+        return None
+    s = run_daily.run("2026-10-05", CFG, ENV, FakeBatchClient(agreeing, result), batches=True, sleep=lambda x: None)
+    assert s["tagged"] == 0 and s["usage"]["claude-haiku-4-5"]["calls"] == 8 and s["cost_usd"] > 0
+
+
+def test_a_passing_network_error_while_waiting_does_not_lose_a_paid_batch(day):
+    import anthropic
+    import httpx2 as httpx
+
+    client, failures = FakeBatchClient(agreeing), iter([1, 1])
+    real = client.messages.batches.retrieve
+
+    def flaky(batch_id):
+        if next(failures, None):
+            raise anthropic.APIConnectionError(request=httpx.Request("GET", "https://api.anthropic.com/v1/messages/batches"))
+        return real(batch_id)
+    client.messages.batches.retrieve = flaky
+    s = run_daily.run("2026-10-05", CFG, ENV, client, batches=True, sleep=lambda x: None)
+    assert s["status"] == "ok" and s["tagged"] == 4
