@@ -51,7 +51,9 @@ __STYLE__
 <div id="app"></div></main>
 <div class="bar"><span id="prog"></span><button id="dl">검수 결과 내려받기</button></div>
 <script>
-const BOOKS=__BOOKS__, KW=__KW__, GENRES=__GENRES__, DEFS=__DEFS__, AXES=__AXES__, WAYS=__WAYS__, KEY=__KEY__, NAME=__NAME__;
+const BOOKS=__BOOKS__, KW=__KW__, GENRES=__GENRES__, DEFS=__DEFS__, AXES=__AXES__, WAYS=__WAYS__, KEY=__KEY__, NAME=__NAME__, FICTION=__FICTION__;
+// v3.1 rules 8–9: a novel / poem axis with no information is 비움 (null); non-fiction is never empty
+const axisOpts=(c,p,z,m)=>[[p,1],[z,0],[m,-1],...(FICTION.includes(c.genre)?[["비움 (정보 없음)",null]]:[])];
 __COMMON__
 const TOPICS=Object.keys(KW);
 const STATUS=[["picked","넣기"],["reserve","대기"],["dropped","빼기"],["requeue","다른 갈래로 (다시 태그)"]];
@@ -61,7 +63,7 @@ const GROUPS=[["fits","① 넣을지 정하기","두 AI 중 하나가 이 책이
  ["tags","② 두 AI가 다르게 본 칸 · 정보 없는 칸","다르게 본 칸, 또는 책소개·목차에 판단할 정보가 없다고 한 칸만 골라 주세요"],
  ["line","③ 한 줄 고치기","이용자에게 보이는 한 줄이 규칙에 걸렸어요"],
  ["sample","④ 표본 — 두 AI가 같게 본 책","자동으로 들어갈 책이 정말 맞는지 재요. 맞으면 [확인]만 누르면 돼요"]];
-const side=(k,v)=>{const a=AXES.find(x=>x[0]===k);return v>0?a[2]:v<0?a[4]:a[3]};
+const side=(k,v)=>{const a=AXES.find(x=>x[0]===k);return v===null||v===undefined?"비움":v>0?a[2]:v<0?a[4]:a[3]};
 const base=b=>b.entry==="target"?{topic:b.topic,keywords:[...(b.keywords||[])],way:b.way,keyword_candidate:b.keyword_candidate||""}:{genre:b.genre,axes:{...b.axes}};
 const cur=b=>st[b.isbn]||{...base(b),one_liner:b.one_liner,status:"picked",answered:[],ok:false};
 const put=(b,patch,key,undo)=>{const c=cur(b), was=(c.answered||[]).filter(k=>k!==undo);st[b.isbn]={...c,...patch,answered:key&&!was.includes(key)?[...was,key]:was,ok:false};save();render()};
@@ -100,7 +102,7 @@ function ask(b,c,k){const two=b.second||{}, done=(c.answered||[]).includes(k);
    ${open?`<div class="row"><span class="lab">${kind}</span><select data-act="fitto"><option value="">${kind}를 골라 주세요</option>${names.filter(n=>n!==slot).map(n=>`<option value="${esc(n)}" ${moved&&n===now?"selected":""}>${esc(n)}${named.has(n)?" (AI 제안)":""}</option>`).join("")}</select>
    ${leaf?"":'<span class="cnt">키워드는 아래 "같게 본 칸도 고치기"에서 새 주제에 맞게 골라 주세요</span>'}</div>`:""}`}
  if(AXIS_NAME[k]){const [,q,p,z,m,hint]=AXES.find(x=>x[0]===k), ax2=two.axes||{};
-  return `<p class="q">${esc(q)} <span class="hint">— ${esc(hint)}</span></p><div class="opts">${[[p,1],[z,0],[m,-1]].map(([t,v])=>`<label><input type="radio" name="q-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${done&&c.axes[k]===v?"checked":""}><span>${esc(t)}
+  return `<p class="q">${esc(q)} <span class="hint">— ${esc(hint)}</span></p><div class="opts">${axisOpts(c,p,z,m).map(([t,v])=>`<label><input type="radio" name="q-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${done&&c.axes[k]===v?"checked":""}><span>${esc(t)}
    ${marks(b.axes[k]===v,ax2[k]===v)}</span></label>`).join("")}</div>${signalsOf(b,k)}`}
  if(k==="keywords"){const k1=b.keywords||[], k2=two.keywords||[], list=chipsOf(b,c);
   return `<p class="q">키워드 <span class="hint">— 책의 중심일 때만 · 눌러서 켜고 끄기 (최대 5개) · ¹ AI-1이 붙임 · ² AI-2가 붙임</span></p>
@@ -128,7 +130,7 @@ function fields(b,c){
    <div class="row"><span class="lab">후보</span><input type="text" data-act="cand" maxlength="12" value="${esc(c.keyword_candidate||"")}" placeholder="목록에 없는 키워드 후보 (12자)" title="책의 중심이 위 키워드 목록에 없을 때만 — 짧은 이름. 5권이 모이면 키워드로 만들지 물어봐요"></div>`}
  const two=b.second||{axes:{}};
  return `<div class="row"><span class="lab">장르</span><select data-act="genre">${GENRES.map(g=>`<option ${g===c.genre?"selected":""}>${esc(g)}</option>`).join("")}</select></div>`
-  +AXES.map(([k,q,p,z,m,hint])=>`<p class="q">${esc(q)} <span class="hint">— ${esc(hint)}</span></p><div class="opts">${[[p,1],[z,0],[m,-1]].map(([t,v])=>`<label><input type="radio" name="ax-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${c.axes[k]===v?"checked":""}><span>${esc(t)}
+  +AXES.map(([k,q,p,z,m,hint])=>`<p class="q">${esc(q)} <span class="hint">— ${esc(hint)}</span></p><div class="opts">${axisOpts(c,p,z,m).map(([t,v])=>`<label><input type="radio" name="ax-${b.isbn}-${k}" data-axis="${k}" value="${v}" ${c.axes[k]===v?"checked":""}><span>${esc(t)}
    ${b.axes[k]===v?'<span class="ai1">AI-1</span>':""}${two.axes[k]===v?'<span class="ai2">AI-2</span>':""}</span></label>`).join("")}</div>`).join("")}
 function card(b){const c=cur(b), q=asks(b), rest=left(b,c), lineAsked=q.includes("line");
  return `<div class="card ${c.ok?"done":""} ${c.status==="dropped"?"dropped":""}" id="b${b.isbn}"><p class="t">${b.entry==="target"?"🎯":"🍃"} ${esc(b.title)}${b.sample?'<span class="badge">표본</span>':""}</p>
@@ -162,7 +164,7 @@ document.addEventListener("click",e=>{const b=bookOf(e); if(!b)return; const c=c
  if(act==="ok"){if(left(b,c).length)return; if(c.status==="requeue"&&b.entry==="target"&&!c.to_slot){alert("어느 🍃 장르 책인지 골라 주세요");return}
   st[b.isbn]={...c,ok:true};save();render()}});
 document.addEventListener("change",e=>{const b=bookOf(e); if(!b)return; const act=e.target.dataset.act, axis=e.target.dataset.axis, v=e.target.value;
- if(axis){put(b,{axes:{...cur(b).axes,[axis]:Number(v)}},axis);return}
+ if(axis){put(b,{axes:{...cur(b).axes,[axis]:v==="null"?null:Number(v)}},axis);return}
  if(act==="fit"){const slot=b.entry==="leaf"?{genre:b.genre}:{topic:b.topic,keywords:[...(b.keywords||[])]};
   if(v==="move"){st[b.isbn]={...cur(b),moveOpen:true,ok:false,answered:(cur(b).answered||[]).filter(x=>x!=="fits")};save();render();return}
   put(b,{status:v,moveOpen:false,...slot},"fits");return}

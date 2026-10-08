@@ -610,3 +610,13 @@ def test_the_story_hints_on_the_review_pages_follow_dictionary_v3_1():
         assert word in hint["pull"], word
     for word in ("소설·시", "주된 목적", "마음"):
         assert word in hint["gain"], word
+
+
+def test_a_novel_or_poem_axis_may_be_answered_empty_on_the_daily_page():
+    """10-08 user (나는 슈뢰딩거의 고양이로소이다: no ending signal in intro or TOC): label-dictionary v3.1 rules 8–9 — a 🍃
+    novel / poem axis with no information is 비움 (null), as the library page already offers; non-fiction never is."""
+    from pipeline.review import render
+    from pipeline.signals_report import FICTION
+    html = render([], {}, "k")
+    assert '"비움 (정보 없음)"' in html and json.dumps(list(FICTION), ensure_ascii=False) in html
+    assert 'v==="null"?null:Number(v)' in html          # the radio's "null" reaches the download as null, not NaN
