@@ -5,7 +5,8 @@ Usage (from the checkout):  PYTHONIOENCODING=utf-8 python -m src.pipeline.rerout
 Per additions file, every `dropped` book whose pass A and pass B name the same other slot (checks.moved_to) is decided
 again with today's rules (checks.disagreements on its stored answers → checks.decide): its slot becomes the named one
 (a 🎯 book also takes the keywords both passes gave there — merge.moved_keywords), `moved_from` keeps where it was found,
-and `history` keeps the old status and slot. Books with no named slot, or different ones, stay dropped. No API call —
+and `history` keeps the old status and slot. Its one-liner is checked against today's rules (agreement.line_problems) —
+one that breaks them holds the book (reserve) for a person. Books with no named slot, or different ones, stay dropped. No API call —
 the stored answers already hold every tag (prompt COMMON: a pass that says "not here" still tags the book).
 Running it again changes nothing. Without --write it only prints the tally.
 """
@@ -16,6 +17,7 @@ from collections import Counter
 
 from apply_review import FIELD_OF_TOPIC
 
+from .agreement import line_problems
 from .checks import decide, disagreements, moved_to
 from .merge import moved_keywords, write_doc
 from .run_daily import ADDITIONS
@@ -43,13 +45,18 @@ def reroute(doc: dict, auto_merge: bool) -> tuple[dict, dict]:
             continue
         old_slot = book.get("genre") if book["entry"] == "leaf" else book.get("topic")
         flags = disagreements(book["entry"], a, b)
-        status, auto = decide(a, b, flags, book.get("issues") or [], auto_merge)
+        # the one-liner against today's rules (10-08: books dropped before the question rule were never checked by it); a
+        # line blanked for copying the YES24 text keeps that issue only
+        line = book.get("one_liner") or ""
+        issues = [*(book.get("issues") or []), *(p for p in (line_problems(book, line) if line else [])
+                                                 if p not in (book.get("issues") or []))]
+        status, auto = decide(a, b, flags, issues, auto_merge)
         history = {"change": CHANGE, "status": "dropped", ("genre" if book["entry"] == "leaf" else "topic"): old_slot}
         if book["entry"] == "leaf":
             book["genre"] = new
         else:
             book |= {"topic": new, "field": FIELD_OF_TOPIC[new], "keywords": moved_keywords(a, b)}
-        book |= {"moved_from": old_slot, "flags": flags, "status": status,
+        book |= {"moved_from": old_slot, "flags": flags, "issues": issues, "status": status,
                  "history": [*(book.get("history") or []), history]}
         book.pop("auto", None)
         if auto:
