@@ -88,3 +88,36 @@ def write_cache(raw: Path, search: dict[str, list[dict]], details: list[dict]) -
         item = {**d, "starScore": d.get("starScore", 9.2), "pages": d.get("pages", 280)}
         (raw / "detail" / f"{d['isbn13']}.json").write_text(json.dumps({"data": {"items": [item]}}, ensure_ascii=False),
                                                              encoding="utf-8")
+
+
+class FakeBatches:
+    """messages.batches of a fake client: every batch has ended by its first retrieve; `result(params)` gives the result of
+    one request — by default the message `answer(params)` would give, as a succeeded result."""
+
+    def __init__(self, answer, result=None):
+        self.answer, self.result, self.sent, self.polls = answer, result, [], 0
+
+    def create(self, requests):
+        self.sent.append(list(requests))
+        return SimpleNamespace(id=f"msgbatch_{len(self.sent)}", processing_status="in_progress")
+
+    def retrieve(self, batch_id):
+        self.polls += 1
+        return SimpleNamespace(id=batch_id, processing_status="ended")
+
+    def results(self, batch_id):
+        for r in self.sent[int(batch_id.split("_")[1]) - 1]:
+            res = self.result(r["params"]) if self.result else None
+            yield SimpleNamespace(custom_id=r["custom_id"],
+                                  result=res or SimpleNamespace(type="succeeded", message=self.answer(r["params"])))
+
+
+class FakeBatchClient:
+    """A fake client for the Message Batches mode: direct calls fail the test; batch requests are answered by `answer`."""
+
+    def __init__(self, answer=None, result=None):
+        self.messages = SimpleNamespace(create=self._direct, batches=FakeBatches(answer or agreeing, result))
+
+    @staticmethod
+    def _direct(**kwargs):
+        raise AssertionError("batch mode made a direct call")

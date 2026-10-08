@@ -158,30 +158,46 @@
    "author": "윌리엄 데이비스 저/김보은 역",
    "pages": 416,
    "entry": "target",
-   "topic": "마음 돌보기",
-   "field": "마음·관계",
+   "topic": "건강·운동",
+   "field": "습관·자기계발",
    "keywords": [],
    "keywords_regex": [
     "우울"
    ],
    "way": "실습",
+   "keyword_candidate": "장 건강",
+   "suggest": "건강·운동",
+   "suggest_keywords": [
+    "잠·회복"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "장 속 미생물 불균형을 바로잡는 4주 식단 프로그램을 따라 해 볼 수 있어요",
-   "evidence": "마음이 아닌 장 건강과 식단이 중심이라 주제 밖",
-   "confidence": 0.88,
+   "one_liner": "장 속 미생물이 무너진 이유를 알고 4주 프로그램으로 장을 회복해 볼 수 있어요.",
+   "evidence": "마음이 아닌 장 건강·식단 4주 프로그램이 중심",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "장 건강·미생물 책으로, 마음 돌보기가 아닌 신체 건강"
+    "why": "마음이 아닌 장 건강과 식단 프로그램이 중심",
+    "suggest": "건강·운동",
+    "suggest_keywords": []
    },
    "flags": [
-    "fits"
+    "keywords"
    ],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/118569458"
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/118569458",
+   "moved_from": "마음 돌보기",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "마음 돌보기"
+    }
+   ]
   },
   {
    "isbn": "9791193205860",
@@ -189,30 +205,59 @@
    "author": "김민주,박정미,김홍순,조용,김동은 공저",
    "pages": 200,
    "entry": "target",
-   "topic": "대화·관계",
-   "field": "마음·관계",
-   "keywords": [],
-   "keywords_regex": [
-    "발표"
+   "topic": "취업·커리어",
+   "field": "일·커리어",
+   "keywords": [
+    "직장 생활"
    ],
+   "keywords_regex": [],
    "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "글쓰기",
+   "suggest_keywords": [
+    "업무 글"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "교실 경험을 연구 보고서로 정리해 대회에 도전하는 단계별 방법을 알려줘요",
-   "evidence": "교사 연구대회 보고서 작성법, 대화·관계 아님",
-   "confidence": 0.93,
+   "one_liner": "교사 연구대회 주제를 잡고 보고서를 구조에 맞게 쓰는 방법을 익혀요",
+   "evidence": "대화가 아닌 연구 보고서 작성법이 중심",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "교사 연구대회 보고서 작성 안내서로 대화·관계와 무관"
+    "why": "교사 연구대회 보고서 작성 실전서, 대화·관계 아님",
+    "suggest": "취업·커리어",
+    "suggest_keywords": [
+     "직장 생활"
+    ]
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/181006495"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/181006495",
+   "third": {
+    "fits": false,
+    "suggest": "취업·커리어",
+    "suggest_keywords": [
+     "직장 생활"
+    ],
+    "keywords": [],
+    "way": "실습"
+   },
+   "moved_from": "대화·관계",
+   "settled": {
+    "slot": "취업·커리어"
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "대화·관계"
+    }
+   ]
   },
   {
    "isbn": "9791175910188",
@@ -228,25 +273,44 @@
     "갈등·무례 대처"
    ],
    "way": "실습",
+   "keyword_candidate": "육아",
+   "suggest": "",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "",
-   "evidence": "육아서라 성인 대화·관계 주제와 어긋남",
-   "confidence": 0.88,
+   "one_liner": "외동아이를 키우며 과잉보호와 불안 사이에서 부모가 지킬 양육 기준을 짚어 줘요.",
+   "evidence": "부모-자녀 육아 지침서, 갈피 주제 밖",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "외동아이 육아서로, 성인 간 대화·관계가 아님"
+    "why": "부모·자녀 양육법 중심, 대화·관계 칸과 안 맞음",
+    "suggest": "마음 돌보기",
+    "suggest_keywords": []
    },
    "flags": [
     "fits"
    ],
-   "issues": [
-    "한 줄이 책소개를 베낌"
-   ],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/173856406"
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/173856406",
+   "third": {
+    "fits": false,
+    "suggest": "대화·관계",
+    "suggest_keywords": [],
+    "keywords": [],
+    "way": "실습"
+   },
+   "settled": {},
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "대화·관계"
+    }
+   ]
   },
   {
    "isbn": "9788965703969",
@@ -301,33 +365,57 @@
    "author": "설기문 저",
    "pages": 216,
    "entry": "target",
-   "topic": "대화·관계",
+   "topic": "마음 돌보기",
    "field": "마음·관계",
-   "keywords": [],
+   "keywords": [
+    "감정 다루기",
+    "불안·걱정",
+    "우울"
+   ],
    "keywords_regex": [
     "거리 두기"
    ],
    "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "마음 돌보기",
+   "suggest_keywords": [
+    "감정 다루기",
+    "불안·걱정",
+    "우울"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "감정에서 나를 떼어 놓고 평정심을 되찾는 방법을 열세 가지로 익혀요",
-   "evidence": "주제가 관계 아닌 내 감정·마음 다루기",
+   "one_liner": "",
+   "evidence": "",
    "confidence": 0.9,
    "fits": false,
    "second": {
     "fits": false,
-    "keywords": [
-     "거리 두기"
-    ],
+    "keywords": [],
     "way": "실습",
-    "why": "관계가 아닌 내 감정·마음을 다루는 책이라 마음 돌보기"
+    "why": "내 감정·마음을 돌보는 방법이 중심이라 마음 돌보기",
+    "suggest": "마음 돌보기",
+    "suggest_keywords": [
+     "감정 다루기",
+     "불안·걱정",
+     "우울"
+    ]
    },
-   "flags": [
-    "fits",
-    "keywords"
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌",
+    "한 줄이 책소개를 베낌"
    ],
-   "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/102607590"
+   "status": "reserve",
+   "link": "https://www.yes24.com/product/goods/102607590",
+   "moved_from": "대화·관계",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "대화·관계"
+    }
+   ]
   },
   {
    "isbn": "9791176210072",
@@ -604,17 +692,24 @@
    "author": "흑상어쌤 저",
    "pages": 272,
    "entry": "target",
-   "topic": "취업·커리어",
+   "topic": "글쓰기",
    "field": "일·커리어",
-   "keywords": [],
+   "keywords": [
+    "에세이·책 쓰기"
+   ],
    "keywords_regex": [
     "퍼스널 브랜딩",
     "직장 생활"
    ],
    "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "글쓰기",
+   "suggest_keywords": [
+    "에세이·책 쓰기"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "전자책을 기획하고 써서 팔기까지, 나만의 부수입 길을 단계별로 익혀요",
-   "evidence": "전자책 제작·판매 실전서라 커리어 주제 중심은 아님",
+   "one_liner": "전자책을 기획하고 쓰고 펀딩과 마케팅까지 해 보는 방법을 얻어요",
+   "evidence": "전자책 기획·집필·판매 실전 방법이 중심이라 글쓰기",
    "confidence": 0.72,
    "fits": false,
    "second": {
@@ -623,15 +718,26 @@
      "퍼스널 브랜딩"
     ],
     "way": "실습",
-    "why": "전자책 제작·판매 실전서로 취업·커리어 전반과는 거리 "
+    "why": "전자책 기획·집필 방법이 중심이라 글쓰기가 맞음",
+    "suggest": "글쓰기",
+    "suggest_keywords": [
+     "에세이·책 쓰기"
+    ]
    },
-   "flags": [
-    "fits",
-    "keywords"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/139729263"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/139729263",
+   "moved_from": "취업·커리어",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "취업·커리어"
+    }
+   ]
   },
   {
    "isbn": "9788953119901",
@@ -646,23 +752,40 @@
     "직장 생활"
    ],
    "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "인문",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "일의 의미와 소명을 신앙의 눈으로 되짚어 보게 해 줘요",
-   "evidence": "기독교 신앙 관점의 소명론이라 커리어 실무와 거리 있음",
+   "one_liner": "일의 의미와 소명을 신앙의 눈으로 되짚어 보고 싶을 때 곁에 둘 만한 책이에요.",
+   "evidence": "직장 실무가 아닌 신앙적 일의 의미·소명 중심",
    "confidence": 0.8,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "개념",
-    "why": "기독교 신앙 관점의 일·소명론이라 커리어 실무와 거리 "
+    "why": "성경적 소명·신앙 관점의 일 이해라 직장 실용서 아님.",
+    "suggest": "인문",
+    "suggest_keywords": []
    },
    "flags": [
     "fits"
    ],
    "issues": [],
    "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/11301835"
+   "link": "https://www.yes24.com/product/goods/11301835",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "인문"
+   },
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "취업·커리어"
+    }
+   ]
   },
   {
    "isbn": "9791192522081",
@@ -1046,30 +1169,50 @@
    "entry": "target",
    "topic": "글쓰기",
    "field": "일·커리어",
-   "keywords": [],
+   "keywords": [
+    "일기·편지"
+   ],
    "keywords_regex": [
     "에세이·책 쓰기",
     "문해력·어휘",
     "일기·편지"
    ],
    "way": "사례",
+   "keyword_candidate": null,
+   "suggest": "에세이",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "간호대학 시절부터 진료소장이 되기까지 오간 편지와 일기를 따라가 봐요",
-   "evidence": "글쓰기 방법서가 아닌 편지·일기 모음 산문집",
-   "confidence": 0.9,
+   "one_liner": "가족·스승과 나눈 편지와 일기로 보건진료소장의 삶을 만나요.",
+   "evidence": "글쓰기 방법이 아닌 저자 삶의 기록 산문집",
+   "confidence": 0.88,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "사례",
-    "why": "글쓰기 방법서가 아니라 편지·일기를 엮은 삶의 기록 산"
+    "why": "글쓰기 방법이 아닌 저자 삶의 편지·일기 산문집",
+    "suggest": "에세이",
+    "suggest_keywords": []
    },
    "flags": [
-    "fits"
+    "fits",
+    "keywords"
    ],
    "issues": [],
    "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/167387494"
+   "link": "https://www.yes24.com/product/goods/167387494",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "에세이"
+   },
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "글쓰기"
+    }
+   ]
   },
   {
    "isbn": "9791163036784",
@@ -1219,30 +1362,55 @@
    "author": "권상호 저",
    "pages": 264,
    "entry": "target",
-   "topic": "데이터 분석",
+   "topic": "통계",
    "field": "데이터·통계",
-   "keywords": [],
-   "keywords_regex": [],
+   "keywords": [
+    "확률",
+    "가설검정",
+    "기초 통계"
+   ],
+   "keywords_regex": [
+    "파이썬"
+   ],
    "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "통계",
+   "suggest_keywords": [
+    "확률",
+    "가설검정",
+    "기초 통계"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "수식보다 개념을 먼저 짚어 확률과 통계의 이유를 이해해요",
-   "evidence": "확률·통계 입문서라 SQL 중심의 데이터 분석과 거리가 있음",
-   "confidence": 0.8,
+   "one_liner": "수식보다 개념을 먼저 짚으며 확률과 통계의 기초를 손계산으로 익혀요",
+   "evidence": "확률·분포·검정 개념 설명이 중심이라 통계 주제",
+   "confidence": 0.9,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "개념",
-    "why": "확률·통계 입문서라 데이터 분석 칸의 SQL과는 맞지 "
+    "why": "확률·통계 개념 입문서라 통계 주제에 맞음",
+    "suggest": "통계",
+    "suggest_keywords": [
+     "확률",
+     "가설검정",
+     "기초 통계"
+    ]
    },
-   "flags": [
-    "fits"
-   ],
-   "issues": [
-    "근거 김(33자)"
-   ],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/178436575"
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/178436575",
+   "moved_from": "데이터 분석",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "데이터 분석"
+    }
+   ]
   },
   {
    "isbn": "9791191905038",
@@ -1337,28 +1505,41 @@
    "author": "고석범 저",
    "pages": 544,
    "entry": "target",
-   "topic": "통계",
-   "field": "데이터·통계",
+   "topic": "업무 자동화",
+   "field": "AI·IT 활용",
    "keywords": [],
    "keywords_regex": [],
    "way": "실습",
+   "keyword_candidate": "R 마크다운",
+   "suggest": "업무 자동화",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "R 마크다운으로 코드와 글을 섞어 다양한 형식의 문서를 만드는 방법을 익혀요",
-   "evidence": "통계가 아닌 R 문서 제작 도구 사용법 중심",
-   "confidence": 0.93,
+   "one_liner": "R 코드와 글을 섞어 워드·PDF·웹 문서와 대시보드를 만드는 방법을 익혀요.",
+   "evidence": "통계 개념이 아닌 R 문서·웹 결과물 제작법",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "R 문서 제작 도구서, 통계 개념 아님"
+    "why": "통계 개념이 아닌 R로 문서·웹을 만드는 방법서",
+    "suggest": "업무 자동화",
+    "suggest_keywords": []
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/35299288"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/35299288",
+   "moved_from": "통계",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "통계"
+    }
+   ]
   },
   {
    "isbn": "9791161757742",

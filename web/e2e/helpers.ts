@@ -1,7 +1,7 @@
 import { expect, test as base, type Page } from "@playwright/test";
 import { COMMON_KEYS, EVENT_SPEC, isEventName, type PropSpec } from "../src/lib/track/schema";
 import built from "../src/data/question-map.json";
-import { SQL_PATH } from "../src/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "../src/lib/paths/__fixtures__/paths";
 import type { Answer, QuestionMap } from "../src/lib/paths/types";
 
 const MAP = built as QuestionMap;
@@ -39,19 +39,19 @@ export async function answerPath(page: Page, answers: readonly Answer[]) {
 }
 
 /** From S-01 already on screen: [갈피 잡으러 가기] → the path → S-03 (the closed book). */
-export async function answerToClosedBook(page: Page, answers: readonly Answer[] = SQL_PATH) {
+export async function answerToClosedBook(page: Page, answers: readonly Answer[] = DATA_PATH) {
   await page.getByRole("button", { name: START }).click();
   await answerPath(page, answers);
   await expect(page.getByText("눌러서 펼치기")).toBeVisible();
 }
 
-export async function toClosedBook(page: Page, answers: readonly Answer[] = SQL_PATH) {
+export async function toClosedBook(page: Page, answers: readonly Answer[] = DATA_PATH) {
   await page.goto("/");
   await answerToClosedBook(page, answers);
 }
 
 /** … → open the book (S-04) → [다음 장] (S-05, the first bookmark). */
-export async function toBookmarks(page: Page, answers: readonly Answer[] = SQL_PATH) {
+export async function toBookmarks(page: Page, answers: readonly Answer[] = DATA_PATH) {
   await toClosedBook(page, answers);
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await page.getByRole("button", { name: "다음 장" }).click();

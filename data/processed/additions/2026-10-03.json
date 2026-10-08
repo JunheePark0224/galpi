@@ -12,31 +12,53 @@
    "author": "전미진,이화진,신면철 공저",
    "pages": 752,
    "entry": "target",
-   "topic": "데이터 분석",
-   "field": "데이터·통계",
-   "keywords": [],
+   "topic": "업무 자동화",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "AI 업무 활용"
+   ],
    "keywords_regex": [
     "엑셀"
    ],
    "way": "실습",
-   "keyword_candidate": "오피스",
+   "keyword_candidate": "오피스 활용",
+   "suggest": "업무 자동화",
+   "suggest_keywords": [
+    "AI 업무 활용"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "엑셀부터 한글까지 오피스 프로그램 기능을 예제로 따라 익혀요",
-   "evidence": "오피스 4종 기초 사용법 중심, 분석 아님",
-   "confidence": 0.8,
+   "one_liner": "엑셀·파워포인트·워드·한글 기능을 실무 예제로 따라 하며 익혀요",
+   "evidence": "데이터 분석이 아닌 오피스 프로그램 실무 활용서",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
-    "keywords": [],
+    "keywords": [
+     "엑셀"
+    ],
     "way": "실습",
-    "why": "오피스 4종 기초 사용법서, 데이터 분석 아님"
+    "why": "엑셀 분석이 아닌 오피스 기능 전반 실무서입니다.</b",
+    "suggest": "업무 자동화",
+    "suggest_keywords": [
+     "코파일럿·M365",
+     "AI 업무 활용"
+    ]
    },
    "flags": [
-    "fits"
+    "keywords"
    ],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/151066074"
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/151066074",
+   "moved_from": "데이터 분석",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "데이터 분석"
+    }
+   ]
   },
   {
    "isbn": "9791163034735",
@@ -46,29 +68,45 @@
    "entry": "target",
    "topic": "데이터 분석",
    "field": "데이터·통계",
-   "keywords": [],
+   "keywords": [
+    "파이썬"
+   ],
    "keywords_regex": [
     "파이썬"
    ],
    "way": "실습",
-   "keyword_candidate": "파이썬 입문",
+   "keyword_candidate": "파이썬 문법",
+   "suggest": "",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "변수와 자료형부터 차근차근 따라 하며 코딩의 기초 문법을 익혀요",
-   "evidence": "문법 입문서라 데이터 분석 중심이 아님",
-   "confidence": 0.85,
+   "one_liner": "파이썬 문법과 자료형을 따라 하며 프로그래밍 기초를 익혀요",
+   "evidence": "데이터 분석이 아닌 파이썬 문법 입문서",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
-    "keywords": [],
+    "keywords": [
+     "파이썬"
+    ],
     "way": "실습",
-    "why": "파이썬 문법 입문서라 데이터 분석이 중심이 아님"
+    "why": "파이썬 문법 입문서라 데이터 분석이 아님",
+    "suggest": "",
+    "suggest_keywords": []
    },
    "flags": [
     "fits"
    ],
    "issues": [],
    "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/119293186"
+   "link": "https://www.yes24.com/product/goods/119293186",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "데이터 분석"
+    }
+   ]
   },
   {
    "isbn": "9791158396596",
@@ -269,36 +307,49 @@
    "author": "엘리자베스 루카스,라인하르트 부르첼 저/황미하 역",
    "pages": 204,
    "entry": "target",
-   "topic": "대화·관계",
+   "topic": "마음 돌보기",
    "field": "마음·관계",
-   "keywords": [],
+   "keywords": [
+    "불안·걱정"
+   ],
    "keywords_regex": [
     "거리 두기"
    ],
    "way": "개념",
    "keyword_candidate": null,
+   "suggest": "마음 돌보기",
+   "suggest_keywords": [
+    "불안·걱정"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "불안과 두려움, 걱정이 왜 생기는지 로고테라피로 이해하고 마음을 돌보는 길을 알려줘요.",
-   "evidence": "불안·걱정 등 내 마음 돌봄이 중심, 관계 주제 아님",
+   "one_liner": "불안과 두려움, 걱정을 로고테라피로 어떻게 다룰지 문답으로 알려 줘요.",
+   "evidence": "관계보다 내 불안을 돌보는 법이 중심",
    "confidence": 0.9,
    "fits": false,
    "second": {
     "fits": false,
-    "keywords": [
-     "거리 두기"
-    ],
+    "keywords": [],
     "way": "개념",
-    "why": "불안·걱정을 다루는 마음 돌보기 책이라 대화·관계가 아"
+    "why": "불안을 이해하고 다루는 내 마음 중심 책",
+    "suggest": "마음 돌보기",
+    "suggest_keywords": [
+     "불안·걱정"
+    ]
    },
-   "flags": [
-    "fits",
-    "keywords"
-   ],
-   "issues": [
-    "김(38자)"
-   ],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/93384031"
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/93384031",
+   "moved_from": "대화·관계",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "대화·관계"
+    }
+   ]
   },
   {
    "isbn": "9788931585933",
@@ -681,29 +732,47 @@
    "author": "한정희 저",
    "pages": 492,
    "entry": "target",
-   "topic": "업무 자동화",
-   "field": "AI·IT 활용",
-   "keywords": [],
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [
+    "엑셀"
+   ],
    "keywords_regex": [],
    "way": "실습",
    "keyword_candidate": null,
+   "suggest": "데이터 분석",
+   "suggest_keywords": [
+    "엑셀"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "셀 입력부터 견적서 양식까지 따라 하며 실무 엑셀 기본기를 익혀요",
-   "evidence": "엑셀 기초 사용법 중심이라 자동화 주제와 거리",
-   "confidence": 0.8,
+   "one_liner": "셀 입력부터 서식, 시트 관리까지 단계별로 따라 하며 실무 엑셀 기본기를 익혀요.",
+   "evidence": "엑셀 기초 사용법 입문서라 자동화보다 데이터 분석 칸",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "엑셀 기초 사용법 입문서라 자동화가 중심 아님"
+    "why": "엑셀 입문·실무 기능 중심, 자동화 아님",
+    "suggest": "데이터 분석",
+    "suggest_keywords": [
+     "엑셀"
+    ]
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/194919963"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/194919963",
+   "moved_from": "업무 자동화",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "업무 자동화"
+    }
+   ]
   },
   {
    "isbn": "9791165219673",
@@ -711,29 +780,47 @@
    "author": "진은영 저",
    "pages": 476,
    "entry": "target",
-   "topic": "업무 자동화",
-   "field": "AI·IT 활용",
-   "keywords": [],
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [
+    "엑셀"
+   ],
    "keywords_regex": [],
    "way": "실습",
-   "keyword_candidate": "스프레드시트",
+   "keyword_candidate": "구글 스프레드시트",
+   "suggest": "데이터 분석",
+   "suggest_keywords": [
+    "엑셀"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "구글 스프레드시트로 공유·협업하며 데이터를 입력하고 가공하는 법을 익혀요",
-   "evidence": "스프레드시트 사용법 중심, 자동화 아님",
-   "confidence": 0.7,
+   "one_liner": "구글 스프레드시트로 공유·협업하며 데이터를 입력하고 정리하는 법을 익혀요",
+   "evidence": "스프레드시트 기본 사용·협업 중심, 자동화 아님",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "스프레드시트 사용법 중심, 자동화·매크로 아님"
+    "why": "스프레드시트 사용법·협업이 중심, 자동화 아님",
+    "suggest": "데이터 분석",
+    "suggest_keywords": [
+     "엑셀"
+    ]
    },
-   "flags": [
-    "fits"
-   ],
+   "flags": [],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/109346804"
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/109346804",
+   "moved_from": "업무 자동화",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "업무 자동화"
+    }
+   ]
   },
   {
    "isbn": "9791194383635",
@@ -741,34 +828,50 @@
    "author": "박현규 저",
    "pages": 296,
    "entry": "target",
-   "topic": "업무 자동화",
+   "topic": "AI 활용",
    "field": "AI·IT 활용",
-   "keywords": [],
+   "keywords": [
+    "바이브 코딩"
+   ],
    "keywords_regex": [
     "파이썬 자동화",
     "코파일럿·M365"
    ],
    "way": "실습",
-   "keyword_candidate": "바이브 코딩",
+   "keyword_candidate": null,
+   "suggest": "AI 활용",
+   "suggest_keywords": [
+    "바이브 코딩"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "코딩을 몰라도 AI와 대화하며 웹사이트와 앱을 직접 만들어 봐요",
-   "evidence": "AI로 웹앱을 만드는 바이브 코딩 중심, 업무 자동화 아님",
-   "confidence": 0.8,
+   "one_liner": "코딩을 몰라도 AI와 대화하며 웹사이트와 앱 31개를 직접 만들어 봐요.",
+   "evidence": "반복 업무 절감이 아니라 AI로 앱을 만드는 책",
+   "confidence": 0.88,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "업무 자동화보다 바이브 코딩으로 앱 만드는 책"
+    "why": "반복 업무 자동화가 아닌 AI로 앱을 만드는 책",
+    "suggest": "AI 활용",
+    "suggest_keywords": [
+     "바이브 코딩"
+    ]
    },
-   "flags": [
-    "fits"
-   ],
-   "issues": [
-    "근거 김(32자)"
-   ],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/167428992"
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/167428992",
+   "moved_from": "업무 자동화",
+   "auto": "ai-agree",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "업무 자동화"
+    }
+   ]
   },
   {
    "isbn": "9791140720118",
@@ -866,31 +969,48 @@
    "author": "최장순 저",
    "pages": 296,
    "entry": "target",
-   "topic": "습관·집중",
-   "field": "습관·자기계발",
+   "topic": "취업·커리어",
+   "field": "일·커리어",
    "keywords": [],
    "keywords_regex": [
     "습관"
    ],
    "way": "실습",
    "keyword_candidate": "기획력",
+   "suggest": "취업·커리어",
+   "suggest_keywords": [
+    "직장 생활"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "관찰, 독서, 글쓰기 같은 일상 습관에서 기획 아이디어를 얻는 방법을 알려 줘요",
-   "evidence": "기획력 키우는 일상 습관이라 습관·집중 주제와 다름",
-   "confidence": 0.8,
+   "one_liner": "관찰·독서·대화·글쓰기 같은 일상 영역에서 기획 아이디어를 얻는 법을 알려 줘요",
+   "evidence": "좋은 기획을 위한 일 습관 중심, 습관 교정서 아님",
+   "confidence": 0.5,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "실습",
-    "why": "습관·집중 아닌 기획력·아이디어 발상 중심의 책이다.("
+    "why": "좋은 습관 만들기가 아닌 기획 직무 역량 책",
+    "suggest": "취업·커리어",
+    "suggest_keywords": [
+     "커리어 설계"
+    ]
    },
    "flags": [
-    "fits"
+    "keywords"
    ],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/118178549"
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/118178549",
+   "moved_from": "습관·집중",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "습관·집중"
+    }
+   ]
   },
   {
    "isbn": "9791130677491",
@@ -1065,31 +1185,54 @@
    "author": "간다 마사노리 저/이선희 역 ",
    "pages": 364,
    "entry": "target",
-   "topic": "습관·집중",
-   "field": "습관·자기계발",
+   "topic": "마케팅·브랜딩",
+   "field": "일·커리어",
    "keywords": [],
-   "keywords_regex": [
-    "습관"
+   "keywords_regex": [],
+   "way": "실습",
+   "keyword_candidate": "창의적 사고",
+   "suggest": "시간·생산성",
+   "suggest_keywords": [
+    "일하는 법"
    ],
-   "way": "개념",
-   "keyword_candidate": "비즈니스 사고법",
    "one_liner_style": "summary",
-   "one_liner": "논리와 스토리를 엮어 기획과 전략을 짜는 사고 모델을 익혀요",
-   "evidence": "비즈니스 사고법·전략서라 습관·집중 주제와 거리 있음",
-   "confidence": 0.85,
+   "one_liner": "문제 해결과 기획 아이디어를 끌어내는 사고 모델과 단계를 익혀요.",
+   "evidence": "습관 아닌 업무 발상·기획 사고법이 중심",
+   "confidence": 0.6,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
-    "way": "개념",
-    "why": "비즈니스 사고법·전략 책이라 습관·집중과 거리 멀다"
+    "way": "실습",
+    "why": "습관 책이 아니라 비즈니스 사고·기획·마케팅 중심",
+    "suggest": "마케팅·브랜딩",
+    "suggest_keywords": []
    },
    "flags": [
-    "fits"
+    "keywords"
    ],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/118499476"
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/118499476",
+   "third": {
+    "fits": false,
+    "suggest": "마케팅·브랜딩",
+    "suggest_keywords": [],
+    "keywords": [],
+    "way": "실습"
+   },
+   "moved_from": "습관·집중",
+   "settled": {
+    "slot": "마케팅·브랜딩"
+   },
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "습관·집중"
+    }
+   ]
   },
   {
    "isbn": "9791194368175",
@@ -1097,29 +1240,49 @@
    "author": "이선 몰릭 저/신동숙 역",
    "pages": 308,
    "entry": "target",
-   "topic": "시간·생산성",
-   "field": "습관·자기계발",
-   "keywords": [],
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "챗GPT"
+   ],
    "keywords_regex": [],
    "way": "개념",
    "keyword_candidate": null,
+   "suggest": "AI 활용",
+   "suggest_keywords": [
+    "챗GPT",
+    "LLM 원리"
+   ],
    "one_liner_style": "summary",
-   "one_liner": "AI를 동료로 두고 일하는 원칙과 달라질 미래를 살펴봐요",
-   "evidence": "AI 활용·미래 전망이 중심, 시간관리 주제 아님",
-   "confidence": 0.9,
+   "one_liner": "생성형 AI의 특징과 한계를 알고 동료처럼 쓰는 원칙을 익혀요.",
+   "evidence": "일 효율이 아니라 생성형 AI 활용 원칙 중심",
+   "confidence": 0.8,
    "fits": false,
    "second": {
     "fits": false,
     "keywords": [],
     "way": "개념",
-    "why": "AI 활용·미래를 다룬 책이라 시간·생산성 주제와 다름"
+    "why": "일 효율이 아니라 AI 활용·특징 설명 중심",
+    "suggest": "AI 활용",
+    "suggest_keywords": [
+     "챗GPT"
+    ]
    },
    "flags": [
-    "fits"
+    "keywords"
    ],
    "issues": [],
-   "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/142876017"
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/142876017",
+   "moved_from": "시간·생산성",
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "시간·생산성"
+    }
+   ]
   },
   {
    "isbn": "9791194347255",
@@ -1268,23 +1431,42 @@
    ],
    "way": "개념",
    "keyword_candidate": null,
+   "suggest": "사회·시사",
+   "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "성별 임금 격차가 왜 생기는지 역사 속 여성의 일과 가정 선택으로 짚어 줘요",
-   "evidence": "경제학자의 성별 소득 격차 분석서로 진로 지침이 아님",
-   "confidence": 0.8,
+   "one_liner": "성별 소득 격차가 왜 생기고 어떻게 풀 수 있는지 역사로 짚어 줘요",
+   "evidence": "취업 방법서 아닌 성별 임금격차 분석서",
+   "confidence": 0.85,
    "fits": false,
    "second": {
     "fits": false,
-    "keywords": [],
+    "keywords": [
+     "커리어 설계"
+    ],
     "way": "개념",
-    "why": "성별 임금 격차를 분석한 경제사 책, 진로 안내서 아님"
+    "why": "성별 임금 격차를 분석하는 사회 문제서라 진로 방법서 ",
+    "suggest": "사회·시사",
+    "suggest_keywords": []
    },
    "flags": [
-    "fits"
+    "fits",
+    "keywords"
    ],
    "issues": [],
    "status": "dropped",
-   "link": "https://www.yes24.com/product/goods/104107239"
+   "link": "https://www.yes24.com/product/goods/104107239",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "사회·시사"
+   },
+   "rules_version": "v3.3",
+   "history": [
+    {
+     "change": "redo-drops-2026-10-08",
+     "status": "dropped",
+     "topic": "취업·커리어"
+    }
+   ]
   },
   {
    "isbn": "9788974425678",

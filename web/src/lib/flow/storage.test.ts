@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "@/lib/paths/__fixtures__/paths";
 import { INITIAL, type FlowState } from "./state";
 import { commonProps, setEntry, setMode } from "@/lib/track/common";
 import { FLOW_KEY, loadFlow, restoreFlow, saveFlow, shouldResume } from "./storage";
@@ -11,13 +11,13 @@ describe("flow storage", () => {
   });
 
   it("round-trips the state in this tab", () => {
-    const s: FlowState = { ...INITIAL, step: "questions", answers: SQL_PATH.slice(0, 3), asked: 3 };
+    const s: FlowState = { ...INITIAL, step: "questions", answers: DATA_PATH.slice(0, 3), asked: 3 };
     saveFlow(s);
     expect(loadFlow()).toEqual(s);
   });
 
   it("turns a request cut off by a reload into a retry", () => {
-    saveFlow({ ...INITIAL, step: "book", answers: SQL_PATH, status: "loading", drawId: 1 });
+    saveFlow({ ...INITIAL, step: "book", answers: DATA_PATH, status: "loading", drawId: 1 });
     expect(loadFlow()).toMatchObject({ step: "book", status: "error" });
   });
 
@@ -35,12 +35,12 @@ describe("flow storage", () => {
   });
 
   it("starts over on a tampered drawnFor (not a path of today's map)", () => {
-    sessionStorage.setItem(FLOW_KEY, JSON.stringify({ v: 6, state: { ...INITIAL, step: "book", answers: SQL_PATH, drawnFor: [{ node: "branch", choice: "A" }] } }));
+    sessionStorage.setItem(FLOW_KEY, JSON.stringify({ v: 6, state: { ...INITIAL, step: "book", answers: DATA_PATH, drawnFor: [{ node: "branch", choice: "A" }] } }));
     expect(loadFlow()).toEqual(INITIAL);
   });
 
   it("keeps a valid drawnFor", () => {
-    const s: FlowState = { ...INITIAL, step: "book", answers: SQL_PATH, drawnFor: SQL_PATH, status: "ready" };
+    const s: FlowState = { ...INITIAL, step: "book", answers: DATA_PATH, drawnFor: DATA_PATH, status: "ready" };
     saveFlow(s);
     expect(loadFlow()).toEqual(s);
   });
@@ -76,7 +76,7 @@ describe("shouldResume after a login (P5 decision 5: back to the same book, not 
 });
 
 describe("restoreFlow on a fresh open", () => {
-  const midRound: FlowState = { ...INITIAL, step: "bookmarks", answers: SQL_PATH.slice(0, 2), index: 2, reactions: ["curious", "pass"], seen: ["b1", "b2"] };
+  const midRound: FlowState = { ...INITIAL, step: "bookmarks", answers: DATA_PATH.slice(0, 2), index: 2, reactions: ["curious", "pass"], seen: ["b1", "b2"] };
 
   afterEach(() => sessionStorage.clear());
 
@@ -153,7 +153,7 @@ describe("restoreFlow on a fresh open", () => {
 });
 
 describe("loadFlow reads the navigation type of this document load", () => {
-  const mid: FlowState = { ...INITIAL, step: "end", answers: SQL_PATH, seen: ["x"] };
+  const mid: FlowState = { ...INITIAL, step: "end", answers: DATA_PATH, seen: ["x"] };
 
   function stubNavigation(type: string | undefined, wasDiscarded = false) {
     vi.spyOn(performance, "getEntriesByType").mockReturnValue(type === undefined ? [] : ([{ type }] as unknown as PerformanceEntryList));

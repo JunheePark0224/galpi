@@ -419,7 +419,11 @@ def test_a_pass_that_says_the_book_does_not_fit_names_the_slot_it_belongs_to():
         assert got["suggest"] == "호러·괴담"
         assert parse(make("leaf", fits=False, suggest="아무 장르"), "leaf", kind, [])["suggest"] == ""
         assert parse(make("leaf", fits=True, suggest="호러·괴담"), "leaf", kind, [])["suggest"] == ""
-        assert parse(make("leaf", fits=False, suggest="경제 상식"), "leaf", kind, [])["suggest"] == ""  # a topic is no genre
+        # 10-08 (route plan, 『과몰입 사회』): the slot may be in the other 갈래 — a 🍃 book may name a 🎯 topic and back
+        assert parse(make("leaf", fits=False, suggest="경제 상식"), "leaf", kind, [])["suggest"] == "경제 상식"
+        got = parse(make("target", fits=False, suggest="호러·괴담", suggest_keywords=["금리·환율"]), "target", kind, ["주식"],
+                    "돈 관리·투자", lists=TOPIC_LISTS)
+        assert got["suggest"] == "호러·괴담" and got["suggest_keywords"] == []  # keywords only go with a topic
         got = parse(make("target", fits=False, suggest="경제 상식", suggest_keywords=["금리·환율", "주식", "금리·환율"]),
                     "target", kind, ["주식"], "돈 관리·투자", lists=TOPIC_LISTS)
         assert got["suggest"] == "경제 상식" and got["suggest_keywords"] == ["금리·환율"]
@@ -435,12 +439,15 @@ def test_schemas_ask_for_the_suggested_slot_from_our_closed_lists():
     from apply_review import FIELD_OF_TOPIC
     for kind in ("tag", "check"):
         leaf, target = schema("leaf", kind, []), schema("target", kind, ["주식", "금리·환율"])
-        assert leaf["properties"]["suggest"]["enum"] == ["", *GENRES] and "suggest" in leaf["required"]
-        assert target["properties"]["suggest"]["enum"] == ["", *FIELD_OF_TOPIC]
+        both = ["", *GENRES, *FIELD_OF_TOPIC]  # 10-08: either 갈래's slots (a crossing book is tagged again there)
+        assert leaf["properties"]["suggest"]["enum"] == both and "suggest" in leaf["required"]
+        assert target["properties"]["suggest"]["enum"] == both
+        assert "suggest_keywords" not in leaf["properties"]  # a 🍃 book crossing to 🎯 gets its keywords when tagged there
         assert target["properties"]["suggest_keywords"]["items"]["enum"] == ["주식", "금리·환율"]
         assert {"suggest", "suggest_keywords"} <= set(target["required"])
     p = system_prompt(VOC, "check")
     assert "suggest" in p and "suggest_keywords" in p and "null" in p
+    assert "다른 갈래" in p and "같은 갈래 안에 맞는 칸이 없으면" not in p  # 10-08: the slot may be across 🍃/🎯
     # calibration 2 (10-06): passes gave up on books (fits false with no tags, all four axes null) — told not to
     assert "정보가 적다는 이유로 false로 하지 않는다" in p and "null은 드문 예외다" in p
 
@@ -463,6 +470,6 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_3():
+def test_the_dictionary_is_v3_4():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.3"   # 10-08: the rules confirmed during the re-routed books' check
+    assert rules_version() == "v3.4"   # 10-08: science used to explain the course of history → 역사 (총 균 쇠)

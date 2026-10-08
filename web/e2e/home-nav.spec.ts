@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { SQL_PATH } from "../src/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "../src/lib/paths/__fixtures__/paths";
 import { answerPath, named, recordEvents, START, test } from "./helpers";
 
 test.use({ reducedMotion: "reduce" });
@@ -31,7 +31,7 @@ test("a reload resumes mid-flow, but opening the address again starts at S-01 in
 test("the visit of a fresh open mid-flow is the new game's (round + 1, no branch or route); a reload keeps both", async ({ page }) => {
   const { events } = await recordEvents(page);
   await startPath(page);
-  await answerPath(page, SQL_PATH.slice(0, 2));
+  await answerPath(page, DATA_PATH.slice(0, 2));
   await expect.poll(() => named(events, "site_visited").length).toBe(1);
   await page.reload();
   await expect.poll(() => named(events, "site_visited").length).toBe(2);

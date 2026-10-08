@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { SQL_PATH } from "../src/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "../src/lib/paths/__fixtures__/paths";
 import { answerPath, START, test } from "./helpers";
 
 // Design pass: from S-03 on, the book fills the column and the whole scene fits the screen without page scroll.
@@ -33,7 +33,7 @@ const box = async (page: Page, selector: string) => {
   return b;
 };
 
-/** The SQL path → S-03, checking each book step on the way to the first bookmark.
+/** The data path → S-03, checking each book step on the way to the first bookmark.
  *  `fit`: no page scroll at all. `scrollOk`: on a very short window the page may scroll vertically (the book has a floor),
  *  but never sideways. `buttons`: a short phone viewport — the footer may fall below the fold, the action buttons may not. */
 async function walkTheBook(page: Page, mode: "fit" | "scrollOk" | "buttons" = "fit") {
@@ -42,7 +42,7 @@ async function walkTheBook(page: Page, mode: "fit" | "scrollOk" | "buttons" = "f
   const fits = async () => (buttons ? noSizeJump(page) : scrollOk ? noSideScroll(page) : noPageScroll(page));
   await page.goto("/");
   await page.getByRole("button", { name: START }).click();
-  await answerPath(page, SQL_PATH);
+  await answerPath(page, DATA_PATH);
 
   const cover = page.getByRole("button", { name: "책 펼치기" });                  // S-03: the closed book
   await expect(page.getByText("눌러서 펼치기")).toBeVisible();

@@ -1,13 +1,13 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { FlowState } from "@/lib/flow/state";
-import { SQL_PATH } from "@/lib/paths/__fixtures__/paths";
+import { DATA_PATH } from "@/lib/paths/__fixtures__/paths";
 
 /**
  * The first visit event of a document must already carry the round and entry that document starts in. The real page is server
  * HTML (S-01) hydrated on the client: TrackVisit's effect runs in the hydration commit, before FlowRoot switches to Flow.
  */
 describe("site_visited on a fresh open vs a reload (hydrated TrackVisit + FlowRoot)", () => {
-  const midRound = { step: "bookmarks", answers: SQL_PATH, asked: SQL_PATH.length, seen: ["b1"] } as unknown as FlowState;
+  const midRound = { step: "bookmarks", answers: DATA_PATH, asked: DATA_PATH.length, seen: ["b1"] } as unknown as FlowState;
   let unmount: (() => void) | null = null;
 
   afterEach(() => {

@@ -16,6 +16,7 @@ from collections import defaultdict
 
 from .agreement import line_problems
 from .prompt import AXES, MAX_KEYWORDS
+from .checks import other_entry
 from .tiebreak import SETTLES, pass_slot, settle, value
 
 SAMPLE_RATE = 0.05
@@ -25,14 +26,17 @@ TIEBREAK_SAMPLE = 3  # books whose slot the third pass settled, always in the sa
 
 def slot_decision(book: dict, a: dict, b: dict, settled: dict) -> tuple[str | None, str | None]:
     """(new slot or None when it stays, how): "agreed" — both passes say "not here" and name the same slot; "majority" —
-    one pass kept the book and the third pass settled it (stay or move); "ask" — a person decides; None — both kept it."""
+    one pass kept the book and the third pass settled it (stay or move); "ask" — a person decides; None — both kept it.
+    A slot of the other 갈래 (passes may name one since 10-08) is never applied here: a person sends the book there
+    ("다른 갈래로")."""
     slot = book["slot"]
     pa, pb = pass_slot(a, slot), pass_slot(b, slot)
     if pa == pb == slot:
         return None, None
+    elsewhere = other_entry(book["entry"])[1]
     if pa == pb and pa:
-        return pa, "agreed"
-    if slot in (pa, pb) and settled.get("slot"):
+        return (None, "ask") if pa in elsewhere else (pa, "agreed")
+    if slot in (pa, pb) and settled.get("slot") and settled["slot"] not in elsewhere:
         return (None if settled["slot"] == slot else settled["slot"]), "majority"
     return None, "ask"
 

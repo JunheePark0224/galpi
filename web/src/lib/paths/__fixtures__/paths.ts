@@ -3,13 +3,14 @@ import type { Answer } from "../types";
 const path = (...steps: [string, Answer["choice"]][]): Answer[] => steps.map(([node, choice]) => ({ node, choice }));
 
 /**
- * docs/question-map.md, design 3-3 예시 길 (SQL): 9 questions, ends in the SQL keyword. The way question is passed over
- * (mood-skips.json, design 5-2): since the v3.1 library (10-07) only 4 books carry SQL, fewer than a draw's 5, so every one
- * of them is drawn whatever the way answer — it would change no book.
+ * A data path (docs/question-map.md, design 3-3 예시 길 — the SQL example until 10-08): 10 questions, ends in the 엑셀 keyword
+ * with the length question. The way question is passed over (mood-skips.json, design 5-2): every 엑셀 book is 실습, so
+ * the way answer would change no book. 10-08: the SQL example stopped asking length too (5 SQL books = a whole draw), so the
+ * path moved to 엑셀 (12 books) — a keyword with more books than a draw keeps its length question as the library grows.
  */
-export const SQL_PATH = path(
+export const DATA_PATH = path(
   ["start", "A"], ["branch", "B"], ["learn-intro", "A"], ["learn-area", "A"], ["learn-work", "A"], ["learn-tools", "A"],
-  ["learn-data-field", "A"], ["learn-data-tool", "A"], ["learn-len", "A"],
+  ["learn-data-field", "A"], ["learn-data-tool", "B"], ["learn-data-sheet", "A"], ["learn-len", "A"],
 );
 /** 갈피를 못 잡겠어요 at the branch: both sides mixed, one mood question. */
 export const MIXED_PATH = path(["start", "A"], ["branch", "unsure"], ["mix-len", "A"]);
