@@ -38,6 +38,7 @@ import os
 import sys
 import time
 from collections import Counter
+from dataclasses import dataclass
 from datetime import datetime
 
 import collect_candidates
@@ -176,32 +177,24 @@ def _axes_backed(client, model: str, system: str, user: str, entry: str, raw: di
     return ans
 
 
-def run(batch: str, cfg: Config, env: dict, client, batches: bool = False, sleep=time.sleep) -> dict:
-    """One batch (`batch` = the day, or `<day>-N` for a later run that day). `batches`: send the calls through the Message
-    Batches API (batched.py — half the price, results within 24 hours; `sleep` waits between status checks)."""
-    date = parse_batch(batch)[0]
-    books, vocab, additions = load_state()
-    fails_before = len(collect_candidates.FAILURES)
-    queued = requeue.load(REQUEUE)
-    back, waiting = requeue.candidates(env, queued, vocab) if queued else ([], {})
-    wants = plan_day(books, topic_lists(vocab), max(cfg.daily_count - len(back), 0), phase=cfg.target_phase)
-    summary = {"date": date, "batch": batch, "model": cfg.model, "second_model": cfg.second_model,
-               "target_phase": cfg.target_phase, "wanted": sum(w.n for w in wants) + len(back),
-               "slots": [f"{c.slot} (다시 태그) 1" for c in back]
-               + [f"{w.slot}{'/' + w.keyword if w.keyword else ''} {w.n}" for w in wants],
-               **({"requeue_waiting": waiting} if waiting else {})}
-    if not wants and not back:
-        return summary | {"status": "full"}
-    cands = back + gather(env, wants, vocab, known_from(books, additions).plus(back))
-    new_fails = collect_candidates.FAILURES[fails_before:]
-    yes24_fail = [f.split(" -> ")[0] for f in new_fails if not f.endswith(EMPTY_RESULT)]  # paths only, never the answer
-    summary |= {"candidates": len(cands), "yes24_failures": len(yes24_fail), "yes24_failed_paths": sorted(set(yes24_fail)),
-                "yes24_empty": len(new_fails) - len(yes24_fail)}
-    if not cands:
-        return summary | {"status": "yes24_failed" if yes24_fail else "no_candidates"}
-    prompts, rules = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}, rules_version()
+@dataclass
+class Tagged:
+    recs: list[dict]
+    reasons: Counter
+    ledger: dict
+    stopped: str | None
+    retries: RetryLog
+    axis_retries: RetryLog
+    sent: list[str]
+
+
+def tag_all(client, cfg: Config, prompts: dict, vocab: dict, cands: list[Candidate], rules: str,
+            requeued: set[str] = frozenset(), batches: bool = False, sleep=time.sleep) -> Tagged:
+    """Every candidate through tag_one (routed: third pass, cross-entry requeue), in the run's order. `batches`: in rounds
+    through the Message Batches API (batched.py); `requeued`: ISBNs back from requeue.json (not sent on again). Stops on a
+    TaggerStop or when too many books fail (MIN_ATTEMPTS / MAX_FAILED_SHARE) — the finished books are kept."""
     recs, reasons, ledger, stopped, breaker, tried, retries = [], Counter(), {}, None, Breaker(), 0, RetryLog()
-    axis_retries, back_isbns, sent = RetryLog(), {c.isbn for c in back}, []
+    axis_retries, sent = RetryLog(), []
     tagger = batched.Recorder() if batches else client
     if batches:
         prefetch(tagger, cfg, prompts, vocab, cands)
@@ -215,7 +208,7 @@ def run(batch: str, cfg: Config, env: dict, client, batches: bool = False, sleep
                 tagger.begin(cand.isbn)
             try:
                 rec, why = tag_one(tagger, cfg, prompts, vocab, cand, breaker, own, own_retries, rules, own_axes,
-                                   routed=True, requeued=cand.isbn in back_isbns)
+                                   routed=True, requeued=cand.isbn in requeued)
             except batched.Waiting:
                 waiting.append(cand)
                 continue
@@ -249,6 +242,37 @@ def run(batch: str, cfg: Config, env: dict, client, batches: bool = False, sleep
         ledger = dict(tagger.spent)
     order = {c.isbn: i for i, c in enumerate(cands)}
     recs.sort(key=lambda r: order[r["isbn"]])  # a batched book finishes in its own round; the file keeps the run's order
+    return Tagged(recs, reasons, ledger, stopped, retries, axis_retries, sent)
+
+
+def run(batch: str, cfg: Config, env: dict, client, batches: bool = False, sleep=time.sleep) -> dict:
+    """One batch (`batch` = the day, or `<day>-N` for a later run that day). `batches`: send the calls through the Message
+    Batches API (batched.py — half the price, results within 24 hours; `sleep` waits between status checks)."""
+    date = parse_batch(batch)[0]
+    books, vocab, additions = load_state()
+    fails_before = len(collect_candidates.FAILURES)
+    queued = requeue.load(REQUEUE)
+    back, waiting = requeue.candidates(env, queued, vocab) if queued else ([], {})
+    wants = plan_day(books, topic_lists(vocab), max(cfg.daily_count - len(back), 0), phase=cfg.target_phase)
+    summary = {"date": date, "batch": batch, "model": cfg.model, "second_model": cfg.second_model,
+               "target_phase": cfg.target_phase, "wanted": sum(w.n for w in wants) + len(back),
+               "slots": [f"{c.slot} (다시 태그) 1" for c in back]
+               + [f"{w.slot}{'/' + w.keyword if w.keyword else ''} {w.n}" for w in wants],
+               **({"requeue_waiting": waiting} if waiting else {})}
+    if not wants and not back:
+        return summary | {"status": "full"}
+    cands = back + gather(env, wants, vocab, known_from(books, additions).plus(back))
+    new_fails = collect_candidates.FAILURES[fails_before:]
+    yes24_fail = [f.split(" -> ")[0] for f in new_fails if not f.endswith(EMPTY_RESULT)]  # paths only, never the answer
+    summary |= {"candidates": len(cands), "yes24_failures": len(yes24_fail), "yes24_failed_paths": sorted(set(yes24_fail)),
+                "yes24_empty": len(new_fails) - len(yes24_fail)}
+    if not cands:
+        return summary | {"status": "yes24_failed" if yes24_fail else "no_candidates"}
+    prompts, rules = {kind: system_prompt(vocab, kind) for kind in ("tag", "check")}, rules_version()
+    t = tag_all(client, cfg, prompts, vocab, cands, rules, {c.isbn for c in back}, batches, sleep)
+    recs, reasons, ledger, stopped, retries, axis_retries, sent = (t.recs, t.reasons, t.ledger, t.stopped, t.retries,
+                                                                  t.axis_retries, t.sent)
+    back_isbns = {c.isbn for c in back}
     status = Counter(r["status"] for r in recs)
     summary |= {"tagged": len(recs), "reasons": dict(reasons), "stopped": stopped, "rules_version": rules,
                 "picked": status["picked"], "review": status["review"], "reserve": status["reserve"],
