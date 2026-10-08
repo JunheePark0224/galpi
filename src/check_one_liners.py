@@ -34,7 +34,8 @@ STOP_TOKENS = {"있어요", "말해요", "때", "까요", "어떻게", "무엇�
 
 # 🍃 질문형 asks the reader — …까요? …나요? …ㄹ래요? …세요? (10-08, user: "…쉽게 알게 돼요?" reads oddly). A statement with
 # "?" stuck on its ending is not a question: 31 of 395 lines did that, because the rule only asked for a final "?".
-STATEMENT_Q = re.compile(r"(봐|줘|돼|해|혀|려|져|워)요\?$|에요\?$")
+# …어요?/…아요? too ("교훈을 짚어요?", 10-08), but not "있어요?/없어요?" ("해 본 적 있어요?" is a real question)
+STATEMENT_Q = re.compile(r"(?<!있)(?<!없)(봐|줘|돼|해|혀|려|져|워|어|아|여)요\?$|에요\?$")
 
 
 def form_issue(entry: str, line: str) -> str | None:

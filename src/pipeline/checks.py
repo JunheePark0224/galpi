@@ -87,11 +87,15 @@ def scrub(tag: dict, second: dict, issues: list[str]) -> tuple[dict, dict]:
 
 
 def disagreements(entry: str, a: dict, b: dict) -> list[str]:
+    """The fields the two passes answered differently. For a book both passes move to the same other slot (moved_to,
+    10-08) the slot is agreed, and a 🎯 book's keywords are the ones they gave for that new topic."""
     out = []
-    if not (a["fits"] and b["fits"]):
+    moved = moved_to(a, b)
+    if not (a["fits"] and b["fits"]) and not moved:
         out.append("fits")
     if entry == "target":
-        if set(a["keywords"]) != set(b["keywords"]):
+        kw = (lambda s: s.get("suggest_keywords") or []) if moved else (lambda s: s["keywords"])  # noqa: E731
+        if set(kw(a)) != set(kw(b)):
             out.append("keywords")
         if a["way"] != b["way"]:
             out.append("way")
@@ -111,10 +115,25 @@ def needs_person(flags: list[str], issues: list[str]) -> tuple[list[str], list[s
     return [f for f in flags if f != UNSURE], split_issues(issues)[0]
 
 
+def moved_to(a: dict, b: dict) -> str | None:
+    """The slot both passes place the book in when neither keeps it where it was found and both name the same one
+    (10-08, plans/2026-10-08-route-pipeline.md — the library re-tag's "agreed" move, library_review.slot_decision); else
+    None. A pass that says "not here" already fills every other answer for the book (prompt COMMON), so a 🍃 book's tags
+    hold in the new genre; a 🎯 book takes the keywords both passes gave for the new topic (merge.record)."""
+    if a["fits"] or b["fits"]:
+        return None
+    slot = a.get("suggest") or ""
+    return slot if slot and slot == (b.get("suggest") or "") else None
+
+
 def decide(a: dict, b: dict, flags: list[str], issues: list[str], auto_merge: bool) -> tuple[str, str | None]:
-    """(status, auto mark)."""
-    if not a["fits"] and not b["fits"]:
+    """(status, auto mark). A book both passes place in the same other slot is moved there (its "fits" flag was about the
+    slot it was found in); it is dropped only when both say it belongs nowhere among our slots (10-08). Passes that name
+    different slots, or one keeping it, leave it to a person."""
+    if not a["fits"] and not b["fits"] and not (a.get("suggest") or b.get("suggest")):
         return "dropped", None
+    if moved_to(a, b):
+        flags = [f for f in flags if f != "fits"]
     flags, issues = needs_person(flags, issues)
     if issues:
         return "reserve", None
@@ -126,5 +145,7 @@ def decide(a: dict, b: dict, flags: list[str], issues: list[str], auto_merge: bo
 def redecide(book: dict, auto_merge: bool) -> tuple[str, str | None]:
     """decide() for a stored additions record (pass A's fits on the book, pass B's under `second`) — to re-sort a batch
     tagged before a rule changed."""
-    return decide({"fits": book["fits"]}, {"fits": (book.get("second") or {}).get("fits", book["fits"])},
+    second = book.get("second") or {}
+    return decide({"fits": book["fits"], "suggest": book.get("suggest", "")},
+                  {"fits": second.get("fits", book["fits"]), "suggest": second.get("suggest", "")},
                   book.get("flags") or [], book.get("issues") or [], auto_merge)
