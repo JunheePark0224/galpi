@@ -1,0 +1,10 @@
+/* The phone's back key on the bookmarks and the 뒤표지 (10-08): a small note above the bottom of the screen. */
+.notice {
+  position: fixed; left: 50%; bottom: calc(var(--space-6) + env(safe-area-inset-bottom)); z-index: 40;
+  width: max-content; max-width: calc(100vw - 2 * var(--space-4)); translate: -50% 0; margin: 0;
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill);
+  background: var(--ink); color: var(--paper); font-size: 13px; line-height: 1.4; text-align: center; word-break: keep-all;
+  animation: note-in 200ms ease-out both;
+}
+@keyframes note-in { from { opacity: 0; translate: -50% 8px; } }
+@media (prefers-reduced-motion: reduce) { .notice { animation: none; } }

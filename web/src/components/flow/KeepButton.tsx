@@ -13,7 +13,8 @@ import styles from "./KeepButton.module.css";
 export const KEEP = "내 책갈피에 저장";
 export const KEEP_HINT = "나중에 다시 꺼내 볼 수 있어요";
 export const KEPT = "내 책갈피에 저장했어요";
-export const KEPT_HINT = "다시 누르면 빼요";
+// 10-08 (user, 시안 B): a saved book is never drawn again (lib/flow/api drawBody · the draw route) — say so where it is saved
+export const KEPT_HINT = "다음 뽑기엔 안 나와요 · 다시 누르면 빼요";
 export const KEEP_FAILED = "저장하지 못했어요. 다시 눌러 주세요.";
 export const KEEP_FULL = "임시 책갈피는 100개까지예요. 로그인하면 계속 모을 수 있어요";
 /** New copy (context 10-05): a press to take it out that did not go through. */

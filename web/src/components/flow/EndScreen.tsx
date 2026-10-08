@@ -4,7 +4,8 @@ import styles from "./EndScreen.module.css";
 
 /** New copy (logged in context.md): the docs give S-08 its two buttons only. The second line says what 다시 뽑기 does (F-10). */
 export const END_TITLE = "다음 책갈피를 만나 볼까요?";
-export const END_NOTE = "같은 조건으로, 아직 못 본 책으로 다시 뽑아요";
+// 10-08 (user, 시안 C): the books shown this round and the saved ones are both left out
+export const END_NOTE = "같은 조건으로, 이미 본 책과 저장한 책은 빼고 다시 뽑아요";
 
 interface Props { onRedraw: () => void; onHome: () => void }
 

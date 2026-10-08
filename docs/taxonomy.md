@@ -30,6 +30,7 @@
 | taxonomy v2.0 | 2026-10-07 | 뒤표지 + 공유 (PRD F-27·S-11·S-12, `plans/2026-10-07-share-backcover.md`) | E-41 `back_cover_shown`·E-42 `share_clicked`·E-43 `share_page_viewed`·E-44 `share_page_started` live, 분류 `공유`, 동사 그대로(shown·clicked·viewed·started), 처리방침 공유 링크 문구 (8절) |
 | taxonomy v2.1 | 2026-10-07 | 카카오톡 안 브라우저 → 브라우저로 넘겨 공유 · [이미지 저장] → [이미지로 공유] (PRD F-27, 사용자 결정 10-07) | E-42 `method` "save_image" 없앰 → "image"(스토리 이미지 파일을 공유창으로), E-42는 내 뒤표지(S-12 `?mine=1`)에서도, 그 페이지는 E-43을 보내지 않음 (8절) |
 | taxonomy v2.2 | 2026-10-07 | 공유 시트 (PRD F-27, DESIGN C-31, 사용자 시안 10-07) | E-42 `method`에 "save_image" 다시(시트의 [이미지 저장]) — 값 native·copy·image·save_image, 모두 S-11 공유 시트에서. v2.1의 카카오톡 → 브라우저 넘기기와 내 뒤표지 `?mine=1`은 없앰 (8절) |
+| taxonomy v2.3 | 2026-10-08 | 휴대폰 뒤로가기 (`plans/2026-10-08-device-back.md`, 사용자 승인) | E-33 `source` += "device_back"(뒤로가기로 이전 질문·마지막 질문), E-20 `source` += "device_back"(첫 질문에서, 책갈피·뒤표지에서 두 번 눌러 홈으로) — 화면이 아니라 누른 방법이라, 화면 버튼은 그대로 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -440,14 +441,14 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 갈림길 | click | live | 추가 (v1.0) |
 
-**언제**: S-02 [← 이전 질문](두 번째 질문부터 — 첫 질문에서는 E-20 source=question) 또는 S-04 [← 질문으로 돌아가기]를 누를 때. 마지막 답 하나를 지운다  
+**언제**: S-02 [← 이전 질문](두 번째 질문부터 — 첫 질문에서는 E-20 source=question) 또는 S-04 [← 질문으로 돌아가기]를 누를 때. 마지막 답 하나를 지운다. v2.3: 휴대폰 뒤로가기로 같은 일을 할 때도(source=device_back)  
 **분석 질문**: 설계 6절 ① 헷갈리는 질문(질문별 되돌리기 비율)
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `node_id` | 추가 (v1.0) | String | "branch" | 다시 답하게 되는 질문 = 지운 답의 질문 id |
 | `depth` | 추가 (v1.0) | Number | 2, 11 | 그 질문의 depth (= 지우기 전 답 수) |
-| `source` | 추가 (v1.0) | String | "question", "first_page" | 누른 화면 — question=S-02 [← 이전 질문], first_page=S-04 [← 질문으로 돌아가기] |
+| `source` | 추가 (v1.0), "device_back" (v2.3) | String | "question", "first_page", "device_back" | 누른 화면 — question=S-02 [← 이전 질문], first_page=S-04 [← 질문으로 돌아가기], device_back=휴대폰 뒤로가기(질문·닫힌 책·첫 장에서) |
 
 #### E-34 `path_completed`
 
@@ -966,7 +967,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `curious_count` | `curious` → `curious_count` | Number | 0, 2 | 이번 회차 궁금해요 수 |
-| `source` | 추가 — v0.3 구현 | String | "first_page", "end", "question" | 누른 화면 — first_page=S-04(막다른 길), end=마무리, question=S-02 첫 질문의 이전 질문(v1.0) |
+| `source` | 추가 — v0.3 구현, "device_back" (v2.3) | String | "first_page", "end", "question", "device_back" | 누른 화면 — first_page=S-04(막다른 길), end=마무리, question=S-02 첫 질문의 이전 질문(v1.0), device_back=휴대폰 뒤로가기(첫 질문에서, 책갈피·뒤표지에서 3초 안에 두 번) |
 
 #### E-31 `feedback_sent`
 

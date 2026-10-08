@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useId, useRef, type KeyboardEvent, type ReactNode } from "react";
+import { useBackToClose } from "@/lib/nav/useBackToClose";
 import styles from "./Sheet.module.css";
 
 const FOCUSABLE = "button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled])";
@@ -13,7 +14,8 @@ interface Props { title: string; onClose: () => void; children: ReactNode; stepK
 
 /**
  * A sheet from the bottom over a dimmed page (S-07 C-12, S-09 bookmark front / rod picker). A modal dialog: focus goes to its
- * first control and stays inside (Tab wraps), Escape and a tap outside close it, focus returns to what opened it.
+ * first control and stays inside (Tab wraps), Escape, a tap outside and the phone's back key (10-08) close it, focus returns
+ * to what opened it.
  * Rendered only while open — the parent decides.
  */
 export function Sheet({ title, onClose, children, stepKey, pinned = false }: Props) {
@@ -21,6 +23,7 @@ export function Sheet({ title, onClose, children, stepKey, pinned = false }: Pro
   const box = useRef<HTMLDivElement>(null);
   const close = useRef(onClose);
   useEffect(() => { close.current = onClose; }, [onClose]);
+  useBackToClose(() => close.current());
 
   useEffect(() => {
     const opener = document.activeElement;

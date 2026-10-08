@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { forgetBackHolds } from "@/lib/nav/deviceBack";
 import { forgetStories } from "@/lib/share/storyFile";
 import { COPIED, IMAGE_FAILED, INAPP_HINT, OUTSIDE_HINT, ShareSheet } from "./ShareSheet";
 
@@ -13,7 +14,7 @@ const png = () => vi.fn().mockResolvedValue(new Response(new Blob(["png"], { typ
 const tile = (name: string) => screen.queryByRole("button", { name }) ?? screen.queryByRole("link", { name });
 
 describe("ShareSheet (C-31, F-27 — 결과 공유하기)", () => {
-  afterEach(() => { vi.unstubAllGlobals(); forgetStories(); });
+  afterEach(() => { vi.unstubAllGlobals(); forgetStories(); forgetBackHolds(); });
 
   it("where pictures can be shared: preview, then 인스타 스토리로 · 이미지 저장 · 링크 공유 (E-42 image · save_image · native)", async () => {
     const fetchMock = png();
@@ -151,13 +152,14 @@ describe("ShareSheet (C-31, F-27 — 결과 공유하기)", () => {
     expect(close).toHaveFocus();
   });
 
-  it("closes with 닫기, a tap outside, or Esc", () => {
+  it("closes with 닫기, a tap outside, Esc, or the phone's back key", () => {
     vi.stubGlobal("navigator", { ...navigator, userAgent: DESKTOP, canShare: undefined });
     const p = props();
     render(<ShareSheet {...p} />);
     fireEvent.click(screen.getByRole("button", { name: "닫기" }));
     fireEvent.click(document.querySelector("[data-backdrop]")!);   // the sheet is on document.body (a portal)
     fireEvent.keyDown(document, { key: "Escape" });
-    expect(p.onClose).toHaveBeenCalledTimes(3);
+    window.dispatchEvent(new PopStateEvent("popstate", { state: null }));   // the phone's back key (10-08)
+    expect(p.onClose).toHaveBeenCalledTimes(4);
   });
 });
