@@ -470,6 +470,6 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_3():
+def test_the_dictionary_is_v3_4():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.3"   # 10-08: the rules confirmed during the re-routed books' check
+    assert rules_version() == "v3.4"   # 10-08: science used to explain the course of history → 역사 (총 균 쇠)
