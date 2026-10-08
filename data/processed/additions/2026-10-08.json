@@ -16,8 +16,7 @@
    "topic": "마음 돌보기",
    "field": "마음·관계",
    "keywords": [
-    "감정 다루기",
-    "불안·걱정"
+    "감정 다루기"
    ],
    "keywords_regex": [
     "불안·걱정",
@@ -51,9 +50,20 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/196106728",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "마음 돌보기",
+    "keywords": [
+     "감정 다루기",
+     "불안·걱정"
+    ],
+    "way": "개념",
+    "one_liner": "감정에 지나치게 매달리지 않고 적당히 거리를 두는 관점을 얻어요.",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791190807296",
@@ -100,8 +110,20 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/129601763",
-   "auto": "ai-agree",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "대화·관계",
+    "keywords": [
+     "거리 두기",
+     "갈등·무례 대처",
+     "호감·사회생활"
+    ],
+    "way": "실습",
+    "one_liner": "무례한 사람 앞에서 선 긋고 적을 만들지 않는 대화와 관계의 요령을 얻어요.",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9788954699334",
@@ -478,10 +500,20 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/191481989",
    "moved_from": "대화·관계",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "마음 돌보기",
+    "keywords": [
+     "감정 다루기"
+    ],
+    "way": "실습",
+    "one_liner": "싫은 사람 때문에 지친 마음을 생각 리셋 4단계로 가볍게 비워 볼 수 있어요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791172540883",
@@ -628,9 +660,7 @@
    "topic": "마음 돌보기",
    "field": "마음·관계",
    "keywords": [
-    "감정 다루기",
-    "불안·걱정",
-    "번아웃·스트레스"
+    "감정 다루기"
    ],
    "keywords_regex": [
     "불안·걱정",
@@ -662,9 +692,21 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/161341258",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "마음 돌보기",
+    "keywords": [
+     "감정 다루기",
+     "불안·걱정",
+     "번아웃·스트레스"
+    ],
+    "way": "실습",
+    "one_liner": "기분에 휘둘리지 않고 분노·불안 같은 감정을 다루는 요령을 얻어요.",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788954696012",
@@ -922,8 +964,20 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/126045955",
-   "auto": "ai-agree",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "genre": "시",
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "고독과 사랑이 겹친 푸른 빛깔의 시를 읽어 볼래요?",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9788936425449",
@@ -1347,7 +1401,7 @@
    "suggest": "",
    "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "",
+   "one_liner": "간단한 재료로 빠르게 완성하는 도시락과 반찬 레시피",
    "evidence": "도시락·집반찬 레시피 100가지로 바로 따라 하는 요리책",
    "confidence": 0.93,
    "fits": true,
@@ -1366,9 +1420,19 @@
     "근거 김(31자)",
     "한 줄이 책소개를 베낌"
    ],
-   "status": "reserve",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/124766441",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "요리·살림",
+    "keywords": [
+     "집밥"
+    ],
+    "way": "실습",
+    "one_liner": "",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791155360545",
@@ -1410,9 +1474,19 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/34924580",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "요리·살림",
+    "keywords": [
+     "정리·미니멀"
+    ],
+    "way": "실습",
+    "one_liner": "일주일에 하나씩 따라 하며 정리와 수납이 쉬운 단순한 살림 습관을 만들어 가요.",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788901234472",
@@ -1809,9 +1883,19 @@
     "fits"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/193157707",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "이미지·영상 생성"
+    ],
+    "way": "실습",
+    "one_liner": "노드를 연결해 AI 이미지와 영상을 직접 만드는 워크플로우를 익혀요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791194630586",
@@ -1892,9 +1976,19 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/175460151",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "이미지·영상 생성"
+    ],
+    "way": "실습",
+    "one_liner": "대본 작성부터 카메라 연출 프롬프트까지 익혀 AI로 영상을 직접 만들어 봐요.",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791169211420",
@@ -2030,10 +2124,20 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/147626022",
    "moved_from": "업무 자동화",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "챗GPT"
+    ],
+    "way": "실습",
+    "one_liner": "여러 생성형 AI 도구로 일상과 업무에 쓸 100가지 활용법을 익혀요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791160050929",
@@ -2078,8 +2182,16 @@
    "settled": {
     "slot": "건강·운동"
    },
-   "auto": "ai-agree",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [],
+    "way": "개념",
+    "one_liner": "영양소가 몸에 미치는 영향을 알고 내 몸에 맞는 음식 고르는 법을 익혀요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9788931558227",
@@ -2173,8 +2285,7 @@
    "topic": "건강·운동",
    "field": "습관·자기계발",
    "keywords": [
-    "달리기·근력",
-    "운동 습관"
+    "달리기·근력"
    ],
    "keywords_regex": [
     "운동 습관",
@@ -2204,9 +2315,20 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/196679973",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [
+     "달리기·근력",
+     "운동 습관"
+    ],
+    "way": "실습",
+    "one_liner": "속근을 깨우는 스쿼트와 운동 루틴으로 노화에 맞서는 몸을 만들어 봐요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788901299532",
@@ -2332,9 +2454,19 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/36448816",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [
+     "달리기·근력"
+    ],
+    "way": "실습",
+    "one_liner": "기구 없이 맨몸 여섯 동작으로 근력을 키우는 단계별 훈련법을 익혀요.",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791191187342",
@@ -2376,8 +2508,18 @@
    ],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/105484153",
-   "auto": "ai-agree",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [
+     "달리기·근력"
+    ],
+    "way": "실습",
+    "one_liner": "근육 원리를 알고 부위별 기본 동작으로 근력 운동을 시작해요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9788954781145",
@@ -2572,7 +2714,7 @@
    "entry": "leaf",
    "genre": "SF·판타지",
    "axes": {
-    "temp": -1,
+    "temp": null,
     "pull": -1,
     "gain": -1,
     "world": -1
@@ -2614,9 +2756,21 @@
     "temp"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/84640495",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "genre": "SF·판타지",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "one_liner": "과학 상상력이 소설로 터져 나오는 SF 소설집을 만나 볼래요?",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791157403387",
@@ -2725,8 +2879,20 @@
    "issues": [],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/97247811",
-   "auto": "ai-agree",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "genre": "SF·판타지",
+    "axes": {
+     "temp": null,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "one_liner": "사막 행성을 무대로 한 대작 SF 세계로 먼저 들어가 볼래요?",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9791171717095",
@@ -3152,8 +3318,19 @@
    "settled": {
     "slot": "대화·관계"
    },
-   "auto": "ai-agree",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "대화·관계",
+    "keywords": [
+     "거리 두기",
+     "갈등·무례 대처"
+    ],
+    "way": "개념",
+    "one_liner": "위험한 사람을 알아보는 단서와 대응 전략을 알려 줘요.",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9788990514820",
@@ -3194,7 +3371,7 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/3838874",
    "third": {
     "fits": true,
@@ -3212,7 +3389,18 @@
    "a_was": {
     "way": "실습"
    },
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "대화·관계",
+    "keywords": [
+     "말투·대화법",
+     "갈등·무례 대처"
+    ],
+    "way": "개념",
+    "one_liner": "남녀가 서로 다른 언어와 정서적 욕구를 알고 논쟁을 피하며 관계를 지키는 법을 얻어요.",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791140716548",
@@ -3299,10 +3487,20 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/90639406",
    "moved_from": "시간·생산성",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "취업·커리어",
+    "keywords": [
+     "커리어 설계"
+    ],
+    "way": "사례",
+    "one_liner": "직장인이 전문직 프리랜서로 독립하는 과정과 소득 구조, 준비할 일을 알려 줘요.",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791189938338",
@@ -3364,7 +3562,7 @@
    "suggest": "",
    "suggest_keywords": [],
    "one_liner_style": "summary",
-   "one_liner": "",
+   "one_liner": "목표와 우선순위를 세워 일과 삶의 시간을 효율적으로 관리하는 법",
    "evidence": "업무 효율·우선순위·시간계획 방법이 중심",
    "confidence": 0.9,
    "fits": true,
@@ -3382,9 +3580,19 @@
    "issues": [
     "한 줄이 책소개를 베낌"
    ],
-   "status": "reserve",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/185255066",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "시간·생산성",
+    "keywords": [
+     "일하는 법"
+    ],
+    "way": "실습",
+    "one_liner": "",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788935214822",
@@ -3419,9 +3627,17 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/151047736",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "시간·생산성",
+    "keywords": [],
+    "way": "실습",
+    "one_liner": "시간 추적과 우선순위 정하기로 하루를 여유롭고 행복하게 짜는 법을 알려줘요.",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791173577673",
@@ -3626,8 +3842,19 @@
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/103497640",
    "moved_from": "시간·생산성",
-   "auto": "ai-agree",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "리더십",
+    "keywords": [
+     "팀 이끌기",
+     "조직 문화"
+    ],
+    "way": "개념",
+    "one_liner": "리더가 조직과 구성원을 이끌며 던져볼 근본적인 질문을 아포리즘으로 만나요.",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9788954675574",
@@ -3731,10 +3958,22 @@
     "temp"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/195435359",
    "moved_from": "로맨스",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "genre": "SF·판타지",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "one_liner": "영혼에게 마지막 인사를 건넬 처마를 만든다면, 누구를 보내 주고 싶나요?",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788937404627",
@@ -3744,7 +3983,7 @@
    "entry": "leaf",
    "genre": "외국 소설",
    "axes": {
-    "temp": -1,
+    "temp": null,
     "pull": -1,
     "gain": -1,
     "world": 1
@@ -3788,10 +4027,22 @@
    "issues": [
     "근거 약함(겹치는 단어 1개)"
    ],
-   "status": "reserve",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/180338294",
    "moved_from": "로맨스",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "genre": "외국 소설",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "여러 편의 이야기로 묶인 쿤데라의 단편들을 만나 볼래요?",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788976047700",
@@ -3925,7 +4176,7 @@
    "entry": "leaf",
    "genre": "SF·판타지",
    "axes": {
-    "temp": 1,
+    "temp": null,
     "pull": -1,
     "gain": -1,
     "world": -1
@@ -3967,7 +4218,7 @@
     "temp"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/78217545",
    "third": {
     "fits": false,
@@ -3990,7 +4241,19 @@
    "settled": {
     "slot": "SF·판타지"
    },
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "genre": "SF·판타지",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "one_liner": "거짓말이 보이는 소년과 거짓말하는 소녀의 사랑, 함께 따라가 볼래요?",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791193190388",
@@ -4106,7 +4369,7 @@
    "entry": "leaf",
    "genre": "로맨스",
    "axes": {
-    "temp": 1,
+    "temp": null,
     "pull": -1,
     "gain": -1,
     "world": 1
@@ -4148,7 +4411,7 @@
     "temp"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/73440996",
    "third": {
     "fits": true,
@@ -4175,7 +4438,19 @@
    "a_was": {
     "world": -1
    },
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "genre": "로맨스",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "잊힌 이름과 17살의 기억을 따라가는 이야기를 만나볼래요?",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788954690799",
@@ -4330,8 +4605,20 @@
    ],
    "status": "picked",
    "link": "https://www.yes24.com/product/goods/4827619",
-   "auto": "ai-agree",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "genre": "외국 소설",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "one_liner": "폐쇄된 도시에서 절망과 맞서는 사람들의 모습을 따라가 볼래요?",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9788954696852",
@@ -4544,9 +4831,21 @@
     "근거가 책소개를 베낌 (AI-1 temp)",
     "근거가 책소개를 베낌 (AI-2 temp)"
    ],
-   "status": "reserve",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/17359",
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "genre": "외국 소설",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "one_liner": "벌레로 변한 아침처럼 낯설고 기묘한 짧은 이야기들을 만나볼래요?",
+    "status": "reserve"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9791164453115",
@@ -4873,7 +5172,9 @@
    "entry": "target",
    "topic": "습관·집중",
    "field": "습관·자기계발",
-   "keywords": [],
+   "keywords": [
+    "뇌과학"
+   ],
    "keywords_regex": [],
    "way": "실습",
    "keyword_candidate": "공부법",
@@ -4901,7 +5202,7 @@
     "keywords"
    ],
    "issues": [],
-   "status": "review",
+   "status": "picked",
    "link": "https://www.yes24.com/product/goods/119132385",
    "third": {
     "fits": true,
@@ -4913,7 +5214,15 @@
     "way": "실습"
    },
    "settled": {},
-   "rules_version": "v3.4"
+   "rules_version": "v3.4",
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [],
+    "way": "실습",
+    "one_liner": "어른 뇌에 맞는 기억법과 공부법을 익혀 배운 것을 오래 남기는 법을 알려줘요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788901296630",

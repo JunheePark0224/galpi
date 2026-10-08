@@ -17103,6 +17103,23 @@
   "keywords": []
  },
  {
+  "isbn": "9788925568362",
+  "title": "과몰입 사회",
+  "author": "기타 야코프",
+  "pages": 264,
+  "one_liner": "감정에 지나치게 매달리지 않고 적당히 거리를 두는 관점을 얻어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "감정 다루기"
+  ]
+ },
+ {
   "isbn": "9791190807296",
   "title": "당신은 반드시 잘될 사람",
   "author": "라파엘",
@@ -17242,6 +17259,23 @@
   "keywords": []
  },
  {
+  "isbn": "9791191369786",
+  "title": "싫어하는 사람을 사라지게 하는 방법",
+  "author": "호리 모토코",
+  "pages": 224,
+  "one_liner": "싫은 사람 때문에 지친 마음을 생각 리셋 4단계로 가볍게 비워 볼 수 있어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "감정 다루기"
+  ]
+ },
+ {
   "isbn": "9791172540883",
   "title": "늙지 않는 뇌",
   "author": "데일 브레드슨",
@@ -17291,6 +17325,23 @@
   "axes": null,
   "keywords": [
    "커리어 설계"
+  ]
+ },
+ {
+  "isbn": "9788901297842",
+  "title": "기분이 태도가 되지 않게 (헬로키티 에디션)",
+  "author": "레몬심리",
+  "pages": 204,
+  "one_liner": "기분에 휘둘리지 않고 분노·불안 같은 감정을 다루는 요령을 얻어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "마음 돌보기",
+  "field": "마음·관계",
+  "topic": "마음 돌보기",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "감정 다루기"
   ]
  },
  {
@@ -17545,6 +17596,40 @@
   ]
  },
  {
+  "isbn": "9791161508108",
+  "title": "10분 완성 초간단 도시락 레시피 100",
+  "author": "오민주",
+  "pages": 260,
+  "one_liner": "간단한 재료로 빠르게 완성하는 도시락과 반찬 레시피",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "집밥"
+  ]
+ },
+ {
+  "isbn": "9791155360545",
+  "title": "미니멀 라이프 아이디어 55",
+  "author": "미쉘",
+  "pages": 160,
+  "one_liner": "일주일에 하나씩 따라 하며 정리와 수납이 쉬운 단순한 살림 습관을 만들어 가요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "요리·살림",
+  "field": "습관·자기계발",
+  "topic": "요리·살림",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "정리·미니멀"
+  ]
+ },
+ {
   "isbn": "9788901234472",
   "title": "곤도 마리에 정리의 힘",
   "author": "곤도 마리에",
@@ -17685,11 +17770,45 @@
   ]
  },
  {
+  "isbn": "9788931507980",
+  "title": "ComfyUI 독학노트",
+  "author": "김한호 외",
+  "pages": 560,
+  "one_liner": "노드를 연결해 AI 이미지와 영상을 직접 만드는 워크플로우를 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "AI 활용",
+  "field": "AI·IT 활용",
+  "topic": "AI 활용",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "이미지·영상 생성"
+  ]
+ },
+ {
   "isbn": "9791194630586",
   "title": "캔바 AI",
   "author": "신승희, 앤미디어",
   "pages": 368,
   "one_liner": "이미지·영상·문서 초안을 AI로 만들고 다듬는 과정을 따라 하며 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "AI 활용",
+  "field": "AI·IT 활용",
+  "topic": "AI 활용",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "이미지·영상 생성"
+  ]
+ },
+ {
+  "isbn": "9791194630579",
+  "title": "소라 2 AI",
+  "author": "박범희, 앤미디어",
+  "pages": 352,
+  "one_liner": "대본 작성부터 카메라 연출 프롬프트까지 익혀 AI로 영상을 직접 만들어 봐요.",
   "one_liner_style": "summary",
   "entry": "target",
   "genre": "AI 활용",
@@ -17737,6 +17856,23 @@
   ]
  },
  {
+  "isbn": "9791140714650",
+  "title": "생성형 AI 활용 백과사전",
+  "author": "타구치 카즈히로 외",
+  "pages": 372,
+  "one_liner": "여러 생성형 AI 도구로 일상과 업무에 쓸 100가지 활용법을 익혀요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "AI 활용",
+  "field": "AI·IT 활용",
+  "topic": "AI 활용",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "챗GPT"
+  ]
+ },
+ {
   "isbn": "9791160050929",
   "title": "음식이 나다",
   "author": "오새은",
@@ -17769,6 +17905,23 @@
   ]
  },
  {
+  "isbn": "9791198742179",
+  "title": "홍정기의 장수근육 혁명",
+  "author": "홍정기",
+  "pages": 288,
+  "one_liner": "속근을 깨우는 스쿼트와 운동 루틴으로 노화에 맞서는 몸을 만들어 봐요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "달리기·근력"
+  ]
+ },
+ {
   "isbn": "9788901299532",
   "title": "살찌지 않는 몸",
   "author": "우창윤",
@@ -17792,6 +17945,23 @@
   "author": "김명섭",
   "pages": 224,
   "one_liner": "부위별 근육 구조를 알고 부상 없이 웨이트 동작을 따라 해 볼 수 있어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "달리기·근력"
+  ]
+ },
+ {
+  "isbn": "9791158461423",
+  "title": "죄수 운동법",
+  "author": "폴 웨이드",
+  "pages": 384,
+  "one_liner": "기구 없이 맨몸 여섯 동작으로 근력을 키우는 단계별 훈련법을 익혀요.",
   "one_liner_style": "summary",
   "entry": "target",
   "genre": "건강·운동",
@@ -17891,6 +18061,26 @@
    "pull": -1,
    "gain": -1,
    "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791185585819",
+  "title": "나는 슈뢰딩거의 고양이로소이다",
+  "author": "원종우",
+  "pages": 196,
+  "one_liner": "과학 상상력이 소설로 터져 나오는 SF 소설집을 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "SF·판타지",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
   },
   "keywords": []
  },
@@ -18053,6 +18243,24 @@
   ]
  },
  {
+  "isbn": "9788990514820",
+  "title": "화성에서 온 남자 금성에서 온 여자 (100만 부 기념 리커버 에디션)",
+  "author": "존 그레이",
+  "pages": 424,
+  "one_liner": "남녀가 서로 다른 언어와 정서적 욕구를 알고 논쟁을 피하며 관계를 지키는 법을 얻어요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "대화·관계",
+  "field": "마음·관계",
+  "topic": "대화·관계",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "말투·대화법",
+   "갈등·무례 대처"
+  ]
+ },
+ {
   "isbn": "9791140716548",
   "title": "마케팅노트",
   "author": "마케팅노트",
@@ -18072,6 +18280,23 @@
   ]
  },
  {
+  "isbn": "9791165392734",
+  "title": "새벽 4시, 연봉 2억 프리랜서가 되는 시간",
+  "author": "박춘성",
+  "pages": 320,
+  "one_liner": "직장인이 전문직 프리랜서로 독립하는 과정과 소득 구조, 준비할 일을 알려 줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "취업·커리어",
+  "field": "일·커리어",
+  "topic": "취업·커리어",
+  "way": "사례",
+  "axes": null,
+  "keywords": [
+   "커리어 설계"
+  ]
+ },
+ {
   "isbn": "9791189938338",
   "title": "단 한 권을 읽어도 제대로 남는 메모 독서법",
   "author": "신정철",
@@ -18087,6 +18312,38 @@
   "keywords": [
    "에세이·책 쓰기"
   ]
+ },
+ {
+  "isbn": "9791194620327",
+  "title": "하버드의 특별한 시간관리 수업",
+  "author": "쉬셴장",
+  "pages": 352,
+  "one_liner": "목표와 우선순위를 세워 일과 삶의 시간을 효율적으로 관리하는 법",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "시간·생산성",
+  "field": "습관·자기계발",
+  "topic": "시간·생산성",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "일하는 법"
+  ]
+ },
+ {
+  "isbn": "9788935214822",
+  "title": "내 시간 설계의 기술",
+  "author": "캐시 홈스",
+  "pages": 344,
+  "one_liner": "시간 추적과 우선순위 정하기로 하루를 여유롭고 행복하게 짜는 법을 알려줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "시간·생산성",
+  "field": "습관·자기계발",
+  "topic": "시간·생산성",
+  "way": "실습",
+  "axes": null,
+  "keywords": []
  },
  {
   "isbn": "9791173577673",
@@ -18195,6 +18452,46 @@
   "keywords": []
  },
  {
+  "isbn": "9791124575383",
+  "title": "처마 밑 도피자들",
+  "author": "리러하",
+  "pages": 344,
+  "one_liner": "영혼에게 마지막 인사를 건넬 처마를 만든다면, 누구를 보내 주고 싶나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "SF·판타지",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937404627",
+  "title": "우스운 사랑들 (리커버)",
+  "author": "밀란 쿤데라",
+  "pages": 356,
+  "one_liner": "여러 편의 이야기로 묶인 쿤데라의 단편들을 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
   "isbn": "9788976047700",
   "title": "닿지 못해 닳은 사랑",
   "author": "히코로히",
@@ -18228,6 +18525,26 @@
   "way": null,
   "axes": {
    "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788959528158",
+  "title": "거짓말이 보이는 나는, 솔직한 너에게 사랑을 했다",
+  "author": "사쿠라이 미나",
+  "pages": 296,
+  "one_liner": "거짓말이 보이는 소년과 거짓말하는 소녀의 사랑, 함께 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "SF·판타지",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
    "pull": -1,
    "gain": -1,
    "world": -1
@@ -18271,6 +18588,26 @@
    "pull": -1,
    "gain": -1,
    "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788959527939",
+  "title": "너와 만날 수 있었던 4%의 기적",
+  "author": "히로세 미이",
+  "pages": 320,
+  "one_liner": "잊힌 이름과 17살의 기억을 따라가는 이야기를 만나볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "로맨스",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
   },
   "keywords": []
  },
@@ -18395,6 +18732,26 @@
   "keywords": []
  },
  {
+  "isbn": "9788937460043",
+  "title": "변신 시골의사",
+  "author": "프란츠 카프카",
+  "pages": 288,
+  "one_liner": "벌레로 변한 아침처럼 낯설고 기묘한 짧은 이야기들을 만나볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
   "isbn": "9791164453115",
   "title": "초판본 데미안",
   "author": "헤르만 헤세",
@@ -18508,6 +18865,23 @@
   "keywords": [
    "감정 다루기",
    "불안·걱정"
+  ]
+ },
+ {
+  "isbn": "9788925576473",
+  "title": "사소하지만 굉장한 어른의 뇌 사용법",
+  "author": "가토 도시노리",
+  "pages": 252,
+  "one_liner": "어른 뇌에 맞는 기억법과 공부법을 익혀 배운 것을 오래 남기는 법을 알려줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "뇌과학"
   ]
  },
  {
