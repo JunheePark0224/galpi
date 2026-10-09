@@ -19,3 +19,11 @@ export const CHALLENGE_PATH = path(
   ["start", "B"], ["branch", "A"], ["story-intro", "A"], ["story-shelf", "A"], ["story-fiction", "B"], ["story-genre", "A"],
   ["story-temp", "A"], ["story-pull", "unsure"], ["story-len", "A"],
 );
+/**
+ * The longest S-04 summary a person meets (10-09 final check): a challenge with no genre chosen (rule 19 — its line wraps
+ * on a phone), one path row and all five mood answers.
+ */
+export const LONG_MOOD_PATH = path(
+  ["start", "B"], ["branch", "A"], ["story-intro", "B"], ["story-gain", "A"], ["story-world", "A"], ["story-temp", "A"],
+  ["story-pull", "A"], ["story-len", "A"],
+);
