@@ -2,6 +2,8 @@ import type { PathSummary } from "@/lib/paths";
 import styles from "./FirstPage.module.css";
 
 export const CHALLENGE_LINE = "평소의 당신과 반대편에서 골랐어요";
+/** A challenge with no genre or topic chosen (a list rule, 19 · 36): nothing to turn around — a less familiar genre (10-09 시안 A-2). */
+export const CHALLENGE_LINE_LIST = "오늘은 낯선 장르에서 골랐어요";
 export const WHOLE_LIBRARY = "책장 전체에서";
 export const MOOD_ANY = "기분은 갈피에게 맡겼어요";
 
@@ -12,12 +14,12 @@ export const MOOD_ANY = "기분은 갈피에게 맡겼어요";
  * draw's `path`; null while the draw is on its way (only the notes show). The notes share one live region that is always
  * on the page, so a note that arrives with the draw is announced (a region added together with its text often is not).
  */
-export function PathPage({ summary, notices, reason = null }: { summary: PathSummary | null; notices: readonly string[]; reason?: string | null }) {
+export function PathPage({ summary, notices, reason = null, listRule = false }: { summary: PathSummary | null; notices: readonly string[]; reason?: string | null; listRule?: boolean }) {
   return (
     <div className={styles.page}>
       {summary && (
         <>
-          {summary.mode === "challenge" && <p className={styles.challenge}>{CHALLENGE_LINE}</p>}
+          {summary.mode === "challenge" && <p className={styles.challenge}>{listRule ? CHALLENGE_LINE_LIST : CHALLENGE_LINE}</p>}
           {summary.mode === "challenge" && reason && <ChallengeReason text={reason} />}
           <section aria-labelledby="path-way">
             <h3 id="path-way" className={styles.label}>지나온 길</h3>
