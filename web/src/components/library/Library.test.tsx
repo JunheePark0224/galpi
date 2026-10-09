@@ -118,6 +118,9 @@ describe("Library (S-09)", () => {
     expect(screen.getByRole("list", { name: "읽을 책" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "모순 책갈피" })).toBeInTheDocument();
     expect(screen.getByText("아직 비어 있어요")).toBeInTheDocument();
+    // 10-09 시안 A: each rod's bookmark count after its name, outside the heading (the name stays the rod's own words)
+    expect(screen.getByText("· 2권")).toBeInTheDocument();
+    expect(screen.getByText("· 0권")).toBeInTheDocument();
     for (const el of document.querySelectorAll("*")) {
       for (const attr of el.getAttributeNames()) expect(el.getAttribute(attr) ?? "", attr).not.toContain("마음에 남은");
     }
@@ -209,6 +212,7 @@ describe("Library (S-09)", () => {
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     expect(screen.getByText("0개 · 동물 0종")).toBeInTheDocument();
     expect(screen.getAllByText("아직 비어 있어요")).toHaveLength(2);
+    expect(screen.getAllByText("· 0권")).toHaveLength(2);                // the rods' counts follow
     expect(screen.getByRole("heading", { name: "읽을 책" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "모두 제거" })).toBeNull();
     expect(store.accountSnapshot().count).toBe(0);
