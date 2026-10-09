@@ -210,8 +210,8 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     const next = act({ type: "leaveBack" });
     if (next.step === "result") enterResult(next);
   };
-  const shared = (method: ShareMethod) => {
-    track("share_clicked", { method, label_count: state.draw?.label?.chips.length ?? 0 });
+  const shared = (method: ShareMethod, isLinkCopied: boolean | null) => {
+    track("share_clicked", { method, label_count: state.draw?.label?.chips.length ?? 0, is_link_copied: isLinkCopied });
   };
 
   const nextResult = () => {
