@@ -8,6 +8,7 @@ import { hasSeenFirstGuide, markFirstGuideSeen } from "@/lib/flow/firstGuide";
 import { BOOKMARK_AWAY, BOOKMARK_DOWN, BOOKMARK_RISE } from "@/lib/motion";
 import type { FoundItem } from "@/lib/collection/types";
 import { EXHAUSTED_NOTICE } from "@/lib/recommend";
+import { isListRule } from "@/lib/paths";
 import { BACK_TITLE, BackActions, BackLaid, type ShareMethod } from "./BackCover";
 import { Book, RuledPage } from "./Book";
 import { CoverPeeks } from "./CoverPeeks";
@@ -90,7 +91,8 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
   const left = step === "first" && state.opened ? <FirstPageTitle /> : <RuledPage />;
   const right = step === "bookmarks" || shutting
     ? <RuledPage turn={shutting ? 0 : state.index} />
-    : state.opened && <PathPage summary={draw?.path ?? null} notices={noBooks ? [EXHAUSTED_NOTICE] : []} reason={draw?.challenge?.reason ?? null} />;
+    : state.opened && <PathPage summary={draw?.path ?? null} notices={noBooks ? [EXHAUSTED_NOTICE] : []} reason={draw?.challenge?.reason ?? null}
+      listRule={draw?.challenge ? isListRule(draw.challenge.rule.n) : false} />;
 
   // C-19: five decorative bookmark tips stand out of the closed book (nothing from the draw — no wait, no hint).
   const tucked = step === "book" || step === "first" ? <CoverPeeks open={state.opened} /> : null;
