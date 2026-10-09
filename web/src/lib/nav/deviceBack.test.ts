@@ -53,6 +53,17 @@ describe("the phone's back key inside the flow (10-08)", () => {
     expect(flow).not.toHaveBeenCalled();
   });
 
+  it("home while a window is still open (header [처음으로] by keyboard): the unwind waits for the window to close", async () => {
+    setFlowBack(vi.fn());
+    advance();
+    advance();
+    const hold = holdBack(vi.fn());
+    unwind();                                                // a window is open: nothing moves yet
+    expect(depthHere()).toBe(3);
+    await moved(() => hold.release());                       // the window goes away with S-01: one move back over all of it
+    expect(depthHere()).toBe(0);
+  });
+
   it("an open window closes first; closed by its own button it gives its entry back", async () => {
     const flow = vi.fn();
     const sheet = vi.fn();

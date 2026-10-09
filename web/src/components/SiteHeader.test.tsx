@@ -2,6 +2,9 @@ import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { SiteHeader } from "./SiteHeader";
 
+// On / at S-01: the header [처음으로] (HomeLink, 10-09) stays hidden until the flow leaves S-01.
+vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
+
 describe("SiteHeader", () => {
   // /api/me never answers here: the account place (P5 AccountButton) stays in its first, empty state.
   beforeEach(() => { vi.stubGlobal("fetch", vi.fn(() => new Promise(() => {}))); });

@@ -5,4 +5,6 @@
 
 | 폴더 | 채널 | 올린 날 | utm_source |
 |---|---|---|---|
-| `everytime/` | 에브리타임 | 2026-10-09 | everytime |
+| `everytime/` | 에브리타임 (학교 자유·홍보, 연합 독서·홍보 — 4곳) | 2026-10-09 | everytime |
+| `threads/` | 스레드 (새 계정) | 2026-10-09 | threads |
+| `linkedin/` | 링크드인 (개인 계정) | 2026-10-09 | linkedin |
