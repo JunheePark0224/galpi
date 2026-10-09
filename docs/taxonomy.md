@@ -32,6 +32,7 @@
 | taxonomy v2.2 | 2026-10-07 | 공유 시트 (PRD F-27, DESIGN C-31, 사용자 시안 10-07) | E-42 `method`에 "save_image" 다시(시트의 [이미지 저장]) — 값 native·copy·image·save_image, 모두 S-11 공유 시트에서. v2.1의 카카오톡 → 브라우저 넘기기와 내 뒤표지 `?mine=1`은 없앰 (8절) |
 | taxonomy v2.4 | 2026-10-09 | 스토리 공유에 결과 링크 (PRD F-27, DESIGN C-31, 사용자 시안 A-2 `mockups/2026-10-09-story-link.png`) | E-42 `is_link_copied`(Boolean, null) 추가 — [인스타 스토리로]가 그 사람의 결과 링크를 클립보드에 복사했는지(image에서만, 다른 method는 null). 이벤트 시점은 그대로(공유창에 이미지를 넘겼을 때) — 안내 화면의 [스토리로 보내기]를 누른 뒤 (8절) |
 | taxonomy v2.3 | 2026-10-08 | 휴대폰 뒤로가기 (`plans/2026-10-08-device-back.md`, 사용자 승인) | E-33 `source` += "device_back"(뒤로가기로 이전 질문·마지막 질문), E-20 `source` += "device_back"(첫 질문에서 뒤로가기, 책갈피·뒤표지의 뒤로가기 안내 [처음으로]) — 화면이 아니라 누른 방법이라, 화면 버튼은 그대로 (8절) |
+| taxonomy v2.5 | 2026-10-09 | 머리글 [처음으로] (PRD F-01, DESIGN A-05, 사용자 시안 D `mockups/2026-10-09-home-button-right.png`) | E-20 `source` += "header" — 흐름 도중(S-01이 아닐 때) 오른쪽 위 [처음으로]를 눌러 확인 없이 S-01로. 다른 페이지(/library 등)의 [처음으로]는 로고처럼 그냥 이동이라 이벤트 없음 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -963,13 +964,13 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 마무리 | click | live | 같음 |
 
-**언제**: [처음으로]를 누를 때 — S-04(뽑기 실패·책 없음)와 S-08 마무리. 이벤트는 끝나는 판의 round를 싣고, **보낸 직후 round +1 — 같은 탭에서 다시 시작하면 새 판** (3-1a) v1.0: S-02 첫 질문의 [← 이전 질문]도(source=question — 처음 화면으로, 새 판)  
+**언제**: [처음으로]를 누를 때 — S-04(뽑기 실패·책 없음)와 S-08 마무리. 이벤트는 끝나는 판의 round를 싣고, **보낸 직후 round +1 — 같은 탭에서 다시 시작하면 새 판** (3-1a) v1.0: S-02 첫 질문의 [← 이전 질문]도(source=question — 처음 화면으로, 새 판). v2.5: 흐름 도중 머리글 오른쪽 위 [처음으로]도(source=header, 확인 없이 — S-01에서는 보이지 않음)  
 **분석 질문**: Q-01, Q-03
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `curious_count` | `curious` → `curious_count` | Number | 0, 2 | 이번 회차 궁금해요 수 |
-| `source` | 추가 — v0.3 구현, "device_back" (v2.3) | String | "first_page", "end", "question", "device_back" | 누른 화면 — first_page=S-04(막다른 길), end=마무리, question=S-02 첫 질문의 이전 질문(v1.0), device_back=휴대폰 뒤로가기(첫 질문에서), 또는 책갈피·뒤표지에서 뒤로가기를 누르면 뜨는 안내의 [처음으로] |
+| `source` | 추가 — v0.3 구현, "device_back" (v2.3), "header" (v2.5) | String | "first_page", "end", "question", "device_back", "header" | 누른 화면 — first_page=S-04(막다른 길), end=마무리, question=S-02 첫 질문의 이전 질문(v1.0), device_back=휴대폰 뒤로가기(첫 질문에서), 또는 책갈피·뒤표지에서 뒤로가기를 누르면 뜨는 안내의 [처음으로], header=흐름 도중 머리글 오른쪽 위 [처음으로](v2.5) |
 
 #### E-31 `feedback_sent`
 
@@ -1356,6 +1357,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v1.9 | 2026-10-07 | Claude (사용자 결정 10-07 A) | 책갈피 그림이 세 부분(동물 + 배경 + 땅 소품)이 된다 — 하늘 소품(달·구름·별·새·큰 별·무지개·별똥별·금빛 초승달)을 없애고 하늘은 배경이 맡는다(일반판 배경은 깔끔한 하늘, 한정판·초판본 배경은 움직이는 "살아 있는 배경"). 반딧불은 땅 소품에서 빠져 새 한정판 배경 "summer"(여름밤)가 된다. E-36 `part_kind`·E-38 `parts_changed` 값에서 "sky"를 뺌(`schema.ts` 허용 값도), E-07·E-38 `art`는 {animal, bg, ground, rare}, E-37 `collected_count` 최대 42 → 34. 이벤트 이름·속성·타입 그대로. 출시 전이라 도감·시험 기록을 비운다(0008 — 모두 같은 출발선). 그 전 기록에는 "sky"·"firefly"가 있을 수 있어 분석에서 뺀다. 모으는 정보 변화 없음 — `/privacy`는 "하늘"을 말하지 않아 그대로 |
 | v1.8 | 2026-10-07 | Claude (사용자 요청) | 내 책갈피(S-09) [막대 지우기](PRD F-13, DESIGN C-17·C-27): 첫 막대가 아닌 막대를 책갈피와 함께 지운다(책갈피가 있으면 확인 시트). 새 E-40 `shelf_removed`(`removed_count` Number — 서버가 함께 지운 책갈피 수, 빈 막대면 0)를 화면과 함께 `live`로, 동사 `removed` 추가. v0.8의 "막대 지우기는 이벤트 없음"은 빈 막대만 치울 수 있을 때의 결정 — 이제 책갈피가 함께 사라지므로 남긴다. 함께 지운 책마다 E-16을 보내지 않음(E-35와 같음). 막대 이름·번호는 넣지 않음(6-1). 모으는 정보 변화 없음(지운 수뿐) — `/privacy`는 기록을 "누른 버튼"으로만 적어 그대로 |
 | v2.0 | 2026-10-07 | Claude (사용자 결정) | 뒤표지 + 공유(PRD F-27·S-11·S-12, `plans/2026-10-07-share-backcover.md`): E-41 `back_cover_shown`, E-42 `share_clicked`(`method`), E-43 `share_page_viewed`, E-44 `share_page_started` 추가, 분류 `공유`, 새 속성 `method`·`label_count`. 공유 링크에는 고른 답·책 5권·그림만 — 개인정보 없음, 처리방침에 한 줄 |
+| v2.5 | 2026-10-09 | Claude (사용자 시안 D) | 머리글 오른쪽 위 [처음으로](PRD F-01, DESIGN A-05) — 아빠처럼 로고를 눌러 처음으로 가는 걸 모르는 사람을 위해. E-20 `source` += "header". 흐름이 S-01이 아닐 때만 보이고, 누르면 확인 없이 그 판을 끝낸다(중간에 그만두는 사람은 길을 잘못 고른 사람 — 사용자 판단). 보낸 직후 round +1(3-1a 그대로). /library·공유 페이지의 [처음으로]는 로고와 같은 그냥 이동이라 이벤트 없음. 모으는 정보 변화 없음 |
 
 ---
 

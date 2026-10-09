@@ -18,7 +18,7 @@ test("without an Amplitude key nothing is sent to amplitude.com, no SDK code is 
   await page.getByRole("button", { name: START }).click();
   await page.getByRole("link", { name: "처리방침" }).first().click();
   await expect(page.getByRole("heading", { level: 1, name: "개인정보 처리방침" })).toBeVisible();
-  await page.getByRole("link", { name: "처음으로" }).click();
+  await page.locator("main").getByRole("link", { name: "처음으로" }).click();
   await expect(page.getByRole("button", { name: START })).toBeVisible();   // 처음으로 opens S-01 afresh
 
   // the SDK is a separate chunk that only a keyed build ever requests; its code carries Amplitude's ingestion host
