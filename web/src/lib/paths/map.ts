@@ -7,3 +7,11 @@ import type { QuestionMap } from "./types";
  * to pass over (mood-skips.json, design 5-2): the browser and the server read the same set, so they walk the same path.
  */
 export const QUESTION_MAP: QuestionMap = { ...(built as QuestionMap), skip: new Set(skips as string[]) };
+
+/**
+ * A list rule (`pick: one` — 19 이야기, 36 배우기) catches a challenge with no genre or topic chosen: it goes to a less
+ * familiar genre of its list, not to the other side of a choice (S-04 says so, 10-09 시안 A-2).
+ */
+export function isListRule(n: number): boolean {
+  return QUESTION_MAP.far.some((r) => r.n === n && r.pick === "one");
+}

@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { CHALLENGE_LINE, MOOD_ANY, PathPage, WHOLE_LIBRARY } from "./PathPage";
+import { CHALLENGE_LINE, CHALLENGE_LINE_LIST, MOOD_ANY, PathPage, WHOLE_LIBRARY } from "./PathPage";
+import { isListRule } from "@/lib/paths";
 
 describe("PathPage (S-04 당신이 고른 길)", () => {
   it("lists the path, then the mood, with no book count", () => {
@@ -15,6 +16,17 @@ describe("PathPage (S-04 당신이 고른 길)", () => {
   it("says so on the challenge route", () => {
     render(<PathPage summary={{ crumbs: ["여기 없는 딴 세상"], moods: [], mode: "challenge" }} notices={[]} />);
     expect(screen.getByText("평소의 당신과 반대편에서 골랐어요")).toBeInTheDocument();
+  });
+
+  it("a challenge with no genre or topic chosen (a list rule) says it chose a less familiar genre, not 'the other side' (10-09 시안 A-2)", () => {
+    render(<PathPage summary={{ crumbs: [], moods: [], mode: "challenge" }} notices={[]} reason="늘 고르던 곳 밖으로 한 발짝" listRule />);
+    expect(screen.getByText("오늘은 낯선 장르에서 골랐어요")).toBeInTheDocument();
+    expect(screen.queryByText(CHALLENGE_LINE)).toBeNull();
+    expect(CHALLENGE_LINE_LIST).toBe("오늘은 낯선 장르에서 골랐어요");
+  });
+
+  it("knows the list rules of the real map: 19 (이야기) and 36 (배우기), not a one-genre rule", () => {
+    expect([isListRule(19), isListRule(36), isListRule(1), isListRule(28)]).toEqual([true, true, false, false]);
   });
 
   it("puts the rule's moving reason under the challenge line, broken after 에서 (10-06)", () => {
