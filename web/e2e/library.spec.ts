@@ -507,6 +507,10 @@ test("S-09 [막대 지우기]: not on the first rod; an empty rod goes at once, 
   const { events } = await recordEvents(page);
   await page.goto("/library");
   await expect(page.getByText("3개 · 동물 1종")).toBeVisible();
+  // 10-09 시안 A: each rod's count after its name, the first rod's too
+  await expect(page.locator("section").filter({ has: page.getByRole("heading", { name: "마음에 남은" }) }).getByText("· 2권")).toBeVisible();
+  await expect(page.locator("section").filter({ has: page.getByRole("heading", { name: "읽을 책" }) }).getByText("· 1권")).toBeVisible();
+  if (SHOTS) await page.screenshot({ path: `${SHOTS}/s09-rod-counts.png`, fullPage: true });
   const removeOf = (name: string) => page.locator("section").filter({ has: page.getByRole("heading", { name }) }).getByRole("button", { name: "막대 지우기" });
   await expect(removeOf("읽을 책")).toHaveCount(0);                                        // the first rod stays
   const button = removeOf("마음에 남은");

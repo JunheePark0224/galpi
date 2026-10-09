@@ -39,6 +39,8 @@
 .shelf { position: relative; margin-top: var(--space-3); padding: var(--space-1) 0 0; border-radius: var(--radius-card); }
 .shelfHead { display: flex; align-items: center; gap: var(--space-1); min-height: var(--touch); }   /* same height without ✎ (move mode) */
 .shelfName { margin: 0; font-size: 15px; line-height: 1.4; overflow-wrap: anywhere; }
+/* 10-09 시안 A (docs/mockups/2026-10-09-shelf-count.png): the rod's bookmark count, a quiet note after its name */
+.rodCount { flex-shrink: 0; margin-left: 2px; font-size: 13px; color: var(--ink-muted); white-space: nowrap; }
 /* [막대 지우기] (10-07, C-17): a small text button at the end of the name row, quieter than the name. */
 .removeRod { flex-shrink: 0; margin-left: auto; color: var(--ink-soft); white-space: nowrap; }
 .iconButton {

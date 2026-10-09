@@ -30,7 +30,8 @@ interface Props {
  * C-17 rod: its name (the person's own words — shown as text only, masked in replays, never put in an attribute), a
  * leather rod, and the bookmarks hanging from it in a row that scrolls sideways. While a bookmark is dragged over it, a
  * dashed gap opens where it would land (`data-rod` / `data-slot` are what useDrag measures). Every rod but the first has
- * a small [막대 지우기] at the end of its name row (10-07). In move mode the ✎ and [막대 지우기] are hidden (a calm screen —
+ * a small [막대 지우기] at the end of its name row (10-07). After the name, outside the heading, its bookmark count "· N권"
+ * (10-09 시안 A, quiet ink-muted — the name stays the person's own words). In move mode the ✎ and [막대 지우기] are hidden (a calm screen —
  * only moving).
  */
 export function Shelf({ shelf, moving, fixed = false, dragged, gap, onOpen, onPick, onRename, onRemove }: Props) {
@@ -77,6 +78,7 @@ export function Shelf({ shelf, moving, fixed = false, dragged, gap, onOpen, onPi
       ) : (
         <div className={styles.shelfHead}>
           <h2 id={nameId} className={styles.shelfName} data-amp-mask="">{shelf.name}</h2>
+          <span className={styles.rodCount}>{`· ${shelf.bookmarks.length}권`}</span>
           {!moving && !fixed && <button type="button" className={styles.iconButton} aria-label="막대 이름 고치기" onClick={() => { setDraft(shelf.name); setEditing(true); }}>✎</button>}
           {shelf.position > 0 && !moving && !fixed && (
             <button type="button" className={`${styles.textButton} ${styles.removeRod}`} aria-describedby={nameId} onClick={onRemove}>{REMOVE_ROD}</button>

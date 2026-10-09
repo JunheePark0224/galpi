@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>막대 책갈피 수 시안</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Gowun+Batang:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FAF5EA;--paper-deep:#F0E6D0;--paper-line:#DDD0B4;--cloth:#7A4A2E;--cloth-edge:#5A3420;--ink:#2B2724;--ink-soft:#4A433D;--ink-muted:#7A6048}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:#E9E1CF;font-family:"Gowun Dodum",sans-serif;color:var(--ink)}
+.grid{display:flex;gap:24px}
+.col{width:375px}
+.tag{font-family:"Gowun Batang",serif;font-size:18px;margin:0 0 4px}
+.desc{font-size:13px;color:var(--ink-muted);margin:0 0 10px;min-height:36px}
+.phone{background:var(--paper);border-radius:14px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.shelf{margin-top:14px}
+.head{display:flex;align-items:center;gap:4px;min-height:44px}
+.name{margin:0;font-size:15px;line-height:1.4}
+.edit{min-width:32px;color:var(--ink-soft);font-size:15px;text-align:center}
+.remove{margin-left:auto;font-size:13px;text-decoration:underline;text-underline-offset:3px;color:var(--ink-soft)}
+.rod{height:4px;border-radius:2px;background:var(--cloth-edge)}
+.row{display:flex;gap:8px;margin-top:-2px}
+.bm{width:48px;height:80px;background:#fff9;border:1px solid var(--paper-line);border-top:0;border-radius:0 0 4px 4px;clip-path:polygon(0 0,100% 0,100% 100%,50% 86%,0 100%)}
+/* A: quiet number after the name */
+.a{font-size:13px;color:var(--ink-muted);margin-left:2px}
+/* B: small pill */
+.b{font-size:12px;line-height:1;padding:4px 8px;border-radius:9999px;background:var(--paper-deep);color:var(--ink-soft);margin-left:4px}
+/* C: on the rod, right */
+.c-wrap{position:relative}
+.c{position:absolute;right:0;top:-22px;font-size:12px;color:var(--ink-muted)}
+</style></head><body>
+<div class="grid">
+ <div class="col"><p class="tag">A · 이름 옆 숫자</p><p class="desc">이름 뒤에 작은 회색 숫자 "· 3권". 가장 조용함</p>
+  <div class="phone">
+   <div class="shelf"><div class="head"><p class="name">서점 가서 볼 책 <span class="a">· 3권</span></p><span class="edit">✎</span></div><div class="rod"></div><div class="row"><div class="bm"></div><div class="bm"></div><div class="bm"></div></div></div>
+   <div class="shelf"><div class="head"><p class="name">읽기 완료! <span class="a">· 12권</span></p><span class="edit">✎</span><span class="remove">막대 지우기</span></div><div class="rod"></div><div class="row"><div class="bm"></div><div class="bm"></div><div class="bm"></div><div class="bm"></div><div class="bm"></div><div class="bm"></div></div></div>
+   <div class="shelf"><div class="head"><p class="name">언젠가 <span class="a">· 0권</span></p><span class="edit">✎</span><span class="remove">막대 지우기</span></div><div class="rod"></div></div>
+  </div></div>
+ <div class="col"><p class="tag">B · 이름 옆 작은 알약</p><p class="desc">종이색 알약 "3권". 숫자가 한눈에 보임</p>
+  <div class="phone">
+   <div class="shelf"><div class="head"><p class="name">서점 가서 볼 책</p><span class="b">3권</span><span class="edit">✎</span></div><div class="rod"></div><div class="row"><div class="bm"></div><div class="bm"></div><div class="bm"></div></div></div>
+   <div class="shelf"><div class="head"><p class="name">읽기 완료!</p><span class="b">12권</span><span class="edit">✎</span><span class="remove">막대 지우기</span></div><div class="rod"></div><div class="row"><div class="bm"></div><div class="bm"></div><div class="bm"></div><div class="bm"></div><div class="bm"></div><div class="bm"></div></div></div>
+   <div class="shelf"><div class="head"><p class="name">언젠가</p><span class="b">0권</span><span class="edit">✎</span><span class="remove">막대 지우기</span></div><div class="rod"></div></div>
+  </div></div>
+ <div class="col"><p class="tag">C · 막대 오른쪽 위</p><p class="desc">이름 줄과 떨어져 막대 끝에 "3권". 이름 줄은 그대로</p>
+  <div class="phone">
+   <div class="shelf"><div class="head"><p class="name">서점 가서 볼 책</p><span class="edit">✎</span></div><div class="c-wrap"><span class="c">3권</span><div class="rod"></div></div><div class="row"><div class="bm"></div><div class="bm"></div><div class="bm"></div></div></div>
+   <div class="shelf"><div class="head"><p class="name">읽기 완료!</p><span class="edit">✎</span><span class="remove">막대 지우기</span></div><div class="c-wrap"><span class="c">12권</span><div class="rod"></div></div><div class="row"><div class="bm"></div><div class="bm"></div><div class="bm"></div><div class="bm"></div><div class="bm"></div><div class="bm"></div></div></div>
+   <div class="shelf"><div class="head"><p class="name">언젠가</p><span class="edit">✎</span><span class="remove">막대 지우기</span></div><div class="c-wrap"><span class="c">0권</span><div class="rod"></div></div></div>
+  </div></div>
+</div>
+</body></html>
