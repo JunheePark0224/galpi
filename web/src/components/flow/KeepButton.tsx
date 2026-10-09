@@ -22,6 +22,19 @@ export const UNKEEP_FAILED = "빼지 못했어요. 다시 눌러 주세요.";
 export const SAVED_TOAST = "내 책갈피에 저장했어요";
 export const TO_LIBRARY = "보러 가기 →";
 const TOAST_MS = 4000;
+/** 10-09 (user): the toast is for learning where saves go — this browser's first save only. */
+export const TOAST_SEEN_KEY = "galpi.keepToastSeen";
+
+/** True once this browser has shown the toast; a browser that cannot remember (storage blocked) always shows it. */
+function toastSeen(): boolean {
+  try {
+    if (window.localStorage.getItem(TOAST_SEEN_KEY)) return true;
+    window.localStorage.setItem(TOAST_SEEN_KEY, "1");
+  } catch {
+    // storage blocked: show the toast each time, as before
+  }
+  return false;
+}
 const NOTES: Partial<Record<KeepState, string>> = { failed: KEEP_FAILED, full: KEEP_FULL, unkeepFailed: UNKEEP_FAILED };
 
 /** Where the flying copy starts (the peeking bookmark on the cover) and lands (the header's 내 책갈피). */
@@ -36,7 +49,8 @@ function flightPath(): FlightPath | null {
  * S-06 [🔖 내 책갈피에 저장] (PRD F-12, DESIGN C-16b v1.7): a wide leather button under the title and author, above
  * [예스24에서 보기] (still the one main button). Logged in or not, one press saves (lib/library/keep — logged out, into this
  * browser); then it turns green "✓ 내 책갈피에 저장했어요" and a second press takes it out (E-16). A new save flies a small
- * copy of the bookmark to the header (not with reduced motion), and a toast offers 내 책갈피 for 4 s. Hidden while nobody
+ * copy of the bookmark to the header (not with reduced motion), and a toast offers 내 책갈피 for 4 s — on this browser's
+ * first save only (10-09); later saves say it to a screen reader alone (the flight and the "+1" show it). Hidden while nobody
  * has answered who is here, and when login is not set up on this site. `meeting`: the draw's signed ticket and this
  * book's place in it — kept with a logged-out save so the 도감 can record it after the login (v1.7).
  */
@@ -45,8 +59,9 @@ export function KeepButton({ pick, meeting }: { pick: PickView; meeting?: FoundR
   const state = useKeepState(pick.card.id);
   const guest = useGuestSaves();
   const hintId = useId();
-  // the toast: 0 = hidden; each new save counts up, so a second save in a row shows it for 4 s again
+  // the toast: 0 = hidden; each new save counts up, so a second save in a row shows it for 4 s again. `seen`: only heard
   const [toast, setToast] = useState(0);
+  const [seen, setSeen] = useState(false);
   const [flight, setFlight] = useState<FlightPath | null>(null);
 
   useEffect(() => {
@@ -68,6 +83,7 @@ export function KeepButton({ pick, meeting }: { pick: PickView; meeting?: FoundR
     const shown = pressKeep({ isbn, art: pick.art, reason: pick.reason, metOn: kstDate(new Date()), card: pick.card, ...(meeting ? { meeting } : {}) }, loggedIn);
     if (!shown) return;
     setFlight(flightPath());
+    setSeen(toastSeen());
     setToast((n) => n + 1);
   };
 
@@ -85,11 +101,11 @@ export function KeepButton({ pick, meeting }: { pick: PickView; meeting?: FoundR
         <span id={hintId} className={styles.hint}>{saved ? KEPT_HINT : KEEP_HINT}</span>
       </button>
       {problem && <p role="alert" className={styles.error}>{problem}</p>}
-      {toast > 0 && (
+      {toast > 0 && (seen ? <p role="status" className={styles.srOnly}>{SAVED_TOAST}</p> : (
         <p role="status" className={styles.toast}>
           {SAVED_TOAST} · <a href="/library" className={styles.toastLink}>{TO_LIBRARY}</a>
         </p>
-      )}
+      ))}
       {flight && <KeepFlight pick={pick} path={flight} onDone={() => setFlight(null)} />}
     </div>
   );
