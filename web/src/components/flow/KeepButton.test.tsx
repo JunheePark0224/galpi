@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PickView } from "@/lib/flow/state";
 
@@ -75,6 +75,32 @@ describe("KeepButton (S-06 [🔖 내 책갈피에 저장], C-16b v1.7)", () => {
     expect(screen.getByRole("link", { name: "보러 가기 →" })).toHaveAttribute("href", "/library");
     act(() => vi.advanceTimersByTime(4000));
     expect(screen.queryByRole("status")).toBeNull();
+  });
+
+  it("10-09: the toast shows on this browser's first save only — later saves still fly and say it to a screen reader", async () => {
+    pressKeep.mockReturnValue(true);
+    await mount(IN);
+    fireEvent.click(keepButton());
+    expect(screen.getByRole("link", { name: "보러 가기 →" })).toBeInTheDocument();     // the first: the way to 내 책갈피
+    cleanup();
+    await mount(IN);
+    vi.useFakeTimers();
+    fireEvent.click(keepButton());
+    expect(screen.queryByRole("link", { name: "보러 가기 →" })).toBeNull();            // no toast on the page
+    const said = screen.getByRole("status");
+    expect(said).toHaveTextContent("내 책갈피에 저장했어요");
+    expect(said.className).toMatch(/srOnly/);                                         // heard, not shown
+    act(() => vi.advanceTimersByTime(4000));
+    expect(screen.queryByRole("status")).toBeNull();
+  });
+
+  it("the toast still shows when this browser cannot remember (storage blocked)", async () => {
+    pressKeep.mockReturnValue(true);
+    const read = vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => { throw new Error("blocked"); });
+    await mount(IN);
+    fireEvent.click(keepButton());
+    expect(screen.getByRole("link", { name: "보러 가기 →" })).toBeInTheDocument();
+    read.mockRestore();
   });
 
   it("no toast when nothing new was saved (full, blocked)", async () => {
