@@ -1,6 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 import { DATA_PATH } from "../src/lib/paths/__fixtures__/paths";
-import { answerPath, named, recordEvents, START, test } from "./helpers";
+import { answerPath, named, recordEvents, specMismatches, START, test } from "./helpers";
 
 test.use({ reducedMotion: "reduce" });
 
@@ -77,4 +77,51 @@ test("the books already shown stay excluded after a fresh open", async ({ page }
   await expectHome(page);
   const seen = await page.evaluate(() => JSON.parse(sessionStorage.getItem("galpi.flow") ?? "{}").state?.seen);
   expect(seen).toEqual(["9780000000001"]);
+});
+
+// The header's [처음으로] beside the account place (10-09, D안 — mockups/2026-10-09-home-button-right.png).
+const headerHome = (page: Page) => page.locator("header").getByRole("link", { name: "처음으로" });
+
+test("header [처음으로]: hidden at S-01, mid-flow it goes straight home in place (E-20 header, new round)", async ({ page }) => {
+  const { events } = await recordEvents(page);
+  await page.goto("/");
+  await expectHome(page);
+  await expect(headerHome(page)).toHaveCount(0);
+  await page.getByRole("button", { name: START }).click();
+  await answerPath(page, DATA_PATH.slice(0, 2));
+  const visits = named(events, "site_visited").length;
+  const box = await headerHome(page).boundingBox();
+  expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+  await headerHome(page).click();
+  await expectHome(page);                                     // no confirmation
+  await expect(headerHome(page)).toHaveCount(0);
+  await expect.poll(() => named(events, "home_clicked").length).toBe(1);
+  expect(named(events, "home_clicked")[0]).toMatchObject({ props: { curious_count: 0, source: "header" }, common: { round: 1 } });
+  expect(named(events, "site_visited")).toHaveLength(visits); // in place — no page load
+  await page.getByRole("button", { name: START }).click();
+  await expect.poll(() => named(events, "entry_selected").length).toBe(2);
+  expect(named(events, "entry_selected")[1].common).toMatchObject({ round: 2, entry: null, mode: null });
+  expect(specMismatches(events)).toEqual([]);
+});
+
+test("header [처음으로] on another page is a plain link to S-01", async ({ page }) => {
+  await page.goto("/privacy");
+  await headerHome(page).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expectHome(page);
+});
+
+test.describe("320 × 568: [처음으로] and [내 책갈피 10] fit the header on one line", () => {
+  test.use({ viewport: { width: 320, height: 568 } });
+  test("no overflow, one row", async ({ page }) => {
+    await page.route("**/api/me", (route) => route.fulfill({ json: { enabled: true, loggedIn: true, id: "e2e-user", count: 10, login: null } }));
+    await startPath(page);
+    const account = page.locator("header").getByRole("link", { name: "내 책갈피 10개" });
+    await expect(account).toBeVisible();
+    const [a, b] = [await headerHome(page).boundingBox(), await account.boundingBox()];
+    expect(Math.abs((a?.y ?? 0) - (b?.y ?? 99))).toBeLessThan(2);
+    expect((a?.x ?? 0) + (a?.width ?? 0)).toBeLessThanOrEqual(b?.x ?? 0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+    await page.locator("header").screenshot({ path: "test-results/header-320.png" });
+  });
 });

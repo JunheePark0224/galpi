@@ -2,3 +2,5 @@
 .home { display: inline-flex; align-items: center; min-height: var(--touch); color: var(--ink); text-decoration: none; }
 .home:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
 .logo { display: block; color: var(--ink); }
+/* Top right (10-09, D안): [처음으로] and the account place side by side. */
+.actions { display: flex; align-items: center; gap: var(--space-2); }

@@ -17,7 +17,7 @@ test("S-02 → 처리방침 link → /privacy → 처음으로", async ({ page }
   expect(stored).toMatch(/^[0-9a-f-]{36}$/);
   await expect(page.getByText(stored ?? "")).toBeVisible();
 
-  await page.getByRole("link", { name: "처음으로" }).click();
+  await page.locator("main").getByRole("link", { name: "처음으로" }).click();
   await expect(page).toHaveURL(/\/$/);
   // 처음으로 is a fresh open: S-01, not the question it left
   await expect(page.getByRole("button", { name: START })).toBeVisible();

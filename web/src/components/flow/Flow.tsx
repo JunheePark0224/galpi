@@ -20,6 +20,7 @@ import { QUESTION_MAP } from "@/lib/paths";
 import { encodeShare } from "@/lib/share/code";
 import { storyFile } from "@/lib/share/storyFile";
 import { advance, setFlowBack, unwind } from "@/lib/nav/deviceBack";
+import { setFlowHome } from "@/lib/nav/homeLink";
 import type { ShareMethod } from "./BackCover";
 import { BookScene } from "./BookScene";
 import { EndScreen } from "./EndScreen";
@@ -131,8 +132,11 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     act({ type: "start" });
   };
 
-  /** [처음으로] (E-20) — first_page = S-04 dead end, end = S-08, question = the first question's [← 이전 질문]. */
-  const home = (source: "first_page" | "end" | "question" | "device_back") => {
+  /**
+   * [처음으로] (E-20) — first_page = S-04 dead end, end = S-08, question = the first question's [← 이전 질문],
+   * device_back = the phone's back key, header = the header's [처음으로] (10-09).
+   */
+  const home = (source: "first_page" | "end" | "question" | "device_back" | "header") => {
     track("home_clicked", { curious_count: state.reactions.filter((r) => r === "curious").length, source });
     syncCommon([]);
     act({ type: "home" });
@@ -250,6 +254,10 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     }
   });
   useEffect(() => setFlowBack(() => deviceBack()), []);
+  // The header's [처음으로] (10-09, D안): offered while away from S-01, straight home with no confirmation.
+  const headerHome = useEffectEvent(() => home("header"));
+  const away = state.step !== "home";
+  useEffect(() => setFlowHome(away ? () => headerHome() : null), [away]);
   useEffect(() => {
     if (state.step === "home") unwind();
   }, [state.step]);
