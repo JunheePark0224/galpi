@@ -39,3 +39,6 @@
 /* The copy that flies to the header (KeepFlight): a whole C-02 drawn small, from its top-left corner. */
 .flight { position: fixed; z-index: 60; pointer-events: none; will-change: transform; }
 .flightBody { transform-origin: top left; transform: scale(0.42); will-change: transform; }
+
+/* 10-09: a save after the first — heard by a screen reader, not shown (the flight and the "+1" show it) */
+.srOnly { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
