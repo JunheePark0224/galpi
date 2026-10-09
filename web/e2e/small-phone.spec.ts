@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { LONG_MOOD_PATH } from "../src/lib/paths/__fixtures__/paths";
 import { test, toClosedBook } from "./helpers";
 
 // Launch sweep (docs/launch-sweep.md, 10-05): the small-phone layout fixes, each held by an assertion here.
@@ -45,6 +46,25 @@ for (const [w, h] of [[320, 568], [375, 559]] as const) {
         expect(b.width).toBeGreaterThanOrEqual(44);
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBe(0);
+    });
+  });
+}
+
+// 10-09 final check on galpibook.com: a challenge with no genre chosen and all five moods ran 47px past S-04 on a 375 × 667
+// phone (iPhone SE / 8) — the last mood line hidden in the page's scroll
+for (const [w, h] of [[375, 667], [375, 559], [320, 568]] as const) {
+  test.describe(`${w} × ${h} long summary`, () => {
+    test.use({ viewport: { width: w, height: h } });
+
+    test("S-04: the longest summary (challenge line + reason + five moods) stays on the page", async ({ page }, info) => {
+      test.skip(info.project.name !== "phone", "one viewport is set here; the phone project is enough");
+      await toClosedBook(page, LONG_MOOD_PATH);
+      await page.getByRole("button", { name: "책 펼치기" }).click();
+      await expect(page.getByRole("button", { name: "다음 장" })).toBeEnabled();
+      await expect(page.getByText("오늘은 낯선 장르에서 골랐어요")).toBeVisible();
+      expect(await pageOverflow(page)).toBeLessThanOrEqual(0);
+      await expect(page.locator("section[aria-labelledby='path-mood'] li").last()).toBeInViewport({ ratio: 1 });
+      if (process.env.KEEP_SHOTS) await page.screenshot({ path: `${process.env.KEEP_SHOTS}/s04-long-${w}x${h}.png` });
     });
   });
 }
