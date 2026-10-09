@@ -90,7 +90,7 @@ interface ActionsProps {
   curious: number;
   shareUrl: string;
   onContinue: () => void;
-  onShared: (method: ShareMethod) => void;
+  onShared: (method: ShareMethod, isLinkCopied: boolean | null) => void;
 }
 
 /**
