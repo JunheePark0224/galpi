@@ -23,6 +23,7 @@
 
 책을 좋아하는 사람도, 아직 책이 낯선 사람도 갈피에서 새로운 책을 만나 봤으면 좋겠습니다.
 
+한 번씩 써 보시고 피드백 부탁드립니다 ㅎㅎ
 https://galpibook.com/?utm_source=threads&utm_medium=social&utm_campaign=launch_1009
 
 ---
