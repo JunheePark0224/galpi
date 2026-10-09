@@ -1,7 +1,12 @@
 # 에브리타임 홍보글 (최종)
 
-- 올린 날: 2026-10-09
-- 게시판: 홍보게시판 (올린 곳이 다르면 고쳐 주세요)
+- 올린 날: 2026-10-09 (약 14:40 KST, 분석 시작 14:10 이후)
+- 게시판 4곳 (같은 글 · 같은 링크):
+  1. 우리 학교 자유게시판
+  2. 우리 학교 홍보게시판
+  3. 연합(전국 대학) 독서 게시판
+  4. 연합(전국 대학) 홍보게시판
+- 네 곳 모두 같은 링크라 **게시판별 유입은 나눌 수 없다** (모두 `utm_source=everytime`). 다음 채널부터는 게시판마다 `utm_content`를 달리 붙이면 나눌 수 있다
 - 링크: `https://galpibook.com/?utm_source=everytime&utm_medium=community&utm_campaign=launch_1009` (`docs/marketing-plan.md` 2절)
 - 사진 (올린 순서): `01-story-result.png` 결과 스토리 이미지 · `02-question.png` 질문 화면 · `03-my-bookmarks.webp` 내 책갈피
 
