@@ -7,6 +7,6 @@ export { LEARN_CHALLENGE_GENRES, LIST_MIN_BOOKS, NO_CHOICE_LABEL } from "./chall
 export { drawForPath, moodScore, type PathDraw } from "./draw";
 export { askable, moodSkips, MIN_SCORED } from "./skip";
 export { coverage, pathEnds, type PathEnd } from "./coverage";
-export { QUESTION_MAP } from "./map";
+export { isListRule, QUESTION_MAP } from "./map";
 export { pathSummary, type PathSummary } from "./summary";
 export { pathReason } from "./reason";
