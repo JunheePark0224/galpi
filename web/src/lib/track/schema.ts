@@ -75,7 +75,7 @@ export const EVENT_SPEC = {
     pick_type: { type: [null, "recommended", "random"] },
   },
   redraw_clicked: { curious_count: CURIOUS_COUNT },
-  home_clicked: { curious_count: CURIOUS_COUNT, source: { type: ["first_page", "end", "question", "device_back"] } },
+  home_clicked: { curious_count: CURIOUS_COUNT, source: { type: ["first_page", "end", "question", "device_back", "header"] } },
   description_expanded: { book_id: BOOK_ID, pick_type: PICK_TYPE },
   bookmark_pulled: { book_id: BOOK_ID, position: POSITION, pick_type: PICK_TYPE },
   bookmark_flipped: { book_id: BOOK_ID, pick_type: PICK_TYPE },

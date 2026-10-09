@@ -23,6 +23,8 @@ let holds: { depth: number; onBack: () => void }[] = [];
 let flowBack: (() => void) | null = null;
 let ignore = 0;
 let listening = false;
+/** S-01 reached while a window was open: the unwind is owed when the last window closes. */
+let unwindOwed = false;
 
 const depthHere = () => (window.history.state as Entry | null)?.galpiDepth ?? 0;
 
@@ -69,13 +71,18 @@ export function setFlowBack(onBack: () => void): () => void {
 /** A step forward, from a tap: one entry the back key can take back. Call it inside the tap's handler. */
 export function advance(): void {
   listen();
+  unwindOwed = false;
   push({ galpiSheet: false });
 }
 
 /** At S-01 again: go back over the flow's entries left (one move), so the next press leaves the site. */
 export function unwind(): void {
   listen();
-  if (depth <= 0 || holds.length > 0) return;
+  if (holds.length > 0) {
+    unwindOwed = true;
+    return;
+  }
+  if (depth <= 0) return;
   ignore += 1;
   window.history.go(-depth);
 }
@@ -90,6 +97,13 @@ export function holdBack(onBack: () => void): BackHold {
       if (!holds.includes(hold)) return;           // the back key already took it
       const top = holds.at(-1) === hold && depth === hold.depth;
       holds = holds.filter((h) => h !== hold);
+      if (unwindOwed && holds.length === 0) {         // back at S-01 meanwhile: one move over the window's entry and the flow's
+        unwindOwed = false;
+        if (depth <= 0) return;
+        ignore += 1;
+        window.history.go(-depth);
+        return;
+      }
       if (!top) return;                            // not the newest entry: leave it — a later press passes over it
       ignore += 1;
       window.history.back();
@@ -103,6 +117,7 @@ export function forgetBackHolds(): void {
   holds = [];
   flowBack = null;
   ignore = 0;
+  unwindOwed = false;
   window.removeEventListener("popstate", popped);
   listening = false;
 }

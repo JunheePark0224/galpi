@@ -34,7 +34,7 @@ describe("event schema", () => {
   it("v1.0: the question events and the extra home source; old first_page values stay readable; v2.3: the phone's back key", () => {
     expect(EVENT_SPEC.question_answered.kind.type).toEqual(["narrow", "mood"]);
     expect(EVENT_SPEC.question_back_clicked.source.type).toEqual(["question", "first_page", "device_back"]);
-    expect(EVENT_SPEC.home_clicked.source.type).toEqual(["first_page", "end", "question", "device_back"]);
+    expect(EVENT_SPEC.home_clicked.source.type).toEqual(["first_page", "end", "question", "device_back", "header"]);
     expect(EVENT_SPEC.path_completed.scope_id).toEqual({ type: "string" });
     expect(EVENT_SPEC.yes24_link_clicked.source.type).toContain("first_page");
     expect(EVENT_SPEC.entry_selected.source.type).toEqual(["home", "first_page"]);
