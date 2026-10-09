@@ -53,7 +53,7 @@ interface BackProps {
   curious: number;
   shareUrl: string;
   onContinue: () => void;
-  onShared: (method: ShareMethod) => void;
+  onShared: (method: ShareMethod, isLinkCopied: boolean | null) => void;
   /** the book has shut and the back cover shows (E-41) */
   onClosed: () => void;
 }

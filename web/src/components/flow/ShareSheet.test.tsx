@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { forgetBackHolds } from "@/lib/nav/deviceBack";
 import { forgetStories } from "@/lib/share/storyFile";
-import { COPIED, IMAGE_FAILED, INAPP_HINT, OUTSIDE_HINT, ShareSheet } from "./ShareSheet";
+import { COPIED, IMAGE_FAILED, INAPP_HINT, OUTSIDE_HINT, STORY_COPIED, STORY_COPY_FAILED, STORY_SEND, ShareSheet } from "./ShareSheet";
 
 const URL_ = "https://www.galpibook.com/s/1~0A~a.b~000000";
 const STORY = "/s/1~0A~a.b~000000/story";
@@ -19,28 +19,63 @@ describe("ShareSheet (C-31, F-27 — 결과 공유하기)", () => {
   it("where pictures can be shared: preview, then 인스타 스토리로 · 이미지 저장 · 링크 공유 (E-42 image · save_image · native)", async () => {
     const fetchMock = png();
     const share = vi.fn().mockResolvedValue(undefined);
+    const writeText = vi.fn().mockResolvedValue(undefined);
     vi.stubGlobal("fetch", fetchMock);
-    vi.stubGlobal("navigator", { ...navigator, userAgent: PHONE, share, canShare: () => true });
+    vi.stubGlobal("navigator", { ...navigator, userAgent: PHONE, share, canShare: () => true, clipboard: { writeText } });
     const p = props();
     render(<ShareSheet {...p} />);
     expect(screen.getByRole("dialog", { name: "결과 공유하기" })).toBeInTheDocument();
     expect(screen.getByRole("img", { name: "스토리 이미지 미리보기" })).toHaveAttribute("src", STORY);
     expect(fetchMock).toHaveBeenCalledWith(STORY);
 
+    // 10-09 시안 A-2: the story tile copies this result's link first and says how to stick it on the story
     const story = await screen.findByRole("button", { name: "인스타 스토리로" });
     await act(async () => { fireEvent.click(story); });
+    expect(writeText).toHaveBeenCalledWith(URL_);
+    expect(share).not.toHaveBeenCalled();
+    expect(screen.getByText(new RegExp(STORY_COPIED))).toBeInTheDocument();
+    expect(screen.getByText(/스티커에서 🔗 링크/)).toBeInTheDocument();
+    await act(async () => { fireEvent.click(screen.getByRole("button", { name: STORY_SEND })); });
     expect((share.mock.calls[0][0].files as File[])[0].type).toBe("image/png");
-    expect(p.onShared).toHaveBeenLastCalledWith("image");
+    expect(p.onShared).toHaveBeenLastCalledWith("image", true);
 
     const save = screen.getByRole("link", { name: "이미지 저장" });
     expect(save).toHaveAttribute("href", STORY);
     expect(save).toHaveAttribute("download");
     fireEvent.click(save);
-    expect(p.onShared).toHaveBeenLastCalledWith("save_image");
+    expect(p.onShared).toHaveBeenLastCalledWith("save_image", null);
 
     await act(async () => { fireEvent.click(screen.getByRole("button", { name: "링크 공유" })); });
     expect(share).toHaveBeenLastCalledWith(expect.objectContaining({ url: URL_, text: expect.stringContaining("책갈피 5장") }));
-    expect(p.onShared).toHaveBeenLastCalledWith("native");
+    expect(p.onShared).toHaveBeenLastCalledWith("native", null);
+  });
+
+  it("a story without the link when the browser will not copy it: says so, shows the link to copy by hand (is_link_copied false)", async () => {
+    vi.stubGlobal("fetch", png());
+    const share = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal("navigator", { ...navigator, userAgent: PHONE, share, canShare: () => true, clipboard: { writeText: vi.fn().mockRejectedValue(new Error("no")) } });
+    const p = props();
+    render(<ShareSheet {...p} />);
+    const insta = await screen.findByRole("button", { name: "인스타 스토리로" });
+    await act(async () => { fireEvent.click(insta); });
+    expect(screen.getByText(STORY_COPY_FAILED)).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "공유 링크" })).toHaveValue(URL_);
+    await act(async () => { fireEvent.click(screen.getByRole("button", { name: STORY_SEND })); });
+    expect(p.onShared).toHaveBeenLastCalledWith("image", false);
+  });
+
+  it("[돌아가기] from the story steps brings the three tiles back, nothing sent", async () => {
+    vi.stubGlobal("fetch", png());
+    const share = vi.fn();
+    vi.stubGlobal("navigator", { ...navigator, userAgent: PHONE, share, canShare: () => true, clipboard: { writeText: vi.fn().mockResolvedValue(undefined) } });
+    const p = props();
+    render(<ShareSheet {...p} />);
+    const insta = await screen.findByRole("button", { name: "인스타 스토리로" });
+    await act(async () => { fireEvent.click(insta); });
+    fireEvent.click(screen.getByRole("button", { name: "돌아가기" }));
+    expect(screen.getByRole("button", { name: "인스타 스토리로" })).toBeInTheDocument();
+    expect(share).not.toHaveBeenCalled();
+    expect(p.onShared).not.toHaveBeenCalled();
   });
 
   it("counts nothing when a share sheet is closed, and says so when the picture could not go", async () => {
@@ -49,10 +84,12 @@ describe("ShareSheet (C-31, F-27 — 결과 공유하기)", () => {
     vi.stubGlobal("navigator", { ...navigator, userAgent: PHONE, share, canShare: () => true });
     const p = props();
     render(<ShareSheet {...p} />);
-    const story = await screen.findByRole("button", { name: "인스타 스토리로" });
-    await act(async () => { fireEvent.click(story); });
+    const insta = await screen.findByRole("button", { name: "인스타 스토리로" });
+    await act(async () => { fireEvent.click(insta); });
+    const send = screen.getByRole("button", { name: STORY_SEND });
+    await act(async () => { fireEvent.click(send); });
     expect(screen.getByRole("status")).toBeEmptyDOMElement();
-    await act(async () => { fireEvent.click(story); });
+    await act(async () => { fireEvent.click(send); });
     expect(screen.getByRole("status")).toHaveTextContent(IMAGE_FAILED);
     expect(p.onShared).not.toHaveBeenCalled();
   });
@@ -72,7 +109,7 @@ describe("ShareSheet (C-31, F-27 — 결과 공유하기)", () => {
     await act(async () => { fireEvent.click(screen.getByRole("button", { name: "링크 복사" })); });
     expect(writeText).toHaveBeenCalledWith(URL_);
     expect(screen.getByRole("status")).toHaveTextContent(COPIED);
-    expect(p.onShared).toHaveBeenCalledWith("copy");
+    expect(p.onShared).toHaveBeenCalledWith("copy", null);
   });
 
   it("elsewhere without picture sharing (a desktop): 이미지 저장 · 링크 공유, the link copied when there is no share sheet", async () => {
@@ -83,7 +120,7 @@ describe("ShareSheet (C-31, F-27 — 결과 공유하기)", () => {
     expect(tile("인스타 스토리로")).toBeNull();
     expect(screen.getByRole("link", { name: "이미지 저장" })).toBeInTheDocument();
     await act(async () => { fireEvent.click(screen.getByRole("button", { name: "링크 공유" })); });
-    expect(p.onShared).toHaveBeenCalledWith("copy");
+    expect(p.onShared).toHaveBeenCalledWith("copy", null);
   });
 
   it("a refused clipboard shows the link to copy by hand", async () => {
@@ -121,8 +158,9 @@ describe("ShareSheet (C-31, F-27 — 결과 공유하기)", () => {
     const share = vi.fn().mockResolvedValue(undefined);
     vi.stubGlobal("navigator", { ...navigator, userAgent: PHONE, share, canShare: () => true });
     render(<ShareSheet {...props()} />);
-    const story = await screen.findByRole("button", { name: "인스타 스토리로" });
-    fireEvent.click(story);
+    const insta = await screen.findByRole("button", { name: "인스타 스토리로" });
+    await act(async () => { fireEvent.click(insta); });
+    fireEvent.click(screen.getByRole("button", { name: STORY_SEND }));
     expect(share).toHaveBeenCalledTimes(1);
     await act(async () => {});
   });
