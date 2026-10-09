@@ -37,6 +37,7 @@ test("뒤표지 → share a link → the shared page → 나도 갈피 잡기", 
   const [link] = await page.evaluate(() => (window as unknown as { copied: string[] }).copied);
   expect(link).toMatch(/\/s\/1~[0-9a-zA-Z.~]+$/);
   await expect.poll(() => named(events, "share_clicked").map((e) => e.props.method)).toEqual(["copy"]);
+  expect(named(events, "share_clicked")[0].props.is_link_copied).toBeNull();
   expect(await sheet.getByRole("link", { name: "이미지 저장" }).getAttribute("href")).toBe(`${new URL(link).pathname}/story`);
   await page.keyboard.press("Escape");
   await expect(sheet).toHaveCount(0);
@@ -57,6 +58,35 @@ test("뒤표지 → share a link → the shared page → 나도 갈피 잡기", 
   await expect(page.getByRole("button", { name: START })).toBeVisible();
   expect(named(events, "share_page_started")).toHaveLength(1);
 
+  expect(specMismatches(events)).toEqual([]);
+});
+
+test("10-09 시안 A-2: 인스타 스토리로 copies the result link, shows how to stick it on, then 스토리로 보내기 shares the picture (E-42 is_link_copied)", async ({ page }) => {
+  await page.addInitScript(() => {
+    const w = window as unknown as { copied: string[]; shared: { files: number; type: string }[] };
+    w.copied = []; w.shared = [];
+    Object.defineProperty(navigator, "canShare", { value: () => true, configurable: true });
+    Object.defineProperty(navigator, "share", {
+      value: async (data: { files?: File[] }) => { w.shared.push({ files: data.files?.length ?? 0, type: data.files?.[0]?.type ?? "" }); },
+      configurable: true,
+    });
+    Object.defineProperty(navigator, "clipboard", { value: { writeText: async (t: string) => { w.copied.push(t); } }, configurable: true });
+  });
+  const { events } = await recordEvents(page);
+  await toBookmarks(page);
+  await reactToBookmarks(page, ["궁금해요", "패스", "패스", "패스", "패스"], 5, true);
+  await page.getByRole("button", { name: "결과 공유하기" }).click();
+  const sheet = page.getByRole("dialog", { name: "결과 공유하기" });
+  await sheet.getByRole("button", { name: "인스타 스토리로" }).click();
+  await expect(sheet.getByText(/내 결과 링크를 복사했어요/)).toBeVisible();
+  await expect(sheet.getByText(/스티커에서 🔗 링크/)).toBeVisible();
+  if (process.env.KEEP_SHOTS) await page.screenshot({ path: `${process.env.KEEP_SHOTS}/s11-story-steps.png` });
+  const [link] = await page.evaluate(() => (window as unknown as { copied: string[] }).copied);
+  expect(link).toMatch(/\/s\/1~[0-9a-zA-Z.~]+$/);
+  await sheet.getByRole("button", { name: "스토리로 보내기" }).click();
+  await expect.poll(() => page.evaluate(() => (window as unknown as { shared: unknown[] }).shared)).toEqual([{ files: 1, type: "image/png" }]);
+  await expect.poll(() => named(events, "share_clicked").map((e) => e.props)).toEqual([expect.objectContaining({ method: "image", is_link_copied: true })]);
+  await expect(sheet.getByRole("button", { name: "인스타 스토리로" })).toBeVisible();   // back to the tiles
   expect(specMismatches(events)).toEqual([]);
 });
 

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>스토리 링크 시안</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Gowun+Batang:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FAF5EA;--paper-deep:#F0E6D0;--paper-line:#DDD0B4;--ink:#2B2724;--ink-soft:#4A433D;--ink-muted:#7A6048}
+body{margin:0;padding:24px;background:#E9E1CF;font-family:"Gowun Dodum",sans-serif;color:var(--ink)}
+.grid{display:flex;gap:24px;align-items:flex-start}
+.col{width:360px}
+.tag{font-family:"Gowun Batang",serif;font-size:18px;margin:0 0 4px}
+.desc{font-size:12px;color:var(--ink-muted);margin:0 0 10px;min-height:54px;line-height:1.5}
+.phone{position:relative;height:720px;border-radius:24px;overflow:hidden;background:#3a342f}
+.phone::before{content:"";position:absolute;inset:0;background:var(--paper) url(2026-10-07-share-sheet-back.png) center/cover;opacity:.35}
+.dim{position:absolute;inset:0;background:rgba(43,39,36,.45)}
+.sheet{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;gap:12px;padding:10px 16px 16px;border-radius:20px 20px 0 0;background:var(--paper)}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--paper-line)}
+.title{margin:0;font-size:16px}
+.story{width:140px;aspect-ratio:9/16;border-radius:8px;background:var(--paper-deep) url(2026-10-07-story-full.png) center/cover;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+.tiles{display:flex;gap:8px;width:100%}
+.tile{flex:1;min-height:76px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border-radius:14px;background:var(--paper-deep);font-size:13px}
+.tile.on{outline:2px solid #ee2a7b}
+.icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
+.insta{background:linear-gradient(45deg,#f9ce34,#ee2a7b 55%,#6228d7)}.save{background:#6b5b4b}.link{background:#3f5e78}
+.note{margin:0;width:100%;box-sizing:border-box;padding:8px 12px;border-radius:10px;background:var(--paper-deep);font-size:12.5px;line-height:1.5;text-align:center;color:var(--ink-soft);word-break:keep-all}
+.close{font-size:13px;color:var(--ink-muted);text-decoration:underline}
+.steps{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:12px;background:#fffdf8;border:1px solid var(--paper-line);font-size:13.5px;line-height:1.6}
+.steps b{font-family:"Gowun Batang",serif}
+.steps ol{margin:6px 0 0;padding-left:20px}
+.go{width:100%;min-height:48px;border-radius:9999px;background:var(--ink);color:#FAF5EA;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px}
+.sticker{display:inline-block;padding:0 6px;border-radius:6px;background:#fff;border:1px solid #ddd;font-size:12px}
+.status{font-size:13px;color:var(--ink-soft);min-height:18px}
+</style></head><body>
+<div class="grid">
+ <div class="col"><p class="tag">지금</p><p class="desc">[인스타 스토리로] = 이미지만 넘김. 스토리를 본 친구는 결과로 들어올 길이 없음</p>
+  <div class="phone"><div class="dim"></div><div class="sheet"><span class="grab"></span><p class="title">결과 공유하기</p><div class="story"></div>
+   <div class="tiles"><div class="tile"><span class="icon insta">◎</span>인스타 스토리로</div><div class="tile"><span class="icon save">↓</span>이미지 저장</div><div class="tile"><span class="icon link">🔗</span>링크 공유</div></div>
+   <p class="status"></p><span class="close">닫기</span></div></div></div>
+
+ <div class="col"><p class="tag">A-1 · 미리 한 줄 안내</p><p class="desc">타일 아래 안내가 늘 보이고, [인스타 스토리로]를 누르면 링크도 함께 복사된 뒤 바로 공유창. 누르는 횟수는 그대로</p>
+  <div class="phone"><div class="dim"></div><div class="sheet"><span class="grab"></span><p class="title">결과 공유하기</p><div class="story"></div>
+   <div class="tiles"><div class="tile"><span class="icon insta">◎</span>인스타 스토리로</div><div class="tile"><span class="icon save">↓</span>이미지 저장</div><div class="tile"><span class="icon link">🔗</span>링크 공유</div></div>
+   <p class="note">스토리로 보내면 내 결과 링크도 복사돼요.<br>스토리에서 <span class="sticker">🔗 링크</span> 스티커에 붙여 넣으면 친구가 내 결과를 볼 수 있어요</p>
+   <span class="close">닫기</span></div></div></div>
+
+ <div class="col"><p class="tag">A-2 · 누르면 한 번 더 안내</p><p class="desc">[인스타 스토리로]를 누르면 링크를 복사하고 시트가 순서 안내로 바뀜 → [스토리로 보내기]. 한 번 더 누르지만 인스타로 넘어가기 전에 꼭 읽게 됨</p>
+  <div class="phone"><div class="dim"></div><div class="sheet"><span class="grab"></span><p class="title">결과 공유하기</p><div class="story"></div>
+   <div class="steps"><b>✓ 내 결과 링크를 복사했어요</b><ol><li>스토리에 이미지를 올리고</li><li>위쪽 스티커에서 <span class="sticker">🔗 링크</span>를 골라</li><li>붙여 넣으면 친구가 내 결과를 볼 수 있어요</li></ol></div>
+   <div class="go"><span>◎</span>스토리로 보내기</div>
+   <span class="close">돌아가기</span></div></div></div>
+</div>
+</body></html>
