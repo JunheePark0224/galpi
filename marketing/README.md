@@ -12,4 +12,4 @@
 | `instagram/` | 인스타그램 스토리 ① (개인 계정, 2장) | 2026-10-10 | instagram |
 | `kakao/` | 카카오톡 (독서모임 단톡 · 아카데미 코치님 · 지인 1:1) | 2026-10-10 | kakao (campaign bookclub · academy · launch_1009 dm) |
 | `naver_blog/` | 네이버 블로그 (개인, 문학·책) | 2026-10-10 | naver_blog |
-| `openchat/` | 카카오 독서 오픈채팅 | 2026-10-10 전후 | openchat |
+| `openchat/` | 카카오 독서 오픈채팅 | 2026-10-10 전후 | kakao (campaign openchat) |
