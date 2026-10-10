@@ -9,3 +9,4 @@
 | `threads/` | 스레드 (새 계정) | 2026-10-09 | threads |
 | `linkedin/` | 링크드인 (개인 계정) | 2026-10-09 | linkedin |
 | `dcinside/` | 디시인사이드 독서 마이너 갤러리 | 2026-10-09 | dcinside |
+| `instagram/` | 인스타그램 스토리 ① (개인 계정, 2장) | 2026-10-10 | instagram |
