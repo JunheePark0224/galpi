@@ -12,8 +12,11 @@
 name: daily-books
 
 on:
-  schedule:
-    - cron: "0 21 * * *" # 21:00 UTC = 06:00 KST
+  # 06:00 KST schedule off (10-12, user): after launch the "grow" phase runs one batch every two days, started by hand
+  # (local run_daily, about $2.65 a batch) — a daily scheduled run would double the cost. Batches API is not cheaper here
+  # (10-08: the cached rules prompt is rebuilt per parallel request).
+  # schedule:
+  #   - cron: "0 21 * * *" # 21:00 UTC = 06:00 KST
   workflow_dispatch:
     inputs:
       dry_run:
