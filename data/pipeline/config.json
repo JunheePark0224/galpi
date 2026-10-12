@@ -4,5 +4,5 @@
   "sample_rate": 0.1,
   "model": "claude-sonnet-5-5",
   "second_model": "claude-sonnet-5-5",
-  "target_phase": "launch"
+  "target_phase": "grow"
 }
