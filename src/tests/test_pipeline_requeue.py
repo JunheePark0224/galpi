@@ -15,6 +15,7 @@ from pipeline.config import parse_config  # noqa: E402
 from pipeline_fakes import INTRO, TOC, FakeClient, write_cache, yes24_item  # noqa: E402
 
 BRAIN = "9788931558210"
+OTHER = "9791190000001"
 ROW = {"isbn": BRAIN, "to_entry": "leaf", "to_slot": "과학 교양", "from_batch": "2026-10-05", "date": "2026-10-05"}
 
 
@@ -125,6 +126,33 @@ def test_review_apply_writes_the_requeue_row_once(tmp_path, monkeypatch, capsys)
     assert saved["status"] == "dropped" and INTRO[:20] not in path.read_text(encoding="utf-8")  # no YES24 text
     assert review.main(["2026-10-05", "--apply", str(download)]) == 0  # again: same file, no second row, no message
     assert requeue.load(tmp_path / "requeue.json") == rows and "REQUEUE" not in capsys.readouterr().out
+
+
+def test_review_apply_does_not_queue_a_book_a_later_batch_already_took(tmp_path, monkeypatch, capsys):
+    """10-12: batch 10-08 requeued a book by itself, 10-08-2 tagged it and picked it, then applying 10-08's review read the
+    old `requeued_to` back into requeue.json — and 10-12 tagged the same book a third time ("already in books")."""
+    adds = tmp_path / "additions"
+    adds.mkdir()
+    first = adds / "2026-10-05.json"
+    first.write_text(json.dumps({"date": "2026-10-05", "batch_id": "2026-10-05", "batch": "daily", "books": [
+        {**target_book(BRAIN), "status": "dropped", "requeued_to": {"entry": "leaf", "slot": "과학 교양"}},
+        target_book(OTHER)]}, ensure_ascii=False), encoding="utf-8")
+    (adds / "2026-10-05-2.json").write_text(json.dumps({"date": "2026-10-05", "batch_id": "2026-10-05-2", "batch": "daily",
+        "books": [{**target_book(BRAIN), "entry": "leaf", "genre": "과학 교양", "status": "picked"}]}, ensure_ascii=False),
+        encoding="utf-8")
+    (tmp_path / "vocab.json").write_text(json.dumps({"습관·집중": {"kept": {"뇌과학": {"pattern": "뇌과학"}}}}), encoding="utf-8")
+    for name, value in (("ADDITIONS", adds), ("VOCAB", tmp_path / "vocab.json"), ("AGREEMENT", tmp_path / "agreement.csv"),
+                        ("REQUEUE", tmp_path / "requeue.json")):
+        monkeypatch.setattr(review, name, value)
+    monkeypatch.setattr("pipeline.sample.ADDITIONS", adds)
+    monkeypatch.setattr(review, "load_config", lambda: parse_config(
+        {"daily_count": 5, "auto_merge": False, "sample_rate": 0.1, "model": "claude-haiku-4-5",
+         "second_model": "claude-haiku-4-5", "target_phase": "launch"}))
+    download = tmp_path / "dl.json"
+    download.write_text(json.dumps({"answers": {OTHER: {"status": "picked", "one_liner": "", "ok": True}}}), encoding="utf-8")
+    review.main(["2026-10-05", "--apply", str(download)])
+    assert requeue.load(tmp_path / "requeue.json") == []   # the later batch already holds it: nothing to queue
+    assert "REQUEUE" not in capsys.readouterr().out
 
 
 def test_the_next_batch_tags_a_requeued_book_first_as_its_new_entry_and_clears_the_row(yes24, monkeypatch):
