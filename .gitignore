@@ -36,3 +36,6 @@ data/pipeline/eval/
 
 # event logs exported from Supabase for the launch analysis (report/) — raw behaviour rows stay local
 data/raw/events/
+
+# presentation captures include YES24 covers and intro text — never in git (CLAUDE.md 보안·약관)
+presentation/A-B TEST/
