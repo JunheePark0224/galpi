@@ -17,5 +17,5 @@ select e.created_at at time zone 'Asia/Seoul'          as at_kst,
        (e.props - 'feedback_text' - 'goal_text' - 'missing_text')::text as props
 from events e
 where e.created_at >= timestamptz '2026-10-09 14:10+09'
-  and e.common->>'anon_id' not in ('963f449d-d96b-45cc-b03a-6d5f150477fa', 'abc42f53-3c38-4a94-a4fe-b4c16e2b2c56')
+  and e.common->>'anon_id' not in ('963f449d-d96b-45cc-b03a-6d5f150477fa', 'abc42f53-3c38-4a94-a4fe-b4c16e2b2c56', 'de3d99af-cb69-4479-bfc6-451ae9780373')
 order by e.created_at;
