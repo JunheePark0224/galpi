@@ -120,3 +120,8 @@
    Phone only: on a desktop the shut back is already a whole page and never zooms (Book .zoom[data-shut]). Set from the
    moment the book shuts, so it settles once at this size. */
 @media (max-width: 767px) { .scene[data-pick] { --cover-zoom: 1.9; } }
+/* Shorter phones (wider than tall enough): the grown cover already reaches the header, so it would run over the hint line
+   (10-12, a 360 × 600 Samsung Internet). The cover is (width − 32) × 0.725 × zoom and must stay above height − 184;
+   steps by aspect ratio keep it there, down to the 1.6 of A. */
+@media (max-width: 767px) and (min-aspect-ratio: 55/100) { .scene[data-pick] { --cover-zoom: 1.75; } }
+@media (max-width: 767px) and (min-aspect-ratio: 59/100) { .scene[data-pick] { --cover-zoom: 1.6; } }
