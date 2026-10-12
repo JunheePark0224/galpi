@@ -70,13 +70,15 @@ export const test = base.extend({
     await provide({ "x-forwarded-for": clientIp(testInfo.testId) });
   },
   // C-20 · C-21: the S-05 and S-06 guides are marked as seen, so specs reach the reactions and the S-06 buttons;
-  // first-guide.spec and result-guide.spec remove their mark.
+  // first-guide.spec and result-guide.spec remove their mark. The back-cover experiment (10-12) is pinned to A, today's
+  // 뒤표지 with its main button; back-cover-pick.spec pins B (a later init script wins).
   page: async ({ page }, provide) => {
     await page.addInitScript(() => {
       try {
         window.localStorage.setItem("galpi.hint.firstGuide", "1");
         window.localStorage.setItem("galpi.hint.resultGuide", "1");
         window.localStorage.setItem("galpi.hint.libraryGuide", "1");
+        window.localStorage.setItem("galpi.exp.backCover", "A");
       } catch { /* blocked */ }
     });
     await provide(page);

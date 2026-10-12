@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { FIRST_GUIDE_KEY, firstGuide, RESULT_GUIDE_KEY, resultGuide } from "./firstGuide";
+import { BACK_PICK_GUIDE_KEY, backPickGuide, FIRST_GUIDE_KEY, firstGuide, RESULT_GUIDE_KEY, resetGuides, resultGuide } from "./firstGuide";
 
 describe("once-per-browser guide flags (C-20 · C-21)", () => {
   afterEach(() => {
@@ -7,6 +7,16 @@ describe("once-per-browser guide flags (C-20 · C-21)", () => {
     window.localStorage.clear();
     firstGuide.forgetForTests();
     resultGuide.forgetForTests();
+    backPickGuide.forgetForTests();
+  });
+
+  it("B (back-cover experiment): the 뒤표지 tip is its own guide, and S-10 shows it again", () => {
+    expect(backPickGuide.hasSeen()).toBe(false);
+    backPickGuide.markSeen();
+    expect(window.localStorage.getItem(BACK_PICK_GUIDE_KEY)).toBe("1");
+    expect(resultGuide.hasSeen()).toBe(false);
+    resetGuides();
+    expect(backPickGuide.hasSeen()).toBe(false);
   });
 
   it("keeps the S-05 and S-06 guides apart, each under its own key", () => {

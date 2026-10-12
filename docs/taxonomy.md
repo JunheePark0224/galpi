@@ -32,6 +32,7 @@
 | taxonomy v2.2 | 2026-10-07 | 공유 시트 (PRD F-27, DESIGN C-31, 사용자 시안 10-07) | E-42 `method`에 "save_image" 다시(시트의 [이미지 저장]) — 값 native·copy·image·save_image, 모두 S-11 공유 시트에서. v2.1의 카카오톡 → 브라우저 넘기기와 내 뒤표지 `?mine=1`은 없앰 (8절) |
 | taxonomy v2.4 | 2026-10-09 | 스토리 공유에 결과 링크 (PRD F-27, DESIGN C-31, 사용자 시안 A-2 `mockups/2026-10-09-story-link.png`) | E-42 `is_link_copied`(Boolean, null) 추가 — [인스타 스토리로]가 그 사람의 결과 링크를 클립보드에 복사했는지(image에서만, 다른 method는 null). 이벤트 시점은 그대로(공유창에 이미지를 넘겼을 때) — 안내 화면의 [스토리로 보내기]를 누른 뒤 (8절) |
 | taxonomy v2.3 | 2026-10-08 | 휴대폰 뒤로가기 (`plans/2026-10-08-device-back.md`, 사용자 승인) | E-33 `source` += "device_back"(뒤로가기로 이전 질문·마지막 질문), E-20 `source` += "device_back"(첫 질문에서 뒤로가기, 책갈피·뒤표지의 뒤로가기 안내 [처음으로]) — 화면이 아니라 누른 방법이라, 화면 버튼은 그대로 (8절) |
+| taxonomy v2.6 | 2026-10-12 | 뒤표지 A/B 실험 `back_cover_pick` (PRD F-27, 사용자 결정 B2) | E-45 `experiment_exposed`(`experiment`·`variant`) live, 동사 `exposed`, 분류 `실험`. 처리방침은 그대로("화면 버전") (8절) |
 | taxonomy v2.5 | 2026-10-09 | 머리글 [처음으로] (PRD F-01, DESIGN A-05, 사용자 시안 D `mockups/2026-10-09-home-button-right.png`) | E-20 `source` += "header" — 흐름 도중(S-01이 아닐 때) 오른쪽 위 [처음으로]를 눌러 확인 없이 S-01로. 다른 페이지(/library 등)의 [처음으로]는 로고처럼 그냥 이동이라 이벤트 없음 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
@@ -63,6 +64,7 @@
 | Q-12 | **보관 → 로그인** — 보관 → 로그인 창 → 로그인 완료 → 자동 보관 비율, 카카오·구글 비율. v1.7부터: 로그인 없이 브라우저에 저장한 사람 중 로그인해 계정으로 옮기는 비율 | PRD 4절 "새로 볼 수 있는 것", PHASES P8 |
 | Q-13 | **재방문·내 책갈피** — 재방문 후 내 책갈피를 여는 비율. 막대를 만들고 책갈피를 옮기는(꾸미는) 사람이 내 책갈피를 더 자주 여나, 옮기기를 꾹 누르기와 뒷면 메뉴 중 어느 쪽으로 하나 (v0.8) | PRD 4절, F-13 |
 | Q-14 | **기기** — 휴대폰/데스크톱, 앱 안 브라우저 비율, 앱 안 브라우저에서 구글 로그인 실패 | context 09-29(모바일 우선), PRD F-20 |
+| Q-16 | **뒤표지 A/B (`back_cover_pick`, v2.6)** — 궁금해요가 있는 사람이 뒤표지에서 책 정보까지 가는 비율이 b(책갈피를 눌러 바로 열기)에서 높아지나. 지킴: 공유율이 떨어지지 않나 | context 10-12, PRD F-27 |
 | Q-15 | **2단계 전후 비교** — 고친 것 하나의 전후 차이(효과 크기 + 신뢰구간), 유입 경로별로 나눠 보기 | proposal 4-4, PHASES P9 |
 
 ### 1-2. 설계 원칙 — 참고한 글과 갈피에 적용한 것
@@ -127,6 +129,7 @@
 | `decorated` | 이용자가 꾸몄다 — 책갈피 그림을 바꿔 서버가 저장한 뒤 (책갈피 꾸미기, v1.6) | click |
 | `merged` | 따로 있던 것을 합쳤다 — 로그인 전 브라우저에 저장한 책갈피를 계정으로 옮긴 뒤 (v1.7) | system |
 | `removed` | 이용자가 만든 것을 지웠다 — 내 책갈피 막대를 [막대 지우기]로, 서버가 지운 뒤 (v1.8) | click |
+| `exposed` | A/B 실험에서 받은 쪽 화면이 실제로 보였다 — 실험마다 정한 순간에 (v2.6) | view |
 
 ### 2-3. 속성 이름
 
@@ -167,6 +170,7 @@
 | 마무리 | S-08 (E-20은 S-04의 막다른 길에서도) | E-19, E-20 |
 | 홈 | S-01 (퍼널 밖 — 갈피 우체통, v0.10) | E-31 |
 | 공유 | S-11 뒤표지 · S-12 공유 페이지 | E-41, E-42, E-43, E-44 (v2.0) |
+| 실험 | 실험마다 (`back_cover_pick`: S-11) | E-45 (v2.6) |
 | 공통 | — | 공통 속성 (csv의 `*` 줄) |
 
 ### 2-6. 트리거 (Trigger)
@@ -349,8 +353,9 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-42 | `share_clicked` | (없음, v2.0) | 공유 | click | live |
 | E-43 | `share_page_viewed` | (없음, v2.0) | 공유 | view | live |
 | E-44 | `share_page_started` | (없음, v2.0) | 공유 | click | live |
+| E-45 | `experiment_exposed` | (없음, v2.6) | 실험 | view | live |
 
-E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(37개 — `EVENT_NAMES`는 그 키, v2.0 E-41~E-44 추가, v1.2 E-35 추가, v1.3 E-36·E-37 추가, v1.6 E-38 추가, v1.7 E-39 추가, v1.8 E-40 추가. `removed` 6개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
+E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(38개 — `EVENT_NAMES`는 그 키, v2.6 E-45 추가, v2.0 E-41~E-44 추가, v1.2 E-35 추가, v1.3 E-36·E-37 추가, v1.6 E-38 추가, v1.7 E-39 추가, v1.8 E-40 추가. `removed` 6개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
 
 ### 4-2. 이벤트별 상세
 
@@ -986,6 +991,21 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | `feedback_text` | 추가 (v0.10) | String | "책갈피가 귀여워요" | 우체통에 적은 글 (앞뒤 공백 제거, 1~500자). **`Supabase only`** (2-7·6-2) — 로그·DOM 속성에 넣지 않는다 |
 | `text_length` | 추가 (v0.10) | Number | 12, 480 | 앞뒤 공백을 뺀 글자 수 (UTF-16 단위, 1~500) |
 
+#### E-45 `experiment_exposed`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 실험 | view | live | 신규 (v2.6) |
+
+**언제**: A/B 실험에서 받은 쪽 화면이 실제로 보인 순간, 한 판에 한 번. `back_cover_pick`(10-12): 다섯 번째 반응에 **궁금해요가 1권 이상**이고 책이 덮여 S-11 뒤표지가 보일 때 — E-41과 같은 순간(같은 판 새로고침이면 다시 보내지 않음). 궁금해요 0권이면 A·B 화면이 같아 보내지 않는다  
+**받는 쪽 정하기**: 익명 번호(`anon_id`)와 실험 이름을 FNV-1a 해시해 2로 나눈 나머지 — 같은 브라우저는 늘 같은 쪽(`lib/experiment/backCover.ts`). 서버 저장 없음. 로그인해도 바뀌지 않고 기기가 바뀌면 다시 정해진다  
+**분석 질문**: Q-16 — 노출된 사람 중 책 정보(E-09)까지 간 비율을 a·b로 (주 지표, 사람 단위, 차이 + 95% 신뢰구간), 지킴 지표 공유율(E-42), 같이 볼 것 저장(E-11)·예스24(E-18)
+
+| 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
+|---|---|---|---|---|
+| `experiment` | 추가 (v2.6) | String | "back_cover_pick" | 실험 이름 — 뒤표지에서 궁금해요 책을 바로 열기(B2) |
+| `variant` | 추가 (v2.6) | String | "a", "b" | 받은 쪽. a = 지금 그대로([궁금해요 N권 책 정보 보기] → S-06), b = 궁금해요 책갈피를 눌러 뒤표지 위 카드로 |
+
 ### 4-3. 이벤트로 만들지 않는 것
 
 | 행동 | 이유 |
@@ -1110,6 +1130,7 @@ FN-2의 셋째 단계(`goal_submitted`)는 v0.3(2026-10-01)부터 쌓인다. 그
 | 못 찾은 요청 | `free_goal_written`에서 is_matched=false 또는 found_count<4의 goal_text 목록. v0.6부터 `missing_text`(has_missing=TRUE)를 모아 세면 "새 키워드 후보" 목록 (PRD F-24 — 많이 쌓이면 새 주제·키워드) | method | Q-10 ④ |
 | 이해 판단별 반응 (v0.6) | 판의 마지막 `goal_coverage_checked.understood`별 비율, 각각의 5장 완주율·궁금해요율, ②·③에서 `yes24_link_clicked`(first_page) 비율, ③에서 E-02(source=first_page)·E-06 비율 | understood | Q-10 |
 | 요청 적중률 | `free_goal_written` 중 keywords가 1개 이상인 비율 | method | Q-10 |
+| 책 정보 도달률 (실험, v2.6) | E-45를 받은 사람 중 그 뒤 `result_viewed`가 있는 사람 (사람 단위, 노출 뒤 첫 판) | variant | Q-16 |
 | 더 보기율 | `description_expanded` / `result_book_viewed` (책 단위, 중복 제거) | pick_type | Q-11 |
 | 예스24 클릭률 | `yes24_link_clicked`(result) / `result_book_viewed` | pick_type | Q-11 |
 | 책갈피 꺼냄율 | `bookmark_pulled` / `result_book_viewed` (책 단위, 중복 제거, v0.7부터) | pick_type, position | Q-11 |
@@ -1358,6 +1379,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v1.8 | 2026-10-07 | Claude (사용자 요청) | 내 책갈피(S-09) [막대 지우기](PRD F-13, DESIGN C-17·C-27): 첫 막대가 아닌 막대를 책갈피와 함께 지운다(책갈피가 있으면 확인 시트). 새 E-40 `shelf_removed`(`removed_count` Number — 서버가 함께 지운 책갈피 수, 빈 막대면 0)를 화면과 함께 `live`로, 동사 `removed` 추가. v0.8의 "막대 지우기는 이벤트 없음"은 빈 막대만 치울 수 있을 때의 결정 — 이제 책갈피가 함께 사라지므로 남긴다. 함께 지운 책마다 E-16을 보내지 않음(E-35와 같음). 막대 이름·번호는 넣지 않음(6-1). 모으는 정보 변화 없음(지운 수뿐) — `/privacy`는 기록을 "누른 버튼"으로만 적어 그대로 |
 | v2.0 | 2026-10-07 | Claude (사용자 결정) | 뒤표지 + 공유(PRD F-27·S-11·S-12, `plans/2026-10-07-share-backcover.md`): E-41 `back_cover_shown`, E-42 `share_clicked`(`method`), E-43 `share_page_viewed`, E-44 `share_page_started` 추가, 분류 `공유`, 새 속성 `method`·`label_count`. 공유 링크에는 고른 답·책 5권·그림만 — 개인정보 없음, 처리방침에 한 줄 |
 | v2.5 | 2026-10-09 | Claude (사용자 시안 D) | 머리글 오른쪽 위 [처음으로](PRD F-01, DESIGN A-05) — 아빠처럼 로고를 눌러 처음으로 가는 걸 모르는 사람을 위해. E-20 `source` += "header". 흐름이 S-01이 아닐 때만 보이고, 누르면 확인 없이 그 판을 끝낸다(중간에 그만두는 사람은 길을 잘못 고른 사람 — 사용자 판단). 보낸 직후 round +1(3-1a 그대로). /library·공유 페이지의 [처음으로]는 로고와 같은 그냥 이동이라 이벤트 없음. 모으는 정보 변화 없음 |
+| v2.6 | 2026-10-12 | Claude (사용자 결정 B2) | 뒤표지 A/B 실험 `back_cover_pick`(PRD F-27): E-45 `experiment_exposed`(`experiment`·`variant` "a"/"b") 추가, 동사 `exposed`, 분류 `실험`. 궁금해요 1권 이상으로 뒤표지가 덮일 때 한 판에 한 번(E-41과 같은 순간). 받는 쪽은 anon_id 해시로 브라우저마다 고정. b의 책 카드는 S-06과 같은 E-09(한 판에 한 번)·E-10(책마다 한 번)을 보낸다. 모으는 정보: 처리방침의 "화면 버전"에 들어가 처리방침은 그대로. 지표 "책 정보 도달률", 질문 Q-16 |
 
 ---
 

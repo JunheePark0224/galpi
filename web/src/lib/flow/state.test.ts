@@ -117,6 +117,13 @@ describe("flowReducer (v2 questions)", () => {
     expect(flowReducer(marks, { type: "leaveBack" })).toBe(marks);                               // only from the 뒤표지
   });
 
+  it("B (back-cover experiment): [다 봤어요] on the card over the 뒤표지 goes straight to S-08", () => {
+    const marks = flowReducer(opened(), { type: "next" });
+    const curious = run([{ type: "react", reaction: "curious" }, ...Array.from({ length: 4 }, () => ({ type: "react" as const, reaction: "pass" as const }))], marks);
+    expect(flowReducer(curious, { type: "finishBack" })).toMatchObject({ step: "end" });
+    expect(flowReducer(marks, { type: "finishBack" })).toBe(marks);                              // only from the 뒤표지
+  });
+
   it("S-06: ‹ › within the 궁금해요 books", () => {
     const all = (r: "pass" | "curious"): FlowAction[] => Array.from({ length: 5 }, () => ({ type: "react" as const, reaction: r }));
     const marks = flowReducer(opened(), { type: "next" });

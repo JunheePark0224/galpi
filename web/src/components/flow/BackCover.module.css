@@ -34,3 +34,37 @@
 .count { margin: 6px 0 0; font-size: 10.5px; color: var(--ink-muted); }
 .actions { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-2); width: min(100%, 320px); margin: 0 auto; }
 .status { margin: 0; min-height: 1.2em; font-size: 13px; text-align: center; color: var(--ink-soft); }
+/* B (back-cover experiment, 10-12): the 궁금해요 bookmarks are lit and open their book; the rest step back */
+.dim { opacity: 0.38; filter: saturate(0.35) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2)); }
+.lit { z-index: 2; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.42)); }
+.pick {
+  position: absolute; inset: -8px; padding: 0; border: 0; background: transparent; cursor: pointer;
+  border-radius: 8px;
+}
+.pick:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.hint { margin: 0 0 2px; font-size: 14px; text-align: center; color: var(--ink-soft); }
+/* B, 10-12 (user): the lit bookmarks hop now and then (like the S-03 tap nudge, Book .cover) so they read as something to
+   press, and grow a little. `translate` moves them without touching the slot's own rotate. */
+.laid[data-pick] .slot { width: 70px; height: 163px; }
+.laid[data-pick] .small { transform: scale(0.44); }
+@media (prefers-reduced-motion: no-preference) { .lit { animation: hop 2.4s ease-in-out var(--delay, 0s) infinite; } }
+@keyframes hop { 0%, 64%, 100% { translate: 0 0; } 74% { translate: 0 -9px; } 84% { translate: 0 0; } 90% { translate: 0 -4px; } }
+/* B, 10-12 (시안 A, user): a dark tip under the first lit bookmark, pointing up at it — the hint line alone was too quiet.
+   It stands upright (undoes the slot's turn) and hops with the bookmark; gone once a bookmark is pressed. */
+.tip {
+  position: absolute; top: calc(100% + 10px); z-index: 3; margin: 0; padding: 6px 11px; border-radius: 999px;
+  display: flex; align-items: center; gap: 5px; white-space: nowrap; pointer-events: none;
+  background: var(--ink); color: var(--paper); font-size: 12.5px; line-height: 1.2;
+  rotate: calc(-1 * var(--turn)); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+.tip::before {   /* the arrow up to the bookmark */
+  content: ""; position: absolute; bottom: 100%; border: 6px solid transparent; border-bottom-color: var(--ink);
+}
+.tip[data-side="start"] { left: -4px; }
+.tip[data-side="start"]::before { left: 26px; }
+.tip[data-side="middle"] { left: 50%; translate: -50% 0; }
+.tip[data-side="middle"]::before { left: calc(50% - 6px); }
+.tip[data-side="end"] { right: -4px; }
+.tip[data-side="end"]::before { right: 26px; }
+.tipIcon { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.lit[data-tip] { z-index: 4; }   /* the tip lies over the bookmarks below it (each lit slot is its own layer) */

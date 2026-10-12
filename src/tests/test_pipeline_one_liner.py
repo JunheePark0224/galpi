@@ -124,3 +124,13 @@ def test_a_retry_that_copies_again_is_still_failing_and_keeps_the_issue():
     raw, a = first("target", COPIED)
     out, used, outcome = retry(fixing(COPIED), MODEL, SYSTEM, USER, "target", raw, a, TITLE, Breaker(), INTRO)
     assert outcome == "still_failing" and out["one_liner"] == COPIED
+
+
+def test_the_tag_rules_ask_for_a_whole_book_line_under_the_same_copy_limit_the_check_uses():
+    """10-12 (user): one sentence about the whole book, and no 10-character run from the intro/TOC — the number the
+    prompt states is the check's own (checks.COPY_RUN), so the two cannot drift apart."""
+    from pipeline.checks import COPY_RUN
+    from pipeline.prompt import TAG_RULES
+    rule = next(r for r in TAG_RULES if r.startswith("one_liner:"))
+    assert "책 전체" in rule
+    assert f"{COPY_RUN}글자 이상" in rule
