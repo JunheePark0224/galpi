@@ -6,6 +6,7 @@
 export const FIRST_GUIDE_KEY = "galpi.hint.firstGuide";
 export const RESULT_GUIDE_KEY = "galpi.hint.resultGuide";
 export const LIBRARY_GUIDE_KEY = "galpi.hint.libraryGuide";
+export const BACK_PICK_GUIDE_KEY = "galpi.hint.backPick";
 
 export interface GuideFlag {
   hasSeen: () => boolean;
@@ -55,6 +56,8 @@ export const firstGuide = guideFlag(FIRST_GUIDE_KEY);
 export const resultGuide = guideFlag(RESULT_GUIDE_KEY);
 /** C-22, the first visit to S-09 내 책갈피. */
 export const libraryGuide = guideFlag(LIBRARY_GUIDE_KEY);
+/** B (back-cover experiment, 10-12): the tip on the first lit 뒤표지 bookmark, until one is pressed. */
+export const backPickGuide = guideFlag(BACK_PICK_GUIDE_KEY);
 
 export const hasSeenFirstGuide = firstGuide.hasSeen;
 export const markFirstGuideSeen = firstGuide.markSeen;
@@ -66,4 +69,5 @@ export function resetGuides(): void {
   firstGuide.reset();
   resultGuide.reset();
   libraryGuide.reset();
+  backPickGuide.reset();
 }

@@ -21,7 +21,10 @@ import { encodeShare } from "@/lib/share/code";
 import { storyFile } from "@/lib/share/storyFile";
 import { advance, setFlowBack, unwind } from "@/lib/nav/deviceBack";
 import { setFlowHome } from "@/lib/nav/homeLink";
+import { backCoverExposure, backCoverVariant, firstPeekThisRound, type BackCoverVariant } from "@/lib/experiment/backCover";
 import type { ShareMethod } from "./BackCover";
+import { BookPeek } from "./BookPeek";
+import { backPickGuide } from "@/lib/flow/firstGuide";
 import { BookScene } from "./BookScene";
 import { EndScreen } from "./EndScreen";
 import { Home } from "./Home";
@@ -58,6 +61,15 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
   const [found, setFound] = useState<{ at: string; items: FoundItem[] } | null>(null);   // 도감 v1 badge, per bookmark
   // S-11 (10-07): after the last reaction the book shuts onto its back cover (not on a resumed round — already shut)
   const [closing, setClosing] = useState(false);
+  // back-cover experiment (10-12): read once in the browser (the anonymous id lives there); B opens books from the 뒤표지
+  // (the server never draws the 뒤표지 — the flow starts at S-01 — so "A" there cannot mismatch)
+  const [variant] = useState<BackCoverVariant>(() => (typeof window === "undefined" ? "A" : backCoverVariant()));
+  // B: the 궁금해요 book open over the 뒤표지, kept with its round so a new draw starts closed
+  const [peekAt, setPeekAt] = useState<{ drawId: typeof state.drawId; at: number } | null>(null);
+  // B: the tip on the first lit bookmark until one is pressed (once per browser; S-10 shows it again)
+  const [pickTip, setPickTip] = useState(() => typeof window !== "undefined" && !backPickGuide.hasSeen());
+  const peek = peekAt && peekAt.drawId === state.drawId ? peekAt.at : null;
+  const setPeek = (at: number | null) => setPeekAt(at === null ? null : { drawId: state.drawId, at });
 
   useEffect(() => { saveFlow(state); }, [state]);
   useEffect(() => { window.scrollTo(0, 0); }, [state.step, state.result, state.answers.length]);
@@ -206,6 +218,8 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
   const closed = () => {
     setClosing(false);
     track("back_cover_shown", { curious_count: curiousPicks(state).length, label_count: state.draw?.label?.chips.length ?? 0 });
+    const exposure = backCoverExposure(variant, curiousPicks(state).length);   // E-45, the same moment (taxonomy v2.6)
+    if (exposure) track("experiment_exposed", exposure);
   };
 
   /** S-11 main button: S-06 with something 궁금해요, S-08 without (PRD 2절). */
@@ -213,6 +227,24 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     advance();
     const next = act({ type: "leaveBack" });
     if (next.step === "result") enterResult(next);
+  };
+  /** B: a lit bookmark pressed on the 뒤표지 — its book floats over the back cover (BookPeek). */
+  const pickBack = (id: string) => {
+    const i = curiousPicks(state).findIndex((p) => p.card.id === id);
+    if (i < 0) return;
+    if (firstPeekThisRound()) {   // E-09 once per round (analytics round — survives a reload), as entering S-06 does
+      track("result_viewed", { curious_count: curiousPicks(state).length });
+      viewedResults.current = new Set();
+    }
+    setPeek(i);
+    if (pickTip) { backPickGuide.markSeen(); setPickTip(false); }
+  };
+  /** B: E-10 for each book the floating card shows, once per book and round (taxonomy v0.11). */
+  const peekBook = (i: number) => {
+    const pick = curiousPicks(state)[i];
+    if (!pick || viewedResults.current.has(pick.card.id)) return;
+    viewedResults.current.add(pick.card.id);
+    track("result_book_viewed", { book_id: pick.card.id, position: i + 1, pick_type: pick.kind });
   };
   const shared = (method: ShareMethod, isLinkCopied: boolean | null) => {
     track("share_clicked", { method, label_count: state.draw?.label?.chips.length ?? 0, is_link_copied: isLinkCopied });
@@ -304,7 +336,10 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
           onHome={() => home("first_page")}
           found={found?.at === `${state.drawId}:${state.index}:${state.draw?.picks[state.index]?.card.id}` ? found.items : null}
           back={state.step === "back"
-            ? { shutting: closing, curious: curious.length, shareUrl: shareUrl(state), onContinue: leaveBack, onShared: shared, onClosed: closed }
+            ? {
+                shutting: closing, curious: curious.length, shareUrl: shareUrl(state), onContinue: leaveBack, onShared: shared, onClosed: closed,
+                pick: variant === "B" && curious.length > 0 ? { ids: new Set(curious.map((p) => p.card.id)), onPick: pickBack, showTip: pickTip } : undefined,
+              }
             : undefined}
         />
       )}
@@ -315,6 +350,10 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
         />
       )}
       {resultPick && shownResult !== resultPick.card.id && <ResultLoading />}
+      {state.step === "back" && peek !== null && (
+        <BookPeek picks={curious} start={peek} meetingOf={(p) => meetingOf(state.draw, p)} onView={peekBook} onClose={() => setPeek(null)}
+          onDone={() => { setPeek(null); advance(); act({ type: "finishBack" }); }} />
+      )}
       {state.step === "end" && <EndScreen onRedraw={redraw} onHome={() => home("end")} />}
       {noticeFor === screen && (
         <div className={styles.notice} role="status">

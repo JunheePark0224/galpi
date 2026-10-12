@@ -53,6 +53,7 @@ export type FlowAction =
   | { type: "next" }
   | { type: "react"; reaction: Reaction }
   | { type: "leaveBack" }
+  | { type: "finishBack" }
   | { type: "returnToBack" }
   | { type: "nextResult" }
   | { type: "prevResult" }
@@ -130,6 +131,9 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
       // PRD 2절: S-06 when something was 궁금해요, straight to S-08 when nothing was
       if (s.step !== "back") return s;
       return { ...s, step: s.reactions.includes("curious") ? "result" : "end" };
+    case "finishBack":
+      // B (back-cover experiment, 10-12): the 궁금해요 books were seen on the card over the 뒤표지 — [다 봤어요] → S-08
+      return s.step === "back" ? { ...s, step: "end" } : s;
     case "returnToBack":
       // the phone's back key (10-08): from the first 궁금해요 book or the end, back to the 뒤표지
       return s.step === "result" || s.step === "end" ? { ...s, step: "back", result: 0 } : s;

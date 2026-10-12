@@ -78,7 +78,7 @@ function currentEntry(): CommonProps["entry"] {
   return value === "leaf" || value === "target" ? value : null;
 }
 
-function currentRound(): number {
+export function currentRound(): number {
   const n = Number(readSession(ROUND));
   return Number.isInteger(n) && n >= 1 ? n : 1;
 }
