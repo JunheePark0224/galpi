@@ -13,7 +13,8 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 START = pd.Timestamp("2026-10-09 14:10")
 # found 10-12 from the developer's own logins (report/README.md)
-EXCLUDED = ("963f449d-d96b-45cc-b03a-6d5f150477fa", "abc42f53-3c38-4a94-a4fe-b4c16e2b2c56")
+EXCLUDED = ("963f449d-d96b-45cc-b03a-6d5f150477fa", "abc42f53-3c38-4a94-a4fe-b4c16e2b2c56",
+            "de3d99af-cb69-4479-bfc6-451ae9780373")   # 10-12 A/B check device
 KEPT = ("book_saved", "share_clicked")   # 10-12: "picked a book" inside Galpi = saved or shared (YES24 is one way out of many)
 
 
