@@ -3,8 +3,9 @@ of 38 characters although the prompt states both rules).
 
 problems: the one-liner rules a model can fix by rewriting the line — form (🍃 question ends with "?", 🎯 summary does
 not), length (check_one_liners MIN_LEN..MAX_LEN without spaces), hype words, title repeat — each as a request in Korean.
-"Grounded in the intro/TOC" and the YES24-copy check stay with checks.rule_issues only: a retry cannot be told which words
-to use without quoting the YES24 text back.
+"Grounded in the intro/TOC" stays with checks.rule_issues only. A line copied from the intro/TOC (checks.copied_run, 10-12:
+14 of 73 books went to a person for it) is asked again too — the retry runs in the same conversation, whose user turn
+already holds the intro, so the request only says "in your own words" and never sends YES24 text back.
 retry: asks the SAME model once more, in the same conversation (its own answer as the assistant turn), for just a
 corrected one_liner; every other tag stays as it was. The better line is kept — the retry's when it passes or has fewer
 problems, else the first — and checks.rule_issues then flags whatever is still wrong, so the review page shows it as before.
@@ -14,6 +15,7 @@ from collections import Counter
 
 from check_one_liners import MAX_LEN, MIN_LEN, check_line, form_issue
 
+from .checks import COPY_RUN, copied_run
 from .tagger import Breaker, Usage, call
 
 SCHEMA = {"type": "object", "properties": {"one_liner": {"type": "string"}}, "required": ["one_liner"],
@@ -21,8 +23,9 @@ SCHEMA = {"type": "object", "properties": {"one_liner": {"type": "string"}}, "re
 ASK = "방금 답에서 one_liner만 고쳐 주세요. 다른 태그는 그대로 두고, 고친 한 줄만 답해요. 고칠 점:"
 
 
-def problems(entry: str, line: str, title: str) -> list[str]:
-    """What to fix in `line`, in Korean, [] when the line passes (material is not checked here — see the module doc)."""
+def problems(entry: str, line: str, title: str, material: str = "") -> list[str]:
+    """What to fix in `line`, in Korean, [] when the line passes. `material` (intro + TOC, in memory only): a line sharing
+    COPY_RUN characters with it is asked to be rewritten — the request never quotes it."""
     checked, out = check_line(line, title, ""), []
     n = checked["chars"]
     for issue in checked["issues"]:
@@ -41,15 +44,17 @@ def problems(entry: str, line: str, title: str) -> list[str]:
         out.append("평서문 끝에 ?만 붙이지 말고 읽는 사람에게 묻는 말로 바꿔 주세요(…까요? …나요? …ㄹ래요?)")
     elif form:
         out.append("요약형이어야 해요(물음표 없이)")
+    if material and copied_run(line, material) >= COPY_RUN:
+        out.append("책소개 문장을 그대로 옮기지 말고 자기 말로 바꿔 써 주세요")
     return out
 
 
 def retry(client, model: str, system: str, user: str, entry: str, raw: dict, answer: dict, title: str,
-          breaker: Breaker | None = None) -> tuple[dict, Usage, str]:
+          breaker: Breaker | None = None, material: str = "") -> tuple[dict, Usage, str]:
     """(answer with the better one-liner, usage of the retry call, outcome). Outcomes: "ok" (no retry needed, no call),
     "fixed", "still_failing" (the better of the two lines kept), or the failed call's reason (http_…, invalid_json…; the
     first line kept). `raw` is pass A's answer as the model gave it (sent back as its own turn). Raises TaggerStop."""
-    first = problems(entry, answer["one_liner"], title)
+    first = problems(entry, answer["one_liner"], title, material)
     if not first:
         return answer, Usage(), "ok"
     follow = ({"role": "assistant", "content": json.dumps(raw, ensure_ascii=False)},
@@ -59,7 +64,7 @@ def retry(client, model: str, system: str, user: str, entry: str, raw: dict, ans
     if not isinstance(line, str) or not line.strip():
         return answer, used, why if got is None else "invalid_answer"
     line = line.strip()
-    again = problems(entry, line, title)
+    again = problems(entry, line, title, material)
     if not again:
         return answer | {"one_liner": line}, used, "fixed"
     return (answer | {"one_liner": line} if len(again) < len(first) else answer), used, "still_failing"

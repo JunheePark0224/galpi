@@ -30,6 +30,20 @@ describe("bookTitle", () => {
     expect(bookTitle("글쓰기 수업 (기획|퇴고)")).toBe("『글쓰기 수업』");
   });
 
+  it("drops a trailing comma list of three or more covered tools — after \"with\" or a run of Latin keywords (10-12)", () => {
+    const plain = (t: string) => bookTitle(t).replace(/ /g, " ");
+    expect(plain("바이브 코딩을 위한 안티그래비티 2.0 with 스킬, 멀티 에이전트, MCP,  하네스")).toBe("『바이브 코딩을 위한 안티그래비티 2.0』");
+    expect(plain("요즘 AI 에이전트 개발, LLM RAG ADK MCP LangChain A2A LangGraph")).toBe("『요즘 AI 에이전트 개발』");
+  });
+
+  it("keeps a \"with\" that is part of the name, and a comma inside a Korean title", () => {
+    const plain = (t: string) => bookTitle(t).replace(/ /g, " ");   // short words hold on with no-break spaces
+    expect(plain("혼자 공부하는 데이터 분석 with 파이썬")).toBe("『혼자 공부하는 데이터 분석 with 파이썬』");
+    expect(plain("클로드 콘텐츠 자동화 with 코워크, 디자인")).toBe("『클로드 콘텐츠 자동화 with 코워크, 디자인』");
+    expect(plain("빅데이터 시대, 올바른 인사이트를 위한 통계 101×데이터 분석")).toBe("『빅데이터 시대, 올바른 인사이트를 위한 통계 101×데이터 분석』");
+    expect(plain("총, 균, 쇠")).toBe("『총, 균, 쇠』");
+  });
+
   it("keeps a one-character word on the same line as the next word", () => {
     expect(bookTitle("존재의 세 가지 거짓말")).toBe("『존재의 세 가지 거짓말』");
     expect(bookTitle("모두를 위한 R 데이터 분석 입문")).toBe("『모두를 위한 R 데이터 분석 입문』");

@@ -27,7 +27,7 @@ def test_config_reads_the_six_knobs_and_the_saved_file_is_valid():
     assert cfg.target_phase == "launch" and parse_config(GOOD | {"target_phase": "grow"}).target_phase == "grow"
     saved = load_config()
     assert saved.auto_merge is False and saved.sample_rate == 0.1  # decided 10-01: start with a person reviewing
-    assert saved.target_phase == "launch"                           # 10-05: before the 1,000-book launch
+    assert saved.target_phase == "grow"                             # 10-12: after the launch (user) — 10-05 was "launch"
 
 
 @pytest.mark.parametrize("over, msg", [
