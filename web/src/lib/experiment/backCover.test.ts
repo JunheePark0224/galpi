@@ -38,5 +38,23 @@ describe("back-cover experiment assignment (10-12, A/B by person)", () => {
     sessionStorage.setItem("galpi.round", "2");     // nextRound() after [다시 뽑기] or [처음으로]
     expect(firstPeekThisRound()).toBe(true);
   });
+
+  it("?ab=a|b in the address pins this browser (a phone has no console), ?ab=off unpins; the switch leaves the address", () => {
+    window.history.replaceState(null, "", "/?ab=b&utm_source=threads");
+    expect(backCoverVariant()).toBe("B");
+    expect(window.location.search).toBe("?utm_source=threads");   // other tags stay for the visit event
+    window.history.replaceState(null, "", "/");
+    expect(backCoverVariant()).toBe("B");                          // kept in this browser
+    window.history.replaceState(null, "", "/?ab=a");
+    expect(backCoverVariant()).toBe("A");
+    window.history.replaceState(null, "", "/?ab=off");
+    backCoverVariant();
+    expect(localStorage.getItem(BACK_COVER_OVERRIDE)).toBeNull();
+    expect(window.location.search).toBe("");
+    window.history.replaceState(null, "", "/?ab=zzz");
+    backCoverVariant();
+    expect(localStorage.getItem(BACK_COVER_OVERRIDE)).toBeNull();
+    window.history.replaceState(null, "", "/");
+  });
 });
 

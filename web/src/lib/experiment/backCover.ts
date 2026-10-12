@@ -8,7 +8,7 @@ import type { PropsOf } from "@/lib/track/schema";
  */
 export type BackCoverVariant = "A" | "B";
 export const BACK_COVER_EXPERIMENT = "back_cover_pick";
-/** localStorage key that pins a variant on this browser (screenshots, checking B on a phone). */
+/** localStorage key that pins a variant on this browser (screenshots; on a phone set through ?ab=, below). */
 export const BACK_COVER_OVERRIDE = "galpi.exp.backCover";
 
 /** FNV-1a (32-bit) of the experiment name and the id: stable across visits, about half and half across people. */
@@ -18,7 +18,26 @@ export function variantOf(anonId: string): BackCoverVariant {
   return h % 2 === 0 ? "A" : "B";
 }
 
+/** The address switch for checking a variant on a phone: ?ab=a or ?ab=b pins this browser, ?ab=off unpins. */
+export const BACK_COVER_PARAM = "ab";
+
+/** Reads ?ab= once and takes it out of the address (other tags such as utm_* stay); anything else is ignored. */
+function pinFromAddress(): void {
+  try {
+    const url = new URL(window.location.href);
+    const value = url.searchParams.get(BACK_COVER_PARAM);
+    if (value === null) return;
+    if (value === "a" || value === "b") localStorage.setItem(BACK_COVER_OVERRIDE, value.toUpperCase());
+    else if (value === "off") localStorage.removeItem(BACK_COVER_OVERRIDE);
+    url.searchParams.delete(BACK_COVER_PARAM);
+    window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
+  } catch {
+    // storage blocked: the hash decides
+  }
+}
+
 export function backCoverVariant(): BackCoverVariant {
+  pinFromAddress();
   try {
     const pinned = localStorage.getItem(BACK_COVER_OVERRIDE);
     if (pinned === "A" || pinned === "B") return pinned;
