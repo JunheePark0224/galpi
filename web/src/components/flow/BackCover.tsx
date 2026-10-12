@@ -15,7 +15,7 @@ export const CHALLENGE_CHIP = "오늘은 낯선 쪽으로 도전";
 export const NEXT_WHEN_NONE = "다음 책갈피 만나기";
 export const SHARE = "결과 공유하기";
 /** B (back-cover experiment, 10-12): the line that says the lit bookmarks open. */
-export const PICK_HINT = "궁금한 책갈피를 눌러 보세요";
+export const PICK_HINT = "책갈피를 눌러 보세요";
 /** B: the tip on the first lit bookmark, until one is pressed (once per browser, lib/flow/firstGuide). */
 export const PICK_TIP = "눌러서 책 정보 보기";
 export type { ShareMethod } from "./ShareSheet";

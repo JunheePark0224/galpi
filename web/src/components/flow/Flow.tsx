@@ -228,15 +228,17 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     const next = act({ type: "leaveBack" });
     if (next.step === "result") enterResult(next);
   };
-  /** B: a lit bookmark pressed on the 뒤표지 — its book floats over the back cover (BookPeek). */
+  /**
+   * B: a lit bookmark pressed on the 뒤표지 — the 궁금해요 books float over the back cover (BookPeek), always from the first
+   * one whichever was pressed (10-12, user: so the last one ends at [다 봤어요]).
+   */
   const pickBack = (id: string) => {
-    const i = curiousPicks(state).findIndex((p) => p.card.id === id);
-    if (i < 0) return;
+    if (!curiousPicks(state).some((p) => p.card.id === id)) return;
     if (firstPeekThisRound()) {   // E-09 once per round (analytics round — survives a reload), as entering S-06 does
       track("result_viewed", { curious_count: curiousPicks(state).length });
       viewedResults.current = new Set();
     }
-    setPeek(i);
+    setPeek(0);
     if (pickTip) { backPickGuide.markSeen(); setPickTip(false); }
   };
   /** B: E-10 for each book the floating card shows, once per book and round (taxonomy v0.11). */
