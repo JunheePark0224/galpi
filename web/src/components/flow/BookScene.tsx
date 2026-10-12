@@ -9,7 +9,7 @@ import { BOOKMARK_AWAY, BOOKMARK_DOWN, BOOKMARK_RISE } from "@/lib/motion";
 import type { FoundItem } from "@/lib/collection/types";
 import { EXHAUSTED_NOTICE } from "@/lib/recommend";
 import { isListRule } from "@/lib/paths";
-import { BACK_TITLE, BackActions, BackLaid, type ShareMethod } from "./BackCover";
+import { BACK_TITLE, BackActions, BackLaid, PICK_HINT, type BackPick, type ShareMethod } from "./BackCover";
 import { Book, RuledPage } from "./Book";
 import { CoverPeeks } from "./CoverPeeks";
 import { FirstGuide } from "./FirstGuide";
@@ -56,6 +56,8 @@ interface BackProps {
   onShared: (method: ShareMethod, isLinkCopied: boolean | null) => void;
   /** the book has shut and the back cover shows (E-41) */
   onClosed: () => void;
+  /** B (back-cover experiment, 10-12): the 궁금해요 bookmarks open their book; absent in A or with no 궁금해요 */
+  pick?: BackPick;
 }
 
 /**
@@ -98,7 +100,8 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
   const tucked = step === "book" || step === "first" ? <CoverPeeks open={state.opened} /> : null;
 
   return (
-    <div ref={scene} className={styles.scene} data-wide-scene="" data-peeks={step === "book" ? "" : undefined} data-clip={tucked ? "" : undefined}>
+    <div ref={scene} className={styles.scene} data-wide-scene="" data-peeks={step === "book" ? "" : undefined} data-clip={tucked ? "" : undefined}
+      data-pick={shutting && back?.pick ? "" : undefined}>
       <div className={styles.stage}>
         <Book
           open={state.opened}
@@ -110,7 +113,7 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
           shutNow={shutting && !back?.shutting}
           onShut={back?.onClosed}
           backFace={shutting && landed && draw ? (
-            <div className={styles.popFace}><BackLaid books={draw.picks} label={draw.label ?? { chips: [], challenge: false }} /></div>
+            <div className={styles.popFace}><BackLaid books={draw.picks} label={draw.label ?? { chips: [], challenge: false }} pick={back?.pick} /></div>
           ) : null}
         />
         {pick && <p className={styles.folio}>{`${state.index + 1} / ${picks.length}`}</p>}
@@ -138,7 +141,8 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
       {shutting && <h1 className={styles.srOnly}>{BACK_TITLE}</h1>}
       {shutting && landed && back && draw && (
         <div className={styles.popActions}>
-          <BackActions count={draw.picks.length} curious={back.curious} shareUrl={back.shareUrl} onContinue={back.onContinue} onShared={back.onShared} />
+          <BackActions hint={back.pick ? PICK_HINT : undefined} count={draw.picks.length} curious={back.curious} shareUrl={back.shareUrl}
+            onContinue={back.onContinue} onShared={back.onShared} />
         </div>
       )}
 

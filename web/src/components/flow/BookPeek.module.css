@@ -1,0 +1,26 @@
+/* B (back-cover experiment, 10-12): the book card floats over the 뒤표지, which stays behind, blurred and dimmed */
+.backdrop {
+  position: fixed; inset: 0; z-index: 40; display: flex; align-items: flex-start; justify-content: center;
+  padding: var(--space-4) var(--space-3); overflow-y: auto;
+}
+/* The blur is its own layer: `backdrop-filter` on .backdrop would make it the box that position: fixed children inside the
+   card (the save toast and its flight, the first-time guide) are placed in, so they would slide with the card's scroll. */
+.backdrop::before {
+  content: ""; position: fixed; inset: 0; z-index: -1;
+  background: rgba(43, 39, 36, 0.42); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.card {
+  position: relative; width: min(100%, 460px); margin: auto 0; padding: var(--space-4) var(--space-3) var(--space-3);
+  border-radius: 18px; background: var(--paper); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .card { animation: rise 260ms ease-out both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px) scale(0.98); } to { opacity: 1; transform: none; } }
+}
+.card:focus { outline: none; }
+.close {
+  position: absolute; top: 6px; right: 6px; z-index: 2; min-width: var(--touch); min-height: var(--touch);
+  padding: 0 var(--space-3); border: 0; border-radius: var(--radius-pill); background: none;
+  font: inherit; font-size: 14px; color: var(--ink-soft); cursor: pointer;
+}
+.close:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }

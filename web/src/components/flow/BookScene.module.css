@@ -116,3 +116,7 @@
 .popFace { position: absolute; inset: 0; }
 @keyframes pop { from { opacity: 0; transform: scale(0.97); } }
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* B (back-cover experiment, 10-12): the lit bookmarks are the way on, so the 뒤표지 takes the main button's room and grows.
+   Phone only: on a desktop the shut back is already a whole page and never zooms (Book .zoom[data-shut]). Set from the
+   moment the book shuts, so it settles once at this size. */
+@media (max-width: 767px) { .scene[data-pick] { --cover-zoom: 1.9; } }
