@@ -18,9 +18,8 @@ from difflib import SequenceMatcher
 from check_one_liners import check_line, form_issue
 
 from .gaps import GENRES
-from .prompt import AXES, EVIDENCE_MAX, TOPICS
+from .prompt import AXES, COPY_RUN, EVIDENCE_MAX, TOPICS
 
-COPY_RUN = 10
 AUTO = "ai-agree"
 # issue text per model-written field that can copy the YES24 text; a field with its issue is never stored (see scrub)
 COPY_ISSUES = {"one_liner": "한 줄이 책소개를 베낌", "evidence": "근거가 책소개를 베낌", "why": "판단 이유가 책소개를 베낌"}
