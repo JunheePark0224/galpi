@@ -3,7 +3,7 @@ import { named, reactToBookmarks, recordEvents, specMismatches, test, toBookmark
 
 /**
  * Back-cover experiment B (10-12, PRD F-27, taxonomy v2.6): the 궁금해요 bookmarks on the 뒤표지 open their book in a card
- * over the blurred back cover — no main button, a tip on the first one (once per browser), ‹ › through the 궁금해요 books,
+ * over the blurred back cover, always from the first 궁금해요 book — no main button, a tip on the first one (once per browser), ‹ › through them,
  * [다 봤어요] on the last → S-08. E-45 variant "b", and the card sends E-09 once and E-10 per book as S-06 does.
  */
 test("B: 궁금해요 bookmark on the 뒤표지 → floating book card → S-08", async ({ page }) => {
@@ -14,12 +14,13 @@ test("B: 궁금해요 bookmark on the 뒤표지 → floating book card → S-08"
 
   await expect.poll(() => named(events, "experiment_exposed").map((e) => e.props)).toEqual([{ experiment: "back_cover_pick", variant: "b" }]);
   await expect(page.getByRole("button", { name: /권 책 정보 보기$/ })).toHaveCount(0);
-  await expect(page.getByText("궁금한 책갈피를 눌러 보세요")).toBeVisible();
+  await expect(page.getByText("책갈피를 눌러 보세요", { exact: true })).toBeVisible();
   await expect(page.getByText("눌러서 책 정보 보기")).toBeVisible();
   const lit = page.getByRole("button", { name: /^『.+』 책 정보 보기$/ });
   await expect(lit).toHaveCount(2);
 
-  await lit.first().click();
+  // 10-12 (user): whichever lit bookmark is pressed, the card starts at the first 궁금해요 book — so the last one ends at [다 봤어요]
+  await lit.nth(1).click();
   const card = page.getByRole("dialog", { name: "궁금해요 책 정보" });
   await expect(card.getByText("궁금해요 1 / 2")).toBeVisible();
   await expect.poll(() => named(events, "result_viewed").map((e) => e.props)).toEqual([{ curious_count: 2 }]);
