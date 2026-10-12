@@ -77,7 +77,7 @@ const asks=b=>[...splits(b),...(heldBy(b).length?["line"]:[])];
 // a held line is answered when it passes the rules here AND the person edited it or kept it on purpose ("이대로 괜찮아요"):
 // some rules (근거 약함, the YES24-copy check) need the intro and cannot be checked again on this page
 const lineLeft=(b,c)=>issues(c.one_liner,b).length>0||(c.one_liner.trim()===(b.one_liner||"").trim()&&!(c.answered||[]).includes("line"));
-const left=(b,c)=>asks(b).filter(k=>k==="line"?lineLeft(b,c):!(c.answered||[]).includes(k));
+const left=(b,c)=>c.status==="dropped"?[]:asks(b).filter(k=>k==="line"?lineLeft(b,c):!(c.answered||[]).includes(k));  // a book left out needs nothing else (10-12)
 const decisionKey=b=>asks(b).includes("fits")?"fits":null;  // any decision in the box also answers "넣을지"
 // 10-06: the slot each AI named for a book it says does not fit ("" or absent = none); AI-1's first
 const suggestions=b=>[[1,b],[2,b.second||{}]].filter(([,o])=>o.fits===false&&o.suggest).map(([n,o])=>({who:n,slot:o.suggest,keywords:o.suggest_keywords||[]}));

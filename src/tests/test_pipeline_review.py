@@ -272,6 +272,9 @@ const mv={...t,fits:false,suggest:"경제 상식",suggest_keywords:["금리·환
 put(mv,{status:"picked",moveOpen:false,...moveTo(mv,"경제 상식")},"fits"); out.moved_keywords=cur(mv).keywords;
 out.other_topic=moveTo(mv,"글쓰기").keywords;
 st[mv.isbn]={...cur(mv),moveOpen:true}; out.suggest_hint=ask(mv,cur(mv),"fits");
+const dr={...t,isbn:"d",one_liner:"",flags:["keywords","line"],issues:["한 줄이 책소개를 베낌"]};
+put(dr,{status:"dropped"},decisionKey(dr)); out.dropped_asks_nothing=left(dr,cur(dr));
+put(dr,{status:"picked"},decisionKey(dr)); out.picked_still_asks=left(dr,cur(dr));
 console.log(JSON.stringify(out));
 """
 
@@ -291,6 +294,8 @@ def test_the_page_gates_confirm_on_what_a_person_must_decide(files):
     assert out["grounding_kept"] == [] and out["grounding_edited"] == []   # "이대로 괜찮아요" or a passing edit answers it
     assert out["notes_not_asked"] == ["temp"]
     assert out["fits_by_select"] == []                   # choosing 빼기 in the decision box answers "넣을지"
+    assert out["dropped_asks_nothing"] == []             # 10-12: a book left out needs no keywords or line to confirm
+    assert set(out["picked_still_asks"]) == {"keywords", "line"}  # putting it in still asks both
     assert out["topic_resets"] == ["keywords"]           # a new topic asks the keywords again
     assert out["chips_after_topic"] == ["금리·환율"]      # no keyword left over from the old topic
     sig = out["signals_temp"]                            # 10-06: both AIs' signal line under an asked axis
@@ -430,7 +435,7 @@ def test_the_page_asks_only_the_split_fields_with_nothing_preselected_and_keeps_
     review.main(["2026-10-05"])
     script = (tmp / "pages" / "2026-10-05.html").read_text(encoding="utf-8")
     assert 'status:"picked",answered:[]' in script and '${done&&c.axes[k]===v?"checked":""}' in script
-    assert 'k==="line"?lineLeft(b,c):!(c.answered||[]).includes(k)' in script   # behaviour: test_the_page_gates_confirm…
+    assert 'k==="line"?lineLeft(b,c):!(c.answered||[]).includes(k)' in script and 'c.status==="dropped"?[]' in script   # behaviour: test_the_page_gates_confirm…
     assert 'if(act==="ok"){if(left(b,c).length)return;' in script
     assert 'filter(f=>f!=="confidence")' in script and "근거 김|" in script                     # not asked (checks.needs_person)
     assert 'querySelectorAll("details[open]")' in script and "d.open=true" in script   # a re-render keeps the open details
