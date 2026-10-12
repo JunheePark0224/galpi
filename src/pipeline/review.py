@@ -170,8 +170,9 @@ def apply(name: str, batch: str, picked: list[tuple[Path, dict, list[str]]], dow
 
 
 def record_requeue(name: str, picked: list[tuple[Path, dict, list[str]]]) -> list[dict]:
-    """Rows for data/pipeline/requeue.json: every book of these files now stored with `requeued_to` (pipeline/requeue.py).
-    Read back from the files just written, so applying the same download again changes nothing."""
+    """Rows for data/pipeline/requeue.json: every book of these files now stored with `requeued_to` (pipeline/requeue.py),
+    except one another additions record already holds (a later batch that tagged it from the queue). Read back from the
+    files just written, so applying the same download again changes nothing."""
     today = datetime.now(KST).date().isoformat()
     new = []
     for path, _, isbns in picked:
@@ -179,6 +180,9 @@ def record_requeue(name: str, picked: list[tuple[Path, dict, list[str]]]) -> lis
         new += [{"isbn": b["isbn"], "to_entry": b["requeued_to"]["entry"], "to_slot": b["requeued_to"]["slot"],
                  "from_batch": doc.get("batch_id") or doc.get("date") or name, "date": today}
                 for b in doc["books"] if b["isbn"] in isbns and isinstance(b.get("requeued_to"), dict)]
+    taken = {b["isbn"] for p in ADDITIONS.glob("*.json")   # a later batch tagged it already (10-12: else it comes a third time)
+             for b in json.loads(p.read_text(encoding="utf-8")).get("books", []) if not isinstance(b.get("requeued_to"), dict)}
+    new = [r for r in new if r["isbn"] not in taken]
     rows = requeue.load(REQUEUE)
     known = {r["isbn"]: r for r in rows}
     fresh = [r for r in new if {k: v for k, v in known.get(r["isbn"], {}).items() if k != "date"}
