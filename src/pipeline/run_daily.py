@@ -119,7 +119,8 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     a = parse(raw_a, cand.entry, "tag", names, cand.slot, left_out, lists) if raw_a else None
     if a is None:
         return None, why if raw_a is None else "invalid_answer"
-    a, used, outcome = retry_one_liner(client, cfg.model, prompts["tag"], user, cand.entry, raw_a, a, cand.title, breaker)
+    a, used, outcome = retry_one_liner(client, cfg.model, prompts["tag"], user, cand.entry, raw_a, a, cand.title, breaker,
+                                       f"{cand.intro} {cand.toc}")
     _spend(ledger, cfg.model, used)
     if retries is not None:
         retries.note(cfg.model, used, outcome)

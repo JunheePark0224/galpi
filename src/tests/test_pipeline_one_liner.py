@@ -99,3 +99,28 @@ def test_the_retry_log_counts_outcomes_and_cost_per_model():
     s = log.summary()
     assert (s["tried"], s["fixed"], s["still_failing"], s["call_failed"]) == (4, 2, 1, 1)
     assert s["usage"][MODEL]["calls"] == 4 and s["cost_usd"] == round(Usage(4, 0, 4000, 200).cost(MODEL), 4)
+
+
+INTRO = "배당과 분산 투자로 첫 주식 계좌를 꾸리는 법을 사례와 함께 차근차근 설명하는 입문서"
+COPIED = "배당과 분산 투자로 첫 주식 계좌를 꾸리는 법을 알려 줘요"     # 14+ characters straight from the intro
+OWN = "월급쟁이가 배당으로 첫 주식 계좌를 시작하는 길을 짚어 줘요"
+
+
+def test_a_line_copied_from_the_intro_is_asked_again_in_its_own_words_without_quoting_it():
+    """10-12: "한 줄이 책소개를 베낌" went straight to a person (14 of 73 books). The retry runs in the same conversation —
+    the intro is already in the user turn — so it asks for the model's own words without sending YES24 text again."""
+    assert problems("target", COPIED, TITLE, INTRO) == ["책소개 문장을 그대로 옮기지 말고 자기 말로 바꿔 써 주세요"]
+    assert problems("target", COPIED, TITLE) == []                       # no material given: not checked (as before)
+    raw, a = first("target", COPIED)
+    client = fixing(OWN)
+    out, used, outcome = retry(client, MODEL, SYSTEM, USER, "target", raw, a, TITLE, Breaker(), INTRO)
+    assert outcome == "fixed" and out["one_liner"] == OWN and used.calls == 1
+    (sent,) = client.messages.calls
+    ask = sent["messages"][-1]["content"]
+    assert "자기 말로" in ask and INTRO not in ask and COPIED not in ask   # nothing from YES24 in the follow-up
+
+
+def test_a_retry_that_copies_again_is_still_failing_and_keeps_the_issue():
+    raw, a = first("target", COPIED)
+    out, used, outcome = retry(fixing(COPIED), MODEL, SYSTEM, USER, "target", raw, a, TITLE, Breaker(), INTRO)
+    assert outcome == "still_failing" and out["one_liner"] == COPIED
