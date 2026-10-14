@@ -470,6 +470,16 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_4():
+def test_the_dictionary_is_v3_5():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.4"   # 10-08: science used to explain the course of history → 역사 (총 균 쇠)
+    assert rules_version() == "v3.5"   # 10-14: ghosts in a love story → 로맨스 (죽여주는 연애 상담소)
+
+
+def test_the_v3_5_rules_reach_both_prompts():
+    """10-14: a ghost on stage does not make a love story 호러·괴담 — the 세계 axis carries the ghost, and a "오컬트 로맨스"
+    name is not a two-genre half-and-half; the shape of a table of contents (aphorisms, short chapters) is no 끌림 signal."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "| 초자연 소재 ↔ 로맨스 (호러·괴담 ↔ 로맨스, 10-14) |" in p
+        assert "내용 장르 둘을 합친 이름에만 쓴다" in p
+        assert "**목차의 모양은 끌림 신호가 아니다** (10-14 사용자)" in p
