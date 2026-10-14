@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
 import { Bookmark } from "@/components/Bookmark";
 import { Button } from "@/components/Button";
@@ -64,6 +64,9 @@ interface BackProps {
  * S-03 · S-04 · S-05 share one book so the cover keeps its place between steps. The book fills the column; the bookmark
  * rises out of the gutter, centred between the two pages. Buttons sit below the book; the page count is the folio.
  */
+/** 10-14: the reactions unlock when the rise reports done; if it never does (page hidden mid-rise on iOS Safari), by then. */
+export const BUSY_FALLBACK_MS = 1500;
+
 export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onHome, found = null, back }: Props) {
   const [busy, setBusy] = useState(true);            // a bookmark is still moving: reactions wait (and frost stays off)
   const [last, setLast] = useState<Reaction>("pass");
@@ -82,6 +85,13 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
   // the bookmarks and buttons come at once when the book has shut (10-07: no screen change, "한 번에 팍") — Flow stops
   // `shutting` in onClosed; a resumed round is shut from the start
   const landed = shutting && !!back && !back.shutting;
+
+  const pickId = pick?.card.id;
+  useEffect(() => {
+    if (!busy || !pickId) return;
+    const unlock = setTimeout(() => setBusy(false), BUSY_FALLBACK_MS);
+    return () => clearTimeout(unlock);
+  }, [busy, pickId]);
 
   const react = (reaction: Reaction) => {
     if (busy) return;
