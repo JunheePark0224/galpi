@@ -9,6 +9,8 @@ import styles from "./Question.module.css";
 export const TAP_GUARD_MS = 250;
 /** PRD F-03 · DESIGN C-08: shown in the hold button while it is pressed. */
 export const HOLD_HINT = "끌리는 쪽을 고를수록 더 잘 맞아요";
+/** 10-14: after a quick tap on 갈피를 못 잡겠어요 — choosing comes first, the hold is the way out. */
+export const TAP_HINT = "끌리는 쪽을 골라 주세요 · 모르겠으면 꾹";
 export const UNSURE = "갈피를 못 잡겠어요";
 export const BACK = "이전 질문";
 
@@ -77,7 +79,7 @@ export function Question({ node, onAnswer, onHoldCancel, onBack }: Props) {
         <span className={styles.vs} aria-hidden="true">vs</span>
         <ChoiceCard side="right" label={node.b.label} hint={node.b.hint} onChoose={() => choose("B")} />
       </div>
-      <HoldButton label={UNSURE} hint={HOLD_HINT} onHold={() => onAnswer("unsure", elapsed())} onCancel={onHoldCancel} />
+      <HoldButton label={UNSURE} hint={HOLD_HINT} tapHint={TAP_HINT} onHold={() => onAnswer("unsure", elapsed())} onCancel={onHoldCancel} />
     </section>
   );
 }
