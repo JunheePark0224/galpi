@@ -475,10 +475,11 @@ def test_the_dictionary_is_v3_5():
     assert rules_version() == "v3.5"   # 10-14: ghosts in a love story → 로맨스 (죽여주는 연애 상담소)
 
 
-def test_the_v3_5_occult_romance_rule_reaches_both_prompts():
+def test_the_v3_5_rules_reach_both_prompts():
     """10-14: a ghost on stage does not make a love story 호러·괴담 — the 세계 axis carries the ghost, and a "오컬트 로맨스"
-    name is not a two-genre half-and-half."""
+    name is not a two-genre half-and-half; the shape of a table of contents (aphorisms, short chapters) is no 끌림 signal."""
     for kind in ("tag", "check"):
         p = system_prompt(VOC, kind)
         assert "| 초자연 소재 ↔ 로맨스 (호러·괴담 ↔ 로맨스, 10-14) |" in p
         assert "내용 장르 둘을 합친 이름에만 쓴다" in p
+        assert "**목차의 모양은 끌림 신호가 아니다** (10-14 사용자)" in p
