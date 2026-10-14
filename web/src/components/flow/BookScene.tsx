@@ -66,6 +66,7 @@ interface BackProps {
  */
 /** 10-14: the reactions unlock when the rise reports done; if it never does (page hidden mid-rise on iOS Safari), by then. */
 export const BUSY_FALLBACK_MS = 1500;
+const BUSY_RETRY_MS = 300;
 
 export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onHome, found = null, back }: Props) {
   const [busy, setBusy] = useState(true);            // a bookmark is still moving: reactions wait (and frost stays off)
@@ -87,9 +88,16 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
   const landed = shutting && !!back && !back.shutting;
 
   const pickId = pick?.card.id;
+  const mountedId = useRef<string | null>(null);   // the bookmark actually on the page (mode="wait" mounts it after the exit)
   useEffect(() => {
     if (!busy || !pickId) return;
-    const unlock = setTimeout(() => setBusy(false), BUSY_FALLBACK_MS);
+    // unlock only once this bookmark is on the page — a stalled exit must not let a tap react to a book nobody saw
+    let unlock: ReturnType<typeof setTimeout>;
+    const tryUnlock = () => {
+      if (mountedId.current === pickId) setBusy(false);
+      else unlock = setTimeout(tryUnlock, BUSY_RETRY_MS);
+    };
+    unlock = setTimeout(tryUnlock, BUSY_FALLBACK_MS);
     return () => clearTimeout(unlock);
   }, [busy, pickId]);
 
@@ -132,6 +140,7 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
             <AnimatePresence mode="wait" custom={last}>
               <motion.div
                 key={pick.card.id}
+                ref={(el) => { if (el) mountedId.current = pick.card.id; }}
                 custom={last}
                 variants={BOOKMARK}
                 initial="hidden"

@@ -30,9 +30,10 @@ export default defineConfig({
   },
   use: { baseURL: `http://localhost:${PORT}` },
   projects: [
-    { name: "phone", use: { ...devices["Pixel 7"] } },
-    { name: "laptop", use: { viewport: { width: 1440, height: 900 } } },
-    // 10-14: iOS Safari reports — WebKit on an iPhone profile, run by name (npx playwright test --project=iphone)
-    { name: "iphone", use: { ...devices["iPhone 13"] }, testMatch: /ios-.*\.spec\.ts/ },
+    { name: "phone", use: { ...devices["Pixel 7"] }, testIgnore: /[\\/]ios-[^\\/]*\.spec\.ts$/ },
+    { name: "laptop", use: { viewport: { width: 1440, height: 900 } }, testIgnore: /[\\/]ios-[^\\/]*\.spec\.ts$/ },
+    // 10-14: iOS Safari reports — WebKit on an iPhone profile; only e2e/ios-*.spec.ts (taps). Runs with the others by
+    // default, so `npx playwright install webkit` is needed once; `--project=phone` skips it.
+    { name: "iphone", use: { ...devices["iPhone 13"] }, testMatch: /[\\/]ios-[^\\/]*\.spec\.ts$/ },
   ],
 });
