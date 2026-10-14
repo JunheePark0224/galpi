@@ -32,5 +32,7 @@ export default defineConfig({
   projects: [
     { name: "phone", use: { ...devices["Pixel 7"] } },
     { name: "laptop", use: { viewport: { width: 1440, height: 900 } } },
+    // 10-14: iOS Safari reports — WebKit on an iPhone profile, run by name (npx playwright test --project=iphone)
+    { name: "iphone", use: { ...devices["iPhone 13"] }, testMatch: /ios-.*\.spec\.ts/ },
   ],
 });
