@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import type { LibraryCount } from "@/lib/books/library";
 import { LogoMark } from "@/components/Logo";
 import { Mailbox } from "@/components/feedback/Mailbox";
+import { NewsOwl } from "@/components/news/NewsOwl";
 import styles from "./Home.module.css";
 
 /** library: F-23 count from the server (page.tsx), null until the first fill — then the cover keeps the logo. */
@@ -62,7 +63,11 @@ export function Home({ onStart, library = null }: Props) {
         </button>
         <p className={styles.entryNote}>{START_NOTE}</p>
       </div>
-      <Mailbox />
+      {/* F-26 takes letters in, F-28 brings news out — a quiet pair under the entry (DESIGN C-18 · C-33) */}
+      <div className={styles.notes}>
+        <Mailbox />
+        <NewsOwl />
+      </div>
     </div>
   );
 }

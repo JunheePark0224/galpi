@@ -114,6 +114,8 @@ export const EVENT_SPEC = {
   share_page_started: {},
   // v2.6: an A/B experiment's screen was really seen — back_cover_pick: the 뒤표지 shut with something 궁금해요
   experiment_exposed: { experiment: { type: ["back_cover_pick"] }, variant: { type: ["a", "b"] } },
+  // v2.7 갈피 소식통: the news sheet opened — was the new-news dot showing, and the newest week's Monday
+  news_opened: { has_unseen: { type: "boolean" }, latest_week: { type: "string" } },
 } as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
 
 type Spec = typeof EVENT_SPEC;
