@@ -12,7 +12,7 @@ const books = (n: number) => `${n.toLocaleString("ko-KR")}권`;
 
 /** PRD F-01 v2 wording (design 10절). */
 export const START_LABEL = "갈피 잡으러 가기";
-export const START_NOTE = "질문 몇 개면 한 권을 만나요";
+export const START_NOTE = "질문 몇 개면 나에게 맞는 책을 만나요";
 
 /**
  * P-01: a closed cloth book with two bookmarks peeking out. Decorative — the words are read from Home's hidden line.

@@ -89,3 +89,10 @@
 
 /* DESIGN C-33: 갈피 우체통 and 갈피 소식통 side by side, their words on one baseline */
 .notes { display: flex; justify-content: center; align-items: flex-end; gap: 18px; }
+/* 320px phones: two side-by-side buttons with 16px side padding wrapped their small lines mid-word ("주세/요").
+   Narrower side padding and no wrapping keep each line whole; the 44px target is kept by min-width/min-height. */
+.notes button { white-space: nowrap; }
+@media (max-width: 374px) {
+  .notes { gap: var(--space-2); }
+  .notes button { padding-left: var(--space-2); padding-right: var(--space-2); }
+}

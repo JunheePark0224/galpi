@@ -10,7 +10,7 @@ describe("Home (S-01)", () => {
     render(<Home onStart={onStart} />);
     fireEvent.click(screen.getByRole("button", { name: "갈피 잡으러 가기" }));
     expect(onStart).toHaveBeenCalledTimes(1);
-    expect(screen.getByText("질문 몇 개면 한 권을 만나요")).toBeInTheDocument();
+    expect(screen.getByText("질문 몇 개면 나에게 맞는 책을 만나요")).toBeInTheDocument();
   });
 
   it("has no login place of its own — the one entry, then the 갈피 우체통 and 갈피 소식통 (F-26, F-28)", () => {
