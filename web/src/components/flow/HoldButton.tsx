@@ -4,12 +4,17 @@ import styles from "./HoldButton.module.css";
 
 /** DESIGN T-06 hold: the timer decides when it passes; the gauge only shows it (a janky frame cannot delay it). */
 export const HOLD_MS = 800;
+/** 10-14: a release this quick was a tap, not a hold the person gave up on — it leaves the tap hint for TAP_HINT_MS. */
+export const TAP_MS = 300;
+export const TAP_HINT_MS = 2000;
 const HOLD_KEYS = new Set(["Enter", " "]);
 
 interface Props {
   label: string;
   /** C-08 (09-30): faint text shown in place of the label while pressing. */
   hint?: string;
+  /** 10-14: shown in the same box for TAP_HINT_MS after a quick tap (the hold hint flashes for only ~0.1 s there). */
+  tapHint?: string;
   onHold: () => void;
   onCancel: (heldMs: number) => void;
 }
@@ -19,17 +24,23 @@ interface Props {
  * faint hint in the same box (both are laid out on top of each other, so nothing moves). The name stays the label; the hint
  * is announced once per hold through a polite status line.
  */
-export function HoldButton({ label, hint, onHold, onCancel }: Props) {
+export function HoldButton({ label, hint, tapHint, onHold, onCancel }: Props) {
   const [holding, setHolding] = useState(false);
+  const [nudge, setNudge] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const nudgeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startedAt = useRef(0);
 
   useEffect(() => () => {
     if (timer.current) clearTimeout(timer.current);
+    if (nudgeTimer.current) clearTimeout(nudgeTimer.current);
   }, []);
 
   const start = () => {
     if (timer.current) return;
+    if (nudgeTimer.current) clearTimeout(nudgeTimer.current);
+    nudgeTimer.current = null;
+    setNudge(false);
     startedAt.current = performance.now();
     setHolding(true);
     timer.current = setTimeout(() => {
@@ -44,7 +55,15 @@ export function HoldButton({ label, hint, onHold, onCancel }: Props) {
     clearTimeout(timer.current);
     timer.current = null;
     setHolding(false);
-    onCancel(Math.round(performance.now() - startedAt.current));
+    const held = Math.round(performance.now() - startedAt.current);
+    onCancel(held);
+    if (tapHint && held < TAP_MS) {
+      setNudge(true);
+      nudgeTimer.current = setTimeout(() => {
+        nudgeTimer.current = null;
+        setNudge(false);
+      }, TAP_HINT_MS);
+    }
   };
 
   const onPointerDown = (e: PointerEvent<HTMLButtonElement>) => {
@@ -72,6 +91,7 @@ export function HoldButton({ label, hint, onHold, onCancel }: Props) {
         className={styles.hold}
         aria-label={label}
         data-holding={holding ? "" : undefined}
+        data-nudge={nudge ? "" : undefined}
         onPointerDown={onPointerDown}
         onPointerUp={stop}
         onPointerCancel={stop}
@@ -84,9 +104,10 @@ export function HoldButton({ label, hint, onHold, onCancel }: Props) {
         <span className={styles.texts} aria-hidden="true">
           <span className={styles.label}>{label}</span>
           {hint && <span className={styles.hint}>{hint}</span>}
+          {tapHint && <span className={styles.tapHint}>{tapHint}</span>}
         </span>
       </button>
-      {hint && <span className={styles.announce} role="status">{holding ? hint : ""}</span>}
+      {(hint || tapHint) && <span className={styles.announce} role="status">{holding ? hint ?? "" : nudge ? tapHint : ""}</span>}
     </>
   );
 }

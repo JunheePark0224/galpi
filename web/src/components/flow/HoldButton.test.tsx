@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { HOLD_MS, HoldButton } from "./HoldButton";
+import { HOLD_MS, HoldButton, TAP_HINT_MS } from "./HoldButton";
 
 describe("HoldButton", () => {
   beforeEach(() => vi.useFakeTimers());
@@ -33,6 +33,29 @@ describe("HoldButton", () => {
     expect(onHold).not.toHaveBeenCalled();
     expect(onCancel).toHaveBeenCalledTimes(1);
     expect(onCancel).toHaveBeenCalledWith(expect.any(Number));
+  });
+
+  // 10-14: 26 of 132 people tapped it (83 times, median 0.1 s) and saw nothing — the hold hint only shows while pressing.
+  it("a quick tap leaves the tap hint for 2 s, then the label comes back", () => {
+    render(<HoldButton label="갈피를 못 잡겠어요" tapHint="끌리는 쪽을 골라 주세요 · 모르겠으면 꾹" onHold={vi.fn()} onCancel={vi.fn()} />);
+    const button = screen.getByRole("button", { name: "갈피를 못 잡겠어요" });
+    fireEvent.pointerDown(button);
+    act(() => { vi.advanceTimersByTime(100); });
+    fireEvent.pointerUp(button);
+    expect(button).toHaveAttribute("data-nudge");
+    expect(screen.getByRole("status")).toHaveTextContent("끌리는 쪽을 골라 주세요 · 모르겠으면 꾹");
+    act(() => { vi.advanceTimersByTime(TAP_HINT_MS); });
+    expect(button).not.toHaveAttribute("data-nudge");
+    expect(screen.getByRole("status")).toHaveTextContent("");
+  });
+
+  it("a release after a real press shows no tap hint", () => {
+    render(<HoldButton label="갈피를 못 잡겠어요" tapHint="끌리는 쪽을 골라 주세요 · 모르겠으면 꾹" onHold={vi.fn()} onCancel={vi.fn()} />);
+    const button = screen.getByRole("button", { name: "갈피를 못 잡겠어요" });
+    fireEvent.pointerDown(button);
+    act(() => { vi.advanceTimersByTime(500); });
+    fireEvent.pointerUp(button);
+    expect(button).not.toHaveAttribute("data-nudge");
   });
 
   it("holds with Enter and ignores key repeat", () => {
