@@ -32,7 +32,11 @@ function readSaved(): Saved {
     if (saved.v !== VERSION || !state || !STEPS.includes(state.step as FlowState["step"])) return rejected;
     if (!isPath(state.answers)) return rejected;   // answers off today's map (the map was edited): start over
     if (state.drawnFor !== null && state.drawnFor !== undefined && !isPath(state.drawnFor)) return rejected;
-    return { state: { ...INITIAL, ...state } as FlowState, rejected: false };
+    // `undone` (10-19) only marks a card: a save without it, or a broken one, simply forgets the marks
+    const undone = Array.isArray(state.undone)
+      ? state.undone.filter((a) => a && typeof a.node === "string" && ["A", "B", "unsure"].includes(a.choice))
+      : [];
+    return { state: { ...INITIAL, ...state, undone } as FlowState, rejected: false };
   } catch {
     return { state: null, rejected: true };
   }

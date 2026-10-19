@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { QUESTION_MAP } from "@/lib/paths";
-import { HOLD_HINT, Question, TAP_GUARD_MS } from "./Question";
+import { CHOSEN_BEFORE, HOLD_HINT, Question, TAP_GUARD_MS, UNSURE } from "./Question";
 
 const START = QUESTION_MAP.nodes.start;     // 평소 끌리는 쪽으로 / 오늘은 낯선 쪽으로 도전
 const settle = () => act(() => { vi.advanceTimersByTime(TAP_GUARD_MS); });
@@ -81,5 +81,39 @@ describe("Question (S-02)", () => {
     expect(back).toHaveTextContent("← 이전 질문");
     fireEvent.click(back);
     expect(h.onBack).toHaveBeenCalledTimes(1);
+  });
+  describe("the answer given before going back (10-19, DESIGN C-23)", () => {
+    it("marks nothing on a question met for the first time", () => {
+      const { container } = render(<Question node={START} {...handlers()} />);
+      expect(container.querySelector("[data-chosen]")).toBeNull();
+      expect(screen.queryByText(CHOSEN_BEFORE)).toBeNull();
+    });
+
+    it("marks the card chosen before with a border and a ✓, says so to screen readers, and keeps both cards choosable", () => {
+      const h = handlers();
+      const { container } = render(<Question node={START} previous="B" {...h} />);
+      const right = container.querySelector('[data-side="right"]')!;
+      expect(right).toHaveAttribute("data-chosen", "");
+      expect(container.querySelector('[data-side="left"]')).not.toHaveAttribute("data-chosen");
+      expect(right.querySelector("[data-part='check']")).toHaveAttribute("aria-hidden", "true");
+      expect(screen.getByRole("button", { name: START.b.label })).toHaveAccessibleDescription(CHOSEN_BEFORE);
+      settle();
+      fireEvent.click(screen.getByRole("button", { name: START.a.label }));
+      expect(h.onAnswer).toHaveBeenCalledWith("A", expect.any(Number));
+    });
+
+    it("keeps a hint in the description beside the mark", () => {
+      const node = { ...START, a: { ...START.a, hint: "소설·에세이·교양 / 읽는 동안이 좋은 책" } };
+      render(<Question node={node} previous="A" {...handlers()} />);
+      expect(screen.getByRole("button", { name: START.a.label })).toHaveAccessibleDescription(`소설·에세이·교양 읽는 동안이 좋은 책 ${CHOSEN_BEFORE}`);
+    });
+
+    it("marks 갈피를 못 잡겠어요 when that was the answer", () => {
+      const { container } = render(<Question node={START} previous="unsure" {...handlers()} />);
+      expect(container.querySelector('[data-side][data-chosen]')).toBeNull();
+      const hold = screen.getByRole("button", { name: UNSURE });
+      expect(hold).toHaveAttribute("data-chosen", "");
+      expect(hold).toHaveAccessibleDescription(CHOSEN_BEFORE);
+    });
   });
 });

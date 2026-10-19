@@ -10,7 +10,7 @@ import type { LibraryCount } from "@/lib/books/library";
 import { drawBody, requestDraw, toDrawView } from "@/lib/flow/api";
 import { challengeProps, completedProps, nextQuestion, pathCommon } from "@/lib/flow/path";
 import { deviceBackMove } from "@/lib/flow/back";
-import { curiousPicks, flowReducer, meetingOf, type FlowAction, type FlowState, type Reaction } from "@/lib/flow/state";
+import { curiousPicks, flowReducer, meetingOf, previousChoice, type FlowAction, type FlowState, type Reaction } from "@/lib/flow/state";
 import { loadFlow, saveFlow } from "@/lib/flow/storage";
 import { guestSaves } from "@/lib/library/guest";
 import type { Answer, AnswerChoice } from "@/lib/paths";
@@ -325,7 +325,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
       {state.step === "home" && <Home onStart={start} library={library} />}
       {node && (
         // a new key per question shown (an answer or a step back): the tap guard and the hold start again
-        <Question key={`${state.asked}-${state.answers.length}`} node={node} onAnswer={answer} onHoldCancel={holdCancelled} onBack={() => back()} />
+        <Question key={`${state.asked}-${state.answers.length}`} node={node} previous={previousChoice(state, node)} onAnswer={answer} onHoldCancel={holdCancelled} onBack={() => back()} />
       )}
       {inBook && (
         <BookScene
