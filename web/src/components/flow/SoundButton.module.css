@@ -1,0 +1,10 @@
+/* DESIGN C-34: secondary and small — a muted round button at the right end of the room above the book (BookScene .stage,
+   the same room the bookmark rises into, `--bm-room`), clear of the centred bookmark. */
+.sound {
+  position: absolute; top: calc(-1 * var(--bm-room, 106px)); right: 0; z-index: 5; display: flex; align-items: center; justify-content: center;
+  width: var(--touch); height: var(--touch); padding: 0; border: 0; border-radius: 50%;
+  background: color-mix(in srgb, var(--paper) 85%, transparent); color: var(--ink-muted); cursor: pointer;
+}
+.sound[aria-pressed="false"] { opacity: 0.75; }
+.sound:active { background: var(--paper-deep); }
+.sound:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
