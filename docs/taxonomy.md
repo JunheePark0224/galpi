@@ -33,8 +33,9 @@
 | taxonomy v2.4 | 2026-10-09 | 스토리 공유에 결과 링크 (PRD F-27, DESIGN C-31, 사용자 시안 A-2 `mockups/2026-10-09-story-link.png`) | E-42 `is_link_copied`(Boolean, null) 추가 — [인스타 스토리로]가 그 사람의 결과 링크를 클립보드에 복사했는지(image에서만, 다른 method는 null). 이벤트 시점은 그대로(공유창에 이미지를 넘겼을 때) — 안내 화면의 [스토리로 보내기]를 누른 뒤 (8절) |
 | taxonomy v2.3 | 2026-10-08 | 휴대폰 뒤로가기 (`plans/2026-10-08-device-back.md`, 사용자 승인) | E-33 `source` += "device_back"(뒤로가기로 이전 질문·마지막 질문), E-20 `source` += "device_back"(첫 질문에서 뒤로가기, 책갈피·뒤표지의 뒤로가기 안내 [처음으로]) — 화면이 아니라 누른 방법이라, 화면 버튼은 그대로 (8절) |
 | taxonomy v2.6 | 2026-10-12 | 뒤표지 A/B 실험 `back_cover_pick` (PRD F-27, 사용자 결정 B2) | E-45 `experiment_exposed`(`experiment`·`variant`) live, 동사 `exposed`, 분류 `실험`. 처리방침은 그대로("화면 버전") (8절) |
-| taxonomy v2.7 | 2026-10-19 | 갈피 소식통 (PRD F-28, DESIGN C-33, 사용자 시안 A `mockups/2026-10-19-news-owl.html`) | E-46 `news_opened`(`has_unseen`·`latest_week`) live, 동사 `opened`, 분류 `홈`. 모으는 정보 변화 없음 (8절) |
 | taxonomy v2.5 | 2026-10-09 | 머리글 [처음으로] (PRD F-01, DESIGN A-05, 사용자 시안 D `mockups/2026-10-09-home-button-right.png`) | E-20 `source` += "header" — 흐름 도중(S-01이 아닐 때) 오른쪽 위 [처음으로]를 눌러 확인 없이 S-01로. 다른 페이지(/library 등)의 [처음으로]는 로고처럼 그냥 이동이라 이벤트 없음 (8절) |
+| taxonomy v2.7 | 2026-10-19 | 갈피 소식통 (PRD F-28, DESIGN C-33, 사용자 시안 A `mockups/2026-10-19-news-owl.html`) | E-46 `news_opened`(`has_unseen`·`latest_week`) live, 동사 `opened`, 분류 `홈`. 모으는 정보 변화 없음 (8절) |
+| taxonomy v2.8 | 2026-10-19 | 책장 효과음 (PRD F-29, DESIGN C-34, 사용자 시안 `mockups/2026-10-19-page-sound.html` 넘김 2 · 펼침 A) | E-47 `sound_toggle_clicked`(`is_sound_on`) live, 동사 `clicked`, 분류 `책펼치기`. 모으는 정보 변화 없음 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
 > - `docs/taxonomy.csv` — 이 문서의 **기계가 읽는 사본**. 이벤트 × 속성 한 줄씩. **두 파일은 항상 같은 커밋에서 함께 고친다** (7절).
@@ -161,7 +162,7 @@
 | 진입 | S-01 | E-01, E-02 |
 | 갈림길 | S-02 | E-32, E-25, E-33, E-34 (v1.0) |
 | ~~밸런스게임~~ · ~~목표입력~~ | ~~S-02 🍃 · 🎯~~ | v1.0 없앰 — E-24, E-03·E-26·E-21·E-22 (`removed`) |
-| 책펼치기 | S-03, S-04 | E-05, E-06 |
+| 책펼치기 | S-03, S-04 (E-47은 S-05까지) | E-05, E-06, E-47 (v2.8) |
 | 책갈피 | S-05 | E-07, E-08 |
 | 결과 | S-06 | E-09, E-10, E-23, E-27, E-28, E-18 |
 | 보관 | S-06, S-09 (E-39는 로그인 뒤 어느 화면이든) | E-11, E-15, E-16, E-39 (v1.7) |
@@ -351,13 +352,14 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-20 | `home_clicked` | 같음 | 마무리 | click | live |
 | E-31 | `feedback_sent` | (없음, v0.10) | 홈 | click | live |
 | E-46 | `news_opened` | (없음, v2.7) | 홈 | click | live |
+| E-47 | `sound_toggle_clicked` | (없음, v2.8) | 책펼치기 | click | live |
 | E-41 | `back_cover_shown` | (없음, v2.0) | 공유 | view | live |
 | E-42 | `share_clicked` | (없음, v2.0) | 공유 | click | live |
 | E-43 | `share_page_viewed` | (없음, v2.0) | 공유 | view | live |
 | E-44 | `share_page_started` | (없음, v2.0) | 공유 | click | live |
 | E-45 | `experiment_exposed` | (없음, v2.6) | 실험 | view | live |
 
-E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(39개 — `EVENT_NAMES`는 그 키, v2.7 E-46 추가, v2.6 E-45 추가, v2.0 E-41~E-44 추가, v1.2 E-35 추가, v1.3 E-36·E-37 추가, v1.6 E-38 추가, v1.7 E-39 추가, v1.8 E-40 추가. `removed` 6개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
+E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(40개 — `EVENT_NAMES`는 그 키, v2.8 E-47 추가, v2.7 E-46 추가, v2.6 E-45 추가, v2.0 E-41~E-44 추가, v1.2 E-35 추가, v1.3 E-36·E-37 추가, v1.6 E-38 추가, v1.7 E-39 추가, v1.8 E-40 추가. `removed` 6개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
 
 ### 4-2. 이벤트별 상세
 
@@ -1007,6 +1009,19 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | `has_unseen` | 추가 (v2.7) | Boolean | TRUE, FALSE | 열 때 새 소식 점이 보였는지 — 이 브라우저에서 마지막으로 연 뒤 새 주가 올라왔는지(브라우저 저장이 막혔으면 FALSE) |
 | `latest_week` | 추가 (v2.7) | String | "2026-10-19" | 시트 맨 위(가장 최근) 주의 시작일(월요일, YYYY-MM-DD) — 어느 소식까지 올라와 있을 때 열었는지 |
 
+#### E-47 `sound_toggle_clicked`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 책펼치기 | click | live | 신규 (v2.8) |
+
+**언제**: 책 화면(S-03 닫힌 책 · S-04 첫 장 · S-05 책갈피) 위 오른쪽 스피커(DESIGN C-34)를 누를 때마다 한 번. 뒤표지(S-11)에는 버튼이 없다. 소리를 내는 것(펼칠 때·넘길 때)은 이벤트로 남기지 않는다 — 그 순간은 E-05·E-07이 이미 남긴다  
+**분석 질문**: 운영용 — 효과음을 끄는 사람이 얼마나 되는지(기본은 켜짐). 많이 끄면 기본값·크기를 다시 본다. 퍼널·지표(5절)에 넣지 않는다
+
+| 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
+|---|---|---|---|---|
+| `is_sound_on` | 추가 (v2.8) | Boolean | TRUE, FALSE | 누른 **뒤**의 상태 — FALSE면 소리를 끈 것. 설정은 이 브라우저에 남는다(`galpi.sound.off`) |
+
 #### E-45 `experiment_exposed`
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
@@ -1397,6 +1412,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v2.5 | 2026-10-09 | Claude (사용자 시안 D) | 머리글 오른쪽 위 [처음으로](PRD F-01, DESIGN A-05) — 아빠처럼 로고를 눌러 처음으로 가는 걸 모르는 사람을 위해. E-20 `source` += "header". 흐름이 S-01이 아닐 때만 보이고, 누르면 확인 없이 그 판을 끝낸다(중간에 그만두는 사람은 길을 잘못 고른 사람 — 사용자 판단). 보낸 직후 round +1(3-1a 그대로). /library·공유 페이지의 [처음으로]는 로고와 같은 그냥 이동이라 이벤트 없음. 모으는 정보 변화 없음 |
 | v2.6 | 2026-10-12 | Claude (사용자 결정 B2) | 뒤표지 A/B 실험 `back_cover_pick`(PRD F-27): E-45 `experiment_exposed`(`experiment`·`variant` "a"/"b") 추가, 동사 `exposed`, 분류 `실험`. 궁금해요 1권 이상으로 뒤표지가 덮일 때 한 판에 한 번(E-41과 같은 순간). 받는 쪽은 anon_id 해시로 브라우저마다 고정. b의 책 카드는 S-06과 같은 E-09(한 판에 한 번)·E-10(책마다 한 번)을 보낸다. 모으는 정보: 처리방침의 "화면 버전"에 들어가 처리방침은 그대로. 지표 "책 정보 도달률", 질문 Q-16 |
 | v2.7 | 2026-10-19 | Claude (사용자 시안 A) | 갈피 소식통(PRD F-28, DESIGN C-33): E-46 `news_opened`(`has_unseen` Boolean·`latest_week` String) 추가, 동사 `opened`(이미 허용), 분류 `홈`, 트리거 click. 시트를 열 때마다 한 번. 새 소식 점은 브라우저 저장(`galpi.news.seenWeek`, 마지막으로 연 주의 시작일)으로만 정하고 서버에 보내지 않는다 — C-20 안내 기억과 같은 종류라 처리방침은 그대로. 모으는 정보 변화 없음 |
+| v2.8 | 2026-10-19 | Claude (사용자 시안 넘김 2 · 펼침 A) | 책장 효과음(PRD F-29, DESIGN C-34): E-47 `sound_toggle_clicked`(`is_sound_on` Boolean — 누른 뒤 상태) 추가, 동사 `clicked`, 분류 `책펼치기`, 트리거 click. 소리 자체는 이벤트 없음. 끈 설정은 브라우저 저장(`galpi.sound.off`)만 — C-20 안내 기억과 같은 종류라 처리방침은 그대로. 모으는 정보 변화 없음 |
 
 ---
 

@@ -28,9 +28,10 @@ test("B: 궁금해요 bookmark on the 뒤표지 → floating book card → S-08"
 
   await expect(card.getByRole("button", { name: "닫기" })).toBeFocused();
 
-  // Escape (or 닫기) → the 뒤표지 again, focus back on the bookmark, the tip gone for good; pressing again sends no second E-09
+  // Escape (or 닫기) → the 뒤표지 again, focus back on the bookmark that opened the card (the second one, pressed above —
+  // the 10-12 change moved the press, not the focus rule), the tip gone for good; pressing again sends no second E-09
   await page.keyboard.press("Escape");
-  await expect(lit.first()).toBeFocused();
+  await expect(lit.nth(1)).toBeFocused();
   await expect(card).toHaveCount(0);
   await expect(page.getByText("눌러서 책 정보 보기")).toHaveCount(0);
   await lit.first().click();

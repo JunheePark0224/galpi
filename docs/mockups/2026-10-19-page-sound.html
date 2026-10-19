@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>책장 효과음 시안</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  :root { --paper:#FAF5EA; --paper-deep:#F1E8D6; --ink:#2B2724; --ink-soft:#4a433d; --ink-muted:#7a6048; --line:#ddd0b4; --cloth:#7a4a2e; --red:#b23a48; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:24px 16px 48px; background:var(--paper); color:var(--ink); font-family:"Gowun Dodum",sans-serif; }
+  main { max-width: 560px; margin: 0 auto; }
+  h1 { font-family:"Gowun Batang",serif; font-size:22px; margin:0 0 6px; }
+  .sub { margin:0 0 20px; font-size:14px; color:var(--ink-soft); line-height:1.6; }
+  h2 { font-family:"Gowun Batang",serif; font-size:17px; margin:28px 0 10px; }
+  .cards { display:grid; gap:10px; }
+  .card { display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:#fff; }
+  .card b { font-family:"Gowun Batang",serif; font-size:15px; display:block; }
+  .card span { font-size:13px; color:var(--ink-soft); }
+  .card .txt { flex:1; }
+  button.play { min-width:72px; min-height:44px; border:1px solid var(--ink); border-radius:999px; background:var(--paper); color:var(--ink); font:inherit; font-size:14px; cursor:pointer; }
+  button.play:active { background:var(--paper-deep); }
+  .vol { display:flex; align-items:center; gap:10px; font-size:14px; color:var(--ink-soft); }
+  .vol input { flex:1; }
+  .demo { margin-top:10px; padding:18px 14px; border-radius:16px; background:var(--paper-deep); text-align:center; }
+  .book { position:relative; width:150px; height:190px; margin:8px auto 14px; border-radius:4px 10px 10px 4px; background:var(--cloth); box-shadow: inset 10px 0 0 #5a3420, 0 8px 18px rgba(0,0,0,.18); color:#ead9b0; display:flex; align-items:center; justify-content:center; font-family:"Gowun Batang",serif; font-size:15px; transition: transform .35s; }
+  .book.flip { transform: rotateY(-14deg) scale(.98); }
+  .row { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+  .speaker { position:absolute; top:8px; right:8px; width:44px; height:44px; border:0; border-radius:50%; background:rgba(250,245,234,.9); cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .wrap { position:relative; }
+  select { min-height:44px; font:inherit; padding:0 10px; border-radius:10px; border:1px solid var(--line); background:#fff; }
+  .note { font-size:12px; color:var(--ink-muted); margin-top:10px; line-height:1.6; }
+  .pick { font-size:13px; color:var(--ink-soft); margin:4px 0 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>책장 효과음 시안</h1>
+  <p class="sub">버튼을 누르면 소리가 나요(이어폰 추천). 소리는 모두 코드로 만든 것이라 파일·저작권 걱정이 없어요. 마음에 드는 번호와, 처음에 켜 둘지 꺼 둘지 알려 주세요.</p>
+
+  <div class="vol">작게 <input id="vol" type="range" min="0.05" max="1" step="0.05" value="0.35"> 크게</div>
+
+  <h2>① 책갈피 넘길 때 (다음 장)</h2>
+  <div class="cards">
+    <div class="card"><div class="txt"><b>1 · 가벼운 넘김</b><span>짧고 사각 — 얇은 종이 한 장</span></div><button class="play" data-s="flip1">듣기</button></div>
+    <div class="card"><div class="txt"><b>2 · 종이 스침</b><span>조금 길게 스르륵 — 손으로 넘기는 느낌</span></div><button class="play" data-s="flip2">듣기</button></div>
+    <div class="card"><div class="txt"><b>3 · 두툼한 책장</b><span>사각 + 낮게 툭 — 오래된 책</span></div><button class="play" data-s="flip3">듣기</button></div>
+  </div>
+
+  <h2>② 책 펼칠 때</h2>
+  <div class="cards">
+    <div class="card"><div class="txt"><b>A · 표지 열림</b><span>낮게 툭 + 짧은 바스락</span></div><button class="play" data-s="openA">듣기</button></div>
+    <div class="card"><div class="txt"><b>B · 표지 + 책장 촤르륵</b><span>펼치며 여러 장이 한 번에 넘어가는 소리</span></div><button class="play" data-s="openB">듣기</button></div>
+  </div>
+
+  <h2>③ 실제처럼 해 보기</h2>
+  <div class="demo">
+    <div class="row">
+      <select id="flipPick" aria-label="넘길 때 소리"><option value="flip1">넘김 1</option><option value="flip2" selected>넘김 2</option><option value="flip3">넘김 3</option></select>
+      <select id="openPick" aria-label="펼칠 때 소리"><option value="openA" selected>펼침 A</option><option value="openB">펼침 B</option></select>
+    </div>
+    <div class="wrap">
+      <div class="book" id="book">갈피</div>
+      <button class="speaker" id="speaker" aria-label="소리 끄기" title="소리 끄기"></button>
+    </div>
+    <div class="row">
+      <button class="play" id="open">책 펼치기</button>
+      <button class="play" id="next">다음 장</button>
+    </div>
+    <p class="pick" id="state">소리 켜짐</p>
+    <p class="note">오른쪽 위 스피커 버튼 = 실제 사이트에 둘 끄기/켜기 자리(시안). 끄면 다음에 와도 꺼진 채로 기억해요.</p>
+  </div>
+</main>
+<script>
+let ctx = null;
+const audio = () => (ctx ??= new (window.AudioContext || window.webkitAudioContext)());
+const vol = () => parseFloat(document.getElementById("vol").value);
+let muted = false;
+
+function noise(c, seconds) {
+  const buf = c.createBuffer(1, Math.ceil(c.sampleRate * seconds), c.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  const src = c.createBufferSource(); src.buffer = buf; return src;
+}
+function env(c, g, t0, peak, attack, hold, release) {
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(peak, t0 + attack);
+  g.gain.setValueAtTime(peak, t0 + attack + hold);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + attack + hold + release);
+}
+function rustle(c, t0, { dur, from, to, q = 0.9, peak = 0.6, attack = 0.012, type = "bandpass" }) {
+  const src = noise(c, dur + 0.05), f = c.createBiquadFilter(), g = c.createGain();
+  f.type = type; f.Q.value = q;
+  f.frequency.setValueAtTime(from, t0); f.frequency.exponentialRampToValueAtTime(to, t0 + dur);
+  env(c, g, t0, peak * vol(), attack, dur * 0.25, dur * 0.7);
+  src.connect(f).connect(g).connect(c.destination); src.start(t0); src.stop(t0 + dur + 0.05);
+}
+function thump(c, t0, { freq = 110, dur = 0.12, peak = 0.7 }) {
+  const o = c.createOscillator(), g = c.createGain();
+  o.type = "sine"; o.frequency.setValueAtTime(freq * 1.6, t0); o.frequency.exponentialRampToValueAtTime(freq, t0 + dur);
+  env(c, g, t0, peak * vol(), 0.004, 0.01, dur);
+  o.connect(g).connect(c.destination); o.start(t0); o.stop(t0 + dur + 0.05);
+}
+const SOUNDS = {
+  flip1: (c, t) => rustle(c, t, { dur: 0.16, from: 4200, to: 2600, q: 1.2, peak: 0.55 }),
+  flip2: (c, t) => { rustle(c, t, { dur: 0.34, from: 1400, to: 5200, q: 0.7, peak: 0.45, attack: 0.06 }); rustle(c, t + 0.22, { dur: 0.09, from: 3000, to: 2200, q: 1.4, peak: 0.35 }); },
+  flip3: (c, t) => { rustle(c, t, { dur: 0.22, from: 2600, to: 1600, q: 0.9, peak: 0.55 }); thump(c, t + 0.16, { freq: 95, dur: 0.1, peak: 0.45 }); },
+  openA: (c, t) => { thump(c, t, { freq: 80, dur: 0.18, peak: 0.8 }); rustle(c, t + 0.05, { dur: 0.2, from: 2200, to: 3800, q: 0.8, peak: 0.35 }); },
+  openB: (c, t) => { thump(c, t, { freq: 80, dur: 0.16, peak: 0.7 }); for (let i = 0; i < 5; i++) rustle(c, t + 0.08 + i * 0.055, { dur: 0.08, from: 3600 - i * 250, to: 2400, q: 1.3, peak: 0.3 - i * 0.03 }); },
+};
+function play(name) {
+  if (muted) return;
+  const c = audio(); if (c.state === "suspended") c.resume();
+  SOUNDS[name](c, c.currentTime + 0.01);
+}
+document.querySelectorAll("button[data-s]").forEach((b) => b.addEventListener("click", () => play(b.dataset.s)));
+
+const book = document.getElementById("book");
+const speaker = document.getElementById("speaker");
+const ICON_ON = '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#2B2724"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="#2B2724" stroke-width="1.8" stroke-linecap="round"/></svg>';
+const ICON_OFF = '<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#7a6048"/><path d="M16.5 9.5l5 5M21.5 9.5l-5 5" stroke="#7a6048" stroke-width="1.8" stroke-linecap="round"/></svg>';
+const draw = () => { speaker.innerHTML = muted ? ICON_OFF : ICON_ON; speaker.setAttribute("aria-label", muted ? "소리 켜기" : "소리 끄기"); document.getElementById("state").textContent = muted ? "소리 꺼짐" : "소리 켜짐"; };
+speaker.addEventListener("click", () => { muted = !muted; draw(); });
+draw();
+const wiggle = () => { book.classList.add("flip"); setTimeout(() => book.classList.remove("flip"), 350); };
+document.getElementById("open").addEventListener("click", () => { play(document.getElementById("openPick").value); wiggle(); });
+document.getElementById("next").addEventListener("click", () => { play(document.getElementById("flipPick").value); wiggle(); });
+</script>
+</body>
+</html>
