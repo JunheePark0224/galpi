@@ -1,8 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Home } from "./Home";
 
 describe("Home (S-01)", () => {
+  beforeEach(() => localStorage.clear());   // the 소식통 dot remembers the week opened (F-28)
+
   it("offers one entry with the v2 wording and the line under it (PRD F-01, design 10절)", () => {
     const onStart = vi.fn();
     render(<Home onStart={onStart} />);
@@ -11,13 +13,14 @@ describe("Home (S-01)", () => {
     expect(screen.getByText("질문 몇 개면 한 권을 만나요")).toBeInTheDocument();
   });
 
-  it("has no login place of its own — the one entry, then the 갈피 우체통 last (F-26)", () => {
+  it("has no login place of its own — the one entry, then the 갈피 우체통 and 갈피 소식통 (F-26, F-28)", () => {
     render(<Home onStart={vi.fn()} />);
     expect(screen.queryByTestId("account-slot")).toBeNull();
     expect(screen.queryByText("로그인")).toBeNull();
     expect(screen.getAllByRole("button").map((b) => b.getAttribute("aria-label") ?? b.textContent)).toEqual([
       "갈피 잡으러 가기",
       "갈피 우체통 — 써 보고 느낀 점을 넣어 주세요",
+      "갈피 소식통 — 이번 주에 바뀐 것, 새 소식 있음",
     ]);
     expect(screen.getByRole("heading", { name: "갈피" })).toBeInTheDocument();
     expect(screen.getByText("읽을 책, 갈피가 안 잡힐 때")).toBeInTheDocument();
@@ -27,6 +30,12 @@ describe("Home (S-01)", () => {
     render(<Home onStart={vi.fn()} />);
     fireEvent.click(screen.getByRole("button", { name: "갈피 우체통 — 써 보고 느낀 점을 넣어 주세요" }));
     expect(screen.getByRole("dialog", { name: "갈피 우체통" })).toBeInTheDocument();
+  });
+
+  it("opens the 갈피 소식통 sheet from S-01 (F-28)", () => {
+    render(<Home onStart={vi.fn()} />);
+    fireEvent.click(screen.getByRole("button", { name: /^갈피 소식통 — 이번 주에 바뀐 것/ }));
+    expect(screen.getByRole("dialog", { name: "갈피 소식통" })).toBeInTheDocument();
   });
 
   it("shows no library count below the first fill (F-23 hidden) — the cover keeps the logo", () => {
@@ -44,7 +53,7 @@ describe("Home (S-01)", () => {
     expect(art).toHaveTextContent("갈피의 서재");
     expect(art).toHaveTextContent("1,234권");
     expect(art).toHaveTextContent("+12");
-    expect(screen.getAllByRole("button")).toHaveLength(2);   // one entry + 갈피 우체통
+    expect(screen.getAllByRole("button")).toHaveLength(3);   // one entry + 갈피 우체통 + 갈피 소식통
   });
 
   it("leaves out today's bookmark and sentence on a day with no new books", () => {
