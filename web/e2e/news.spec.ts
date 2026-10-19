@@ -42,3 +42,24 @@ test("the owl sits beside the mailbox, opens the weekly news, sends E-46 and los
   await expect(page.getByRole("button", { name: NEWS })).toHaveAccessibleName("갈피 소식통 — 이번 주에 바뀐 것");
   await expect(page.getByTestId("news-dot")).toHaveCount(0);
 });
+
+test.describe("320 × 568: the mailbox and the owl keep their small lines whole", () => {
+  test.use({ viewport: { width: 320, height: 568 } });
+
+  test("each line is one line, and the pair stays inside the page", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByTestId("news-dot")).toBeVisible();   // the browser render is in (S-01 is drawn again after hydration)
+    for (const name of [MAILBOX, NEWS]) {
+      const button = page.getByRole("button", { name });
+      const lines = await button.evaluate((b) =>
+        [...b.querySelectorAll("span")].filter((s) => s.children.length === 0 && s.textContent)
+          // one line: the text's box is shorter than two lines of its own font size (line-height 1.4)
+          .map((s) => Math.ceil(s.getBoundingClientRect().height / (parseFloat(getComputedStyle(s).fontSize) * 1.4 + 1))));
+      expect(lines.every((n) => n === 1), `${name}: ${lines}`).toBe(true);
+      const box = (await button.boundingBox())!;
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(320);
+      expect(Math.min(box.width, box.height)).toBeGreaterThanOrEqual(44);
+    }
+  });
+});

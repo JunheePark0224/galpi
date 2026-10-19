@@ -15,7 +15,7 @@ const shot = async (page: Page, name: string) => { if (SHOTS) await page.screens
 test("data path: ten questions (the way question passed over: every 엑셀 book is 실습), no path or count while answering, then 당신이 고른 길 and five bookmarks (E-32 · E-25 · E-34)", async ({ page }) => {
   const { events } = await recordEvents(page);
   await page.goto("/");
-  await expect(page.getByText("질문 몇 개면 한 권을 만나요")).toBeVisible();
+  await expect(page.getByText("질문 몇 개면 나에게 맞는 책을 만나요")).toBeVisible();
   await shot(page, "s01-home");
   await page.getByRole("button", { name: START }).click();
   await expect(heading(page, "start")).toBeVisible();
