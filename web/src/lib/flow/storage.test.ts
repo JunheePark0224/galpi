@@ -34,6 +34,27 @@ describe("flow storage", () => {
     expect(loadFlow()).toEqual(INITIAL);
   });
 
+  it("restores a save from before 10-19 (no undone) with nothing marked", () => {
+    const old: Partial<FlowState> = { ...INITIAL, step: "questions", answers: DATA_PATH.slice(0, 2), asked: 2 };
+    delete old.undone;
+    sessionStorage.setItem(FLOW_KEY, JSON.stringify({ v: 6, state: old }));
+    expect(loadFlow()).toMatchObject({ step: "questions", undone: [] });
+  });
+
+  it.each([
+    ["not a list", "x"],
+    ["holes and junk", [null, "x", { node: 3, choice: "A" }, { node: "learn-area", choice: "zzz" }]],
+  ])("drops a broken undone (%s) and keeps the rest of the flow", (_, undone) => {
+    sessionStorage.setItem(FLOW_KEY, JSON.stringify({ v: 6, state: { ...INITIAL, step: "questions", answers: DATA_PATH.slice(0, 2), undone } }));
+    expect(loadFlow()).toMatchObject({ step: "questions", answers: DATA_PATH.slice(0, 2), undone: [] });
+  });
+
+  it("keeps a good undone", () => {
+    const undone = [DATA_PATH[2]];
+    sessionStorage.setItem(FLOW_KEY, JSON.stringify({ v: 6, state: { ...INITIAL, step: "questions", answers: DATA_PATH.slice(0, 2), undone } }));
+    expect(loadFlow()).toMatchObject({ undone });
+  });
+
   it("starts over on a tampered drawnFor (not a path of today's map)", () => {
     sessionStorage.setItem(FLOW_KEY, JSON.stringify({ v: 6, state: { ...INITIAL, step: "book", answers: DATA_PATH, drawnFor: [{ node: "branch", choice: "A" }] } }));
     expect(loadFlow()).toEqual(INITIAL);

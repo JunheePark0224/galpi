@@ -13,24 +13,30 @@ export const HOLD_HINT = "끌리는 쪽을 고를수록 더 잘 맞아요";
 export const TAP_HINT = "끌리는 쪽을 골라 주세요 · 모르겠으면 꾹";
 export const UNSURE = "갈피를 못 잡겠어요";
 export const BACK = "이전 질문";
+/** C-23 (10-19): read out for the answer given before [← 이전 질문] took it back (the ✓ itself is hidden). */
+export const CHOSEN_BEFORE = "아까 고른 답";
 
 interface Props {
   node: QNode;
   onAnswer: (choice: AnswerChoice, elapsedMs: number) => void;
   onHoldCancel: (heldMs: number) => void;
   onBack: () => void;
+  /** The answer this question had before going back — its card (or 갈피를 못 잡겠어요) gets a border and a ✓ (10-19). */
+  previous?: AnswerChoice;
 }
 
 /**
  * C-07: the bookmark shape with the choice in the arched window instead of a picture. The whole card is the button.
  * A hint (question-map `hint=`) sits small under the label; the button's name stays the label, the hint is its description.
  */
-function ChoiceCard({ side, label, hint, onChoose }: { side: "left" | "right"; label: string; hint?: string; onChoose: () => void }) {
+function ChoiceCard({ side, label, hint, chosen, onChoose }: { side: "left" | "right"; label: string; hint?: string; chosen: boolean; onChoose: () => void }) {
   const hintId = useId();
+  const chosenId = useId();
+  const described = [hint ? hintId : null, chosen ? chosenId : null].filter(Boolean).join(" ");
   return (
     <button
-      type="button" className={`${frame.frame} ${styles.card}`} data-side={side} onClick={onChoose}
-      {...(hint ? { "aria-label": label, "aria-describedby": hintId } : {})}
+      type="button" className={`${frame.frame} ${styles.card}`} data-side={side} data-chosen={chosen ? "" : undefined} onClick={onChoose}
+      {...(hint || chosen ? { "aria-label": label, "aria-describedby": described } : {})}
     >
       <span className={frame.string} aria-hidden="true" />
       <span className={`${frame.film} ${styles.film}`}>
@@ -45,6 +51,12 @@ function ChoiceCard({ side, label, hint, onChoose }: { side: "left" | "right"; l
         </span>
         <span className={frame.stitch} aria-hidden="true" />
       </span>
+      {chosen && (
+        <>
+          <span className={styles.check} data-part="check" aria-hidden="true">✓</span>
+          <span id={chosenId} className={styles.srOnly}>{CHOSEN_BEFORE}</span>
+        </>
+      )}
     </button>
   );
 }
@@ -55,7 +67,7 @@ function ChoiceCard({ side, label, hint, onChoose }: { side: "left" | "right"; l
  * question (key), so the tap guard and the hold start again — and focus moves to the new question's heading (the card or
  * button just pressed is gone), without a scroll jump.
  */
-export function Question({ node, onAnswer, onHoldCancel, onBack }: Props) {
+export function Question({ node, onAnswer, onHoldCancel, onBack, previous }: Props) {
   const shownAt = useRef(0);
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
@@ -75,11 +87,11 @@ export function Question({ node, onAnswer, onHoldCancel, onBack }: Props) {
       </button>
       <h1 id="question-text" ref={heading} tabIndex={-1} className={styles.question}>{node.question}</h1>
       <div className={styles.pair}>
-        <ChoiceCard side="left" label={node.a.label} hint={node.a.hint} onChoose={() => choose("A")} />
+        <ChoiceCard side="left" label={node.a.label} hint={node.a.hint} chosen={previous === "A"} onChoose={() => choose("A")} />
         <span className={styles.vs} aria-hidden="true">vs</span>
-        <ChoiceCard side="right" label={node.b.label} hint={node.b.hint} onChoose={() => choose("B")} />
+        <ChoiceCard side="right" label={node.b.label} hint={node.b.hint} chosen={previous === "B"} onChoose={() => choose("B")} />
       </div>
-      <HoldButton label={UNSURE} hint={HOLD_HINT} tapHint={TAP_HINT} onHold={() => onAnswer("unsure", elapsed())} onCancel={onHoldCancel} />
+      <HoldButton label={UNSURE} hint={HOLD_HINT} tapHint={TAP_HINT} chosenNote={previous === "unsure" ? CHOSEN_BEFORE : undefined} onHold={() => onAnswer("unsure", elapsed())} onCancel={onHoldCancel} />
     </section>
   );
 }

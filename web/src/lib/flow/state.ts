@@ -35,11 +35,12 @@ export interface FlowState {
   reactions: Reaction[];
   result: number;                  // S-06: which 궁금해요 book is shown (0-based)
   seen: string[];                  // books shown in this session — excluded from later draws (F-05)
+  undone: Answer[];                // answers taken back with [← 이전 질문], newest last — the question shown again marks its own (C-23)
 }
 
 export const INITIAL: FlowState = {
   step: "home", answers: [], asked: 0, drawnFor: null,
-  status: "idle", drawId: 0, draw: null, opened: false, index: 0, reactions: [], result: 0, seen: [],
+  status: "idle", drawId: 0, draw: null, opened: false, index: 0, reactions: [], result: 0, seen: [], undone: [],
 };
 
 export type FlowAction =
@@ -65,6 +66,12 @@ function requestDraw(s: FlowState): FlowState {
   return { ...s, status: "loading", drawId: s.drawId + 1, draw: null, drawnFor: s.answers, step: s.opened ? "first" : "book" };
 }
 
+/** C-23 (10-19): the answer this question had before [← 이전 질문] took it back, if this is that question. */
+export function previousChoice(s: Pick<FlowState, "undone">, node: { id: string }): AnswerChoice | undefined {
+  const top = s.undone.at(-1);
+  return top && top.node === node.id ? top.choice : undefined;
+}
+
 /** The 궁금해요 books of this round, in bookmark order — S-06 shows them one by one. */
 export function curiousPicks(s: Pick<FlowState, "draw" | "reactions">): PickView[] {
   return (s.draw?.picks ?? []).filter((_, i) => s.reactions[i] === "curious");
@@ -88,7 +95,10 @@ function answer(s: FlowState, choice: AnswerChoice): FlowState {
   const node = nextQuestion(s.answers);
   if (!node) return s;
   const answers = [...s.answers, { node: node.id, choice }];
-  const moved = { ...s, answers, asked: s.asked + 1 };
+  // the same answer as before going back keeps the deeper remembered answers; another one leads elsewhere and forgets them
+  const top = s.undone.at(-1);
+  const undone = top && top.node === node.id && top.choice === choice ? s.undone.slice(0, -1) : [];
+  const moved = { ...s, answers, asked: s.asked + 1, undone };
   if (nextQuestion(answers) !== null) return moved;
   // the path is done. Back on the open book with the same answers (and a draw that did not fail): the same five books.
   if (s.opened && s.drawnFor && sameAnswers(answers, s.drawnFor) && s.status !== "error") return { ...moved, step: "first" };
@@ -105,7 +115,7 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
       // S-02 [← 이전 질문] and S-04 [← 질문으로 돌아가기] drop the last answer — and the phone's back key on the closed book
       // (S-03, 10-08). The first question's back is Flow's [처음으로].
       if ((s.step === "questions" || s.step === "book" || s.step === "first") && s.answers.length > 0) {
-        return { ...s, step: "questions", answers: s.answers.slice(0, -1) };
+        return { ...s, step: "questions", answers: s.answers.slice(0, -1), undone: [...s.undone, s.answers[s.answers.length - 1]] };
       }
       return s;
     case "drawn":
