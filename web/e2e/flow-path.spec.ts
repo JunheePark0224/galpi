@@ -182,6 +182,13 @@ test("[← 이전 질문] after a question the map passed over: back to the ques
   await expect.poll(() => named(events, "question_back_clicked").length).toBe(1);
   expect(named(events, "question_back_clicked")[0].props).toEqual({ node_id: "learn-data-sheet", depth: 9, source: "question" });
   expect(named(events, "question_answered").map((e) => e.props.node_id)).not.toContain("learn-way");
+  // C-23 (10-19): the card answered before (표로 = A) has the border and ✓ — also after a reload
+  for (const reload of [false, true]) {
+    if (reload) await page.reload();
+    await expect(page.locator('button[data-side="left"]')).toHaveAttribute("data-chosen", "");
+    await expect(page.locator("[data-chosen]")).toHaveCount(1);
+    await expect(page.getByRole("button", { name: /표로/ })).toHaveAccessibleDescription(/아까 고른 답/);
+  }
   expect(specMismatches(events)).toEqual([]);
 });
 

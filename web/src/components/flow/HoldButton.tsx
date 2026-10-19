@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import { useEffect, useId, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import styles from "./HoldButton.module.css";
 
 /** DESIGN T-06 hold: the timer decides when it passes; the gauge only shows it (a janky frame cannot delay it). */
@@ -15,6 +15,8 @@ interface Props {
   hint?: string;
   /** 10-14: shown in the same box for TAP_HINT_MS after a quick tap (the hold hint flashes for only ~0.1 s there). */
   tapHint?: string;
+  /** C-23 (10-19): this was the answer before going back — a ✓ in the button, the words read as its description. */
+  chosenNote?: string;
   onHold: () => void;
   onCancel: (heldMs: number) => void;
 }
@@ -24,7 +26,8 @@ interface Props {
  * faint hint in the same box (both are laid out on top of each other, so nothing moves). The name stays the label; the hint
  * is announced once per hold through a polite status line.
  */
-export function HoldButton({ label, hint, tapHint, onHold, onCancel }: Props) {
+export function HoldButton({ label, hint, tapHint, chosenNote, onHold, onCancel }: Props) {
+  const chosenId = useId();
   const [holding, setHolding] = useState(false);
   const [nudge, setNudge] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -90,6 +93,8 @@ export function HoldButton({ label, hint, tapHint, onHold, onCancel }: Props) {
         type="button"
         className={styles.hold}
         aria-label={label}
+        aria-describedby={chosenNote ? chosenId : undefined}
+        data-chosen={chosenNote ? "" : undefined}
         data-holding={holding ? "" : undefined}
         data-nudge={nudge ? "" : undefined}
         onPointerDown={onPointerDown}
@@ -106,7 +111,9 @@ export function HoldButton({ label, hint, tapHint, onHold, onCancel }: Props) {
           {hint && <span className={styles.hint}>{hint}</span>}
           {tapHint && <span className={styles.tapHint}>{tapHint}</span>}
         </span>
+        {chosenNote && <span className={styles.check} aria-hidden="true">✓</span>}
       </button>
+      {chosenNote && <span id={chosenId} className={styles.srOnly}>{chosenNote}</span>}
       {(hint || tapHint) && <span className={styles.announce} role="status">{holding ? hint ?? "" : nudge ? tapHint : ""}</span>}
     </>
   );

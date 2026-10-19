@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { DATA_PATH } from "@/lib/paths/__fixtures__/paths";
-import { INITIAL, curiousPicks, flowReducer, meetingOf, type DrawView, type FlowAction, type FlowState } from "./state";
+import { INITIAL, curiousPicks, flowReducer, meetingOf, previousChoice, type DrawView, type FlowAction, type FlowState } from "./state";
 
 const art = { animal: "cat", bg: "peach", sky: "moon", ground: "none", rare: false } as const;
 const view = (n: number): DrawView => ({
@@ -44,6 +44,54 @@ describe("flowReducer (v2 questions)", () => {
     expect(flowReducer(first, { type: "back" })).toBe(first);
     const reading = run([{ type: "drawn", id: 1, draw: view(5) }, { type: "open" }, { type: "next" }], asked());
     expect(flowReducer(reading, { type: "back" })).toBe(reading);     // S-05: no back (S-03 has one since 10-08 — see below)
+  });
+
+  describe("the answer given before going back (10-19, DESIGN C-23: border + ✓ on it)", () => {
+    const node = (s: FlowState) => ({ id: s.answers.length < DATA_PATH.length ? DATA_PATH[s.answers.length].node : "" });
+
+    it("is remembered for the question shown again", () => {
+      const s = run([{ type: "start" }, ...answers().slice(0, 3), { type: "back" }]);
+      expect(s.answers).toEqual(DATA_PATH.slice(0, 2));
+      expect(previousChoice(s, node(s))).toBe(DATA_PATH[2].choice);
+    });
+
+    it("walks back several questions and keeps each one's answer while the same answers are given again", () => {
+      let s = run([{ type: "start" }, ...answers().slice(0, 3), { type: "back" }, { type: "back" }]);
+      expect(previousChoice(s, node(s))).toBe(DATA_PATH[1].choice);
+      s = run([{ type: "answer", choice: DATA_PATH[1].choice }], s);
+      expect(previousChoice(s, node(s))).toBe(DATA_PATH[2].choice);
+      s = run([{ type: "answer", choice: DATA_PATH[2].choice }], s);
+      expect(previousChoice(s, node(s))).toBeUndefined();
+    });
+
+    it("is forgotten once another answer takes the path elsewhere", () => {
+      const other = DATA_PATH[1].choice === "A" ? "B" : "A";
+      const s = run([{ type: "start" }, ...answers().slice(0, 3), { type: "back" }, { type: "back" }, { type: "answer", choice: other }]);
+      expect(s.undone).toEqual([]);
+    });
+
+    it("from S-04 or the closed book: the last question gets its answer back, and the same answer again leaves nothing marked", () => {
+      const last = DATA_PATH[DATA_PATH.length - 1];
+      for (const from of [opened(), asked()]) {
+        const back = run([{ type: "back" }], from);
+        expect(previousChoice(back, { id: last.node })).toBe(last.choice);
+        expect(run([{ type: "answer", choice: last.choice }], back).undone).toEqual([]);
+      }
+    });
+
+    it("is always empty once a path is complete", () => {
+      expect(asked().undone).toEqual([]);
+      const again = run([{ type: "back" }, { type: "back" }, ...answers().slice(-2)], asked());
+      expect(again.step).not.toBe("questions");
+      expect(again.undone).toEqual([]);
+    });
+
+    it("only for the question it belongs to, and never after [처음으로] or a new start", () => {
+      const s = run([{ type: "start" }, ...answers().slice(0, 3), { type: "back" }]);
+      expect(previousChoice(s, { id: "not-this-one" })).toBeUndefined();
+      expect(run([{ type: "home" }], s).undone).toEqual([]);
+      expect(run([{ type: "start" }], s).undone).toEqual([]);
+    });
   });
 
   describe("S-04 [← 질문으로 돌아가기]", () => {
