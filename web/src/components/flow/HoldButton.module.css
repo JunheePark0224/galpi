@@ -14,10 +14,14 @@
 .hold[data-holding] .gauge { transform: scaleX(1); transition: transform var(--dur-hold) linear; }
 /* Label and hint share one grid cell: the button is as wide as the longer one, so swapping them moves nothing. */
 .texts { position: relative; display: grid; }
-.label, .hint { grid-area: 1 / 1; }
+.label, .hint, .tapHint { grid-area: 1 / 1; }
 .hint { visibility: hidden; font-size: 12px; color: var(--ink-muted); }
 .hold[data-holding] .label { visibility: hidden; }
 .hold[data-holding] .hint { visibility: visible; }
+/* 10-14: after a quick tap — the same box says what to do (choose a side; hold only if truly unsure). */
+.tapHint { visibility: hidden; font-size: 12px; color: var(--ink-soft); }
+.hold[data-nudge] .label { visibility: hidden; }
+.hold[data-nudge] .tapHint { visibility: visible; }
 /* Read by screen readers only (once per hold). */
 .announce {
   position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;

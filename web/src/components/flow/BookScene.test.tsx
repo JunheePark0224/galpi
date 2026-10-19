@@ -4,7 +4,8 @@ import { describe, expect, it, vi } from "vitest";
 import { EXHAUSTED_NOTICE } from "@/lib/recommend";
 import { DATA_PATH } from "@/lib/paths/__fixtures__/paths";
 import { INITIAL, type DrawView, type FlowState } from "@/lib/flow/state";
-import { BookScene, DRAW_FAILED } from "./BookScene";
+import { act } from "@testing-library/react";
+import { BookScene, BUSY_FALLBACK_MS, DRAW_FAILED } from "./BookScene";
 
 const art = { animal: "owl", bg: "sky", ground: "grass", rare: false } as const;
 const view = (n: number, mode: "normal" | "challenge" = "normal"): DrawView => ({
@@ -176,5 +177,23 @@ describe("BookScene", () => {
     expect(screen.getByRole("button", { name: "패스" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "궁금해요" })).toBeInTheDocument();
     expect(screen.getByText("2 / 3")).toBeInTheDocument();
+  });
+  // 10-14 (iPhone report): the reactions unlock when the bookmark's rise animation says it finished. A page hidden mid-rise
+  // (a KakaoTalk switch) may never say so — the buttons must still come back on their own.
+  it("S-05: if the rise never reports done, pass / curious unlock after BUSY_FALLBACK_MS", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    vi.stubGlobal("requestAnimationFrame", () => 0);   // no frame ever runs: the animation never completes
+    try {
+      render(<BookScene state={{ ...first, step: "bookmarks", index: 0 }} {...handlers()} />);
+      const curious = screen.getByRole("button", { name: "궁금해요" });
+      expect(curious).toBeDisabled();
+      act(() => { vi.advanceTimersByTime(BUSY_FALLBACK_MS - 1); });
+      expect(curious).toBeDisabled();
+      act(() => { vi.advanceTimersByTime(1); });
+      expect(curious).toBeEnabled();
+    } finally {
+      vi.unstubAllGlobals();
+      vi.useRealTimers();
+    }
   });
 });
