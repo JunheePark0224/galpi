@@ -1,0 +1,44 @@
+/* DESIGN C-33 갈피 소식통: as quiet as the C-18 slot beside it — muted words, a faded drawing, no idle motion. */
+.post { display: flex; justify-content: center; margin-top: var(--space-5); }
+.owl {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
+  min-width: var(--touch); min-height: var(--touch); padding: var(--space-2) var(--space-4);
+  border: 0; border-radius: var(--radius-card); background: none; color: var(--ink-muted);
+  font: inherit; cursor: pointer;
+}
+.owl:active { background: var(--paper-deep); }
+.owl:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.art { position: relative; display: block; width: 60px; height: 60px; margin-top: -6px; }
+/* only the drawing is faded (C-18): the words keep ink-muted at full strength */
+.drawing { display: block; width: 100%; height: 100%; opacity: 0.72; filter: saturate(0.7); transition: opacity 160ms; }
+.owl:hover .drawing, .owl:focus-visible .drawing { opacity: 1; }
+.dot {
+  position: absolute; top: 10px; right: 6px; width: 8px; height: 8px; border-radius: 50%;
+  background: #b23a48; box-shadow: 0 0 0 2px var(--paper);
+}
+.name { font-family: var(--font-batang), serif; font-size: 12px; font-weight: 700; line-height: 1.4; letter-spacing: 0.5px; }
+.line { font-size: 11px; line-height: 1.4; }
+
+/* The sheet */
+.sheet { display: flex; flex-direction: column; }
+.lead { margin: var(--space-1) 0 var(--space-3); font-size: 14px; color: var(--ink-soft); }
+.week { border-top: 1px solid var(--paper-line); padding: var(--space-3) 0; }
+.weekTitle {
+  display: flex; align-items: center; gap: var(--space-2); margin: 0 0 var(--space-2);
+  font-family: var(--font-batang), serif; font-size: 15px; font-weight: 700; color: var(--ink);
+}
+.new {
+  font-family: inherit; font-size: 11px; font-weight: 400; line-height: 1.6; color: #fff;
+  background: #b23a48; border-radius: 999px; padding: 0 7px;
+}
+.items { margin: 0; padding-left: 1.2em; font-size: 14px; line-height: 1.7; color: var(--ink-soft); }
+.textClose {
+  align-self: center; min-height: var(--touch); min-width: var(--touch); padding: 0 var(--space-3);
+  border: 0; background: none; color: var(--ink-muted); font: inherit; font-size: 13px; cursor: pointer;
+}
+.textClose:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .drawing { transition: none; } }
+.srOnly {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
