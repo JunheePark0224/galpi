@@ -25,6 +25,7 @@ import { backCoverExposure, backCoverVariant, firstPeekThisRound, type BackCover
 import type { ShareMethod } from "./BackCover";
 import { BookPeek } from "./BookPeek";
 import { backPickGuide } from "@/lib/flow/firstGuide";
+import { playPage } from "@/lib/sound/pageSound";
 import { BookScene } from "./BookScene";
 import { EndScreen } from "./EndScreen";
 import { Home } from "./Home";
@@ -189,6 +190,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
 
   const open = () => {
     track("book_opened", {});
+    playPage("open");   // F-29 펼침 A — from the tap itself, so the browser lets it sound
     advance();
     act({ type: "open" });
   };
@@ -196,7 +198,10 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
   const nextPage = () => {
     advance();
     const next = act({ type: "next" });
-    if (next.step === "bookmarks") trackShown(next);
+    if (next.step === "bookmarks") {
+      playPage("flip");   // F-29 넘김 2: the first page turns to the first bookmark
+      trackShown(next);
+    }
   };
 
   const react = (reaction: Reaction) => {
@@ -207,7 +212,10 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
       book_id: pick.card.id, position: state.index + 1, reaction, pick_type: pick.kind, one_liner_style: pick.card.oneLinerStyle,
     });
     const next = act({ type: "react", reaction });
-    if (next.step === "bookmarks") trackShown(next);
+    if (next.step === "bookmarks") {
+      playPage("flip");   // a sheet turns to the next bookmark (never as the book shuts onto the back cover — A/B)
+      trackShown(next);
+    }
     if (next.step === "back") {
       setClosing(true);
       // the server starts drawing the story picture now, while the book shuts (10-08: the sheet's preview came late)

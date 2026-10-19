@@ -16,6 +16,7 @@ import { FirstGuide } from "./FirstGuide";
 import { FirstPageTitle } from "./FirstPage";
 import { FoundBadge } from "./FoundBadge";
 import { PathPage } from "./PathPage";
+import { SoundButton } from "./SoundButton";
 import styles from "./BookScene.module.css";
 
 /** No wording in the docs for a failed draw request — new copy, logged in context.md. */
@@ -134,6 +135,8 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
             <div className={styles.popFace}><BackLaid books={draw.picks} label={draw.label ?? { chips: [], challenge: false }} pick={back?.pick} /></div>
           ) : null}
         />
+        {/* C-34 (10-19): the page sounds' switch — on the book screens, not on the back cover (A/B, report/README) */}
+        {!shutting && (step === "book" || step === "first" || step === "bookmarks") && <SoundButton />}
         {pick && <p className={styles.folio}>{`${state.index + 1} / ${picks.length}`}</p>}
         {pick && (
           <div className={styles.slot}>
