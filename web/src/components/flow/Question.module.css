@@ -42,3 +42,15 @@
   width: 28px; height: 28px; border-radius: 50%; background: var(--paper-deep);
   font-family: var(--font-batang), serif; font-size: 13px; color: var(--ink-muted);
 }
+/* C-23 (10-19): back on a question, the card answered before — a 2px ink line inside the window and a small ✓ on the
+   card's top right. Both cards stay as they are otherwise: either can be chosen again. */
+.card[data-chosen] .window { box-shadow: inset 0 0 0 2px var(--ink); }
+.check {
+  position: absolute; top: 34px; right: 14px; display: flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: var(--paper);
+  font-family: var(--font-dodum), sans-serif; font-size: 13px; line-height: 1;
+}
+.srOnly {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}

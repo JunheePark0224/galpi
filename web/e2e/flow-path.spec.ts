@@ -15,7 +15,7 @@ const shot = async (page: Page, name: string) => { if (SHOTS) await page.screens
 test("data path: ten questions (the way question passed over: every 엑셀 book is 실습), no path or count while answering, then 당신이 고른 길 and five bookmarks (E-32 · E-25 · E-34)", async ({ page }) => {
   const { events } = await recordEvents(page);
   await page.goto("/");
-  await expect(page.getByText("질문 몇 개면 한 권을 만나요")).toBeVisible();
+  await expect(page.getByText("질문 몇 개면 나에게 맞는 책을 만나요")).toBeVisible();
   await shot(page, "s01-home");
   await page.getByRole("button", { name: START }).click();
   await expect(heading(page, "start")).toBeVisible();
@@ -182,6 +182,13 @@ test("[← 이전 질문] after a question the map passed over: back to the ques
   await expect.poll(() => named(events, "question_back_clicked").length).toBe(1);
   expect(named(events, "question_back_clicked")[0].props).toEqual({ node_id: "learn-data-sheet", depth: 9, source: "question" });
   expect(named(events, "question_answered").map((e) => e.props.node_id)).not.toContain("learn-way");
+  // C-23 (10-19): the card answered before (표로 = A) has the border and ✓ — also after a reload
+  for (const reload of [false, true]) {
+    if (reload) await page.reload();
+    await expect(page.locator('button[data-side="left"]')).toHaveAttribute("data-chosen", "");
+    await expect(page.locator("[data-chosen]")).toHaveCount(1);
+    await expect(page.getByRole("button", { name: /표로/ })).toHaveAccessibleDescription(/아까 고른 답/);
+  }
   expect(specMismatches(events)).toEqual([]);
 });
 
