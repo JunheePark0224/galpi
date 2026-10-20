@@ -470,9 +470,20 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_5():
+def test_the_dictionary_is_v3_6():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.5"   # 10-14: ghosts in a love story → 로맨스 (죽여주는 연애 상담소)
+    assert rules_version() == "v3.6"   # 10-20: 육아·자녀 교육 waits under its candidate name, parents only
+
+
+def test_the_v3_6_rules_reach_both_prompts():
+    """10-20: a parenting book has no topic yet — both passes are told to keep the nearest topic and write the candidate
+    name exactly (checks.HELD_TOPICS then holds it), that teachers' guides stay out, and the three borders."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**정확히 `육아·자녀 교육`**" in p
+        assert "**교사가 남의 아이를 가르치는 지도서**" in p
+        assert "| 육아·자녀 교육(대기) ↔ 마음 돌보기 |" in p
+        assert "| 육아·자녀 교육(대기) ↔ 교사용 지도서 |" in p
 
 
 def test_the_v3_5_rules_reach_both_prompts():

@@ -2375,7 +2375,7 @@
     "거리 두기"
    ],
    "way": "실습",
-   "keyword_candidate": "육아",
+   "keyword_candidate": "육아·자녀 교육",
    "suggest": "",
    "suggest_keywords": [],
    "one_liner_style": "summary",
@@ -2395,7 +2395,7 @@
     "fits"
    ],
    "issues": [],
-   "status": "dropped",
+   "status": "reserve",
    "link": "https://www.yes24.com/product/goods/98981422",
    "rules_version": "v3.3",
    "history": [
@@ -2404,7 +2404,8 @@
      "status": "dropped",
      "topic": "대화·관계"
     }
-   ]
+   ],
+   "reviewed": true
   }
  ]
 }
