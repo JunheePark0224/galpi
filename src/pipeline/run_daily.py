@@ -52,7 +52,7 @@ from .batch import BatchError, parse as parse_batch
 from .candidates import Candidate, find, known_from, yes24_env
 from .checks import crossed_to, decide, disagreements, rule_issues
 from .config import Config, load_config
-from .gaps import Want, plan_day
+from .gaps import PER_SLOT, Want, plan_day
 from .keyword_candidates import excluded_names
 from .merge import additions_doc, keyword_hints, record, write_doc
 from .one_liner import RetryLog, retry as retry_one_liner
@@ -83,17 +83,23 @@ def topic_lists(vocab: dict) -> dict[str, list[str]]:
 
 # Planned books for the ranked list behind a day: far more than a day takes, so a short slot leaves room for later ones.
 FULL_PLAN = 10_000
+# The walk asks at most this many times the slots a full day needs (100 books → 10 slots → at most 30 asked).
+WALK_FACTOR = 3
 
 
-def gather(env: dict, wants, vocab: dict, known, count: int | None = None, asked: list | None = None) -> list[Candidate]:
+def gather(env: dict, wants, vocab: dict, known, count: int | None = None, asked: list | None = None,
+           max_slots: int | None = None) -> list[Candidate]:
     """Candidates down the ranked plan. With `count` (10-20), each slot is asked only for what the day still misses and
     the walk stops once `count` is met — so a slot YES24 has little left for hands its share to the next ones instead of
     leaving the day short (58 of 100 on 10-14 and 10-20). Each slot keeps its plan_day cap. `asked` collects the wants
-    really sent to YES24 (the run summary's slots)."""
+    really sent to YES24 (the run summary's slots). `max_slots` bounds the walk — when almost every slot is dry it would
+    otherwise ask YES24 about every genre, topic and keyword (list pages and detail calls each)."""
     out: list[Candidate] = []
     for w in wants:
         left = None if count is None else count - len(out)
         if left is not None and left <= 0:
+            break
+        if max_slots is not None and asked is not None and len(asked) >= max_slots:
             break
         ask = w if left is None or w.n <= left else Want(w.entry, w.slot, left, w.keyword)
         rule = keyword_rule(w.slot, w.keyword, vocab[w.slot]["kept"][w.keyword]["pattern"]) if w.keyword else slot_rule(w.slot)
@@ -277,7 +283,11 @@ def run(batch: str, cfg: Config, env: dict, client, batches: bool = False, sleep
     if not wants and not back:
         return summary | {"status": "full", "slots": []}
     asked: list[Want] = []
-    cands = back + gather(env, wants, vocab, known_from(books, additions).plus(back), count=day, asked=asked)
+    max_slots = WALK_FACTOR * -(-day // PER_SLOT)
+    cands = back + gather(env, wants, vocab, known_from(books, additions).plus(back), count=day, asked=asked,
+                          max_slots=max_slots)
+    if len(asked) >= max_slots and len(cands) - len(back) < day:
+        summary["walk_capped"] = max_slots
     summary["slots"] = ([f"{c.slot} (다시 태그) 1" for c in back]
                         + [f"{w.slot}{'/' + w.keyword if w.keyword else ''} {w.n}" for w in asked])
     new_fails = collect_candidates.FAILURES[fails_before:]
