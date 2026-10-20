@@ -317,7 +317,7 @@ def test_the_tagger_knows_romance_and_the_four_new_topics_from_the_same_docs_and
     """10-05 (docs/plans/2026-10-05-new-genres.md, drafts): the genre boundary, the topic definitions and boundaries and the
     twelve keywords with their definitions all come from label-dictionary.md 2-3 · target-chips.md 2-1 · keyword_vocab.json."""
     p = system_prompt(VOC, "tag")
-    assert "| 로맨스 | 사랑·연애 관계가 이야기의 **중심 줄기**인 소설" in p and "웹소설·장르 로맨스 문고·19금" in p
+    assert "| 로맨스 | 사랑·연애 관계가 이야기의 **중심 줄기**인 소설" in p and "장르 로맨스 문고·19금·시리즈 2권 이후" in p   # 10-20: "웹소설" left the rule
     # 10-05 user: content genres before origin, the 중심 줄기, and the order when truly half and half
     assert "**내용 장르**(SF·판타지 · 추리·스릴러 · 호러·괴담 · 로맨스)" in p and "출처 장르보다 먼저" in p
     assert "SF·판타지 → 추리·스릴러 → 호러·괴담 → 로맨스 → 한국·외국 소설" in p and "이 책을 한 줄로 소개할 때" in p
@@ -484,6 +484,8 @@ def test_the_v3_6_rules_reach_both_prompts():
         assert "**교사가 남의 아이를 가르치는 지도서**" in p
         assert "| 육아·자녀 교육(대기) ↔ 마음 돌보기 |" in p
         assert "| 육아·자녀 교육(대기) ↔ 교사용 지도서 |" in p
+        assert "**시리즈는 1권만 넣는다**" in p and "**19금은 장르와 상관없이 넣지 않는다.**" in p
+        assert "수험서·어린이·만화·웹소설·종교" not in p   # 10-20: "웹소설" alone is no reason to leave a book out
 
 
 def test_the_v3_5_rules_reach_both_prompts():
