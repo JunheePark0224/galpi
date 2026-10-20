@@ -144,12 +144,26 @@ def crossed_to(entry: str, a: dict, b: dict) -> dict | None:
     return {"entry": other, "slot": slot} if slot in slots else None
 
 
+# Topics we mean to make but have not yet (label-dictionary 3절): a book either pass names with one of these as its
+# keyword_candidate waits (reserve) — never picked into the nearest topic, never dropped — so the books gather until the
+# topic is made (10-20, user: 육아·자녀 교육 for parents only). Compared with spaces removed.
+HELD_TOPICS = ("육아·자녀 교육",)
+
+
+def held_for_topic(a: dict, b: dict) -> bool:
+    held = {"".join(t.split()) for t in HELD_TOPICS}
+    return any("".join(str(p.get("keyword_candidate") or "").split()) in held for p in (a, b))
+
+
 def decide(a: dict, b: dict, flags: list[str], issues: list[str], auto_merge: bool,
            entry: str | None = None) -> tuple[str, str | None]:
     """(status, auto mark). A book both passes place in the same other slot is moved there (its "fits" flag was about the
     slot it was found in); it is dropped only when both say it belongs nowhere among our slots (10-08). Passes that name
     different slots, or one keeping it, leave it to a person. A slot of the other 갈래 (with `entry`) is no move here —
-    run_daily requeues such a book (crossed_to); one already requeued once waits for a person."""
+    run_daily requeues such a book (crossed_to); one already requeued once waits for a person. A book for a topic we
+    have not made yet (HELD_TOPICS) waits first of all."""
+    if held_for_topic(a, b):
+        return "reserve", None
     if not a["fits"] and not b["fits"] and not (a.get("suggest") or b.get("suggest")):
         return "dropped", None
     if moved_to(a, b, entry):
@@ -172,6 +186,6 @@ def redecide(book: dict, auto_merge: bool) -> tuple[str, str | None]:
     """decide() for a stored additions record (pass A's fits on the book, pass B's under `second`) — to re-sort a batch
     tagged before a rule changed."""
     second = book.get("second") or {}
-    return decide({"fits": book["fits"], "suggest": book.get("suggest", "")},
+    return decide({"fits": book["fits"], "suggest": book.get("suggest", ""), "keyword_candidate": book.get("keyword_candidate")},
                   {"fits": second.get("fits", book["fits"]), "suggest": second.get("suggest", "")},
                   book.get("flags") or [], book.get("issues") or [], auto_merge, book.get("entry"))
