@@ -52,7 +52,7 @@ from .batch import BatchError, parse as parse_batch
 from .candidates import Candidate, find, known_from, yes24_env
 from .checks import crossed_to, decide, disagreements, rule_issues
 from .config import Config, load_config
-from .gaps import plan_day
+from .gaps import Want, plan_day
 from .keyword_candidates import excluded_names
 from .merge import additions_doc, keyword_hints, record, write_doc
 from .one_liner import RetryLog, retry as retry_one_liner
@@ -81,11 +81,25 @@ def topic_lists(vocab: dict) -> dict[str, list[str]]:
     return out | {t: [] for t in FIELD_OF_TOPIC if t not in out}
 
 
-def gather(env: dict, wants, vocab: dict, known) -> list[Candidate]:
+# Planned books for the ranked list behind a day: far more than a day takes, so a short slot leaves room for later ones.
+FULL_PLAN = 10_000
+
+
+def gather(env: dict, wants, vocab: dict, known, count: int | None = None, asked: list | None = None) -> list[Candidate]:
+    """Candidates down the ranked plan. With `count` (10-20), each slot is asked only for what the day still misses and
+    the walk stops once `count` is met — so a slot YES24 has little left for hands its share to the next ones instead of
+    leaving the day short (58 of 100 on 10-14 and 10-20). Each slot keeps its plan_day cap. `asked` collects the wants
+    really sent to YES24 (the run summary's slots)."""
     out: list[Candidate] = []
     for w in wants:
+        left = None if count is None else count - len(out)
+        if left is not None and left <= 0:
+            break
+        ask = w if left is None or w.n <= left else Want(w.entry, w.slot, left, w.keyword)
         rule = keyword_rule(w.slot, w.keyword, vocab[w.slot]["kept"][w.keyword]["pattern"]) if w.keyword else slot_rule(w.slot)
-        found = find(env, w, rule, known)
+        found = find(env, ask, rule, known)
+        if asked is not None:
+            asked.append(ask)
         known = known.plus(found)
         out += found
     return out
@@ -254,15 +268,18 @@ def run(batch: str, cfg: Config, env: dict, client, batches: bool = False, sleep
     fails_before = len(collect_candidates.FAILURES)
     queued = requeue.load(REQUEUE)
     back, waiting = requeue.candidates(env, queued, vocab) if queued else ([], {})
-    wants = plan_day(books, topic_lists(vocab), max(cfg.daily_count - len(back), 0), phase=cfg.target_phase)
+    # the whole ranked plan, each slot capped as usual; gather() walks it until the day's count is met (10-20)
+    day = max(cfg.daily_count - len(back), 0)
+    wants = plan_day(books, topic_lists(vocab), FULL_PLAN if day else 0, phase=cfg.target_phase)
     summary = {"date": date, "batch": batch, "model": cfg.model, "second_model": cfg.second_model,
-               "target_phase": cfg.target_phase, "wanted": sum(w.n for w in wants) + len(back),
-               "slots": [f"{c.slot} (다시 태그) 1" for c in back]
-               + [f"{w.slot}{'/' + w.keyword if w.keyword else ''} {w.n}" for w in wants],
+               "target_phase": cfg.target_phase, "wanted": min(day, sum(w.n for w in wants)) + len(back),
                **({"requeue_waiting": waiting} if waiting else {})}
     if not wants and not back:
-        return summary | {"status": "full"}
-    cands = back + gather(env, wants, vocab, known_from(books, additions).plus(back))
+        return summary | {"status": "full", "slots": []}
+    asked: list[Want] = []
+    cands = back + gather(env, wants, vocab, known_from(books, additions).plus(back), count=day, asked=asked)
+    summary["slots"] = ([f"{c.slot} (다시 태그) 1" for c in back]
+                        + [f"{w.slot}{'/' + w.keyword if w.keyword else ''} {w.n}" for w in asked])
     new_fails = collect_candidates.FAILURES[fails_before:]
     yes24_fail = [f.split(" -> ")[0] for f in new_fails if not f.endswith(EMPTY_RESULT)]  # paths only, never the answer
     summary |= {"candidates": len(cands), "yes24_failures": len(yes24_fail), "yes24_failed_paths": sorted(set(yes24_fail)),

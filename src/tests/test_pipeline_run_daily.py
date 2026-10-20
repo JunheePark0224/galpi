@@ -460,3 +460,30 @@ def test_a_requeued_book_sent_back_again_waits_for_a_person_instead_of_bouncing(
     rec, _ = run_daily.tag_one(FakeClient(crossing("돈 관리·투자")), CFG, {"tag": "T", "check": "C"}, {}, cand, Breaker(),
                                {}, rules="v", routed=True, requeued=True)
     assert rec["status"] == "review" and "requeued_to" not in rec and "fits" in rec["flags"]
+
+
+def test_short_slots_hand_their_share_to_the_next_ones(monkeypatch):
+    """10-20: the scarcest slots come back nearly empty on YES24 (58 of 100 on 10-14 and 10-20). The day walks the whole
+    ranked plan and asks each next slot for what is still missing, until the day's count is met or the plan runs out —
+    each slot still capped (plan_day's per-slot limit)."""
+    from pipeline import run_daily
+    from pipeline.gaps import Want
+
+    asked: list[tuple[str, int]] = []
+    stock = {"A": 2, "B": 10, "C": 10, "D": 10}
+
+    def fake_find(env, w, rule, known):
+        asked.append((w.slot, w.n))
+        return [f"{w.slot}{i}" for i in range(min(w.n, stock[w.slot]))]
+
+    class Known:
+        def plus(self, found):
+            return self
+
+    monkeypatch.setattr(run_daily, "find", fake_find)
+    monkeypatch.setattr(run_daily, "slot_rule", lambda slot: {})
+    wants = [Want("leaf", s, 10) for s in "ABCD"]
+    got = run_daily.gather({}, wants, {}, Known(), count=15)
+    assert len(got) == 15
+    assert asked == [("A", 10), ("B", 10), ("C", 3)]          # A short by 8 → C asked for the 3 still missing; D never
+    assert run_daily.gather({}, wants, {}, Known(), count=100) and asked[-1] == ("D", 10)   # plan runs out: every slot once
