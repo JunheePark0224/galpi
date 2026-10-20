@@ -486,4 +486,10 @@ def test_short_slots_hand_their_share_to_the_next_ones(monkeypatch):
     got = run_daily.gather({}, wants, {}, Known(), count=15)
     assert len(got) == 15
     assert asked == [("A", 10), ("B", 10), ("C", 3)]          # A short by 8 → C asked for the 3 still missing; D never
-    assert run_daily.gather({}, wants, {}, Known(), count=100) and asked[-1] == ("D", 10)   # plan runs out: every slot once
+    asked.clear()
+    assert len(run_daily.gather({}, wants, {}, Known(), count=100)) == 32   # the plan runs out: every slot once
+    assert asked == [("A", 10), ("B", 10), ("C", 10), ("D", 10)]
+    asked.clear()
+    seen: list = []
+    assert len(run_daily.gather({}, wants, {}, Known(), count=100, asked=seen, max_slots=2)) == 12   # the walk is bounded
+    assert asked == [("A", 10), ("B", 10)] and len(seen) == 2

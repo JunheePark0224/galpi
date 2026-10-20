@@ -191,7 +191,7 @@ def test_a_requeue_takes_its_place_in_the_days_count(yes24, monkeypatch):
         monkeypatch.setattr(run_daily, name, value)
     # 10-20: the day's count goes to gather() (the plan behind it is the whole ranked list); a requeued book takes its place
     monkeypatch.setattr(run_daily, "plan_day", lambda books, kept, n, **k: [run_daily.Want("leaf", "에세이", 10)])
-    monkeypatch.setattr(run_daily, "gather", lambda env, wants, vocab, known, count=None, asked=None: seen.update(n=count) or [])
+    monkeypatch.setattr(run_daily, "gather", lambda env, wants, vocab, known, count=None, **k: seen.update(n=count) or [])
     cfg = parse_config({"daily_count": 5, "auto_merge": False, "sample_rate": 0.1, "model": "claude-haiku-4-5",
                         "second_model": "claude-haiku-4-5", "target_phase": "launch"})
     run_daily.run("2026-10-06", cfg, {"YES24_API_KEY": "x"}, FakeClient())
