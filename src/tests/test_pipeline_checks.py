@@ -238,3 +238,24 @@ def test_a_crossing_book_is_recorded_where_it_was_found_with_where_it_goes():
     rec = record(leaf, a, b, [], [], "dropped", None, [])
     assert rec["genre"] == "사회·시사" and "moved_from" not in rec
     assert rec["requeued_to"] == {"entry": "target", "slot": "마음 돌보기"} and rec["status"] == "dropped"
+
+
+@pytest.mark.parametrize("name", ["육아·자녀 교육", "육아·자녀교육", " 육아·자녀 교육 "])
+def test_a_parenting_book_waits_for_its_topic(name):
+    """10-20 (user): 육아·자녀 교육 has no topic yet — a book either pass names so waits (reserve), even when both passes
+    agree on the nearest topic or say it fits nowhere, so the books gather in one place until the topic is made."""
+    a, b = tag_answer("target"), check_answer("target")
+    held = {**a, "keyword_candidate": name}
+    assert decide(held, b, [], [], auto_merge=False) == ("reserve", None)
+    assert decide(a, {**b, "keyword_candidate": name}, [], [], auto_merge=False) == ("reserve", None)
+    assert decide({**held, "fits": False}, {**b, "fits": False}, ["fits"], [], False) == ("reserve", None)
+    assert decide({**a, "keyword_candidate": "육아 일기"}, b, [], [], auto_merge=False) == ("picked", AUTO)   # only the agreed name
+
+
+def test_redecide_holds_a_stored_parenting_book():
+    """A record tagged before v3.6 is re-sorted with its candidate name: renamed to 육아·자녀 교육 it waits (10-20)."""
+    stored = {"fits": True, "suggest": "", "entry": "target", "flags": [], "issues": [], "second": {"fits": True, "suggest": ""}}
+    assert redecide(stored, auto_merge=False) == ("picked", AUTO)
+    assert redecide({**stored, "keyword_candidate": "육아·자녀 교육"}, auto_merge=False) == ("reserve", None)
+    gone = {**stored, "fits": False, "second": {"fits": False, "suggest": ""}}
+    assert redecide({**gone, "keyword_candidate": "육아·자녀 교육"}, auto_merge=False) == ("reserve", None)

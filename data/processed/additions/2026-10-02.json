@@ -273,7 +273,7 @@
     "갈등·무례 대처"
    ],
    "way": "실습",
-   "keyword_candidate": "육아",
+   "keyword_candidate": "육아·자녀 교육",
    "suggest": "",
    "suggest_keywords": [],
    "one_liner_style": "summary",
@@ -293,7 +293,7 @@
     "fits"
    ],
    "issues": [],
-   "status": "review",
+   "status": "reserve",
    "link": "https://www.yes24.com/product/goods/173856406",
    "third": {
     "fits": false,
@@ -310,7 +310,8 @@
      "status": "dropped",
      "topic": "대화·관계"
     }
-   ]
+   ],
+   "reviewed": true
   },
   {
    "isbn": "9788965703969",
