@@ -3905,7 +3905,7 @@
     "fits"
    ],
    "issues": [],
-   "status": "review",
+   "status": "dropped",
    "link": "https://www.yes24.com/product/goods/159291680",
    "third": {
     "fits": false,
@@ -3917,7 +3917,17 @@
     "way": "실습"
    },
    "settled": {},
-   "rules_version": "v3.6"
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "문해력·어휘"
+    ],
+    "way": "실습",
+    "one_liner": "낱말 놀이 서른 가지로 아이들의 어휘력을 자연스럽게 키우는 수업 아이디어를 얻어요",
+    "status": "review"
+   },
+   "reviewed": true
   },
   {
    "isbn": "9788968334818",
