@@ -22,6 +22,13 @@
 /* The sheet */
 .sheet { display: flex; flex-direction: column; }
 .lead { margin: var(--space-1) 0 var(--space-3); font-size: 14px; color: var(--ink-soft); }
+/* A quiet note stitched on like a bookmark: dashed line, the red bookmark mark */
+.promise {
+  display: flex; gap: var(--space-2); align-items: flex-start; margin: 0 0 var(--space-3); padding: 10px 12px;
+  border: 1px dashed #c9b48f; border-radius: 10px; background: #fffdf7;
+  font-size: 13px; line-height: 1.6; color: var(--ink-soft);
+}
+.promise svg { flex: none; margin-top: 3px; }
 .week { border-top: 1px solid var(--paper-line); padding: var(--space-3) 0; }
 .weekTitle {
   display: flex; align-items: center; gap: var(--space-2); margin: 0 0 var(--space-2);
