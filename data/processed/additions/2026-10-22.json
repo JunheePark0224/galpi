@@ -1,0 +1,5034 @@
+{
+ "date": "2026-10-22",
+ "batch_id": "2026-10-22",
+ "batch": "daily",
+ "reviewed": false,
+ "model": "claude-sonnet-5-5",
+ "second_model": "claude-sonnet-5-5",
+ "note": "Daily pipeline: pass A (model) tags, pass B (second_model) checks blind. Our tags only — no YES24 intro/TOC. auto=ai-agree: both passes agreed — or a third pass settled their split (`settled`) — accepted without human review (not in the agreement figures).",
+ "books": [
+  {
+   "isbn": "9791140719785",
+   "title": "깨달은 들짐승처럼 살기로 했다",
+   "author": "한그루 저",
+   "pages": 256,
+   "entry": "leaf",
+   "genre": "인문",
+   "axes": {
+    "temp": 1,
+    "pull": 0,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 현실적 위로로 보통의 삶 가치를 건넴",
+    "pull": "몰입 쪽: 상담 고민과 저자 삶의 사례가 끌고 감",
+    "gain": "마음 −: 생각의 전환·위로로 마음이 달라짐",
+    "world": "비소설이라 현실 +1"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "자존감과 성공, 돈에 대한 흔한 생각을 뒤집어 보며 평범한 나를 받아들여 볼래요?",
+   "evidence": "통념을 뒤집어 보통 삶의 가치를 제안하는 인문",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 현실적 위로, 보통의 삶의 가치를 건넴",
+     "pull": "0 해당 없음: 끄는 힘을 알 수 있는 신호 없음",
+     "gain": "마음 쪽: 생각의 전환·성찰을 건네는 책",
+     "world": "현실: 비소설, 현실의 삶과 고민을 다룸"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "삶의 태도와 생각 전환이 중심인 인문"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/194752642",
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": 1,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 현실적 위로, 보통의 삶 가치를 건넴",
+     "pull": "0 해당 없음: 끄는 힘을 알 신호 없음",
+     "gain": "마음 −: 통념을 뒤집는 생각의 전환·성찰",
+     "world": "현실 +: 비소설, 현실의 삶과 사회"
+    },
+    "missing": []
+   },
+   "settled": {
+    "pull": 0
+   },
+   "a_was": {
+    "pull": -1
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791172540203",
+   "title": "브레인 에너지",
+   "author": "크리스토퍼 M. 팔머 저/이한나 역",
+   "pages": 468,
+   "entry": "leaf",
+   "genre": "과학 교양",
+   "axes": {
+    "temp": 0,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 설명 중심, 끝맺음·어조 신호 약함",
+    "pull": "몰입 −: 원인을 밝혀 가는 연구 흐름이 끌고 감",
+    "gain": "알게 됨 +: 대사·미토콘드리아 원리를 설명",
+    "world": "현실 +: 비소설이라 현실"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "정신질환을 뇌의 에너지 대사 문제로 바라보게 하는 새로운 설명이 궁금하신가요?",
+   "evidence": "뇌 대사 원리로 정신질환 설명, 과학 교양",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 원인 설명이 중심, 끝맺음·어조 신호 약함",
+     "pull": "몰입 −: 사례·연구 증거와 새 이론으로 끌고 감",
+     "gain": "알게 됨 +: 대사·미토콘드리아 원리를 설명",
+     "world": "현실 +: 비소설, 실제 정신질환과 뇌 연구"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "뇌 대사·미토콘드리아로 정신질환을 설명하는 과학 교양"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/133338727",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788934986591",
+   "title": "[예스리커버] 타인의 해석",
+   "author": "말콤 글래드웰 저/유강은 역/김경일 감수",
+   "pages": 472,
+   "entry": "leaf",
+   "genre": "인문",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 오해가 낳은 비극적 결말을 짚는 경고의 시선",
+    "pull": "몰입 −: 스파이·사기꾼·재판 등 사건 사례가 끌고 감",
+    "gain": "알게 됨 +: 낯선 사람 해석의 원리를 설명하는 쪽",
+    "world": "현실 +: 비소설, 실제 인물과 사건이 무대"
+   },
+   "missing": [],
+   "suggest": "인문",
+   "one_liner_style": "question",
+   "one_liner": "낯선 사람을 왜 자꾸 오해하는지 실제 사건으로 짚어 보고, 이해하는 눈을 고쳐 볼래요?",
+   "evidence": "사회 문제보다 사람 이해의 틀이 중심",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 오해가 낳은 비극적 결말·실패 사례가 이어짐",
+     "pull": "몰입 −: 스파이·사기·재판 사건 사례로 끌고 감",
+     "gain": "알게 됨 +: 낯선 사람 해석의 오류와 개념·이론 설명",
+     "world": "현실 +: 비소설, 실제 사건과 인물이 무대"
+    },
+    "missing": [],
+    "suggest": "인문",
+    "why": "사회 문제보다 타인을 이해하는 생각 틀이 중심"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/93080509",
+   "moved_from": "사회·시사",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791124516058",
+   "title": "이게 되네? 캔바 AI 미친 활용법 47제",
+   "author": "이지쌤(이지훈) 저",
+   "pages": 328,
+   "entry": "target",
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "이미지·영상 생성"
+   ],
+   "keywords_regex": [
+    "이미지·영상 생성"
+   ],
+   "way": "실습",
+   "keyword_candidate": "캔바",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "캔바로 인쇄물부터 발표 자료까지 직접 만들어 보는 따라 하기 안내서예요.",
+   "evidence": "캔바로 디자인·이미지 만드는 47개 실전 예제",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "이미지·영상 생성"
+    ],
+    "way": "실습",
+    "why": "캔바 AI로 이미지·디자인을 만드는 실습서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/187491806",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791193059005",
+   "title": "챗GPT & AI 31가지 실전 활용",
+   "author": "권지선,박지해,서산화,한지아 저",
+   "pages": 216,
+   "entry": "target",
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "챗GPT",
+    "이미지·영상 생성"
+   ],
+   "keywords_regex": [
+    "챗GPT",
+    "이미지·영상 생성"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "챗GPT와 여러 AI 도구로 교육·문서·취업·생활 속 일을 직접 해 보며 익혀요",
+   "evidence": "챗GPT 중심 실습 예제 31개, 이미지·영상 AI도 포함",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "챗GPT",
+     "이미지·영상 생성"
+    ],
+    "way": "실습",
+    "why": "챗GPT와 AI 툴을 쓰는 실습형 활용서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [
+    "근거 김(32자)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/118485597",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791193639214",
+   "title": "생성형 AI 산업별 활용 트렌드",
+   "author": "이호수 저",
+   "pages": 320,
+   "entry": "target",
+   "topic": "경제 상식",
+   "field": "돈·경제",
+   "keywords": [
+    "트렌드"
+   ],
+   "keywords_regex": [
+    "챗GPT",
+    "프롬프트 엔지니어링",
+    "이미지·영상 생성",
+    "LLM 원리"
+   ],
+   "way": "사례",
+   "keyword_candidate": null,
+   "suggest": "경제 상식",
+   "suggest_keywords": [
+    "트렌드"
+   ],
+   "one_liner_style": "summary",
+   "one_liner": "여러 산업과 기업이 생성형 AI로 어떻게 수익을 내는지 한눈에 훑어봐요",
+   "evidence": "AI를 쓰는 법이 아닌 산업별 기업 사례·전망",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "사례",
+    "why": "AI를 쓰는 법이 아닌 산업별 사례·전망 분석",
+    "suggest": "경제 상식",
+    "suggest_keywords": [
+     "트렌드"
+    ]
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/133337453",
+   "moved_from": "AI 활용",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791129046253",
+   "title": "챗GPT를 200% 활용하는 프롬프트 질문 기술",
+   "author": "심재우 저",
+   "pages": 356,
+   "entry": "target",
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "챗GPT",
+    "프롬프트 엔지니어링"
+   ],
+   "keywords_regex": [
+    "챗GPT",
+    "이미지·영상 생성"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "프롬프트 질문 기술과 활용 사례로 챗GPT를 업무와 콘텐츠 제작에 써 볼 수 있어요.",
+   "evidence": "챗GPT 프롬프트 기법과 활용 사례 중심의 방법서",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "챗GPT",
+     "프롬프트 엔지니어링"
+    ],
+    "way": "실습",
+    "why": "챗GPT 프롬프트 질문 기술을 알려 주는 AI 활용서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/118300550",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791143419439",
+   "title": "바로 쓰는 나노바나나 이미지 & 영상 제작",
+   "author": "전하린 저",
+   "pages": 304,
+   "entry": "target",
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "이미지·영상 생성"
+   ],
+   "keywords_regex": [
+    "제미나이",
+    "프롬프트 엔지니어링",
+    "이미지·영상 생성"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "나노바나나로 인물·제품·배경 이미지를 만들고 고치며 영상까지 단계별로 익혀요.",
+   "evidence": "나노바나나로 이미지·영상 만드는 실습서",
+   "confidence": 0.93,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "이미지·영상 생성",
+     "프롬프트 엔지니어링"
+    ],
+    "way": "실습",
+    "why": "생성형 AI로 이미지·영상을 만드는 실습서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/195945749",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "AI 활용",
+    "keywords": [
+     "이미지·영상 생성"
+    ],
+    "way": "실습",
+    "one_liner": "나노바나나로 인물·제품·배경 이미지를 만들고 고치며 영상까지 단계별로 익혀요.",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791194630357",
+   "title": "나노 바나나",
+   "author": "문수민,박범희,앤미디어 공저",
+   "pages": 312,
+   "entry": "target",
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "이미지·영상 생성",
+    "제미나이",
+    "프롬프트 엔지니어링"
+   ],
+   "keywords_regex": [
+    "제미나이",
+    "프롬프트 엔지니어링",
+    "이미지·영상 생성"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "구글 AI로 원하는 분위기의 이미지를 만들고 영상까지 확장하는 방법을 익혀요.",
+   "evidence": "제미나이로 이미지 만드는 실습서",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "이미지·영상 생성",
+     "제미나이",
+     "프롬프트 엔지니어링"
+    ],
+    "way": "실습",
+    "why": "제미나이·나노 바나나로 AI 이미지를 만드는 법",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/159417254",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791194000136",
+   "title": "대체불가 나노 바나나 완전정복",
+   "author": "이용태 저",
+   "pages": 488,
+   "entry": "target",
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "이미지·영상 생성",
+    "제미나이"
+   ],
+   "keywords_regex": [
+    "제미나이",
+    "이미지·영상 생성"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "이미지 생성 AI로 사진·디자인·광고 이미지를 직접 만드는 방법을 익혀요",
+   "evidence": "AI 이미지·디자인 제작 실무 방법서",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "이미지·영상 생성",
+     "제미나이"
+    ],
+    "way": "실습",
+    "why": "나노 바나나로 AI 이미지를 만드는 실무 활용서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/176990624",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791124205440",
+   "title": "30가지 예제로 따라 하며 배우는 ComfyUI 클라우드",
+   "author": "여승호,신무경 저",
+   "pages": 172,
+   "entry": "target",
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "이미지·영상 생성"
+   ],
+   "keywords_regex": [
+    "이미지·영상 생성"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "따라 하기 쉬운 예제로 AI 그림과 영상을 직접 뚝딱 만들어 보는 법을 익혀요.",
+   "evidence": "ComfyUI로 이미지·영상 생성을 예제로 실습",
+   "confidence": 0.93,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "이미지·영상 생성"
+    ],
+    "way": "실습",
+    "why": "ComfyUI로 AI 이미지·영상을 만드는 법",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/183072607",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791193059630",
+   "title": "생성형 AI와 엔트리로 12가지 인공지능 작품 만들기 with 뤼튼, 캔바, 미리캔버스, 투닝, ChatGPT, 위스크, 수노",
+   "author": "전진아,김수연 공저",
+   "pages": 262,
+   "entry": "target",
+   "topic": "AI 활용",
+   "field": "AI·IT 활용",
+   "keywords": [
+    "챗GPT",
+    "이미지·영상 생성"
+   ],
+   "keywords_regex": [
+    "챗GPT",
+    "이미지·영상 생성"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "여러 생성형 AI와 블록 코딩으로 생활 속 주제의 작품을 직접 만들어 봐요",
+   "evidence": "학생용 코딩북, AI 활용 주제 범위 밖",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "이미지·영상 생성",
+     "챗GPT"
+    ],
+    "way": "실습",
+    "why": "학생용 코딩북·학교 수업 활용서라 넣지 않음",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/153061112",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791190457347",
+   "title": "감정 학교",
+   "author": "안젤름 그륀 저/배명자 역",
+   "pages": 292,
+   "entry": "target",
+   "topic": "마음 돌보기",
+   "field": "마음·관계",
+   "keywords": [
+    "감정 다루기"
+   ],
+   "keywords_regex": [
+    "불안·걱정",
+    "감정 다루기",
+    "우울"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "48가지 감정의 이름과 뜻을 하나씩 알아 가며 내 마음을 들여다보게 돼요.",
+   "evidence": "감정 48가지를 이해하고 다루는 내 마음 중심",
+   "confidence": 0.82,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "감정 다루기"
+    ],
+    "way": "개념",
+    "why": "48가지 감정을 이해하고 다루는 법이 중심",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/132950417",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "마음 돌보기",
+    "keywords": [
+     "감정 다루기",
+     "불안·걱정"
+    ],
+    "way": "개념",
+    "one_liner": "48가지 감정의 이름과 뜻을 하나씩 알아 가며 내 마음을 들여다보게 돼요.",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791187192787",
+   "title": "나는 당신이 살았으면 좋겠습니다",
+   "author": "안경희 저",
+   "pages": 240,
+   "entry": "target",
+   "topic": "마음 돌보기",
+   "field": "마음·관계",
+   "keywords": [],
+   "keywords_regex": [
+    "감정 다루기",
+    "번아웃·스트레스",
+    "우울"
+   ],
+   "way": "사례",
+   "keyword_candidate": "조울병",
+   "suggest": "에세이",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "조울병을 겪은 의사가 병과 치료, 감정 기복 속 삶을 경험으로 들려줘요.",
+   "evidence": "저자 투병 경험이 뼈대인 에세이",
+   "confidence": 0.7,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "감정 다루기",
+     "우울"
+    ],
+    "way": "사례",
+    "why": "저자 자신의 투병·회복 경험이 뼈대인 에세이",
+    "suggest": "에세이",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits",
+    "keywords"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/58544168",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "에세이"
+   },
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791192465197",
+   "title": "빈틈의 위로",
+   "author": "김지용,강다솜,서미란,김태술 저",
+   "pages": 316,
+   "entry": "target",
+   "topic": "마음 돌보기",
+   "field": "마음·관계",
+   "keywords": [
+    "자존감",
+    "번아웃·스트레스",
+    "우울"
+   ],
+   "keywords_regex": [
+    "불안·걱정",
+    "자존감",
+    "감정 다루기",
+    "번아웃·스트레스",
+    "우울"
+   ],
+   "way": "사례",
+   "keyword_candidate": null,
+   "suggest": "에세이",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "지친 마음을 돌보려 애쓴 네 사람의 고백이 마음의 숨 쉴 틈을 건네요",
+   "evidence": "방법서 아닌 저자들의 고백 에세이가 뼈대",
+   "confidence": 0.72,
+   "fits": false,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "번아웃·스트레스",
+     "자존감",
+     "우울"
+    ],
+    "way": "사례",
+    "why": "공허·무기력한 내 마음을 돌보는 심리 에세이",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/128267915",
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "suggest_keywords": [],
+    "keywords": [
+     "번아웃·스트레스",
+     "자존감",
+     "우울"
+    ],
+    "way": "사례"
+   },
+   "settled": {
+    "slot": "마음 돌보기"
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791166838798",
+   "title": "알고 싶니 마음, 심리툰 - 매운맛",
+   "author": "괄호광장 저",
+   "pages": 296,
+   "entry": "target",
+   "topic": "마음 돌보기",
+   "field": "마음·관계",
+   "keywords": [
+    "감정 다루기"
+   ],
+   "keywords_regex": [
+    "불안·걱정",
+    "자존감",
+    "감정 다루기",
+    "우울"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "정신과 전문의의 웹툰으로 내 감정과 마음의 움직임을 알아가고 다독이게 돼요",
+   "evidence": "정신과 의사가 마음·감정을 웹툰으로 풀어 줌",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "감정 다루기",
+     "자존감",
+     "우울"
+    ],
+    "way": "개념",
+    "why": "내 마음·감정·우울을 심리학으로 풀어 줌",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/128119755",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "마음 돌보기",
+    "keywords": [
+     "감정 다루기",
+     "우울",
+     "불안·걱정"
+    ],
+    "way": "개념",
+    "one_liner": "정신과 전문의의 웹툰으로 내 감정과 마음의 움직임을 알아가고 다독이게 돼요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791195522859",
+   "title": "내 안에 삶의 나침반이 있다",
+   "author": "법상 저/용정운 그림",
+   "pages": 324,
+   "entry": "target",
+   "topic": "마음 돌보기",
+   "field": "마음·관계",
+   "keywords": [],
+   "keywords_regex": [
+    "우울",
+    "명상·마음챙김"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "인문",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "삶의 고비마다 마음을 알고 다루고 나누는 태도를 짧은 가르침으로 건네줘요",
+   "evidence": "방법·훈련이 아닌 스님의 삶의 태도 가르침",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "개념",
+    "why": "스님의 삶의 태도·세계관을 건네는 가르침이라 인문이 맞",
+    "suggest": "인문",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/33528631",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "인문"
+   },
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791198502513",
+   "title": "나에게 안녕을 묻는다",
+   "author": "정모래 저",
+   "pages": 144,
+   "entry": "target",
+   "topic": "마음 돌보기",
+   "field": "마음·관계",
+   "keywords": [],
+   "keywords_regex": [
+    "우울"
+   ],
+   "way": "사례",
+   "keyword_candidate": null,
+   "suggest": "에세이",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "우울증과 함께한 제주살이 이야기로 담담한 위로를 얻어요.",
+   "evidence": "저자 투병·제주살이 경험이 뼈대, 에세이",
+   "confidence": 0.88,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "사례",
+    "why": "저자의 우울증·제주살이 경험이 뼈대라 에세이가 맞음.(",
+    "suggest": "에세이",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/124156257",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "에세이"
+   },
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788931023183",
+   "title": "필링 그레이트",
+   "author": "데이비드 D. 번즈 저/박혜원 역 ",
+   "pages": 712,
+   "entry": "target",
+   "topic": "마음 돌보기",
+   "field": "마음·관계",
+   "keywords": [
+    "불안·걱정",
+    "우울",
+    "감정 다루기"
+   ],
+   "keywords_regex": [
+    "불안·걱정",
+    "감정 다루기",
+    "우울"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "기분 일지와 왜곡된 생각 바로잡기로 우울과 불안을 스스로 다루는 법을 익혀요.",
+   "evidence": "우울·불안을 돌보는 인지행동 기법 실습서",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "불안·걱정",
+     "우울",
+     "감정 다루기"
+    ],
+    "way": "실습",
+    "why": "우울·불안을 인지행동 기법으로 다루는 방법서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/119515026",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788992654562",
+   "title": "나를 사랑하기로 했습니다",
+   "author": "크리스틴 네프,크리스토퍼 거머 저/서광,효림,이규미,안희영 역",
+   "pages": 320,
+   "entry": "target",
+   "topic": "마음 돌보기",
+   "field": "마음·관계",
+   "keywords": [
+    "명상·마음챙김",
+    "자존감",
+    "감정 다루기"
+   ],
+   "keywords_regex": [
+    "불안·걱정",
+    "감정 다루기",
+    "우울",
+    "명상·마음챙김"
+   ],
+   "way": "실습",
+   "keyword_candidate": "자기연민",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "자기연민 명상을 따라 하며 아픈 마음을 스스로 다독이는 방법을 익혀요",
+   "evidence": "자기연민 명상·마음챙김 훈련이 중심, 내 마음 돌봄",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "명상·마음챙김",
+     "자존감",
+     "감정 다루기"
+    ],
+    "way": "실습",
+    "why": "자기연민 명상으로 내 마음을 돌보는 방법서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/88242002",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791156758426",
+   "title": "나의 F코드 이야기",
+   "author": "이하늬 저",
+   "pages": 296,
+   "entry": "target",
+   "topic": "마음 돌보기",
+   "field": "마음·관계",
+   "keywords": [],
+   "keywords_regex": [
+    "불안·걱정",
+    "우울"
+   ],
+   "way": "사례",
+   "keyword_candidate": null,
+   "suggest": "에세이",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "정신과 진단 뒤 치료와 상담, 관리로 우울증과 함께 살아온 한 직장인의 4년을 만나요.",
+   "evidence": "저자 자신의 투병·치료 경험이 뼈대라 에세이",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "사례",
+    "why": "저자 자신의 투병 경험이 뼈대인 에세이라 장르가 맞음",
+    "suggest": "에세이",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/93519472",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "에세이"
+   },
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791168340855",
+   "title": "[예스리커버] 내면소통",
+   "author": "김주환 저",
+   "pages": 763,
+   "entry": "target",
+   "topic": "마음 돌보기",
+   "field": "마음·관계",
+   "keywords": [
+    "감정 다루기",
+    "명상·마음챙김"
+   ],
+   "keywords_regex": [
+    "감정 다루기",
+    "번아웃·스트레스",
+    "명상·마음챙김"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "뇌과학으로 두려움과 감정이 생기는 까닭을 알고 명상으로 마음을 다스리게 도와줘요.",
+   "evidence": "뇌과학 원리 설명과 편도체 안정 명상이 중심",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "명상·마음챙김",
+     "감정 다루기",
+     "불안·걱정"
+    ],
+    "way": "개념",
+    "why": "두려움·감정을 뇌과학과 명상으로 다루는 내 마음 중심 ",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/117643865",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "마음 돌보기",
+    "keywords": [
+     "감정 다루기",
+     "명상·마음챙김"
+    ],
+    "way": "개념",
+    "one_liner": "뇌과학으로 두려움과 감정이 생기는 까닭을 알고 명상으로 마음을 다스리게 도와줘요.",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791162543764",
+   "title": "당신의 뇌는 나이 들지 않는다",
+   "author": "토니 부잔,레이먼드 킨 저/ 이영래 역",
+   "pages": 336,
+   "entry": "target",
+   "topic": "건강·운동",
+   "field": "습관·자기계발",
+   "keywords": [
+    "운동 습관",
+    "잠·회복"
+   ],
+   "keywords_regex": [],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "나이 들어도 뇌를 젊게 쓰도록 매일 해 볼 습관과 오해를 짚어 줘요",
+   "evidence": "뇌과학으로 습관을 고치는 법, 장마다 실천 항목",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념",
+    "why": "뇌 노화 오해 바로잡기와 건강 실천이 중심, 습관 교정",
+    "suggest": "건강·운동",
+    "suggest_keywords": [
+     "운동 습관",
+     "잠·회복"
+    ]
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/126983055",
+   "third": {
+    "fits": false,
+    "suggest": "건강·운동",
+    "suggest_keywords": [
+     "운동 습관",
+     "잠·회복"
+    ],
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념"
+   },
+   "moved_from": "습관·집중",
+   "settled": {
+    "slot": "건강·운동",
+    "way": "개념"
+   },
+   "a_was": {
+    "way": "실습"
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788937837654",
+   "title": "정리하는 뇌",
+   "author": "대니얼 J. 레비틴 저/김성훈 역",
+   "pages": 636,
+   "entry": "target",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
+   "keywords": [
+    "뇌과학"
+   ],
+   "keywords_regex": [
+    "뇌과학"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "요리·살림",
+   "suggest_keywords": [
+    "정리·미니멀"
+   ],
+   "one_liner_style": "summary",
+   "one_liner": "넘치는 정보와 일을 뇌의 원리로 이해하고 집·시간·결정을 정돈하는 법을 알려줘요",
+   "evidence": "뇌 원리로 집·시간·결정 정리 설명, 습관 교정 아님",
+   "confidence": 0.4,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념",
+    "why": "뇌과학으로 정리를 설명하는 교양서, 습관 교정서 아님",
+    "suggest": "과학 교양",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/18599174",
+   "third": {
+    "fits": false,
+    "suggest": "시간·생산성",
+    "suggest_keywords": [
+     "일하는 법"
+    ],
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념"
+   },
+   "settled": {},
+   "rules_version": "v3.6",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "과학 교양"
+   },
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념",
+    "one_liner": "넘치는 정보와 일을 뇌의 원리로 이해하고 집·시간·결정을 정돈하는 법을 알려줘요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791139721997",
+   "title": "호기심의 뇌과학",
+   "author": "가토 도시노리 저/전화윤 역",
+   "pages": 232,
+   "entry": "target",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
+   "keywords": [
+    "뇌과학"
+   ],
+   "keywords_regex": [
+    "습관",
+    "집중력",
+    "뇌과학"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "40대 이후 뇌가 굳는 까닭을 알고, 호기심을 되살리는 전략으로 의욕을 되찾아요.",
+   "evidence": "뇌과학으로 의욕·집중 저하를 고치는 8가지 전략",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념",
+    "why": "호기심·뇌 노화 설명 중심의 과학 교양이라 습관·집중이",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits",
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/145997523",
+   "third": {
+    "fits": false,
+    "suggest": "과학 교양",
+    "suggest_keywords": [],
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념"
+   },
+   "settled": {
+    "way": "개념"
+   },
+   "a_was": {
+    "way": "실습"
+   },
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "뇌과학",
+     "집중력"
+    ],
+    "way": "개념",
+    "one_liner": "40대 이후 뇌가 굳는 까닭을 알고, 호기심을 되살리는 전략으로 의욕을 되찾아요.",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9788958270096",
+   "title": "몰입 flow",
+   "author": "미하이 칙센트미하이 저/최인수 역",
+   "pages": 528,
+   "entry": "target",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
+   "keywords": [],
+   "keywords_regex": [
+    "집중력"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "인문",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "행복과 즐거움이 어떤 의식 상태에서 생기는지 일과 여가, 관계 속에서 짚어 줘요",
+   "evidence": "행복·의식·의미를 탐구하는 심리 인문서",
+   "confidence": 0.7,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "집중력"
+    ],
+    "way": "개념",
+    "why": "집중 훈련법이 아니라 행복·의식·삶의 의미를 탐구하는 ",
+    "suggest": "인문",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits",
+    "keywords"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/1397559",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "인문"
+   },
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791198476418",
+   "title": "늙지 않는 뇌의 비밀",
+   "author": "와다 히데키 저/이주희 역",
+   "pages": 216,
+   "entry": "target",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
+   "keywords": [
+    "뇌과학"
+   ],
+   "keywords_regex": [
+    "뇌과학"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "과학 교양",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "전두엽이 늙는 과정과 증세를 알고, 뇌를 젊게 쓰는 길을 살펴봐요.",
+   "evidence": "뇌 노화 설명 중심이라 습관 교정서보다 교양",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념",
+    "why": "전두엽 노화 설명이 중심이라 과학 교양에 가까움",
+    "suggest": "과학 교양",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/124207335",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "과학 교양"
+   },
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791194755791",
+   "title": "도파민형 인간",
+   "author": "대니얼 Z. 리버먼,마이클 E. 롱 저/최가영 역",
+   "pages": 328,
+   "entry": "target",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
+   "keywords": [
+    "뇌과학"
+   ],
+   "keywords_regex": [
+    "뇌과학"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "과학 교양",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "도파민이 사랑과 중독, 창의성, 정치 성향까지 어떻게 움직이는지 알게 돼요",
+   "evidence": "뇌 작동 설명이 중심, 고치는 법 없음",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "개념",
+    "why": "도파민 작동 원리를 설명하는 교양서, 고치는 법 아님",
+    "suggest": "과학 교양",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/154578707",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "과학 교양"
+   },
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791162543665",
+   "title": "마지막 몰입 (확장판) : 나를 넘어서는 힘",
+   "author": "짐 퀵 저/김미정 역",
+   "pages": 496,
+   "entry": "target",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
+   "keywords": [
+    "습관",
+    "집중력",
+    "뇌과학"
+   ],
+   "keywords_regex": [
+    "습관",
+    "집중력"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "뇌를 더 잘 쓰는 마인드셋과 학습 기법으로 한계를 넘는 길을 안내해요",
+   "evidence": "뇌 활용·몰입·습관 고치는 법이 중심",
+   "confidence": 0.7,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "집중력",
+     "습관",
+     "뇌과학"
+    ],
+    "way": "실습",
+    "why": "뇌·몰입·습관을 고치는 방법과 기법 중심",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/125294228",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791158741570",
+   "title": "기억력 천재 게으른 뇌를 깨워라",
+   "author": "개러스 무어 저/윤동준  역",
+   "pages": 208,
+   "entry": "target",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
+   "keywords": [],
+   "keywords_regex": [
+    "집중력"
+   ],
+   "way": "실습",
+   "keyword_candidate": "기억력",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "하루 20분씩 40일 동안 기억법을 따라 하며 무뎌진 기억력을 되살려요",
+   "evidence": "뇌 훈련으로 기억력을 고치는 40일 방법서",
+   "confidence": 0.7,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "집중력",
+     "습관"
+    ],
+    "way": "실습",
+    "why": "뇌 트레이닝으로 기억력을 고치는 40일 실천서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/110167022",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "뇌과학"
+    ],
+    "way": "실습",
+    "one_liner": "하루 20분씩 40일 동안 기억법을 따라 하며 무뎌진 기억력을 되살려요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9788965967576",
+   "title": "도파민 가족",
+   "author": "이은경 저",
+   "pages": 308,
+   "entry": "target",
+   "topic": "습관·집중",
+   "field": "습관·자기계발",
+   "keywords": [
+    "집중력",
+    "습관"
+   ],
+   "keywords_regex": [
+    "습관",
+    "집중력",
+    "뇌과학"
+   ],
+   "way": "개념",
+   "keyword_candidate": "육아·자녀 교육",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "스마트폰 시대에 흔들리는 가족의 대화와 집중을 어떻게 되찾을지 풀어 줘요",
+   "evidence": "부모가 내 아이를 키우는 책이라 육아 대기",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "집중력",
+     "습관"
+    ],
+    "way": "개념",
+    "why": "부모가 아이를 키우는 육아서라 맞는 주제 없음(대기)",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "reserve",
+   "link": "https://www.yes24.com/product/goods/160407504",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "습관·집중",
+    "keywords": [
+     "집중력",
+     "습관"
+    ],
+    "way": "개념",
+    "one_liner": "스마트폰 시대에 흔들리는 가족의 대화와 집중을 어떻게 되찾을지 풀어 줘요",
+    "status": "reserve"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791196986742",
+   "title": "생각 정리 습관",
+   "author": "우부카타 마사야 저/하진수 역",
+   "pages": 240,
+   "entry": "target",
+   "topic": "시간·생산성",
+   "field": "습관·자기계발",
+   "keywords": [
+    "일하는 법"
+   ],
+   "keywords_regex": [
+    "습관"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "시간·생산성",
+   "suggest_keywords": [
+    "일하는 법"
+   ],
+   "one_liner_style": "summary",
+   "one_liner": "기획·정보·설득·회의 장면마다 머릿속을 빠르게 정리해 성과를 내는 방법을 익혀요",
+   "evidence": "뇌·습관 교정이 아닌 업무 성과용 생각 정리법",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "나를 고치는 습관보다 업무 생각 정리·성과 방법이 중심",
+    "suggest": "시간·생산성",
+    "suggest_keywords": [
+     "일하는 법"
+    ]
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/95372060",
+   "moved_from": "습관·집중",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791140714896",
+   "title": "러닝&마라톤 무작정 따라하기",
+   "author": "김병현,문보성,배성훈,엔듀로레이스 저",
+   "pages": 396,
+   "entry": "target",
+   "topic": "건강·운동",
+   "field": "습관·자기계발",
+   "keywords": [
+    "달리기·근력"
+   ],
+   "keywords_regex": [
+    "달리기·근력",
+    "잠·회복"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "자세부터 훈련 계획, 보강 운동까지 내 수준에 맞게 달리는 법을 익혀요",
+   "evidence": "러닝 자세·훈련 프로그램·보강 운동이 중심",
+   "confidence": 0.93,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "달리기·근력"
+    ],
+    "way": "실습",
+    "why": "달리기 자세·훈련 프로그램을 알려 주는 운동 방법서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/148894968",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791194627265",
+   "title": "100년 쓰는 몸을 만드는 걷기와 달리기",
+   "author": "김병곤 저",
+   "pages": 256,
+   "entry": "target",
+   "topic": "건강·운동",
+   "field": "습관·자기계발",
+   "keywords": [
+    "달리기·근력"
+   ],
+   "keywords_regex": [
+    "운동 습관",
+    "달리기·근력",
+    "잠·회복"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "걷기부터 슬로 조깅, 러닝까지 단계별로 부상 없이 오래 뛰는 몸을 만들어요",
+   "evidence": "걷기·달리기 단계별 훈련 프로그램이 중심",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "달리기·근력",
+     "운동 습관",
+     "잠·회복"
+    ],
+    "way": "실습",
+    "why": "걷기·달리기 단계별 훈련법을 알려 주는 운동서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/186464136",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [
+     "달리기·근력",
+     "운동 습관"
+    ],
+    "way": "실습",
+    "one_liner": "걷기부터 슬로 조깅, 러닝까지 단계별로 부상 없이 오래 뛰는 몸을 만들어요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791194413578",
+   "title": "달리기 인류",
+   "author": "마이클 크롤리 저/정아영 역",
+   "pages": 384,
+   "entry": "target",
+   "topic": "건강·운동",
+   "field": "습관·자기계발",
+   "keywords": [],
+   "keywords_regex": [
+    "달리기·근력"
+   ],
+   "way": "사례",
+   "keyword_candidate": null,
+   "suggest": "인문",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "인류학자가 에티오피아 선수들과 달리며 얻은 통찰을 이야기로 만나요.",
+   "evidence": "인류학자의 현지 체류 경험담이 뼈대, 방법서 아님",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "달리기·근력"
+    ],
+    "way": "사례",
+    "why": "에티오피아 달리기 선수 현장 기록, 방법서 아님. 인류",
+    "suggest": "과학 교양",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/153293499",
+   "third": {
+    "fits": false,
+    "suggest": "인문",
+    "suggest_keywords": [],
+    "keywords": [],
+    "way": "사례"
+   },
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "인문"
+   },
+   "settled": {
+    "slot": "인문"
+   },
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791124757000",
+   "title": "내 몸의 생체시계를 늦추는 노화과학",
+   "author": "정해영 저",
+   "pages": 244,
+   "entry": "target",
+   "topic": "건강·운동",
+   "field": "습관·자기계발",
+   "keywords": [],
+   "keywords_regex": [],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "과학 교양",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "노화가 왜 일어나는지 과학으로 이해하고 생체시계를 늦출 단서를 얻어요",
+   "evidence": "노화 원리 설명이 중심, 실천은 4부 일부",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "개념",
+    "why": "노화 원리·가설 설명이 중심, 과학 교양에 맞음",
+    "suggest": "과학 교양",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/193701703",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "과학 교양"
+   },
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788978497145",
+   "title": "NEW 여성 근육운동가이드",
+   "author": "프레데릭 데라비에 저/정구중,이창섭 역",
+   "pages": 198,
+   "entry": "target",
+   "topic": "건강·운동",
+   "field": "습관·자기계발",
+   "keywords": [
+    "달리기·근력"
+   ],
+   "keywords_regex": [
+    "달리기·근력"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "여성의 몸 구조를 이해하고 부위별 근력 운동 동작과 스트레칭을 따라 해 볼 수 있어요.",
+   "evidence": "부위별 근력 운동 동작이 목차 중심이라 건강·운동에 맞음",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "달리기·근력"
+    ],
+    "way": "실습",
+    "why": "근력운동 동작을 알려 주는 운동 방법서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [
+    "근거 김(31자)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/142691546",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [
+     "달리기·근력"
+    ],
+    "way": "실습",
+    "one_liner": "여성의 몸 구조를 이해하고 부위별 근력 운동 동작과 스트레칭을 따라 해 볼 수 있어요.",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
+  },
+  {
+   "isbn": "9791189612535",
+   "title": "쓸모 있는 몸을 만드는 다리찢기 스트레칭",
+   "author": "김성종,백민지 저",
+   "pages": 180,
+   "entry": "target",
+   "topic": "건강·운동",
+   "field": "습관·자기계발",
+   "keywords": [],
+   "keywords_regex": [
+    "달리기·근력"
+   ],
+   "way": "실습",
+   "keyword_candidate": "스트레칭",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "뻣뻣한 몸도 단계별 동작을 따라 하면 유연성을 키워 다리를 일자로 찢게 돼요",
+   "evidence": "스트레칭 동작을 단계별로 따라 하는 몸 돌봄 책",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "운동 습관"
+    ],
+    "way": "실습",
+    "why": "몸을 움직이고 유연성을 키우는 스트레칭 방법서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/85950236",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [],
+    "way": "실습",
+    "one_liner": "뻣뻣한 몸도 단계별 동작을 따라 하면 유연성을 키워 다리를 일자로 찢게 돼요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791199176805",
+   "title": "그림으로 요가하자 : 궁금해요가",
+   "author": "오연진 글그림",
+   "pages": 232,
+   "entry": "target",
+   "topic": "건강·운동",
+   "field": "습관·자기계발",
+   "keywords": [
+    "운동 습관"
+   ],
+   "keywords_regex": [
+    "달리기·근력"
+   ],
+   "way": "사례",
+   "keyword_candidate": "요가",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "요가를 꾸준히 이어 가며 겪은 좌절과 깨달음을 그림으로 보고, 자세와 용어도 익혀요.",
+   "evidence": "요가 수련기와 자세·용어 그림 정리",
+   "confidence": 0.7,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "운동 습관"
+    ],
+    "way": "사례",
+    "why": "요가 수련 경험과 아사나·몸 지식을 그림으로 담은 몸 ",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/143823297",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791193866399",
+   "title": "저속노화 운동",
+   "author": "김병곤 저",
+   "pages": 176,
+   "entry": "target",
+   "topic": "건강·운동",
+   "field": "습관·자기계발",
+   "keywords": [
+    "달리기·근력",
+    "운동 습관"
+   ],
+   "keywords_regex": [
+    "달리기·근력",
+    "잠·회복"
+   ],
+   "way": "실습",
+   "keyword_candidate": "저속노화",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "나이대별로 균형·근력·유연성을 챙기는 운동을 따라 하며 천천히 늙는 몸을 만들어요",
+   "evidence": "단계별 동작 중심 운동법이라 건강·운동에 맞음",
+   "confidence": 0.82,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "운동 습관",
+     "달리기·근력"
+    ],
+    "way": "실습",
+    "why": "몸을 움직이는 운동법을 단계별로 알려주는 책",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/154917713",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [
+     "달리기·근력"
+    ],
+    "way": "실습",
+    "one_liner": "나이대별로 균형·근력·유연성을 챙기는 운동을 따라 하며 천천히 늙는 몸을 만들어요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791198404435",
+   "title": "그저 달리기인 줄 알았는데 삶이었다",
+   "author": "강주원 저",
+   "pages": 376,
+   "entry": "target",
+   "topic": "건강·운동",
+   "field": "습관·자기계발",
+   "keywords": [
+    "달리기·근력"
+   ],
+   "keywords_regex": [
+    "달리기·근력"
+   ],
+   "way": "사례",
+   "keyword_candidate": null,
+   "suggest": "에세이",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "마라톤과 트레일 대회를 완주하며 부상과 좌절을 넘어선 러너의 삶의 태도를 만나요.",
+   "evidence": "저자 경험담이 뼈대인 러너 에세이",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "사례",
+    "why": "방법서가 아니라 저자의 달리기 경험담이 뼈대",
+    "suggest": "에세이",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits",
+    "keywords"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/187501524",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "에세이"
+   },
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791172540821",
+   "title": "러닝 챌린지 100",
+   "author": "이재진 저",
+   "pages": 300,
+   "entry": "target",
+   "topic": "건강·운동",
+   "field": "습관·자기계발",
+   "keywords": [
+    "달리기·근력",
+    "운동 습관"
+   ],
+   "keywords_regex": [
+    "달리기·근력",
+    "잠·회복"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "단계별 미션으로 무리 없이 달리기를 몸에 붙이고 꾸준히 이어 가는 방법을 익혀요",
+   "evidence": "달리기 단계별 미션과 습관 만들기가 중심",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "달리기·근력",
+     "운동 습관"
+    ],
+    "way": "실습",
+    "why": "달리기를 시작하고 이어 가는 방법을 단계별로 알려 줌",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/155063664",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "건강·운동",
+    "keywords": [
+     "달리기·근력",
+     "운동 습관"
+    ],
+    "way": "실습",
+    "one_liner": "단계별 미션으로 무리 없이 달리기를 몸에 붙이고 꾸준히 이어 가는 방법을 익혀요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
+  },
+  {
+   "isbn": "9788939232150",
+   "title": "착지자세",
+   "author": "김정미 저",
+   "pages": 140,
+   "entry": "leaf",
+   "genre": "시",
+   "axes": {
+    "temp": -1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 비정규직·소외된 존재의 웅크림과 닳아 있는 혼자",
+    "pull": "문장 +: 시집은 형식상 약한 문장 신호, 이야기 전개 언급 없음",
+    "gain": "마음 −: 시집은 형식상 마음 신호, 지식 전달이 목적 아님",
+    "world": "현실 +: 춘천, 파트타임 노동, 은박지 돗자리 등 생활이 보임"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "흔들리는 오늘을 건너 다시 내려설 자리를 찾아보실래요?",
+   "evidence": "시집이라 시 장르에 맞고 노동과 일상을 노래함",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 소외된 존재·비정규직 노동의 흔들림, 시 제목 '효수'·'극빈",
+     "pull": "문장 +: 시집은 형식 자체가 문장 신호, 이야기로 끈다는 말 없음",
+     "gain": "마음 −: 시집 형식이 마음 신호, 지식 전달이 목적 아님",
+     "world": "현실 +: 비정규직·파트타임 노동, 춘천 등 사람·생활이 보임"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "시인의 세 번째 시집이라 시 장르에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196682062",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788936424466",
+   "title": "여름 언덕에서 배운 것",
+   "author": "안희연 저",
+   "pages": 152,
+   "entry": "leaf",
+   "genre": "시",
+   "axes": {
+    "temp": -1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 상처·슬픔 곁에 머묾, 시 제목 '면벽의 유령'·'선잠'·'열",
+    "pull": "문장 +: 시집 형식 신호, 섬세한 언어 감각을 강점으로 소개",
+    "gain": "마음 −: 시집 형식이 약한 마음 신호, 지식 목적 없음",
+    "world": "현실 +: 딴 세상 신호 없음, 사회활동·생활 소재의 시집"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "상처 입은 존재들 곁에서 오래 머문 시를 읽어 볼래요?",
+   "evidence": "시집이라 시 장르에 맞음, 상처 곁의 어조",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 세월호 낭독회·상처 어루만짐, 시 제목 '불씨'·'연루'·'열",
+     "pull": "문장 +: 시집 형식 신호, 섬세한 언어 감각을 앞세움",
+     "gain": "마음 −: 시집 형식이 약한 마음 신호, 지식 목적 없음",
+     "world": "현실 +: 딴 세상 신호 없음, 사람·생활 제목(검침원·풍선 장수)"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "시인의 세 번째 시집이라 시 장르에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/91283610",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791141601454",
+   "title": "사랑하고 선량하게 잦아드네",
+   "author": "유수연 저",
+   "pages": 124,
+   "entry": "leaf",
+   "genre": "시",
+   "axes": {
+    "temp": 1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 대화를 건네듯 친숙하고 부드러운 어법, 긍정",
+    "pull": "문장 +: 시집은 형식상 문장, 친숙한 어법이 강점",
+    "gain": "마음 −: 시집 형식, 슬픔·사랑을 건네는 성찰",
+    "world": "현실 +: 원룸·가로수·소양강 등 생활과 장소"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "슬픔과 행복 곁에서 마음의 근육을 기르고 싶은 날, 다정한 말을 건네받을래요?",
+   "evidence": "시집, 다정한 어법과 긍정의 시선",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 대화 건네듯 친숙·부드러운 어법, 사랑과 희망 긍정",
+     "pull": "문장 +: 시집 형식 신호, 친숙한 어법 강조",
+     "gain": "마음 −: 시집 형식 신호, 슬픔 너머를 보게 함",
+     "world": "현실 +: 원룸·소양강 등 사람·장소·생활이 보임"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "시집이라 시 장르에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/138532112",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791141603465",
+   "title": "반려 별자리",
+   "author": "정끝별 저",
+   "pages": 132,
+   "entry": "leaf",
+   "genre": "시",
+   "axes": {
+    "temp": 1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 엄마와의 이별을 애도하는 시선, 비애",
+    "pull": "문장 +: 언어 감각·말놀이 칭찬, 시집 형식",
+    "gain": "마음 −: 애도·회고, 형식상 마음",
+    "world": "현실 +: 엄마·모녀·집·고양이 등 생활"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "엄마를 떠나보낸 애도와 말놀이의 유머가 함께 담긴 시집이에요. 읽어볼래요?",
+   "evidence": "시집이며 엄마 애도와 언어 감각이 중심",
+   "confidence": 0.82,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 따뜻한 이미지와 담담한 애틋함, 어머니·딸의 삶을 포갬",
+     "pull": "문장 +: 언어 감각·말놀이·유머를 강점으로 소개, 시집 형식",
+     "gain": "마음 −: 엄마를 기리는 애도, 시집 형식이 약한 마음 신호",
+     "world": "현실 +: 엄마 집, 모녀 관계, 생활 장면과 딴 세상 신호 없음"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "시집이라 시 장르에 그대로 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/194511293",
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 따뜻한 이미지, 유머와 말놀이, 애틋한 모녀의 삶 담담히 담음",
+     "pull": "문장 +: 시집은 형식이 문장 신호, 언어 감각·말놀이 강조",
+     "gain": "마음 −: 시집 형식, 엄마를 기리는 애도 작업",
+     "world": "현실 +: 엄마 집·강가·한식 등 생활과 사람이 보임"
+    },
+    "missing": []
+   },
+   "settled": {
+    "temp": 1
+   },
+   "a_was": {
+    "temp": -1
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791187895602",
+   "title": "뭉게구름이 내려오는 날",
+   "author": "안춘림 저",
+   "pages": 76,
+   "entry": "leaf",
+   "genre": "시",
+   "axes": {
+    "temp": 1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 부모께 올리는 선물, 사랑·설렘·행복 등 따뜻한 시 제목",
+    "pull": "0 아님 +: 시집은 형식상 문장 신호, 이야기로 끄는 말 없음",
+    "gain": "마음 −: 시집 형식, 그리움·기억·감정을 건넴",
+    "world": "현실 +: 부모·아이들·춘천·쌍계사 등 사람과 장소가 보임"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "살아온 시간의 감정과 기억을 한 편씩 꺼내 보고 싶은 날, 함께 읽을래요?",
+   "evidence": "시집이라 시 장르에 맞고 정서가 따뜻함",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 부모께 선물을 드린다는 다정한 말, 사랑·설렘·계절 시",
+     "pull": "시집 형식 신호: 이야기 전개 언급 없음 → 문장",
+     "gain": "형식 신호 마음: 감정과 기억의 기록, 지식 목적 없음",
+     "world": "현실: 춘천·삼청터널·쌍계사 등 실제 지명과 생활"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "저자의 첫 시집이라 시 칸에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196549692",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788932045603",
+   "title": "그리하여 어느 날 사랑이여",
+   "author": "최승자 저",
+   "pages": 220,
+   "entry": "leaf",
+   "genre": "시",
+   "axes": {
+    "temp": -1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 시 제목들이 외로움·살의·죽음·혼수·감옥 쪽",
+    "pull": "시집 형식의 문장 신호 +, 이야기로 끈다는 말 없음",
+    "gain": "시집이라 마음 쪽 −, 지식을 알려 주는 목적 없음",
+    "world": "현실 +: 청파동·여의도·삼십 세 등 사람과 장소가 보임"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "청춘에서 중년까지 쓸쓸함을 건너온 시인의 목소리를 곁에서 들어볼래요?",
+   "evidence": "시선집이라 시 장르, 제목들이 쓸쓸한 쪽",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 시 제목이 외로움·살의·혼수·죽음 쪽으로 기움",
+     "pull": "문장 +: 시선집이라 형식 신호로 문장",
+     "gain": "마음 −: 시라는 형식이 약한 마음 신호",
+     "world": "현실 +: 청파동·여의도·서른 살 등 생활과 장소"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "최승자 시선집이라 시 장르에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/193466675",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788937409592",
+   "title": "늑대처럼 싱싱하게 울고 싶었다",
+   "author": "문정희 저",
+   "pages": 160,
+   "entry": "leaf",
+   "genre": "시",
+   "axes": {
+    "temp": -1,
+    "pull": 1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 폐허·상처·멍과 고통, 목차에 피 묻은 이빨·첫 유서",
+    "pull": "문장 +: 시집 형식 신호, 말 이전의 감각을 붙드는 언어",
+    "gain": "마음 −: 시 형식 신호, 상처와 감정을 건네는 시",
+    "world": "현실 +: 세탁소·시장·마드리드 등 생활과 장소가 보임"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "상처가 마르기 전의 날것 같은 말을 따라가 볼래요?",
+   "evidence": "시집이라 시 장르에 맞고 상처·폐허의 어조",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": 1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 폐허·상처·환멸, 시 제목 '성병 걸린 날'·'피 묻은 이빨'",
+     "pull": "문장 +: 시집은 형식 신호, 이야기로 끈다는 말 없음",
+     "gain": "마음 −: 시는 형식이 마음 신호, 지식 목적 없음",
+     "world": "현실 +: 목차에 세탁소·마드리드·시장 등 사람·장소"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "신작 시집이라 시 장르에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/187675958",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791192968346",
+   "title": "기업문화, 조직을 움직이는 미래 에너지",
+   "author": "기업문화Cell 저 ",
+   "pages": 328,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "조직 문화"
+   ],
+   "keywords_regex": [],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "기업문화가 왜 변질되고 어떻게 활력을 유지하는지 본질부터 이해하게 돼요.",
+   "evidence": "조직 문화 중심, 원리 설명이라 개념",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "조직 문화"
+    ],
+    "way": "개념",
+    "why": "조직 문화를 만들고 지키는 법이 중심이라 리더십에 맞음",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/119862181",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788997838561",
+   "title": "태어나서 처음 하는 진짜 리더십 공부",
+   "author": "박봉수 저",
+   "pages": 264,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
+   "keywords_regex": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "처음 팀장이 된 사람이 자기 관리, 팀원 다루기, 성과, 팀워크를 익혀요.",
+   "evidence": "팀장 독자, 사람관리·성과관리·팀워크 중심",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ],
+    "way": "실습",
+    "why": "새 팀장을 위한 팀 이끌기·성과 관리 방법서라 리더십에",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/15866196",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791168341333",
+   "title": "리더의 일",
+   "author": "박찬구 저 ",
+   "pages": 240,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
+   "keywords_regex": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
+   "way": "사례",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "리더가 맡을 몫과 넘길 몫을 사례로 짚고, 가치 공유와 소통까지 알려 줘요.",
+   "evidence": "팀장·대표 대상, 위임·가치 공유·성장 지원 중심",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ],
+    "way": "사례",
+    "why": "팀장·경영자가 팀을 이끄는 법이 중심",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/122584941",
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "suggest_keywords": [],
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ],
+    "way": "사례"
+   },
+   "settled": {
+    "way": "사례"
+   },
+   "a_was": {
+    "way": "개념"
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791192381336",
+   "title": "팀장의 끗",
+   "author": "고태현,김은주,안나은,이상현,이정희,한길화,한숙기 공저 ",
+   "pages": 364,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
+   "keywords_regex": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "처음 팀장이 된 사람이 팀원의 감정과 성장, 평가를 어떻게 다룰지 정리해요",
+   "evidence": "독자가 팀장, 피드백·평가·팀워크 장 중심",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ],
+    "way": "실습",
+    "why": "팀장이 팀과 팀원을 이끄는 법·피드백 중심",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/117520692",
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "suggest_keywords": [],
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ],
+    "way": "실습"
+   },
+   "settled": {
+    "way": "실습"
+   },
+   "a_was": {
+    "way": "개념"
+   },
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "리더십",
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ],
+    "way": "실습",
+    "one_liner": "처음 팀장이 된 사람이 팀원의 감정과 성장, 평가를 어떻게 다룰지 정리해요",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
+  },
+  {
+   "isbn": "9791168320369",
+   "title": "오늘부터 조직문화 담당자",
+   "author": "이지안 저 ",
+   "pages": 248,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "조직 문화"
+   ],
+   "keywords_regex": [
+    "팀 이끌기",
+    "조직 문화"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "조직문화 업무를 처음 맡은 사람이 이론과 실전 노하우, 사례로 일을 시작해요",
+   "evidence": "조직문화 담당자용 실무 노하우, 문화 만들기 방법 중심",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "조직 문화"
+    ],
+    "way": "실습",
+    "why": "조직문화를 만드는 담당자용 실전 노하우서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/114942315",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788925575209",
+   "title": "요즘 팀장의 리더 수업",
+   "author": "이민영 저",
+   "pages": 272,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
+   "keywords_regex": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "팀장이 팀을 맡아 성과를 내고 팀원을 키우는 실전 요령을 익혀요",
+   "evidence": "팀장 독자, 위임·원온원·육성 중심",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "팀 이끌기",
+     "피드백·코칭"
+    ],
+    "way": "실습",
+    "why": "팀장을 독자로 팀 운영·육성·원온원을 다루는 리더십 책",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/125541612",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788968334085",
+   "title": "무조건 통하는 피드백, 강점 말하기",
+   "author": "이윤경 저",
+   "pages": 336,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "피드백·코칭",
+    "팀 이끌기"
+   ],
+   "keywords_regex": [
+    "팀 이끌기",
+    "피드백·코칭"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "팀원의 강점을 찾아 말해 주며 팀이 오래 가도록 이끄는 피드백 요령을 익혀요",
+   "evidence": "팀장 대상 강점 피드백 방법 단계 중심",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "피드백·코칭",
+     "팀 이끌기"
+    ],
+    "way": "실습",
+    "why": "팀장이 팀원에게 주는 강점 피드백 방법서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/115603992",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791189580902",
+   "title": "MZ, 젠더 그리고 조직문화",
+   "author": "하수미 저",
+   "pages": 233,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "조직 문화"
+   ],
+   "keywords_regex": [
+    "조직 문화"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "세대와 성별이 다른 구성원을 이해하고 함께 일하기 좋은 팀을 만드는 길을 알려 줘요",
+   "evidence": "세대·성별 다양성으로 조직 문화를 만드는 관리자용 책",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "조직 문화"
+    ],
+    "way": "개념",
+    "why": "조직 문화·다양성으로 팀을 이끄는 리더 대상",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/102402503",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791156759881",
+   "title": "잘나가는 조직은 무엇이 다를까",
+   "author": "제니퍼 모스 저/강유리 역",
+   "pages": 408,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "조직 문화"
+   ],
+   "keywords_regex": [
+    "조직 문화"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "번아웃의 원인을 짚고 리더가 건강한 직장 문화를 만드는 길을 알려줘요",
+   "evidence": "리더 대상, 번아웃 예방과 직장 문화 만들기",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "조직 문화"
+    ],
+    "way": "개념",
+    "why": "리더가 번아웃 막고 건강한 직장 문화 만드는 법",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/114248143",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "리더십",
+    "keywords": [
+     "조직 문화",
+     "팀 이끌기"
+    ],
+    "way": "개념",
+    "one_liner": "번아웃의 원인을 짚고 리더가 건강한 직장 문화를 만드는 길을 알려줘요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791130635873",
+   "title": "왜 리더인가",
+   "author": "이나모리 가즈오 저/김윤경 역",
+   "pages": 224,
+   "entry": "target",
+   "topic": "리더십",
+   "field": "일·커리어",
+   "keywords": [
+    "팀 이끌기"
+   ],
+   "keywords_regex": [
+    "팀 이끌기"
+   ],
+   "way": "개념",
+   "keyword_candidate": "리더의 마음가짐",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "경영자가 지켜야 할 마음가짐과 철학을 다섯 가지 물음으로 깊이 짚어 봐요",
+   "evidence": "리더의 마음가짐·철학 중심, 이끄는 사람이 독자",
+   "confidence": 0.6,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [],
+    "way": "개념",
+    "why": "리더의 마음가짐과 경영 철학을 다뤄 리더십에 맞음",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/101659510",
+   "rules_version": "v3.6",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "인문"
+   },
+   "draft": {
+    "topic": "리더십",
+    "keywords": [
+     "팀 이끌기"
+    ],
+    "way": "개념",
+    "one_liner": "경영자가 지켜야 할 마음가짐과 철학을 다섯 가지 물음으로 깊이 짚어 봐요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791140703302",
+   "title": "코딩 자율학습 나도코딩의 파이썬 입문",
+   "author": "나도코딩 저",
+   "pages": 436,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [],
+   "keywords_regex": [
+    "파이썬"
+   ],
+   "way": "실습",
+   "keyword_candidate": "파이썬 문법",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "변수와 자료구조부터 클래스까지 단계별 문제를 풀며 코딩 기초를 익혀요",
+   "evidence": "데이터 분석 아닌 파이썬 문법 입문서",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "파이썬 문법 입문서라 데이터 분석이 아님",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/117373102",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791156645528",
+   "title": "난생처음 파이썬 프로그래밍",
+   "author": "우재남,최민아 저",
+   "pages": 428,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [],
+   "keywords_regex": [
+    "파이썬"
+   ],
+   "way": "실습",
+   "keyword_candidate": "파이썬 입문",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "실생활 예제를 따라 하며 파이썬 기초 문법부터 작은 프로그램 제작까지 익혀요",
+   "evidence": "파이썬 문법 입문서, 데이터 분석 아님",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "파이썬"
+    ],
+    "way": "실습",
+    "why": "파이썬 문법 입문서라 데이터 분석이 아님",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits",
+    "keywords"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/102485981",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788931478013",
+   "title": "처음이야? 파이썬 데이터 분석",
+   "author": "윤영빈,이용희,오환 공저",
+   "pages": 424,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [
+    "파이썬"
+   ],
+   "keywords_regex": [
+    "엑셀",
+    "파이썬"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "코랩에서 파이썬 코드를 따라 치며 데이터 다루는 기본기를 익혀요.",
+   "evidence": "파이썬 실습 중심 입문서, 엑셀은 독자 언급뿐",
+   "confidence": 0.93,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "파이썬"
+    ],
+    "way": "실습",
+    "why": "파이썬으로 데이터 분석을 따라 하는 입문 실습서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/147129792",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788970506562",
+   "title": "두근두근 파이썬",
+   "author": "천인국 저",
+   "pages": 420,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [],
+   "keywords_regex": [
+    "파이썬"
+   ],
+   "way": "실습",
+   "keyword_candidate": "파이썬 입문",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "그림과 예제로 변수·연산자 같은 프로그래밍 기초를 차근차근 익혀 보는 입문서예요",
+   "evidence": "파이썬 문법 입문 교재, 데이터 분석 아님",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "파이썬 문법 입문 교재라 데이터 분석이 아님",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/116598806",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791156645214",
+   "title": "난생처음 컴퓨팅 사고 with 파이썬",
+   "author": "김명호 저",
+   "pages": 460,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [],
+   "keywords_regex": [
+    "파이썬"
+   ],
+   "way": "실습",
+   "keyword_candidate": "파이썬 입문",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "알고리즘 표현부터 파이썬 문법, 미니 프로젝트까지 따라 하며 코딩 기초를 익혀요",
+   "evidence": "파이썬 문법 입문, 데이터 분석 아님",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "데이터 분석이 아닌 파이썬 문법·프로그래밍 입문서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/96547422",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791193059180",
+   "title": "파이썬 데이터 분석 & 시각화 + 웹 대시보드 제작하기",
+   "author": "박찬의 저",
+   "pages": 254,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [
+    "파이썬"
+   ],
+   "keywords_regex": [
+    "파이썬"
+   ],
+   "way": "실습",
+   "keyword_candidate": "데이터 시각화",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "판다스로 데이터를 다듬고 그래프와 웹 화면으로 보여 주는 방법을 익혀요",
+   "evidence": "판다스·시각화 라이브러리 사용법 중심의 실습서",
+   "confidence": 0.92,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "파이썬"
+    ],
+    "way": "실습",
+    "why": "파이썬 Pandas·시각화로 데이터를 분석하는 방법서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/124732783",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791165212490",
+   "title": "직장인을 위한 실무 데이터 분석 with 엑셀",
+   "author": "선양미 저",
+   "pages": 500,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [
+    "엑셀"
+   ],
+   "keywords_regex": [
+    "SQL",
+    "엑셀",
+    "파이썬"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "엑셀로 흩어진 업무 데이터를 정리하고 분석하는 방법을 단계별로 익혀요.",
+   "evidence": "엑셀 함수·단축키 CASE별 실습, 파이썬·R 제외",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "엑셀"
+    ],
+    "way": "실습",
+    "why": "엑셀로 실무 데이터를 정리·분석하는 방법서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/91785181",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791163035282",
+   "title": "Do it! 데이터 분석을 위한 판다스 입문",
+   "author": "다니엘 첸 저/시진 역",
+   "pages": 400,
+   "entry": "target",
+   "topic": "데이터 분석",
+   "field": "데이터·통계",
+   "keywords": [
+    "파이썬"
+   ],
+   "keywords_regex": [
+    "엑셀",
+    "파이썬"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "파이썬 판다스로 실제 데이터를 다루고 그래프로 그리는 법을 처음부터 익혀요.",
+   "evidence": "파이썬 판다스로 분석하는 실습 중심 입문서",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "파이썬"
+    ],
+    "way": "실습",
+    "why": "파이썬 판다스로 데이터를 분석하는 실습서",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [
+    "김(40자)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/123685657",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "데이터 분석",
+    "keywords": [
+     "파이썬"
+    ],
+    "way": "실습",
+    "one_liner": "현실 데이터셋 예제를 따라 하며 판다스로 데이터를 다루고 그래프로 보여 주는 기본기를 익혀요.",
+    "status": "reserve"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791130697246",
+   "title": "레버리지",
+   "author": "롭 무어 저/김유미 역 ",
+   "pages": 260,
+   "entry": "target",
+   "topic": "시간·생산성",
+   "field": "습관·자기계발",
+   "keywords": [
+    "일하는 법"
+   ],
+   "keywords_regex": [
+    "경제사·자본주의"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "시간·생산성",
+   "suggest_keywords": [
+    "일하는 법"
+   ],
+   "one_liner_style": "summary",
+   "one_liner": "적게 일하고도 성과를 키우려면 일을 맡기고 남의 힘을 빌리는 법을 알려 줘요.",
+   "evidence": "경제 원리 아닌 일하는 방식·위임 중심",
+   "confidence": 0.55,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "개념",
+    "why": "경제 원리가 아니라 적게 일하고 부자 되는 일하는 법 ",
+    "suggest": "시간·생산성",
+    "suggest_keywords": [
+     "일하는 법"
+    ]
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/117389523",
+   "moved_from": "경제 상식",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791193869338",
+   "title": "비트코인 없는 미래는 없다",
+   "author": "오태민,손혜민,김유정 저",
+   "pages": 368,
+   "entry": "target",
+   "topic": "경제 상식",
+   "field": "돈·경제",
+   "keywords": [
+    "경제사·자본주의"
+   ],
+   "keywords_regex": [
+    "금리·환율",
+    "경제사·자본주의"
+   ],
+   "way": "개념",
+   "keyword_candidate": "비트코인",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "비트코인과 달러 패권, 국채 구조를 함께 짚으며 화폐와 신뢰의 질서를 이해해요.",
+   "evidence": "화폐·달러 패권·국채 구조의 원리 설명이 중심",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "경제사·자본주의",
+     "금리·환율"
+    ],
+    "way": "개념",
+    "why": "화폐·달러 패권·국채 등 경제 원리와 역사 설명",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "keywords"
+   ],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/153777837",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "경제 상식",
+    "keywords": [
+     "경제사·자본주의"
+    ],
+    "way": "개념",
+    "one_liner": "비트코인과 달러 패권, 국채 구조를 함께 짚으며 화폐와 신뢰의 질서를 이해해요.",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791175983656",
+   "title": "부富의 알고리즘",
+   "author": "염규남 저",
+   "pages": 230,
+   "entry": "target",
+   "topic": "돈 관리·투자",
+   "field": "돈·경제",
+   "keywords": [
+    "ETF·펀드",
+    "주식",
+    "돈의 심리"
+   ],
+   "keywords_regex": [
+    "경제사·자본주의"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "돈 관리·투자",
+   "suggest_keywords": [
+    "ETF·펀드",
+    "주식",
+    "돈의 심리"
+   ],
+   "one_liner_style": "summary",
+   "one_liner": "자본의 원리를 바탕으로 나스닥 레버리지 투자와 자산 형성, 세금 준비까지 짚어 줘요.",
+   "evidence": "목차 대부분이 투자 방법: 나스닥·레버리지·지표",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "실습",
+    "why": "나스닥·레버리지 ETF 투자법이 목차 중심이라 투자 주",
+    "suggest": "돈 관리·투자",
+    "suggest_keywords": [
+     "주식",
+     "ETF·펀드",
+     "돈의 심리"
+    ]
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/192962553",
+   "moved_from": "경제 상식",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791161340333",
+   "title": "달러는 왜 비트코인을 싫어하는가",
+   "author": "사이페딘 아모스 저/위대선 역",
+   "pages": 424,
+   "entry": "target",
+   "topic": "경제 상식",
+   "field": "돈·경제",
+   "keywords": [
+    "경제사·자본주의"
+   ],
+   "keywords_regex": [
+    "금리·환율",
+    "경제사·자본주의"
+   ],
+   "way": "개념",
+   "keyword_candidate": "비트코인",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "돈의 역사와 정부 통화 정책을 거쳐 비트코인이 놓인 자리를 이해하게 해 줘요",
+   "evidence": "화폐사·자본주의 원리 설명 중심, 투자법 아님",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "경제사·자본주의"
+    ],
+    "way": "개념",
+    "why": "화폐사와 비트코인 경제학을 원리로 설명하는 책",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/66815979",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788957366745",
+   "title": "자본주의 사용설명서",
+   "author": "EBS 자본주의 제작팀,정지은,고희정 공저/EBS MEDIA 기획",
+   "pages": 356,
+   "entry": "target",
+   "topic": "돈 관리·투자",
+   "field": "돈·경제",
+   "keywords": [
+    "돈의 심리",
+    "재테크 기초"
+   ],
+   "keywords_regex": [
+    "경제사·자본주의"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "돈 관리·투자",
+   "suggest_keywords": [
+    "돈의 심리",
+    "재테크 기초"
+   ],
+   "one_liner_style": "summary",
+   "one_liner": "금융과 소비에서 빠지기 쉬운 착각을 짚고 돈을 대하는 눈을 길러 줘요",
+   "evidence": "경제 원리보다 내 소비·돈 습관·금융 교육이 중심",
+   "confidence": 0.7,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "행동경제학"
+    ],
+    "way": "개념",
+    "why": "경제 원리가 아니라 내 소비·금융생활 관리가 중심",
+    "suggest": "돈 관리·투자",
+    "suggest_keywords": [
+     "돈의 심리",
+     "재테크 기초"
+    ]
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/13712404",
+   "moved_from": "경제 상식",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791194353539",
+   "title": "돈의 질서",
+   "author": "김대호 저",
+   "pages": 202,
+   "entry": "target",
+   "topic": "돈 관리·투자",
+   "field": "돈·경제",
+   "keywords": [
+    "주식",
+    "ETF·펀드",
+    "부동산·청약"
+   ],
+   "keywords_regex": [
+    "경제사·자본주의"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "돈 관리·투자",
+   "suggest_keywords": [
+    "주식",
+    "ETF·펀드",
+    "부동산·청약"
+   ],
+   "one_liner_style": "summary",
+   "one_liner": "유동성과 AI·반도체 흐름을 읽고 내 자산을 어디에 둘지 판단하는 눈을 길러 줘요.",
+   "evidence": "목차 대부분이 투자 전략·종목·자산 굴리기",
+   "confidence": 0.72,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "경제사·자본주의"
+    ],
+    "way": "개념",
+    "why": "투자 전략·종목·ETF가 목차 중심이라 돈 관리·투자",
+    "suggest": "돈 관리·투자",
+    "suggest_keywords": [
+     "주식",
+     "ETF·펀드",
+     "부동산·청약"
+    ]
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/188614621",
+   "moved_from": "경제 상식",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791176612807",
+   "title": "존 갤브레이스 돈을 말하다",
+   "author": "존 케네스 갤브레이스 저/이강국 역",
+   "pages": 496,
+   "entry": "target",
+   "topic": "경제 상식",
+   "field": "돈·경제",
+   "keywords": [
+    "경제사·자본주의"
+   ],
+   "keywords_regex": [
+    "금리·환율",
+    "경제사·자본주의"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "조개껍데기에서 지폐까지, 돈이 신뢰와 권력 속에서 어떻게 변해 왔는지 이해해요.",
+   "evidence": "화폐·금융사가 목차 전체의 뼈대, 이해 중심",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "경제사·자본주의"
+    ],
+    "way": "개념",
+    "why": "화폐·금융의 역사로 경제가 돌아가는 원리를 설명",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/195807399",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791195601073",
+   "title": "칼뱅, 자본주의의 고삐를 잡다",
+   "author": "이오갑 저",
+   "pages": 608,
+   "entry": "target",
+   "topic": "경제 상식",
+   "field": "돈·경제",
+   "keywords": [],
+   "keywords_regex": [
+    "경제사·자본주의"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "인문",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "칼뱅의 경제사상과 제네바 개혁을 따라가며 오늘의 신자유주의에 맞설 대안을 짚어 봐요",
+   "evidence": "칼뱅 사상·제네바 역사가 중심, 경제 원리 설명 아님",
+   "confidence": 0.6,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [
+     "경제사·자본주의"
+    ],
+    "way": "개념",
+    "why": "칼뱅의 사상·활동을 다룬 인물·사상사라 인문·역사 성격",
+    "suggest": "인문",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits",
+    "keywords"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/70859045",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "인문"
+   },
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791176610025",
+   "title": "단어의 쓸모",
+   "author": "차민진 저",
+   "pages": 316,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "문해력·어휘"
+   ],
+   "keywords_regex": [
+    "에세이·책 쓰기",
+    "업무 글",
+    "문해력·어휘"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "거친 말버릇을 정확한 단어로 바꿔 말과 글의 인상을 다듬게 돼요",
+   "evidence": "어휘력을 키우는 단어 바꿔 쓰기 안내서",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "문해력·어휘"
+    ],
+    "way": "실습",
+    "why": "어휘를 골라 쓰는 법을 알려 주는 어휘력 책",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/190213120",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791198889508",
+   "title": "어른의 어휘 일력 365",
+   "author": "서선행,이은정 저",
+   "pages": 384,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "문해력·어휘"
+   ],
+   "keywords_regex": [
+    "문해력·어휘"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "하루 한 단어씩 넘기며 어른다운 표현을 익혀 말의 폭을 넓혀 가요.",
+   "evidence": "어휘력 부족 사례와 365일 일력 구성이 중심",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "문해력·어휘"
+    ],
+    "way": "실습",
+    "why": "어휘력을 키우는 일력이라 글쓰기(문해력·어휘)에 맞음",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/133819525",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791198174123",
+   "title": "퇴고하는 글쓰기",
+   "author": "신수일 저",
+   "pages": 240,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "문해력·어휘"
+   ],
+   "keywords_regex": [
+    "문해력·어휘"
+   ],
+   "way": "실습",
+   "keyword_candidate": "퇴고·교정",
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "맞춤법부터 비문 고치기까지 내 글을 스스로 다듬는 교정 기준을 익혀요.",
+   "evidence": "교정·교열 방법 중심의 글쓰기 실용서",
+   "confidence": 0.82,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "문해력·어휘"
+    ],
+    "way": "실습",
+    "why": "글을 다듬는 교정·교열 방법서라 글쓰기에 맞음",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/191855396",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791194530558",
+   "title": "썸 탈 때 틀리면 정떨어지는 맞춤법",
+   "author": "김다경 저",
+   "pages": 340,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "문해력·어휘"
+   ],
+   "keywords_regex": [
+    "업무 글",
+    "문해력·어휘"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "헷갈리는 표현을 짝지어 골라 보며 호감을 지키는 맞춤법 습관을 익혀요",
+   "evidence": "맞춤법 쌍을 고르는 목차라 글쓰기 어휘 실습",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "문해력·어휘"
+    ],
+    "way": "실습",
+    "why": "맞춤법을 바르게 쓰는 법이라 글쓰기에 맞음",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/151662535",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791193378328",
+   "title": "쓰기의 미래",
+   "author": "나오미 배런 저/배동근 역",
+   "pages": 628,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [],
+   "keywords_regex": [
+    "문해력·어휘"
+   ],
+   "way": "개념",
+   "keyword_candidate": "AI와 글쓰기",
+   "suggest": "AI 활용",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "AI가 글을 대신 쓰는 시대에 사람의 읽기와 쓰기가 어떻게 달라지는지 짚어 봐요",
+   "evidence": "글쓰기 기법이 아닌 AI와 쓰기의 미래 탐구",
+   "confidence": 0.5,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "keywords": [],
+    "way": "개념",
+    "why": "글쓰기 방법이 아니라 AI 시대 쓰기를 탐구하는 교양서",
+    "suggest": "과학 교양",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/141197124",
+   "third": {
+    "fits": false,
+    "suggest": "사회·시사",
+    "suggest_keywords": [],
+    "keywords": [],
+    "way": "개념"
+   },
+   "settled": {},
+   "rules_version": "v3.6",
+   "requeued_to": {
+    "entry": "leaf",
+    "slot": "인문"
+   },
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [],
+    "way": "개념",
+    "one_liner": "AI가 글을 대신 쓰는 시대에 사람의 읽기와 쓰기가 어떻게 달라지는지 짚어 봐요",
+    "status": "review"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9788969151940",
+   "title": "문해력 놀이 30",
+   "author": "문지영,강서형,김지원,박지현,수현 저",
+   "pages": 200,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "문해력·어휘"
+   ],
+   "keywords_regex": [
+    "문해력·어휘"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "낱말 놀이 서른 가지로 아이들의 어휘력을 자연스럽게 키우는 수업 아이디어를 얻어요",
+   "evidence": "사서교사가 수업용으로 쓴 놀이집이라 교사 지도서",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "문해력·어휘"
+    ],
+    "way": "실습",
+    "why": "문해력·어휘력을 키우는 놀이 방법서라 글쓰기에 맞음",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "review",
+   "link": "https://www.yes24.com/product/goods/159291680",
+   "third": {
+    "fits": false,
+    "suggest": "",
+    "suggest_keywords": [],
+    "keywords": [
+     "문해력·어휘"
+    ],
+    "way": "실습"
+   },
+   "settled": {},
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788968334818",
+   "title": "고수의 어휘 사용법",
+   "author": "김선영 저",
+   "pages": 248,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "문해력·어휘"
+   ],
+   "keywords_regex": [
+    "문해력·어휘",
+    "일기·편지"
+   ],
+   "way": "실습",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "어휘력을 읽기·말하기·쓰기 훈련으로 단계별로 키우고 말의 품격을 높여요",
+   "evidence": "어휘 훈련 회차별 실습 구성, 문해력·어휘 중심",
+   "confidence": 0.9,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "문해력·어휘"
+    ],
+    "way": "실습",
+    "why": "어휘력을 기르는 훈련법이라 글쓰기 주제에 맞음",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/136255500",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788925589497",
+   "title": "우리말 맞춤법 띄어쓰기",
+   "author": "정희창 저",
+   "pages": 208,
+   "entry": "target",
+   "topic": "글쓰기",
+   "field": "일·커리어",
+   "keywords": [
+    "문해력·어휘"
+   ],
+   "keywords_regex": [
+    "문해력·어휘"
+   ],
+   "way": "개념",
+   "keyword_candidate": null,
+   "suggest": "",
+   "suggest_keywords": [],
+   "one_liner_style": "summary",
+   "one_liner": "맞춤법과 띄어쓰기가 왜 그렇게 적히는지 원리를 이해하고 글에 적용해요.",
+   "evidence": "맞춤법·띄어쓰기 규범의 원리 설명 중심",
+   "confidence": 0.88,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "keywords": [
+     "문해력·어휘"
+    ],
+    "way": "개념",
+    "why": "맞춤법·띄어쓰기 규칙을 알려 주는 글쓰기 책",
+    "suggest": "",
+    "suggest_keywords": []
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/95595173",
+   "rules_version": "v3.6",
+   "draft": {
+    "topic": "글쓰기",
+    "keywords": [
+     "문해력·어휘"
+    ],
+    "way": "개념",
+    "one_liner": "맞춤법과 띄어쓰기가 왜 그렇게 적히는지 원리를 이해하고 글에 적용해요.",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
+  },
+  {
+   "isbn": "9788989571742",
+   "title": "제대로 된 시체답게 행동해!",
+   "author": "온드르제이 네프,야나 레치코바 등저/야로슬라프 올샤, jr.,박상준 공편/김창규 등역",
+   "pages": 520,
+   "entry": "leaf",
+   "genre": "SF·판타지",
+   "axes": {
+    "temp": null,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "끝맺음·어조·장면 신호 없음: 작품별 줄거리 소개가 없음",
+    "pull": "몰입 −: 소설 선집이라 형식상 이야기로 끌고 감",
+    "gain": "마음 −: 소설 형식 신호, 지식 전달이 목적 아님",
+    "world": "딴 세상 −: SF 선집, 소행성대·아인슈타인 두뇌 등 SF 소재"
+   },
+   "missing": [
+    "temp"
+   ],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "체코 SF 걸작 가운데 골라 낸 단편 열 편, 한 권으로 만나 볼래요?",
+   "evidence": "체코 SF 걸작 10편을 모은 선집이라 SF·판타지에 맞음",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": null,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "끝맺음·어조·장면 신호 없음: 작품별 줄거리 소개가 없음",
+     "pull": "형식 신호 몰입−: 문체 칭찬 없이 걸작 선집으로만 소개",
+     "gain": "형식 신호 마음−: 지식 전달이 주된 목적이라는 말 없음",
+     "world": "딴 세상 −: SF 선집, 소행성대·스틱스 등 제목"
+    },
+    "missing": [
+     "temp"
+    ],
+    "suggest": "",
+    "why": "체코 SF 단편 10편을 묶은 SF 선집"
+   },
+   "flags": [],
+   "issues": [
+    "근거 약함(겹치는 단어 1개)",
+    "근거 김(32자)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/5533457",
+   "rules_version": "v3.6",
+   "draft": {
+    "genre": "SF·판타지",
+    "axes": {
+     "temp": null,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "one_liner": "낯선 나라의 상상력이 빚은 SF 단편 열 편을 한 번에 만나 보실래요?",
+    "status": "reserve"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791166687525",
+   "title": "구름문",
+   "author": "이다하 저",
+   "pages": 376,
+   "entry": "leaf",
+   "genre": "SF·판타지",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "장면 −: 호수의 어두운 면, 실종, 비밀 기록 추적",
+    "pull": "몰입 −: 호수의 실종과 추적이 끌고 감",
+    "gain": "마음 −: 소설, 인물 이야기가 남기는 것",
+    "world": "딴 세상 −: 결정화한 잠 '구름', 슬리퍼 등 없는 기술"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "잠을 사고파는 세상에서 사라진 사람의 자취를 따라가 볼래요?",
+   "evidence": "잠을 결정화한 상상 기술이 이야기를 움직임",
+   "confidence": 0.85,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "장면 −: 호수의 어두운 면, 실종, 비밀 기록 추적",
+     "pull": "몰입 −: 실종 사건과 추적 전개가 끌고 감",
+     "gain": "마음 −: 소설 형식, 인물 이야기가 남는 것",
+     "world": "딴 세상 −: 잠을 결정화한 구름, 슬리퍼가 있는 미래"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "잠을 결정화하는 미래 설정이 이야기를 움직이는 SF"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/124328263",
+   "rules_version": "v3.6",
+   "draft": {
+    "genre": "SF·판타지",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "one_liner": "잠을 사고파는 세상에서 사라진 사람의 자취를 따라가 볼래요?",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
+  },
+  {
+   "isbn": "9791166680151",
+   "title": "유미의 연인",
+   "author": "이서영 저",
+   "pages": 376,
+   "entry": "leaf",
+   "genre": "SF·판타지",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "어조 +: 사랑스러운 사랑과 강인한 약자를 향한 찬가·송가",
+    "pull": "몰입 −: 소설 형식이 약한 몰입 신호, 문체 칭찬 없음",
+    "gain": "마음 −: 소설 형식, 사랑과 투쟁의 이야기가 남는 것",
+    "world": "딴 세상 −: SF 중단편집, 로보 등 비현실 존재가 등장"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "사랑도 투쟁도 포기하지 않는 약한 이들의 이야기를 SF로 만나 볼래요?",
+   "evidence": "사회파 SF 중단편집이라 SF·판타지에 맞음",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "어조 +: 사랑하는 이들을 향한 찬가·송가, 달달한 사랑을 만날 수 있다",
+     "pull": "몰입 −: 소설 형식이 약한 몰입 신호, 문체 칭찬 없음",
+     "gain": "마음 −: 소설 형식 기본, 지식이 주목적이라는 말 없음",
+     "world": "딴 세상 −: SF 모음집, 로보 등 비현실 존재가 제목에 보임"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "사회파 로맨스 SF 중단편집이라 SF에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/97559781",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791188862290",
+   "title": "지구에서 한아뿐",
+   "author": "정세랑 저",
+   "pages": 228,
+   "entry": "leaf",
+   "genre": "로맨스",
+   "axes": {
+    "temp": 1,
+    "pull": 1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "어조 +: 눈물 날 듯한 다정함, 진심을 건네는 문체",
+    "pull": "",
+    "gain": "마음 −: 사랑 이야기라 인물과 감정이 남김",
+    "world": "딴 세상 −: 외계인 경민이 실제로 등장"
+   },
+   "missing": [],
+   "suggest": "로맨스",
+   "one_liner_style": "question",
+   "one_liner": "외계인과 지구인의 드문 사랑을 다정한 문장으로 만나 볼래요?",
+   "evidence": "외계인 소재지만 이야기 중심은 두 사람의 사랑",
+   "confidence": 0.8,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "어조 +: 다정함과 진심을 건네는 시선, 소개에 문장으로 쓰임",
+     "pull": "",
+     "gain": "마음 −: 소설이며 사랑 이야기가 남기는 것",
+     "world": "딴 세상 −: 외계인 경민이 실제 등장"
+    },
+    "missing": [],
+    "suggest": "로맨스",
+    "why": "외계인은 나오나 사랑 이야기가 중심 줄기"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-1 pull)",
+    "근거가 책소개를 베낌 (AI-2 pull)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/76106687",
+   "moved_from": "SF·판타지",
+   "rules_version": "v3.6",
+   "draft": {
+    "genre": "로맨스",
+    "axes": {
+     "temp": 1,
+     "pull": 1,
+     "gain": -1,
+     "world": -1
+    },
+    "one_liner": "외계인과 지구인의 드문 사랑을 다정한 문장으로 만나 볼래요?",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
+  },
+  {
+   "isbn": "9791130669458",
+   "title": "삼체 0 : 구상섬전",
+   "author": "류츠신 저/허유영 역",
+   "pages": 464,
+   "entry": "leaf",
+   "genre": "SF·판타지",
+   "axes": {
+    "temp": null,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "끝맺음·어조·장면 모두 소개에 없음, 목차도 서곡·상중하뿐",
+    "pull": "소설 형식의 몰입·이야기 약한 신호, 문체 칭찬 없음",
+    "gain": "소설 형식 기본값 마음, 지식 전달이 목적이라는 말 없음",
+    "world": "SF 장르, 삼체 세계관의 시작이라 딴 세상 쪽"
+   },
+   "missing": [
+    "temp"
+   ],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "삼체 세계관이 어디서 시작됐는지, 그 상상력의 뿌리를 따라가 볼래요?",
+   "evidence": "SF 소설로 세계관의 기원을 다루는 프리퀄",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": null,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "끝맺음·어조·장면 모두 소개에 없음: 신호 없음",
+     "pull": "몰입 −: 소설 형식 신호, 문체 칭찬 없음",
+     "gain": "마음 −: 소설 형식 신호, 지식이 주된 목적 아님",
+     "world": "딴 세상 −: SF 소설, 구상섬전 세계관의 시작"
+    },
+    "missing": [
+     "temp"
+    ],
+    "suggest": "",
+    "why": "SF 상상이 이야기를 움직이는 SF 소설"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/152953927",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791167375810",
+   "title": "대각선 논법",
+   "author": "박건률 등저",
+   "pages": 252,
+   "entry": "leaf",
+   "genre": "SF·판타지",
+   "axes": {
+    "temp": null,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "끝맺음·어조·장면 신호 없음: 수상작품집 소개뿐",
+    "pull": "몰입 −: 소설 형식이 약한 이야기 신호, 문체 칭찬 없음",
+    "gain": "마음 −: 소설 형식 신호, 지식을 주목적으로 내세우지 않음",
+    "world": "딴 세상 −: SF 수상작들, '확률적 유령' 등 비현실 소재"
+   },
+   "missing": [
+    "temp"
+   ],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "이공계 대학생들이 과학적 상상력으로 그려 낸 새로운 한국 SF를 만나 볼래요?",
+   "evidence": "이공계 SF 공모전 수상 소설 모음",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": null,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "끝맺음·어조·장면 신호 없음: 수상작품집 소개와 목차뿐",
+     "pull": "몰입 −: 소설 형식의 약한 신호, 문체 칭찬 없음",
+     "gain": "마음 −: 소설 형식 신호, 지식이 주목적이라는 말 없음",
+     "world": "딴 세상 −: 한국 SF 수상작품집, 과학적 상상력"
+    },
+    "missing": [
+     "temp"
+    ],
+    "suggest": "",
+    "why": "한국 SF 수상 작품집이라 SF·판타지에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/154160047",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791198173898",
+   "title": "비가 오면 열리는 상점 (영미권 출간기념 리커버)",
+   "author": "유영광 저",
+   "pages": 328,
+   "entry": "leaf",
+   "genre": "SF·판타지",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "어조 +: 감동 모험, 행복을 사는 상점이라는 다정한 설정",
+    "pull": "몰입 −: 소설 형식이 약한 신호, 문체 칭찬 없고 모험 전개",
+    "gain": "마음 −: 소설 형식 신호, 지식을 앞세우지 않음",
+    "world": "딴 세상 −: 도깨비·안내묘가 실제로 나오는 상점"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "비 오는 날에만 열리는 신비한 상점에서 도깨비들과 모험을 떠나 볼래요?",
+   "evidence": "도깨비·안내묘가 나오는 모험 판타지라 맞음",
+   "confidence": 0.82,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "어조 +: 감동 모험 판타지, 행복을 사는 상점 / 끝맺음 흐릿(무지개)",
+     "pull": "몰입 −: 상점마다 이어지는 모험·사건 전개, 문체 칭찬 없음",
+     "gain": "마음 −: 소설 형식, 지식이 목적이라는 말 없음",
+     "world": "딴 세상 −: 도깨비·안내묘가 실제로 등장하는 판타지"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "도깨비와 마법 상점이 이야기를 움직이는 판타지"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/119577650",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791193098134",
+   "title": "세령",
+   "author": "이봉선(봉산탈출) 저",
+   "pages": 264,
+   "entry": "leaf",
+   "genre": "SF·판타지",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": -1
+   },
+   "signals": {
+    "temp": "어조·장면 −: 사형 집행인, 굶주린 아이들을 파는 일, 죽음 등 아픈 ",
+    "pull": "소설 형식 신호로 몰입 −: 문체 칭찬 없고 화마다 사건이 이어짐",
+    "gain": "소설 형식 신호로 마음 −: 타로는 소재일 뿐 이야기가 남김",
+    "world": "딴 세상 −: 사극 판타지, 신령·무당의 예언과 신비 요소가 등장"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "광대부터 세계까지, 타로 카드를 사극 판타지로 풀어낸 이야기에 빠져 볼래요?",
+   "evidence": "사극 판타지 타로를 바탕으로 한 신령·예언 연작",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "signals": {
+     "temp": "장면 −: 사형 집행인·죽음·굶주린 아이들 같은 아픈 장면",
+     "pull": "몰입 −: 소설 형식, 문체 칭찬 없음, 회차별 이야기 전개",
+     "gain": "마음 −: 소설 형식, 지식이 주된 목적이 아님",
+     "world": "딴 세상 −: 사극 판타지, 신령·무당·여우 등이 등장"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "사극 판타지 타로 연작 소설이라 SF·판타지에 맞음"
+   },
+   "flags": [],
+   "issues": [
+    "근거 약함(겹치는 단어 1개)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/125554858",
+   "rules_version": "v3.6",
+   "draft": {
+    "genre": "SF·판타지",
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": -1
+    },
+    "one_liner": "타로 스물두 장의 상징을 옛 조선풍 이야기로 풀어낸 연작에 빠져 볼래요?",
+    "status": "reserve"
+   },
+   "reviewed": true
+  },
+  {
+   "isbn": "9791187142379",
+   "title": "명상록",
+   "author": "마르쿠스 아우렐리우스 저/박문재 역",
+   "pages": 272,
+   "entry": "leaf",
+   "genre": "인문",
+   "axes": {
+    "temp": 0,
+    "pull": 0,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "0 해당 없음: 끝맺음·어조가 소개·목차에 드러나지 않음",
+    "pull": "0 해당 없음: 문체 칭찬도 끄는 흐름도 없음, 단편 모음 형식뿐",
+    "gain": "마음 −: 내면을 지키는 성찰과 경구를 건네는 책",
+    "world": "현실 +: 실제 황제의 통치·전쟁 중 기록, 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "황제가 전장에서 적어 내려간 단상으로 내면을 단단히 세우는 법을 만나 볼래요?",
+   "evidence": "삶의 태도를 다룬 철학 고전이라 인문",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 끝맺음·어조 신호 없음, 단편 사유 기록",
+     "pull": "해당 없음 0: 문체 칭찬도 끄는 흐름도 없음, 번역·해제 소개뿐",
+     "gain": "마음: 내면을 지키는 성찰·경구를 건네는 책",
+     "world": "현실: 비소설, 실제 황제의 전쟁·통치 시대"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "철학자 황제의 성찰록이라 삶의 태도를 다루는 인문에 맞"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/59463540",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791185121505",
+   "title": "비폭력대화",
+   "author": "마셜 B. 로젠버그 저/캐서린 한 역",
+   "pages": 380,
+   "entry": "leaf",
+   "genre": "인문",
+   "axes": {
+    "temp": 1,
+    "pull": 0,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 비난 없이 공감하며 연결하도록 곁에서 안내",
+    "pull": "0 해당 없음: 끄는 힘을 알 수 있는 신호 없음",
+    "gain": "마음 −: 느낌·욕구를 알아차리고 공감하는 연습",
+    "world": "현실 +: 비소설이라 일상 인간관계가 무대"
+   },
+   "missing": [],
+   "suggest": "대화·관계",
+   "one_liner_style": "question",
+   "one_liner": "비난 없이 내 마음을 말하고 상대의 욕구를 들어 볼래요?",
+   "evidence": "대화 방법과 연습 단계가 중심이라 🎯 대화·관계",
+   "confidence": 0.82,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 비난 없이 공감·연결하는 다정한 방법을 건넴",
+     "pull": "해당 없음 0: 끄는 힘을 알 수 있는 문체·흐름 신호 없음",
+     "gain": "마음 −: 공감·느낌·욕구를 알아차리고 표현하게 함",
+     "world": "현실 +: 비소설, 일상 인간관계가 무대"
+    },
+    "missing": [],
+    "suggest": "대화·관계",
+    "why": "대화법 훈련을 알려 주는 실천서라 인문이 아님"
+   },
+   "flags": [
+    "fits"
+   ],
+   "issues": [],
+   "status": "dropped",
+   "link": "https://www.yes24.com/product/goods/129394805",
+   "requeued_to": {
+    "entry": "target",
+    "slot": "대화·관계"
+   },
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791173578601",
+   "title": "이향인",
+   "author": "라미 카민스키 저/최지숙 역",
+   "pages": 264,
+   "entry": "leaf",
+   "genre": "인문",
+   "axes": {
+    "temp": 1,
+    "pull": 0,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 이해와 수용, 내버려두는 조언으로 독자 곁에 섬",
+    "pull": "몰입 −: 사례·상담 이야기와 유형 풀이로 끌고 감",
+    "gain": "알게 됨 +: 이향인 개념과 특성을 설명하고 구분해 줌",
+    "world": "현실 +: 비소설이라 현실 세계"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "무리에 섞이기 힘든 성향을 새 이름으로 이해하고, 혼자여도 괜찮은 삶을 만나볼래요?",
+   "evidence": "집단 속 개인의 성향과 삶의 태도를 다룸",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": 0,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "",
+     "pull": "0 해당 없음: 끄는 힘을 알 수 있는 신호 없음",
+     "gain": "알게 됨: 성향의 특성·원리를 설명하고 테스트 제공",
+     "world": "현실: 비소설이라 현실 세계"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "성향과 삶의 태도를 다루는 인문서"
+   },
+   "flags": [],
+   "issues": [
+    "근거가 책소개를 베낌 (AI-2 temp)"
+   ],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/182009922",
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": 1,
+     "pull": 0,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 이향인의 미덕·수용을 독자 곁에서 건넴, 맺음도 나만의 삶",
+     "pull": "0 해당 없음: 문체 칭찬도 끌고 가는 흐름도 소개에 없음",
+     "gain": "알게 됨: 이향인이라는 성향의 개념·특성을 설명",
+     "world": "현실: 비소설, 현실 사회가 무대"
+    },
+    "missing": []
+   },
+   "settled": {
+    "pull": 0
+   },
+   "a_was": {
+    "pull": -1
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791197977046",
+   "title": "여덟 단어",
+   "author": "박웅현 저",
+   "pages": 272,
+   "entry": "leaf",
+   "genre": "인문",
+   "axes": {
+    "temp": 1,
+    "pull": 0,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 삶을 세울 화두를 곁에서 건네는 제안, 인생 장은 희망",
+    "pull": "해당 없음 0: 문체 칭찬도 끄는 흐름도 소개에 없음",
+    "gain": "마음 −: 자존·인생 같은 화두로 성찰을 건넴",
+    "world": "현실 +: 비소설, 현실의 삶을 다룸"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "삶의 중심을 세울 여덟 가지 화두를 곁에서 건네받아 볼래요?",
+   "evidence": "삶의 태도 화두를 제안하는 인문서",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 삶을 바로 세울 화두를 곁에서 건넴, 끝맺음 '민들레 씨앗' ",
+     "pull": "0 해당 없음: 문체 칭찬도 사례·흐름으로 끈다는 말도 없음",
+     "gain": "마음 −: 화두를 건네 생각하고 느끼게 함",
+     "world": "현실 +: 비소설, 삶과 인생을 다룸"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "삶의 태도를 여덟 화두로 건네는 인문서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/119410542",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791192559957",
+   "title": "그라시안의 사람을 읽는 눈",
+   "author": "발타자르 그라시안 저/김철 편역",
+   "pages": 232,
+   "entry": "leaf",
+   "genre": "인문",
+   "axes": {
+    "temp": 0,
+    "pull": 0,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "해당 없음 0: 경계와 다정함이 섞여 끝맺음·어조 모두 약함",
+    "pull": "해당 없음 0: 잠언 모양뿐, 문체 칭찬이나 흐름 없음",
+    "gain": "알게 됨 +: 사람을 읽는 관찰 기술을 알려 줌",
+    "world": "현실 +: 비소설, 실제 인간관계와 400년 전 궁정"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "사람 때문에 지친 날, 관계를 읽는 눈을 길러 볼래요?",
+   "evidence": "인간 관찰 잠언으로 삶의 태도를 다룸",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 0,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 마지막 장 '인격'은 단어 하나, 어조는 격언 나열",
+     "pull": "해당 없음 0: 소개에 문체 칭찬도 끄는 흐름도 없음, 격언 모음 모양뿐",
+     "gain": "마음 −: 사람과 나를 다루는 법을 성찰하게 하는 격언",
+     "world": "현실 +: 비소설, 궁정·인간관계 등 실제 세상"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "격언으로 인간 본성과 삶의 태도를 다룬 인문서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/194502712",
+   "third": {
+    "fits": true,
+    "suggest": "",
+    "axes": {
+     "temp": 0,
+     "pull": 0,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "해당 없음 0: 격언 모음이라 끝맺음·어조 방향이 약함",
+     "pull": "해당 없음 0: 문체 칭찬도 끄는 흐름도 없음, 격언 목차 모양뿐",
+     "gain": "마음 −: 인격에 닿는 성찰, 나를 다루는 법",
+     "world": "현실 +: 비소설, 400년 전 스페인 궁정 사회"
+    },
+    "missing": []
+   },
+   "settled": {
+    "gain": -1
+   },
+   "a_was": {
+    "gain": 1
+   },
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9791167743091",
+   "title": "사고외주",
+   "author": "홍진기 저",
+   "pages": 152,
+   "entry": "leaf",
+   "genre": "인문",
+   "axes": {
+    "temp": -1,
+    "pull": -1,
+    "gain": -1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 −: 똑똑한 무능함·잃게 되는 것 등 비판이 여러 장에 이어짐",
+    "pull": "몰입 −: 강의실 사례와 질문 장면으로 끌고 감, 문장 칭찬 없음",
+    "gain": "마음 −: 생각하는 태도와 책임을 성찰하게 하는 책",
+    "world": "현실 +: 대학 강의실과 AI 시대 현실을 다루는 비소설"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "AI에 생각을 맡길수록 무엇이 흐려지는지 돌아보고 내 판단을 지키는 길을 찾을까요?",
+   "evidence": "AI 시대 사고 주도권과 삶의 태도를 성찰",
+   "confidence": 0.72,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": -1,
+     "pull": -1,
+     "gain": -1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 −: 똑똑한 무능함, 사라지는 사람 등 경고·비판이 이어짐",
+     "pull": "몰입 −: 강의실 사례와 흐름으로 끌고 감",
+     "gain": "마음 −: 생각의 주도권·책임을 성찰하게 함",
+     "world": "현실 +: 비소설, 대학 강의실과 AI 시대"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "AI 시대 생각·삶의 태도를 묻는 인문서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/192173353",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788934933878",
+   "title": "팩트풀니스",
+   "author": "한스 로슬링,올라 로슬링,안나 로슬링 뢴룬드 공저/이창신 역",
+   "pages": 484,
+   "entry": "leaf",
+   "genre": "사회·시사",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "끝맺음 +: 마지막 당부와 맺음말, 어조는 편견을 덜어주는 쪽",
+    "pull": "몰입 −: 사례·데이터와 통계 퀴즈로 끌고 감",
+    "gain": "알게 됨 +: 세계 사실을 설명하고 오해를 바로잡음",
+    "world": "현실 +: 실제 세계와 통계를 다루는 비소설"
+   },
+   "missing": [],
+   "suggest": "과학 교양",
+   "one_liner_style": "question",
+   "one_liner": "데이터로 세상을 다시 보면 두려움과 오해가 줄어드는 걸 느껴볼래요?",
+   "evidence": "통계·사실로 세계 오해를 바로잡는 설명서",
+   "confidence": 0.5,
+   "fits": false,
+   "second": {
+    "fits": false,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "끝맺음 +: 사실충실성 실천·맺음말로 닫힘, 어조 다정",
+     "pull": "몰입 −: 퀴즈·데이터·사례와 인물 이야기로 끌고 감",
+     "gain": "알게 됨: 데이터로 세계 실상을 알려 주는 책",
+     "world": "현실 +: 비소설, 실제 세계의 통계를 다룸"
+    },
+    "missing": [],
+    "suggest": "사회·시사",
+    "why": "삶의 태도가 아닌 세계 데이터 해설이 중심"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/132226737",
+   "third": {
+    "fits": false,
+    "suggest": "사회·시사",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "끝맺음 +: 마지막 장이 사실충실성 실천, 어조는 세상을 희망적으로 보게",
+     "pull": "몰입: 데이터·사례·퀴즈 결과로 끌고 감",
+     "gain": "알게 됨: 세계 현황 사실을 알려 주고 오해를 바로잡음",
+     "world": "현실: 비소설, 실제 세계의 통계와 사회"
+    },
+    "missing": []
+   },
+   "moved_from": "인문",
+   "settled": {
+    "slot": "사회·시사"
+   },
+   "rules_version": "v3.6",
+   "draft": {
+    "genre": "사회·시사",
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "one_liner": "데이터로 세상을 다시 보면 두려움과 오해가 줄어드는 걸 느껴볼래요?",
+    "status": "picked"
+   },
+   "reviewed": true,
+   "sampled": true
+  },
+  {
+   "isbn": "9791124038833",
+   "title": "처음 만나는 철학의 세계",
+   "author": "성창원 저",
+   "pages": 320,
+   "entry": "leaf",
+   "genre": "인문",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 친절한 수업, 독자를 일상 질문으로 이끎",
+    "pull": "몰입 −: 철학자들의 논쟁 속으로 끌어들이는 흐름",
+    "gain": "알게 됨 +: 철학 입문서로 개념·논쟁을 설명",
+    "world": "현실 +: 비소설, 일상 문제를 다룸"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "일상의 고민을 철학자들의 논쟁으로 함께 따져 보며 생각의 폭을 넓혀 볼래요?",
+   "evidence": "질문 중심 철학 입문서, 독자에게 다정한 어조",
+   "confidence": 0.8,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 친절한 수업, 독자 곁에서 질문을 일상으로 끌어옴",
+     "pull": "몰입 −: 철학자들의 논쟁 속으로 독자를 끌어들이며 이끎",
+     "gain": "알게 됨: 철학 입문서로 개념·논쟁을 설명하는 일이 중심",
+     "world": "현실: 비소설, 행복·전쟁·안락사·AI 등 실제 문제"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "삶의 태도·도덕을 묻는 철학 입문서라 인문에 맞음"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/196359766",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  },
+  {
+   "isbn": "9788925568423",
+   "title": "나민애와 다시 읽는 고전",
+   "author": "EBS 제작진 기획/나민애 저",
+   "pages": 304,
+   "entry": "leaf",
+   "genre": "인문",
+   "axes": {
+    "temp": 1,
+    "pull": -1,
+    "gain": 1,
+    "world": 1
+   },
+   "signals": {
+    "temp": "어조 +: 친근하고 유쾌하게 독자 곁에서 고전을 안내",
+    "pull": "몰입 −: 독서 모임처럼 인물·사건·대중문화로 이끌어 감",
+    "gain": "알게 됨: 고전 33편의 핵심과 시대 배경을 설명",
+    "world": "현실: 비소설 안내서라 현실"
+   },
+   "missing": [],
+   "suggest": "",
+   "one_liner_style": "question",
+   "one_liner": "어렵게 느껴졌던 동서양 고전을 열 가지 주제로 가볍게 만나 볼래요?",
+   "evidence": "고전 안내서, 문학 읽기 중심이라 인문에 맞음",
+   "confidence": 0.7,
+   "fits": true,
+   "second": {
+    "fits": true,
+    "axes": {
+     "temp": 1,
+     "pull": -1,
+     "gain": 1,
+     "world": 1
+    },
+    "signals": {
+     "temp": "어조 +: 친근하고 유쾌하게 독자 곁에서 고전을 안내",
+     "pull": "몰입 −: 독서 모임처럼 작품 이야기와 인물 사례로 끌고 감",
+     "gain": "알게 됨: 고전 33편의 핵심과 의미를 설명해 줌",
+     "world": "현실: 비소설이라 현실"
+    },
+    "missing": [],
+    "suggest": "",
+    "why": "고전을 읽고 해석하는 인문 안내서"
+   },
+   "flags": [],
+   "issues": [],
+   "status": "picked",
+   "link": "https://www.yes24.com/product/goods/195235826",
+   "auto": "ai-agree",
+   "rules_version": "v3.6"
+  }
+ ]
+}
