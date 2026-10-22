@@ -470,9 +470,18 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_7():
+def test_the_dictionary_is_v3_8():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.7"   # 10-22: what a comic is — panels stay out, prose with pictures is judged as any book
+    assert rules_version() == "v3.8"   # 10-22: play and activity books stay out, not held as parenting books
+
+
+def test_the_v3_8_rules_reach_both_prompts():
+    """10-22: a book that is mostly play or activities to follow is left out — also for parents, and with no candidate
+    name, so checks.HELD_TOPICS does not hold it as a parenting book."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**놀이·활동책은 넣지 않는다 (🍃·🎯 공통, 10-22 사용자)**" in p
+        assert "**키워드 후보도 적지 않는다**" in p and "**아이와 함께 하는 놀이·활동 모음**(0절, 10-22)" in p
 
 
 def test_the_v3_7_rules_reach_both_prompts():
