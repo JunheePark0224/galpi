@@ -470,9 +470,18 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_6():
+def test_the_dictionary_is_v3_7():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.6"   # 10-20: 육아·자녀 교육 waits under its candidate name, parents only
+    assert rules_version() == "v3.7"   # 10-22: what a comic is — panels stay out, prose with pictures is judged as any book
+
+
+def test_the_v3_7_rules_reach_both_prompts():
+    """10-22: both passes are told what a comic is — panels out, prose with pictures judged like any book, by the form
+    inside the book, a clear comic left out (so it never reaches a person)."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**만화는 넣지 않는다 — 무엇이 만화인가 (🍃·🎯 공통, 10-22 사용자)**" in p
+        assert "**칸 만화**" in p and "**그림이 곁들여진 글**" in p and "**누가 봐도 칸 만화**면 맞지 않음으로 답한다" in p
 
 
 def test_the_v3_6_rules_reach_both_prompts():
