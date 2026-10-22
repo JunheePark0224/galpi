@@ -8,7 +8,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from pipeline.candidates import Candidate  # noqa: E402
-from pipeline.checks import AUTO, copied_run, crossed_to, decide, disagreements, moved_to, needs_person, redecide, rule_issues, scrub, split_issues  # noqa: E402
+from pipeline.checks import AUTO, copied_run, crossed_to, decide, hold_comic, disagreements, moved_to, needs_person, redecide, rule_issues, scrub, split_issues  # noqa: E402
 from pipeline.merge import additions_doc, keyword_hints, record, write_doc  # noqa: E402
 from pipeline.tagger import parse  # noqa: E402
 from pipeline_fakes import INTRO, TOC, check_answer, tag_answer  # noqa: E402
@@ -259,3 +259,20 @@ def test_redecide_holds_a_stored_parenting_book():
     assert redecide({**stored, "keyword_candidate": "육아·자녀 교육"}, auto_merge=False) == ("reserve", None)
     gone = {**stored, "fits": False, "second": {"fits": False, "suggest": ""}}
     assert redecide({**gone, "keyword_candidate": "육아·자녀 교육"}, auto_merge=False) == ("reserve", None)
+
+
+@pytest.mark.parametrize("words", ["심리학 웹툰이 돌아왔다", "인스타툰 작가의 첫 책", "학습만화로 배우는", "그래픽 노블", "코믹스 원작"])
+def test_a_book_that_may_be_a_comic_goes_to_a_person(words):
+    """10-22 (user): a book both passes keep but whose title or intro calls it a comic may be panels or prose with
+    pictures — only a person who looked inside can tell, so it is asked ("어디에 둘지") instead of auto-accepted."""
+    assert hold_comic("picked", AUTO, [], "제목", words, auto_merge=False) == ("review", None, ["fits"])
+    assert hold_comic("picked", AUTO, [], "제목", words, auto_merge=True) == ("reserve", None, ["fits"])
+    assert hold_comic("review", None, ["way"], "제목", words, False) == ("review", None, ["way", "fits"])
+    assert hold_comic("review", None, ["fits"], "제목", words, False) == ("review", None, ["fits"])
+
+
+def test_a_clear_comic_left_out_by_both_passes_stays_out_and_other_books_pass():
+    """10-22 (user): a book both passes leave out as a comic is dropped without asking; a book with no comic word is as
+    decided."""
+    assert hold_comic("dropped", None, ["fits"], "제목", "웹툰 단행본", False) == ("dropped", None, ["fits"])
+    assert hold_comic("picked", AUTO, [], "처음 주식 공부", INTRO, False) == ("picked", AUTO, [])
