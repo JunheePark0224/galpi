@@ -13,6 +13,7 @@ merging the PR without reviewing cannot put an unreviewed flagged book into the 
 looks before merge, so it waits too); otherwise picked and auto-accepted (`auto: "ai-agree"`) — counted apart from
 human-reviewed books (agreement.py). Only "picked" books reach books.json (web/src/lib/books/additions.ts).
 """
+import re
 from difflib import SequenceMatcher
 
 from check_one_liners import check_line, form_issue
@@ -180,6 +181,22 @@ def status_of(flags: list[str], issues: list[str], auto_merge: bool) -> tuple[st
     if flags:
         return ("reserve" if auto_merge else "review"), None
     return "picked", AUTO
+
+
+# Words that say a book may be a comic (label-dictionary 0절, 10-22 user): 웹툰·인스타툰·심리툰, 만화, 코믹스, 그래픽 노블.
+COMIC = re.compile(r"툰|만화|코믹스|그래픽\s?노블")
+
+
+def hold_comic(status: str, auto: str | None, flags: list[str], title: str, intro: str,
+               auto_merge: bool) -> tuple[str, str | None, list[str]]:
+    """(status, auto mark, flags) after the comic rule (10-22, user): a clear comic is left out by both passes (the
+    dictionary) and stays dropped without asking; a book kept although its title or intro calls it a comic may be panels
+    or prose with pictures, which only a person who looked inside can tell — it is asked "어디에 둘지" (the fits flag),
+    never auto-accepted."""
+    if status == "dropped" or not COMIC.search(f"{title} {intro}"):
+        return status, auto, flags
+    flags = flags if "fits" in flags else [*flags, "fits"]
+    return (("reserve" if auto_merge else "review") if status == "picked" else status), None, flags
 
 
 def redecide(book: dict, auto_merge: bool) -> tuple[str, str | None]:

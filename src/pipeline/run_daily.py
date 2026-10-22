@@ -50,7 +50,7 @@ from . import batched, requeue
 from .axis_check import retry as retry_axes
 from .batch import BatchError, parse as parse_batch
 from .candidates import Candidate, find, known_from, yes24_env
-from .checks import crossed_to, decide, disagreements, rule_issues
+from .checks import crossed_to, decide, disagreements, hold_comic, rule_issues
 from .config import Config, load_config
 from .gaps import PER_SLOT, Want, plan_day
 from .keyword_candidates import excluded_names
@@ -155,6 +155,7 @@ def tag_one(client, cfg: Config, prompts: dict, vocab: dict, cand: Candidate, br
     issues = rule_issues(cand.entry, a, cand.title, f"{cand.intro} {cand.toc}", b)
     crossed = routed and not requeued and crossed_to(cand.entry, a, b)
     status, auto = ("dropped", None) if crossed else decide(a, b, flags, issues, cfg.auto_merge, cand.entry)
+    status, auto, flags = hold_comic(status, auto, flags, cand.title, cand.intro, cfg.auto_merge)
     rec = record(cand, a, b, flags, issues, status, auto, hints)  # record() blanks any field that copied YES24 text
     rec = _third_pass(client, cfg, prompts, vocab, cand, breaker, ledger, rec, requeued) if routed else rec
     return {**rec, "rules_version": rules or rules_version()}, "ok"
