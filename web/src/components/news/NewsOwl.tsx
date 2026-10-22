@@ -10,6 +10,8 @@ const TITLE = "갈피 소식통";
 const LINE = "이번 주에 바뀐 것";
 /** Contains the visible words (WCAG 2.5.3). */
 const LABEL = `${TITLE} — ${LINE}`;
+/** 10-22 (user, mockup A `docs/mockups/2026-10-22-news-promise.html`): how books get onto the shelf, on top of every week. */
+export const PROMISE = "갈피는 아무 책이나 꽂지 않아요. 기준표에 맞는 책만, 애매하면 사람이 확인해서 넣어요.";
 
 /**
  * S-01 PRD F-28 / DESIGN C-33: the owl beside the 갈피 우체통 — the slot takes letters in, the owl brings news out. As quiet
@@ -51,6 +53,10 @@ export function NewsOwl() {
         <Sheet title={TITLE} onClose={() => setOpen(false)}>
           <div ref={body} className={styles.sheet}>
             <p className={styles.lead}>한 주 동안 갈피에서 바뀐 것을 모아 전해요.</p>
+            <p className={styles.promise}>
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path d="M6 2h12v20l-6-5-6 5z" fill="#b23a48" /></svg>
+              {PROMISE}
+            </p>
             {NEWS_WEEKS.map((week, i) => (
               <section key={week.start} className={styles.week}>
                 <h3 className={styles.weekTitle}>

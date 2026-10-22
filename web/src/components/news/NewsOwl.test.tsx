@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const track = vi.fn();
 vi.mock("@/lib/track/client", () => ({ track: (...a: unknown[]) => track(...a) }));
 import { latestWeek, NEWS_SEEN_KEY, NEWS_WEEKS, weekLabel } from "@/lib/news/news";
-import { NewsOwl } from "./NewsOwl";
+import { NewsOwl, PROMISE } from "./NewsOwl";
 
 const LATEST = latestWeek().start;
 const button = () => screen.getByRole("button", { name: /^갈피 소식통 — 이번 주에 바뀐 것/ });
@@ -40,6 +40,10 @@ describe("NewsOwl (S-01, PRD F-28, DESIGN C-33)", () => {
     fireEvent.click(button());
     const sheet = screen.getByRole("dialog", { name: "갈피 소식통" });
     expect(within(sheet).getByText("한 주 동안 갈피에서 바뀐 것을 모아 전해요.")).toBeInTheDocument();
+    // 10-22 (user, mockup A): how books get in, always on top — the bookmark icon is decoration only
+    const promise = within(sheet).getByText(PROMISE);
+    expect(promise.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
+    expect(promise.compareDocumentPosition(headings0(sheet)) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     const headings = within(sheet).getAllByRole("heading", { level: 3 }).map((h) => h.textContent);
     expect(headings).toEqual(NEWS_WEEKS.map((w, i) => (i === 0 ? `${weekLabel(w)}, 새 소식` : weekLabel(w))));
     for (const item of NEWS_WEEKS.flatMap((w) => w.items)) expect(within(sheet).getByText(item)).toBeInTheDocument();
@@ -72,3 +76,7 @@ describe("NewsOwl (S-01, PRD F-28, DESIGN C-33)", () => {
     expect(track).toHaveBeenLastCalledWith("news_opened", { has_unseen: false, latest_week: LATEST });
   });
 });
+
+function headings0(sheet: HTMLElement): HTMLElement {
+  return within(sheet).getAllByRole("heading", { level: 3 })[0];
+}
