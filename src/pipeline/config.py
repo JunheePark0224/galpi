@@ -1,6 +1,6 @@
 """data/pipeline/config.json — the knobs of the daily run (design 2-1) plus the blind second tagger's model (10-01).
 
-daily_count  books to add per day (D-C 50, then 30)          auto_merge  false: a person reviews the PR / true: merge
+daily_count  books to add per day (D-C 50, then 30; 100 since 10-25)          auto_merge  false: a person reviews the PR / true: merge
 sample_rate  share of a week's additions sampled after graduation   model / second_model  tagger (pass A) / checker (pass B)
 target_phase "launch" (before the 1,000-book launch) or "grow" (after it): which targets gaps.py fills up to (10-05)
 """

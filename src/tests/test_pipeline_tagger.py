@@ -470,9 +470,27 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_8():
+def test_the_dictionary_is_v3_10():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.8"   # 10-22: play and activity books stay out, not held as parenting books
+    assert rules_version() == "v3.10"   # 10-25: partisan political books stay out, whichever side
+
+
+def test_the_v3_10_rules_reach_both_prompts():
+    """10-25: a book whose centre is attacking or backing a party, politician or camp is left out — the same for either
+    side; a book explaining how politics works is judged like any other."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**정치 논쟁서는 넣지 않는다 — 어느 쪽이든 똑같이 (🍃·🎯 공통, 10-25 사용자)**" in p
+        assert "**공격하거나 편드는 것이 중심**" in p and "**어떻게 돌아가는지 설명**" in p
+
+
+def test_the_v3_9_rules_reach_both_prompts():
+    """10-25: a classic (pre-modern, called a classic in its intro) with immortals, ghosts or rebirth is a Korean or foreign
+    novel, its supernatural carried by the world axis; a modern retelling is judged by its content genre."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "| 고전 소설 ↔ SF·판타지·호러·괴담 (10-25 사용자) |" in p
+        assert "**작가의 나라로 한국 소설·외국 소설**" in p and "**현대 작가가 새로 쓴 판타지**" in p
 
 
 def test_the_v3_8_rules_reach_both_prompts():
