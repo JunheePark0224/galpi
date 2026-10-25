@@ -23334,5 +23334,1667 @@
    "world": 1
   },
   "keywords": []
+ },
+ {
+  "isbn": "9788935214433",
+  "title": "다산의 마지막 습관",
+  "author": "조윤제",
+  "pages": 340,
+  "one_liner": "흔들리는 마음을 오래된 옛 구절에 기대어 다시 세워 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 0,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194634034",
+  "title": "도파민의 배신",
+  "author": "강웅구 외",
+  "pages": 264,
+  "one_liner": "중독이 왜 의지력만의 문제가 아닌지 뇌과학과 임상 사례로 살펴볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788960909762",
+  "title": "오늘도 미술관에 다녀왔습니다",
+  "author": "김슬기",
+  "pages": 464,
+  "one_liner": "유럽 곳곳의 미술관을 한 해 동안 거닐며 작품에 얽힌 사연을 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788931461664",
+  "title": "알고 보면 더 재밌는 디자인 원리로 그림 읽기",
+  "author": "김지훈",
+  "pages": 216,
+  "one_liner": "그림이 왜 편안하거나 어색한지 디자인 원리로 말해 보고 싶나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791192025230",
+  "title": "멀리도 가까이도 느긋한 여행",
+  "author": "마스다 미리",
+  "pages": 200,
+  "one_liner": "지친 날 어디로 떠나면 좋을까요? 느긋한 여행의 기분을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194966234",
+  "title": "칠십 여행",
+  "author": "이여진",
+  "pages": 244,
+  "one_liner": "은퇴 뒤 세계를 걸으며 풍경 속에서 나의 시간을 돌아보고 싶을래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788994228341",
+  "title": "파리는 날마다 축제",
+  "author": "어니스트 헤밍웨이",
+  "pages": 368,
+  "one_liner": "가난했지만 빛나던 젊은 날의 파리를 작가의 발걸음으로 함께 걸어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193712368",
+  "title": "베니스 건축 스케치북",
+  "author": "매튜 라이스",
+  "pages": 212,
+  "one_liner": "스케치와 이야기로 베니스의 건축과 역사, 일상까지 천천히 둘러볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791188806553",
+  "title": "피트 아우돌프 작품집 Piet Oudolf at Work",
+  "author": "피트 아우돌프 외",
+  "pages": 288,
+  "one_liner": "세계적 정원디자이너의 도면과 사진, 해설로 식재 철학을 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": 0,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791188502240",
+  "title": "고군산의 섬.섬.섬",
+  "author": "신진철",
+  "pages": 184,
+  "one_liner": "사라져 가는 섬과 그곳 사람들의 삶을 그림과 글로 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193153406",
+  "title": "박물관을 빌려드립니다 : 영국",
+  "author": "손봉기",
+  "pages": 288,
+  "one_liner": "두 박물관에서 무엇을 어떻게 볼지 도슨트의 이야기로 짚어 주는 길잡이를 만나볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791141603021",
+  "title": "구름 사람들",
+  "author": "이유리",
+  "pages": 352,
+  "one_liner": "구름 위에서 시작해 땅으로 내려오는 슬픈 삶의 이야기를 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937477515",
+  "title": "우리 착한 나진",
+  "author": "이서수",
+  "pages": 208,
+  "one_liner": "선의로 살아온 사람에게 불운이 닥친다면, 계속 착하게 지낼 수 있을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198363596",
+  "title": "젊음의 나라",
+  "author": "손원평",
+  "pages": 292,
+  "one_liner": "저출생과 고령화가 현실이 된 가까운 미래에서 젊음은 어떤 모습일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791173327377",
+  "title": "인생의 단맛을 보여주마",
+  "author": "김영민",
+  "pages": 235,
+  "one_liner": "웃다 보면 어느새 내 삶을 돌아보게 되는 이야기, 함께 걸어볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937428234",
+  "title": "비눗방울 퐁",
+  "author": "이유리",
+  "pages": 340,
+  "one_liner": "이별 앞에서도 가볍게 웃으며 다시 사랑해 볼 마음이 생기나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791141603359",
+  "title": "지상의 밤",
+  "author": "임선우",
+  "pages": 296,
+  "one_liner": "상실의 빈자리를 귀여운 상상으로 달래는 이야기, 함께 읽어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788932027098",
+  "title": "광장/구운몽",
+  "author": "최인훈",
+  "pages": 342,
+  "one_liner": "남과 북이 갈라선 시대, 한 사람의 비극과 갈망을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788936431556",
+  "title": "일억 번째 여름",
+  "author": "청예",
+  "pages": 256,
+  "one_liner": "끝나지 않는 여름 속에서 사랑하는 사람을 지키려는 이들의 이야기를 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "SF·판타지",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791171717217",
+  "title": "어떤 새의 이름을 아는 슬픈 너",
+  "author": "문보영",
+  "pages": 96,
+  "one_liner": "한 사람의 외로운 죽음 뒤에 남은 삶의 흔적을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788954697941",
+  "title": "두 사람의 인터내셔널",
+  "author": "김기태",
+  "pages": 336,
+  "one_liner": "평범한 사람들을 응원하는 단편 아홉 편, 펼쳐 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788936481667",
+  "title": "일곱개의 이름",
+  "author": "차병직",
+  "pages": 496,
+  "one_liner": "국경과 이념을 넘나든 한 사람의 생을 따라가며 20세기를 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791139716566",
+  "title": "드디어 만나는 아즈텍 신화",
+  "author": "카밀라 타운센드",
+  "pages": 248,
+  "one_liner": "아즈텍 사람들의 세계관과 제국의 흥망을 시대 순서로 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194096764",
+  "title": "한 권으로 읽는 향신료 세계사",
+  "author": "장 마리 펠트",
+  "pages": 314,
+  "one_liner": "작은 가루 하나가 제국과 바닷길을 어떻게 움직였는지 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788960173538",
+  "title": "문명과 수학",
+  "author": "EBS 제작팀",
+  "pages": 244,
+  "one_liner": "수와 0, 미적분이 어떻게 태어나 문명을 움직였는지 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791197871214",
+  "title": "벌거벗은 한국사 : 인물편",
+  "author": "tvN STORY 제작팀",
+  "pages": 320,
+  "one_liner": "역사 속 왕과 인물의 선택을 이야기로 따라가며 맥락을 이해해 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791140719983",
+  "title": "이토록 문학적인 서울 산책",
+  "author": "이순자",
+  "pages": 276,
+  "one_liner": "소설 속 장소를 직접 걸으며 서울의 옛 풍경과 사람들을 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193378601",
+  "title": "교양 한 그릇",
+  "author": "박찬일",
+  "pages": 232,
+  "one_liner": "매일 먹는 음식에 숨은 사연을 알고 나면 식탁이 더 즐거워질까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791187142126",
+  "title": "사마천 사기 56",
+  "author": "사마천",
+  "pages": 976,
+  "one_liner": "고대 중국의 제왕과 영웅들이 흥하고 망한 과정을 인물별로 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788920054747",
+  "title": "DK 지도로 보는 제2차 세계대전",
+  "author": "DK 제2차 세계대전 편집위원회",
+  "pages": 288,
+  "one_liner": "지도 위에서 전쟁의 흐름과 전략 변화를 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788965966647",
+  "title": "도파민 디톡스",
+  "author": "애나 렘키",
+  "pages": 200,
+  "one_liner": "스마트폰·게임 같은 과잉 자극에서 벗어나 4주 동안 뇌를 되돌리는 법을 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "습관"
+  ]
+ },
+ {
+  "isbn": "9791139716009",
+  "title": "운동의 뇌과학",
+  "author": "제니퍼 헤이스",
+  "pages": 336,
+  "one_liner": "몸을 움직여 불안과 우울을 덜고 잠과 노화까지 돌보는 운동법을 알려 줘요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "운동 습관",
+   "잠·회복"
+  ]
+ },
+ {
+  "isbn": "9788972995357",
+  "title": "구겨진 나를 쫙 펴주는 루틴 100가지",
+  "author": "구도 다카후미",
+  "pages": 240,
+  "one_liner": "기분이 가라앉는 날 가볍게 따라 할 수 있는 작은 행동으로 몸과 마음을 달래 봐요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "운동 습관",
+   "잠·회복"
+  ]
+ },
+ {
+  "isbn": "9791193528419",
+  "title": "도파민 밸런스",
+  "author": "안철우",
+  "pages": 296,
+  "one_liner": "도파민에 휘둘리는 습관을 3단계 일지로 점검하고 균형 잡힌 일상을 되찾아요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "습관",
+   "집중력"
+  ]
+ },
+ {
+  "isbn": "9788997347285",
+  "title": "혈관 해독 : 10분 루틴",
+  "author": "밸류어블라이프",
+  "pages": 368,
+  "one_liner": "혈관과 순환을 중심으로 식사·수면·운동 루틴을 몸에 맞게 바꾸는 방법을 알려 줘요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "건강·운동",
+  "field": "습관·자기계발",
+  "topic": "건강·운동",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "잠·회복",
+   "운동 습관"
+  ]
+ },
+ {
+  "isbn": "9791124255131",
+  "title": "폰더 씨의 위대한 하루",
+  "author": "앤디 앤드루스",
+  "pages": 288,
+  "one_liner": "삶의 방향을 잃었을 때, 위인들을 만나는 하루가 어떤 용기를 줄까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937464386",
+  "title": "이반 일리치의 죽음",
+  "author": "레프 니콜라예비치 톨스토이",
+  "pages": 144,
+  "one_liner": "삶이 사실은 내리막이었다면, 죽음 앞에서 나는 무엇을 돌아볼까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937463211",
+  "title": "육체의 악마",
+  "author": "레몽 라디게",
+  "pages": 212,
+  "one_liner": "어긋난 사랑에 휘말린 소년의 마음을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788932916804",
+  "title": "돈키호테 1",
+  "author": "미겔 데 세르반테스 사아베드라",
+  "pages": 922,
+  "one_liner": "풍차에 돌진하는 괴짜 기사와 종자의 엉뚱한 여정을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937465000",
+  "title": "압록강은 흐른다",
+  "author": "이미륵",
+  "pages": 252,
+  "one_liner": "3·1운동 뒤 압록강을 건너 독일로 망명한 청년의 자전적 이야기를 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788954641548",
+  "title": "너무 시끄러운 고독",
+  "author": "보후밀 흐라발",
+  "pages": 144,
+  "one_liner": "책 더미 속에서 홀로 늙어 간 사람의 독백을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "외국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791175240841",
+  "title": "초판본 탈무드",
+  "author": "유대교 랍비",
+  "pages": 212,
+  "one_liner": "오랜 세월 유대 랍비들이 전한 지혜 이야기를 짧은 일화로 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791187192787",
+  "title": "나는 당신이 살았으면 좋겠습니다",
+  "author": "안경희",
+  "pages": 240,
+  "one_liner": "감정 기복으로 힘든 날, 같은 병을 앓은 의사의 곁을 느껴 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791195522859",
+  "title": "내 안에 삶의 나침반이 있다",
+  "author": "법상",
+  "pages": 324,
+  "one_liner": "인간관계와 가족 속에서 흔들릴 때 단순한 답으로 마음을 다잡아 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 0,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198502513",
+  "title": "나에게 안녕을 묻는다",
+  "author": "정모래",
+  "pages": 144,
+  "one_liner": "오늘은 나에게 잘 지냈냐고 안부를 물어볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791156758426",
+  "title": "나의 F코드 이야기",
+  "author": "이하늬",
+  "pages": 296,
+  "one_liner": "우울과 불안을 안고도 살아가는 한 사람의 4년을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788958270096",
+  "title": "몰입 flow",
+  "author": "미하이 칙센트미하이",
+  "pages": 528,
+  "one_liner": "즐거움과 행복이 어디서 오는지 의식의 원리로 풀어 보고 싶나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 0,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194755791",
+  "title": "도파민형 인간",
+  "author": "대니얼 Z. 리버먼 외",
+  "pages": 328,
+  "one_liner": "욕망과 중독, 창조성, 정치 성향까지 도파민이 어떻게 움직이는지 궁금하진 않나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194413578",
+  "title": "달리기 인류",
+  "author": "마이클 크롤리",
+  "pages": 384,
+  "one_liner": "에티오피아 선수들 곁에서 달리기가 삶에서 갖는 뜻을 들여다보고 싶나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198404435",
+  "title": "그저 달리기인 줄 알았는데 삶이었다",
+  "author": "강주원",
+  "pages": 376,
+  "one_liner": "달리며 넘어지고 일어서는 동안 어떤 마음이 자라는지 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791195601073",
+  "title": "칼뱅, 자본주의의 고삐를 잡다",
+  "author": "이오갑",
+  "pages": 608,
+  "one_liner": "16세기 제네바에서 칼뱅이 부자의 탐욕을 어떻게 다뤘는지 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791185121505",
+  "title": "비폭력대화",
+  "author": "마셜 B. 로젠버그",
+  "pages": 380,
+  "one_liner": "비난 없이 내 마음을 말하고 상대의 느낌과 욕구를 듣는 대화 방법을 익혀요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "대화·관계",
+  "field": "마음·관계",
+  "topic": "대화·관계",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "말투·대화법",
+   "갈등·무례 대처"
+  ]
+ },
+ {
+  "isbn": "9788937837654",
+  "title": "정리하는 뇌",
+  "author": "대니얼 J. 레비틴",
+  "pages": 636,
+  "one_liner": "주의와 기억이 일하는 방식을 알고 나면 시간과 결정도 달리 보일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "과학 교양",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791130635873",
+  "title": "왜 리더인가",
+  "author": "이나모리 가즈오",
+  "pages": 224,
+  "one_liner": "리더로서 어떤 마음을 지니고 일에 임할지 곰곰이 되짚어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 0,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193378328",
+  "title": "쓰기의 미래",
+  "author": "나오미 배런",
+  "pages": 628,
+  "one_liner": "AI가 글을 대신 쓰는 시대에 사람의 읽고 쓰는 힘은 어디로 향할까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788991418394",
+  "title": "산빛",
+  "author": "박노해",
+  "pages": 120,
+  "one_liner": "세계의 산과 그 품에 사는 사람들을 사진과 글로 천천히 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 0,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791197601392",
+  "title": "오늘도 무사히, 일본살이 중입니다",
+  "author": "정세월드",
+  "pages": 238,
+  "one_liner": "낯선 나라에서 나답게 자리 잡은 이야기를 들어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788925569581",
+  "title": "예술은 무엇을 하는가",
+  "author": "브라이언 이노 외",
+  "pages": 128,
+  "one_liner": "예술이 우리 삶과 세상을 어떻게 움직이는지 함께 생각해 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791172102098",
+  "title": "혼여행 기록집",
+  "author": "최유진",
+  "pages": 248,
+  "one_liner": "혼자 떠나는 게 망설여질 때, 나만의 속도로 용기를 내 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791194176022",
+  "title": "나는 일상을 여행하기로 했다",
+  "author": "리밍",
+  "pages": 336,
+  "one_liner": "낯선 나라에서 살며 매일이 여행이 되는 감각을 함께 느껴 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "에세이",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791173555299",
+  "title": "삶의 확장",
+  "author": "나승유, 김선희",
+  "pages": 272,
+  "one_liner": "낯선 길 위에서 얻은 깨달음으로 내 일상을 다시 바라볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198262004",
+  "title": "괜찮아, 그 길 끝에 행복이 기다릴 거야",
+  "author": "손미나",
+  "pages": 296,
+  "one_liner": "지치고 흔들릴 때 순례길을 함께 걸으며 다시 일어설 힘을 얻어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791172540456",
+  "title": "화가들의 꽃",
+  "author": "앵거스 하일랜드 외",
+  "pages": 168,
+  "one_liner": "명화 속 꽃을 천천히 넘겨 보며 마음이 환해지는 시간을 보내볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": 0,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788997716425",
+  "title": "LIGHT 미술가를 위한 빛의 이해와 활용",
+  "author": "리처드 요트",
+  "pages": 175,
+  "one_liner": "빛이 물체와 공간에서 어떻게 작용하는지 알고 그림과 사진에 살려 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791141603250",
+  "title": "2026 제17회 젊은작가상 수상작품집",
+  "author": "김채원 외",
+  "pages": 368,
+  "one_liner": "젊은 작가 일곱 명의 단편으로 지금 한국 소설의 결을 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788936431716",
+  "title": "알로하, 나의 엄마들 (특별 한정판)",
+  "author": "이금이",
+  "pages": 400,
+  "one_liner": "조선에서 하와이로 시집간 세 여성, 그 낯선 땅의 삶을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791172131067",
+  "title": "나의 아름다운 정원",
+  "author": "심윤경",
+  "pages": 380,
+  "one_liner": "어린 스승들과 보낸 인왕산 아래 다섯 해, 한 아이의 성장을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937460104",
+  "title": "한국단편문학선 1",
+  "author": "김동인 외",
+  "pages": 480,
+  "one_liner": "식민지 시대를 살아낸 사람들의 삶을 단편으로 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791172134617",
+  "title": "아르고스",
+  "author": "이승형",
+  "pages": 240,
+  "one_liner": "잠마저 빼앗긴 채 멈추지 못하는 사람들, 그 이야기를 마주해 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788937460722",
+  "title": "구운몽",
+  "author": "김만중",
+  "pages": 254,
+  "one_liner": "팔선녀를 만난 승려가 꾸는 한평생의 꿈, 누가 진짜일까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": -1,
+   "world": -1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791141613433",
+  "title": "노 피플 존",
+  "author": "정이현",
+  "pages": 368,
+  "one_liner": "가까워지고도 멀어지고 싶은 마음, 여러분도 이런 관계를 겪어 보셨나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": 1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9788936438036",
+  "title": "일의 기쁨과 슬픔",
+  "author": "장류진",
+  "pages": 236,
+  "one_liner": "이삼십대 직장인들의 오늘을 그린 소설 여덟 편, 내 얘기 같을까요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791141602024",
+  "title": "2025 제16회 젊은작가상 수상작품집",
+  "author": "백온유 외",
+  "pages": 372,
+  "one_liner": "젊은 작가 일곱 명이 포착한 지금 우리 삶의 문제의식을 만나 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": null,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791171717064",
+  "title": "라비우와 링과",
+  "author": "김서해",
+  "pages": 128,
+  "one_liner": "외로운 여름, 낯선 룸메이트와 함께 지내 본 적 있나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "한국 소설",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": -1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791193128787",
+  "title": "요즘 어른을 위한 최소한의 전쟁사",
+  "author": "김봉중",
+  "pages": 348,
+  "one_liner": "수천 년 동안 벌어진 전쟁의 원인과 흐름을 한 권으로 훑어볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791164458769",
+  "title": "초판본 난중일기",
+  "author": "이순신",
+  "pages": 556,
+  "one_liner": "임진왜란 7년의 나날을 장군의 기록으로 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791140715596",
+  "title": "방구석 삼국지 기행 : 위나라, 촉나라 편",
+  "author": "기행장군 양양이",
+  "pages": 400,
+  "one_liner": "삼국지 속 영웅과 전투를 실제 유적지 답사로 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791198320117",
+  "title": "전쟁으로 보는 인류사",
+  "author": "임용한",
+  "pages": 532,
+  "one_liner": "수메르에서 아시리아까지 고대 문명이 전쟁으로 커 간 과정을 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791170437444",
+  "title": "기묘한 세계사의 미스터리",
+  "author": "기묘한 밤",
+  "pages": 316,
+  "one_liner": "역사 속 풀리지 않은 수수께끼를 따라가 보고 싶나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": -1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791197073069",
+  "title": "할아버지가 들려주는 6·25전쟁 이야기",
+  "author": "장삼열",
+  "pages": 312,
+  "one_liner": "전쟁이 어떻게 시작되어 멈추었는지 한 흐름으로 쉽게 짚어 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "역사",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 1,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791188949793",
+  "title": "지극히 사적인 영국",
+  "author": "피터 빈트, 홍성광",
+  "pages": 392,
+  "one_liner": "영국인이 스스로를 어떻게 보는지 일상과 관습으로 들여다보고 싶나요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "인문",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791186274897",
+  "title": "일상이 고고학, 나 혼자 국립중앙박물관",
+  "author": "황윤",
+  "pages": 416,
+  "one_liner": "박물관 유물로 금과 불교가 이어 온 우리 고대사를 따라가 볼래요?",
+  "one_liner_style": "question",
+  "entry": "leaf",
+  "genre": "예술·여행",
+  "field": null,
+  "topic": null,
+  "way": null,
+  "axes": {
+   "temp": 0,
+   "pull": -1,
+   "gain": 1,
+   "world": 1
+  },
+  "keywords": []
+ },
+ {
+  "isbn": "9791169084239",
+  "title": "도파민 인류를 위한 대화의 감각",
+  "author": "이승화",
+  "pages": 328,
+  "one_liner": "듣기와 말하기를 단계별로 연습해 막힌 소통을 풀고 대화 감각을 키워요.",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "대화·관계",
+  "field": "마음·관계",
+  "topic": "대화·관계",
+  "way": "실습",
+  "axes": null,
+  "keywords": [
+   "말투·대화법"
+  ]
+ },
+ {
+  "isbn": "9791171175697",
+  "title": "집중력의 배신",
+  "author": "한덕현",
+  "pages": 240,
+  "one_liner": "중독과 몰입이 어떻게 다른지 뇌 작동 원리로 이해하고 능동적으로 집중하는 감을 얻어요",
+  "one_liner_style": "summary",
+  "entry": "target",
+  "genre": "습관·집중",
+  "field": "습관·자기계발",
+  "topic": "습관·집중",
+  "way": "개념",
+  "axes": null,
+  "keywords": [
+   "집중력",
+   "뇌과학"
+  ]
  }
 ]
