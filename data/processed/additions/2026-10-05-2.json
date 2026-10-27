@@ -207,7 +207,7 @@
     "pull"
    ],
    "issues": [],
-   "status": "picked",
+   "status": "dropped",
    "link": "https://www.yes24.com/product/goods/118755085",
    "draft": {
     "genre": "역사",
@@ -220,7 +220,6 @@
     "one_liner": "대륙마다 문명의 출발선이 달라진 까닭을 지리와 생물로 풀어 볼까요?",
     "status": "review"
    },
-   "auto": "ai-agree",
    "history": [
     {
      "rules_version": "before-v3",
@@ -234,7 +233,9 @@
      "one_liner": "대륙마다 문명의 출발선이 달라진 까닭을 지리와 생물로 풀어 볼까요?"
     }
    ],
-   "rules_version": "v3"
+   "rules_version": "v3",
+   "reviewed": true,
+   "sampled": true
   },
   {
    "isbn": "9791139728002",

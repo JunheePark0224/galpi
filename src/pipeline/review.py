@@ -64,7 +64,8 @@ def main_checkout(root: Path = OUT_DIR.parents[2], git=subprocess.run) -> Path:
 
 PAGES = main_checkout() / OUT_DIR.relative_to(OUT_DIR.parents[2]) / "pipeline"
 KEEP = ("isbn", "title", "author", "pages", "link", "entry", "topic", "keywords", "way", "genre", "axes", "one_liner",
-        "evidence", "signals", "missing", "confidence", "fits", "second", "flags", "issues", "status", "keyword_candidate")
+        "evidence", "signals", "missing", "confidence", "fits", "second", "flags", "issues", "status", "keyword_candidate",
+        "same_as")
 
 
 def needs_look(b: dict) -> bool:

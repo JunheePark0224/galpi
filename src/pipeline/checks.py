@@ -187,16 +187,69 @@ def status_of(flags: list[str], issues: list[str], auto_merge: bool) -> tuple[st
 COMIC = re.compile(r"툰|만화|코믹스|그래픽\s?노블")
 
 
+def hold_for_person(status: str, auto: str | None, flags: list[str], auto_merge: bool) -> tuple[str, str | None, list[str]]:
+    """(status, auto mark, flags) of a kept book a rule sends to a person: asked "어디에 둘지" (the fits flag), never
+    auto-accepted — review (reserve with auto_merge). A book already waiting keeps its status."""
+    flags = flags if "fits" in flags else [*flags, "fits"]
+    return (("reserve" if auto_merge else "review") if status == "picked" else status), None, flags
+
+
 def hold_comic(status: str, auto: str | None, flags: list[str], title: str, intro: str,
                auto_merge: bool) -> tuple[str, str | None, list[str]]:
     """(status, auto mark, flags) after the comic rule (10-22, user): a clear comic is left out by both passes (the
     dictionary) and stays dropped without asking; a book kept although its title or intro calls it a comic may be panels
-    or prose with pictures, which only a person who looked inside can tell — it is asked "어디에 둘지" (the fits flag),
-    never auto-accepted."""
+    or prose with pictures, which only a person who looked inside can tell."""
     if status == "dropped" or not COMIC.search(f"{title} {intro}"):
         return status, auto, flags
-    flags = flags if "fits" in flags else [*flags, "fits"]
-    return (("reserve" if auto_merge else "review") if status == "picked" else status), None, flags
+    return hold_for_person(status, auto, flags, auto_merge)
+
+
+# 10-27 (user): a book republished under a new title and ISBN (『하버드 첫 강의 시간관리 수업』 = 10-08's 『하버드의 특별한
+# 시간관리 수업』) passes the ISBN check. Same first author and pages within PAGE_SLACK of a shelf book = maybe the same book.
+PAGE_SLACK = 10
+AUTHOR_END = re.compile(r"[/,]|\s(?:저|글|지음|엮음|편|역|옮김)(?=[\s/,]|$)")
+# Author and pages alone matched 18 pairs on the 1,333-book shelf, nearly all different books (10-27); a renamed edition
+# keeps some of its title words, so titles must also share this much (Jaccard of two-letter pieces).
+TITLE_OVERLAP = 0.25
+
+
+def _pieces(title: str) -> set[str]:
+    s = "".join(ch for ch in title if ch.isalnum())
+    return {s[i:i + 2] for i in range(len(s) - 1)}
+
+
+def title_overlap(a: str, b: str) -> float:
+    pa, pb = _pieces(a), _pieces(b)
+    return len(pa & pb) / len(pa | pb) if pa and pb else 0.0
+
+
+def first_author(author: str) -> str:
+    """The first author with spaces removed: '쉬셴장 저/하정희 역' and books.json's '쉬셴장' both → '쉬셴장'."""
+    return "".join(AUTHOR_END.split(author.strip(), maxsplit=1)[0].split())
+
+
+def same_book(rec: dict, shelf: list[dict]) -> dict | None:
+    """{isbn, title} of the first shelf book (another ISBN) with the same first author, pages within PAGE_SLACK and titles
+    sharing at least TITLE_OVERLAP."""
+    who = first_author(rec.get("author", ""))
+    if not who:
+        return None
+    for b in shelf:
+        if (b.get("isbn") != rec["isbn"] and first_author(b.get("author", "")) == who
+                and abs(int(b.get("pages") or 0) - int(rec.get("pages") or 0)) <= PAGE_SLACK
+                and title_overlap(b.get("title", ""), rec.get("title", "")) >= TITLE_OVERLAP):
+            return {"isbn": b["isbn"], "title": b.get("title", "")}
+    return None
+
+
+def hold_same_book(rec: dict, shelf: list[dict], auto_merge: bool) -> dict:
+    """The record after the same-book check (10-27, user): a kept book that may be another edition of a shelf book goes to
+    a person with that book named (`same_as`); a dropped book or one with no match is returned unchanged."""
+    match = None if rec["status"] == "dropped" else same_book(rec, shelf)
+    if not match:
+        return rec
+    status, _, flags = hold_for_person(rec["status"], rec.get("auto"), rec.get("flags") or [], auto_merge)
+    return {k: v for k, v in rec.items() if k != "auto"} | {"status": status, "flags": flags, "same_as": match}
 
 
 def redecide(book: dict, auto_merge: bool) -> tuple[str, str | None]:

@@ -470,9 +470,16 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_10():
+def test_the_dictionary_is_v3_11():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.10"   # 10-25: partisan political books stay out, whichever side
+    assert rules_version() == "v3.11"   # 10-27: a sequel stays out even with no number in its title
+
+
+def test_the_v3_11_rules_reach_both_prompts():
+    """10-27: an intro that calls the book a sequel of another keeps it out, numbered or not."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**제목에 번호가 없어도 소개가 다른 책의 후속작·속편·제2탄이라고 부르면 넣지 않는다**" in p
 
 
 def test_the_v3_10_rules_reach_both_prompts():

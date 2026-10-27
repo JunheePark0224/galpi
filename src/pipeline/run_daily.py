@@ -50,7 +50,7 @@ from . import batched, requeue
 from .axis_check import retry as retry_axes
 from .batch import BatchError, parse as parse_batch
 from .candidates import Candidate, find, known_from, yes24_env
-from .checks import crossed_to, decide, disagreements, hold_comic, rule_issues
+from .checks import crossed_to, decide, disagreements, hold_comic, hold_same_book, rule_issues
 from .config import Config, load_config
 from .gaps import PER_SLOT, Want, plan_day
 from .keyword_candidates import excluded_names
@@ -301,6 +301,9 @@ def run(batch: str, cfg: Config, env: dict, client, batches: bool = False, sleep
     t = tag_all(client, cfg, prompts, vocab, cands, rules, {c.isbn for c in back}, batches, sleep)
     recs, reasons, ledger, stopped, retries, axis_retries, sent = (t.recs, t.reasons, t.ledger, t.stopped, t.retries,
                                                                   t.axis_retries, t.sent)
+    # 10-27: the same book under a new title and ISBN goes to a person (checks.hold_same_book)
+    shelf = books + [b for doc in additions for b in doc.get("books", []) if b.get("status") == "picked"]
+    recs = [hold_same_book(r, shelf, cfg.auto_merge) for r in recs]
     back_isbns = {c.isbn for c in back}
     status = Counter(r["status"] for r in recs)
     summary |= {"tagged": len(recs), "reasons": dict(reasons), "stopped": stopped, "rules_version": rules,
