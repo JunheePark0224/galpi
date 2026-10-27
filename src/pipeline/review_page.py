@@ -95,7 +95,7 @@ function ask(b,c,k){const two=b.second||{}, done=(c.answered||[]).includes(k);
   const pick=!done?"":c.status==="dropped"?"dropped":moved?"move":"picked", open=pick==="move"||c.moveOpen;
   const names=leaf?GENRES:TOPICS, kind=leaf?"장르":"주제";
   const sug=suggestions(b), named=new Set(sug.map(x=>x.slot));
-  return `<p class="q">이 책을 어디에 둘까요? <span class="hint">— AI가 <b>${esc(slot)}</b> 칸으로 가져왔어요 · AI-1 ${yes(b)} · AI-2 ${yes(two)}${two.why?` (AI-2: ${esc(two.why)})`:""}${sug.length?` · AI 제안: ${sug.map(x=>`<b>${esc(x.slot)}</b> (AI-${x.who})`).join(", ")}`:""}</span></p>
+  return `<p class="q">이 책을 어디에 둘까요? <span class="hint">— AI가 <b>${esc(slot)}</b> 칸으로 가져왔어요 · AI-1 ${yes(b)} · AI-2 ${yes(two)}${two.why?` (AI-2: ${esc(two.why)})`:""}${sug.length?` · AI 제안: ${sug.map(x=>`<b>${esc(x.slot)}</b> (AI-${x.who})`).join(", ")}`:""}${b.same_as?` · <b>같은 책 다른 판?</b> 서재의 『${esc(b.same_as.title)}』와 첫 저자·쪽수가 같아요 — 같은 책이면 빼기`:""}</span></p>
    <div class="opts"><label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="picked" ${pick==="picked"?"checked":""}><span>${esc(slot)} 맞아요<span class="ai0">이대로 넣기</span></span></label>
    <label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="move" ${open?"checked":""}><span>다른 ${kind}예요<span class="ai0">옮겨서 넣기</span></span></label>
    <label><input type="radio" name="fit-${b.isbn}" data-act="fit" value="dropped" ${pick==="dropped"?"checked":""}><span>어디에도 안 맞아요<span class="ai0">빼기</span></span></label></div>

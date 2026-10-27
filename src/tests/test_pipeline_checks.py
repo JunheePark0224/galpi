@@ -8,7 +8,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from pipeline.candidates import Candidate  # noqa: E402
-from pipeline.checks import AUTO, copied_run, crossed_to, decide, hold_comic, disagreements, moved_to, needs_person, redecide, rule_issues, scrub, split_issues  # noqa: E402
+from pipeline.checks import AUTO, copied_run, crossed_to, decide, first_author, hold_comic, hold_same_book, title_overlap, TITLE_OVERLAP, disagreements, moved_to, needs_person, redecide, rule_issues, scrub, split_issues  # noqa: E402
 from pipeline.merge import additions_doc, keyword_hints, record, write_doc  # noqa: E402
 from pipeline.tagger import parse  # noqa: E402
 from pipeline_fakes import INTRO, TOC, check_answer, tag_answer  # noqa: E402
@@ -276,3 +276,48 @@ def test_a_clear_comic_left_out_by_both_passes_stays_out_and_other_books_pass():
     decided."""
     assert hold_comic("dropped", None, ["fits"], "제목", "웹툰 단행본", False) == ("dropped", None, ["fits"])
     assert hold_comic("picked", AUTO, [], "처음 주식 공부", INTRO, False) == ("picked", AUTO, [])
+
+
+SHELF = [{"isbn": "9791194620327", "title": "하버드의 특별한 시간관리 수업", "author": "쉬셴장", "pages": 352},
+         {"isbn": "9790000000099", "title": "다른 책", "author": "김하나", "pages": 200}]
+
+
+def _rec(**kw):
+    base = {"isbn": "9788972773719", "title": "하버드 첫 강의 시간관리 수업", "author": "쉬셴장 저/하정희 역", "pages": 352,
+            "flags": [], "status": "picked", "auto": AUTO}
+    return {**base, **kw}
+
+
+def test_a_new_edition_of_a_shelf_book_goes_to_a_person():
+    """10-27 (user): the same book comes back under a new title and ISBN after a publisher change (『하버드 첫 강의 시간관리
+    수업』 = 『하버드의 특별한 시간관리 수업』: same author, translator, pages, TOC). Same first author and pages within
+    PAGE_SLACK of a shelf book → asked "어디에 둘지" with the shelf book named, never auto-accepted."""
+    out = hold_same_book(_rec(), SHELF, auto_merge=False)
+    assert out["status"] == "review" and "auto" not in out and out["flags"] == ["fits"]
+    assert out["same_as"] == {"isbn": "9791194620327", "title": "하버드의 특별한 시간관리 수업"}
+    assert hold_same_book(_rec(pages=360), SHELF, auto_merge=True)["status"] == "reserve"
+
+
+def test_other_books_by_the_author_and_dropped_books_are_left_alone():
+    assert hold_same_book(_rec(pages=240), SHELF, False)["status"] == "picked"           # another book of the author
+    assert hold_same_book(_rec(title="리더의 언어 공식"), SHELF, False)["status"] == "picked"  # same author+pages, other title
+    assert hold_same_book(_rec(author="리사 저"), SHELF, False)["status"] == "picked"      # another author, same pages
+    assert hold_same_book(_rec(isbn="9791194620327"), SHELF, False)["status"] == "picked"  # the shelf book itself
+    dropped = _rec(status="dropped", flags=["fits"])
+    del dropped["auto"]
+    assert hold_same_book(dropped, SHELF, False) == dropped
+
+
+@pytest.mark.parametrize("author,first", [("쉬셴장 저/하정희 역", "쉬셴장"), ("쉬셴장", "쉬셴장"),
+                                          ("김 하나, 이두리 저", "김하나"), ("유발 하라리 지음", "유발하라리"), ("", "")])
+def test_first_author(author, first):
+    assert first_author(author) == first
+
+
+@pytest.mark.parametrize("a,b,close", [("하버드 첫 강의 시간관리 수업", "하버드의 특별한 시간관리 수업", True),
+                                       ("총, 균, 쇠", "총 균 쇠", True),
+                                       ("1% 리더의 언어 공식", "누구나 쉽게 배우는 3단계 발표 공식", False),
+                                       ("장미와 나이프", "악의", False)])
+def test_title_closeness(a, b, close):
+    """Shared two-letter pieces of the titles (spaces and marks removed): a renamed edition keeps some of its words."""
+    assert (title_overlap(a, b) >= TITLE_OVERLAP) is close
