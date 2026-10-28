@@ -15,3 +15,4 @@
 | `openchat/` | 카카오 독서 오픈채팅 | 2026-10-10 전후 | kakao (campaign openchat) |
 | `tistory/` | 티스토리 Junior Log (juny-data, 검색 노출용 — 구글 서치 콘솔·네이버 서치어드바이저 등록) | 2026-10-11 | tistory |
 | `linkareer/` | 링커리어 자유이야기방 (익명) | 2026-10-11 | linkareer |
+| `instagram/` | 인스타그램 릴스 ① (`@galpi.book`, 프로필 링크) | 2026-10-14 | instagram (medium profile) |
