@@ -92,6 +92,7 @@ git merge --no-ff <브랜치> -m "Merge <브랜치>: ..." && git push origin mai
 
 | 무엇 | 어디 |
 |---|---|
+| 피드백 원문·스레드 홍보 기록 | `feedback/2026-10-12-01.md`, `feedback/2026-10-13-01.md`, `marketing/threads/threads-1012-1014.md`, `docs/threads-plan.md`·`threads-tracker.xlsx` — 다른 사람의 말과 홍보 계정 운영 메모라 **공개 저장소에서 기록까지 지움(10-28)**, 이 컴퓨터에만. `.gitignore`에 있음 |
 | 매일 확인 SQL | `Galpi/check/daily.md`, `check/supabase-checks.md` (커밋 안 함) |
 | 발표 자료 | `Galpi/presentation/` (HTML 장표 `deck-site/` → Vercel `galpi-deck`, noindex), Canva 디자인(사용자 계정) |
 | 발표용 스킬 | GitHub `JunheePark0224/canva-deck-skill` (공개, Claude Code 플러그인) + 이 PC `~/.claude/skills/canva-deck` |

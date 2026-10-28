@@ -39,3 +39,10 @@ data/raw/events/
 
 # presentation captures include YES24 covers and intro text — never in git (CLAUDE.md 보안·약관)
 presentation/A-B TEST/
+
+# kept on this computer only (10-28): promo-account notes and other people's words
+marketing/threads/threads-1012-1014.md
+feedback/2026-10-12-01.md
+feedback/2026-10-13-01.md
+docs/threads-plan.md
+docs/threads-tracker.xlsx
