@@ -1,133 +1,104 @@
 # 인수인계 — 갈피 (Galpi)
 
-Last Updated: 2026-10-05 (책갈피 꾸미기 `feat/decorate` 병합 전 — 아래 "책갈피 꾸미기". 그 밖의 줄은 10-04 기준)
+Last Updated: 2026-10-28 (계정 이전 전 정리. 이전 판 `archive/HANDOFF-2026-10-05.md`)
 
-새 세션은 이 문서 → `process.md` → `context.md` → `tasks.md` 순으로 읽는다.
+**새 Claude는 이 문서를 처음부터 끝까지 읽고 시작한다.** 그다음 필요할 때 `context.md`(결정 기록, 10-28까지 최신)를 본다.
+`process.md`·`tasks.md`는 10-06 이후 갱신되지 않았다 — 지금 상태는 이 문서와 `context.md`가 맞다.
 
-## 지금 상태
+---
 
-- **로그인 전 저장 → 도감 (`fix/guest-dex`, `.worktrees/guest-dex`, 병합 전, 10-05)**: 로그인 전에 저장한 책갈피가 로그인 뒤 도감에 오르게(서명된 뽑기 표 v3 — 뽑힌 책까지 서명, 한 책갈피는 한 사람만). **사용자가 할 일**: 0007은 이미 한 번 실행했고 임시로 `saves_own_insert`를 되살려 둔 상태(10-05). ① Vercel Production에 `SUPABASE_SERVICE_ROLE_KEY`가 있는지 확인(없으면 저장이 503) ② 이 브랜치를 병합·배포 ③ **배포한 뒤** SQL Editor에서 `web/supabase/migrations/0007_kept_claims.sql`을 다시 **Run**(임시 정책을 다시 없앰, 여러 번 실행해도 안전) ④ `web/supabase/checks/`의 `p5_rls.sql`, `collection_rls.sql`, `decorate_rls.sql`, `art_guard.sql`, `kept_claims_rls.sql`을 각각 새 query로 Run → 빨간 "RLS CHECK RESULT" 상자 안 줄이 모두 `ok`(오류 상자는 정상 — 시험 데이터를 되돌림). (`fix/art-guard`는 이 브랜치에 병합됨, 0006은 이미 적용.) 배포하면 v2 표는 받지 않으므로 배포 순간 S-05에 떠 있던 책갈피 하나쯤은 도감에 안 오를 수 있다. 저장할 때 그림은 이제 서버가 뽑기 표로 정한다(표 없는 옛 임시 책갈피는 서버가 고른 그림 — context 10-05).
-- **꾸미기 보안 수정 (`fix/art-guard`, `.worktrees/art-guard`, 병합 전, 10-05)**: 로그인한 사람이 anon 키로 `saves.art`를 직접 바꿔 도감에 없는 그림을 넣을 수 있던 구멍을 DB 트리거로 막음(0006). 앱 코드 변경 없음. 기록 `context.md` 10-05 "꾸미기 규칙을 DB에서도".
-  **사용자가 할 일 (0005 다음, 순서대로)**:
-  1. SQL Editor → New query에 `web/supabase/migrations/0006_art_guard.sql` 전체를 붙여 **Run** (다시 돌려도 안전). "Success. No rows returned"가 나오면 됨.
-  2. 새 query에 `web/supabase/checks/art_guard.sql` 전체를 붙여 Run → 빨간 오류 상자 "RLS CHECK RESULT" 안 11줄이 모두 `ok`인지. `FAILED`나 다른 오류면 그 글을 Claude에게.
-  3. (선택) `checks/decorate_rls.sql`을 다시 돌려 8줄 `ok`.
-  - ~~**남은 구멍**~~ (`fix/guest-dex`에서 막음 — 저장 그림은 서버가 뽑기 표로 정하고, 책갈피는 서버만 넣는다(0007)): 저장(`POST /api/library/saves`)은 아는 부분이면 어떤 그림이든 받는다(지우고 다시 꽂기로 우회 가능). 막으려면 저장 그림에 서버 서명이 필요 — 따로 결정.
+## 1. 한눈에
 
-- **책갈피 꾸미기 (`feat/decorate`, `.worktrees/decorate`, 병합 전, 10-05)**: S-09 시트 버튼 시안 C([예스24] → [🎨 꾸미기][↔ 옮기기] → [빼기]), [꾸미기] 편집기(내 도감에 있는 부분으로만 그림 바꾸기, [처음 그림으로]·[이대로 꽂기]), 서버 `PATCH /api/library/saves/art`(도감 확인, 아니면 403), taxonomy v1.6(E-38). 계획 `plans/2026-10-05-decorate.md`, 스크린샷 `mockups/2026-10-05-decorate/impl-*.png`.
-  **사용자가 할 일 (병합·배포 전, 0004 다음, 순서대로)**:
-  1. Supabase 대시보드 → SQL Editor → New query에 `web/supabase/migrations/0005_original_art.sql` 전체를 붙여 **Run** (한 번만). "Success. No rows returned"가 나오면 됨. 기존 책갈피는 모두 지금 그림이 "처음 그림"이 된다.
-  2. 새 query에 `web/supabase/checks/decorate_rls.sql` 전체를 붙여 Run → 빨간 오류 상자 "RLS CHECK RESULT" 안 8줄이 모두 `ok`인지 확인(이 오류는 정상 — 시험 데이터를 되돌리는 장치). `FAILED`나 다른 오류면 그 글을 Claude에게.
-  3. 병합·배포 → 로그인해 /library에서 책갈피를 눌러 [꾸미기] → 도감에 있는 동물로 바꿔 [이대로 꽂기] → 막대 위 책갈피가 바뀌는지, `select isbn, art->>'animal', original_art->>'animal' from saves order by created_at desc limit 3;`에서 처음 그림이 그대로인지.
-  - 0005를 적용하기 전에 배포해도 사이트는 그대로 돈다: 시트에 [꾸미기]가 나오지 않을 뿐(서버도 503).
+- **사이트**: https://www.galpibook.com — 10-09 공개, 운영 중. 저장소 = GitHub `JunheePark0224/galpi` (공개), **main에 push하면 Vercel이 자동 배포**.
+- **서재**: 1,420권 (10-27 기준, 🍃 738 · 🎯 682). 책은 거의 이틀마다 100권씩 추가한다(아래 3-1).
+- **정의서**: `docs/label-dictionary.md` **v3.11** (책 태그 기준. 0~5절은 AI 태그 지시문에 그대로 들어간다).
+- **A/B 실험** `back_cover_pick` 진행 중 — **2026-11-02(월)에 한 번만 판정**. 규칙과 배포 기록은 `report/README.md`. 아래 2절.
+- **발표**: 10-15 끝남(잘 끝남). 이후는 피드백 반영 + 책 추가 + 운영.
 
-- **도감 표시 수정 (`fix/dex-display`, `.worktrees/dex-fix`, 병합 전, 10-05)**: 배지가 부분마다 이름·등급, 도감 칸은 그 부분만, 땅 "없음"은 모으지 않음(소품 15, 운영의 옛 "none" 줄은 읽을 때 무시 — 마이그레이션 없음). 설계 8절, taxonomy v1.4.1.
-- **도감 v1 (`feat/collection-dex`, `.worktrees/dex`, 병합 전, 10-05)**: 한정판·초판본 그림(동물 16·배경 11·소품 16 → 모으는 소품은 15, 부분마다 90/9/1), 초판본 효과, S-09 [막대 | 도감], S-05 "처음 만난 …!" 배지, 서버 서명 seed로 기록, taxonomy v1.3(E-36·E-37), 처리방침 갱신일 10-05. 설계는 `plans/2026-10-05-collection-dex.md` "설계 (구현)". 스크린샷 `mockups/2026-10-05-dex/impl-*.png`.
-  **사용자가 할 일 (병합·배포 전, 순서대로)**:
-  1. Supabase 대시보드 → SQL Editor → New query에 `web/supabase/migrations/0004_collection.sql` 전체를 붙여 **Run** (0001~0003 다음, 한 번만). "Success. No rows returned"가 나오면 됨.
-  2. 새 query에 `web/supabase/checks/collection_rls.sql` 전체를 붙여 Run → 빨간 오류 상자 "RLS CHECK RESULT" 안 9줄이 모두 `ok`인지 확인(이 오류는 정상 — 시험 데이터를 되돌리는 장치). `FAILED`나 다른 오류면 그 글을 Claude에게.
-  3. Vercel → Settings → Environment Variables → `COLLECTION_SIGNING_SECRET`을 **Production에만**, Sensitive로 추가(32자 이상 무작위 — 만드는 법 `deploy.md` 3절). 값은 대화에 붙이지 않는다. Preview에는 넣지 않는다(넣지 않으면 Preview는 도감 기록만 꺼짐).
-  4. `SUPABASE_SERVICE_ROLE_KEY`가 Production에 이미 있는지 확인(도감 쓰기에 씀 — 없으면 도감 기록이 꺼짐).
-  5. 병합·배포 → 로그인해 책갈피 몇 장을 넘긴 뒤 `select kind, value, first_met_at from collection order by first_met_at desc limit 5;`에 줄이 생기는지, [도감]에 그 그림이 보이는지.
-  - 0004를 적용하기 전에 배포해도 사이트는 그대로 돈다: [도감]은 "도감을 불러오지 못했어요."만 보이고 배지는 나오지 않는다.
+## 2. 지금 열려 있는 일 (우선순위 순)
 
-- **v2 계획 2 완료 (`feat/v2-screens`, 병합 전)**: S-01 입구 하나 · S-02 갈림길(이전 질문, 진행 표시 없음) · S-04 당신이 고른 길 · 서버 뽑기 = 질문 지도 길 · taxonomy v1.0(E-32 `question_answered`, E-33 `question_back_clicked`, E-34 `path_completed`, 공통 `mode`, 🎯·밸런스 이벤트 6개 removed) · 처리방침 v2 · 사이트 Anthropic 0. 길 끝 157개 중 4권 미만 7개(`npm run map:coverage`). 스크린샷 `docs/mockups/2026-10-04-v2/`. **남은 일**: 사용자 확인 → 병합·배포(사용자) → 배포 뒤 Supabase `events`에 `screen_version`=v2와 `question_answered` 확인, Amplitude 대시보드에 FN-7 퍼널 → 계획 3(모자란 길 채우기).
-- **확인한 것 (10-04)**: 단위 870개 통과(`src/lib/recommend/**`·`src/lib/paths/**` 커버리지 임계 통과) · typecheck·lint·build 오류 0 (`/api/goal/classify` 라우트 없음) · 전체 E2E(`TRACK_STORE=off`) 134 passed · 18 skipped(휴대폰/노트북 한쪽 전용 테스트).
-- **계획 3 입력**: 길 끝 157개 중 4권 미만 **7개**. 책이 0권인 장르·주제도 지도에서 빼지 않는다.
+1. **A/B 판정 (11-02)** — `report/README.md` 15~16줄 규칙대로: 차이 + 95% 신뢰구간, 구간이 0을 걸치면 A 유지, 표본이 한쪽 210명에 못 미쳐도 그대로 적고 "모자랐다"고 쓴다. 판정 스크립트 초안 `report/ab_final.py`는 **메인 폴더에만 있고 커밋 안 됨**(10-14 작성). 배포 시각 전후로 나눠 한 번 더 본다(같은 파일의 배포 기록 줄). **그 전까지 뒤표지(S-11)·책 정보로 가는 길·결과 화면 버튼은 바꾸지 않는다.** 그 앞 화면은 바꿔도 되고, 바꾸면 배포 시각을 `report/README.md`에 한 줄.
+2. **육아·자녀 교육 주제** — 부모용 육아 책은 키워드 후보 `육아·자녀 교육`으로 **대기에 모은다**(`checks.HELD_TOPICS`, 현재 5권). 10권쯤 모이면 주제를 만든다: PRD → 질문 지도 → 예스24 분류 규칙 → 10권부터 켜짐(새 주제를 켜는 기준은 `docs/target-chips.md` 2절, 10-01·10-05에 주제를 더한 커밋 `d4bf7bc`·`77c6ce5`가 고친 파일들을 따라가면 된다 — 정확한 코드 위치는 그때 확인).
+3. **키워드 후보 `저속노화`** (🎯 건강·운동, 현재 1권 — 『내 몸의 생체시계를 늦추는 노화과학』). 같은 후보 5권이 모이면 키워드로 만들지 사용자에게 묻는다.
+4. **피드백 남은 것** (`feedback/` 폴더): 책갈피마다 "왜 이 책인지" 보이게, 질문이 길다·하나 줄이기. 결정 전.
+5. **버그 확인 못 함**: 아이폰에서 머리글·우체통 닫기 문제(WebKit 흉내로는 재현 안 됨 — 친구 아이폰이나 Amplitude로 확인), 운영에서만 나는 React #418(로컬 프로덕션 빌드에선 안 남).
+6. **정리할 것**:
+   - 메인 폴더(`Galpi/`)는 `feat/one-liner-rule` 브랜치이고 **main에 없는 커밋 9개**(발표 개요·스토리보드·피드백·마케팅 문서) + 커밋 안 한 수정 5파일(`docs/context.md` 10-15 행, `marketing/`, `report/outline.md`, `report/storyboard.md`). 사용자에게 합칠지 물어본다. `docs/launch-docs` 브랜치도 문서 커밋 2개가 main에 없다.
+   - `.worktrees/` 아래 작업 폴더 11개 — `books-1022` 말고는 모두 main에 합쳐졌다(위 두 브랜치 제외). 지워도 되는지 사용자에게 묻고 정리.
+   - `process.md`·`tasks.md`를 이 문서 기준으로 갱신하거나 "멈춤"이라고 적기.
 
-### 배포 체크리스트 (병합·배포는 사용자)
+## 3. 반복 작업 절차
 
-1. 옛 번들 탭은 새로고침 전까지 `/api/track` 이벤트를 잃고(`mode` 없음) 뽑기가 400을 받는다. 배포 직후 이 탭의 이탈은 퍼널 이탈로 세지 않는다.
-2. 저장된 v5 흐름은 S-01부터 다시 시작한다.
-3. Vercel의 `ANTHROPIC_API_KEY`는 지워도 된다(사이트가 더 이상 읽지 않음). **GitHub Actions Secret(매일 책 파이프라인)은 그대로 둔다.**
-4. 배포 뒤 Supabase `events`에서 `screen_version`='v2', `question_answered`, `path_completed`, 공통 `mode`가 들어오는지 확인한다.
-5. Amplitude FN-7 퍼널을 E-32 → E-34 → E-05로 다시 만든다.
-6. v1과 v2 비교는 책갈피 단계 이후 이벤트만, `screen_version`으로 나눠서 한다.
+### 3-1. 책 추가 ("오늘 책 추가하자")
 
-## 1. 어디에 무엇이
+작업 폴더는 `.worktrees/books-1022`를 계속 쓴다(`.env`와 예스24 캐시 `data/raw/`가 들어 있음 — 새 폴더를 만들면 둘 다 복사해야 한다).
 
-| 위치 | 내용 |
+```
+cd .worktrees/books-1022
+git fetch origin && git switch -c books/<날짜> origin/main
+PYTHONIOENCODING=utf-8 python -m src.pipeline.run_daily --date <날짜>        # 기본 100권, 30~40분, 약 $3.5 — 백그라운드로
+PYTHONIOENCODING=utf-8 python -m src.pipeline.review <날짜>                  # 검수 페이지 → 메인 폴더 data/processed/check/pipeline/<날짜>.html
+```
+- 결과(후보·넣기·검수·대기·빠짐·다른 갈래·비용)를 표로 보고하고 검수 페이지를 브라우저 창에 띄운다.
+- 사용자가 검수 → `~/Downloads/<날짜>-review.json`을 내려받는다 → `python -m src.pipeline.review <날짜> --apply <파일>`.
+- **답이 없는 책**(확인을 안 누른 책)은 review/reserve로 남는다 — 사용자에게 묻거나, 사용자가 대화에서 이미 정한 책은 그 답으로 작은 답 파일을 만들어 `--apply`(형식은 내려받은 파일과 같다: `{"file": "<날짜>", "answers": {isbn: {...필드, "status": "dropped", "ok": true}}}`).
+- `cd web && npm run books:import` → 서재 권수 확인.
+- **소식통** `web/src/data/news.json`: 그 주(월~일)에 새 책 줄은 **한 줄만** — "새 책 N권이 꽂혀 갈피의 서재가 M권이 됐어요". 같은 주에 또 넣으면 그 줄 숫자를 고친다. 새 주면 맨 위에 새 칸.
+- `docs/context.md`에 날짜 행 하나(결과 숫자 + 그날 정한 규칙).
+- 테스트: `PYTHONIOENCODING=utf-8 python -m pytest src/tests -q`, `cd web && npx vitest run` → 커밋(영어 메시지, 끝에 `Co-Authored-By` 줄, 본문에 events 체크리스트 줄).
+- 같은 날 더 받고 싶으면 `--batch <날짜>-2 --count 50`.
+
+**주의**
+- 옛 묶음(다른 날짜)에 `--apply`로 빼기를 반영하면 `data/pipeline/agreement.csv`에 그 묶음 줄이 **새로 생긴다**(결정 1건으로 계산된 엉터리 통계) — 마지막 줄을 지운다.
+- 검수 중 사용자가 새 규칙을 정하면: 정의서 버전을 올리고(`버전 vX.Y` 머리줄 + 8절 바뀐 기록 행) `src/tests/test_pipeline_tagger.py`의 버전 테스트와 "지시문에 들어갔나" 테스트를 고친다. 코드 규칙이면 `src/pipeline/checks.py`에 테스트 먼저.
+
+### 3-2. 배포 ("배포해줘"라고 할 때만)
+
+```
+# report/README.md A/B 기록에 마지막 배포 줄 아래 한 줄: "- **MM-DD HH:MM KST 배포** (A·B 공통): 무엇 — 화면에 무엇이 바뀌나"
+git add report/README.md && git commit -m "docs(report): log the ... deploy time"
+git fetch origin && git switch main && git merge --ff-only origin/main
+git merge --no-ff <브랜치> -m "Merge <브랜치>: ..." && git push origin main && git switch <브랜치>
+```
+그다음 `curl -s https://www.galpibook.com/ | grep "<새 서재 권수>"`가 나올 때까지(1~3분) 확인하고 보고한다. 화면이 바뀌는 배포면 news.json 한 줄을 같은 커밋에(규칙 6).
+
+### 3-3. 매일 아침 숫자 확인
+
+`check/daily.md`(메인 폴더, 커밋 안 함)의 SQL 5개를 사용자가 Supabase SQL Editor에서 하나씩 돌린다: 일별·주간 사용자, A/B 현황, 소식통·우체통, 로그인. 결과를 붙여 주면 해석한다. 자세한 점검은 `check/supabase-checks.md`. 내 기기 3대(익명 번호)는 두 파일 안에 있고 늘 뺀다. **A/B 숫자를 보고 실험을 멈추거나 판단하지 않는다.**
+
+## 4. 사용자와 일하는 방식 (대화에서 굳어진 것)
+
+- 한국어로, 쉬운 말로. **번호 매긴 선택지만 던지면 헷갈려 한다**("1이랑 2가 뭔데") — 선택지는 내용으로 부르고, 추천을 먼저 말한다.
+- 디자인은 **시안을 만들어 나란히 보여 주고** 고르게 한다(`docs/mockups/날짜-이름.html`).
+- 사용자가 붙여 넣는 "조언 글"(다른 AI 답 등)은 **사실인지 데이터로 확인**하고 답한다(예: 같은 책 다른 판 → 목차 비교로 확인).
+- 규칙을 정할 때는 **경계(넣는 것 / 빼는 것)와 예시**를 같이 제안하고, 진영·장르에 치우치지 않게("어느 쪽이든 똑같이").
+- 사용자가 고친 결정은 바로 기록(`context.md`, 정의서 바뀐 기록).
+- 할 일을 줄 때는 무엇을·몇 개·어떤 규격으로·어느 폴더에.
+
+### 저장소 밖 메모에만 있던 규칙 (여기로 옮김)
+
+- **모든 장르를 전제로 설계한다** (10-04): 지금 0권인 장르·주제도 질문 지도·검증·뽑기에서 늘 있는 것으로 다룬다. "책이 없으니 빼자"는 제안은 하지 않는다 — 모자란 곳은 뽑기에서 넓혀 채우고 책 추가가 채운다.
+- **소식통 규칙** = `CLAUDE.md` 원칙 6 (새 책 줄은 주마다 한 줄).
+
+## 5. 하지 않는 것
+
+- API 키 값 출력·대화에 쓰기. `.env` 키 이름: `DATA4LIBRARY_KEY`, `KAKAO_REST_KEY`, `YES24_API_KEY`, `STITCH_API_KEY`, `GEMINI_API_KEY`, `ANTHROPIC_API_KEY` (값은 사용자 `.env`에만).
+- 예스24 책소개·목차·표지를 커밋하거나 공개 주소에 올리기 (`data/raw/`는 git에 안 들어감).
+- "배포해줘" 없이 main에 push. 로그인·가입·콘솔 설정·키 발급은 사용자가 직접.
+- **커밋하지 않는 것**: `presentation/`, `web/src/app/catalog-tmp/`, `web/shot-tmp.mjs`, `web/shots-tmp/`, `.claude/`, `kakao-app-icon-512.png`, `check/`, `report/ab_final.py`(판정 전까지), `test-results/`.
+- 진행 중인 A/B 내용을 소식통에 쓰기.
+
+## 6. 저장소 밖에 있는 것
+
+| 무엇 | 어디 |
 |---|---|
-| `C:\Users\jukun\Desktop\Portfolio\Galpi` | **작업 폴더 = GitHub `JunheePark0224/galpi`(공개)**. 로컬 브랜치는 `main` 하나 |
-| https://galpi-omega.vercel.app | 사이트. Vercel Root Directory `web`, **main에 push하면 배포** |
-| `../backups/galpi-history-before-public-20260930.bundle` | 공개 전 git 기록(공개하면 안 되는 파일 포함). **Galpi 안으로 옮기지 않는다** |
-| `../ERI-Project` `../Olist-BPM-Agent` `../Kkeutjang` `../strategy` `../stitch_data_analyst_portfolio_deck` | 다른 포트폴리오 자료. 갈피와 무관 (`strategy/`의 경쟁 조사만 `context.md`가 참조) |
+| 매일 확인 SQL | `Galpi/check/daily.md`, `check/supabase-checks.md` (커밋 안 함) |
+| 발표 자료 | `Galpi/presentation/` (HTML 장표 `deck-site/` → Vercel `galpi-deck`, noindex), Canva 디자인(사용자 계정) |
+| 발표용 스킬 | GitHub `JunheePark0224/canva-deck-skill` (공개, Claude Code 플러그인) + 이 PC `~/.claude/skills/canva-deck` |
+| 검수 페이지 | 메인 폴더 `data/processed/check/pipeline/*.html` (예스24 글이 들어 있어 커밋 안 함) |
+| 블로그 | 티스토리 juny-data.tistory.com (구글 색인됨), Search Console에서 galpibook.com 노출 시작(10-28, 클릭 0) |
+| 서비스 계정 | Supabase(DB·로그인), Vercel(배포), Amplitude(이벤트), Google Search Console — 모두 사용자 로그인 |
 
-**동시 작업(git worktree)은 `Galpi/.worktrees/<이름>`에만 만든다** (git 무시). Portfolio에 `galpi-*` 형제 폴더를 만들지 않는다 — 10-01에 7개를 정리했다.
+## 7. 문서 지도
 
-로컬에만 있고 git에 안 올라가는 것 (공개 금지 — 예스24 글·키·검토 기록):
-
-| 경로 | 내용 |
-|---|---|
-| `.env`, `web/.env.local` | 키. **열거나 출력하지 않는다** |
-| `data/raw/` | 예스24 응답 캐시 등 원본 |
-| `data/processed/check/` | 검수 페이지(HTML, 예스24 글 포함) |
-| `data/pipeline/runs/`, `data/pipeline/eval/` | 파이프라인 실행 요약·태거 평가 행 |
-| `.superpowers/sdd/<계획>/` | SDD 진행 기록·리뷰 (`progress.md`가 각 계획의 원장) |
-
-## 2. 지금 무엇이 돌고 있나
-
-- **책 330권** (🍃 100 · 🎯 230), 🎯 주제 12개(분야 6) · 🍃 장르 12개. 주제는 책 10권 이상일 때만 켜진다(`web/src/lib/books/active.ts`)
-- 🎯 입력 B안(큰 직접 쓰기 + 예시 칩 6) · 직접 쓴 말은 Claude Haiku 분류(3초 넘으면 단어 매칭)
-- F-24 "이렇게 이해했어요" ①찾음 ②"아직 없어요" + 예스24 검색 ③우리 주제 아님 · C-16 표지 위 책갈피(당기기·뒤집기, [꽂기] 저장은 P5)
-- 홈 이동: 로고·새로 연 주소 = 처음 화면, 새로고침·뒤로가기 = 하던 곳
-- 기록: Supabase `events` + Amplitude(project 870203, 시간대 Asia/Seoul, 대시보드 `n5w9r3vr`). 택소노미 v0.7 (`docs/taxonomy.md`가 원본)
-- **매일 책 파이프라인 (D-B)**: GitHub Actions `daily-books` 매일 06:00 KST → 후보 50권 → Sonnet 5.5 두 번 따로 태그 → PR `books/<날짜>`. Secrets·Actions 권한은 사용자가 설정 완료(10-01). 첫 자동 실행은 **10-02 06:00**
-- 비용: Anthropic `galpi` 워크스페이스 **월 한도 $15**를 사이트 분류와 파이프라인이 같이 씀. 파이프라인 하루 약 $0.6, 사이트는 1,000명당 약 $1~4
-
-## 3. 매일 할 일 (D-C — 검수하며 자동 병합 졸업까지)
-
-1. 아침 PR `books/<날짜>` 확인 (실패하면 PR 없이 Actions 기록에 이유만)
-2. PR 브랜치에서 `PYTHONIOENCODING=utf-8 python -m src.pipeline.review <날짜>` → 검수 페이지는 **늘 본 폴더(main 체크아웃) `Galpi/data/processed/check/pipeline/<날짜>.html`** — worktree(`.worktrees/<이름>`) 안에서 돌려도 같은 곳(10-05, 찍히는 절대 경로 확인) → 사용자가 검수하고 내려받기 (`--apply`는 내려받은 파일이 어디 있든 경로만 주면 된다)
-   - 검수 페이지 결정에 **"다른 갈래로 (다시 태그)"**(10-05): 🎯로 왔지만 🍃 장르 책이면(예: 『뇌』 모기 겐이치로 → 과학 교양) 이걸 고르고 🍃 장르를 고른다. 🍃 책이면 🎯 주제를 고르거나 "AI가 정해요"(파이프라인이 우리 규칙으로 가장 맞는 주제를 고름). `--apply`가 그 책을 books.json에 넣지 않고(`dropped` + `requeued_to`) `data/pipeline/requeue.json`에 적는다 → 다음 묶음이 그 책을 맨 먼저 새 갈래로 태그하고(그날 권수에 포함) 줄을 지운다. 빼기와 달리 책을 잃지 않는다
-3. `python -m src.pipeline.review <날짜> --apply <내려받은 파일>` → `cd web && npm run books:import` → `npm test` → PR 브랜치에 커밋 → **병합·배포는 사용자 허락 후**
-4. 졸업 기준 (`docs/deploy.md` 7절): ① 연속 3회 모든 항목 95%+ — **현재 1/3** ② 그 3회 일치 책 표본 10권 이상·바뀐 책 5% 이하 — **현재 표본 3권, 바뀜 0**. 둘 다 넘으면 사용자에게 물어본 뒤 `data/pipeline/config.json` `auto_merge: true`
-5. 일치율 기록: `data/pipeline/agreement.csv`
-
-### 여러 번 돌리기 (10-06 공개 준비)
-
-하루에 묶음(batch)을 여러 번 돌려 책을 376권 → 1,000권으로 늘린다(묶음당 100권, 7~9번). 묶음 100권은 **가장 모자란 칸부터 칸당 10권 → 약 10칸**(장르 · 주제 · 키워드, `book-pool.md` 1-2c). 목표는 `data/pipeline/config.json` **`target_phase`**: 지금 `"launch"`(장르 45 · 주제 26 · 키워드 5), 공개 뒤 사용자 승인으로 `"grow"`(100 · 60 · 15). 모든 칸이 목표에 닿으면 그 뒤 실행은 아무것도 넣지 않는다. 첫 묶음은 그대로 `<날짜>`, 같은 날 다음 묶음은 `<날짜>-2`, `-3` … — 브랜치 `books/<묶음>`, 파일 `data/processed/additions/<묶음>.json`, 검수 명령, `agreement.csv`의 `date` 칸(`batch`는 그대로 `daily`)이 모두 이 이름을 쓴다. 책의 날짜(`date`)는 달력 날짜 그대로.
-
-1. 실행 (열린 `books/` PR이 없을 때만 돈다 — 있으면 API 호출 없이 쉰다):
-   `gh workflow run daily-books.yml -f next_batch=true -f count=100 -f dry_run=false`
-   → 실행 화면 Summary 첫 줄 `Batch: 2026-10-06-2`가 이번 묶음 이름. 오늘 main에 아무것도 없으면 `<날짜>` 그대로
-2. PR `books/<묶음>` 브랜치에서 검수: `PYTHONIOENCODING=utf-8 python -m src.pipeline.review <묶음>` (예: `… review 2026-10-06-2`) → 내려받기 → `python -m src.pipeline.review <묶음> --apply <내려받은 파일>` → `cd web && npm run books:import` → `npm test` → PR 브랜치에 커밋
-3. **병합한 뒤에** 1로 돌아가 다음 묶음. 병합 전에 돌리면 쉰다(한 번에 PR 하나 — books.json 충돌 방지). 앞 묶음 책은 main의 파일로 빠지므로 같은 책이 두 번 오지 않는다
-- 매일 06:00 자동 실행은 그대로 — 그날 이미 묶음이 main에 있으면 쉰다. `next_batch` 없이 손으로 돌려도 마찬가지
-- 묶음마다 약 $1.2(100권, 권당 약 $0.0115). 월 한도 $15를 사이트와 같이 쓰니 9번이면 약 $10.4 — 시작 전에 Console 사용량 확인
-
-## 3b. 키워드 후보 → 승인 (10-02)
-
-- 매일 PR 본문 "### 키워드 후보"에 같은 후보가 **5권 이상**이면 "추가할까요?" — 사용자에게 물어 정의 문장 확인 → `PYTHONIOENCODING=utf-8 python src/backfill_keywords.py promote "주제:이름" --pattern "<단어 규칙>" --definition "<정의>"` → `cd web && npm run books:import && npx vitest run` → 커밋 (`plans/2026-10-02-keyword-candidates.md`)
-- 새 키워드를 기존 책에 붙일 때: `python src/backfill_keywords.py build "주제:이름,…"`(단어 규칙 후보) → Claude가 정의대로 판단해 `apply` (10-02: 사용자는 예스24 글을 볼 수 없는 페이지로 판단하지 않는다)
-- 10-02에 다시 넣은 키워드: 데이터 분석 엑셀·파이썬·데이터 리터러시, AI 활용 LLM 원리. 사람 검수는 키워드 5개까지(AI는 3개)
-
-## 3c. 친구 5명 시험 (10-02 시작)
-
-- **시작점: 2026-10-02 14:22 KST (05:22:41 UTC)** — 사용자가 URL을 보내기 시작한 시각. 5명 분석은 이 시각 이후 기록만 쓴다. 그 전 기록(테스트·우체통 시험 글)은 지우지 않고 시작점으로 뺀다
-- 뺄 기기: 사용자 본인 기기의 익명 번호(처리방침 맨 아래) — 받는 대로 여기 적는다: `4af2b2d9-4308-408f-a321-4350408e1aa9`(10-02 받음, 어느 브라우저인지 미기재) · `abc42f53…`(휴대폰 카톡 안 브라우저 — 위 번호와 같은 로그인 계정이라 사용자 본인으로 봄, 10-02) · `47c43f9a…`(PC, 15:52 — 같은 계정, 10-02)
-- 볼 것: 사람별 흐름(입구 → 책 펼치기 → 책갈피 반응 → 결과 → 예스24·꽂기·로그인), 그만둔 곳, 걸린 시간 + 우체통 글(`feedback_sent`)·카톡 의견을 나란히. 5명이라 비율 대신 "5명 중 몇 명"과 사람별 흐름으로(원칙 5)
-
-## 4. 남은 작업 (순서)
-
-1. **D-C 매일 검수 루프** (위 3절) — 10-02부터
-2. **사용자 확인 2개**: 카카오톡 브라우저에서 앱 전환 후 돌아왔을 때 이어지는지 · iOS에서 책갈피 뒷면 뒤집을 때 깜빡임
-3. ~~F-23 홈 "갈피의 서재 N권 · 오늘 +M권"~~ — 시안 B 구현(10-01, `feat/f23-library-count`). 600권 넘는 배포에서 저절로 보인다. 검수 뒤 `books:import`하면 **`web/src/data/` 세 파일(books·vocab·library.json)을 같이 커밋**
-   - ~~P5 로그인·내 책갈피~~ — `feat/p5-login`(`.worktrees/p5`) 완료(10-02): 카카오(개인 비즈 앱, 닉네임·사진·이메일 선택 동의)·구글(테스트 중, 테스트 사용자 2명) 실제 로그인, 꽂기 → 로그인 → 같은 책 복귀 + 자동 꽂기, S-09 막대(꾹 눌러 옮기기·뒷면 메뉴·막대 추가/이름/치우기·로그아웃), 처리방침, taxonomy v0.8(E-11~17·29·30 live). Supabase 0003 마이그레이션·RLS 확인 25/25, Redirect URL `http://localhost:3000/**`·`https://galpi-omega.vercel.app/**`, Vercel에 `NEXT_PUBLIC_SUPABASE_URL`·`_ANON_KEY`(Config). **병합·배포는 사용자 허락 후** → 배포 뒤 확인: 실제 `events.common.user_id`, Amplitude User Look-up, 사이트 코드에 Supabase 주소
-   - P5 뒤 정할 것: 구글 앱 '게시'(지금은 테스트 사용자만 로그인) — P7 공개 전 · Supabase JWT 비대칭 서명 키(지금은 `/api/track`이 로그인한 이벤트마다 Auth 확인 — 보안 리뷰 L2) · 카카오·구글 같은 이메일 계정 자동 연결 설정 확인(L4) · Google Cloud `galpi-510315`(만들다 만 중복 프로젝트) 지우기 · `Galpi/kakao-app-icon-512.png`(카카오 앱 아이콘 원본, 커밋 안 함)
-   - **갈피 우체통 (F-26)** — `feat/feedback-mailbox`(`.worktrees/feedback`), 병합·배포는 사용자 허락 후. 배포 전 사용자 몫: Resend 가입·API 키 → Vercel Production에 `RESEND_API_KEY`·`FEEDBACK_NOTIFY_TO`. 발신 `onboarding@resend.dev`는 **Resend 계정 주인 주소로만** 배달되니 `FEEDBACK_NOTIFY_TO`는 그 주소(아니면 알림 403, 글 저장은 됨). 알림 상한 50통/일은 **인스턴스마다**. 글은 Supabase `events`의 `feedback_sent` 줄 `props.feedback_text`
-4. P7 휴대폰·카톡 점검 → 5명 반응 → 테스트 기록 지우기 → Amplitude 대시보드 시작점을 그날 00:00 KST로
-5. P8 이용자 모으기·1단계 분석 → P9 고치고 전후 비교·리포트
-6. 사용자 몫(급하지 않음): `docs/goal-grading.md` 30행 채점 · D4 나머지 156권 검수 · 원격 브랜치 `origin/feat/p3-flow` 지울지
-
-보류한 작은 것들 (필요할 때): 관리/활용 단어 매칭 동점 처리 · ②가 키워드로 찾았을 때도 "비슷한 '{주제}'"라고 말함 · `playwright.config` 포트를 환경변수로 · S-06 ↗를 스크린 리더가 읽음 · 워크플로 `npm ci --ignore-scripts` · 45분 시간 초과면 그날 전부 잃음 · E-27 중복 · 뒤집기는 버튼인데 C-13은 탭
-
-## 5. 지켜야 할 것
-
-- **키 값을 출력·전사하지 않는다.** 키 입력은 사용자가 직접(`.env`, `web/.env.local`, Vercel, GitHub Secrets). `.env.example`은 빈 칸
-- **예스24 책소개·목차 등 남의 글은 커밋·PR·Actions 로그·평가 파일 어디에도 남기지 않는다** (저장소 공개)
-- 직접 쓴 글(`goal_text`, `missing_text`)은 Supabase에만, Amplitude 금지. **DOM 속성에 이용자 글을 넣지 않는다** (자동 수집·리플레이가 기록함)
-- 이벤트 변경은 taxonomy.md → csv → `schema.ts` → 테스트 → `track()`를 한 커밋에. 모으는 정보가 바뀌면 `/privacy` 먼저
-- 테스트·E2E는 실제 `events`에 쓰지 않는다
-- **병합·push·배포는 사용자 허락 후.** 기록 재작성은 사용자가. 로그인·OAuth·결제·약관 동의도 사용자가
-- 사용자와는 한국어, 쉬운 말로. 디자인은 시안으로 비교해서 받는다. 날짜는 잠정 — 순서만 지킨다
+`CLAUDE.md`(원칙) · `docs/README.md`(문서 관계) · `PRD.md`(기능 F-xx, 화면 S-xx, 이벤트 E-xx) · `DESIGN.md`(토큰 T-xx, 컴포넌트 C-xx) · `taxonomy.md`(이벤트 원본, v2.8) · `label-dictionary.md`(태그 기준 v3.11) · `book-pool.md`(수집·뽑기 규칙) · `context.md`(결정 기록) · `report/README.md`(A/B) · `docs/stitch/`(Stitch 시안 — `src/fetch_stitch.py`로 읽어 옴).
