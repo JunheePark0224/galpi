@@ -23,7 +23,7 @@ Last Updated: 2026-10-28 (계정 이전 전 정리. 이전 판 `archive/HANDOFF-
 4. **피드백 남은 것** (`feedback/` 폴더): 책갈피마다 "왜 이 책인지" 보이게, 질문이 길다·하나 줄이기. 결정 전.
 5. **버그 확인 못 함**: 아이폰에서 머리글·우체통 닫기 문제(WebKit 흉내로는 재현 안 됨 — 친구 아이폰이나 Amplitude로 확인), 운영에서만 나는 React #418(로컬 프로덕션 빌드에선 안 남).
 6. **정리할 것**:
-   - 메인 폴더(`Galpi/`)는 `feat/one-liner-rule` 브랜치이고 **main에 없는 커밋 9개**(발표 개요·스토리보드·피드백·마케팅 문서) + 커밋 안 한 수정 5파일(`docs/context.md` 10-15 행, `marketing/`, `report/outline.md`, `report/storyboard.md`). 사용자에게 합칠지 물어본다. `docs/launch-docs` 브랜치도 문서 커밋 2개가 main에 없다.
+   - (10-28 끝남) 메인 폴더의 `feat/one-liner-rule` 커밋과 수정은 main에 합쳤고, 메인 폴더는 main이다. GitHub의 옛 브랜치는 지웠다. `docs/launch-docs` 브랜치의 문서 커밋 2개는 아직 main에 없다.
    - `.worktrees/` 아래 작업 폴더 11개 — `books-1022` 말고는 모두 main에 합쳐졌다(위 두 브랜치 제외). 지워도 되는지 사용자에게 묻고 정리.
    - `process.md`·`tasks.md`를 이 문서 기준으로 갱신하거나 "멈춤"이라고 적기.
 
@@ -92,7 +92,7 @@ git merge --no-ff <브랜치> -m "Merge <브랜치>: ..." && git push origin mai
 
 | 무엇 | 어디 |
 |---|---|
-| 피드백 원문·스레드 홍보 기록 | `feedback/2026-10-12-01.md`, `feedback/2026-10-13-01.md`, `marketing/threads/threads-1012-1014.md`, `docs/threads-plan.md`·`threads-tracker.xlsx` — 다른 사람의 말과 홍보 계정 운영 메모라 **공개 저장소에서 기록까지 지움(10-28)**, 이 컴퓨터에만. `.gitignore`에 있음 |
+| 피드백 원문·홍보 기록 | `feedback/2026-10-12-01.md`, `feedback/2026-10-13-01.md`, **`marketing/`의 채널별 폴더 전부**(올린 글·사진, README만 공개), `docs/threads-plan.md`·`threads-tracker.xlsx` — 다른 사람의 말과 홍보 계정 운영 메모라 **공개 저장소에서 기록까지 지움(10-28)**, 이 컴퓨터에만. `.gitignore`에 있음 |
 | 매일 확인 SQL | `Galpi/check/daily.md`, `check/supabase-checks.md` (커밋 안 함) |
 | 발표 자료 | `Galpi/presentation/` (HTML 장표 `deck-site/` → Vercel `galpi-deck`, noindex), Canva 디자인(사용자 계정) |
 | 발표용 스킬 | GitHub `JunheePark0224/canva-deck-skill` (공개, Claude Code 플러그인) + 이 PC `~/.claude/skills/canva-deck` |

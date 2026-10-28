@@ -41,7 +41,8 @@ data/raw/events/
 presentation/A-B TEST/
 
 # kept on this computer only (10-28): promo-account notes and other people's words
-marketing/threads/threads-1012-1014.md
+marketing/*
+!marketing/README.md
 feedback/2026-10-12-01.md
 feedback/2026-10-13-01.md
 docs/threads-plan.md
