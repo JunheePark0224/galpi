@@ -101,4 +101,4 @@ git merge --no-ff <브랜치> -m "Merge <브랜치>: ..." && git push origin mai
 
 ## 7. 문서 지도
 
-`CLAUDE.md`(원칙) · `docs/README.md`(문서 관계) · `PRD.md`(기능 F-xx, 화면 S-xx, 이벤트 E-xx) · `DESIGN.md`(토큰 T-xx, 컴포넌트 C-xx) · `taxonomy.md`(이벤트 원본, v2.8) · `label-dictionary.md`(태그 기준 v3.11) · `book-pool.md`(수집·뽑기 규칙) · `context.md`(결정 기록) · `report/README.md`(A/B) · `docs/stitch/`(Stitch 시안 — `src/fetch_stitch.py`로 읽어 옴).
+`CLAUDE.md`(원칙) · `docs/README.md`(문서 관계) · `PRD.md`(기능 F-xx, 화면 S-xx, 이벤트 E-xx) · `DESIGN.md`(토큰 T-xx, 컴포넌트 C-xx) · `taxonomy.md`(이벤트 원본, v2.8) · `label-dictionary.md`(태그 기준 v3.11) · `book-pool.md`(수집·뽑기 규칙) · `context.md`(결정 기록) · `report/README.md`(A/B) · `docs/stitch/`(Stitch 시안 — `src/fetch_stitch.py`로 읽어 옴) · **`playbook.md`(이 프로젝트의 설계·운영 방식 — 다음 프로젝트용 설명서)**.
