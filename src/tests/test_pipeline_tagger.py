@@ -470,9 +470,27 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_11():
+def test_the_dictionary_is_v3_13():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.11"   # 10-27: a sequel stays out even with no number in its title
+    assert rules_version() == "v3.13"   # 10-29: a one-profession practice manual stays out
+
+
+def test_the_v3_13_rules_reach_both_prompts():
+    """10-29: a book of one profession's forms, records and reports (social workers, teachers, nurses, civil servants…)
+    stays out under every 🎯 topic; office skills any worker uses are judged by their topic as before."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**특정 직업 종사자만 쓰는 직무 실무서도 넣지 않는다** (10-29 사용자)" in p
+        assert "한 직업의 직무 실무서(판단 순서 1)" in p
+
+
+def test_the_v3_12_rules_reach_both_prompts():
+    """10-29: a series of short-story anthologies (a new theme and new authors each volume, no story carried over) is not
+    held to "volume 1 only"; a one-author linked series still is."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**예외 — 권마다 이야기가 따로 끝나는 시리즈** (10-29 사용자)" in p and "**번호와 상관없이**" in p
+        assert "**사건이 권마다 끝나는 추리 시리즈**" in p and "같은 인물이 나오는 것만으로는 이어진다고 보지 않는다" in p
 
 
 def test_the_v3_11_rules_reach_both_prompts():
