@@ -105,8 +105,8 @@ test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, 
   await page.getByRole("button", { name: "다음 장" }).click();
   await reactToBookmarks(page, ["패스", "패스", "패스", "패스", "패스"]);
 
-  await expect(page.getByRole("heading", { name: "다음 책갈피를 만나 볼까요?" })).toBeVisible();   // 0 궁금해요 → S-08
-  await page.getByRole("button", { name: "다시 뽑기" }).click();
+  await expect(page.getByRole("heading", { name: "다음 책갈피를 만나 볼까요?" })).toHaveCount(0);   // 0 궁금해요: no S-08 (11-03)
+  await page.getByRole("button", { name: "다시 뽑기" }).click();                                 // the 뒤표지's main tile
   await expect(page.getByText("눌러서 펼치기")).toBeVisible();                                   // S-03 again
   await page.getByRole("button", { name: "책 펼치기" }).click();
   await expect(page.getByRole("button", { name: "질문으로 돌아가기" })).toBeVisible();          // the way back stays on a new round
@@ -121,7 +121,7 @@ test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, 
   expect(first).toHaveLength(5);
   expect(second).toHaveLength(5);
   expect(second.some((id) => first.includes(id))).toBe(false);                  // seen books stay out
-  expect(named(events, "redraw_clicked").map((e) => [e.props, e.common.round, e.common.entry])).toEqual([[{ curious_count: 0 }, 1, "target"]]);
+  expect(named(events, "redraw_clicked").map((e) => [e.props, e.common.round, e.common.entry])).toEqual([[{ curious_count: 0, source: "back_cover" }, 1, "target"]]);
   expect(named(events, "book_opened").map((e) => e.common.round)).toEqual([1, 2]);
   expect(named(events, "question_answered")).toHaveLength(DATA_PATH.length);   // the answers were not asked again
   expect(named(events, "result_viewed")[0]).toMatchObject({ props: { curious_count: 1 }, common: { round: 2 } });

@@ -12,7 +12,9 @@ import { ShareSheet, type ShareMethod } from "./ShareSheet";
 export const BACK_TITLE = "오늘 만난 책갈피";
 export const LABEL_TITLE = "내가 고른 길";
 export const CHALLENGE_CHIP = "오늘은 낯선 쪽으로 도전";
-export const NEXT_WHEN_NONE = "다음 책갈피 만나기";
+/** S-11 [다시 뽑기] (11-03, F-27): the same answers, five new bookmarks — as S-08 does. */
+export const REDRAW = "다시 뽑기";
+export const REDRAW_NOTE = "새 책갈피 5장";
 export const SHARE = "결과 공유하기";
 /** B (back-cover experiment, 10-12): the line that says the lit bookmarks open. */
 export const PICK_HINT = "책갈피를 눌러 보세요";
@@ -117,6 +119,7 @@ interface ActionsProps {
   curious: number;
   shareUrl: string;
   onContinue: () => void;
+  onRedraw: () => void;
   onShared: (method: ShareMethod, isLinkCopied: boolean | null) => void;
 }
 
@@ -125,7 +128,7 @@ interface ActionsProps {
  * share sheet (C-31). Shows only — Flow sends the events (E-42 through onShared). The story picture is asked for (Flow
  * already did, at the last reaction; here for a resumed round) so the sheet's preview and [인스타 스토리로] are ready (10-08).
  */
-export function BackActions({ hint, count, curious, shareUrl, onContinue, onShared }: ActionsProps) {
+export function BackActions({ hint, count, curious, shareUrl, onContinue, onRedraw, onShared }: ActionsProps) {
   const [sheet, setSheet] = useState(false);
   useEffect(() => {
     void storyFile(`${new URL(shareUrl).pathname}/story`);
@@ -138,9 +141,20 @@ export function BackActions({ hint, count, curious, shareUrl, onContinue, onShar
   return (
     <div className={styles.actions}>
       {hint && <p className={styles.hint}>{hint}</p>}
-      {!hint && <Button onClick={onContinue}>{curious > 0 ? `궁금해요 ${curious}권 책 정보 보기` : NEXT_WHEN_NONE}</Button>}
-      <Button ref={opener} variant="secondary" onClick={() => setSheet(true)} aria-haspopup="dialog">
-        <span aria-hidden="true">↗ </span>{SHARE}
+      <div className={styles.tiles}>
+        {!hint && curious > 0 && (
+          <Button className={`${styles.tile} ${styles.wide}`} onClick={onContinue} aria-label={`궁금해요 ${curious}권 책 정보 보기`}>
+            <svg className={styles.tileIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2z" /><path d="M22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z" /></svg>
+            <span>책 정보 보기</span><small className={styles.tileNote}>{`궁금해요 ${curious}권`}</small>
+          </Button>
+        )}
+        <Button variant={hint || curious > 0 ? "secondary" : "primary"} className={`${styles.tile} ${hint || curious > 0 ? "" : styles.wide}`} onClick={onRedraw} aria-label={REDRAW}>
+          <svg className={styles.tileIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8" /><path d="M21 3v5h-5" /></svg>
+          <span>{REDRAW}</span><small className={styles.tileNote}>{REDRAW_NOTE}</small>
+        </Button>
+      </div>
+      <Button ref={opener} variant="quiet" className={styles.share} onClick={() => setSheet(true)} aria-haspopup="dialog">
+        <svg className={styles.shareIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" /><path d="M12 3v12" /><path d="m7 8 5-5 5 5" /></svg>{SHARE}
       </Button>
       {sheet && <ShareSheet shareUrl={shareUrl} count={count} onClose={close} onShared={onShared} />}
     </div>

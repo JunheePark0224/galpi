@@ -54,6 +54,8 @@ interface BackProps {
   curious: number;
   shareUrl: string;
   onContinue: () => void;
+  /** [다시 뽑기] on the back cover (11-03) */
+  onRedraw: () => void;
   onShared: (method: ShareMethod, isLinkCopied: boolean | null) => void;
   /** the book has shut and the back cover shows (E-41) */
   onClosed: () => void;
@@ -166,7 +168,7 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
       {shutting && landed && back && draw && (
         <div className={styles.popActions}>
           <BackActions hint={back.pick ? PICK_HINT : undefined} count={draw.picks.length} curious={back.curious} shareUrl={back.shareUrl}
-            onContinue={back.onContinue} onShared={back.onShared} />
+            onContinue={back.onContinue} onRedraw={back.onRedraw} onShared={back.onShared} />
         </div>
       )}
 

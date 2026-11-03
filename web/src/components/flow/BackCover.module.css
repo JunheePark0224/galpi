@@ -43,6 +43,34 @@
 }
 .pick:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
 .hint { margin: 0 0 2px; font-size: 14px; text-align: center; color: var(--ink-soft); }
+/* 11-03 C-1 (DESIGN C-29): tall tiles, icon over the words; the main one wider, ink with a thin foil frame inside */
+.tiles { display: flex; gap: 10px; width: min(100%, 272px); margin: 0 auto; }
+.tile {
+  position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  min-height: 96px; padding: var(--space-2); border-radius: 16px; line-height: 1.35;
+}
+.wide { flex: 1.5; }
+.tile[data-variant="primary"] { box-shadow: 0 4px 0 #120f0d, 0 10px 18px -8px rgba(43, 39, 36, 0.55); }
+.tile[data-variant="primary"]::before {
+  content: ""; position: absolute; inset: 5px; border: 1px solid var(--foil-line); border-radius: 11px; pointer-events: none;
+}
+.tile[data-variant="primary"] .tileIcon { color: var(--foil); }
+.tile[data-variant="secondary"] { background: #fffdf7; border-width: 1.5px; box-shadow: 0 3px 0 var(--ink); }
+.tile:active { transform: translateY(3px); box-shadow: none; }
+.tileIcon { width: 26px; height: 26px; }
+.tileNote { font-size: 12px; opacity: 0.8; }
+/* The tiles take the old two buttons' height (96px), so the book's layout math (BookScene .scene) is unchanged; the share
+   line floats in the air between the shut back cover and the tiles instead of pushing the tiles below the screen. */
+.actions:has(.tiles) { position: relative; }
+.share {
+  position: absolute; bottom: calc(100% + 2px); left: 50%; transform: translateX(-50%);
+  display: inline-flex; align-items: center; justify-content: center; gap: 5px; white-space: nowrap;
+}
+/* Desktop: the back is a whole unzoomed page down to the tiles, so the line sits beside them (right of the 272px row). */
+@media (min-width: 768px) {
+  .share { bottom: auto; top: 50%; left: calc(50% + 148px); transform: translateY(-50%); }
+}
+.shareIcon { width: 15px; height: 15px; }
 /* B, 10-12 (user): the lit bookmarks hop now and then (like the S-03 tap nudge, Book .cover) so they read as something to
    press, and grow a little. `translate` moves them without touching the slot's own rotate. */
 .laid[data-pick] .slot { width: 70px; height: 163px; }

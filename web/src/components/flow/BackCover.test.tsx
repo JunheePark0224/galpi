@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ArtCombo } from "@/lib/art/combine";
 import type { BookCard } from "@/lib/books/types";
 import { NO_CHIP_LINE } from "@/lib/share/label";
-import { BackActions, BackLaid, CHALLENGE_CHIP, LABEL_TITLE, NEXT_WHEN_NONE, SHARE, type ShareMethod } from "./BackCover";
+import { BackActions, BackLaid, CHALLENGE_CHIP, LABEL_TITLE, REDRAW, SHARE, type ShareMethod } from "./BackCover";
 import type { ShareLabel } from "@/lib/share/label";
 
 const card = (id: string): BookCard => ({
@@ -14,20 +14,20 @@ const ART: ArtCombo = { animal: "cat", bg: "peach", ground: "grass", rare: false
 const BOOKS = ["a", "b", "c", "d", "e"].map((id) => ({ card: card(id), art: ART }));
 const URL_ = "https://www.galpibook.com/s/1~0A~a.b~000000";
 interface Props {
-  books: typeof BOOKS; label: ShareLabel; curious: number; shareUrl: string; onContinue: () => void; onShared: (m: ShareMethod) => void;
+  books: typeof BOOKS; label: ShareLabel; curious: number; shareUrl: string; onContinue: () => void; onRedraw: () => void; onShared: (m: ShareMethod) => void;
 }
 /** S-11 as BookScene shows it once the book has shut: what lies on the back, and the buttons under the book. */
-function BackCover({ books, label, curious, shareUrl, onContinue, onShared }: Props) {
+function BackCover({ books, label, curious, shareUrl, onContinue, onRedraw, onShared }: Props) {
   return (
     <>
       <BackLaid books={books} label={label} />
-      <BackActions count={books.length} curious={curious} shareUrl={shareUrl} onContinue={onContinue} onShared={onShared} />
+      <BackActions count={books.length} curious={curious} shareUrl={shareUrl} onContinue={onContinue} onRedraw={onRedraw} onShared={onShared} />
     </>
   );
 }
 const props = (over: Partial<Props> = {}): Props => ({
   books: BOOKS, label: { chips: ["읽는 시간 자체를 즐기기", "몽글몽글 따뜻함"], challenge: false }, curious: 2,
-  shareUrl: URL_, onContinue: vi.fn(), onShared: vi.fn(), ...over,
+  shareUrl: URL_, onContinue: vi.fn(), onRedraw: vi.fn(), onShared: vi.fn(), ...over,
 });
 
 describe("BackLaid + BackActions (S-11, F-27 — the back of the book with today's five bookmarks)", () => {
@@ -61,11 +61,31 @@ describe("BackLaid + BackActions (S-11, F-27 — the back of the book with today
     expect(p.onContinue).toHaveBeenCalledTimes(1);
   });
 
-  it("puts the challenge first, says 기분 따라 골랐어요 when no choice holds, and moves on to S-08 with no 궁금해요", () => {
-    render(<BackCover {...props({ label: { chips: ["따뜻한 이야기"], challenge: true }, curious: 0 })} />);
+  it("11-03 (C-1): [책 정보 보기] is the main tile, [다시 뽑기] the second, and 결과 공유하기 a small line under them", () => {
+    const p = props();
+    render(<BackCover {...p} />);
+    const main = screen.getByRole("button", { name: "궁금해요 2권 책 정보 보기" });
+    const again = screen.getByRole("button", { name: REDRAW });
+    expect(main).toHaveTextContent("책 정보 보기궁금해요 2권");
+    expect(again).toHaveAttribute("data-variant", "secondary");
+    expect(again).toHaveTextContent("다시 뽑기새 책갈피 5장");
+    expect(screen.getByRole("button", { name: SHARE })).toHaveAttribute("data-variant", "quiet");
+    fireEvent.click(again);
+    expect(p.onRedraw).toHaveBeenCalledTimes(1);
+    expect(p.onContinue).not.toHaveBeenCalled();
+  });
+
+  it("puts the challenge first, says 기분 따라 골랐어요 when no choice holds, and with no 궁금해요 [다시 뽑기] is the one main tile", () => {
+    const p = props({ label: { chips: ["따뜻한 이야기"], challenge: true }, curious: 0 });
+    const { unmount } = render(<BackCover {...p} />);
     expect(within(screen.getByRole("group", { name: LABEL_TITLE })).getAllByRole("listitem").map((li) => li.textContent))
       .toEqual([CHALLENGE_CHIP, "따뜻한 이야기"]);
-    expect(screen.getByRole("button", { name: NEXT_WHEN_NONE })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /책 정보 보기/ })).toBeNull();
+    const again = screen.getByRole("button", { name: REDRAW });
+    expect(again).toHaveAttribute("data-variant", "primary");
+    fireEvent.click(again);
+    expect(p.onRedraw).toHaveBeenCalledTimes(1);
+    unmount();
     render(<BackCover {...props({ label: { chips: [], challenge: false } })} />);
     expect(screen.getByText(NO_CHIP_LINE)).toBeInTheDocument();
   });
