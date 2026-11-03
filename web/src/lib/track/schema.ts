@@ -112,8 +112,6 @@ export const EVENT_SPEC = {
   share_clicked: { method: { type: ["native", "copy", "image", "save_image"] }, label_count: { type: "number" }, is_link_copied: { type: "boolean", nullable: true } },
   share_page_viewed: { label_count: { type: "number" } },
   share_page_started: {},
-  // v2.6: an A/B experiment's screen was really seen — back_cover_pick: the 뒤표지 shut with something 궁금해요
-  experiment_exposed: { experiment: { type: ["back_cover_pick"] }, variant: { type: ["a", "b"] } },
   // v2.7 갈피 소식통: the news sheet opened — was the new-news dot showing, and the newest week's Monday
   news_opened: { has_unseen: { type: "boolean" }, latest_week: { type: "string" } },
   // v2.8 책장 효과음: the speaker on the book screens pressed — the state after the press

@@ -21,7 +21,7 @@ import { encodeShare } from "@/lib/share/code";
 import { storyFile } from "@/lib/share/storyFile";
 import { advance, setFlowBack, unwind } from "@/lib/nav/deviceBack";
 import { setFlowHome } from "@/lib/nav/homeLink";
-import { backCoverExposure, backCoverVariant, firstPeekThisRound, type BackCoverVariant } from "@/lib/experiment/backCover";
+import { backCoverVariant, firstPeekThisRound, type BackCoverVariant } from "@/lib/experiment/backCover";
 import type { ShareMethod } from "./BackCover";
 import { BookPeek } from "./BookPeek";
 import { backPickGuide } from "@/lib/flow/firstGuide";
@@ -226,8 +226,6 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
   const closed = () => {
     setClosing(false);
     track("back_cover_shown", { curious_count: curiousPicks(state).length, label_count: state.draw?.label?.chips.length ?? 0 });
-    const exposure = backCoverExposure(variant, curiousPicks(state).length);   // E-45, the same moment (taxonomy v2.6)
-    if (exposure) track("experiment_exposed", exposure);
   };
 
   /** S-11 main button: S-06 with something 궁금해요, S-08 without (PRD 2절). */

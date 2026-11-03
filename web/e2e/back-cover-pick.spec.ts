@@ -4,7 +4,7 @@ import { named, reactToBookmarks, recordEvents, specMismatches, test, toBookmark
 /**
  * Back-cover experiment B (10-12, PRD F-27, taxonomy v2.6): the 궁금해요 bookmarks on the 뒤표지 open their book in a card
  * over the blurred back cover, always from the first 궁금해요 book — no main button, a tip on the first one (once per browser), ‹ › through them,
- * [다 봤어요] on the last → S-08. E-45 variant "b", and the card sends E-09 once and E-10 per book as S-06 does.
+ * [다 봤어요] on the last → S-08. Ended 11-03 (everyone sees A, E-45 removed in taxonomy v2.9); the old B screen stays behind ?ab=b, and the card sends E-09 once and E-10 per book as S-06 does.
  */
 test("B: 궁금해요 bookmark on the 뒤표지 → floating book card → S-08", async ({ page }) => {
   await page.addInitScript(() => window.localStorage.setItem("galpi.exp.backCover", "B"));
@@ -12,7 +12,8 @@ test("B: 궁금해요 bookmark on the 뒤표지 → floating book card → S-08"
   await toBookmarks(page);
   await reactToBookmarks(page, ["궁금해요", "패스", "궁금해요", "패스", "패스"], 5, true);
 
-  await expect.poll(() => named(events, "experiment_exposed").map((e) => e.props)).toEqual([{ experiment: "back_cover_pick", variant: "b" }]);
+  await expect.poll(() => named(events, "back_cover_shown").length).toBe(1);
+  expect(named(events, "experiment_exposed")).toEqual([]);   // E-45 removed (taxonomy v2.9)
   await expect(page.getByRole("button", { name: /권 책 정보 보기$/ })).toHaveCount(0);
   await expect(page.getByText("책갈피를 눌러 보세요", { exact: true })).toBeVisible();
   await expect(page.getByText("눌러서 책 정보 보기")).toBeVisible();

@@ -35,6 +35,7 @@
 | taxonomy v2.6 | 2026-10-12 | 뒤표지 A/B 실험 `back_cover_pick` (PRD F-27, 사용자 결정 B2) | E-45 `experiment_exposed`(`experiment`·`variant`) live, 동사 `exposed`, 분류 `실험`. 처리방침은 그대로("화면 버전") (8절) |
 | taxonomy v2.5 | 2026-10-09 | 머리글 [처음으로] (PRD F-01, DESIGN A-05, 사용자 시안 D `mockups/2026-10-09-home-button-right.png`) | E-20 `source` += "header" — 흐름 도중(S-01이 아닐 때) 오른쪽 위 [처음으로]를 눌러 확인 없이 S-01로. 다른 페이지(/library 등)의 [처음으로]는 로고처럼 그냥 이동이라 이벤트 없음 (8절) |
 | taxonomy v2.7 | 2026-10-19 | 갈피 소식통 (PRD F-28, DESIGN C-33, 사용자 시안 A `mockups/2026-10-19-news-owl.html`) | E-46 `news_opened`(`has_unseen`·`latest_week`) live, 동사 `opened`, 분류 `홈`. 모으는 정보 변화 없음 (8절) |
+| taxonomy v2.9 | 2026-11-03 | 뒤표지 A/B 1차 종료 (PRD F-27, 사용자 결정 11-03, `report/README.md`) | E-45 `experiment_exposed` removed — 모두 A, 보내지 않음 (8절) |
 | taxonomy v2.8 | 2026-10-19 | 책장 효과음 (PRD F-29, DESIGN C-34, 사용자 시안 `mockups/2026-10-19-page-sound.html` 넘김 2 · 펼침 A) | E-47 `sound_toggle_clicked`(`is_sound_on`) live, 동사 `clicked`, 분류 `책펼치기`. 모으는 정보 변화 없음 (8절) |
 
 > **이 문서가 이벤트의 원본(SSOT)이다.** 이벤트 이름·속성·값·보내는 곳은 여기서 정하고, 코드는 이 문서를 따른다.
@@ -357,9 +358,9 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-42 | `share_clicked` | (없음, v2.0) | 공유 | click | live |
 | E-43 | `share_page_viewed` | (없음, v2.0) | 공유 | view | live |
 | E-44 | `share_page_started` | (없음, v2.0) | 공유 | click | live |
-| E-45 | `experiment_exposed` | (없음, v2.6) | 실험 | view | live |
+| E-45 | `experiment_exposed` | (없음, v2.6) | 실험 | view | removed |
 
-E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(40개 — `EVENT_NAMES`는 그 키, v2.8 E-47 추가, v2.7 E-46 추가, v2.6 E-45 추가, v2.0 E-41~E-44 추가, v1.2 E-35 추가, v1.3 E-36·E-37 추가, v1.6 E-38 추가, v1.7 E-39 추가, v1.8 E-40 추가. `removed` 6개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
+E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(39개 — `EVENT_NAMES`는 그 키, v2.9 E-45 없앰, v2.8 E-47 추가, v2.7 E-46 추가, v2.6 E-45 추가, v2.0 E-41~E-44 추가, v1.2 E-35 추가, v1.3 E-36·E-37 추가, v1.6 E-38 추가, v1.7 E-39 추가, v1.8 E-40 추가. `removed` 7개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
 
 ### 4-2. 이벤트별 상세
 
@@ -1026,7 +1027,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 
 | 분류 | 트리거 | 상태 | 현재 → 제안 |
 |---|---|---|---|
-| 실험 | view | live | 신규 (v2.6) |
+| 실험 | view | removed | 신규 (v2.6) · 없앰 (v2.9, 11-03 실험 종료) |
 
 **언제**: A/B 실험에서 받은 쪽 화면이 실제로 보인 순간, 한 판에 한 번. `back_cover_pick`(10-12): 다섯 번째 반응에 **궁금해요가 1권 이상**이고 책이 덮여 S-11 뒤표지가 보일 때 — E-41과 같은 순간(같은 판 새로고침이면 다시 보내지 않음). 궁금해요 0권이면 A·B 화면이 같아 보내지 않는다  
 **받는 쪽 정하기**: 익명 번호(`anon_id`)와 실험 이름을 FNV-1a 해시해 2로 나눈 나머지 — 같은 브라우저는 늘 같은 쪽(`lib/experiment/backCover.ts`). 서버 저장 없음. 로그인해도 바뀌지 않고 기기가 바뀌면 다시 정해진다  
@@ -1413,6 +1414,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v2.6 | 2026-10-12 | Claude (사용자 결정 B2) | 뒤표지 A/B 실험 `back_cover_pick`(PRD F-27): E-45 `experiment_exposed`(`experiment`·`variant` "a"/"b") 추가, 동사 `exposed`, 분류 `실험`. 궁금해요 1권 이상으로 뒤표지가 덮일 때 한 판에 한 번(E-41과 같은 순간). 받는 쪽은 anon_id 해시로 브라우저마다 고정. b의 책 카드는 S-06과 같은 E-09(한 판에 한 번)·E-10(책마다 한 번)을 보낸다. 모으는 정보: 처리방침의 "화면 버전"에 들어가 처리방침은 그대로. 지표 "책 정보 도달률", 질문 Q-16 |
 | v2.7 | 2026-10-19 | Claude (사용자 시안 A) | 갈피 소식통(PRD F-28, DESIGN C-33): E-46 `news_opened`(`has_unseen` Boolean·`latest_week` String) 추가, 동사 `opened`(이미 허용), 분류 `홈`, 트리거 click. 시트를 열 때마다 한 번. 새 소식 점은 브라우저 저장(`galpi.news.seenWeek`, 마지막으로 연 주의 시작일)으로만 정하고 서버에 보내지 않는다 — C-20 안내 기억과 같은 종류라 처리방침은 그대로. 모으는 정보 변화 없음 |
 | v2.8 | 2026-10-19 | Claude (사용자 시안 넘김 2 · 펼침 A) | 책장 효과음(PRD F-29, DESIGN C-34): E-47 `sound_toggle_clicked`(`is_sound_on` Boolean — 누른 뒤 상태) 추가, 동사 `clicked`, 분류 `책펼치기`, 트리거 click. 소리 자체는 이벤트 없음. 끈 설정은 브라우저 저장(`galpi.sound.off`)만 — C-20 안내 기억과 같은 종류라 처리방침은 그대로. 모으는 정보 변화 없음 |
+| v2.9 | 2026-11-03 | Claude (사용자 결정) | 뒤표지 A/B `back_cover_pick` 1차 종료(PRD F-27, `report/README.md` 11-03 판정 — 차이를 가려내지 못해 A 유지): E-45 `experiment_exposed` 상태 live → removed, `schema.ts`에서 뺌. 모두 A를 본다. B 화면은 기록용으로 `?ab=b`로만 열리고 E-45를 보내지 않는다(b 카드의 E-09·E-10은 그대로). 모으는 정보는 줄기만 해 처리방침은 그대로 |
 
 ---
 

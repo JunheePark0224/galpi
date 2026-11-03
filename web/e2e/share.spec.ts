@@ -24,8 +24,8 @@ test("뒤표지 → share a link → the shared page → 나도 갈피 잡기", 
   await expect(back.getByRole("group", { name: "내가 고른 길" })).toBeVisible();
   await expect.poll(() => named(events, "back_cover_shown").length).toBe(1);
   expect(named(events, "back_cover_shown")[0].props).toMatchObject({ curious_count: 1 });
-  // E-45 (v2.6): the same moment, with the variant this browser got (pinned to A by the fixture)
-  expect(named(events, "experiment_exposed").map((e) => e.props)).toEqual([{ experiment: "back_cover_pick", variant: "a" }]);
+  // E-45 removed 11-03 (taxonomy v2.9): the experiment ended, nothing is sent
+  expect(named(events, "experiment_exposed")).toEqual([]);
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(0);
 
