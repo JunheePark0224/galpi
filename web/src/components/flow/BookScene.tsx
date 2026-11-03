@@ -59,6 +59,8 @@ interface BackProps {
   onClosed: () => void;
   /** B (back-cover experiment, 10-12): the 궁금해요 bookmarks open their book; absent in A or with no 궁금해요 */
   pick?: BackPick;
+  /** the 궁금해요 bookmarks, lit on the back cover while the rest step back (11-03) */
+  lit?: ReadonlySet<string>;
 }
 
 /**
@@ -132,7 +134,7 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
           shutNow={shutting && !back?.shutting}
           onShut={back?.onClosed}
           backFace={shutting && landed && draw ? (
-            <div className={styles.popFace}><BackLaid books={draw.picks} label={draw.label ?? { chips: [], challenge: false }} pick={back?.pick} /></div>
+            <div className={styles.popFace}><BackLaid books={draw.picks} label={draw.label ?? { chips: [], challenge: false }} pick={back?.pick} lit={back?.lit} /></div>
           ) : null}
         />
         {/* C-34 (10-19): the page sounds' switch — on the book screens, not on the back cover (A/B, report/README) */}
