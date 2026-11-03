@@ -156,7 +156,8 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
       return s.step === "result" && s.result > 0 ? { ...s, result: s.result - 1 } : s;
     case "redraw":
       // F-10: the same answers, five new books (seen stay excluded), the earlier 궁금해요 do not carry over; a new closed book.
-      if (s.step !== "end") return s;
+      // From S-08, or straight from the S-11 뒤표지 (11-03, F-27).
+      if (s.step !== "end" && s.step !== "back") return s;
       return requestDraw({ ...s, opened: false, index: 0, reactions: [], result: 0 });
     case "home":
       return { ...INITIAL, seen: s.seen };

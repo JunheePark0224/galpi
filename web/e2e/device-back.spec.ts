@@ -102,7 +102,9 @@ test("the share sheet closes with back; the 궁금해요 book goes back to the �
 test("after [처음으로] on the last screen, back leaves the site — no dead press", async ({ page }) => {
   await page.goto("/privacy");
   await toBookmarks(page);
-  await reactToBookmarks(page, ["패스", "패스", "패스", "패스", "패스"], 5);
+  await reactToBookmarks(page, ["궁금해요", "패스", "패스", "패스", "패스"], 5);   // 11-03: S-08 comes after the 궁금해요 books
+  await page.getByRole("button", { name: "다 봤어요" }).click();
+  await expect(page.getByRole("heading", { name: "다음 책갈피를 만나 볼까요?" })).toBeVisible();
   await page.getByRole("button", { name: "처음으로" }).click();
   await expect(page.getByRole("button", { name: START })).toBeVisible();
   await page.waitForTimeout(300);

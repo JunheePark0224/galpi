@@ -307,9 +307,9 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     return () => clearTimeout(t);
   }, [noticeFor]);
 
-  /** S-08 [다시 뽑기] (E-19): track() moves the round on right after sending it (taxonomy 3-1a); the path stays. */
-  const redraw = () => {
-    track("redraw_clicked", { curious_count: state.reactions.filter((r) => r === "curious").length });
+  /** [다시 뽑기] on S-08 or the S-11 뒤표지 (E-19): track() moves the round on right after sending it (taxonomy 3-1a); the path stays. */
+  const redraw = (source: "end" | "back_cover") => {
+    track("redraw_clicked", { curious_count: state.reactions.filter((r) => r === "curious").length, source });
     advance();
     act({ type: "redraw" });
   };
@@ -345,7 +345,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
           found={found?.at === `${state.drawId}:${state.index}:${state.draw?.picks[state.index]?.card.id}` ? found.items : null}
           back={state.step === "back"
             ? {
-                shutting: closing, curious: curious.length, shareUrl: shareUrl(state), onContinue: leaveBack, onShared: shared, onClosed: closed,
+                shutting: closing, curious: curious.length, shareUrl: shareUrl(state), onContinue: leaveBack, onRedraw: () => redraw("back_cover"), onShared: shared, onClosed: closed,
                 lit: new Set(curious.map((p) => p.card.id)),
                 pick: variant === "B" && curious.length > 0 ? { ids: new Set(curious.map((p) => p.card.id)), onPick: pickBack, showTip: pickTip } : undefined,
               }
@@ -363,7 +363,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
         <BookPeek picks={curious} start={peek} meetingOf={(p) => meetingOf(state.draw, p)} onView={peekBook} onClose={() => setPeek(null)}
           onDone={() => { setPeek(null); advance(); act({ type: "finishBack" }); }} />
       )}
-      {state.step === "end" && <EndScreen onRedraw={redraw} onHome={() => home("end")} />}
+      {state.step === "end" && <EndScreen onRedraw={() => redraw("end")} onHome={() => home("end")} />}
       {noticeFor === screen && (
         <div className={styles.notice} role="status">
           <span>{HOLD_NOTICE}</span>

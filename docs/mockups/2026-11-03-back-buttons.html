@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>뒤표지 버튼 시안</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FAF5EA;--ink:#2B2724;--ink-soft:#4a433d;--ink-muted:#7a6f66;--cloth:#7A4A2E;--cloth-deep:#5a3420;--foil:#EAD9B0;--line:#e6dccb}
+*{box-sizing:border-box}
+body{margin:0;background:#efe7d6;font-family:'Gowun Dodum',sans-serif;color:var(--ink);padding:24px 16px}
+h1{font-family:'Gowun Batang',serif;font-size:18px;text-align:center;margin:0 0 6px}
+.sub{text-align:center;font-size:13px;color:var(--ink-muted);margin:0 0 20px}
+.wrap{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.col{width:320px;max-width:100%}
+.tag{font-size:14px;font-weight:700;font-family:'Gowun Batang',serif;margin:0 0 2px;text-align:center}
+.why{font-size:12px;color:var(--ink-muted);margin:0 0 10px;text-align:center;min-height:32px}
+.phone{background:var(--paper);border-radius:22px;padding:0 0 28px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+/* the bottom of the shut book, so the buttons sit where they do today */
+.book{height:150px;margin:0 22px;background:var(--cloth);border-radius:0 0 10px 2px;position:relative;
+  background-image:radial-gradient(rgba(250,245,234,.12) .8px,transparent 1.2px);background-size:5px 5px;box-shadow:0 18px 30px -16px rgba(43,39,36,.45)}
+.book::after{content:"";position:absolute;top:0;right:0;bottom:0;width:22px;background:#4f2d1c;border-radius:0 0 10px 0}
+.label{position:absolute;left:18px;right:40px;bottom:20px;background:#faf7ee;border-radius:6px;padding:8px;text-align:center;font-size:11px;color:var(--ink-muted)}
+.label b{display:block;font-family:'Gowun Batang',serif;font-size:13px;color:var(--ink);margin-bottom:2px}
+.actions{display:flex;flex-direction:column;gap:10px;width:272px;margin:36px auto 0}
+button{font:inherit;cursor:pointer;border:0;padding:0}
+.ic{width:18px;height:18px;flex:none}
+
+/* now */
+.now-p{min-height:44px;border-radius:999px;background:var(--ink);color:var(--paper);border:1px solid var(--ink);font-size:14px}
+.now-s{min-height:44px;border-radius:999px;background:var(--paper);color:var(--ink);border:1px solid var(--ink);font-size:14px}
+
+/* A: thick pills — a 4px lower edge you can press down */
+.a-p{min-height:54px;border-radius:999px;background:var(--ink);color:var(--paper);font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 4px 0 #120f0d,0 10px 18px -8px rgba(43,39,36,.55)}
+.a-p .n{background:var(--foil);color:var(--ink);border-radius:999px;font-size:12px;padding:1px 8px}
+.a-p .go{font-size:18px;margin-left:2px}
+.a-s{min-height:48px;border-radius:999px;background:#fffdf7;color:var(--ink);border:1.5px solid var(--ink);font-size:15px;display:flex;align-items:center;justify-content:center;gap:6px;
+  box-shadow:0 3px 0 var(--ink)}
+
+/* B: the book's own leather and stitching */
+.b-p{min-height:56px;border-radius:14px;background:var(--cloth);color:var(--foil);font-family:'Gowun Batang',serif;font-weight:700;font-size:16px;position:relative;
+  background-image:radial-gradient(rgba(250,245,234,.12) .8px,transparent 1.2px);background-size:5px 5px;box-shadow:0 4px 0 var(--cloth-deep),0 10px 18px -8px rgba(43,39,36,.5);
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.b-p::before{content:"";position:absolute;inset:5px;border:1.5px dashed rgba(234,217,176,.7);border-radius:10px;pointer-events:none}
+.b-s{min-height:44px;background:transparent;color:var(--ink-soft);font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:underline;text-underline-offset:4px;text-decoration-color:#c9b48f}
+
+/* C: two tall tiles side by side, icon above the words */
+.actions.c{flex-direction:row;gap:10px}
+.c-t{flex:1;min-height:96px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:14px;line-height:1.35}
+.c-t .ic{width:26px;height:26px}
+.c-t small{font-size:12px;opacity:.75}
+.c-p{flex:1.5;background:var(--ink);color:var(--paper);box-shadow:0 4px 0 #120f0d,0 10px 18px -8px rgba(43,39,36,.55)}
+.c-s{background:#fffdf7;color:var(--ink);border:1.5px solid var(--ink);box-shadow:0 3px 0 var(--ink)}
+</style></head><body>
+<h1>뒤표지 아래 버튼 — 어떤 모양이 누르고 싶나</h1>
+<p class="sub">궁금해요 2권을 고른 화면 · 휴대폰 폭 · 주 버튼은 하나(DESIGN C-05)</p>
+<div class="wrap">
+ <div class="col"><p class="tag">지금</p><p class="why">얇은 알약 둘 — 납작해서 눌리는 느낌이 없음</p>
+  <div class="phone"><div class="book"><div class="label"><b>내가 고른 길</b>이 길에서 만난 책갈피 5장</div></div>
+   <div class="actions"><button class="now-p">궁금해요 2권 책 정보 보기</button><button class="now-s">↗ 결과 공유하기</button></div></div></div>
+
+ <div class="col"><p class="tag">A · 도톰한 알약</p><p class="why">아래에 두께(그림자 턱)를 줘서 눌리는 버튼처럼. 권수는 금박 배지, 끝에 →</p>
+  <div class="phone"><div class="book"><div class="label"><b>내가 고른 길</b>이 길에서 만난 책갈피 5장</div></div>
+   <div class="actions">
+    <button class="a-p">궁금해요 <span class="n">2권</span> 책 정보 보기 <span class="go" aria-hidden="true">→</span></button>
+    <button class="a-s"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v12"/><path d="m7 8 5-5 5 5"/></svg>결과 공유하기</button>
+   </div></div></div>
+
+ <div class="col"><p class="tag">B · 가죽 + 바느질 선</p><p class="why">책 표지와 같은 가죽에 금박 글씨·바느질 선. 공유는 밑줄 글씨로 한 단계 낮춤</p>
+  <div class="phone"><div class="book"><div class="label"><b>내가 고른 길</b>이 길에서 만난 책갈피 5장</div></div>
+   <div class="actions">
+    <button class="b-p"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12v20l-6-5-6 5z"/></svg>궁금해요 2권 책 정보 보기</button>
+    <button class="b-s"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v12"/><path d="m7 8 5-5 5 5"/></svg>결과 공유하기</button>
+   </div></div></div>
+
+ <div class="col"><p class="tag">C · 세로형 타일 둘 나란히</p><p class="why">그림 위·글씨 아래인 키 큰 버튼. 책 정보 쪽을 더 넓게</p>
+  <div class="phone"><div class="book"><div class="label"><b>내가 고른 길</b>이 길에서 만난 책갈피 5장</div></div>
+   <div class="actions c">
+    <button class="c-t c-p"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2z"/><path d="M22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"/></svg>책 정보 보기<small>궁금해요 2권</small></button>
+    <button class="c-t c-s"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v12"/><path d="m7 8 5-5 5 5"/></svg>결과<br>공유하기</button>
+   </div></div></div>
+</div>
+</body></html>

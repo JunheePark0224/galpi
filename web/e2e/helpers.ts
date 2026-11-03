@@ -70,15 +70,14 @@ export const test = base.extend({
     await provide({ "x-forwarded-for": clientIp(testInfo.testId) });
   },
   // C-20 · C-21: the S-05 and S-06 guides are marked as seen, so specs reach the reactions and the S-06 buttons;
-  // first-guide.spec and result-guide.spec remove their mark. The back-cover experiment (10-12) is pinned to A, today's
-  // 뒤표지 with its main button; back-cover-pick.spec pins B (a later init script wins).
+  // first-guide.spec and result-guide.spec remove their mark. The back-cover experiment ended 11-03 (everyone sees A);
+  // back-cover-pick.spec pins the old B screen itself.
   page: async ({ page }, provide) => {
     await page.addInitScript(() => {
       try {
         window.localStorage.setItem("galpi.hint.firstGuide", "1");
         window.localStorage.setItem("galpi.hint.resultGuide", "1");
         window.localStorage.setItem("galpi.hint.libraryGuide", "1");
-        window.localStorage.setItem("galpi.exp.backCover", "A");
       } catch { /* blocked */ }
     });
     await provide(page);
@@ -128,8 +127,9 @@ export function specMismatches(events: Sent[]): string[] {
 
 /** Reacts to bookmarks in order; each click waits until the bookmark has finished rising (buttons re-enable). */
 /**
- * React to the bookmarks in turn. After the last one the S-11 뒤표지 shows (F-27, 10-07); unless `stayOnBack`, its main
- * button is pressed so the round goes on to S-06 / S-08 as before.
+ * React to the bookmarks in turn. After the last one the S-11 뒤표지 shows (F-27, 10-07); unless `stayOnBack`, its
+ * [책 정보 보기] is pressed so the round goes on to S-06. With no 궁금해요 the back cover is the end (11-03: its main tile
+ * is [다시 뽑기], no S-08), so nothing is pressed.
  */
 export async function reactToBookmarks(page: Page, reactions: readonly ("궁금해요" | "패스")[], total = reactions.length, stayOnBack = false) {
   for (let i = 0; i < reactions.length; i++) {
@@ -140,5 +140,5 @@ export async function reactToBookmarks(page: Page, reactions: readonly ("궁금�
   await expect(page.getByRole("heading", { level: 1, name: "오늘 만난 책갈피" })).toBeVisible();
   if (stayOnBack) return;
   const curious = reactions.filter((r) => r === "궁금해요").length;
-  await page.getByRole("button", { name: curious > 0 ? `궁금해요 ${curious}권 책 정보 보기` : "다음 책갈피 만나기" }).click();
+  if (curious > 0) await page.getByRole("button", { name: `궁금해요 ${curious}권 책 정보 보기` }).click();
 }

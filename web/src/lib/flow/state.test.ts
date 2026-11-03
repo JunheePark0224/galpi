@@ -193,6 +193,12 @@ describe("flowReducer (v2 questions)", () => {
     expect(flowReducer(opened(), { type: "redraw" })).toEqual(opened());
   });
 
+  it("[다시 뽑기] on the S-11 뒤표지 too (11-03): straight from the back cover, without S-06 / S-08", () => {
+    const back = run(Array.from({ length: 5 }, () => ({ type: "react" as const, reaction: "curious" as const })), flowReducer(opened(), { type: "next" }));
+    expect(back.step).toBe("back");
+    expect(flowReducer(back, { type: "redraw" })).toMatchObject({ step: "book", opened: false, status: "loading", drawId: 2, index: 0, reactions: [], result: 0 });
+  });
+
   it("[처음으로] keeps only the books already shown", () => {
     const marks = flowReducer(opened(), { type: "next" });
     expect(flowReducer(marks, { type: "home" })).toEqual({ ...INITIAL, seen: ["b0"] });

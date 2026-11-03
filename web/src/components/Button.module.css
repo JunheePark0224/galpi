@@ -12,6 +12,11 @@
 .btn:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
 .primary { background: var(--ink); color: var(--paper); }
 .secondary { background: var(--paper); color: var(--ink); }
+/* a small underlined line that is still a 44px button (S-11 결과 공유하기, 11-03) */
+.quiet {
+  border-color: transparent; background: transparent; color: var(--ink-muted); font-size: 13px;
+  text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--foil);
+}
 
 .btn:disabled { opacity: 0.45; cursor: default; }
 .btn:disabled:active { transform: none; }

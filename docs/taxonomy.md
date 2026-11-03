@@ -35,6 +35,7 @@
 | taxonomy v2.6 | 2026-10-12 | 뒤표지 A/B 실험 `back_cover_pick` (PRD F-27, 사용자 결정 B2) | E-45 `experiment_exposed`(`experiment`·`variant`) live, 동사 `exposed`, 분류 `실험`. 처리방침은 그대로("화면 버전") (8절) |
 | taxonomy v2.5 | 2026-10-09 | 머리글 [처음으로] (PRD F-01, DESIGN A-05, 사용자 시안 D `mockups/2026-10-09-home-button-right.png`) | E-20 `source` += "header" — 흐름 도중(S-01이 아닐 때) 오른쪽 위 [처음으로]를 눌러 확인 없이 S-01로. 다른 페이지(/library 등)의 [처음으로]는 로고처럼 그냥 이동이라 이벤트 없음 (8절) |
 | taxonomy v2.7 | 2026-10-19 | 갈피 소식통 (PRD F-28, DESIGN C-33, 사용자 시안 A `mockups/2026-10-19-news-owl.html`) | E-46 `news_opened`(`has_unseen`·`latest_week`) live, 동사 `opened`, 분류 `홈`. 모으는 정보 변화 없음 (8절) |
+| taxonomy v3.0 | 2026-11-03 | 뒤표지 [다시 뽑기] (PRD F-27·F-10, 사용자 시안 C-1 `mockups/2026-11-03-back-buttons-redraw.png`) | E-19 `source`("end" · "back_cover") 추가 — S-11에서도 다시 뽑기 (8절) |
 | taxonomy v2.9 | 2026-11-03 | 뒤표지 A/B 1차 종료 (PRD F-27, 사용자 결정 11-03, `report/README.md`) | E-45 `experiment_exposed` removed — 모두 A, 보내지 않음 (8절) |
 | taxonomy v2.8 | 2026-10-19 | 책장 효과음 (PRD F-29, DESIGN C-34, 사용자 시안 `mockups/2026-10-19-page-sound.html` 넘김 2 · 펼침 A) | E-47 `sound_toggle_clicked`(`is_sound_on`) live, 동사 `clicked`, 분류 `책펼치기`. 모으는 정보 변화 없음 (8절) |
 
@@ -961,12 +962,13 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 마무리 | click | live | 같음 |
 
-**언제**: S-08 [다시 뽑기]를 누를 때. 이 이벤트는 끝나는 판의 round를 싣고, **보낸 직후 round +1** (3-1a)  
-**분석 질문**: Q-03
+**언제**: S-08 마무리 또는 S-11 뒤표지(v3.0, 11-03)의 [다시 뽑기]를 누를 때. 이 이벤트는 끝나는 판의 round를 싣고, **보낸 직후 round +1** (3-1a)  
+**분석 질문**: Q-03 · 뒤표지에서 책 정보를 보지 않고 다시 뽑는 비율(`source` "back_cover", v3.0)
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `curious_count` | 같음 | Number | 0, 2 | 이번 회차 궁금해요 수 |
+| `source` | 추가 (v3.0) | String | "end", "back_cover" | 누른 화면 — S-08 마무리 / S-11 뒤표지. v3.0 전 E-19는 모두 S-08 |
 
 #### E-20 `home_clicked`
 
@@ -1415,6 +1417,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v2.7 | 2026-10-19 | Claude (사용자 시안 A) | 갈피 소식통(PRD F-28, DESIGN C-33): E-46 `news_opened`(`has_unseen` Boolean·`latest_week` String) 추가, 동사 `opened`(이미 허용), 분류 `홈`, 트리거 click. 시트를 열 때마다 한 번. 새 소식 점은 브라우저 저장(`galpi.news.seenWeek`, 마지막으로 연 주의 시작일)으로만 정하고 서버에 보내지 않는다 — C-20 안내 기억과 같은 종류라 처리방침은 그대로. 모으는 정보 변화 없음 |
 | v2.8 | 2026-10-19 | Claude (사용자 시안 넘김 2 · 펼침 A) | 책장 효과음(PRD F-29, DESIGN C-34): E-47 `sound_toggle_clicked`(`is_sound_on` Boolean — 누른 뒤 상태) 추가, 동사 `clicked`, 분류 `책펼치기`, 트리거 click. 소리 자체는 이벤트 없음. 끈 설정은 브라우저 저장(`galpi.sound.off`)만 — C-20 안내 기억과 같은 종류라 처리방침은 그대로. 모으는 정보 변화 없음 |
 | v2.9 | 2026-11-03 | Claude (사용자 결정) | 뒤표지 A/B `back_cover_pick` 1차 종료(PRD F-27, `report/README.md` 11-03 판정 — 차이를 가려내지 못해 A 유지): E-45 `experiment_exposed` 상태 live → removed, `schema.ts`에서 뺌. 모두 A를 본다. B 화면은 기록용으로 `?ab=b`로만 열리고 E-45를 보내지 않는다(b 카드의 E-09·E-10은 그대로). 모으는 정보는 줄기만 해 처리방침은 그대로 |
+| v3.0 | 2026-11-03 | Claude (사용자 시안 C-1) | 뒤표지 [다시 뽑기](PRD F-27·F-10, DESIGN C-29): E-19 `redraw_clicked`에 `source`(String, "end" · "back_cover") 추가 — S-08 마무리와 S-11 뒤표지를 가른다. 궁금해요 0권이면 뒤표지의 [다시 뽑기]가 S-08 대신. 모으는 정보의 종류는 그대로라 처리방침은 그대로 |
 
 ---
 

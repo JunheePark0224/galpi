@@ -32,7 +32,7 @@ describe("BookScene", () => {
 
   describe("S-11 (10-07): the book shuts onto its back cover — no screen change", () => {
     const back = (shutting: boolean) => ({
-      shutting, curious: 1, shareUrl: "https://www.galpibook.com/s/1~0A~b0~000", onContinue: vi.fn(), onShared: vi.fn(), onClosed: vi.fn(),
+      shutting, curious: 1, shareUrl: "https://www.galpibook.com/s/1~0A~b0~000", onContinue: vi.fn(), onRedraw: vi.fn(), onShared: vi.fn(), onClosed: vi.fn(),
     });
     const done: FlowState = { ...first, step: "back", index: 4 };
 
