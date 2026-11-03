@@ -53,9 +53,14 @@ function useFit() {
 /** B: the 궁금해요 bookmarks are lit and open their book; the rest are dimmed (S-11 only — the shared page never picks). */
 export interface BackPick { ids: ReadonlySet<string>; onPick: (id: string) => void; showTip?: boolean }
 
-export function BackLaid({ books, label, pick }: { books: Books; label: ShareLabel; pick?: BackPick }) {
+/**
+ * S-11 (11-03, user — kept from experiment B): the 궁금해요 bookmarks stay clear and the rest step back; with no 궁금해요 all
+ * five step back. Absent on the shared page (S-12), where all five stay as they are.
+ */
+export function BackLaid({ books, label, pick, lit }: { books: Books; label: ShareLabel; pick?: BackPick; lit?: ReadonlySet<string> }) {
   const chips = [...(label.challenge ? [CHALLENGE_CHIP] : []), ...label.chips];
   const { box, k } = useFit();
+  const glow = pick?.ids ?? lit;
   const tipAt = pick?.showTip ? books.findIndex(({ card }) => pick.ids.has(card.id)) : -1;
   return (
     <div ref={box} className={styles.fit}>
@@ -64,7 +69,8 @@ export function BackLaid({ books, label, pick }: { books: Books; label: ShareLab
           {books.map(({ card, art }, i) => {
             const [x, y, turn] = LAID[i % LAID.length];
             return (
-              <li key={card.id} className={`${styles.slot} ${pick ? (pick.ids.has(card.id) ? styles.lit : styles.dim) : ""}`}
+              <li key={card.id} className={`${styles.slot} ${glow ? (glow.has(card.id) ? styles.lit : styles.dim) : ""}`}
+                data-glow={glow ? (glow.has(card.id) ? "lit" : "dim") : undefined}
                 data-tip={i === tipAt ? "" : undefined}
                 style={{ left: `${x}%`, top: `${y}%`, "--turn": `${turn}deg`, "--delay": `${i * 0.3}s` } as CSSProperties}>
                 <div className={styles.small}><Bookmark card={card} art={art} moving /></div>

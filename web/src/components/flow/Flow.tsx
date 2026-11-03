@@ -346,6 +346,7 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
           back={state.step === "back"
             ? {
                 shutting: closing, curious: curious.length, shareUrl: shareUrl(state), onContinue: leaveBack, onShared: shared, onClosed: closed,
+                lit: new Set(curious.map((p) => p.card.id)),
                 pick: variant === "B" && curious.length > 0 ? { ids: new Set(curious.map((p) => p.card.id)), onPick: pickBack, showTip: pickTip } : undefined,
               }
             : undefined}

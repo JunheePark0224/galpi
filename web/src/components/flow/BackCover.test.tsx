@@ -33,6 +33,22 @@ const props = (over: Partial<Props> = {}): Props => ({
 describe("BackLaid + BackActions (S-11, F-27 — the back of the book with today's five bookmarks)", () => {
   afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); forgetStories(); });
 
+  it("11-03 (from experiment B): the 궁금해요 bookmarks stay clear and the rest step back — nothing to press, no hop", () => {
+    const { container } = render(<BackLaid books={BOOKS} label={props().label} lit={new Set(["a", "c"])} />);
+    const glow = [...container.querySelectorAll("article")].map((a) => a.closest("li")?.getAttribute("data-glow"));
+    expect(glow).toEqual(["lit", "dim", "lit", "dim", "dim"]);
+    expect(screen.queryAllByRole("button")).toHaveLength(0);
+    expect(container.querySelector("[data-pick]")).toBeNull();
+  });
+
+  it("with no 궁금해요 all five step back (user, 11-03); the shared page (no lit) keeps them as they are", () => {
+    const { container, unmount } = render(<BackLaid books={BOOKS} label={props().label} lit={new Set<string>()} />);
+    expect([...container.querySelectorAll("li[data-glow]")].map((li) => li.getAttribute("data-glow"))).toEqual(["dim", "dim", "dim", "dim", "dim"]);
+    unmount();
+    const shared = render(<BackLaid books={BOOKS} label={props().label} />);
+    expect(shared.container.querySelectorAll("[data-glow]")).toHaveLength(0);
+  });
+
   it("lays the five bookmarks on the back cover with the 내가 고른 길 label, and continues to the 궁금해요 books", () => {
     const p = props();
     const { container } = render(<BackCover {...p} />);

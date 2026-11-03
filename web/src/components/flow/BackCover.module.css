@@ -34,7 +34,7 @@
 .count { margin: 6px 0 0; font-size: 10.5px; color: var(--ink-muted); }
 .actions { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-2); width: min(100%, 320px); margin: 0 auto; }
 .status { margin: 0; min-height: 1.2em; font-size: 13px; text-align: center; color: var(--ink-soft); }
-/* B (back-cover experiment, 10-12): the 궁금해요 bookmarks are lit and open their book; the rest step back */
+/* S-11 (11-03, from experiment B): the 궁금해요 bookmarks are lit, the rest step back (B also opens their book, below) */
 .dim { opacity: 0.38; filter: saturate(0.35) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2)); }
 .lit { z-index: 2; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.42)); }
 .pick {
@@ -47,7 +47,7 @@
    press, and grow a little. `translate` moves them without touching the slot's own rotate. */
 .laid[data-pick] .slot { width: 70px; height: 163px; }
 .laid[data-pick] .small { transform: scale(0.44); }
-@media (prefers-reduced-motion: no-preference) { .lit { animation: hop 2.4s ease-in-out var(--delay, 0s) infinite; } }
+@media (prefers-reduced-motion: no-preference) { .laid[data-pick] .lit { animation: hop 2.4s ease-in-out var(--delay, 0s) infinite; } }
 @keyframes hop { 0%, 64%, 100% { translate: 0 0; } 74% { translate: 0 -9px; } 84% { translate: 0 0; } 90% { translate: 0 -4px; } }
 /* B, 10-12 (시안 A, user): a dark tip under the first lit bookmark, pointing up at it — the hint line alone was too quiet.
    It stands upright (undoes the slot's turn) and hops with the bookmark; gone once a bookmark is pressed. */
