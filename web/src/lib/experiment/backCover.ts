@@ -1,22 +1,13 @@
-import { currentRound, ensureAnonId } from "@/lib/track/common";
-import type { PropsOf } from "@/lib/track/schema";
+import { currentRound } from "@/lib/track/common";
 
 /**
- * Back-cover experiment (10-12, report/README.md): A = today's 뒤표지 (the main button goes on to S-06); B = the same 뒤표지
- * where the 궁금해요 bookmarks stand out and open their book in a floating card. One person always sees one variant:
- * hash(experiment name + anonymous id) % 2 — no server, and the rule can be said in one sentence (원칙 2).
+ * Back-cover experiment (10-12 ~ 11-03, report/README.md): A = today's 뒤표지 (the main button goes on to S-06); B = the same
+ * 뒤표지 where the 궁금해요 bookmarks stand out and open their book in a floating card. Ended 11-03 without telling the two
+ * apart, so everyone sees A; the B screen stays reachable through ?ab=b for the record, and E-45 is no longer sent.
  */
 export type BackCoverVariant = "A" | "B";
-export const BACK_COVER_EXPERIMENT = "back_cover_pick";
 /** localStorage key that pins a variant on this browser (screenshots; on a phone set through ?ab=, below). */
 export const BACK_COVER_OVERRIDE = "galpi.exp.backCover";
-
-/** FNV-1a (32-bit) of the experiment name and the id: stable across visits, about half and half across people. */
-export function variantOf(anonId: string): BackCoverVariant {
-  let h = 2166136261;
-  for (const ch of `${BACK_COVER_EXPERIMENT}:${anonId}`) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0;
-  return h % 2 === 0 ? "A" : "B";
-}
 
 /** The address switch for checking a variant on a phone: ?ab=a or ?ab=b pins this browser, ?ab=off unpins. */
 export const BACK_COVER_PARAM = "ab";
@@ -32,7 +23,7 @@ function pinFromAddress(): void {
     url.searchParams.delete(BACK_COVER_PARAM);
     window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
   } catch {
-    // storage blocked: the hash decides
+    // storage blocked: nothing pinned
   }
 }
 
@@ -42,18 +33,9 @@ export function backCoverVariant(): BackCoverVariant {
     const pinned = localStorage.getItem(BACK_COVER_OVERRIDE);
     if (pinned === "A" || pinned === "B") return pinned;
   } catch {
-    // storage blocked: fall through to the hash
+    // storage blocked: A
   }
-  return variantOf(ensureAnonId());
-}
-
-/**
- * E-45 `experiment_exposed` (taxonomy v2.6): what to send when the 뒤표지 shuts — only with something 궁금해요, since with
- * none the two screens are the same. null = send nothing.
- */
-export function backCoverExposure(variant: BackCoverVariant, curiousCount: number): PropsOf<"experiment_exposed"> | null {
-  if (curiousCount <= 0) return null;
-  return { experiment: BACK_COVER_EXPERIMENT, variant: variant === "B" ? "b" : "a" };
+  return "A";
 }
 
 const PEEKED = "galpi.exp.peekedRound";
