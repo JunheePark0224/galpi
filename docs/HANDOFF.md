@@ -49,7 +49,7 @@ PYTHONIOENCODING=utf-8 python -m src.pipeline.review <날짜>                  #
 - `cd web && npm run books:import` → 서재 권수 확인.
 - **소식통** `web/src/data/news.json`: 그 주(월~일)에 새 책 줄은 **한 줄만** — "새 책 N권이 꽂혀 갈피의 서재가 M권이 됐어요". 같은 주에 또 넣으면 그 줄 숫자를 고친다. 새 주면 맨 위에 새 칸.
 - `docs/context.md`에 날짜 행 하나(결과 숫자 + 그날 정한 규칙).
-- 테스트: `PYTHONIOENCODING=utf-8 python -m pytest src/tests -q`, `cd web && npx vitest run` → 커밋(영어 메시지, 끝에 `Co-Authored-By` 줄, 본문에 events 체크리스트 줄).
+- 테스트: `PYTHONIOENCODING=utf-8 python -m pytest src/tests -q`, `cd web && npx vitest run`, **`npx playwright test e2e/design.spec.ts`**(새 한 줄이 책갈피 틀에 들어가는지 — 글씨 1.15배에서 넷째 줄을 넘으면 잘림. 36자 규칙 안이어도 줄바꿈 위치에 따라 넘친다, 11-03 『타인의 해석』) → 커밋(영어 메시지, 끝에 `Co-Authored-By` 줄, 본문에 events 체크리스트 줄).
 - 같은 날 더 받고 싶으면 `--batch <날짜>-2 --count 50`.
 
 #### 3-1-1. 최근 정의서 변경 (검수에서 사용자가 정한 것 — 비슷한 책이 오면 이것부터)
