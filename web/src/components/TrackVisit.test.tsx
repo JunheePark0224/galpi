@@ -5,8 +5,10 @@ import { DATA_PATH } from "@/lib/paths/__fixtures__/paths";
 /**
  * The first visit event of a document must already carry the round and entry that document starts in. The real page is server
  * HTML (S-01) hydrated on the client: TrackVisit's effect runs in the hydration commit, before FlowRoot switches to Flow.
+ * Each test loads React and the whole FlowRoot tree afresh (vi.resetModules — a new document): about 1 s alone, and past the
+ * 5 s default when the full suite runs in parallel (11-03), where a timed-out test kept running and broke the tests after it.
  */
-describe("site_visited on a fresh open vs a reload (hydrated TrackVisit + FlowRoot)", () => {
+describe("site_visited on a fresh open vs a reload (hydrated TrackVisit + FlowRoot)", { timeout: 30_000 }, () => {
   const midRound = { step: "bookmarks", answers: DATA_PATH, asked: DATA_PATH.length, seen: ["b1"] } as unknown as FlowState;
   let unmount: (() => void) | null = null;
 

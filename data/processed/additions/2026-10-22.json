@@ -154,7 +154,7 @@
    "missing": [],
    "suggest": "인문",
    "one_liner_style": "question",
-   "one_liner": "낯선 사람을 왜 자꾸 오해하는지 실제 사건으로 짚어 보고, 이해하는 눈을 고쳐 볼래요?",
+   "one_liner": "낯선 사람을 왜 자꾸 오해하는지 실제 사건으로 짚어 볼래요?",
    "evidence": "사회 문제보다 사람 이해의 틀이 중심",
    "confidence": 0.6,
    "fits": false,
