@@ -104,7 +104,7 @@ git merge --no-ff <브랜치> -m "Merge <브랜치>: ..." && git push origin mai
 - API 키 값 출력·대화에 쓰기. `.env` 키 이름: `DATA4LIBRARY_KEY`, `KAKAO_REST_KEY`, `YES24_API_KEY`, `STITCH_API_KEY`, `GEMINI_API_KEY`, `ANTHROPIC_API_KEY` (값은 사용자 `.env`에만).
 - 예스24 책소개·목차·표지를 커밋하거나 공개 주소에 올리기 (`data/raw/`는 git에 안 들어감).
 - "배포해줘" 없이 main에 push. 로그인·가입·콘솔 설정·키 발급은 사용자가 직접.
-- **커밋하지 않는 것**: `presentation/`, `web/src/app/catalog-tmp/`, `web/shot-tmp.mjs`, `web/shots-tmp/`, `.claude/`, `kakao-app-icon-512.png`, `check/`, `report/ab_final.py`(판정 전까지), `test-results/`.
+- **커밋하지 않는 것**: `presentation/`, `web/src/app/catalog-tmp/`, `web/shot-tmp.mjs`, `web/shots-tmp/`, `.claude/`, `kakao-app-icon-512.png`, `check/`, `test-results/`.
 - 진행 중인 A/B 내용을 소식통에 쓰기.
 
 ## 6. 저장소 밖에 있는 것
@@ -115,6 +115,7 @@ git merge --no-ff <브랜치> -m "Merge <브랜치>: ..." && git push origin mai
 | 매일 확인 SQL | `Galpi/check/daily.md`, `check/supabase-checks.md` (커밋 안 함) |
 | 발표 자료 | `Galpi/presentation/` (HTML 장표 `deck-site/` → Vercel `galpi-deck`, noindex), Canva 디자인(사용자 계정) |
 | 발표용 스킬 | GitHub `JunheePark0224/canva-deck-skill` (공개, Claude Code 플러그인) + 이 PC `~/.claude/skills/canva-deck` |
+| A/B 계산 스크립트 | `Portfolio/backups/galpi-ab-2026-11-04/ab_final.py` (11-04 옮김 — 10-15 발표 17·18장 숫자를 낸 것. 11-03 최종 판정은 매일 확인 SQL 합계로 계산) |
 | 검수 페이지 | 메인 폴더 `data/processed/check/pipeline/*.html` (예스24 글이 들어 있어 커밋 안 함) |
 | 블로그 | 티스토리 juny-data.tistory.com (구글 색인됨), Search Console에서 galpibook.com 노출 시작(10-28, 클릭 0) |
 | 서비스 계정 | Supabase(DB·로그인), Vercel(배포), Amplitude(이벤트), Google Search Console — 모두 사용자 로그인 |
