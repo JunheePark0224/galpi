@@ -107,13 +107,18 @@
 .backStamp { position: absolute; inset: 14px 34px 14px 14px; border: 1px solid var(--foil-line); border-radius: 6px; }
 /* shutting: the book keeps its size while it turns, then settles (zooms) once shut */
 .zoom[data-shut] { transition-duration: 0.45s; }   /* settles once shut (SHUT_SETTLE_MS), never while open */
-/* the open cover (the tall left page) goes once the turning half shows its back (≈ half way: 0.4 s wait + ≈ 0.55 s of the
-   1 s turn) — on a phone the back is a 1 : 1.45 book and must not lie on a page taller than itself (10-08). 11-05 (phone
-   frames): it used to vanish at once, so the page and its rim stuck out around the short back and then blinked away — now
-   its inside fades across the moment the half stands on edge (0.85 → 1.15 s), then the cover hides. The fade is on .back
-   (no 3D inside it), not on .cover: opacity < 1 there would flatten the cover's 3D. */
-.zoom[data-shut] .cover { visibility: hidden; transition: visibility 0s linear 1.15s; }
-.zoom[data-shut] .cover .back { opacity: 0; transition: opacity 0.3s ease-in 0.85s; }
+/* Phone, 11-05 (frames, twice): a tall page used to turn over into a short back cover — the two faces of one leaf were
+   different heights, so the leaf seemed to shrink as it stood on edge, and the tall left page and its rim stuck out around
+   the short back. Now, in the 0.4 s before the turn (SHUT_BOOK.delay), the blank spread first shortens, centred, to the
+   back's height ((half + rim) × 1.45 − the rims): the leaf is the same board on both faces and lands exactly on the left
+   page. The open cover (that left page) then hides under it once the turn is over. Desktop keeps its height (below). */
+.zoom { container-type: inline-size; }
+.zoom[data-shut] .book {
+  --shut-h: min(var(--book-h, 340px), calc((50cqw + 5px) * 1.45 - 10px));
+  height: var(--shut-h); margin-block: calc((var(--book-h, 340px) - var(--shut-h)) / 2);
+  transition: height 0.4s var(--ease-open), margin 0.4s var(--ease-open);
+}
+.zoom[data-shut] .cover { visibility: hidden; transition: visibility 0s linear 1.4s; }
 .ruled {
   position: absolute; inset: 0; perspective: 1600px;
   background: repeating-linear-gradient(to bottom, transparent 0 27px, var(--paper-rule) 27px 28px);
@@ -132,5 +137,6 @@
     .zoom[data-closed] .board, .zoom[data-closed] .pageRight { opacity: 1; }
     .front, .backOutside { top: 0; bottom: 0; aspect-ratio: auto; translate: none; }
     .zoom[data-shut] { transform: none; }   /* the back is already a whole page here; zoomed, it would reach the buttons */
+    .zoom[data-shut] .book { height: var(--book-h, 340px); margin-block: 0; }   /* …so the spread keeps its height too */
   }
 }
