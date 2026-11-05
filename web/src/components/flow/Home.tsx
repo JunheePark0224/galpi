@@ -2,11 +2,14 @@ import type { CSSProperties } from "react";
 import type { LibraryCount } from "@/lib/books/library";
 import { LogoMark } from "@/components/Logo";
 import { Mailbox } from "@/components/feedback/Mailbox";
+import { MakerShelf } from "@/components/maker/MakerShelf";
 import { NewsOwl } from "@/components/news/NewsOwl";
 import styles from "./Home.module.css";
 
 /** library: F-23 count from the server (page.tsx), null until the first fill — then the cover keeps the logo. */
-interface Props { onStart: () => void; library?: LibraryCount | null }
+/** Where a round starts from S-01 (E-02 `source`): the entry button, or S-13 책갈피 구경 (F-30). */
+export type StartSource = "home" | "maker_shelf";
+interface Props { onStart: (source: StartSource) => void; library?: LibraryCount | null }
 
 const books = (n: number) => `${n.toLocaleString("ko-KR")}권`;
 
@@ -57,16 +60,17 @@ export function Home({ onStart, library = null }: Props) {
         {news && <p className={styles.news} aria-hidden="true">{news}</p>}
       </section>
       <div className={styles.entries}>
-        <button type="button" className={styles.entry} onClick={onStart}>
+        <button type="button" className={styles.entry} onClick={() => onStart("home")}>
           <span className={styles.entryTitle}>{START_LABEL}</span>
           <span className={styles.go}><Arrow /></span>
         </button>
         <p className={styles.entryNote}>{START_NOTE}</p>
       </div>
-      {/* F-26 takes letters in, F-28 brings news out — a quiet pair under the entry (DESIGN C-18 · C-33) */}
+      {/* F-26 takes letters in, F-28 brings news out, F-30 shows the maker's shelf — quiet, under the entry (DESIGN C-18 · C-33 · C-35) */}
       <div className={styles.notes}>
         <Mailbox />
         <NewsOwl />
+        <MakerShelf onStart={() => onStart("maker_shelf")} />
       </div>
     </div>
   );

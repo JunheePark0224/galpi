@@ -87,12 +87,12 @@
   clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
-/* DESIGN C-33: 갈피 우체통 and 갈피 소식통 side by side, their words on one baseline */
-.notes { display: flex; justify-content: center; align-items: flex-end; gap: 18px; }
-/* 320px phones: two side-by-side buttons with 16px side padding wrapped their small lines mid-word ("주세/요").
-   Narrower side padding and no wrapping keep each line whole; the 44px target is kept by min-width/min-height. */
-.notes button { white-space: nowrap; }
-@media (max-width: 374px) {
-  .notes { gap: var(--space-2); }
-  .notes button { padding-left: var(--space-2); padding-right: var(--space-2); }
-}
+/* DESIGN C-35 (11-05): 갈피 우체통 · 갈피 소식통 · 책갈피 구경 on one row, their words on one baseline. Three share the
+   width equally (one row down to 320px); a name stays on one line, the small line under it folds at word breaks into at
+   most two balanced lines (C-35 replaces C-18 · C-33's single line). The 44px target is kept by min-width/min-height. */
+.notes { display: flex; justify-content: center; align-items: flex-end; gap: 6px; }
+.notes > * { flex: 1 1 0; min-width: 0; }
+/* only the three trigger buttons — their sheets render inside these boxes too (Sheet has no portal) */
+.notes > * > button { width: 100%; max-width: 160px; padding-left: var(--space-1); padding-right: var(--space-1); }
+.notes > * > button > span:nth-last-child(2) { white-space: nowrap; }
+.notes > * > button > span:last-child { text-align: center; word-break: keep-all; text-wrap: balance; }

@@ -28,7 +28,7 @@ import { backPickGuide } from "@/lib/flow/firstGuide";
 import { playPage } from "@/lib/sound/pageSound";
 import { BookScene } from "./BookScene";
 import { EndScreen } from "./EndScreen";
-import { Home } from "./Home";
+import { Home, type StartSource } from "./Home";
 import { Question } from "./Question";
 import { ResultBook } from "./ResultBook";
 import { ResultLoading } from "./ResultLoading";
@@ -137,10 +137,10 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     for (const p of curious) void readyCover(p.card.id);
   };
 
-  /** S-01 [갈피 잡으러 가기] (E-02): no branch and no route yet — the questions set them. */
-  const start = () => {
+  /** S-01 [갈피 잡으러 가기] or S-13 [나도 책갈피 모으러 가기] (E-02): no branch and no route yet — the questions set them. */
+  const start = (source: StartSource) => {
     syncCommon([]);
-    track("entry_selected", { source: "home" });
+    track("entry_selected", { source });
     advance();
     act({ type: "start" });
   };

@@ -10,10 +10,11 @@ describe("Home (S-01)", () => {
     render(<Home onStart={onStart} />);
     fireEvent.click(screen.getByRole("button", { name: "갈피 잡으러 가기" }));
     expect(onStart).toHaveBeenCalledTimes(1);
+    expect(onStart).toHaveBeenCalledWith("home");
     expect(screen.getByText("질문 몇 개면 나에게 맞는 책을 만나요")).toBeInTheDocument();
   });
 
-  it("has no login place of its own — the one entry, then the 갈피 우체통 and 갈피 소식통 (F-26, F-28)", () => {
+  it("has no login place of its own — the one entry, then the 갈피 우체통, 갈피 소식통 and 책갈피 구경 (F-26, F-28, F-30)", () => {
     render(<Home onStart={vi.fn()} />);
     expect(screen.queryByTestId("account-slot")).toBeNull();
     expect(screen.queryByText("로그인")).toBeNull();
@@ -21,6 +22,7 @@ describe("Home (S-01)", () => {
       "갈피 잡으러 가기",
       "갈피 우체통 — 써 보고 느낀 점을 넣어 주세요",
       "갈피 소식통 — 이번 주에 바뀐 것, 새 소식 있음",
+      "책갈피 구경 — 갈피를 만든 사람의 책갈피함",
     ]);
     expect(screen.getByRole("heading", { name: "갈피" })).toBeInTheDocument();
     expect(screen.getByText("읽을 책, 갈피가 안 잡힐 때")).toBeInTheDocument();
@@ -53,7 +55,7 @@ describe("Home (S-01)", () => {
     expect(art).toHaveTextContent("갈피의 서재");
     expect(art).toHaveTextContent("1,234권");
     expect(art).toHaveTextContent("+12");
-    expect(screen.getAllByRole("button")).toHaveLength(3);   // one entry + 갈피 우체통 + 갈피 소식통
+    expect(screen.getAllByRole("button")).toHaveLength(4);   // one entry + 갈피 우체통 + 갈피 소식통 + 책갈피 구경
   });
 
   it("leaves out today's bookmark and sentence on a day with no new books", () => {

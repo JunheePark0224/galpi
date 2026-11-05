@@ -1,0 +1,26 @@
+/* DESIGN C-35 책갈피 구경: as quiet as the C-18 slot and the C-33 owl beside it — muted words, a faded drawing, no motion. */
+.post { display: flex; justify-content: center; margin-top: var(--space-5); }
+.peek {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
+  min-width: var(--touch); min-height: var(--touch); padding: var(--space-2) var(--space-4);
+  border: 0; border-radius: var(--radius-card); background: none; color: var(--ink-muted);
+  font: inherit; cursor: pointer;
+}
+.peek:active { background: var(--paper-deep); }
+.peek:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+.art { display: block; width: 94px; height: 60px; margin-top: -6px; }
+/* only the drawing is faded (C-18): the words keep ink-muted at full strength */
+.drawing { display: block; width: 100%; height: 100%; opacity: 0.72; filter: saturate(0.7); transition: opacity 160ms; }
+.peek:hover .drawing, .peek:focus-visible .drawing { opacity: 1; }
+.name { font-family: var(--font-batang), serif; font-size: 12px; font-weight: 700; line-height: 1.4; letter-spacing: 0.5px; }
+.line { font-size: 11px; line-height: 1.4; }
+
+/* S-13 */
+.sheet { display: flex; flex-direction: column; }
+.lead { margin: var(--space-1) 0 var(--space-3); font-size: 14px; color: var(--ink-soft); }
+.textButton {
+  align-self: center; min-height: var(--touch); min-width: var(--touch); padding: 0 var(--space-3);
+  border: 0; background: none; color: var(--ink-muted); font: inherit; font-size: 13px; cursor: pointer;
+}
+.textButton:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .drawing { transition: none; } }

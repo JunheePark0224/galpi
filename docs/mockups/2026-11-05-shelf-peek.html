@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>남의 책갈피함 입구 시안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FAF5EA; --paper-deep: #F0E6D0; --paper-line: #DDD0B4;
+    --cloth: #7A4A2E; --cloth-edge: #5A3420; --ink: #2B2724; --ink-soft: #4A433D; --ink-muted: #7A6048;
+    --frost: #F4F1EA; --card-bg: rgba(255,255,255,.55);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px 16px 40px; background: #E9E1CF; font-family: "Gowun Dodum", sans-serif; color: var(--ink); }
+  h1 { font-family: "Gowun Batang", serif; font-size: 20px; margin: 0 0 4px; }
+  .sub { margin: 0 0 20px; font-size: 13px; color: var(--ink-soft); }
+  .grid { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+  .col { display: flex; flex-direction: column; gap: 8px; }
+  .tag { font-family: "Gowun Batang", serif; font-weight: 700; font-size: 15px; }
+  .tag small { font-family: "Gowun Dodum", sans-serif; font-weight: 400; font-size: 12px; color: var(--ink-soft); margin-left: 6px; }
+  .phone { width: 375px; background: var(--paper); border-radius: 18px; padding: 20px 16px 22px; box-shadow: 0 2px 10px rgba(43,39,36,.12); }
+  .phone.narrow { width: 320px; }
+  /* the start entry, simplified */
+  .entry { display: flex; justify-content: space-between; align-items: center; height: 64px; padding: 0 18px;
+           border-radius: 16px; background: var(--ink); color: var(--paper); font-family: "Gowun Batang", serif; font-weight: 700; font-size: 17px; }
+  .note { margin: 8px 0 0; text-align: center; font-size: 12px; color: var(--ink-muted); }
+  /* the quiet row (Home .notes) */
+  .notes { display: flex; justify-content: center; align-items: flex-end; gap: 6px; margin-top: 22px; }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1 1 0; min-width: 0; padding: 8px 4px;
+          color: var(--ink-muted); border-radius: 14px; }
+  .item.now { flex: 0 1 auto; padding: 8px 16px; white-space: nowrap; }
+  .art { display: block; height: 60px; }
+  .art svg { display: block; height: 100%; width: auto; opacity: .72; filter: saturate(.7); }
+  .art.mail svg { width: 100px; height: 54px; margin-top: 6px; }
+  .name { font-family: "Gowun Batang", serif; font-size: 12px; font-weight: 700; line-height: 1.4; letter-spacing: .5px; white-space: nowrap; }
+  .line { font-size: 11px; line-height: 1.4; text-align: center; text-wrap: balance; word-break: keep-all; }
+  .new { position: relative; }
+  .new::after { content: "새 메뉴"; position: absolute; top: -6px; left: 50%; transform: translateX(-50%); font-size: 10px; padding: 1px 6px;
+                border-radius: 8px; background: #b23a48; color: #fff; white-space: nowrap; }
+  .why { width: 375px; margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+<h1>남의 책갈피함 — 첫 화면 입구 시안 (2026-11-05)</h1>
+<p class="sub">우체통 · 부엉이 옆 세 번째 메뉴. 그림은 둘(A 막대 · B 책갈피 한 장), 이름은 둘. 모두 휴대폰 375px, 마지막은 320px(작은 휴대폰) 확인.</p>
+
+<!-- reusable drawings -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="mail" viewBox="0 0 104 56">
+      <rect x="2" y="20" width="100" height="32" rx="6" fill="#C9A45C" stroke="#8C6B2E" stroke-width="1.5"/>
+      <circle cx="11" cy="36" r="2" fill="#8C6B2E"/><circle cx="93" cy="36" r="2" fill="#8C6B2E"/>
+      <rect x="22" y="32" width="60" height="6" rx="3" fill="#2B2724"/>
+      <g transform="rotate(-8 52 35)"><rect x="35" y="5" width="34" height="30" rx="1.5" fill="#fffdf7" stroke="#b9ac93" stroke-width="1.2"/>
+      <path d="M35.6 5.6 L52 18 L68.4 5.6" fill="none" stroke="#b9ac93" stroke-width="1.2"/></g>
+    </symbol>
+    <symbol id="owl" viewBox="0 0 100 100">
+      <path d="M30 42 L32 30 L42 38 Z M70 42 L68 30 L58 38 Z" fill="#A7876B"/>
+      <circle cx="50" cy="63" r="26" fill="#A7876B"/>
+      <circle cx="39" cy="58" r="9" fill="#F5EEDD"/><circle cx="61" cy="58" r="9" fill="#F5EEDD"/>
+      <circle cx="39" cy="58" r="3.4" fill="#2B2724"/><circle cx="61" cy="58" r="3.4" fill="#2B2724"/>
+      <g transform="rotate(-14 62 80)"><rect x="46" y="68" width="34" height="23" rx="1.5" fill="#fffdf7" stroke="#8C6B2E" stroke-width="1.4"/>
+      <path d="M46.7 68.7 L63 80 L79.3 68.7" fill="none" stroke="#8C6B2E" stroke-width="1.4"/><circle cx="63" cy="80.5" r="2.6" fill="#b23a48"/></g>
+      <path d="M47 64 H53 L50 69.5 Z" fill="#E39A4E"/>
+    </symbol>
+    <!-- small faces (from assets/animals, simplified) -->
+    <symbol id="cat" viewBox="0 0 100 100"><path d="M26 52 L29 24 Q31 20 35 23 L48 36 Z M74 52 L71 24 Q69 20 65 23 L52 36 Z" fill="#EFE3CF"/><ellipse cx="50" cy="61" rx="27" ry="24" fill="#EFE3CF"/><circle cx="40" cy="60" r="3" fill="#2B2724"/><circle cx="60" cy="60" r="3" fill="#2B2724"/></symbol>
+    <symbol id="fox" viewBox="0 0 100 100"><path d="M24 50 L27 24 Q28 20 32 22 L46 36 Z M76 50 L73 24 Q72 20 68 22 L54 36 Z" fill="#D98C55"/><path d="M22 52 Q50 26 78 52 Q74 76 50 86 Q26 76 22 52 Z" fill="#D98C55"/><path d="M23 57 Q37 61 50 86 Q29 80 23 57 Z M77 57 Q63 61 50 86 Q71 80 77 57 Z" fill="#FBF4E8"/><circle cx="40" cy="58" r="3" fill="#2B2724"/><circle cx="60" cy="58" r="3" fill="#2B2724"/></symbol>
+    <symbol id="rabbit" viewBox="0 0 100 100"><ellipse cx="40" cy="26" rx="7.5" ry="20" fill="#F6F0E4"/><ellipse cx="60" cy="26" rx="7.5" ry="20" fill="#F6F0E4"/><ellipse cx="40" cy="27" rx="3.4" ry="14" fill="#EBB7AA"/><ellipse cx="60" cy="27" rx="3.4" ry="14" fill="#EBB7AA"/><circle cx="50" cy="63" r="25" fill="#F6F0E4"/><circle cx="41" cy="61" r="2.8" fill="#2B2724"/><circle cx="59" cy="61" r="2.8" fill="#2B2724"/><ellipse cx="34" cy="68" rx="4.2" ry="2.5" fill="#EBB7AA"/><ellipse cx="66" cy="68" rx="4.2" ry="2.5" fill="#EBB7AA"/></symbol>
+    <!-- A: a short rod (C-17 cloth edge) with three small bookmarks hanging, like the S-07 example shelf -->
+    <symbol id="rod" viewBox="0 0 100 64">
+      <rect x="6" y="6" width="88" height="4.5" rx="2.2" fill="#5A3420"/>
+      <circle cx="6" cy="8.2" r="3.2" fill="#7A4A2E"/><circle cx="94" cy="8.2" r="3.2" fill="#7A4A2E"/>
+      <g id="mini">
+        <line x1="24" y1="10.5" x2="24" y2="17" stroke="#7A6048" stroke-width="1.3"/>
+      </g>
+      <line x1="50" y1="10.5" x2="50" y2="17" stroke="#7A6048" stroke-width="1.3"/>
+      <line x1="76" y1="10.5" x2="76" y2="17" stroke="#7A6048" stroke-width="1.3"/>
+      <!-- films: arch top, swallowtail bottom -->
+      <g stroke="#DDD0B4" stroke-width="1">
+        <path d="M13 27 A11 11 0 0 1 35 27 V60 L24 54 L13 60 Z" fill="#F4F1EA"/>
+        <path d="M39 27 A11 11 0 0 1 61 27 V60 L50 54 L39 60 Z" fill="#F4F1EA"/>
+        <path d="M65 27 A11 11 0 0 1 87 27 V60 L76 54 L65 60 Z" fill="#F4F1EA"/>
+      </g>
+      <path d="M15.5 27.5 A8.5 8.5 0 0 1 32.5 27.5 V40 H15.5 Z" fill="#F9DCCB"/><path d="M15.5 37 Q24 33 32.5 37 V40 H15.5 Z" fill="#E7B597"/>
+      <path d="M41.5 27.5 A8.5 8.5 0 0 1 58.5 27.5 V40 H41.5 Z" fill="#1D2E4A"/><path d="M43 26 Q50 22 57 27" stroke="#7FD6B0" stroke-width="1.6" fill="none" opacity=".8"/><path d="M41.5 37 Q50 33 58.5 37 V40 H41.5 Z" fill="#2C4440"/>
+      <path d="M67.5 27.5 A8.5 8.5 0 0 1 84.5 27.5 V40 H67.5 Z" fill="#E4EFD9"/><path d="M67.5 37 Q76 33 84.5 37 V40 H67.5 Z" fill="#A9C69A"/>
+      <use href="#cat" x="17" y="23" width="14" height="14"/>
+      <use href="#rabbit" x="43" y="22" width="14" height="14"/>
+      <use href="#fox" x="69" y="23" width="14" height="14"/>
+      <g fill="#DDD0B4"><rect x="16" y="44" width="16" height="1.6" rx=".8"/><rect x="42" y="44" width="16" height="1.6" rx=".8"/><rect x="68" y="44" width="16" height="1.6" rx=".8"/>
+      <rect x="18" y="48" width="12" height="1.4" rx=".7"/><rect x="44" y="48" width="12" height="1.4" rx=".7"/><rect x="70" y="48" width="12" height="1.4" rx=".7"/></g>
+    </symbol>
+    <!-- B: one bookmark of the maker's shelf (this week's — 오로라 토끼), kept at the same 60px height -->
+    <symbol id="one" viewBox="0 0 44 64">
+      <path d="M22 0 V7" stroke="#7A6048" stroke-width="1.4"/>
+      <circle cx="22" cy="7.5" r="1.6" fill="#7A6048"/>
+      <path d="M6 22 A16 16 0 0 1 38 22 V63 L22 55 L6 63 Z" fill="#F4F1EA" stroke="#DDD0B4" stroke-width="1"/>
+      <path d="M9.5 22.5 A12.5 12.5 0 0 1 34.5 22.5 V40 H9.5 Z" fill="#1D2E4A"/>
+      <path d="M11 21 Q22 14 33 21" stroke="#7FD6B0" stroke-width="2" fill="none" opacity=".85"/>
+      <path d="M12 25 Q22 19 32 25" stroke="#B49CE0" stroke-width="1.4" fill="none" opacity=".6"/>
+      <path d="M9.5 36 Q22 31 34.5 36 V40 H9.5 Z" fill="#2C4440"/>
+      <use href="#rabbit" x="12" y="18" width="20" height="20"/>
+      <rect x="10" y="44" width="24" height="2" rx="1" fill="#DDD0B4"/>
+      <rect x="13" y="49" width="18" height="1.6" rx=".8" fill="#DDD0B4"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="grid">
+
+  <div class="col">
+    <div class="tag">지금 <small>우체통 + 부엉이</small></div>
+    <div class="phone">
+      <div class="entry">갈피 잡으러 가기 <span>→</span></div>
+      <p class="note">질문 몇 개면 나에게 맞는 책을 만나요</p>
+      <div class="notes" style="gap:18px">
+        <div class="item now"><span class="art mail"><svg viewBox="0 0 104 56"><use href="#mail"/></svg></span><span class="name">갈피 우체통</span><span class="line">써 보고 느낀 점을 넣어 주세요</span></div>
+        <div class="item now"><span class="art"><svg viewBox="0 0 100 100"><use href="#owl"/></svg></span><span class="name">갈피 소식통</span><span class="line">이번 주에 바뀐 것</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="tag">A-1 <small>막대 · "책갈피 구경"</small></div>
+    <div class="phone">
+      <div class="entry">갈피 잡으러 가기 <span>→</span></div>
+      <p class="note">질문 몇 개면 나에게 맞는 책을 만나요</p>
+      <div class="notes">
+        <div class="item"><span class="art mail"><svg viewBox="0 0 104 56"><use href="#mail"/></svg></span><span class="name">갈피 우체통</span><span class="line">써 보고 느낀 점을 넣어 주세요</span></div>
+        <div class="item"><span class="art"><svg viewBox="0 0 100 100"><use href="#owl"/></svg></span><span class="name">갈피 소식통</span><span class="line">이번 주에 바뀐 것</span></div>
+        <div class="item new"><span class="art"><svg viewBox="0 0 100 64"><use href="#rod"/></svg></span><span class="name">책갈피 구경</span><span class="line">갈피를 만든 사람의 책갈피함</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="tag">A-2 <small>막대 · "남의 책갈피함"</small></div>
+    <div class="phone">
+      <div class="entry">갈피 잡으러 가기 <span>→</span></div>
+      <p class="note">질문 몇 개면 나에게 맞는 책을 만나요</p>
+      <div class="notes">
+        <div class="item"><span class="art mail"><svg viewBox="0 0 104 56"><use href="#mail"/></svg></span><span class="name">갈피 우체통</span><span class="line">써 보고 느낀 점을 넣어 주세요</span></div>
+        <div class="item"><span class="art"><svg viewBox="0 0 100 100"><use href="#owl"/></svg></span><span class="name">갈피 소식통</span><span class="line">이번 주에 바뀐 것</span></div>
+        <div class="item new"><span class="art"><svg viewBox="0 0 100 64"><use href="#rod"/></svg></span><span class="name">남의 책갈피함</span><span class="line">갈피를 만든 사람은 뭘 꽂았을까</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="tag">B <small>책갈피 한 장 (같은 60px 높이) · "이번 주 책갈피"</small></div>
+    <div class="phone">
+      <div class="entry">갈피 잡으러 가기 <span>→</span></div>
+      <p class="note">질문 몇 개면 나에게 맞는 책을 만나요</p>
+      <div class="notes">
+        <div class="item"><span class="art mail"><svg viewBox="0 0 104 56"><use href="#mail"/></svg></span><span class="name">갈피 우체통</span><span class="line">써 보고 느낀 점을 넣어 주세요</span></div>
+        <div class="item"><span class="art"><svg viewBox="0 0 100 100"><use href="#owl"/></svg></span><span class="name">갈피 소식통</span><span class="line">이번 주에 바뀐 것</span></div>
+        <div class="item new"><span class="art"><svg viewBox="0 0 44 64"><use href="#one"/></svg></span><span class="name">이번 주 책갈피</span><span class="line">갈피를 만든 사람이 꽂은 책</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="tag">A-1 · 320px <small>작은 휴대폰에서 셋이 한 줄에 들어가나</small></div>
+    <div class="phone narrow">
+      <div class="entry">갈피 잡으러 가기 <span>→</span></div>
+      <p class="note">질문 몇 개면 나에게 맞는 책을 만나요</p>
+      <div class="notes">
+        <div class="item"><span class="art mail"><svg viewBox="0 0 104 56"><use href="#mail"/></svg></span><span class="name">갈피 우체통</span><span class="line">써 보고 느낀 점을 넣어 주세요</span></div>
+        <div class="item"><span class="art"><svg viewBox="0 0 100 100"><use href="#owl"/></svg></span><span class="name">갈피 소식통</span><span class="line">이번 주에 바뀐 것</span></div>
+        <div class="item new"><span class="art"><svg viewBox="0 0 100 64"><use href="#rod"/></svg></span><span class="name">책갈피 구경</span><span class="line">갈피를 만든 사람의 책갈피함</span></div>
+      </div>
+    </div>
+    <p class="why" style="width:320px">셋이 되면 지금처럼 설명 줄을 한 줄로 둘 수 없어 두 줄로 접힌다(우체통 줄 포함). 누르는 곳은 셋 다 44px 이상.</p>
+  </div>
+
+</div>
+</body>
+</html>

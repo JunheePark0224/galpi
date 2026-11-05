@@ -36,7 +36,7 @@ const UTM = { type: "string", nullable: true, only: "supabase", max: UTM_MAX } a
 /** Every live and planned event (taxonomy 4-1), in PRD order. Props are the event's own; common props are separate. */
 export const EVENT_SPEC = {
   site_visited: { prompt_version: { type: "string", only: "amplitude" }, utm_source: UTM, utm_medium: UTM, utm_campaign: UTM },
-  entry_selected: { source: { type: ["home", "first_page"] } },
+  entry_selected: { source: { type: ["home", "first_page", "maker_shelf"] } },   // v3.1: S-13 [나도 책갈피 모으러 가기]
   question_answered: {
     node_id: NODE_ID,
     kind: { type: ["narrow", "mood"] },
@@ -71,7 +71,7 @@ export const EVENT_SPEC = {
   library_viewed: { saved_count: { type: "number" } },
   yes24_link_clicked: {
     book_id: { type: "string", nullable: true },
-    source: { type: ["result", "library", "first_page"] },
+    source: { type: ["result", "library", "first_page", "maker_shelf"] },   // v3.1: S-13 책갈피 구경
     pick_type: { type: [null, "recommended", "random"] },
   },
   redraw_clicked: { curious_count: CURIOUS_COUNT, source: { type: ["end", "back_cover"] } },   // v3.0: S-11 too
@@ -116,6 +116,9 @@ export const EVENT_SPEC = {
   news_opened: { has_unseen: { type: "boolean" }, latest_week: { type: "string" } },
   // v2.8 책장 효과음: the speaker on the book screens pressed — the state after the press
   sound_toggle_clicked: { is_sound_on: { type: "boolean" } },
+  // v3.1 책갈피 구경 (F-30): the maker's shelf sheet opened, and one of its bookmarks seen large
+  maker_shelf_opened: {},
+  maker_bookmark_viewed: { book_id: BOOK_ID },
 } as const satisfies Record<string, Readonly<Record<string, PropSpec>>>;
 
 type Spec = typeof EVENT_SPEC;
