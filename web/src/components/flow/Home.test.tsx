@@ -22,7 +22,7 @@ describe("Home (S-01)", () => {
       "갈피 잡으러 가기",
       "갈피 우체통 — 써 보고 느낀 점을 넣어 주세요",
       "갈피 소식통 — 이번 주에 바뀐 것, 새 소식 있음",
-      "책갈피 구경 — 갈피를 만든 사람의 책갈피함",
+      "책갈피 구경 — 갈피 운영자의 책갈피함",
     ]);
     expect(screen.getByRole("heading", { name: "갈피" })).toBeInTheDocument();
     expect(screen.getByText("읽을 책, 갈피가 안 잡힐 때")).toBeInTheDocument();

@@ -6,7 +6,7 @@ test.use({ reducedMotion: "reduce" });
 
 const MAILBOX = "갈피 우체통 — 써 보고 느낀 점을 넣어 주세요";
 const NEWS = /^갈피 소식통 — 이번 주에 바뀐 것/;
-const PEEK = "책갈피 구경 — 갈피를 만든 사람의 책갈피함";
+const PEEK = "책갈피 구경 — 갈피 운영자의 책갈피함";
 
 test("the owl sits beside the mailbox, opens the weekly news, sends E-46 and loses its dot for good", async ({ page }) => {
   const { events } = await recordEvents(page);

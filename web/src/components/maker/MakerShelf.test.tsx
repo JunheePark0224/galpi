@@ -17,7 +17,7 @@ const VIEW = {
 };
 const fetchMock = vi.fn<typeof fetch>();
 const answer = (body: unknown, status = 200) => fetchMock.mockResolvedValueOnce(new Response(JSON.stringify(body), { status }));
-const button = () => screen.getByRole("button", { name: "책갈피 구경 — 갈피를 만든 사람의 책갈피함" });
+const button = () => screen.getByRole("button", { name: "책갈피 구경 — 갈피 운영자의 책갈피함" });
 const sheet = () => screen.getByRole("dialog", { name: MAKER_TITLE });
 
 describe("MakerShelf (S-01 → S-13, PRD F-30, DESIGN C-35)", () => {
@@ -31,7 +31,7 @@ describe("MakerShelf (S-01 → S-13, PRD F-30, DESIGN C-35)", () => {
   it("is one quiet button with its drawing hidden from screen readers, and asks nothing until pressed", () => {
     const { container } = render(<MakerShelf onStart={() => {}} />);
     expect(button()).toHaveTextContent("책갈피 구경");
-    expect(button()).toHaveTextContent("갈피를 만든 사람의 책갈피함");
+    expect(button()).toHaveTextContent("갈피 운영자의 책갈피함");
     expect(container.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
     expect(fetchMock).not.toHaveBeenCalled();
   });
@@ -46,7 +46,7 @@ describe("MakerShelf (S-01 → S-13, PRD F-30, DESIGN C-35)", () => {
     const s = within(sheet());
     expect(s.getByText("첫 막대")).toBeInTheDocument();
     expect(s.getByText("다음에 읽을 책")).toBeInTheDocument();
-    expect(s.getByText(/갈피를 만든 사람이 직접 뽑아 모은 책갈피예요 · 2권/)).toBeInTheDocument();
+    expect(s.getByText(/갈피 운영자가 갈피를 사용하는 방식이에요 · 2권/)).toBeInTheDocument();
     expect(s.queryByRole("button", { name: "막대 이름 고치기" })).toBeNull();
     expect(s.queryByRole("button", { name: /막대 지우기/ })).toBeNull();
   });
