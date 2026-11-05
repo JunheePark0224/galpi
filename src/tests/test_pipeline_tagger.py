@@ -470,9 +470,16 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_13():
+def test_the_dictionary_is_v3_14():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.13"   # 10-29: a one-profession practice manual stays out
+    assert rules_version() == "v3.14"   # 11-05: prose written on poems (a 시화) is not 시
+
+
+def test_the_v3_14_rule_reaches_both_prompts():
+    """11-05: a critic's prose on poems is non-fiction — on the themes of life it is 인문, not 시."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**시를 읽고 쓴 평론·산문(시화·시 해설)** → 시가 아님" in p
 
 
 def test_the_v3_13_rules_reach_both_prompts():
