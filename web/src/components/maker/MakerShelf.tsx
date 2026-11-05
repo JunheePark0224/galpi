@@ -15,7 +15,7 @@ import styles from "./MakerShelf.module.css";
 import { RodPeek } from "./RodPeek";
 
 const NAME = "책갈피 구경";
-const LINE = "갈피를 만든 사람의 책갈피함";
+const LINE = "갈피 운영자의 책갈피함";
 /** Contains the visible words (WCAG 2.5.3). */
 const LABEL = `${NAME} — ${LINE}`;
 export const MAKER_TITLE = LINE;
@@ -126,7 +126,7 @@ function ShelfList({ load, onOpen, onClose }: { load: Load; onOpen: (b: LibraryB
       {load.status === "ready" && load.view.count === 0 && <p className={styles.lead}>{EMPTY}</p>}
       {load.status === "ready" && load.view.count > 0 && (
         <>
-          <p className={styles.lead}>{`갈피를 만든 사람이 직접 뽑아 모은 책갈피예요 · ${load.view.count}권`}</p>
+          <p className={styles.lead}>{`갈피 운영자가 갈피를 사용하는 방식이에요 · ${load.view.count}권`}</p>
           {load.view.shelves.map((shelf, i) => (
             <Shelf
               key={`${i}-${shelf.name}`} shelf={asShelf(shelf, i)} moving={false} fixed dragged={null} gap={null}

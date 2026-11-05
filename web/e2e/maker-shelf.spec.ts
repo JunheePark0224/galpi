@@ -4,7 +4,7 @@ import { named, recordEvents, test } from "./helpers";
 // PRD F-30 책갈피 구경 (S-01 → S-13), DESIGN C-35. e2e has no Supabase: the maker's shelf is answered here.
 test.use({ reducedMotion: "reduce" });
 
-const PEEK = "책갈피 구경 — 갈피를 만든 사람의 책갈피함";
+const PEEK = "책갈피 구경 — 갈피 운영자의 책갈피함";
 const ISBN = "9790000000001";   // in books.sample.json
 const ART = { animal: "rabbit", bg: "aurora", ground: "grass", rare: true };
 const VIEW = {
@@ -30,8 +30,8 @@ test("the third quiet button opens the maker's shelf, a bookmark large, YES24, a
   expect(Math.abs(p!.y + p!.height - (o!.y + o!.height))).toBeLessThan(2);
 
   await peek.click();
-  const sheet = page.getByRole("dialog", { name: "갈피를 만든 사람의 책갈피함" });
-  await expect(sheet.getByText("갈피를 만든 사람이 직접 뽑아 모은 책갈피예요 · 1권")).toBeVisible();
+  const sheet = page.getByRole("dialog", { name: "갈피 운영자의 책갈피함" });
+  await expect(sheet.getByText("갈피 운영자가 갈피를 사용하는 방식이에요 · 1권")).toBeVisible();
   await expect.poll(() => named(events, "maker_shelf_opened").length).toBe(1);
 
   await sheet.getByRole("button", { name: "구경할 책 책갈피" }).click();
@@ -53,7 +53,7 @@ test("says so quietly when the shelf cannot load", async ({ page }) => {
   await page.route("**/api/maker-shelf", (route) => route.fulfill({ status: 503, json: { error: "unavailable" } }));
   await page.goto("/");
   await page.getByRole("button", { name: PEEK }).click();
-  const sheet = page.getByRole("dialog", { name: "갈피를 만든 사람의 책갈피함" });
+  const sheet = page.getByRole("dialog", { name: "갈피 운영자의 책갈피함" });
   await expect(sheet.getByText("지금은 책갈피함을 불러올 수 없어요")).toBeVisible();
   await sheet.getByRole("button", { name: "닫기" }).click();
   await expect(sheet).toBeHidden();
