@@ -683,3 +683,47 @@ test("S-09 on a touch screen, move mode (11-05): a quick sideways swipe on a boo
   await expect(page.getByRole("status").filter({ hasText: DRAGGING })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "완료" })).toBeVisible();
 });
+
+test("S-09 move mode (11-05): [완료] floats at the bottom wherever the page is scrolled, covers no rod, and steps aside while a bookmark is dragged", async ({ page }) => {
+  const rods = [ROD_A, ROD_B, ROD_C];
+  const lib: FakeLibrary = {
+    loggedIn: true,
+    shelves: rods.map((id, i) => ({ id, name: ["읽을 책", "다 읽은 책", "선물할 책"][i], position: i })),
+    saved: Array.from({ length: 9 }, (_, i) => ({ isbn: `97900000001${i}0`, shelfId: rods[i % 3], title: `지어낸 책 ${i + 1}` })),
+    posts: [],
+    moves: [],
+  };
+  await fakeAccount(page, lib);
+  await page.goto("/library");
+  await page.getByRole("button", { name: "책갈피 옮기기" }).click();
+  const done = page.getByRole("button", { name: "완료" });
+  const inView = async () => {
+    const box = await done.boundingBox();
+    const vh = page.viewportSize()!.height;
+    return !!box && box.y >= 0 && box.y + box.height <= vh;
+  };
+  expect(await inView()).toBe(true);
+  expect((await done.boundingBox())!.height).toBeGreaterThanOrEqual(48);
+
+  // scrolled to the very end: still on screen, and the last rod's bookmarks end above it
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await expect.poll(inView).toBe(true);
+  const last = page.getByRole("button", { name: "지어낸 책 9 책갈피" });
+  const lastBox = (await last.boundingBox())!;
+  expect(lastBox.y + lastBox.height).toBeLessThanOrEqual((await done.boundingBox())!.y);
+  const policy = (await page.getByRole("contentinfo").getByRole("link", { name: "처리방침" }).boundingBox())!;   // the site footer too
+  expect(policy.y + policy.height).toBeLessThanOrEqual((await done.boundingBox())!.y);
+
+  // while a bookmark is held it lets the drag through (the bottom band scrolls the page)
+  const from = await centreOf(last);
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  await page.mouse.move(from.x + 30, from.y - 60, { steps: 6 });
+  await expect(page.getByRole("status").filter({ hasText: DRAGGING })).toBeVisible();
+  await expect(done).toHaveCSS("pointer-events", "none");
+  await page.mouse.up();
+  await expect(done).not.toHaveCSS("pointer-events", "none");
+
+  await done.click();
+  await expect(page.getByRole("button", { name: "책갈피 옮기기" })).not.toHaveAttribute("data-moving");
+});
