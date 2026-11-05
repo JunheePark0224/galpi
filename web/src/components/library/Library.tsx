@@ -8,6 +8,7 @@ import { useGuestSaves } from "@/lib/library/guest";
 import type { LibraryBookmark } from "@/lib/library/types";
 import { MAX_SHELVES } from "@/lib/library/service";
 import { SHELF_NAME_MAX } from "@/lib/library/validate";
+import { NameCount } from "./NameCount";
 import { setAmplitudeUser } from "@/lib/track/amplitude";
 import { setUserId } from "@/lib/track/common";
 import { libraryGuide } from "@/lib/flow/firstGuide";
@@ -251,8 +252,9 @@ function Rods({ toggle }: { toggle?: ReactNode }) {
         <form className={styles.rename} onSubmit={(e) => { e.preventDefault(); void add(); }}>
           <input
             className={styles.nameInput} value={newName} maxLength={SHELF_NAME_MAX} autoFocus data-amp-mask=""
-            aria-label="새 막대 이름" placeholder="막대 이름 (12자)" onChange={(e) => setNewName(e.target.value)}
+            aria-label="새 막대 이름" placeholder={`막대 이름 (${SHELF_NAME_MAX}자)`} onChange={(e) => setNewName(e.target.value)}
           />
+          <NameCount value={newName} />
           <button type="submit" className={styles.textButton} disabled={addBusy}>만들기</button>
           <button type="button" className={styles.textButton} onClick={() => { setAdding(false); setNewName(""); }}>취소</button>
         </form>
