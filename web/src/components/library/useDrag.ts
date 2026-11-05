@@ -51,7 +51,8 @@ function paint(ghost: HTMLElement | null, d: Live | null) {
  * put it back. Only the pointer that picked it up drives it (a second finger is ignored and cannot start another drag).
  * While dragging, a touch never pans the page: the non-passive touchmove blocker lives as long as the library, because
  * browsers decide at touchstart whether a touch's moves can be cancelled — one added mid-touch would get uncancelable
- * moves and the browser would pan and cancel. (In move mode the bookmarks are also `touch-action: none`.)
+ * moves and the browser would pan and cancel. (11-05: bookmarks keep `touch-action: pan-x pan-y` in move mode so a quick
+ * swipe scrolls the row; a finger lifts only after a still press — usePickUp.)
  */
 export function useDrag(onDrop: (isbn: string, to: Place, from: Place) => void) {
   const [drag, setDrag] = useState<Dragging | null>(null);

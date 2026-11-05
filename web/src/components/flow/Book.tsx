@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion } from "motion/react";
 import { LogoMark } from "@/components/Logo";
-import { FLIP_PAGE, OPEN_COVER, SHUT_BOOK, SHUT_SETTLE_MS } from "@/lib/motion";
+import { FLIP_PAGE, OPEN_COVER, SHUT_BOOK, SHUT_SETTLE_AFTER_MS, SHUT_SETTLE_MS } from "@/lib/motion";
 import styles from "./Book.module.css";
 
 interface Props {
@@ -34,11 +34,29 @@ interface Props {
 export function Book({ open, onPress, left, right, tucked, shut = false, shutNow = false, onShut, backFace }: Props) {
   const [settled, setSettled] = useState(false);
   const wait = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const done = useRef(false);
+  const onShutLatest = useRef(onShut);
+  useEffect(() => { onShutLatest.current = onShut; }, [onShut]);
   useEffect(() => () => clearTimeout(wait.current), []);
+  // once per shut: when the turn is nearly flat (timer, SHUT_SETTLE_AFTER_MS) or done (onAnimationComplete), whichever first
   const turned = () => {
+    if (done.current) return;
+    done.current = true;
     setSettled(true);
-    wait.current = setTimeout(() => onShut?.(), SHUT_SETTLE_MS);   // the zoom (CSS, below) has landed
+    wait.current = setTimeout(() => onShutLatest.current?.(), SHUT_SETTLE_MS);   // the zoom (CSS, below) has landed
   };
+  // [다시 뽑기] reuses this book for the next round: open again, it may shut (and settle) once more
+  const [wasShut, setWasShut] = useState(shut);
+  if (wasShut !== shut) {
+    setWasShut(shut);
+    if (!shut) setSettled(false);
+  }
+  useEffect(() => {
+    if (!shut || shutNow) return;
+    done.current = false;   // a new shut (a round after [다시 뽑기] reuses this book)
+    const early = setTimeout(turned, SHUT_SETTLE_AFTER_MS);
+    return () => clearTimeout(early);
+  }, [shut, shutNow]);   // turned runs once per shut (its own ref)
   const closed = !open || (shut && (settled || shutNow));
   return (
     <div className={styles.zoom} data-closed={closed ? "" : undefined} data-shut={shut ? "" : undefined}>

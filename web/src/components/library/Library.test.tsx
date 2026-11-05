@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { LibraryView } from "@/lib/library/types";
 import { libraryGuide } from "@/lib/flow/firstGuide";
 import { HOLD_MS, HOLD_SLOP_PX } from "./useHold";
+import { PICK_HOLD_MS } from "./usePickUp";
 
 const track = vi.fn();
 const request = vi.fn();
@@ -190,6 +191,39 @@ describe("Library (S-09)", () => {
     fireEvent.click(el, { detail: 1 });
     expect(screen.queryByRole("dialog")).toBeNull();
     Reflect.deleteProperty(navigator, "vibrate");
+  });
+
+  it("in move mode a finger waits a moment before it lifts (11-05): moving at once scrolls the row, a still press lifts", async () => {
+    layout();
+    await mount(IN);
+    await enterMode();
+    const moso = await screen.findByRole("button", { name: "모순 책갈피" });
+    vi.useFakeTimers();
+    // a quick swipe: moves before PICK_HOLD_MS — the row scrolls, nothing is picked up
+    fireEvent.pointerDown(moso, { clientX: 50, clientY: 100, pointerId: 11, pointerType: "touch" });
+    act(() => { fireEvent.pointerMove(window, { clientX: 70, clientY: 100, pointerId: 11 }); });
+    act(() => { vi.advanceTimersByTime(PICK_HOLD_MS + 50); });
+    expect(moso).not.toHaveAttribute("data-lifted");
+    fireEvent.pointerUp(window, { pointerId: 11 });
+    // a still press: after PICK_HOLD_MS it is up, before the finger moves
+    fireEvent.pointerDown(moso, { clientX: 50, clientY: 100, pointerId: 12, pointerType: "touch" });
+    act(() => { vi.advanceTimersByTime(PICK_HOLD_MS - 30); });
+    expect(moso).not.toHaveAttribute("data-lifted");
+    act(() => { vi.advanceTimersByTime(40); });
+    expect(moso).toHaveAttribute("data-lifted");
+    expect(screen.getByText("놓을 자리로 끌어서 놓으세요")).toBeInTheDocument();
+    fireEvent.keyDown(window, { key: "Escape" });
+  });
+
+  it("in move mode a mouse still lifts at once (no row to swipe with a mouse)", async () => {
+    layout();
+    await mount(IN);
+    await enterMode();
+    const moso = await screen.findByRole("button", { name: "모순 책갈피" });
+    fireEvent.pointerDown(moso, { clientX: 50, clientY: 100, pointerId: 1, pointerType: "mouse", button: 0 });
+    act(() => { fireEvent.pointerMove(window, { clientX: 56, clientY: 100, pointerId: 1 }); });
+    expect(moso).toHaveAttribute("data-lifted");
+    fireEvent.keyDown(window, { key: "Escape" });
   });
 
   it("a hold that moves (a scroll) or lifts early is not a hold — a quick tap still opens the sheet", async () => {
