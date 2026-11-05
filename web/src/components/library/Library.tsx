@@ -210,7 +210,11 @@ function Rods({ toggle }: { toggle?: ReactNode }) {
         <div className={styles.actions}>
           <button
             type="button" className={styles.moveToggle} data-moving={moving ? "" : undefined}
-            onClick={() => { setAdding(false); setNewName(""); setMoveMode(!moving); }}
+            onClick={(e) => {
+              setAdding(false); setNewName(""); setMoveMode(!moving);
+              // [완료] floats at the bottom (11-05); back in place at the top, keep the focused button in view
+              if (moving) { const button = e.currentTarget; requestAnimationFrame(() => button.scrollIntoView?.({ block: "nearest" })); }
+            }}
           >
             {!moving && <MoveIcon />}
             {moving ? MOVE_DONE : MOVE_MODE}

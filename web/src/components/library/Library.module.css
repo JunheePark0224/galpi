@@ -25,13 +25,28 @@
 .moveToggle:active, .decorate:active { transform: translateY(1px); background: var(--leather-grain), var(--leather-sheen), var(--cloth-edge); }
 .moveToggle[data-moving] { background: var(--ink); color: var(--paper); box-shadow: 0 8px 16px -10px rgba(43, 39, 36, 0.6); }
 .moveToggle[data-moving]::before { border-color: rgba(250, 245, 234, 0.3); }
+/* 11-05 시안 A (user, mockups/2026-11-05-move-done-options.png): in move mode [완료] floats at the bottom, so it is in
+   reach wherever the page is scrolled — the same button (its name and focus stay). The page gains room under the last rod
+   so nothing hangs behind it, a toast rises above it, and while a bookmark is held it fades and lets the finger through
+   (the bottom 48 px band scrolls the page, and the drag toast comes down into this spot). Centred with margins, not a transform
+   (:active nudges with transform). */
+.moveToggle[data-moving] {
+  position: fixed; z-index: 30; left: 0; right: 0; bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
+  width: min(240px, calc(100% - 2 * var(--space-4))); min-height: 52px; margin-inline: auto;
+  box-shadow: 0 10px 24px -6px rgba(43, 39, 36, 0.45); transition: transform 120ms ease, opacity 150ms ease;
+}
+/* the room goes inside the paper column, so the site footer (처리방침) clears the button too and the cream runs on */
+:global(.column):has(.page[data-move-mode]) { padding-bottom: calc(52px + 2 * var(--space-4) + env(safe-area-inset-bottom)); }
+.page[data-move-mode] .toast { bottom: calc(52px + 2 * var(--space-4) + env(safe-area-inset-bottom)); }
+.page[data-dragging] .moveToggle[data-moving] { opacity: 0; pointer-events: none; }
+.page[data-dragging] .toast { bottom: calc(var(--space-4) + env(safe-area-inset-bottom)); }
 .clearAll {
   flex: 1 1 0; border: 1.5px solid rgba(169, 76, 96, 0.55); background: #fffdf8; color: var(--genre-korean-fiction);
 }
 .clearAll:active { transform: scale(0.98); }
 .moveToggle:focus-visible, .clearAll:focus-visible { outline: 3px solid var(--field-data); outline-offset: 2px; }
 .icon { flex-shrink: 0; }
-@media (prefers-reduced-motion: reduce) { .moveToggle, .clearAll { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .moveToggle, .clearAll, .moveToggle[data-moving] { transition: none; } }
 .hint { margin: 0; font-size: 13px; color: var(--ink-soft); }
 .error { width: 100%; margin: 0; font-size: 13px; color: var(--genre-korean-fiction); }
 
