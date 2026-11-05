@@ -234,6 +234,7 @@ function Rods({ toggle }: { toggle?: ReactNode }) {
           gap={drag?.over?.shelfId === shelf.id && !samePlace(drag.over, drag.from) ? drag.over.index : null}
           onOpen={(bookmark) => setOpen({ bookmark, shelfId: shelf.id })}
           onPick={(bookmark, index, at, box, pointerId) => start(bookmark, { shelfId: shelf.id, index }, at, box, pointerId)}
+          onHold={() => { setAdding(false); setNewName(""); setMoveMode(true); }}
           onRename={(name) => lib.renameShelf(shelf.id, name)}
           onRemove={() => {
             if (shelf.bookmarks.length > 0) {

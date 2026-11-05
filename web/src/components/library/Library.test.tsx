@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen, waitFor, within } from "@testing-librar
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { LibraryView } from "@/lib/library/types";
 import { libraryGuide } from "@/lib/flow/firstGuide";
+import { HOLD_MS, HOLD_SLOP_PX } from "./useHold";
 
 const track = vi.fn();
 const request = vi.fn();
@@ -172,6 +173,43 @@ describe("Library (S-09)", () => {
     expect(document.querySelector("[data-move-mode]")).toBeNull();
   });
 
+  it("holding a bookmark (11-05) turns move mode on like [책갈피 옮기기] — the press does not also open its sheet", async () => {
+    await mount(IN);
+    const vibrate = vi.fn();
+    Object.defineProperty(navigator, "vibrate", { value: vibrate, configurable: true });
+    const el = await screen.findByRole("button", { name: "모순 책갈피" });
+    vi.useFakeTimers();
+    fireEvent.pointerDown(el, { clientX: 50, clientY: 100, pointerId: 7, pointerType: "touch" });
+    act(() => { vi.advanceTimersByTime(HOLD_MS - 50); });
+    expect(document.querySelector("[data-move-mode]")).toBeNull();
+    act(() => { vi.advanceTimersByTime(60); });
+    expect(document.querySelector("[data-move-mode]")).not.toBeNull();
+    expect(screen.getByRole("button", { name: "완료" })).toBeInTheDocument();
+    expect(vibrate).toHaveBeenCalledTimes(1);
+    fireEvent.pointerUp(window, { pointerId: 7 });
+    fireEvent.click(el, { detail: 1 });
+    expect(screen.queryByRole("dialog")).toBeNull();
+    Reflect.deleteProperty(navigator, "vibrate");
+  });
+
+  it("a hold that moves (a scroll) or lifts early is not a hold — a quick tap still opens the sheet", async () => {
+    await mount(IN);
+    const el = await screen.findByRole("button", { name: "모순 책갈피" });
+    vi.useFakeTimers();
+    fireEvent.pointerDown(el, { clientX: 50, clientY: 100, pointerId: 3, pointerType: "touch" });
+    act(() => { fireEvent.pointerMove(window, { clientX: 50 + HOLD_SLOP_PX + 2, clientY: 100, pointerId: 3 }); });
+    act(() => { vi.advanceTimersByTime(HOLD_MS + 100); });
+    expect(document.querySelector("[data-move-mode]")).toBeNull();
+    fireEvent.pointerUp(window, { pointerId: 3 });
+    fireEvent.pointerDown(el, { clientX: 50, clientY: 100, pointerId: 4, pointerType: "touch" });
+    fireEvent.pointerUp(window, { pointerId: 4 });
+    act(() => { vi.advanceTimersByTime(HOLD_MS + 100); });
+    expect(document.querySelector("[data-move-mode]")).toBeNull();
+    vi.useRealTimers();
+    fireEvent.click(el, { detail: 1 });
+    expect(await screen.findByRole("dialog", { name: "모순" })).toBeInTheDocument();
+  });
+
   it("no bookmarks: no [책갈피 옮기기] and no [모두 제거]", async () => {
     request.mockResolvedValue(ok({ count: 0, animals: 0, shelves: [{ ...VIEW.shelves[0], bookmarks: [] }] }));
     await mount({ ...IN, count: 0 });
@@ -253,15 +291,18 @@ describe("Library (S-09)", () => {
     expect(track).toHaveBeenCalledWith("library_cleared", { removed_count: 2 });
   });
 
-  it("outside move mode a press that moves (or is held) never drags — a tap opens the sheet", async () => {
+  it("outside move mode a press that moves never drags (nor turns move mode on, 11-05) — a tap opens the sheet", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     layout();
     await mount(IN);
-    const moso = await lift("모순 책갈피");
+    const moso = await screen.findByRole("button", { name: "모순 책갈피" });
+    fireEvent.pointerDown(moso, { clientX: 50, clientY: 100 });
+    dragTo(50 + HOLD_SLOP_PX + 4, 100);
     act(() => { vi.advanceTimersByTime(800); });
     dragTo(150, 450);
     expect(moso).not.toHaveAttribute("data-lifted");
     expect(screen.queryByText("놓을 자리로 끌어서 놓으세요")).toBeNull();
+    expect(document.querySelector("[data-move-mode]")).toBeNull();
     fireEvent.pointerUp(window);
     fireEvent.click(moso);
     expect(screen.getByRole("dialog", { name: "모순" })).toBeInTheDocument();
