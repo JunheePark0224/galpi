@@ -1,8 +1,8 @@
 import { ANIMALS, BACKGROUNDS, EMPTY_GROUND, GROUND_PROPS, isRare, type ArtCombo } from "@/lib/art/combine";
 import type { Reason } from "@/lib/recommend";
 
-/** PRD F-13: a rod's name, the person's own words — at most this many characters (DB check matches, 0003). */
-export const SHELF_NAME_MAX = 12;
+/** PRD F-13: a rod's name, the person's own words — at most this many characters (DB check matches, 0009). */
+export const SHELF_NAME_MAX = 16;   // 11-05 (user): 12 → 16 — the database check is migration 0009
 /** The ground prop that left the lists (10-07 A — it became the 여름밤 background). */
 const RETIRED_GROUND = "firefly";
 const REASON_LABELS = ["나온 이유", "이 책은"] as const;

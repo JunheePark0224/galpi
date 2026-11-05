@@ -52,11 +52,11 @@ describe("parseMetOn — 만난 날 (YYYY-MM-DD, Korean date)", () => {
   });
 });
 
-describe("cleanShelfName — the person's own words, at most 12 characters", () => {
+describe("cleanShelfName — the person's own words, at most 16 characters (11-05, was 12)", () => {
   it("trims, joins spaces and keeps Korean and emoji", () => {
     expect(cleanShelfName("  읽을   책  ")).toBe("읽을 책");
     expect(cleanShelfName("🌙 밤에 읽기")).toBe("🌙 밤에 읽기");
-    expect(SHELF_NAME_MAX).toBe(12);
+    expect(SHELF_NAME_MAX).toBe(16);
   });
   it("takes out control characters and angle brackets", () => {
     expect(cleanShelfName("a\u0000b​c<d>")).toBe("abcd");
@@ -64,8 +64,8 @@ describe("cleanShelfName — the person's own words, at most 12 characters", () 
   it("refuses empty and too long names (counted in characters, not UTF-16 units)", () => {
     expect(cleanShelfName("   ")).toBeNull();
     expect(cleanShelfName(1)).toBeNull();
-    expect(cleanShelfName("가".repeat(12))).toBe("가".repeat(12));
-    expect(cleanShelfName("가".repeat(13))).toBeNull();
-    expect(cleanShelfName("🌙".repeat(12))).toBe("🌙".repeat(12));
+    expect(cleanShelfName("가".repeat(16))).toBe("가".repeat(16));
+    expect(cleanShelfName("가".repeat(17))).toBeNull();
+    expect(cleanShelfName("🌙".repeat(16))).toBe("🌙".repeat(16));
   });
 });

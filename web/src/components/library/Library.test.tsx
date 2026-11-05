@@ -438,7 +438,7 @@ describe("Library (S-09)", () => {
     fireEvent.click(await screen.findByRole("button", { name: "＋ 막대 추가" }));
     const input = screen.getByRole("textbox", { name: "새 막대 이름" });
     expect(input).toHaveAttribute("data-amp-mask");
-    expect(input).toHaveAttribute("maxlength", "12");
+    expect(input).toHaveAttribute("maxlength", "16");
     fireEvent.change(input, { target: { value: "밤에 읽기" } });
     request.mockResolvedValueOnce(ok({ ok: true, shelf: { id: "c", name: "밤에 읽기", position: 2 } })).mockResolvedValueOnce(ok(VIEW));
     fireEvent.click(screen.getByRole("button", { name: "만들기" }));
