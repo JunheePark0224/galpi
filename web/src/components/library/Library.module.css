@@ -105,6 +105,9 @@
   background: var(--field-bg); color: var(--ink); font: inherit; font-size: 15px;
 }
 .nameInput:focus-visible { outline: 3px solid var(--field-data); outline-offset: 1px; }
+/* 11-05 (user): under the name field — "n/16", and the limit in words once full (C-17). Its own row, right-aligned. */
+.nameCount { flex-basis: 100%; order: 1; margin: 0; font-size: 12px; text-align: right; color: var(--ink-muted); }
+.nameCount[data-full] { color: var(--genre-korean-fiction); }
 .textButton {
   min-height: var(--touch); padding: 0 var(--space-2); border: 0; background: none; color: var(--ink);
   font: inherit; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer;

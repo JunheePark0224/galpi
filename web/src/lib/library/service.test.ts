@@ -59,7 +59,7 @@ describe("rods (C-17)", () => {
     const store = memoryStore({ shelves: [{ id: "a", name: "첫", position: 0 }] });
     expect(await renameShelf(store, "a", "읽을 책")).toEqual({ ok: true });
     expect(store.data.shelves[0].name).toBe("읽을 책");
-    expect(await renameShelf(store, "a", "가".repeat(13))).toEqual({ ok: false, error: "invalid" });
+    expect(await renameShelf(store, "a", "가".repeat(17))).toEqual({ ok: false, error: "invalid" });
     expect(await renameShelf(store, "zz", "x")).toEqual({ ok: false, error: "missing" });
   });
 

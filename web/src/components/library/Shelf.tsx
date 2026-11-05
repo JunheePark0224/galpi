@@ -4,6 +4,7 @@ import { SHELF_NAME_MAX } from "@/lib/library/validate";
 import type { LibraryBookmark, LibraryShelf } from "@/lib/library/types";
 import { REMOVE_ROD } from "./ClearSheet";
 import styles from "./Library.module.css";
+import { NameCount } from "./NameCount";
 import { ShelfBookmark } from "./ShelfBookmark";
 import type { Point } from "./useDrag";
 
@@ -71,6 +72,7 @@ export function Shelf({ shelf, moving, fixed = false, dragged, gap, onOpen, onPi
             className={styles.nameInput} value={draft} maxLength={SHELF_NAME_MAX} autoFocus data-amp-mask=""
             aria-label="막대 이름" aria-invalid={badName} onChange={(e) => setDraft(e.target.value)}
           />
+          <NameCount value={draft} />
           <button type="submit" className={styles.textButton}>저장</button>
           <button type="button" className={styles.textButton} onClick={() => { setEditing(false); setDraft(shelf.name); setBadName(false); }}>취소</button>
           {badName && <p role="alert" className={styles.error}>{`이름은 1~${SHELF_NAME_MAX}자로 적어 주세요`}</p>}
