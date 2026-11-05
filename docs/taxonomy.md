@@ -35,6 +35,7 @@
 | taxonomy v2.6 | 2026-10-12 | 뒤표지 A/B 실험 `back_cover_pick` (PRD F-27, 사용자 결정 B2) | E-45 `experiment_exposed`(`experiment`·`variant`) live, 동사 `exposed`, 분류 `실험`. 처리방침은 그대로("화면 버전") (8절) |
 | taxonomy v2.5 | 2026-10-09 | 머리글 [처음으로] (PRD F-01, DESIGN A-05, 사용자 시안 D `mockups/2026-10-09-home-button-right.png`) | E-20 `source` += "header" — 흐름 도중(S-01이 아닐 때) 오른쪽 위 [처음으로]를 눌러 확인 없이 S-01로. 다른 페이지(/library 등)의 [처음으로]는 로고처럼 그냥 이동이라 이벤트 없음 (8절) |
 | taxonomy v2.7 | 2026-10-19 | 갈피 소식통 (PRD F-28, DESIGN C-33, 사용자 시안 A `mockups/2026-10-19-news-owl.html`) | E-46 `news_opened`(`has_unseen`·`latest_week`) live, 동사 `opened`, 분류 `홈`. 모으는 정보 변화 없음 (8절) |
+| taxonomy v3.1 | 2026-11-05 | 책갈피 구경 (PRD F-30·S-13, DESIGN C-35, 사용자 시안 A-1 `mockups/2026-11-05-shelf-peek.png`) | E-48 `maker_shelf_opened`·E-49 `maker_bookmark_viewed` live, E-18·E-02 `source`에 "maker_shelf", 분류 `홈`에 S-13, 동사 그대로(opened·viewed) (8절) |
 | taxonomy v3.0 | 2026-11-03 | 뒤표지 [다시 뽑기] (PRD F-27·F-10, 사용자 시안 C-1 `mockups/2026-11-03-back-buttons-redraw.png`) | E-19 `source`("end" · "back_cover") 추가 — S-11에서도 다시 뽑기 (8절) |
 | taxonomy v2.9 | 2026-11-03 | 뒤표지 A/B 1차 종료 (PRD F-27, 사용자 결정 11-03, `report/README.md`) | E-45 `experiment_exposed` removed — 모두 A, 보내지 않음 (8절) |
 | taxonomy v2.8 | 2026-10-19 | 책장 효과음 (PRD F-29, DESIGN C-34, 사용자 시안 `mockups/2026-10-19-page-sound.html` 넘김 2 · 펼침 A) | E-47 `sound_toggle_clicked`(`is_sound_on`) live, 동사 `clicked`, 분류 `책펼치기`. 모으는 정보 변화 없음 (8절) |
@@ -172,7 +173,7 @@
 | 내 책갈피 | S-09 | E-17, E-29, E-30, E-35 (v1.2), E-38 (v1.6), E-40 (v1.8) |
 | 도감 | S-05(처음 만남)·S-09(도감 보기) | E-36, E-37 (v1.3) |
 | 마무리 | S-08 (E-20은 S-04의 막다른 길에서도) | E-19, E-20 |
-| 홈 | S-01 (퍼널 밖 — 갈피 우체통 v0.10, 갈피 소식통 v2.7) | E-31, E-46 (v2.7) |
+| 홈 | S-01 (퍼널 밖 — 갈피 우체통 v0.10, 갈피 소식통 v2.7, 책갈피 구경 v3.1) · S-13 | E-31, E-46 (v2.7), E-48, E-49 (v3.1) |
 | 공유 | S-11 뒤표지 · S-12 공유 페이지 | E-41, E-42, E-43, E-44 (v2.0) |
 | 실험 | 실험마다 (`back_cover_pick`: S-11) | E-45 (v2.6) |
 | 공통 | — | 공통 속성 (csv의 `*` 줄) |
@@ -355,13 +356,15 @@ Supabase 경로는 두 항목과 무관하다(이미 즉시 전송, `created_at`
 | E-31 | `feedback_sent` | (없음, v0.10) | 홈 | click | live |
 | E-46 | `news_opened` | (없음, v2.7) | 홈 | click | live |
 | E-47 | `sound_toggle_clicked` | (없음, v2.8) | 책펼치기 | click | live |
+| E-48 | `maker_shelf_opened` | (없음, v3.1) | 홈 | click | live |
+| E-49 | `maker_bookmark_viewed` | (없음, v3.1) | 홈 | view | live |
 | E-41 | `back_cover_shown` | (없음, v2.0) | 공유 | view | live |
 | E-42 | `share_clicked` | (없음, v2.0) | 공유 | click | live |
 | E-43 | `share_page_viewed` | (없음, v2.0) | 공유 | view | live |
 | E-44 | `share_page_started` | (없음, v2.0) | 공유 | click | live |
 | E-45 | `experiment_exposed` | (없음, v2.6) | 실험 | view | removed |
 
-E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(39개 — `EVENT_NAMES`는 그 키, v2.9 E-45 없앰, v2.8 E-47 추가, v2.7 E-46 추가, v2.6 E-45 추가, v2.0 E-41~E-44 추가, v1.2 E-35 추가, v1.3 E-36·E-37 추가, v1.6 E-38 추가, v1.7 E-39 추가, v1.8 E-40 추가. `removed` 7개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
+E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모든 이벤트가 `schema.ts`의 `EVENT_SPEC`에 속성까지 들어 있다(41개 — `EVENT_NAMES`는 그 키, v3.1 E-48·E-49 추가, v2.9 E-45 없앰, v2.8 E-47 추가, v2.7 E-46 추가, v2.6 E-45 추가, v2.0 E-41~E-44 추가, v1.2 E-35 추가, v1.3 E-36·E-37 추가, v1.6 E-38 추가, v1.7 E-39 추가, v1.8 E-40 추가. `removed` 7개는 csv·이 문서에 기록으로만). v0.8부터 planned 없음.
 
 ### 4-2. 이벤트별 상세
 
@@ -389,12 +392,12 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 진입 | click | live | 같음 |
 
-**언제**: S-01 [갈피 잡으러 가기]를 누를 때(source=home). v1.0부터 first_page 값은 나오지 않는다(F-24 ③ 없앰). 누르기 직전에 공통 entry·mode가 null로 정해지고, 갈래·모드는 질문에 답하며 정해진다  
+**언제**: S-01 [갈피 잡으러 가기]를 누를 때(source=home), 또는 S-13 책갈피 구경의 [나도 책갈피 모으러 가기](source=maker_shelf, v3.1). v1.0부터 first_page 값은 나오지 않는다(F-24 ③ 없앰). 누르기 직전에 공통 entry·mode가 null로 정해지고, 갈래·모드는 질문에 답하며 정해진다  
 **분석 질문**: Q-01, Q-05, Q-10
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
-| `source` | 추가 (v0.6, F-24) | String | "home", "first_page" | 누른 화면 — home=S-01 입구 버튼, first_page=S-04 ③(맞는 주제 없음)의 [🍃 그냥 한 권]. 퍼널 FN-1·FN-2는 source=home으로 센다 |
+| `source` | 추가 (v0.6, F-24; v3.1 "maker_shelf") | String | "home", "first_page", "maker_shelf" | 누른 화면 — home=S-01 입구 버튼, maker_shelf=S-13 [나도 책갈피 모으러 가기](v3.1), first_page=S-04 ③(맞는 주제 없음)의 [🍃 그냥 한 권]. 퍼널 FN-1·FN-2는 source=home으로 센다(maker_shelf는 F-30 반응으로 따로) |
 
 #### E-24 `balance_answered`
 
@@ -686,14 +689,14 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 결과 | click | live | `yes24_clicked` → `yes24_link_clicked` |
 
-**언제**: S-06 또는 S-09에서 [예스24에서 보기]를 누를 때, 또는 S-04 F-24 ②·③에서 [예스24에서 … 찾기]를 누를 때 (새 탭)  
+**언제**: S-06 또는 S-09에서 [예스24에서 보기]를 누를 때, 또는 S-04 F-24 ②·③에서 [예스24에서 … 찾기]를 누를 때, 또는 S-13 책갈피 구경의 큰 앞면에서 (v3.1) (새 탭)  
 **분석 질문**: Q-01, Q-10, Q-11
 
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `book_id` | 같음 (v0.6: null 허용) | String | null, "9788998441012" | 책 ISBN-13 (books.isbn). source=first_page면 null (책 없이 검색) |
-| `source` | 같음 (v0.6: "first_page" 추가) | String | "result", "library", "first_page" | 누른 화면 — result=S-06, library=S-09, first_page=S-04 F-24 ②·③ (v1.0부터 보내지 않음 — v1 기록용. 어느 쪽인지는 같은 판의 E-22 `understood`) |
-| `pick_type` | 추가 — v0.3 명세 반영, 심는 것은 P4 | String | null, "recommended", "random" | 추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음). source=library·first_page면 null |
+| `source` | 같음 (v0.6: "first_page" 추가, v3.1: "maker_shelf" 추가) | String | "result", "library", "first_page", "maker_shelf" | 누른 화면 — result=S-06, library=S-09, maker_shelf=S-13 책갈피 구경(v3.1), first_page=S-04 F-24 ②·③ (v1.0부터 보내지 않음 — v1 기록용. 어느 쪽인지는 같은 판의 E-22 `understood`) |
+| `pick_type` | 추가 — v0.3 명세 반영, 심는 것은 P4 | String | null, "recommended", "random" | 추천 4권 중 하나인지, 검증용 무작위 1권인지 (화면에는 구분 없음). source=library·first_page·maker_shelf면 null |
 
 #### E-11 `save_clicked`
 
@@ -1024,6 +1027,30 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 | 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
 |---|---|---|---|---|
 | `is_sound_on` | 추가 (v2.8) | Boolean | TRUE, FALSE | 누른 **뒤**의 상태 — FALSE면 소리를 끈 것. 설정은 이 브라우저에 남는다(`galpi.sound.off`) |
+
+#### E-48 `maker_shelf_opened`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 홈 | click | live | 신규 (v3.1) |
+
+**언제**: S-01 책갈피 구경(PRD F-30, DESIGN C-35)을 눌러 S-13 시트가 열릴 때마다 한 번 — 불러오기가 실패해도 남는다(누른 것이 기록)  
+**분석 질문**: F-30 반응 — 처음 화면에 온 사람 중 남의 책갈피함을 여는 비율, 연 사람이 책갈피를 눌러 보는지(E-49)·예스24(E-18 maker_shelf)·갈피 시작(E-02 maker_shelf)으로 가는지. 퍼널·지표(5절)에는 넣지 않는다
+
+속성 없음 (공통 속성만).
+
+#### E-49 `maker_bookmark_viewed`
+
+| 분류 | 트리거 | 상태 | 현재 → 제안 |
+|---|---|---|---|
+| 홈 | view | live | 신규 (v3.1) |
+
+**언제**: S-13에서 책갈피를 눌러 큰 앞면 단계가 보일 때마다 한 번(같은 책을 다시 눌러도 또 남는다)  
+**분석 질문**: F-30 — 구경한 사람이 어떤 책갈피에 끌리는지, 앞면을 본 뒤 예스24·갈피 시작으로 가는지
+
+| 속성 | 현재 → 제안 | 타입 | 값 | 설명 |
+|---|---|---|---|---|
+| `book_id` | 추가 (v3.1) | String | "9788936477196" | 책 ISBN-13 (books.isbn) |
 
 #### E-45 `experiment_exposed`
 
@@ -1417,6 +1444,7 @@ export const COMMON_KEYS = ["anon_id", "user_id", "session_id", "round", "entry"
 | v2.7 | 2026-10-19 | Claude (사용자 시안 A) | 갈피 소식통(PRD F-28, DESIGN C-33): E-46 `news_opened`(`has_unseen` Boolean·`latest_week` String) 추가, 동사 `opened`(이미 허용), 분류 `홈`, 트리거 click. 시트를 열 때마다 한 번. 새 소식 점은 브라우저 저장(`galpi.news.seenWeek`, 마지막으로 연 주의 시작일)으로만 정하고 서버에 보내지 않는다 — C-20 안내 기억과 같은 종류라 처리방침은 그대로. 모으는 정보 변화 없음 |
 | v2.8 | 2026-10-19 | Claude (사용자 시안 넘김 2 · 펼침 A) | 책장 효과음(PRD F-29, DESIGN C-34): E-47 `sound_toggle_clicked`(`is_sound_on` Boolean — 누른 뒤 상태) 추가, 동사 `clicked`, 분류 `책펼치기`, 트리거 click. 소리 자체는 이벤트 없음. 끈 설정은 브라우저 저장(`galpi.sound.off`)만 — C-20 안내 기억과 같은 종류라 처리방침은 그대로. 모으는 정보 변화 없음 |
 | v2.9 | 2026-11-03 | Claude (사용자 결정) | 뒤표지 A/B `back_cover_pick` 1차 종료(PRD F-27, `report/README.md` 11-03 판정 — 차이를 가려내지 못해 A 유지): E-45 `experiment_exposed` 상태 live → removed, `schema.ts`에서 뺌. 모두 A를 본다. B 화면은 기록용으로 `?ab=b`로만 열리고 E-45를 보내지 않는다(b 카드의 E-09·E-10은 그대로). 모으는 정보는 줄기만 해 처리방침은 그대로 |
+| v3.1 | 2026-11-05 | Claude (사용자 시안 A-1) | 책갈피 구경(PRD F-30·S-13, DESIGN C-35): E-48 `maker_shelf_opened`(속성 없음, click) · E-49 `maker_bookmark_viewed`(`book_id`, view) 추가, E-18 `yes24_link_clicked` `source`에 "maker_shelf"(그때 `pick_type` null), E-02 `entry_selected` `source`에 "maker_shelf"([나도 책갈피 모으러 가기]), 분류 `홈`에 S-13. 동사 opened·viewed는 이미 허용. 모으는 정보 새로 없음(운영자 책갈피를 보여 줄 뿐) |
 | v3.0 | 2026-11-03 | Claude (사용자 시안 C-1) | 뒤표지 [다시 뽑기](PRD F-27·F-10, DESIGN C-29): E-19 `redraw_clicked`에 `source`(String, "end" · "back_cover") 추가 — S-08 마무리와 S-11 뒤표지를 가른다. 궁금해요 0권이면 뒤표지의 [다시 뽑기]가 S-08 대신. 모으는 정보의 종류는 그대로라 처리방침은 그대로 |
 
 ---

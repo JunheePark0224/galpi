@@ -6,6 +6,7 @@ test.use({ reducedMotion: "reduce" });
 
 const MAILBOX = "갈피 우체통 — 써 보고 느낀 점을 넣어 주세요";
 const NEWS = /^갈피 소식통 — 이번 주에 바뀐 것/;
+const PEEK = "책갈피 구경 — 갈피를 만든 사람의 책갈피함";
 
 test("the owl sits beside the mailbox, opens the weekly news, sends E-46 and loses its dot for good", async ({ page }) => {
   const { events } = await recordEvents(page);
@@ -43,23 +44,27 @@ test("the owl sits beside the mailbox, opens the weekly news, sends E-46 and los
   await expect(page.getByTestId("news-dot")).toHaveCount(0);
 });
 
-test.describe("320 × 568: the mailbox and the owl keep their small lines whole", () => {
+test.describe("320 × 568: the mailbox, the owl and the maker's shelf share one row (DESIGN C-35)", () => {
   test.use({ viewport: { width: 320, height: 568 } });
 
-  test("each line is one line, and the pair stays inside the page", async ({ page }) => {
+  test("names stay on one line, the small lines fold into at most two, and all three stay inside the page", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByTestId("news-dot")).toBeVisible();   // the browser render is in (S-01 is drawn again after hydration)
-    for (const name of [MAILBOX, NEWS]) {
+    const bottoms: number[] = [];
+    for (const name of [MAILBOX, NEWS, PEEK]) {
       const button = page.getByRole("button", { name });
+      // text spans in order: the name, then the small line; lines = box height over one line (line-height 1.4)
       const lines = await button.evaluate((b) =>
         [...b.querySelectorAll("span")].filter((s) => s.children.length === 0 && s.textContent)
-          // one line: the text's box is shorter than two lines of its own font size (line-height 1.4)
           .map((s) => Math.ceil(s.getBoundingClientRect().height / (parseFloat(getComputedStyle(s).fontSize) * 1.4 + 1))));
-      expect(lines.every((n) => n === 1), `${name}: ${lines}`).toBe(true);
+      expect(lines[0], `${name}: name ${lines}`).toBe(1);
+      expect(lines[1], `${name}: line ${lines}`).toBeLessThanOrEqual(2);
       const box = (await button.boundingBox())!;
       expect(box.x).toBeGreaterThanOrEqual(0);
       expect(box.x + box.width).toBeLessThanOrEqual(320);
       expect(Math.min(box.width, box.height)).toBeGreaterThanOrEqual(44);
+      bottoms.push(box.y + box.height);
     }
+    expect(Math.max(...bottoms) - Math.min(...bottoms)).toBeLessThan(2);
   });
 });

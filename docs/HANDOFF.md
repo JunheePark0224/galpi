@@ -83,7 +83,7 @@ git merge --no-ff <브랜치> -m "Merge <브랜치>: ..." && git push origin mai
 
 ### 3-3. 매일 아침 숫자 확인
 
-`check/daily.md`(메인 폴더, 커밋 안 함)의 SQL 5개를 사용자가 Supabase SQL Editor에서 하나씩 돌린다: 일별·주간 사용자, A/B 현황, 소식통·우체통, 로그인. 결과를 붙여 주면 해석한다. 자세한 점검은 `check/supabase-checks.md`. 내 기기 3대(익명 번호)는 두 파일 안에 있고 늘 뺀다. **A/B 숫자를 보고 실험을 멈추거나 판단하지 않는다.**
+`check/daily.md`(메인 폴더, 커밋 안 함, 11-05 정리) 하나만 쓴다. 사용자가 Supabase SQL Editor에서 하나씩 돌린다 — 매일: 일별 사용자 · 우체통 새 글 / 주 1회: 주간 사용자 · 뒤표지 바꾼 뒤(11-03 13:20) 전후 비교 / 가끔: 누적 퍼널(README 숫자) · 내 기기 찾기. 결과를 붙여 주면 해석한다. 내 기기 3대(익명 번호)는 파일 안에 있고 늘 뺀다. 끝난 일의 SQL(A/B·재방문 분석·포트폴리오 숫자·소식통·로그인·책갈피 되돌리기)은 `Portfolio/backups/galpi-check-2026-11-05/`.
 
 ## 4. 사용자와 일하는 방식 (대화에서 굳어진 것)
 
@@ -112,7 +112,7 @@ git merge --no-ff <브랜치> -m "Merge <브랜치>: ..." && git push origin mai
 | 무엇 | 어디 |
 |---|---|
 | 피드백 원문·홍보 기록 | `feedback/2026-10-12-01.md`, `feedback/2026-10-13-01.md`, **`marketing/`의 채널별 폴더 전부**(올린 글·사진, README만 공개), `docs/threads-plan.md`·`threads-tracker.xlsx` — 다른 사람의 말과 홍보 계정 운영 메모라 **공개 저장소에서 기록까지 지움(10-28)**, 이 컴퓨터에만. `.gitignore`에 있음 |
-| 매일 확인 SQL | `Galpi/check/daily.md`, `check/supabase-checks.md` (커밋 안 함) |
+| 운영 확인 SQL | `Galpi/check/daily.md` 하나 (커밋 안 함). 옛 SQL은 `Portfolio/backups/galpi-check-2026-11-05/` |
 | 발표 자료 | `Galpi/presentation/` (HTML 장표 `deck-site/` → Vercel `galpi-deck`, noindex), Canva 디자인(사용자 계정) |
 | 발표용 스킬 | GitHub `JunheePark0224/canva-deck-skill` (공개, Claude Code 플러그인) + 이 PC `~/.claude/skills/canva-deck` |
 | A/B 계산 스크립트 | `Portfolio/backups/galpi-ab-2026-11-04/ab_final.py` (11-04 옮김 — 10-15 발표 17·18장 숫자를 낸 것. 11-03 최종 판정은 매일 확인 SQL 합계로 계산) |
