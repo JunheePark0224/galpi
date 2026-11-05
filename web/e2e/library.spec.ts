@@ -634,3 +634,25 @@ test("S-09 logged out offers the login", async ({ page }) => {
   await page.getByRole("main").getByRole("button", { name: "로그인" }).click();
   await expect(page.getByRole("dialog", { name: "로그인하고 내 책갈피를 모아 보세요" })).toBeVisible();
 });
+
+test("S-09 holding a bookmark turns move mode on, like [책갈피 옮기기], and opens no sheet (11-05)", async ({ page }) => {
+  const lib: FakeLibrary = {
+    loggedIn: true,
+    shelves: [{ id: ROD_A, name: "읽을 책", position: 0 }],
+    saved: [{ isbn: "9790000000001", shelfId: ROD_A, title: "지어낸 첫째 책" }, { isbn: "9790000000002", shelfId: ROD_A, title: "지어낸 둘째 책" }],
+    posts: [],
+    moves: [],
+  };
+  await fakeAccount(page, lib);
+  await page.goto("/library");
+  const first = page.getByRole("button", { name: "지어낸 첫째 책 책갈피" });
+  await expect(first).toBeVisible();
+  const { x, y } = await centreOf(first);
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.waitForTimeout(700);
+  await expect(page.getByRole("button", { name: "완료" })).toHaveAttribute("data-moving", "");
+  await page.mouse.up();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.getByText("책갈피를 끌어서 원하는 자리에 놓으세요")).toBeVisible();
+});
