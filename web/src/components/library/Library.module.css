@@ -70,7 +70,9 @@
 /* Move mode (10-04): each bookmark says it can be moved — a dashed leather outline, a grab cursor, no browser pan on it
    (the page still scrolls from anywhere else), and, with motion allowed, a gentle sway from its string. */
 .page[data-move-mode] .hang {
-  outline: 1.5px dashed var(--cloth-edge); outline-offset: 2px; border-radius: var(--radius-card); cursor: grab; touch-action: none;
+  outline: 1.5px dashed var(--cloth-edge); outline-offset: 2px; border-radius: var(--radius-card); cursor: grab;
+  /* 11-05: a finger may still swipe the row in move mode — a still press of PICK_HOLD_MS lifts (usePickUp) */
+  touch-action: pan-x pan-y;
 }
 .page[data-move-mode] .hang:focus-visible { outline: 3px solid var(--field-data); }
 .page[data-move-mode] .row { padding-right: var(--space-1); }   /* room for the last outline; the top stays on the rod (strings) */

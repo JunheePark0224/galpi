@@ -545,7 +545,7 @@ test("S-09 [막대 지우기]: not on the first rod; an empty rod goes at once, 
 
 // Real touch in Chromium (CDP touch events on the phone project): the browser decides at touchstart whether the finger's
 // moves can be held back. If the page could still pan, it would send pointercancel mid-drag and nothing would move.
-test("S-09 on a touch screen: in move mode a finger drags at once and the page does not pan; outside it a swipe on a bookmark scrolls", async ({ page }, info) => {
+test("S-09 on a touch screen: in move mode a finger lifts after a still moment (11-05) and the page does not pan; outside it a swipe on a bookmark scrolls", async ({ page }, info) => {
   test.skip(info.project.name !== "phone", "touch is emulated on the phone project only");
   const lib: FakeLibrary = {
     loggedIn: true,
@@ -590,12 +590,13 @@ test("S-09 on a touch screen: in move mode a finger drags at once and the page d
   await expect(dragging).toHaveCount(0);
   await page.evaluate(() => window.scrollTo(0, 0));
 
-  // move mode: touch the first bookmark and drag straight down onto the other rod, after the one there — no hold
+  // move mode: touch the first bookmark, hold still a moment (11-05), drag straight down onto the other rod, after the one there
   await bm("지어낸 넷째 책").scrollIntoViewIfNeeded();
   const from = await centreOf(bm("지어낸 첫째 책"));
   const to = await after(bm("지어낸 넷째 책"));
   const scrolled = await scrollY();
   await touch("touchStart", from.x, from.y);
+  await page.waitForTimeout(400);
   for (let i = 1; i <= 15; i++) await touch("touchMove", from.x + ((to.x - from.x) * i) / 15, from.y + ((to.y - from.y) * i) / 15);
   await expect(dragging).toBeVisible();                                         // no pointercancel
   await touch("touchEnd");
@@ -655,4 +656,30 @@ test("S-09 holding a bookmark turns move mode on, like [책갈피 옮기기], an
   await page.mouse.up();
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(page.getByText("책갈피를 끌어서 원하는 자리에 놓으세요")).toBeVisible();
+});
+
+test("S-09 on a touch screen, move mode (11-05): a quick sideways swipe on a bookmark scrolls the rod's row, nothing is lifted", async ({ page }, info) => {
+  test.skip(info.project.name !== "phone", "touch is emulated on the phone project only");
+  const lib: FakeLibrary = {
+    loggedIn: true,
+    shelves: [{ id: ROD_A, name: "읽을 책", position: 0 }],
+    saved: ["01", "02", "03", "04", "05", "06"].map((n) => ({ isbn: `97900000000${n}`, shelfId: ROD_A, title: `지어낸 ${n}번 책` })),
+    posts: [],
+    moves: [],
+  };
+  await fakeAccount(page, lib);
+  await page.goto("/library");
+  await expect(page.getByText("6개 · 동물 1종")).toBeVisible();
+  await page.getByRole("button", { name: "책갈피 옮기기" }).click();
+  const cdp = await page.context().newCDPSession(page);
+  const touch = (type: "touchStart" | "touchMove" | "touchEnd", x = 0, y = 0) =>
+    cdp.send("Input.dispatchTouchEvent", { type, touchPoints: type === "touchEnd" ? [] : [{ x, y }] });
+  const row = page.getByRole("list", { name: "읽을 책" });
+  const at = await centreOf(page.getByRole("button", { name: "지어낸 02번 책 책갈피" }));
+  await touch("touchStart", at.x, at.y);
+  for (let i = 1; i <= 10; i++) await touch("touchMove", at.x - 18 * i, at.y);
+  await touch("touchEnd");
+  await expect.poll(() => row.evaluate((el) => el.scrollLeft)).toBeGreaterThan(40);
+  await expect(page.getByRole("status").filter({ hasText: DRAGGING })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "완료" })).toBeVisible();
 });
