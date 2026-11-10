@@ -1,44 +1,79 @@
 [
  {
-  "isbn": "9791189198640",
-  "to_entry": "target",
-  "to_slot": "글쓰기",
-  "from_batch": "2026-11-05",
-  "date": "2026-11-05"
+  "isbn": "9791190105804",
+  "to_entry": "leaf",
+  "to_slot": "인문",
+  "from_batch": "2026-11-10",
+  "date": "2026-11-10"
  },
  {
-  "isbn": "9791191587739",
+  "isbn": "9791165529499",
   "to_entry": "leaf",
-  "to_slot": "예술·여행",
-  "from_batch": "2026-11-05",
-  "date": "2026-11-05"
+  "to_slot": "인문",
+  "from_batch": "2026-11-10",
+  "date": "2026-11-10"
+ },
+ {
+  "isbn": "9791156366454",
+  "to_entry": "leaf",
+  "to_slot": "에세이",
+  "from_batch": "2026-11-10",
+  "date": "2026-11-10"
+ },
+ {
+  "isbn": "9791196586362",
+  "to_entry": "leaf",
+  "to_slot": "에세이",
+  "from_batch": "2026-11-10",
+  "date": "2026-11-10"
+ },
+ {
+  "isbn": "9791124497159",
+  "to_entry": "target",
+  "to_slot": "마음 돌보기",
+  "from_batch": "2026-11-10",
+  "date": "2026-11-10"
+ },
+ {
+  "isbn": "9791190538602",
+  "to_entry": "target",
+  "to_slot": "마음 돌보기",
+  "from_batch": "2026-11-10",
+  "date": "2026-11-10"
+ },
+ {
+  "isbn": "9791198632401",
+  "to_entry": "target",
+  "to_slot": "마음 돌보기",
+  "from_batch": "2026-11-10",
+  "date": "2026-11-10"
+ },
+ {
+  "isbn": "9788960179110",
+  "to_entry": "target",
+  "to_slot": "마음 돌보기",
+  "from_batch": "2026-11-10",
+  "date": "2026-11-10"
+ },
+ {
+  "isbn": "9788967442804",
+  "to_entry": "target",
+  "to_slot": "마음 돌보기",
+  "from_batch": "2026-11-10",
+  "date": "2026-11-10"
  },
  {
   "isbn": "9791124654163",
-  "to_entry": "leaf",
-  "to_slot": "과학 교양",
-  "from_batch": "2026-11-05",
-  "date": "2026-11-05"
- },
- {
-  "isbn": "9791186602553",
-  "to_entry": "leaf",
-  "to_slot": "에세이",
-  "from_batch": "2026-11-05",
-  "date": "2026-11-05"
- },
- {
-  "isbn": "9791198340955",
   "to_entry": "target",
-  "to_slot": "글쓰기",
-  "from_batch": "2026-11-05",
-  "date": "2026-11-05"
+  "to_slot": "건강·운동",
+  "from_batch": "2026-11-10",
+  "date": "2026-11-10"
  },
  {
-  "isbn": "9788976331243",
+  "isbn": "9788901249605",
   "to_entry": "leaf",
-  "to_slot": "역사",
-  "from_batch": "2026-11-05",
-  "date": "2026-11-05"
+  "to_slot": "사회·시사",
+  "from_batch": "2026-11-10",
+  "date": "2026-11-10"
  }
 ]

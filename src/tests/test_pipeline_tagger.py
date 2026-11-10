@@ -470,9 +470,31 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_14():
+def test_the_dictionary_is_v3_17():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.14"   # 11-05: prose written on poems (a 시화) is not 시
+    assert rules_version() == "v3.17"   # 11-10: "first volume only" is for stories, not for 🎯 books that stand alone
+
+
+def test_the_v3_17_rule_reaches_both_prompts():
+    """11-10: a 🎯 how-to or cookbook its blurb calls the next one is judged like any other book if it reads on its own."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**🎯 배우기 책에는 \"1권만\"을 쓰지 않는다** (11-10 사용자)" in p and "**이 책만 읽어도 되는 🎯 책**" in p
+
+
+def test_the_v3_16_rule_reaches_both_prompts():
+    """11-10: a trend, money or market forecast with its year in the title or blurb stays out once that year is over."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**지난 해의 전망서는 넣지 않는다 (🍃·🎯 공통, 11-10 사용자)**" in p and "**그 해가 지나면** 넣지 않는다" in p
+
+
+def test_the_v3_15_rule_reaches_both_prompts():
+    """11-10: game theory or economics as a lens on one past event per chapter is 역사; the idea itself, with events as
+    short examples, is 경제 상식."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "사회과학 개념으로 역사 읽기" in p and "**지난 사건을 한 장에 하나씩 다시 읽으면 역사**" in p
 
 
 def test_the_v3_14_rule_reaches_both_prompts():
