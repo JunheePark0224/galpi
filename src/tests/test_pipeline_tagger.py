@@ -470,9 +470,17 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_14():
+def test_the_dictionary_is_v3_15():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.14"   # 11-05: prose written on poems (a 시화) is not 시
+    assert rules_version() == "v3.15"   # 11-10: past events re-read through social-science ideas are 역사
+
+
+def test_the_v3_15_rule_reaches_both_prompts():
+    """11-10: game theory or economics as a lens on one past event per chapter is 역사; the idea itself, with events as
+    short examples, is 경제 상식."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "사회과학 개념으로 역사 읽기" in p and "**지난 사건을 한 장에 하나씩 다시 읽으면 역사**" in p
 
 
 def test_the_v3_14_rule_reaches_both_prompts():
