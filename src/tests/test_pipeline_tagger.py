@@ -470,9 +470,16 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_15():
+def test_the_dictionary_is_v3_16():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.15"   # 11-10: past events re-read through social-science ideas are 역사
+    assert rules_version() == "v3.16"   # 11-10: a forecast for a year that has passed stays out
+
+
+def test_the_v3_16_rule_reaches_both_prompts():
+    """11-10: a trend, money or market forecast with its year in the title or blurb stays out once that year is over."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**지난 해의 전망서는 넣지 않는다 (🍃·🎯 공통, 11-10 사용자)**" in p and "**그 해가 지나면** 넣지 않는다" in p
 
 
 def test_the_v3_15_rule_reaches_both_prompts():
