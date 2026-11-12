@@ -470,9 +470,16 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_18():
+def test_the_dictionary_is_v3_19():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.18"   # 11-12: religious and spiritual practice books stay out in both branches
+    assert rules_version() == "v3.19"   # 11-12: step-by-step practice manuals (drawing, instruments, crafts) stay out
+
+
+def test_the_v3_19_rule_reaches_both_prompts():
+    """11-12: a manual for following a hand skill step by step is a book to do, not to read — like activity books."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**실기 교본도 넣지 않는다 (🍃·🎯 공통, 11-12 사용자)**" in p and "**손으로 하는 기법을 단계별로 따라 하게 하는 책**" in p
 
 
 def test_the_v3_18_rule_reaches_both_prompts():
