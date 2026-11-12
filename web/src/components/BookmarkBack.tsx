@@ -29,7 +29,7 @@ export function BookmarkBack({ card, reason, met, moving = false }: Props) {
       <span className={frame.string} aria-hidden="true" />
       <div className={`${frame.film} ${styles.card}`}>
         <span className={frame.hole} aria-hidden="true" />
-        <p ref={titleRef} className={styles.title}>{bookTitle(card.title)}</p>
+        <p ref={titleRef} className={styles.title}>{bookTitle(card.title, card.author)}</p>
         {reason.items.length > 0 && (
           <>
             <span className={styles.rule} aria-hidden="true" />

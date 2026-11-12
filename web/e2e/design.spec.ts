@@ -71,7 +71,7 @@ test("design page shows a bookmark with its reading label", async ({ page }) => 
 for (const scale of [1, 1.15]) for (const met of [false, true]) {
   test(`every real book's title, author and one-liner fit the bookmark frame${met ? " with the met date" : ""} at text x${scale}`, async ({ page }) => {
     const books = (JSON.parse(readFileSync("src/data/books.json", "utf8")) as { isbn: string; title: string; author: string; one_liner: string }[])
-      .map((b) => ({ ...b, shown: bookTitle(b.title), author: bookAuthor(b.author) }));
+      .map((b) => ({ ...b, shown: bookTitle(b.title, b.author), author: bookAuthor(b.author) }));
     expect(books.length).toBeGreaterThanOrEqual(200); // 200 base + pilot additions (288 on 10-01)
     await page.goto("/design");
     await page.evaluate(() => document.fonts.ready);
