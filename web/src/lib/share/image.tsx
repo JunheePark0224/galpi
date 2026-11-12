@@ -222,7 +222,7 @@ const STORY_S = 1.6;   // the 160px bookmark drawn 256px wide
 function StoryBookmark({ c, art, i }: { c: SharedView["cards"][number]; art: ArtCombo; i: number }) {
   const S = STORY_S;
   const tone = toneOf(c);
-  const title = bookTitle(c.title);
+  const title = bookTitle(c.title, c.author ?? undefined);
   const long = title.length > 20;
   // whole words in a wrapping row: Satori would otherwise break before a closing 』 when a line is just full
   // (bookTitle's no-break spaces keep a one-letter word with its neighbour, so they stay inside a word here)
@@ -308,7 +308,7 @@ function Story({ view }: { view: SharedView }) {
 function textOf(view: SharedView): string {
   return [
     "갈피 읽을 책, 갈피가 안 잡힐 때 오늘 책갈피 5장을 만났어요. 나도 갈피 잡으러 가기 galpibook.com 오늘 만난 책갈피 · 내가 고른 길 이 길에서 만난 장",
-    NO_CHIP_LINE, CHALLENGE, ...chipsOf(view), ...view.cards.flatMap((c) => [c.genre, shortTitle(c.title), bookTitle(c.title), c.author ?? "", c.oneLiner]), "0123456789…『』",
+    NO_CHIP_LINE, CHALLENGE, ...chipsOf(view), ...view.cards.flatMap((c) => [c.genre, shortTitle(c.title), bookTitle(c.title, c.author ?? undefined), c.author ?? "", c.oneLiner]), "0123456789…『』",
   ].join("");
 }
 

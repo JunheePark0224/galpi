@@ -58,6 +58,19 @@ describe("bookTitle", () => {
     expect(bookTitle("세일즈 레터 & 카피라이팅")).toBe("『세일즈 레터 & 카피라이팅』");
   });
 
+  it("drops a leading \"<author> 교수의\" from a long title — the author line already says it (11-12)", () => {
+    expect(bookTitle("구만수 교수의 3시간 공부하고 30년 써먹는 재개발·재건축 투자 공부법", "구만수"))
+      .toBe("『3시간 공부하고 30년 써먹는 재개발·재건축 투자 공부법』");
+  });
+
+  it("keeps the author's name in a short title, a name that is not the author's, and when no author is given", () => {
+    expect(bookTitle("김대석 셰프의 집밥 레시피 1", "김대석")).toBe("『김대석 셰프의 집밥 레시피 1』");
+    expect(bookTitle("구만수 교수의 3시간 공부하고 30년 써먹는 재개발·재건축 투자 공부법", "홍길동"))
+      .toBe("『구만수 교수의 3시간 공부하고 30년 써먹는 재개발·재건축 투자 공부법』");
+    expect(bookTitle("구만수 교수의 3시간 공부하고 30년 써먹는 재개발·재건축 투자 공부법"))
+      .toBe("『구만수 교수의 3시간 공부하고 30년 써먹는 재개발·재건축 투자 공부법』");
+  });
+
   it("keeps the whole title when it is only a label", () => {
     expect(bookTitle("[예스리커버]")).toBe("『[예스리커버]』");
   });

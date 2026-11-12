@@ -6,6 +6,10 @@ const COVERS = /[│|]/;
 const WITH_LIST = /\s+with\s+[^,]+(?:,\s*[^,]+){2,}$/i;
 /** A trailing ", " + three or more Latin words and nothing Korean ("LLM RAG ADK MCP LangChain") — shop keywords (10-12). */
 const LATIN_LIST = /,\s+(?:[A-Za-z0-9][\w.+-]*\s+){2,}[A-Za-z0-9][\w.+-]*$/;
+/** A title this long may not fit the bookmark's three lines (11-12: 38 characters with the author in front did not). */
+const LONG_TITLE = 30;
+/** A leading "<name> 교수의 " — the author's name and a job title, said again on the author line under the title (11-12). */
+const TITLED_NAME = /^(\S+)\s?(?:교수|박사|선생님|선생|작가|원장|셰프|변호사|회계사|기자|약사|의사)의\s+/;
 
 const NBSP = "\u00a0";
 /** A word that is only a joining mark — kept at the end of its line, never starting the next. */
@@ -32,9 +36,11 @@ function holdShortWords(name: string): string {
  * trailing list of what it covers ("(수업혁신사례연구대회│디지털교육연구대회│…)", 10-08; "with 스킬, 멀티 에이전트, MCP, 하네스" and
  * ", LLM RAG ADK MCP LangChain", 10-12 — three items or more, so "with 파이썬" stays).
  * A trailing note that is part of the name ("(RPA)", "(원칙편)") stays. Short words hold on to their neighbours.
+ * A long title (LONG_TITLE+) that opens with the author's own name and job title ("구만수 교수의 …", 11-12) drops that opening —
+ * the author line says the name; a short one keeps it ("김대석 셰프의 집밥 레시피 1").
  */
-export function bookTitle(title: string): string {
-  const name = title.trim().replace(/\s+/g, " ")
+export function bookTitle(title: string, author?: string): string {
+  const name = withoutAuthorInFront(title.trim().replace(/\s+/g, " "), author)
     .replace(/^\[[^\]]*\]\s*/, "")
     .replace(/\s*\(([^()]*)\)$/, (note, inner: string) => (EDITION.test(inner) || COVERS.test(inner) ? "" : note))
     .replace(/\s+:\s+[^:]*기념판$/, "")
@@ -42,4 +48,12 @@ export function bookTitle(title: string): string {
     .replace(LATIN_LIST, "")
     .trim();
   return `『${holdShortWords(name || title.trim())}』`;
+}
+
+/** "<author> 교수의 …" → "…" when the title is long and the name is the (first) author's. */
+function withoutAuthorInFront(title: string, author?: string): string {
+  if (!author || [...title].length < LONG_TITLE) return title;
+  const m = TITLED_NAME.exec(title);
+  const first = author.trim().split(/[\s,·]+/)[0];
+  return m && m[1] === first ? title.slice(m[0].length) : title;
 }
