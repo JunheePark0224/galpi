@@ -470,9 +470,18 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_17():
+def test_the_dictionary_is_v3_18():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.17"   # 11-10: "first volume only" is for stories, not for 🎯 books that stand alone
+    assert rules_version() == "v3.18"   # 11-12: religious and spiritual practice books stay out in both branches
+
+
+def test_the_v3_18_rule_reaches_both_prompts():
+    """11-12: books that preach a faith or teach its practice (scripture, past-life healing, ki training) stay out under 🍃
+    and 🎯 alike; meditation as everyday care for the mind is 🎯 마음 돌보기."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**종교·영성서는 넣지 않는다 (🍃·🎯 공통, 11-12 사용자)**" in p
+        assert "**목표가 깨달음·해탈·신(하늘)과의 소통**" in p and "**방법으로서의 명상·마음챙김**" in p
 
 
 def test_the_v3_17_rule_reaches_both_prompts():
