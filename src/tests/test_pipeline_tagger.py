@@ -470,9 +470,16 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_19():
+def test_the_dictionary_is_v3_20():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.19"   # 11-12: step-by-step practice manuals (drawing, instruments, crafts) stay out
+    assert rules_version() == "v3.20"   # 11-17: a believer's travel writing or essay is not a religious book
+
+
+def test_the_v3_20_rule_reaches_both_prompts():
+    """11-17: a travelogue or essay of a believer's experience (a monastery visit) is judged like any other book."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**신앙인의 경험을 담은 기행·에세이**" in p
 
 
 def test_the_v3_19_rule_reaches_both_prompts():
