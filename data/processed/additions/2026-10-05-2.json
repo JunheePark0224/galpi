@@ -3758,7 +3758,8 @@
    "topic": "건강·운동",
    "field": "습관·자기계발",
    "keywords": [
-    "운동 습관"
+    "운동 습관",
+    "유연성·체형 교정"
    ],
    "keywords_regex": [
     "달리기·근력",
@@ -3848,7 +3849,9 @@
    "entry": "target",
    "topic": "건강·운동",
    "field": "습관·자기계발",
-   "keywords": [],
+   "keywords": [
+    "유연성·체형 교정"
+   ],
    "keywords_regex": [
     "달리기·근력"
    ],
@@ -3949,7 +3952,9 @@
    "entry": "target",
    "topic": "건강·운동",
    "field": "습관·자기계발",
-   "keywords": [],
+   "keywords": [
+    "유연성·체형 교정"
+   ],
    "keywords_regex": [
     "달리기·근력"
    ],
@@ -3988,7 +3993,9 @@
    "entry": "target",
    "topic": "건강·운동",
    "field": "습관·자기계발",
-   "keywords": [],
+   "keywords": [
+    "유연성·체형 교정"
+   ],
    "keywords_regex": [
     "달리기·근력"
    ],

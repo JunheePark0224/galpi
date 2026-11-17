@@ -4624,13 +4624,15 @@
    "entry": "target",
    "topic": "건강·운동",
    "field": "습관·자기계발",
-   "keywords": [],
+   "keywords": [
+    "유연성·체형 교정"
+   ],
    "keywords_regex": [
     "운동 습관",
     "달리기·근력"
    ],
    "way": "실습",
-   "keyword_candidate": "유연성·체형 교정",
+   "keyword_candidate": null,
    "suggest": "",
    "suggest_keywords": [],
    "one_liner_style": "summary",
@@ -4753,12 +4755,14 @@
    "entry": "target",
    "topic": "건강·운동",
    "field": "습관·자기계발",
-   "keywords": [],
+   "keywords": [
+    "유연성·체형 교정"
+   ],
    "keywords_regex": [
     "달리기·근력"
    ],
    "way": "실습",
-   "keyword_candidate": "유연성·체형 교정",
+   "keyword_candidate": null,
    "suggest": "",
    "suggest_keywords": [],
    "one_liner_style": "summary",
@@ -4842,12 +4846,14 @@
    "entry": "target",
    "topic": "건강·운동",
    "field": "습관·자기계발",
-   "keywords": [],
+   "keywords": [
+    "유연성·체형 교정"
+   ],
    "keywords_regex": [
     "달리기·근력"
    ],
    "way": "실습",
-   "keyword_candidate": "유연성·체형 교정",
+   "keyword_candidate": null,
    "suggest": "",
    "suggest_keywords": [],
    "one_liner_style": "summary",
@@ -4917,12 +4923,14 @@
    "entry": "target",
    "topic": "건강·운동",
    "field": "습관·자기계발",
-   "keywords": [],
+   "keywords": [
+    "유연성·체형 교정"
+   ],
    "keywords_regex": [
     "달리기·근력"
    ],
    "way": "실습",
-   "keyword_candidate": "유연성·체형 교정",
+   "keyword_candidate": null,
    "suggest": "",
    "suggest_keywords": [],
    "one_liner_style": "summary",
@@ -4965,14 +4973,15 @@
    "topic": "건강·운동",
    "field": "습관·자기계발",
    "keywords": [
-    "달리기·근력"
+    "달리기·근력",
+    "유연성·체형 교정"
    ],
    "keywords_regex": [
     "달리기·근력",
     "잠·회복"
    ],
    "way": "실습",
-   "keyword_candidate": "유연성·체형 교정",
+   "keyword_candidate": null,
    "suggest": "",
    "suggest_keywords": [],
    "one_liner_style": "summary",
