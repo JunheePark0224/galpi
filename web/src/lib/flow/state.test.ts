@@ -185,10 +185,10 @@ describe("flowReducer (v2 questions)", () => {
     expect(flowReducer(second, { type: "nextResult" })).toMatchObject({ step: "end" });
   });
 
-  it("[다시 뽑기]: the same answers, a new closed book, nothing carried over", () => {
+  it("[다시 뽑기]: the same answers, the book open again (no S-03, 11-19), nothing carried over", () => {
     const end = run([...Array.from({ length: 5 }, () => ({ type: "react" as const, reaction: "pass" as const })), { type: "leaveBack" }], flowReducer(opened(), { type: "next" }));
     const again = flowReducer(end, { type: "redraw" });
-    expect(again).toMatchObject({ step: "book", opened: false, status: "loading", drawId: 2, index: 0, reactions: [], result: 0 });
+    expect(again).toMatchObject({ step: "first", opened: true, status: "loading", drawId: 2, index: 0, reactions: [], result: 0, again: true });
     expect(again.answers).toEqual(DATA_PATH);
     expect(flowReducer(opened(), { type: "redraw" })).toEqual(opened());
   });
@@ -196,7 +196,19 @@ describe("flowReducer (v2 questions)", () => {
   it("[다시 뽑기] on the S-11 뒤표지 too (11-03): straight from the back cover, without S-06 / S-08", () => {
     const back = run(Array.from({ length: 5 }, () => ({ type: "react" as const, reaction: "curious" as const })), flowReducer(opened(), { type: "next" }));
     expect(back.step).toBe("back");
-    expect(flowReducer(back, { type: "redraw" })).toMatchObject({ step: "book", opened: false, status: "loading", drawId: 2, index: 0, reactions: [], result: 0 });
+    expect(flowReducer(back, { type: "redraw" })).toMatchObject({ step: "first", opened: true, status: "loading", drawId: 2, index: 0, reactions: [], result: 0 });
+  });
+
+  it("a [다시 뽑기] round is marked (11-19): it goes past the first page; the mark ends at the bookmarks", () => {
+    const back = run(Array.from({ length: 5 }, () => ({ type: "react" as const, reaction: "pass" as const })), flowReducer(opened(), { type: "next" }));
+    const again = run([{ type: "redraw" }, { type: "drawn", id: 2, draw: view(5) }], back);
+    expect(again).toMatchObject({ step: "first", again: true, status: "ready" });
+    const marks = flowReducer(again, { type: "next" });
+    expect(marks).toMatchObject({ step: "bookmarks", again: false, index: 0 });
+    expect(opened().again).toBe(false);   // a first round is not marked
+    expect(flowReducer(again, { type: "home" }).again).toBe(false);
+    const backed = flowReducer(flowReducer(back, { type: "redraw" }), { type: "back" });   // the phone's back key while it waits
+    expect(backed).toMatchObject({ step: "questions", again: false });
   });
 
   it("[처음으로] keeps only the books already shown", () => {

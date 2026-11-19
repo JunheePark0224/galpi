@@ -119,6 +119,12 @@
   transition: height 0.4s var(--ease-open), margin 0.4s var(--ease-open);
 }
 .zoom[data-shut] .cover { visibility: hidden; transition: visibility 0s linear 1.4s; }
+/* [다시 뽑기] (11-19): the back half turns back open, the shut reversed — the spread keeps the back's height until the half
+   stands past upright, then grows (else the short back would turn on a tall page again), and the page and board under it
+   are there at once instead of fading in grey. */
+.book { transition: height 0.45s var(--ease-open), margin 0.45s var(--ease-open); }
+.zoom[data-reopen] .book { transition-delay: 0.5s; }
+.zoom[data-reopen] .board, .zoom[data-reopen] .pageRight { transition: none; }
 .ruled {
   position: absolute; inset: 0; perspective: 1600px;
   background: repeating-linear-gradient(to bottom, transparent 0 27px, var(--paper-rule) 27px 28px);

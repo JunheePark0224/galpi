@@ -35,6 +35,7 @@
 | taxonomy v2.6 | 2026-10-12 | 뒤표지 A/B 실험 `back_cover_pick` (PRD F-27, 사용자 결정 B2) | E-45 `experiment_exposed`(`experiment`·`variant`) live, 동사 `exposed`, 분류 `실험`. 처리방침은 그대로("화면 버전") (8절) |
 | taxonomy v2.5 | 2026-10-09 | 머리글 [처음으로] (PRD F-01, DESIGN A-05, 사용자 시안 D `mockups/2026-10-09-home-button-right.png`) | E-20 `source` += "header" — 흐름 도중(S-01이 아닐 때) 오른쪽 위 [처음으로]를 눌러 확인 없이 S-01로. 다른 페이지(/library 등)의 [처음으로]는 로고처럼 그냥 이동이라 이벤트 없음 (8절) |
 | taxonomy v2.7 | 2026-10-19 | 갈피 소식통 (PRD F-28, DESIGN C-33, 사용자 시안 A `mockups/2026-10-19-news-owl.html`) | E-46 `news_opened`(`has_unseen`·`latest_week`) live, 동사 `opened`, 분류 `홈`. 모으는 정보 변화 없음 (8절) |
+| taxonomy v3.2 | 2026-11-19 | [다시 뽑기] 판은 책이 저절로 다시 펼쳐짐 (PRD F-10, 사용자) | E-05 `book_opened`는 누를 때만 — 다시 뽑기 판에는 닫힌 책(S-03)이 없어 보내지 않음. 이벤트·속성 변경 없음 |
 | taxonomy v3.1 | 2026-11-05 | 책갈피 구경 (PRD F-30·S-13, DESIGN C-35, 사용자 시안 A-1 `mockups/2026-11-05-shelf-peek.png`) | E-48 `maker_shelf_opened`·E-49 `maker_bookmark_viewed` live, E-18·E-02 `source`에 "maker_shelf", 분류 `홈`에 S-13, 동사 그대로(opened·viewed) (8절) |
 | taxonomy v3.0 | 2026-11-03 | 뒤표지 [다시 뽑기] (PRD F-27·F-10, 사용자 시안 C-1 `mockups/2026-11-03-back-buttons-redraw.png`) | E-19 `source`("end" · "back_cover") 추가 — S-11에서도 다시 뽑기 (8절) |
 | taxonomy v2.9 | 2026-11-03 | 뒤표지 A/B 1차 종료 (PRD F-27, 사용자 결정 11-03, `report/README.md`) | E-45 `experiment_exposed` removed — 모두 A, 보내지 않음 (8절) |
@@ -557,7 +558,7 @@ E-04 `situation_written`은 PRD에서 삭제(09-29)되어 목록에 없다. 모�
 |---|---|---|---|
 | 책펼치기 | click | live | 같음 |
 
-**언제**: S-03 닫힌 책을 눌러 펼칠 때 → S-04 첫 장  
+**언제**: S-03 닫힌 책을 눌러 펼칠 때 → S-04 첫 장. [다시 뽑기] 판(11-19~)은 닫힌 책 없이 다시 펼쳐져 보내지 않는다 — 판(`round`)마다 하나가 아니다  
 **분석 질문**: Q-01
 
 속성 없음 (공통 속성만).

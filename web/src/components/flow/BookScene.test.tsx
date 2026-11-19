@@ -124,6 +124,20 @@ describe("BookScene", () => {
     expect(screen.queryByText("평소의 당신과 반대편에서 골랐어요")).toBeNull();
   });
 
+  it("F-10 (11-19): a [다시 뽑기] round passes S-04 by — blank pages and no buttons; a failed draw or no books left still speak", () => {
+    const again: FlowState = { ...first, again: true, status: "loading", draw: null };
+    const { rerender } = render(<BookScene state={again} {...handlers()} />);
+    expect(screen.queryByRole("heading", { name: "당신이 고른 길" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "다음 장" })).toBeNull();
+    expect(screen.queryByRole("button", { name: /질문으로 돌아가기/ })).toBeNull();
+    rerender(<BookScene state={{ ...again, status: "error" }} {...handlers()} />);
+    expect(screen.getByRole("alert")).toHaveTextContent(DRAW_FAILED);
+    expect(screen.getByRole("button", { name: "다시 시도" })).toBeInTheDocument();
+    rerender(<BookScene state={{ ...again, status: "ready", draw: view(0) }} {...handlers()} />);
+    expect(screen.getByText(EXHAUSTED_NOTICE)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "처음으로" })).toBeInTheDocument();
+  });
+
   it("S-04: the challenge route says so in one line", () => {
     render(<BookScene state={{ ...first, draw: view(5, "challenge") }} {...handlers()} />);
     expect(screen.getByText("평소의 당신과 반대편에서 골랐어요")).toBeInTheDocument();

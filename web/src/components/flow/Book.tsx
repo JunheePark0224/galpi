@@ -46,10 +46,15 @@ export function Book({ open, onPress, left, right, tucked, shut = false, shutNow
     wait.current = setTimeout(() => onShutLatest.current?.(), SHUT_SETTLE_MS);   // the zoom (CSS, below) has landed
   };
   // [다시 뽑기] reuses this book for the next round: open again, it may shut (and settle) once more
+  // F-10 (11-19): [다시 뽑기] from the back cover keeps the book open — the back half turns back the way it shut
+  const [unshutting, setUnshutting] = useState(false);
   const [wasShut, setWasShut] = useState(shut);
   if (wasShut !== shut) {
     setWasShut(shut);
-    if (!shut) setSettled(false);
+    if (!shut) {
+      setSettled(false);
+      setUnshutting(open);
+    } else setUnshutting(false);
   }
   useEffect(() => {
     if (!shut || shutNow) return;
@@ -59,7 +64,7 @@ export function Book({ open, onPress, left, right, tucked, shut = false, shutNow
   }, [shut, shutNow]);   // turned runs once per shut (its own ref)
   const closed = !open || (shut && (settled || shutNow));
   return (
-    <div className={styles.zoom} data-closed={closed ? "" : undefined} data-shut={shut ? "" : undefined}>
+    <div className={styles.zoom} data-closed={closed ? "" : undefined} data-shut={shut ? "" : undefined} data-reopen={unshutting ? "" : undefined}>
       <motion.div
         className={styles.book}
         initial={false}
@@ -94,14 +99,14 @@ export function Book({ open, onPress, left, right, tucked, shut = false, shutNow
           </button>
           <div className={styles.back}><div className={styles.pageLeft}>{left}</div></div>
         </motion.div>
-        {shut && (
+        {(shut || unshutting) && (
           <motion.div
             className={styles.backHalf}
             data-back-half=""
             initial={shutNow ? false : { rotateY: 0 }}
-            animate={{ rotateY: -180 }}
-            transition={SHUT_BOOK}
-            onAnimationComplete={turned}
+            animate={{ rotateY: shut ? -180 : 0 }}
+            transition={shut ? SHUT_BOOK : OPEN_COVER}
+            onAnimationComplete={() => (shut ? turned() : setUnshutting(false))}
           >
             <div className={styles.backInside} aria-hidden="true"><div className={styles.backPage}><RuledPage /></div></div>
             <div className={styles.backOutside}>

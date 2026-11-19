@@ -113,14 +113,17 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
     onReact(reaction);
   };
 
-  const left = step === "first" && state.opened ? <FirstPageTitle /> : <RuledPage />;
-  const right = step === "bookmarks" || shutting
+  // F-10 (11-19): a [다시 뽑기] round passes S-04 by — its pages stay blank while the book opens by itself and the books
+  // come; only a failed draw or no books left speak (the retry, or the exhausted notice with [처음으로])
+  const passing = state.again && step === "first" && status !== "error" && !noBooks;
+  const left = step === "first" && state.opened && !passing ? <FirstPageTitle /> : <RuledPage />;
+  const right = step === "bookmarks" || shutting || passing
     ? <RuledPage turn={shutting ? 0 : state.index} />
     : state.opened && <PathPage summary={draw?.path ?? null} notices={noBooks ? [EXHAUSTED_NOTICE] : []} reason={draw?.challenge?.reason ?? null}
       listRule={draw?.challenge ? isListRule(draw.challenge.rule.n) : false} />;
 
   // C-19: five decorative bookmark tips stand out of the closed book (nothing from the draw — no wait, no hint).
-  const tucked = step === "book" || step === "first" ? <CoverPeeks open={state.opened} /> : null;
+  const tucked = step === "book" || (step === "first" && !passing) ? <CoverPeeks open={state.opened} /> : null;
 
   return (
     <div ref={scene} className={styles.scene} data-wide-scene="" data-peeks={step === "book" ? "" : undefined} data-clip={tucked ? "" : undefined}
@@ -175,7 +178,7 @@ export function BookScene({ state, onOpen, onBack, onNext, onRetry, onReact, onH
       {/* the words moved onto the cover (C-01 tap cue, 10-02); this keeps the room the layout math counts on */}
       {step === "book" && <p className={styles.hint} aria-hidden="true" />}
 
-      {step === "first" && (
+      {step === "first" && !passing && (
         <div className={styles.actions}>
           {status === "error" && <p className={styles.error} role="alert">{DRAW_FAILED}</p>}
           {status === "error" ? (
