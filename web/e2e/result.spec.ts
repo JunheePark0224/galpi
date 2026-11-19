@@ -95,7 +95,7 @@ test("S-06 ‹ › turn back to a book already seen and on again, each book's vi
   expect(specMismatches(events)).toEqual([]);
 });
 
-test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, round + 1 (E-19)", async ({ page }) => {
+test("[다시 뽑기]: same answers, the new book opens by itself straight to five unseen bookmarks, round + 1 (E-19, F-10 11-19)", async ({ page }) => {
   const { events } = await recordEvents(page);
   await mockBooks(page);
   await page.goto("/");
@@ -107,10 +107,8 @@ test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, 
 
   await expect(page.getByRole("heading", { name: "다음 책갈피를 만나 볼까요?" })).toHaveCount(0);   // 0 궁금해요: no S-08 (11-03)
   await page.getByRole("button", { name: "다시 뽑기" }).click();                                 // the 뒤표지's main tile
-  await expect(page.getByText("눌러서 펼치기")).toBeVisible();                                   // S-03 again
-  await page.getByRole("button", { name: "책 펼치기" }).click();
-  await expect(page.getByRole("button", { name: "질문으로 돌아가기" })).toBeVisible();          // the way back stays on a new round
-  await page.getByRole("button", { name: "다음 장" }).click();
+  await expect(page.getByText("1 / 5")).toBeVisible();                                           // no tap, no S-04: the first bookmark
+  await expect(page.getByRole("heading", { name: "당신이 고른 길" })).toHaveCount(0);
   await reactToBookmarks(page, ["궁금해요", "패스", "패스", "패스", "패스"]);
   await expect(page.getByText("궁금해요 1 / 1")).toBeVisible();
 
@@ -122,7 +120,7 @@ test("S-08 [다시 뽑기]: same answers, a new closed book, five unseen books, 
   expect(second).toHaveLength(5);
   expect(second.some((id) => first.includes(id))).toBe(false);                  // seen books stay out
   expect(named(events, "redraw_clicked").map((e) => [e.props, e.common.round, e.common.entry])).toEqual([[{ curious_count: 0, source: "back_cover" }, 1, "target"]]);
-  expect(named(events, "book_opened").map((e) => e.common.round)).toEqual([1, 2]);
+  expect(named(events, "book_opened").map((e) => e.common.round)).toEqual([1]);   // E-05 is a tap: the redraw book opens by itself
   expect(named(events, "question_answered")).toHaveLength(DATA_PATH.length);   // the answers were not asked again
   expect(named(events, "result_viewed")[0]).toMatchObject({ props: { curious_count: 1 }, common: { round: 2 } });
   expect(specMismatches(events)).toEqual([]);

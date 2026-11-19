@@ -26,6 +26,7 @@ import type { ShareMethod } from "./BackCover";
 import { BookPeek } from "./BookPeek";
 import { backPickGuide } from "@/lib/flow/firstGuide";
 import { playPage } from "@/lib/sound/pageSound";
+import { AGAIN_TURN_AFTER_MS } from "@/lib/motion";
 import { BookScene } from "./BookScene";
 import { EndScreen } from "./EndScreen";
 import { Home, type StartSource } from "./Home";
@@ -313,6 +314,16 @@ export function Flow({ library = null }: { library?: LibraryCount | null }) {
     advance();
     act({ type: "redraw" });
   };
+
+  // F-10 (11-19, user): in a [다시 뽑기] round the book stays open — the back cover turns back (Book) — and once the books
+  // are there it turns past S-04 ("당신이 고른 길", already seen) to the first bookmark, as [다음 장] would
+  const turnAgain = useEffectEvent(() => nextPage());
+  const againReady = state.again && state.step === "first" && state.status === "ready" && (state.draw?.picks.length ?? 0) > 0;
+  useEffect(() => {
+    if (!againReady) return;
+    const t = setTimeout(turnAgain, AGAIN_TURN_AFTER_MS);
+    return () => clearTimeout(t);
+  }, [againReady]);
 
   const inBook = state.step === "book" || state.step === "first" || state.step === "bookmarks" || (state.step === "back" && !!state.draw);
   const curious = curiousPicks(state);

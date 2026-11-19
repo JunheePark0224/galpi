@@ -36,11 +36,12 @@ export interface FlowState {
   result: number;                  // S-06: which 궁금해요 book is shown (0-based)
   seen: string[];                  // books shown in this session — excluded from later draws (F-05)
   undone: Answer[];                // answers taken back with [← 이전 질문], newest last — the question shown again marks its own (C-23)
+  again: boolean;                  // F-10 (11-19): a [다시 뽑기] round — the book stays open and skips S-04 to the first bookmark
 }
 
 export const INITIAL: FlowState = {
   step: "home", answers: [], asked: 0, drawnFor: null,
-  status: "idle", drawId: 0, draw: null, opened: false, index: 0, reactions: [], result: 0, seen: [], undone: [],
+  status: "idle", drawId: 0, draw: null, opened: false, index: 0, reactions: [], result: 0, seen: [], undone: [], again: false,
 };
 
 export type FlowAction =
@@ -115,7 +116,8 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
       // S-02 [← 이전 질문] and S-04 [← 질문으로 돌아가기] drop the last answer — and the phone's back key on the closed book
       // (S-03, 10-08). The first question's back is Flow's [처음으로].
       if ((s.step === "questions" || s.step === "book" || s.step === "first") && s.answers.length > 0) {
-        return { ...s, step: "questions", answers: s.answers.slice(0, -1), undone: [...s.undone, s.answers[s.answers.length - 1]] };
+        // going back ends a [다시 뽑기] round's shortcut (11-19): the path changes, so its S-04 shows again
+        return { ...s, step: "questions", answers: s.answers.slice(0, -1), undone: [...s.undone, s.answers[s.answers.length - 1]], again: false };
       }
       return s;
     case "drawn":
@@ -128,7 +130,7 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
       return s.step === "book" ? { ...s, opened: true, step: "first" } : s;
     case "next":
       if (s.step !== "first" || s.status !== "ready" || !s.draw || s.draw.picks.length === 0) return s;
-      return { ...s, step: "bookmarks", index: 0, reactions: [], seen: addSeen(s.seen, s.draw.picks[0].card.id) };
+      return { ...s, step: "bookmarks", index: 0, reactions: [], again: false, seen: addSeen(s.seen, s.draw.picks[0].card.id) };
     case "react": {
       if (s.step !== "bookmarks" || !s.draw) return s;
       const reactions = [...s.reactions, a.reaction];
@@ -158,7 +160,9 @@ export function flowReducer(s: FlowState, a: FlowAction): FlowState {
       // F-10: the same answers, five new books (seen stay excluded), the earlier 궁금해요 do not carry over; a new closed book.
       // From S-08, or straight from the S-11 뒤표지 (11-03, F-27).
       if (s.step !== "end" && s.step !== "back") return s;
-      return requestDraw({ ...s, opened: false, index: 0, reactions: [], result: 0 });
+      // 11-19 (user): no closed book and no S-04 — the book opens again (the back cover turns back) and goes straight to
+      // the first bookmark once the books are there (Flow, `again`)
+      return requestDraw({ ...s, opened: true, index: 0, reactions: [], result: 0, again: true });
     case "home":
       return { ...INITIAL, seen: s.seen };
   }
