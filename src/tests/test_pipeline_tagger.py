@@ -470,9 +470,16 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_21():
+def test_the_dictionary_is_v3_22():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.21"   # 11-19: an epic poem is 시 with the story's pull, not the poetry book's
+    assert rules_version() == "v3.22"   # 11-19: survival against a supernatural being is horror, not a thriller
+
+
+def test_the_v3_22_rule_reaches_both_prompts():
+    """11-19: when the threat is a supernatural being itself, a survival story is 호러·괴담 even without the word 공포."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**위협이 초자연적 존재 자체**(흡혈귀·괴물·귀신)인 생존·대결 이야기는" in p
 
 
 def test_the_v3_21_rule_reaches_both_prompts():
