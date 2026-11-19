@@ -470,9 +470,23 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_20():
+def test_the_dictionary_is_v3_22():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.20"   # 11-17: a believer's travel writing or essay is not a religious book
+    assert rules_version() == "v3.22"   # 11-19: survival against a supernatural being is horror, not a thriller
+
+
+def test_the_v3_22_rule_reaches_both_prompts():
+    """11-19: when the threat is a supernatural being itself, a survival story is 호러·괴담 even without the word 공포."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**위협이 초자연적 존재 자체**(흡혈귀·괴물·귀신)인 생존·대결 이야기는" in p
+
+
+def test_the_v3_21_rule_reaches_both_prompts():
+    """11-19: an epic poem (one long story in verse) keeps 시 but pulls as a story (−1); the 문장 +1 is for collections."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "- **서사시**(한 편의 긴 이야기를 운문으로 쓴 작품)는 장르는 시, 끌림은 형식 신호로 **몰입·이야기(−1)**다" in p
 
 
 def test_the_v3_20_rule_reaches_both_prompts():
