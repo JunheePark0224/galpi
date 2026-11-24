@@ -470,9 +470,16 @@ def test_the_v3_1_rules_reach_both_prompts():
         assert "비소설은 값을 null로 두지 않는다" in p and "비소설은 해당 없음 0" in p
 
 
-def test_the_dictionary_is_v3_22():
+def test_the_dictionary_is_v3_23():
     from pipeline.rules_version import rules_version
-    assert rules_version() == "v3.22"   # 11-19: survival against a supernatural being is horror, not a thriller
+    assert rules_version() == "v3.23"   # 11-24: research monographs for specialists stay out like textbooks
+
+
+def test_the_v3_23_rule_reaches_both_prompts():
+    """11-24: a monograph, a survey of research or a scholar's research memoir written for specialists stays out."""
+    for kind in ("tag", "check"):
+        p = system_prompt(VOC, kind)
+        assert "**전공 연구서도 같은 기준이다 (11-24 사용자)**" in p and "**본문이 연구 자료·문헌 목록·학계 동향**" in p
 
 
 def test_the_v3_22_rule_reaches_both_prompts():
