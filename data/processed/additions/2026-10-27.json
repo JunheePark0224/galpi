@@ -239,10 +239,12 @@
    "entry": "target",
    "topic": "건강·운동",
    "field": "습관·자기계발",
-   "keywords": [],
+   "keywords": [
+    "저속노화"
+   ],
    "keywords_regex": [],
    "way": "개념",
-   "keyword_candidate": "저속노화",
+   "keyword_candidate": null,
    "suggest": "과학 교양",
    "suggest_keywords": [],
    "one_liner_style": "summary",

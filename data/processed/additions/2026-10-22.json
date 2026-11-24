@@ -1951,14 +1951,15 @@
    "field": "습관·자기계발",
    "keywords": [
     "달리기·근력",
-    "운동 습관"
+    "운동 습관",
+    "저속노화"
    ],
    "keywords_regex": [
     "달리기·근력",
     "잠·회복"
    ],
    "way": "실습",
-   "keyword_candidate": "저속노화",
+   "keyword_candidate": null,
    "suggest": "",
    "suggest_keywords": [],
    "one_liner_style": "summary",
